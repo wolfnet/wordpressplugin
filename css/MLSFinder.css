@@ -1,0 +1,37 @@
+/* CSS Document */
+/* **************************************** /
+
+@package		css
+@title			MLSFinder.css
+@contributors	AJ Michels (aj.michels@wolfnet.com)
+@version		1.0
+
+/ ***************************************** */
+.mlsFinder_widget.mlsFinder_listingFilmStrip {
+  /* display:none; */
+
+  overflow: hidden;
+  white-space: nowrap;
+  height: 140px;
+}
+.mlsFinder_widget.mlsFinder_listingFilmStrip .filmStripContainer {
+  height: 140px;
+}
+.mlsFinder_widget.mlsFinder_listingFilmStrip .filmStripContainer .mlsFinder_listing {
+  width: 150px;
+  height: 140px;
+  float: left;
+}
+.mlsFinder_widget.mlsFinder_listingFilmStrip .filmStripContainer .mlsFinder_listing .detailsLink {
+  display: block;
+}
+.mlsFinder_widget.mlsFinder_listingFilmStrip .filmStripContainer .mlsFinder_listing .listingImage {
+  width: 140px;
+  height: 75px;
+  display: block;
+  overflow: hidden;
+}
+.mlsFinder_widget.mlsFinder_listingFilmStrip .filmStripContainer .mlsFinder_listing .listingImage img {
+  border: none;
+  height: 75px;
+}

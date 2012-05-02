@@ -1,0 +1,132 @@
+<project name="MLSFinderWordPressPlugin" default="build" basedir=".">
+	
+	
+	<property name="version" value="0.1.0" />
+	
+	
+	<property file="build.properties" />
+	<property name="tool.yuicompressor" value="${basedir}/ant/yuicompressor-2.4.5.jar" />
+	<property name="tool.rhino" value="${basedir}/ant/rhino.jar" />
+	<property name="tool.less" value="${basedir}/ant/less-rhino-1.1.5.js" />
+	<property name="buildName" value="MLSFinder" />
+	<property name="buildDir" value="../${buildName}" />
+	<property name="testDir" value="../${buildName}Test" />
+	<property name="dir.js" value="js" />
+	<property name="dir.css" value="css" />
+	<property name="packageDir" value="../" />
+	<property name="packageName" value="${packageDir}${buildName}_${version}" />
+	
+	
+	<target name="build" depends="clean-build">
+		<echo>Creating Build Directory: ${buildDir}</echo>
+		<copy todir="${buildDir}">
+			<fileset dir="${basedir}">
+				<exclude name="build.properties" />
+				<exclude name="build.xml" />
+				<exclude name="LessCompilerOutput.txt" />
+				<exclude name="ant/" />
+				<exclude name="${dir.js}/**/*.js" />
+				<exclude name="**/*.less" />
+				<exclude name="**/*.dev.css" />
+				<exclude name="**/*.dev.js" />
+				<exclude name="**/*.less" />
+				<exclude name="**/*.css" />
+				<exclude name="xml/*.xml" />
+			</fileset>
+		</copy>
+		<!-- Update Plugin Version -->
+		<replace file="${buildDir}/MLSFinder.php" token="{X.X.X}" value="${version}"/>
+		<!-- Compile Less Files -->
+		<echo>Compiling Less Files</echo>
+		<!--<lessjs input="${basedir}/${dir.css}/main.less" output="${basedir}/${dir.css}/main.css" />-->
+		<apply executable="java" parallel="false" output="${basedir}/LessCompilerOutput.txt">
+			<fileset dir="${basedir}/" >
+				<include name="${dir.css}/**/*.less"/>
+				<exclude name="${dir.css}/**/*.inc.less"/>
+			</fileset>
+			<arg line="-jar"/>
+			<arg path="${tool.rhino}"/>
+			<arg path="${tool.less}"/>
+			<srcfile />
+			<mapper type="glob" from="*.less" to="${basedir}/*.css"/>
+			<targetfile />
+			<arg line="-o"/>
+		</apply>
+		<!-- Minify CSS Files -->
+		<echo>Minifiying CSS Files</echo>
+		<apply executable="java" parallel="false">
+			<fileset dir="${basedir}/" >
+				<include name="${dir.css}/**/*.css"/>
+				<exclude name="${dir.css}/**/*.min.css"/>
+			</fileset>
+			<arg line="-jar"/>
+			<arg path="${tool.yuicompressor}"/>
+			<srcfile />
+			<arg line="--line-break"/>
+			<arg line="4000"/>
+			<arg line="-o"/>
+			<mapper type="glob" from="*.css" to="${buildDir}/*.min.css"/>
+			<targetfile />
+		</apply>
+		<!-- Minify JS and CSS Files -->
+		<echo>Minifiying JavaScript Files</echo>
+		<apply executable="java" parallel="false">
+			<fileset dir="${basedir}/" >
+				<include name="${dir.js}/**/*.js"/>
+				<exclude name="${dir.js}/**/*.min.js"/>
+			</fileset>
+			<arg line="-jar"/>
+			<arg path="${tool.yuicompressor}"/>
+			<srcfile />
+			<arg line="--line-break"/>
+			<arg line="4000"/>
+			<arg line="-o"/>
+			<mapper type="glob" from="*.js" to="${buildDir}/*.min.js"/>
+			<targetfile />
+		</apply>
+	</target>
+	
+	
+	<target name="package" depends="build,clean-package">
+		<zip destfile="${packageName}.zip" basedir="${buildDir}/../" compress="true" includes="${buildName}/" />
+		<zip destfile="${packageName}_src.zip" basedir="${basedir}" compress="true" excludes="LessCompilerOutput.txt, css/MLSFinder.css" />
+	</target>
+	
+	
+	<target name="test" depends="build,clean-test">
+		<copy todir="${testDir}">
+			<fileset dir="${buildDir}" />
+		</copy>
+	</target>
+	
+	
+	<target name="clean-package">
+		<delete file="${packageName}.zip" />
+		<delete file="${packageName}_src.zip" />
+	</target>
+	
+	
+	<target name="clean-build">
+		<delete dir="${buildDir}" />
+	</target>
+	
+	
+	<target name="clean-test">
+		<delete dir="${testDir}" />
+	</target>
+	
+	
+	<macrodef name="lessjs">
+		<attribute name="input" />
+		<attribute name="output" />
+		<attribute name="compress" default="false" />
+		<sequential>
+			<java jar="${tool.rhino}" fork="true" output="@{output}">
+				<arg path="${tool.less}" />
+				<arg path="@{input}" />
+			</java>
+		</sequential>
+	</macrodef>
+	
+	
+</project>

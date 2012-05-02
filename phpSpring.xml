@@ -1,0 +1,59 @@
+<beans>
+	
+	
+	<!-- Model -->
+	
+	<bean id="ListingService" class="com_mlsfinder_wordpress_listing_service">
+		<property name="DAO">
+			<ref bean="ListingDAO" />
+		</property>
+	</bean>
+	
+	<bean id="ListingDAO" class="com_mlsfinder_wordpress_listing_dao">
+		<property name="DataService">
+			<ref bean="DataService" />
+		</property>
+		<property name="EntityPrototype">
+			<ref bean="Listing" />
+		</property>
+		<property name="WebServiceUrl">
+			<ref bean="DefaultWebServiceUrl" />
+		</property>
+	</bean>
+	
+	<bean id="Listing" class="com_mlsfinder_wordpress_listing_entity" />
+	
+	
+	<!-- Views -->
+	
+	<bean id="PluginSettingsView" class="com_mlsfinder_wordpress_admin_pluginSettingsView" />
+	
+	<bean id="ListingView" class="com_mlsfinder_wordpress_listing_view" />
+	
+	<bean id="ListingFilmStripView" class="com_mlsfinder_wordpress_listing_filmStripView" />
+	
+	<bean id="ListingFilmStripOptionsView" class="com_mlsfinder_wordpress_listing_filmStripOptionsView" />
+	
+	<bean id="QuickSearchView" class="com_mlsfinder_wordpress_listing_quickSearchView" />
+	
+	
+	<!-- Actions -->
+	
+	<bean id="EnqueueResources" class="com_mlsfinder_wordpress_action_enqueueResources">
+		<property name="PluginUrl">
+			<value>${pluginUrl}</value>
+		</property>
+	</bean>
+	
+	<bean id="CreateAdminPages" class="com_mlsfinder_wordpress_action_createAdminPages" />
+	
+	<bean id="RegisterWidgets" class="com_mlsfinder_wordpress_action_registerWidgets" />
+	
+	<bean id="EnqueueAdminResources" class="com_mlsfinder_wordpress_action_enqueueAdminResources">
+		<property name="PluginUrl">
+			<value>${pluginUrl}</value>
+		</property>
+	</bean>
+	
+	
+</beans>
