@@ -45,7 +45,7 @@ extends com_mlsfinder_wordpress_abstract_widget
 	 */
 	public function widget ( $args, $instance )
 	{
-		$view = $this->sf->get( 'QuickSearchView' );
+		$view = $this->getQuickSearchView();
 		$view->out();
 	}
 	
@@ -73,6 +73,16 @@ extends com_mlsfinder_wordpress_abstract_widget
 	 */
 	public function update ( $new_instance, $old_instance )
 	{
+	}
+	
+	
+	/* ACCESSORS ******************************************************************************** */
+	
+	/* The 'sf' property is set in the abstract widget class and is pulled from the plugin instance */
+	
+	public function getQuickSearchView ()
+	{
+		return $this->sf->getBean( 'QuickSearchView' );
 	}
 	
 	

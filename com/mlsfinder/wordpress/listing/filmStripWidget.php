@@ -54,10 +54,10 @@ extends com_mlsfinder_wordpress_abstract_widget
 	 */
 	public function widget ( $args, $instance )
 	{
-		$s = $this->sf->get( 'ListingService' );
+		$s = $this->getListingService();
 		$data = array(	'listings'	=> $s->getListings(), 
 						'options'	=> $this->getOptionData( $instance ) );
-		$view = $this->sf->get( 'ListingFilmStripView' );
+		$view = $this->getListingFilmStripView();
 		$view->out( $data );
 	}
 	
@@ -73,7 +73,7 @@ extends com_mlsfinder_wordpress_abstract_widget
 	public function form ( $instance )
 	{
 		$data = array( 'fields' => $this->getOptionData( $instance ) );
-		$view = $this->sf->get( 'ListingFilmStripOptionsView' );
+		$view = $this->getListingFilmStripOptionsView();
 		$view->out( $data );
 	}
 	
@@ -118,6 +118,28 @@ extends com_mlsfinder_wordpress_abstract_widget
 			
 		}
 		return $options;
+	}
+	
+	
+	/* ACCESSORS ******************************************************************************** */
+	
+	/* The 'sf' property is set in the abstract widget class and is pulled from the plugin instance */
+	
+	public function getListingService ()
+	{
+		return $this->sf->getBean( 'ListingService' );
+	}
+	
+	
+	public function getListingFilmStripView ()
+	{
+		return $this->sf->getBean( 'ListingFilmStripView' );
+	}
+	
+	
+	public function getListingFilmStripOptionsView ()
+	{
+		return $this->sf->getBean( 'ListingFilmStripOptionsView' );
 	}
 	
 	

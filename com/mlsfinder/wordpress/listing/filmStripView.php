@@ -74,11 +74,26 @@ implements com_ajmichels_wppf_interface_iView
 	{
 		$listingContent = '';
 		foreach ( $listings as $listing ) {
-			$view = $this->sf->get( 'ListingView' );
+			$view = $this->getListingView();
 			$view->setTemplate( 'simple' );
 			$listingContent .= $view->render( array( 'listing' => $listing ) );
 		}
 		return $listingContent;
+	}
+	
+	
+	/* ACCESSORS ******************************************************************************** */
+	
+	
+	public function getListingView ()
+	{
+		return $this->listingView;
+	}
+	
+	
+	public function setListingView ( com_ajmichels_wppf_interface_iView $view )
+	{
+		$this->listingView = $view;
 	}
 	
 	

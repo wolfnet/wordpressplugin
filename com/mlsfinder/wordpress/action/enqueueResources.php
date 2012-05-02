@@ -45,6 +45,8 @@ extends com_ajmichels_wppf_action_action
 	}
 	
 	
+	/* ACCESSORS ******************************************************************************** */
+	
 	/**
 	 * SETTER: This method is a setter for the pluginUrl property.
 	 *

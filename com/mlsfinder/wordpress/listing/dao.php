@@ -114,7 +114,6 @@ implements com_ajmichels_wppf_interface_iDao
 	
 	/* ACCESSORS ******************************************************************************** */
 	
-	
 	/**
 	 * SETTER: This setter method is used to set the data property, which is an inherited property.
 	 * 

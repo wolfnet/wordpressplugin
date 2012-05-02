@@ -23,34 +23,48 @@
 	
 	<bean id="Listing" class="com_mlsfinder_wordpress_listing_entity" />
 	
+	<bean id="DefaultWebServiceUrl" class="com_ajmichels_wppf_data_webServiceUrl">
+		<property name="Domain">
+			<value>${webServiceDomain}</value>
+		</property>
+	</bean>
+	
 	
 	<!-- Views -->
 	
-	<bean id="PluginSettingsView" class="com_mlsfinder_wordpress_admin_pluginSettingsView" />
+	<bean id="PluginSettingsView" class="com_mlsfinder_wordpress_admin_pluginSettingsView" singleton="false" />
 	
-	<bean id="ListingView" class="com_mlsfinder_wordpress_listing_view" />
+	<bean id="ListingView" class="com_mlsfinder_wordpress_listing_view" singleton="false" />
 	
-	<bean id="ListingFilmStripView" class="com_mlsfinder_wordpress_listing_filmStripView" />
+	<bean id="ListingFilmStripView" class="com_mlsfinder_wordpress_listing_filmStripView" singleton="false">
+		<property name="ListingView">
+			<ref bean="ListingView" />
+		</property>
+	</bean>
 	
-	<bean id="ListingFilmStripOptionsView" class="com_mlsfinder_wordpress_listing_filmStripOptionsView" />
+	<bean id="ListingFilmStripOptionsView" class="com_mlsfinder_wordpress_listing_filmStripOptionsView" singleton="false" />
 	
-	<bean id="QuickSearchView" class="com_mlsfinder_wordpress_listing_quickSearchView" />
+	<bean id="QuickSearchView" class="com_mlsfinder_wordpress_listing_quickSearchView" singleton="false" />
 	
 	
 	<!-- Actions -->
 	
 	<bean id="EnqueueResources" class="com_mlsfinder_wordpress_action_enqueueResources">
-		<property name="PluginUrl">
+		<property name="pluginUrl">
 			<value>${pluginUrl}</value>
 		</property>
 	</bean>
 	
-	<bean id="CreateAdminPages" class="com_mlsfinder_wordpress_action_createAdminPages" />
+	<bean id="CreateAdminPages" class="com_mlsfinder_wordpress_action_createAdminPages">
+		<property name="PluginSettingsView">
+			<ref bean="PluginSettingsView" />
+		</property>
+	</bean>
 	
 	<bean id="RegisterWidgets" class="com_mlsfinder_wordpress_action_registerWidgets" />
 	
 	<bean id="EnqueueAdminResources" class="com_mlsfinder_wordpress_action_enqueueAdminResources">
-		<property name="PluginUrl">
+		<property name="pluginUrl">
 			<value>${pluginUrl}</value>
 		</property>
 	</bean>

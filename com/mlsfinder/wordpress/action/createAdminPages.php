@@ -43,8 +43,23 @@ extends com_ajmichels_wppf_action_action
 	 */
 	public function pluginSettingsPage ()
 	{
-		$view = $this->sf->get( 'PluginSettingsView' );
+		$view = $this->getPluginSettingsView();
 		$view->out();
+	}
+	
+	
+	/* ACCESSORS ******************************************************************************** */
+	
+	
+	public function getPluginSettingsView ()
+	{
+		return $this->pluginSettingsView;
+	}
+	
+	
+	public function setPluginSettingsView ( com_ajmichels_wppf_interface_iView $view )
+	{
+		$this->pluginSettingsView = $view;
 	}
 	
 	
