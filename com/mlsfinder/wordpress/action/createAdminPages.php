@@ -26,8 +26,8 @@ extends com_ajmichels_wppf_action_action
 	 */
 	public function execute ()
 	{
-		add_menu_page(	'MLSFinder', 
-						'MLSFinder', 
+		add_menu_page(	'MLS Finder', 
+						'MLS Finder', 
 						'administrator', 
 						'mlsfinder_plugin_settings', 
 						array( &$this, 'pluginSettingsPage' ) );

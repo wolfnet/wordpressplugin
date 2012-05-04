@@ -42,4 +42,29 @@ implements com_ajmichels_wppf_interface_iView
 	}
 	
 	
+	public function render ( $data = array() )
+	{
+		$optionManager					= $this->getOptionManager();
+		$data['formHeader']				= $optionManager->getSettingsFormHeader();
+		$data['productKey']				= $optionManager->getOptionValueFromWP('wnt_productKey');
+		$data['searchSolutionURL']		= $optionManager->getOptionValueFromWP('wnt_searchSolutionURL');
+		return parent::render( $data );
+	}
+	
+	
+	/* ACCESSORS ******************************************************************************** */
+	
+	
+	public function getOptionManager ()
+	{
+		return $this->optionManager;
+	}
+	
+	
+	public function setOptionManager ( com_ajmichels_wppf_option_manager $om )
+	{
+		$this->optionManager = $om;
+	}
+	
+	
 }

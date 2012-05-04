@@ -32,7 +32,12 @@
 	
 	<!-- Views -->
 	
-	<bean id="PluginSettingsView" class="com_mlsfinder_wordpress_admin_pluginSettingsView" singleton="false" />
+	<bean id="PluginSettingsView" class="com_mlsfinder_wordpress_admin_pluginSettingsView" singleton="false">
+		<property name="OptionManager">
+			<!-- Defined in the WPPF Service Factory -->
+			<ref bean="OptionManager" />
+		</property>
+	</bean>
 	
 	<bean id="ListingView" class="com_mlsfinder_wordpress_listing_view" singleton="false" />
 	

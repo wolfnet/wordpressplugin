@@ -54,9 +54,10 @@ extends com_mlsfinder_wordpress_abstract_widget
 	 */
 	public function widget ( $args, $instance )
 	{
-		$s = $this->getListingService();
-		$data = array(	'listings'	=> $s->getListings(), 
-						'options'	=> $this->getOptionData( $instance ) );
+		$data = array(
+					'listings'	=> $this->getListingService()->getListings(), 
+					'options'	=> $this->getOptionData( $instance )
+					);
 		$view = $this->getListingFilmStripView();
 		$view->out( $data );
 	}
@@ -73,8 +74,7 @@ extends com_mlsfinder_wordpress_abstract_widget
 	public function form ( $instance )
 	{
 		$data = array( 'fields' => $this->getOptionData( $instance ) );
-		$view = $this->getListingFilmStripOptionsView();
-		$view->out( $data );
+		$this->getListingFilmStripOptionsView()->out( $data );
 	}
 	
 	
