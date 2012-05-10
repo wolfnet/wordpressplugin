@@ -136,9 +136,6 @@ implements com_ajmichels_wppf_interface_iDao
 	public function getData ()
 	{
 		$data = $this->getDataService()->getData( $this->getWebServiceUrl() );
-		if ( array_key_exists( 'mlsfinder' , $data ) ) {
-			$data = $data['mlsfinder'];
-		}
 		$this->setData( $data['listings'] );
 		return $this->data;
 	}

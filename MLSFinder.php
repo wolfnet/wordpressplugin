@@ -61,7 +61,7 @@ implements com_ajmichels_common_iSingleton
 		$sfXml = __DIR__ . DIRECTORY_SEPARATOR . 'phpSpring.xml';
 		$sfProps = array( 
 					'pluginUrl'			=> $this->getPluginUrl(),
-					'webServiceDomain'	=> $this->getPluginUrl() . 'testFeed.xml'
+					'webServiceDomain'	=> $this->getPluginUrl() . 'testFeed.json'
 					);
 		$this->sf = new com_ajmichels_phpSpring_bean_factory_default( $sfXml, array(), $sfProps );
 		$this->sf->setParent( $this->wppf_serviceFactory );

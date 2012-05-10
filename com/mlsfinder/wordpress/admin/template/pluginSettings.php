@@ -36,8 +36,11 @@
 							value="<?php echo $productKey; ?>" size="50" />
 						<p class="description">
 							This Product Key ties your WordPress site back to the MLS Finder<br/>
-							servers So that we can provide you with accurate data tailored to your<br/>
-							needs. You will not be able to received any data without a valid key.
+							servers so that we can provide you with accurate data tailored to your<br/>
+							needs. You will not be able to received any data without a valid key.<br/>
+							If you do not have a key please contact WolfNet Technologies at </br>
+							612-342-0088 or toll free at 1-866-WOLFNET. You may also reach us <br/>
+							online via our website <a href="http://wolfnet.com/contact_us.cfm" target="_blank">WolfNet.com</a>.
 						</p>
 					</td>
 				</tr>

@@ -11,7 +11,7 @@
 	
 	<bean id="ListingDAO" class="com_mlsfinder_wordpress_listing_dao">
 		<property name="DataService">
-			<ref bean="DataService" />
+			<ref bean="JsonDataService" />
 		</property>
 		<property name="EntityPrototype">
 			<ref bean="Listing" />
