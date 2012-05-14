@@ -27,7 +27,7 @@ extends com_mlsfinder_wordpress_abstract_widget
 	 * @type	array
 	 * 
 	 */
-	private $options = array('wait' => false, 'waitLen' => 1, 'speed' => 50 );
+	protected $options = array('wait' => false, 'waitLen' => 1, 'speed' => 50 );
 	
 	
 	/**
@@ -96,30 +96,6 @@ extends com_mlsfinder_wordpress_abstract_widget
 		}
 		return $saveData;
 	}
-	
-	
-	/**
-	 * This method both gets and parses widget option data.
-	 * 
-	 * @param	array	$instance	An array of widget instance data
-	 * @return	array
-	 * 
-	 */
-	private function getOptionData ( $instance = null )
-	{
-		$options = array();
-		foreach ( $this->options as $opt => $value ) {
-			$options[$opt]['value']	= $value;
-			$options[$opt]['id']	= $this->get_field_id( $opt );
-			$options[$opt]['name']	= $this->get_field_name( $opt );
-			if ( $instance != null && isset( $instance[ $opt ] ) ) {
-				$options[$opt]['value'] = $instance[ $opt ];
-			}
-			
-		}
-		return $options;
-	}
-	
 	
 	/* ACCESSORS ******************************************************************************** */
 	

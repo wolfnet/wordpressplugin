@@ -104,6 +104,14 @@ implements com_ajmichels_common_iSingleton
 	}
 	
 	
+	/* Register Shortcodes with the Shortcode Manager */
+	protected function shortcodes ()
+	{
+		$this->sm->register( $this->sf->getBean( 'ListingQuickSearchShortcode' ) );
+		$this->sm->register( $this->sf->getBean( 'FeaturedListingsShortcode' ) );
+	}
+	
+	
 }
 
 

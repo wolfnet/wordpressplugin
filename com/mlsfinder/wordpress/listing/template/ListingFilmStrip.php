@@ -23,9 +23,9 @@ $instanceId = uniqid('mlsFinder_listingFilmStrip_');
 <script type="text/javascript">
 	
 	jQuery('#<?php echo $instanceId; ?>').mlsFinderFilmStrip({
-		'wait' : <?php echo ($options['wait']['value']) ? 'true' : 'false'; ?>, 
-		'waitLen' : <?php echo $options['waitLen']['value'] * 1000 ; ?>,
-		'speed' : <?php echo round(($options['speed']['value'] != 0) ? 10 / ($options['speed']['value'] / 100) : 40) ; ?>
+		'wait' : <?php echo ($options['wait']) ? 'true' : 'false'; ?>, 
+		'waitLen' : <?php echo $options['waitLen'] * 1000 ; ?>,
+		'speed' : <?php echo round(($options['speed'] != 0) ? 10 / ($options['speed'] / 100) : 40) ; ?>
 	});
 	
 </script>

@@ -80,4 +80,22 @@
 	</bean>
 	
 	
+	<!-- Shortcodes -->
+	
+	<bean id="ListingQuickSearchShortcode" class="com_mlsfinder_wordpress_listing_quickSearchShortcode">
+		<property name="QuickSearchView">
+			<ref bean="QuickSearchView" />
+		</property>
+	</bean>
+	
+	<bean id="FeaturedListingsShortcode" class="com_mlsfinder_wordpress_listing_featuredListingsShortcode">
+		<property name="ListingService">
+			<ref bean="ListingService" />
+		</property>
+		<property name="ListingFilmStripView">
+			<ref bean="ListingFilmStripView" />
+		</property>
+	</bean>
+	
+	
 </beans>
