@@ -26,11 +26,13 @@ extends com_ajmichels_wppf_action_action
 	 */
 	public function execute ()
 	{
+		$url = $this->getPluginUrl();
 		add_menu_page(	'MLS Finder', 
 						'MLS Finder', 
 						'administrator', 
 						'mlsfinder_plugin_settings', 
-						array( &$this, 'pluginSettingsPage' ) );
+						array( &$this, 'pluginSettingsPage' ),
+						$url . '/img/wp_mlsfinder_nav_on.png' );
 	}
 	
 	
@@ -60,6 +62,31 @@ extends com_ajmichels_wppf_action_action
 	public function setPluginSettingsView ( com_ajmichels_wppf_interface_iView $view )
 	{
 		$this->pluginSettingsView = $view;
+	}
+	
+	
+	/**
+	 * SETTER: This method is a setter for the pluginUrl property.
+	 *
+	 * @param	string	$url	The absolute URL to this plugin's directory.
+	 * @return	void
+	 * 
+	 */
+	public function setPluginUrl ( $url )
+	{
+		$this->pluginUrl = $url;
+	}
+	
+	
+	/**
+	 * GETTER: This method is a getter for the pluginUrl property.
+	 *
+	 * @return	string	The absolute URL to this plugin's directory.
+	 * 
+	 */
+	public function getPluginUrl ()
+	{
+		return $this->pluginUrl;
 	}
 	
 	

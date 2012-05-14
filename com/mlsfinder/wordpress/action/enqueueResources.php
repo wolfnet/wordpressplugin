@@ -39,9 +39,10 @@ extends com_ajmichels_wppf_action_action
 	public function execute ()
 	{
 		$this->log( 'Action EnqueueResources' );
-		wp_enqueue_script( 'mlsfinderjs', 			$this->getPluginUrl() . 'js/MLSFinder.min.js', array('jquery') );
-		wp_enqueue_script( 'mlsfinderfilmsriptjs',	$this->getPluginUrl() . 'js/jQuery/jquery.filmStrip.min.js', array('jquery') );
-		wp_enqueue_style(  'mlsfindercss',			$this->getPluginUrl() . 'css/MLSFinder.min.css', array(), false, 'screen' );
+		$url = $this->getPluginUrl();
+		wp_enqueue_script( 'mlsfinderjs', 			$url . 'js/MLSFinder.min.js', array('jquery') );
+		wp_enqueue_script( 'mlsfinderfilmsriptjs',	$url . 'js/jQuery/jquery.filmStrip.min.js', array('jquery') );
+		wp_enqueue_style(  'mlsfindercss',			$url . 'css/MLSFinder.min.css', array(), false, 'screen' );
 	}
 	
 	

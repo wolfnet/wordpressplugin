@@ -66,6 +66,9 @@
 		<property name="PluginSettingsView">
 			<ref bean="PluginSettingsView" />
 		</property>
+		<property name="pluginUrl">
+			<value>${pluginUrl}</value>
+		</property>
 	</bean>
 	
 	<bean id="RegisterWidgets" class="com_mlsfinder_wordpress_action_registerWidgets" />

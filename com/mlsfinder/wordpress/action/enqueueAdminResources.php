@@ -38,6 +38,8 @@ extends com_ajmichels_wppf_action_action
 	public function execute ()
 	{
 		$this->log( 'Action EnqueueAdminResources' );
+		$url = $this->getPluginUrl();
+		wp_enqueue_style(  'mlsfinderadmincss',	$url . 'css/mlsFinderAdmin.min.css', array(), false, 'screen' );
 	}
 	
 	
