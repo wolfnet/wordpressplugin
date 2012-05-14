@@ -7,17 +7,19 @@
 		<property name="DAO">
 			<ref bean="ListingDAO" />
 		</property>
+		<property name="DataService">
+			<!-- Defined in WPPF service factory -->
+			<ref bean="JsonDataService" />
+		</property>
+		<property name="WebServiceUrl">
+			<!-- Defined in WPPF service factory -->
+			<ref bean="DefaultWebServiceUrl" />
+		</property>
 	</bean>
 	
 	<bean id="ListingDAO" class="com_mlsfinder_wordpress_listing_dao">
-		<property name="DataService">
-			<ref bean="JsonDataService" />
-		</property>
 		<property name="EntityPrototype">
 			<ref bean="Listing" />
-		</property>
-		<property name="WebServiceUrl">
-			<ref bean="DefaultWebServiceUrl" />
 		</property>
 	</bean>
 	

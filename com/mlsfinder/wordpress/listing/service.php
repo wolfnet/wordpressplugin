@@ -20,6 +20,13 @@ implements com_ajmichels_wppf_interface_iService
 {
 	
 	
+	/* PROPERTIES ******************************************************************************* */
+	
+	private $dataService;
+	private $webServiceUrl;
+	
+	
+	/* SINGLETON ENFORCEMENT ******************************************************************** */
 	
 	/**
 	 * This private static property holds the singleton instance of this class.
@@ -28,19 +35,6 @@ implements com_ajmichels_wppf_interface_iService
 	 * 
 	 */
 	private static $instance;
-	
-	
-	/**
-	 * This constructor method is private becuase this class is a singleton and can only be retrieved
-	 * by statically calling the getInstance method.
-	 * 
-	 * @return void
-	 * 
-	 */
-	private function __construct ()
-	{
-		$this->log( 'Init com_mlsfinder_wordpress_listing_service' );
-	}
 	
 	
 	/**
@@ -58,6 +52,23 @@ implements com_ajmichels_wppf_interface_iService
 	}
 	
 	
+	/* CONSTRUCTOR ****************************************************************************** */
+	
+	/**
+	 * This constructor method is private becuase this class is a singleton and can only be retrieved
+	 * by statically calling the getInstance method.
+	 * 
+	 * @return void
+	 * 
+	 */
+	private function __construct ()
+	{
+		$this->log( 'Init com_mlsfinder_wordpress_listing_service' );
+	}
+	
+	
+	/* PUBLIC METHODS *************************************************************************** */
+	
 	/**
 	 * This method returns all property listings avaiable to this WordPress plugin instance. This 
 	 * data is retrieved from the listingDao object.
@@ -67,9 +78,48 @@ implements com_ajmichels_wppf_interface_iService
 	 */
 	public function getListings ()
 	{
+		$this->setData();
+		return $this->getDAO()->findAll();
+	}
+	
+	
+	/* PRIVATE METHODS ************************************************************************** */
+	
+	private function setData ()
+	{
 		$dao = $this->getDAO();
-		$objs = $dao->findAll();
-		return $objs;
+		$wsu = $this->getWebServiceUrl();
+		$wsu->setCacheSetting( 15 );
+		
+		$data = $this->getDataService()->getData( $wsu );
+		
+		$dao->setData( $data['listings'] );
+	}
+	
+	
+	/* ACCESSOR METHODS ************************************************************************* */
+	
+	public function getDataService ()
+	{
+		return $this->dataService;
+	}
+	
+	
+	public function setDataService ( com_ajmichels_wppf_data_service $service )
+	{
+		$this->dataService = $service;
+	}
+	
+	
+	public function getWebServiceUrl ()
+	{
+		return $this->webServiceUrl;
+	}
+	
+	
+	public function setWebServiceUrl ( com_ajmichels_wppf_data_webServiceUrl $url )
+	{
+		$this->webServiceUrl = $url;
 	}
 	
 	

@@ -135,8 +135,6 @@ implements com_ajmichels_wppf_interface_iDao
 	 */
 	public function getData ()
 	{
-		$data = $this->getDataService()->getData( $this->getWebServiceUrl() );
-		$this->setData( $data['listings'] );
 		return $this->data;
 	}
 	

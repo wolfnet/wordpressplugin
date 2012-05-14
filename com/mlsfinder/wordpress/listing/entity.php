@@ -73,7 +73,10 @@ implements com_ajmichels_wppf_interface_iEntity
 		$this->linktext	=	$data['linktext'];
 		$this->url		=	$data['url'];
 		$this->photo	=	$data['photo'];
-		$this->body		=	$data['body'];
+		
+		/* using html_entity_decode to make sure that character that were encoded as part of the 
+		   JSON encoding process are converted back into HTML for display. */
+		$this->body		=	html_entity_decode( $data['body'] );
 	}
 	
 	
