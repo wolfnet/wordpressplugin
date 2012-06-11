@@ -1,4 +1,4 @@
-/**
+﻿/**
  * This jQuery plugin can be applied to any number of containers which hold child elements which will
  * then scroll based on the options that are passes in.
  * 

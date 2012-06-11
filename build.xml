@@ -1,4 +1,4 @@
-<project name="MLSFinderWordPressPlugin" default="build" basedir=".">
+﻿<project name="MLSFinderWordPressPlugin" default="build" basedir=".">
 	
 	
 	<property name="version" value="0.1.0" />
