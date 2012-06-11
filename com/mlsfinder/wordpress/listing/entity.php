@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 
 /**
  * This class is the Listing Entity and is a container for listing data.
@@ -55,7 +55,28 @@ implements com_ajmichels_wppf_interface_iEntity
 	 * @type string
 	 * 
 	 */
-	private $body		=	'';
+	private $city		=	'';
+	
+	/**
+	 * 
+	 * @type string
+	 * 
+	 */
+	private $state		=	'';
+	
+	/**
+	 * 
+	 * @type string
+	 * 
+	 */
+	private $beds		=	0;
+	
+	/**
+	 * 
+	 * @type string
+	 * 
+	 */
+	private $baths		=	0;
 	
 	
 	/**
@@ -73,6 +94,10 @@ implements com_ajmichels_wppf_interface_iEntity
 		$this->linktext	=	$data['linktext'];
 		$this->url		=	$data['url'];
 		$this->photo	=	$data['photo'];
+		$this->city		=	$data['city'];
+		$this->state	=	$data['state'];
+		$this->beds		=	$data['beds'];
+		$this->baths	=	$data['baths'];
 		
 		/* using html_entity_decode to make sure that character that were encoded as part of the 
 		   JSON encoding process are converted back into HTML for display. */
@@ -140,6 +165,54 @@ implements com_ajmichels_wppf_interface_iEntity
 	public function getBody ()
 	{
 		return $this->body;
+	}
+	
+	
+	/**
+	 * GETTER: This getter method is used to get the 'city' property, which is an inherited property.
+	 * 
+	 * @return	string
+	 * 
+	 */
+	public function getCity ()
+	{
+		return $this->city;
+	}
+	
+	
+	/**
+	 * GETTER: This getter method is used to get the 'state' property, which is an inherited property.
+	 * 
+	 * @return	string
+	 * 
+	 */
+	public function getState ()
+	{
+		return $this->state;
+	}
+	
+	
+	/**
+	 * GETTER: This getter method is used to get the 'beds' property, which is an inherited property.
+	 * 
+	 * @return	string
+	 * 
+	 */
+	public function getBeds ()
+	{
+		return $this->beds;
+	}
+	
+	
+	/**
+	 * GETTER: This getter method is used to get the 'baths' property, which is an inherited property.
+	 * 
+	 * @return	string
+	 * 
+	 */
+	public function getBaths ()
+	{
+		return $this->baths;
 	}
 	
 	

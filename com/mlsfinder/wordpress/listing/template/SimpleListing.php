@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 
 /**
  * This is an HTML template file for the listing entity. This specific template is meant to be very 

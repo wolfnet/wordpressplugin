@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 
 /**
  * This class is the listingService and is a Facade used to interact with all other listing information.

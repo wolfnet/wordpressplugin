@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 
 /**
  * This is an HTML template file for the Plugin Settings page in the WordPress admin. This file should
@@ -16,7 +16,7 @@
 
 ?>
 <div class="wrap">
-
+	
 	<div id="icon-options-mlsfinder" class="icon32"><br></div>
 	
 	<h2>MLS Finder - Plugin Settings</h2>

@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 
 /**
  * This is the filmStripWidget object. This object inherites from the base WP_Widget object and 
@@ -31,7 +31,7 @@ extends com_ajmichels_wppf_shortcode_shortcode
 	 * @type	array
 	 * 
 	 */
-	protected $attributes = array('wait' => false, 'waitLen' => 1, 'speed' => 50 );
+	protected $attributes = array('wait' => false, 'waitLen' => 1, 'speed' => 50, 'scrollCount' => 0 );
 	
 	
 	/* PUBLIC METHODS *************************************************************************** */

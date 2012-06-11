@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 
 /**
  * This object provides some additional MLSFinder specific logic to abstract widget class.
@@ -25,6 +25,8 @@ extends com_ajmichels_wppf_abstract_widget
 	 * 
 	 */
 	protected $p;
+	
+	protected $sf;
 	
 	
 	/**
