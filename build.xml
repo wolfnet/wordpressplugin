@@ -1,7 +1,9 @@
 ﻿<project name="MLSFinderWordPressPlugin" default="build" basedir=".">
 	
 	
-	<property name="version" value="0.1.0" />
+	<property name="majorVersion" value="0.1" />
+	<property name="minorVersion" value="0" />
+	<property name="version" value="${majorVersion}.${minorVersion}" />
 	
 	
 	<property file="build.properties" />
@@ -23,6 +25,7 @@
 			<fileset dir="${basedir}">
 				<exclude name="build.properties" />
 				<exclude name="build.xml" />
+				<exclude name="phpdoc.dist.xml" />
 				<exclude name="LessCompilerOutput.txt" />
 				<exclude name="ant/" />
 				<exclude name="${dir.js}/**/*.js" />
@@ -35,7 +38,10 @@
 			</fileset>
 		</copy>
 		<!-- Update Plugin Version -->
+		<replace file="${buildDir}/MLSFinder.php" token="{majorVersion}" value="${majorVersion}"/>
+		<replace file="${buildDir}/MLSFinder.php" token="{minorVersion}" value="${minorVersion}"/>
 		<replace file="${buildDir}/MLSFinder.php" token="{X.X.X}" value="${version}"/>
+		<replace file="${buildDir}/ReadMe.txt" token="{X.X.X}" value="${version}"/>
 		<!-- Compile Less Files -->
 		<echo>Compiling Less Files</echo>
 		<!--<lessjs input="${basedir}/${dir.css}/main.less" output="${basedir}/${dir.css}/main.css" />-->

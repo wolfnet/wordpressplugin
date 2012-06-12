@@ -43,6 +43,13 @@ implements com_ajmichels_common_iSingleton
 	}
 	
 	
+	/* PROPERTIES ******************************************************************************* */
+	
+	public $majorVersion = {majorVersion};
+	public $minorVersion = {minorVersion};
+	public $version = '{X.X.X}';
+	
+	
 	/* CONSTRUCT PLUGIN ************************************************************************* */
 	
 	public function __construct ()
@@ -60,11 +67,17 @@ implements com_ajmichels_common_iSingleton
 		/* Create Plugin Service Factory */
 		$sfXml = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'phpSpring.xml';
 		$sfProps = array( 
-					'pluginUrl'			=> $this->getPluginUrl(),
-					'webServiceDomain'	=> $this->getPluginUrl() . 'testFeed.json'
+					'pluginUrl'				=> $this->getPluginUrl(),
+					'webServiceDomain'		=> $this->getPluginUrl() . 'testFeed.json',
+					'pluginMajorVersion'	=> $this->majorVersion,
+					'pluginMinorVersion'	=> $this->minorVersion,
+					'pluginVersion'			=> $this->version
 					);
 		$this->sf = new com_ajmichels_phpSpring_bean_factory_default( $sfXml, array(), $sfProps );
 		$this->sf->setParent( $this->wppf_serviceFactory );
+		
+		$defaultUrl = $this->sf->getBean( 'DefaultWebServiceUrl' );
+		$defaultUrl->setParameter( 'pluginVersion', $this->version );
 		
 		/* Notify the bootstrap that we are ready to initialize the plugin. */
 		parent::initPlugin();
