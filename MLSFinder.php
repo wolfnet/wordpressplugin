@@ -58,7 +58,7 @@ implements com_ajmichels_common_iSingleton
 		}
 		
 		/* Create Plugin Service Factory */
-		$sfXml = __DIR__ . DIRECTORY_SEPARATOR . 'phpSpring.xml';
+		$sfXml = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'phpSpring.xml';
 		$sfProps = array( 
 					'pluginUrl'			=> $this->getPluginUrl(),
 					'webServiceDomain'	=> $this->getPluginUrl() . 'testFeed.json'

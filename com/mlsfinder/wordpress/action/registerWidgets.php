@@ -2,7 +2,7 @@
 
 /**
  * This action is responsible for registering any widgets the plugin makes available.
- *
+ * 
  * @package			com.mlsfinder.wordpress.action
  * @title			registerWidgets.php
  * @extends			com_ajmichels_wppf_action_action
@@ -21,7 +21,7 @@ extends com_ajmichels_wppf_action_action
 	 * This method is executed by the ActionManager when any hooks that this action is registered to
 	 * are encountered.  It is currently handling the following resources: MLSFinder.min.js,
 	 * jquery.filmStrip.min.js, and MLSFinder.min.css.
-	 *
+	 * 
 	 * @return void
 	 * 
 	 */

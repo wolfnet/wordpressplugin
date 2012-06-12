@@ -3,7 +3,7 @@
 /**
  * This is an HTML template file for the Listing Film Strip Widget. This template is meant to wrap a 
  * set of listing views. This file should ideally contain very little PHP.
- *
+ * 
  * @package			com.mlsfinder.wordpress.listing.template
  * @title			ListingFilmStrip.php
  * @contributors	AJ Michels (aj.michels@wolfnet.com)

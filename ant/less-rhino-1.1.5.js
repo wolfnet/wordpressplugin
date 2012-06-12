@@ -1,4 +1,4 @@
-//
+﻿//
 // Stub out `require` in rhino
 //
 function require(arg) {

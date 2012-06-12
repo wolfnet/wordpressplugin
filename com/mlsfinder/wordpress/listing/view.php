@@ -2,7 +2,7 @@
 
 /**
  * This view is responsible for displaying a listing record.
- *
+ * 
  * @package			com.mlsfinder.wordpress.listing
  * @title			view.php
  * @extends			com_ajmichels_wppf_abstract_view

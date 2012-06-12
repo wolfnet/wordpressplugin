@@ -2,7 +2,7 @@
 
 /**
  * This class is the Listing Entity and is a container for listing data.
- *
+ * 
  * @package			com.mlsfinder.wordpress.listing
  * @title			entity.php
  * @extends			com_ajmichels_wppf_abstract_entity

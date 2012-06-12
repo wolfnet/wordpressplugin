@@ -2,7 +2,7 @@
 
 /**
  * This view is responsible for displaying the plugin admin page.
- *
+ * 
  * @package			com.mlsfinder.wordpress.admin
  * @title			pluginSettingsView.php
  * @extends			com_ajmichels_wppf_abstract_view

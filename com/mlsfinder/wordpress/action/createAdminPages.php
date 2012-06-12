@@ -1,8 +1,8 @@
-<?php
+﻿<?php
 
 /**
  * This action is responsible for creating the plugin admin pages within the WordPress admin.
- *
+ * 
  * @package			com.mlsfinder.wordpress.action
  * @title			createAdminPages.php
  * @extends			com_ajmichels_wppf_action_action

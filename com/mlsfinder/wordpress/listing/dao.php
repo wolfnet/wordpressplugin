@@ -4,7 +4,7 @@
  * This class is the listingDAO (data access object) and is responsible for translating the incoming
  * and outgoing data to and from the listingEntity objects. This object should be replaced in the 
  * event that the method used for data i/o is changed.
- *
+ * 
  * @package			com.mlsfinder.wordpress.listing
  * @title			ListingDAO.php
  * @extends			com_ajmichels_wppf_abstract_dao

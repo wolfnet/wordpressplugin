@@ -2,7 +2,7 @@
 
 /**
  * This class is the listingService and is a Facade used to interact with all other listing information.
- *
+ * 
  * @package			com.mlsfinder.wordpress.listing
  * @title			service.php
  * @extends			com_ajmichels_wppf_abstract_service

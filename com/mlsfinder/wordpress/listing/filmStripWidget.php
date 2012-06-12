@@ -27,7 +27,7 @@ extends com_mlsfinder_wordpress_abstract_widget
 	 * @type	array
 	 * 
 	 */
-	protected $options = array('wait' => false, 'waitLen' => 1, 'speed' => 50 );
+	public $options = array('wait' => false, 'waitLen' => 1, 'speed' => 50 );
 	
 	
 	/**

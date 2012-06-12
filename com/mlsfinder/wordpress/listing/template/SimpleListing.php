@@ -5,7 +5,7 @@
  * simple with limited information. If more information is need to be displayed on the page a new 
  * template file should be created and made avaiable in the ListingView class. This file should 
  * ideally contain very little PHP.
- *
+ * 
  * @package			com.mlsfinder.wordpress.listing.template
  * @title			SimpleListing.php
  * @contributors	AJ Michels (aj.michels@wolfnet.com)

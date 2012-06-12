@@ -3,7 +3,7 @@
 /**
  * This view is repsondible for displaying the Film Strip Widget Options in the WordPress admin.
  * Each widget instance has its own instance of this view.
- *
+ * 
  * @package			com.mlsfinder.wordpress.listing
  * @title			filmStripOptionsView.php
  * @extends			com_ajmichels_wppf_abstract_view

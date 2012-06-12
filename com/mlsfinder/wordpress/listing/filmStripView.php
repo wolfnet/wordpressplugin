@@ -2,7 +2,7 @@
 
 /**
  * This view is responsible for displaying the Listings Film Strip, which is a widget component.
- *
+ * 
  * @package			com.mlsfinder.wordpress.listing
  * @title			filmStripView.php
  * @extends			com_ajmichels_wppf_abstract_view

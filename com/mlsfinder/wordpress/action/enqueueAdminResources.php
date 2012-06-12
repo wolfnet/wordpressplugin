@@ -3,7 +3,7 @@
 /**
  * This action is responsible for enqueuing any admin resources such as JavaScript and CSS that are
  * needed for any code generated in the WordPress admin for the plugin.
- *
+ * 
  * @package			com.mlsfinder.wordpress.action
  * @title			enqueueAdminResources.php
  * @extends			com_ajmichels_wppf_action_action
