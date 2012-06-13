@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 
 /**
  * This is an HTML template file for the Listing Film Strip Widget instance Options Form page in the 

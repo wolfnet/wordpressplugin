@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 
 /**
  * This action is responsible for registering any widgets the plugin makes available.

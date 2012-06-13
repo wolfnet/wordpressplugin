@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 
 /**
  * This view is repsondible for displaying the Film Strip Widget Options in the WordPress admin.

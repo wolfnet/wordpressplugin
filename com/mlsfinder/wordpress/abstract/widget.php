@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 
 /**
  * This object provides some additional MLSFinder specific logic to abstract widget class.

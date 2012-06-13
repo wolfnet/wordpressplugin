@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 
 /**
  * This view is responsible for displaying a listing record.

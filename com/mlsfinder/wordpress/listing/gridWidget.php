@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 
 /**
  * This is the gridWidget object. This object inherites from the base WP_Widget object and 

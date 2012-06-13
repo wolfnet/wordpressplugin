@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 
 /**
  * This class is the listingDAO (data access object) and is responsible for translating the incoming

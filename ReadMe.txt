@@ -1,4 +1,4 @@
-﻿=== MLSFinder ===
+=== MLSFinder ===
 Contributors: ajmichels
 Tags: idx, mls, homes
 Requires at least: 2.0.2

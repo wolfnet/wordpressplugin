@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 
 /**
  * This is an HTML template file for the Grid Widget. This template is meant to wrap a 

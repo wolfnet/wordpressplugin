@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 
 /**
  * This action is responsible for creating the plugin admin pages within the WordPress admin.

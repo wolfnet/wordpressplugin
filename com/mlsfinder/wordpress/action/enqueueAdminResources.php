@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 
 /**
  * This action is responsible for enqueuing any admin resources such as JavaScript and CSS that are

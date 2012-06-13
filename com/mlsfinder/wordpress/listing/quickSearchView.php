@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 
 /**
  * This view is responsible for displaying the Quick Search Form, which is a widget component.

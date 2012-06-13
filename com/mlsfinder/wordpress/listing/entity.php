@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 
 /**
  * This class is the Listing Entity and is a container for listing data.

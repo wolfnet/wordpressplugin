@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 
 /**
  * This is an HTML template file for the Quick Search Form Widget. This file should ideally contain 

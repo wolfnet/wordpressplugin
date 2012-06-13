@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 
 /**
  * This view is responsible for displaying the Listings Grid, which is a widget component.

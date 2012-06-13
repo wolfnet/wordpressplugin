@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 
 /**
  * This is an HTML template file for the Plugin Settings page in the WordPress admin. This file should
