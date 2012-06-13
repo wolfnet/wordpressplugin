@@ -51,6 +51,14 @@
 	
 	<bean id="ListingFilmStripOptionsView" class="com_mlsfinder_wordpress_listing_filmStripOptionsView" singleton="false" />
 	
+	<bean id="GridView" class="com_mlsfinder_wordpress_listing_gridView" singleton="false">
+		<property name="ListingView">
+			<ref bean="ListingView" />
+		</property>
+	</bean>
+	
+	<bean id="GridOptionsView" class="com_mlsfinder_wordpress_listing_gridOptionsView" singleton="false" />
+	
 	<bean id="QuickSearchView" class="com_mlsfinder_wordpress_listing_quickSearchView" singleton="false" />
 	
 	

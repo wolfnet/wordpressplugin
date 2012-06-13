@@ -19,8 +19,7 @@ extends com_ajmichels_wppf_action_action
 	
 	/**
 	 * This method is executed by the ActionManager when any hooks that this action is registered to
-	 * are encountered.  It is currently handling the following resources: MLSFinder.min.js,
-	 * jquery.filmStrip.min.js, and MLSFinder.min.css.
+	 * are encountered.
 	 * 
 	 * @return void
 	 * 
@@ -28,6 +27,7 @@ extends com_ajmichels_wppf_action_action
 	public function execute ()
 	{
 		register_widget( 'com_mlsfinder_wordpress_listing_filmStripWidget' );
+		register_widget( 'com_mlsfinder_wordpress_listing_gridWidget' );
 		register_widget( 'com_mlsfinder_wordpress_listing_quickSearchWidget' );
 	}
 	
