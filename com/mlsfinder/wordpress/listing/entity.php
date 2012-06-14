@@ -21,62 +21,75 @@ implements com_ajmichels_wppf_interface_iEntity
 	
 	/* PROPERTIES ******************************************************************************* */
 	
-	
 	/**
 	 * 
 	 * @type mixed
 	 * 
 	 */
-	private $id			=	0;
+	private $property_id		=	'';
 	
 	/**
 	 * 
 	 * @type string
 	 * 
 	 */
-	private $linktext	=	'';
+	private $property_url		=	'';
+	
+	/**
+	 * 
+	 * @type float
+	 * 
+	 */
+	private $listing_price		=	0;
+	
+	/**
+	 * 
+	 * @type boolean
+	 * 
+	 */
+	private $agent_listing		=	0;
 	
 	/**
 	 * 
 	 * @type string
 	 * 
 	 */
-	private $url		=	'';
+	private $display_address	=	'';
 	
 	/**
 	 * 
 	 * @type string
 	 * 
 	 */
-	private $photo		=	'';
+	private $city				=	'';
 	
 	/**
 	 * 
 	 * @type string
 	 * 
 	 */
-	private $city		=	'';
+	private $state				=	'';
 	
 	/**
 	 * 
 	 * @type string
 	 * 
 	 */
-	private $state		=	'';
+	private $thumbnail_url		=	'';
 	
 	/**
 	 * 
-	 * @type string
+	 * @type numeric
 	 * 
 	 */
-	private $beds		=	0;
+	private $bathroom			=	0;
 	
 	/**
 	 * 
-	 * @type string
+	 * @type numeric
 	 * 
 	 */
-	private $baths		=	0;
+	private $bedrooms			=	0;
 	
 	
 	/**
@@ -90,129 +103,129 @@ implements com_ajmichels_wppf_interface_iEntity
 	 */
 	public function _setMemento ( $data )
 	{
-		$this->id		=	$data['id'];
-		$this->linktext	=	$data['linktext'];
-		$this->url		=	$data['url'];
-		$this->photo	=	$data['photo'];
-		$this->city		=	$data['city'];
-		$this->state	=	$data['state'];
-		$this->beds		=	$data['beds'];
-		$this->baths	=	$data['baths'];
+		$this->property_id		=	$data['property_id'];
+		$this->property_url		=	$data['property_url'];
+		$this->listing_price	=	$data['listing_price'];
+		$this->agent_listing	=	$data['agent_listing'];
+		$this->display_address	=	$data['display_address'];
+		$this->city				=	$data['city'];
+		$this->state			=	$data['state'];
+		$this->thumbnail_url	=	$data['thumbnail_url'];
+		$this->bathroom			=	$data['bathroom'];
+		$this->bedrooms			=	$data['bedrooms'];
+	}
+	
+	
+	public function _getMemento ()
+	{
+		return array( 
+			'property_id'		=> $this->property_id,
+			'property_url'		=> $this->property_url,
+			'listing_price'		=> $this->listing_price,
+			'agent_listing'		=> $this->agent_listing,
+			'display_address'	=> $this->display_address,
+			'city'				=> $this->city,
+			'state'				=> $this->state,
+			'thumbnail_url'		=> $this->thumbnail_url,
+			'bathroom'			=> $this->bathroom,
+			'bedrooms'			=> $this->bedrooms
+			);
+	}
+	
+	/* PUBLIC METHODS *************************************************************************** */
+	
+	public function getLocation ()
+	{
+		$location = $this->getCity();
+		if ( $this->getCity() != '' && $this->getState() != '' ) {
+			$location .= ', ';
+		}
+		$location .= $this->getState();
+		return $location;
 		
-		/* using html_entity_decode to make sure that character that were encoded as part of the 
-		   JSON encoding process are converted back into HTML for display. */
-		$this->body		=	html_entity_decode( $data['body'] );
+	}
+	
+	
+	public function getBedsAndBaths ()
+	{
+		$bedsAndBaths = '';
+		if ( is_numeric( $this->getBedrooms() ) ) {
+			$bedsAndBaths .= $this->getBedrooms() . ' Beds';
+		}
+		if ( is_numeric( $this->getBedrooms() ) && is_numeric( $this->getBathroom() ) ) {
+			$bedsAndBaths .= ', ';
+		}
+		if ( is_numeric( $this->getBathroom() ) ) {
+			$bedsAndBaths .= $this->getBathroom() . ' Baths';
+		}
+		return $bedsAndBaths;
 	}
 	
 	
 	/*	ACCESSORS ******************************************************************************* */
 	
-	
-	/**
-	 * GETTER: This getter method is used to get the 'id' property, which is an inherited property.
-	 * 
-	 * @return	mixed
-	 * 
-	 */
-	public function getID ()
+	public function getPropertyId ()
 	{
-		return $this->id;
+		return $this->property_id;
 	}
 	
 	
-	/**
-	 * GETTER: This getter method is used to get the 'linkText' property, which is an inherited property.
-	 * 
-	 * @return	string
-	 * 
-	 */
-	public function getLinkText ()
+	public function getPropertyUrl ()
 	{
-		return $this->linktext;
+		return $this->property_url;
 	}
 	
 	
-	/**
-	 * GETTER: This getter method is used to get the 'url' property, which is an inherited property.
-	 * 
-	 * @return	string
-	 * 
-	 */
-	public function getUrl ()
+	public function getListingPrice ()
 	{
-		return $this->url;
+		if ( is_numeric( $this->listing_price ) ) {
+			return number_format( $this->listing_price, 0, '.', ',' );
+		}
+		else {
+			return $this->listing_price;
+		}
 	}
 	
 	
-	/**
-	 * GETTER: This getter method is used to get the 'photo' property, which is an inherited property.
-	 * 
-	 * @return	string
-	 * 
-	 */
-	public function getPhoto ()
+	public function getAgentListing ()
 	{
-		return $this->photo;
+		return $this->agent_listing;
 	}
 	
 	
-	/**
-	 * GETTER: This getter method is used to get the 'body' property, which is an inherited property.
-	 * 
-	 * @return	string
-	 * 
-	 */
-	public function getBody ()
+	public function getDisplayAddress ()
 	{
-		return $this->body;
+		return $this->display_address;
 	}
 	
 	
-	/**
-	 * GETTER: This getter method is used to get the 'city' property, which is an inherited property.
-	 * 
-	 * @return	string
-	 * 
-	 */
 	public function getCity ()
 	{
 		return $this->city;
 	}
 	
 	
-	/**
-	 * GETTER: This getter method is used to get the 'state' property, which is an inherited property.
-	 * 
-	 * @return	string
-	 * 
-	 */
 	public function getState ()
 	{
 		return $this->state;
 	}
 	
 	
-	/**
-	 * GETTER: This getter method is used to get the 'beds' property, which is an inherited property.
-	 * 
-	 * @return	string
-	 * 
-	 */
-	public function getBeds ()
+	public function getThumbnailUrl ()
 	{
-		return $this->beds;
+		return $this->thumbnail_url;
 	}
 	
 	
-	/**
-	 * GETTER: This getter method is used to get the 'baths' property, which is an inherited property.
-	 * 
-	 * @return	string
-	 * 
-	 */
-	public function getBaths ()
+	public function getBathroom ()
 	{
-		return $this->baths;
+		return $this->bathroom;
+	}
+	
+	
+	public function getBedrooms ()
+	{
+		return $this->bedrooms;
 	}
 	
 	

@@ -90,6 +90,7 @@ implements com_ajmichels_wppf_interface_iService
 		$dao = $this->getDAO();
 		$wsu = $this->getWebServiceUrl();
 		$wsu->setCacheSetting( 15 );
+		$wsu->setScriptPath( '/propertyBar/3FF15C5C-62F5-4D97-84C8-16243EDEE7F6' );
 		
 		$data = $this->getDataService()->getData( $wsu );
 		

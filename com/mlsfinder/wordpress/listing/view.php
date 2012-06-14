@@ -42,6 +42,21 @@ implements com_ajmichels_wppf_interface_iView
 	}
 	
 	
+	public function render ( $data = array() )
+	{
+		$data['id']			= $data['listing']->getPropertyId();
+		$data['url']		= $data['listing']->getPropertyUrl();
+		$data['address']	= $data['listing']->getDisplayAddress();
+		$data['image']		= $data['listing']->getThumbnailUrl();
+		$data['price']		= $data['listing']->getListingPrice();
+		$data['location']	= $data['listing']->getLocation();
+		$data['bedbath']	= $data['listing']->getBedsAndBaths();
+		$data['rawData']	= $data['listing']->_getMemento();
+		
+		return parent::render( $data );
+	}
+	
+	
 	/**
 	 * This method creates a way to dynamically specify which HTML template file should be used to 
 	 * render the view.  This is done because listings can be rendered in several different ways using

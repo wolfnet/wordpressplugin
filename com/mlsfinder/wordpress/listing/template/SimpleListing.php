@@ -16,8 +16,25 @@
 
 ?>
 
-<div id="mlsFinder_listing_<?php echo $listing->getID(); ?>" class="mlsFinder_listing">
-	<a class="listingImage" href="<?php echo $listing->getUrl(); ?>"><img src="<?php echo $listing->getPhoto(); ?>" /></a>
-	<span class="detailsLink"><a href="<?php echo $listing->getUrl(); ?>"><?php echo $listing->getLinktext(); ?></a></span>
-	<span class="body"><?php echo $listing->getBody(); ?></span>
+<div id="mlsFinder_listing_<?php echo $id; ?>" class="mlsFinder_listing">
+	<a href="<?php echo $url; ?>" 
+		title="<?php echo $address; ?>" target="_blank">
+		<span class="listingImage"><img src="<?php echo $image; ?>" /></span>
+		<span class="price">$<?php echo $price; ?></span>
+		<span class="location"><?php echo $location; ?></span>
+		<span class="bed-bath"><?php echo $bedbath; ?></span>
+	</a>
+	<!-- RAW DATA ----------------------------------------------------------------------------------
+	------------------------------------------------------------------------------------------------
+	property_id:      <?php echo $rawData['property_id']		. "\n"; ?>
+	property_url:     <?php echo $rawData['property_url']		. "\n"; ?>
+	listing_price:    <?php echo $rawData['listing_price']		. "\n"; ?>
+	agent_listing:    <?php echo $rawData['agent_listing']		. "\n"; ?>
+	display_address:  <?php echo $rawData['display_address']	. "\n"; ?>
+	city:             <?php echo $rawData['city']				. "\n"; ?>
+	state:            <?php echo $rawData['state']				. "\n"; ?>
+	thumbnail_url:    <?php echo $rawData['thumbnail_url']		. "\n"; ?>
+	bathroom:         <?php echo $rawData['bathroom']			. "\n"; ?>
+	bedrooms:         <?php echo $rawData['bedrooms']			. "\n"; ?>
+	-------------------------------------------------------------------------------------------- -->
 </div>

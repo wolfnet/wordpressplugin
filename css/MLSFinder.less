@@ -19,7 +19,6 @@
 	
 	&.mlsFinder_listingFilmStrip
 	{
-		/* display:none; */
 		overflow: hidden;
 		white-space: nowrap;
 		height: 140px;
@@ -28,35 +27,6 @@
 		.filmStripContainer
 		{
 			height:140px;
-			
-			.mlsFinder_listing
-			{
-				width: 150px;
-				height: 140px;
-				float: left;
-				margin: 0 auto 0 auto;
-				
-				.detailsLink
-				{
-					display:block;
-				}
-				
-				.listingImage
-				{
-					width:140px;
-					height:75px;
-					display:block;
-					overflow:hidden;
-					
-					img
-					{
-						border:none;
-						height:75px;
-					}
-					
-				}
-				
-			}
 			
 		}
 		
@@ -69,6 +39,12 @@
 		position: relative;
 		left: 50%;
 		
+	}
+	
+	&.mlsFinder_listingFilmStrip,
+	&.mlsFinder_grid
+	{
+		
 		.mlsFinder_listing
 		{
 			width: 150px;
@@ -78,6 +54,13 @@
 			position: relative;
 			left: -50%;
 			text-align: center;
+			font-size: 11px;
+			
+			a
+			{
+				color: #555;
+				text-decoration:none;
+			}
 			
 			.detailsLink
 			{
@@ -100,6 +83,22 @@
 					height:75px;
 				}
 				
+			}
+			
+			.price
+			{
+				font-weight:bold;
+				display:block;
+			}
+			
+			.location
+			{
+				display:block;
+			}
+			
+			.bed-bath
+			{
+				display:block;
 			}
 			
 		}

@@ -68,7 +68,7 @@ implements com_ajmichels_common_iSingleton
 		$sfXml = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'phpSpring.xml';
 		$sfProps = array( 
 					'pluginUrl'				=> $this->getPluginUrl(),
-					'webServiceDomain'		=> $this->getPluginUrl() . 'testFeed.json',
+					'webServiceDomain'		=> 'http://aj.cfdevel.wnt/com/services/index.cfm',
 					'pluginMajorVersion'	=> $this->majorVersion,
 					'pluginMinorVersion'	=> $this->minorVersion,
 					'pluginVersion'			=> $this->version
