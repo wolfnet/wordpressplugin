@@ -1,9 +1,0 @@
-[submodule "com/ajmichels/common"]
-	path = com/ajmichels/common
-	url = xirometh@git.ajmichels.com:~/git/common
-[submodule "com/ajmichels/wppf"]
-	path = com/ajmichels/wppf
-	url = xirometh@git.ajmichels.com:~/git/wppf
-[submodule "com/ajmichels/phpSpring"]
-	path = com/ajmichels/phpSpring
-	url = xirometh@git.ajmichels.com:~/git/phpSpring

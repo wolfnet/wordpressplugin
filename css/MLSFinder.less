@@ -8,8 +8,14 @@
  * 
  */
 
+.clearfix
+{
+	clear:both;
+}
+
 .mlsFinder_widget
 {
+	margin: 1em auto 2em auto;
 	
 	&.mlsFinder_listingFilmStrip
 	{
@@ -17,6 +23,7 @@
 		overflow: hidden;
 		white-space: nowrap;
 		height: 140px;
+		text-align: center;
 		
 		.filmStripContainer
 		{
@@ -27,6 +34,7 @@
 				width: 150px;
 				height: 140px;
 				float: left;
+				margin: 0 auto 0 auto;
 				
 				.detailsLink
 				{
@@ -56,12 +64,20 @@
 	
 	&.mlsFinder_grid
 	{
+		text-align: center;
+		margin: 0 auto 0 auto;
+		position: relative;
+		left: 50%;
 		
 		.mlsFinder_listing
 		{
 			width: 150px;
 			height: 140px;
 			float: left;
+			margin: 0 auto 1em auto;
+			position: relative;
+			left: -50%;
+			text-align: center;
 			
 			.detailsLink
 			{
@@ -70,10 +86,13 @@
 			
 			.listingImage
 			{
-				width:140px;
-				height:75px;
-				display:block;
-				overflow:hidden;
+				width: 100%;
+				height: 75px;
+				display: block;
+				overflow: hidden;
+				padding: 0;
+				margin: 0;
+				text-align: center;
 				
 				img
 				{

@@ -57,6 +57,24 @@ implements com_ajmichels_wppf_interface_iView
 		if ( $data != null && array_key_exists( 'listings', $data ) ) {
 			$data['listingContent'] = $this->renderListings( $data['listings'] );
 		}
+		
+		$data['instanceId'] = uniqid( 'mlsFinder_listingFilmStrip_' );
+		
+		$data['wait']		= 'false';
+		if ( is_bool( $data['options']['wait'] ) && $data['options']['wait'] ) {
+			$data['wait']		= 'true';
+		}
+		
+		$data['waitLen']	= 1000;
+		if ( is_numeric( $data['options']['waitLen'] ) ) {
+			$data['waitLen']	= $data['options']['waitLen'] * 1000;
+		}
+		
+		$data['speed']		= 40;
+		if ( is_numeric( $data['options']['speed'] ) && $data['options']['speed'] != 0 ) {
+			$data['speed']		= round( 10 / ( $data['options']['speed'] / 100 ) );
+		}
+		
 		return parent::render( $data );
 	}
 	

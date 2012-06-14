@@ -57,6 +57,7 @@ implements com_ajmichels_wppf_interface_iView
 		if ( $data != null && array_key_exists( 'listings', $data ) ) {
 			$data['listingContent'] = $this->renderListings( $data['listings'] );
 		}
+		$data['instanceId']	= uniqid( 'mlsFinder_grid_' );
 		return parent::render( $data );
 	}
 	

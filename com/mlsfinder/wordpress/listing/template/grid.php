@@ -12,10 +12,9 @@
  * 
  */
 
-$instanceId	= uniqid( 'mlsFinder_grid_' );
-
 ?>
 
 <div id="<?php echo $instanceId; ?>" class="mlsFinder_widget mlsFinder_grid">
 	<?php echo ( isset($listingContent) ) ? $listingContent : 'No Listings to Display.'; ?>
+	<div class="clearfix"></div>
 </div>

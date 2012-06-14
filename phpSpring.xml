@@ -105,5 +105,14 @@
 		</property>
 	</bean>
 	
+	<bean id="GridShortcode" class="com_mlsfinder_wordpress_listing_gridShortcode">
+		<property name="ListingService">
+			<ref bean="ListingService" />
+		</property>
+		<property name="GridView">
+			<ref bean="GridView" />
+		</property>
+	</bean>
+	
 	
 </beans>

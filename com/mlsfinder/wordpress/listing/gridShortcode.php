@@ -8,7 +8,7 @@
  * @see http://core.trac.wordpress.org/browser/tags/3.3.2/wp-includes/widgets.php
  * 
  * @package			com.mlsfinder.wordpress.listing
- * @title			featuredListingsShortcode.php
+ * @title			gridShortcode.php
  * @extends			com_ajmichels_wppf_shortcode_shortcode
  * @contributors	AJ Michels (aj.michels@wolfnet.com)
  * @version			1.0
@@ -16,14 +16,14 @@
  * 
  */
 
-class com_mlsfinder_wordpress_listing_featuredListingsShortcode
+class com_mlsfinder_wordpress_listing_gridShortcode
 extends com_ajmichels_wppf_shortcode_shortcode
 {
 	
 	
 	/* PROPERTIES ******************************************************************************* */
 	
-	public $tag = 'FeaturedListings';
+	public $tag = 'ListingGrid';
 	
 	/**
 	 * This property holds an array of different options that are available for each widget instance.
@@ -41,7 +41,7 @@ extends com_ajmichels_wppf_shortcode_shortcode
 					'listings'	=> $this->getListingService()->getListings(), 
 					'options'	=> $this->getAttributesData( $attr )
 					);
-		return $this->getListingFilmStripView()->render( $data );
+		return $this->getGridView()->render( $data );
 	}
 	
 	
@@ -59,15 +59,15 @@ extends com_ajmichels_wppf_shortcode_shortcode
 	}
 	
 	
-	public function getListingFilmStripView ()
+	public function getGridView ()
 	{
-		return $this->listingFilmStripView;
+		return $this->gridView;
 	}
 	
 	
-	public function setListingFilmStripView ( com_ajmichels_wppf_interface_iView $view )
+	public function setGridView ( com_ajmichels_wppf_interface_iView $view )
 	{
-		$this->listingFilmStripView = $view;
+		$this->gridView = $view;
 	}
 	
 	

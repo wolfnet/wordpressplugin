@@ -29,7 +29,7 @@ extends com_ajmichels_wppf_shortcode_shortcode
 	/* PUBLIC METHODS *************************************************************************** */
 	
 	public function execute ( $attr, $content = null ) {
-		$this->getQuickSearchView()->out();
+		return $this->getQuickSearchView()->render();
 	}
 	
 	
