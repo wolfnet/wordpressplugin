@@ -1,0 +1,9 @@
+[submodule "com/ajmichels/phpSpring"]
+	path = com/ajmichels/phpSpring
+	url = http://git.ajmichels.com/phpSpring/
+[submodule "com/ajmichels/common"]
+	path = com/ajmichels/common
+	url = http://git.ajmichels.com/common
+[submodule "com/ajmichels/wppf"]
+	path = com/ajmichels/wppf
+	url = http://git.ajmichels.com/wppf
