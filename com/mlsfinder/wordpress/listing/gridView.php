@@ -3,13 +3,13 @@
 /**
  * This view is responsible for displaying the Listings Grid, which is a widget component.
  * 
- * @package			com.mlsfinder.wordpress.listing
- * @title			gridView.php
- * @extends			com_ajmichels_wppf_abstract_view
- * @implements		com_ajmichels_wppf_interface_iView
- * @contributors	AJ Michels (aj.michels@wolfnet.com)
- * @version			1.0
- * @copyright		Copyright (c) 2012, WolfNet Technologies, LLC
+ * @package       com.mlsfinder.wordpress.listing
+ * @title         gridView.php
+ * @extends       com_ajmichels_wppf_abstract_view
+ * @implements    com_ajmichels_wppf_interface_iView
+ * @contributors  AJ Michels (aj.michels@wolfnet.com)
+ * @version       1.0
+ * @copyright     Copyright (c) 2012, WolfNet Technologies, LLC
  * 
  */
 
@@ -22,7 +22,7 @@ implements com_ajmichels_wppf_interface_iView
 	/**
 	 * This property holds the path to the HTML template file for this view.
 	 *
-	 * @type	string
+	 * @type  string
 	 * 
 	 */
 	public $template;
@@ -32,7 +32,7 @@ implements com_ajmichels_wppf_interface_iView
 	 * This constructor method simply assigns the template property with a path to the HTML template
 	 * for this view based on the view files location.
 	 *
-	 * @return	void
+	 * @return  void
 	 * 
 	 */
 	public function __construct ()
@@ -48,8 +48,8 @@ implements com_ajmichels_wppf_interface_iView
 	 * renderListings method. This separates the concerns of rendering the film strip from rendering
 	 * indevidual listings.
 	 *
-	 * @param	array	$data	Associative array of data to be injected into the template file.
-	 * @return	void
+	 * @param   array  $data  Associative array of data to be injected into the template file.
+	 * @return  void
 	 * 
 	 */
 	public function render ( $data = null )
@@ -67,8 +67,8 @@ implements com_ajmichels_wppf_interface_iView
 	 * of the listingView object for each. The listings are then rendered individually and combined 
 	 * in a string which is returned.
 	 *
-	 * @param	array	$listings	An array of listing objects.
-	 * @return	string				Rendered listing content.
+	 * @param   array   $listings  An array of listing objects.
+	 * @return  string             Rendered listing content.
 	 * 
 	 */
 	private function renderListings ( $listings )
@@ -84,7 +84,6 @@ implements com_ajmichels_wppf_interface_iView
 	
 	
 	/* ACCESSORS ******************************************************************************** */
-	
 	
 	public function getListingView ()
 	{

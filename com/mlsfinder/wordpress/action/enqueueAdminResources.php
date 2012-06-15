@@ -4,12 +4,12 @@
  * This action is responsible for enqueuing any admin resources such as JavaScript and CSS that are
  * needed for any code generated in the WordPress admin for the plugin.
  * 
- * @package			com.mlsfinder.wordpress.action
- * @title			enqueueAdminResources.php
- * @extends			com_ajmichels_wppf_action_action
- * @contributors	AJ Michels (aj.michels@wolfnet.com)
- * @version			1.0
- * @copyright		Copyright (c) 2012, WolfNet Technologies, LLC
+ * @package       com.mlsfinder.wordpress.action
+ * @title         enqueueAdminResources.php
+ * @extends       com_ajmichels_wppf_action_action
+ * @contributors  AJ Michels (aj.michels@wolfnet.com)
+ * @version       1.0
+ * @copyright     Copyright (c) 2012, WolfNet Technologies, LLC
  * 
  */
 
@@ -22,7 +22,7 @@ extends com_ajmichels_wppf_action_action
 	 * This property holds the URL string to the plugin directory. This URL is needed to accurately 
 	 * define the path to the resource files.
 	 *
-	 * @type string
+	 * @type  string
 	 * 
 	 */
 	private $pluginUrl = '';
@@ -32,7 +32,7 @@ extends com_ajmichels_wppf_action_action
 	 * This method is executed by the ActionManager when any hooks that this action is registered to
 	 * are encountered.
 	 *
-	 * @return void
+	 * @return  void
 	 * 
 	 */
 	public function execute ()
@@ -46,8 +46,8 @@ extends com_ajmichels_wppf_action_action
 	/**
 	 * SETTER: This method is a setter for the pluginUrl property.
 	 *
-	 * @param	string	$url	The absolute URL to this plugin's directory.
-	 * @return	void
+	 * @param   string  $url  The absolute URL to this plugin's directory.
+	 * @return  void
 	 * 
 	 */
 	public function setPluginUrl ( $url )
@@ -59,7 +59,7 @@ extends com_ajmichels_wppf_action_action
 	/**
 	 * GETTER: This method is a getter for the pluginUrl property.
 	 *
-	 * @return	string	The absolute URL to this plugin's directory.
+	 * @return  string  The absolute URL to this plugin's directory.
 	 * 
 	 */
 	public function getPluginUrl ()

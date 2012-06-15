@@ -15,6 +15,10 @@
 			<!-- Defined in WPPF service factory -->
 			<ref bean="DefaultWebServiceUrl" />
 		</property>
+		<property name="OptionManager">
+			<!-- Defined in WPPF service factory -->
+			<ref bean="OptionManager" />
+		</property>
 	</bean>
 	
 	<bean id="ListingDAO" class="com_mlsfinder_wordpress_listing_dao">

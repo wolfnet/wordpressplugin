@@ -3,14 +3,14 @@
 /**
  * This class is the listingService and is a Facade used to interact with all other listing information.
  * 
- * @package			com.mlsfinder.wordpress.listing
- * @title			service.php
- * @extends			com_ajmichels_wppf_abstract_service
- * @implements		com_ajmichels_wppf_interface_iService
- * @singleton		True
- * @contributors	AJ Michels (aj.michels@wolfnet.com)
- * @version			1.0
- * @copyright		Copyright (c) 2012, WolfNet Technologies, LLC
+ * @package       com.mlsfinder.wordpress.listing
+ * @title         service.php
+ * @extends       com_ajmichels_wppf_abstract_service
+ * @implements    com_ajmichels_wppf_interface_iService
+ * @singleton     True
+ * @contributors  AJ Michels (aj.michels@wolfnet.com)
+ * @version       1.0
+ * @copyright     Copyright (c) 2012, WolfNet Technologies, LLC
  * 
  */
 
@@ -24,6 +24,7 @@ implements com_ajmichels_wppf_interface_iService
 	
 	private $dataService;
 	private $webServiceUrl;
+	private $optionManager;
 	
 	
 	/* SINGLETON ENFORCEMENT ******************************************************************** */
@@ -31,7 +32,7 @@ implements com_ajmichels_wppf_interface_iService
 	/**
 	 * This private static property holds the singleton instance of this class.
 	 *
-	 * @type com_mlsfinder_wordpress_listing_service
+	 * @type  com_mlsfinder_wordpress_listing_service
 	 * 
 	 */
 	private static $instance;
@@ -40,7 +41,7 @@ implements com_ajmichels_wppf_interface_iService
 	/**
 	 * This static method is used to retrieve the singleton instance of this class.
 	 * 
-	 * @return com_mlsfinder_wordpress_listing_service
+	 * @return  com_mlsfinder_wordpress_listing_service
 	 * 
 	 */
 	public static function getInstance ()
@@ -58,7 +59,7 @@ implements com_ajmichels_wppf_interface_iService
 	 * This constructor method is private becuase this class is a singleton and can only be retrieved
 	 * by statically calling the getInstance method.
 	 * 
-	 * @return void
+	 * @return  void
 	 * 
 	 */
 	private function __construct ()
@@ -73,7 +74,7 @@ implements com_ajmichels_wppf_interface_iService
 	 * This method returns all property listings avaiable to this WordPress plugin instance. This 
 	 * data is retrieved from the listingDao object.
 	 * 
-	 * @return	array	An array of listing objects (com_mlsfinder_wordpress_listing_entity)
+	 * @return  array  An array of listing objects (com_mlsfinder_wordpress_listing_entity)
 	 * 
 	 */
 	public function getListings ()
@@ -88,9 +89,10 @@ implements com_ajmichels_wppf_interface_iService
 	private function setData ()
 	{
 		$dao = $this->getDAO();
+		$om  = $this->getOptionManager();
 		$wsu = $this->getWebServiceUrl();
 		$wsu->setCacheSetting( 15 );
-		$wsu->setScriptPath( '/propertyBar/3FF15C5C-62F5-4D97-84C8-16243EDEE7F6' );
+		$wsu->setScriptPath( '/propertyBar/' . $om->getOptionValueFromWP( 'wnt_productKey' ) );
 		
 		$data = $this->getDataService()->getData( $wsu );
 		
@@ -121,6 +123,18 @@ implements com_ajmichels_wppf_interface_iService
 	public function setWebServiceUrl ( com_ajmichels_wppf_data_webServiceUrl $url )
 	{
 		$this->webServiceUrl = $url;
+	}
+	
+	
+	public function getOptionManager ()
+	{
+		return $this->optionManager;
+	}
+	
+	
+	public function setOptionManager ( com_ajmichels_wppf_option_manager $manager )
+	{
+		$this->optionManager = $manager;
 	}
 	
 	

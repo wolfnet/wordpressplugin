@@ -3,13 +3,13 @@
 /**
  * This class is the Listing Entity and is a container for listing data.
  * 
- * @package			com.mlsfinder.wordpress.listing
- * @title			entity.php
- * @extends			com_ajmichels_wppf_abstract_entity
- * @implements		com_ajmichels_wppf_interface_iEntity
- * @contributors	AJ Michels (aj.michels@wolfnet.com)
- * @version			1.0
- * @copyright		Copyright (c) 2012, WolfNet Technologies, LLC
+ * @package       com.mlsfinder.wordpress.listing
+ * @title         entity.php
+ * @extends       com_ajmichels_wppf_abstract_entity
+ * @implements    com_ajmichels_wppf_interface_iEntity
+ * @contributors  AJ Michels (aj.michels@wolfnet.com)
+ * @version       1.0
+ * @copyright     Copyright (c) 2012, WolfNet Technologies, LLC
  * 
  */
 
@@ -26,70 +26,70 @@ implements com_ajmichels_wppf_interface_iEntity
 	 * @type mixed
 	 * 
 	 */
-	private $property_id		=	'';
+	private $property_id     = '';
 	
 	/**
 	 * 
 	 * @type string
 	 * 
 	 */
-	private $property_url		=	'';
+	private $property_url    = '';
 	
 	/**
 	 * 
 	 * @type float
 	 * 
 	 */
-	private $listing_price		=	0;
+	private $listing_price   = 0;
 	
 	/**
 	 * 
 	 * @type boolean
 	 * 
 	 */
-	private $agent_listing		=	0;
+	private $agent_listing   = 0;
 	
 	/**
 	 * 
 	 * @type string
 	 * 
 	 */
-	private $display_address	=	'';
+	private $display_address = '';
 	
 	/**
 	 * 
 	 * @type string
 	 * 
 	 */
-	private $city				=	'';
+	private $city            = '';
 	
 	/**
 	 * 
 	 * @type string
 	 * 
 	 */
-	private $state				=	'';
+	private $state           = '';
 	
 	/**
 	 * 
 	 * @type string
 	 * 
 	 */
-	private $thumbnail_url		=	'';
+	private $thumbnail_url   = '';
 	
 	/**
 	 * 
 	 * @type numeric
 	 * 
 	 */
-	private $bathroom			=	0;
+	private $bathroom        = 0;
 	
 	/**
 	 * 
 	 * @type numeric
 	 * 
 	 */
-	private $bedrooms			=	0;
+	private $bedrooms        = 0;
 	
 	
 	/**
@@ -97,38 +97,38 @@ implements com_ajmichels_wppf_interface_iEntity
 	 * this method should not be accessed by any object other than the listingDao.
 	 * @see Memento Design Pattern
 	 * 
-	 * @param	array	$data	The primary key of a single listing.
-	 * @return	void
+	 * @param   array  $data  The primary key of a single listing.
+	 * @return  void
 	 * 
 	 */
 	public function _setMemento ( $data )
 	{
-		$this->property_id		=	$data['property_id'];
-		$this->property_url		=	$data['property_url'];
-		$this->listing_price	=	$data['listing_price'];
-		$this->agent_listing	=	$data['agent_listing'];
-		$this->display_address	=	$data['display_address'];
-		$this->city				=	$data['city'];
-		$this->state			=	$data['state'];
-		$this->thumbnail_url	=	$data['thumbnail_url'];
-		$this->bathroom			=	$data['bathroom'];
-		$this->bedrooms			=	$data['bedrooms'];
+		$this->property_id     = $data['property_id'];
+		$this->property_url    = $data['property_url'];
+		$this->listing_price   = $data['listing_price'];
+		$this->agent_listing   = $data['agent_listing'];
+		$this->display_address = $data['display_address'];
+		$this->city            = $data['city'];
+		$this->state           = $data['state'];
+		$this->thumbnail_url   = $data['thumbnail_url'];
+		$this->bathroom        = $data['bathroom'];
+		$this->bedrooms        = $data['bedrooms'];
 	}
 	
 	
 	public function _getMemento ()
 	{
 		return array( 
-			'property_id'		=> $this->property_id,
-			'property_url'		=> $this->property_url,
-			'listing_price'		=> $this->listing_price,
-			'agent_listing'		=> $this->agent_listing,
-			'display_address'	=> $this->display_address,
-			'city'				=> $this->city,
-			'state'				=> $this->state,
-			'thumbnail_url'		=> $this->thumbnail_url,
-			'bathroom'			=> $this->bathroom,
-			'bedrooms'			=> $this->bedrooms
+			'property_id'     => $this->property_id,
+			'property_url'    => $this->property_url,
+			'listing_price'   => $this->listing_price,
+			'agent_listing'   => $this->agent_listing,
+			'display_address' => $this->display_address,
+			'city'            => $this->city,
+			'state'           => $this->state,
+			'thumbnail_url'   => $this->thumbnail_url,
+			'bathroom'        => $this->bathroom,
+			'bedrooms'        => $this->bedrooms
 			);
 	}
 	

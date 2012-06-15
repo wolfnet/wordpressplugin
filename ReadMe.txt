@@ -1,11 +1,11 @@
 === MLSFinder ===
-Contributors: ajmichels
-Tags: idx, mls, homes
-Requires at least: 2.0.2
-Tested up to: 2.1
-Stable tag: {X.X.X}
-License: GPLv2 or later
-License URI: http://www.gnu.org/licenses/gpl-2.0.html
+Contributors:       ajmichels
+Tags:               idx, mls, homes
+Requires at least:  2.0.2
+Tested up to:       2.1
+Stable tag:         {X.X.X}
+License:            GPLv2 or later
+License URI:        http://www.gnu.org/licenses/gpl-2.0.html
 
 Here is a short description of the plugin.  This should be no more than 150 characters.  No markup here.
 

@@ -3,13 +3,13 @@
 /**
  * This view is responsible for displaying a listing record.
  * 
- * @package			com.mlsfinder.wordpress.listing
- * @title			view.php
- * @extends			com_ajmichels_wppf_abstract_view
- * @implements		com_ajmichels_wppf_interface_iView
- * @contributors	AJ Michels (aj.michels@wolfnet.com)
- * @version			1.0
- * @copyright		Copyright (c) 2012, WolfNet Technologies, LLC
+ * @package       com.mlsfinder.wordpress.listing
+ * @title         view.php
+ * @extends       com_ajmichels_wppf_abstract_view
+ * @implements    com_ajmichels_wppf_interface_iView
+ * @contributors  AJ Michels (aj.michels@wolfnet.com)
+ * @version       1.0
+ * @copyright     Copyright (c) 2012, WolfNet Technologies, LLC
  * 
  */
 
@@ -22,7 +22,7 @@ implements com_ajmichels_wppf_interface_iView
 	/**
 	 * This property holds the path to the HTML template file for this view.
 	 *
-	 * @type string
+	 * @type  string
 	 * 
 	 */
 	public $template;
@@ -32,7 +32,7 @@ implements com_ajmichels_wppf_interface_iView
 	 * This constructor method simply assigns the template property with a path to the HTML template
 	 * for this view based on the view files location.
 	 *
-	 * @return void
+	 * @return  void
 	 * 
 	 */
 	public function __construct ()
@@ -44,14 +44,14 @@ implements com_ajmichels_wppf_interface_iView
 	
 	public function render ( $data = array() )
 	{
-		$data['id']			= $data['listing']->getPropertyId();
-		$data['url']		= $data['listing']->getPropertyUrl();
-		$data['address']	= $data['listing']->getDisplayAddress();
-		$data['image']		= $data['listing']->getThumbnailUrl();
-		$data['price']		= $data['listing']->getListingPrice();
-		$data['location']	= $data['listing']->getLocation();
-		$data['bedbath']	= $data['listing']->getBedsAndBaths();
-		$data['rawData']	= $data['listing']->_getMemento();
+		$data['id']       = $data['listing']->getPropertyId();
+		$data['url']      = $data['listing']->getPropertyUrl();
+		$data['address']  = $data['listing']->getDisplayAddress();
+		$data['image']    = $data['listing']->getThumbnailUrl();
+		$data['price']    = $data['listing']->getListingPrice();
+		$data['location'] = $data['listing']->getLocation();
+		$data['bedbath']  = $data['listing']->getBedsAndBaths();
+		$data['rawData']  = $data['listing']->_getMemento();
 		
 		return parent::render( $data );
 	}
@@ -62,8 +62,8 @@ implements com_ajmichels_wppf_interface_iView
 	 * render the view.  This is done because listings can be rendered in several different ways using
 	 * the same set of data.
 	 * 
-	 * @param	string	$type	The template type/file to use for rendering.
-	 * @return	void
+	 * @param   string  $type  The template type/file to use for rendering.
+	 * @return  void
 	 */
 	public function setTemplate ( $type = 'full' )
 	{

@@ -3,12 +3,12 @@
 /**
  * This action is responsible for creating the plugin admin pages within the WordPress admin.
  * 
- * @package			com.mlsfinder.wordpress.action
- * @title			createAdminPages.php
- * @extends			com_ajmichels_wppf_action_action
- * @contributors	AJ Michels (aj.michels@wolfnet.com)
- * @version			1.0
- * @copyright		Copyright (c) 2012, WolfNet Technologies, LLC
+ * @package       com.mlsfinder.wordpress.action
+ * @title         createAdminPages.php
+ * @extends       com_ajmichels_wppf_action_action
+ * @contributors  AJ Michels (aj.michels@wolfnet.com)
+ * @version       1.0
+ * @copyright     Copyright (c) 2012, WolfNet Technologies, LLC
  * 
  */
 
@@ -21,7 +21,7 @@ extends com_ajmichels_wppf_action_action
 	 * This method is executed by the ActionManager when any hooks that this action is registered to
 	 * are encountered.
 	 *
-	 * @return	void
+	 * @return  void
 	 * 
 	 */
 	public function execute ()
@@ -68,8 +68,8 @@ extends com_ajmichels_wppf_action_action
 	/**
 	 * SETTER: This method is a setter for the pluginUrl property.
 	 *
-	 * @param	string	$url	The absolute URL to this plugin's directory.
-	 * @return	void
+	 * @param   string  $url  The absolute URL to this plugin's directory.
+	 * @return  void
 	 * 
 	 */
 	public function setPluginUrl ( $url )
@@ -81,7 +81,7 @@ extends com_ajmichels_wppf_action_action
 	/**
 	 * GETTER: This method is a getter for the pluginUrl property.
 	 *
-	 * @return	string	The absolute URL to this plugin's directory.
+	 * @return  string  The absolute URL to this plugin's directory.
 	 * 
 	 */
 	public function getPluginUrl ()

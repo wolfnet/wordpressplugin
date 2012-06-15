@@ -3,12 +3,12 @@
 /**
  * This action is responsible for registering any widgets the plugin makes available.
  * 
- * @package			com.mlsfinder.wordpress.action
- * @title			registerWidgets.php
- * @extends			com_ajmichels_wppf_action_action
- * @contributors	AJ Michels (aj.michels@wolfnet.com)
- * @version			1.0
- * @copyright		Copyright (c) 2012, WolfNet Technologies, LLC
+ * @package       com.mlsfinder.wordpress.action
+ * @title         registerWidgets.php
+ * @extends       com_ajmichels_wppf_action_action
+ * @contributors  AJ Michels (aj.michels@wolfnet.com)
+ * @version       1.0
+ * @copyright     Copyright (c) 2012, WolfNet Technologies, LLC
  * 
  */
 
@@ -21,7 +21,7 @@ extends com_ajmichels_wppf_action_action
 	 * This method is executed by the ActionManager when any hooks that this action is registered to
 	 * are encountered.
 	 * 
-	 * @return void
+	 * @return  void
 	 * 
 	 */
 	public function execute ()

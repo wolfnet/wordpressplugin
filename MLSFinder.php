@@ -2,12 +2,12 @@
 
 /* *********************************************************************************************** /
 
-Plugin Name:	MLSFinder
-Plugin URI:		http://www.mlsfinder.com/wordpress
-Description:	This plugin provides WordPress integration with MLSFinder.com.
-Author:			WolfNet Technologies
-Version:		{X.X.X}
-Author URI:		http://wolfnet.com
+Plugin Name:  MLSFinder
+Plugin URI:   http://www.mlsfinder.com/wordpress
+Description:  This plugin provides WordPress integration with MLSFinder.com.
+Author:       WolfNet Technologies
+Version:      {X.X.X}
+Author URI:   http://wolfnet.com
 
 / *********************************************************************************************** */
 
@@ -18,10 +18,10 @@ com_ajmichels_common_autoLoader::getInstance( dirname(__FILE__) );
 
 /**
  * 
- * @title			MLSFinder.php
- * @contributors 	AJ Michels (http://aj.michels@wolfnet.com)
- * @version 		1.0
- * @copyright		Copyright (c) 2012, WolfNet Technologies, LLC
+ * @title         MLSFinder.php
+ * @contributors  AJ Michels (http://aj.michels@wolfnet.com)
+ * @version       1.0
+ * @copyright     Copyright (c) 2012, WolfNet Technologies, LLC
  * 
  */
 class MLSFinder
@@ -47,7 +47,7 @@ implements com_ajmichels_common_iSingleton
 	
 	public $majorVersion = {majorVersion};
 	public $minorVersion = {minorVersion};
-	public $version = '{X.X.X}';
+	public $version      = '{X.X.X}';
 	
 	
 	/* CONSTRUCT PLUGIN ************************************************************************* */
@@ -67,11 +67,11 @@ implements com_ajmichels_common_iSingleton
 		/* Create Plugin Service Factory */
 		$sfXml = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'phpSpring.xml';
 		$sfProps = array( 
-					'pluginUrl'				=> $this->getPluginUrl(),
-					'webServiceDomain'		=> 'http://aj.cfdevel.wnt/com/services/index.cfm',
-					'pluginMajorVersion'	=> $this->majorVersion,
-					'pluginMinorVersion'	=> $this->minorVersion,
-					'pluginVersion'			=> $this->version
+					'pluginUrl'          => $this->getPluginUrl(),
+					'webServiceDomain'   => 'http://aj.cfdevel.wnt/com/services/index.cfm',
+					'pluginMajorVersion' => $this->majorVersion,
+					'pluginMinorVersion' => $this->minorVersion,
+					'pluginVersion'      => $this->version
 					);
 		$this->sf = new com_ajmichels_phpSpring_bean_factory_default( $sfXml, array(), $sfProps );
 		$this->sf->setParent( $this->wppf_serviceFactory );

@@ -4,11 +4,11 @@
  * This is an HTML template file for the Grid Widget instance Options Form page in the 
  * WordPress admin. This file should ideally contain very little PHP.
  * 
- * @package			com.mlsfinder.wordpress.listing.template
- * @title			gridOptions.php
- * @contributors	AJ Michels (aj.michels@wolfnet.com)
- * @version			1.0
- * @copyright		Copyright (c) 2012, WolfNet Technologies, LLC
+ * @package       com.mlsfinder.wordpress.listing.template
+ * @title         gridOptions.php
+ * @contributors  AJ Michels (aj.michels@wolfnet.com)
+ * @version       1.0
+ * @copyright     Copyright (c) 2012, WolfNet Technologies, LLC
  * 
  */
 

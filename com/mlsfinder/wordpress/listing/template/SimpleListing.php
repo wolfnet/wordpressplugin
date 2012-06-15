@@ -6,11 +6,11 @@
  * template file should be created and made avaiable in the ListingView class. This file should 
  * ideally contain very little PHP.
  * 
- * @package			com.mlsfinder.wordpress.listing.template
- * @title			SimpleListing.php
- * @contributors	AJ Michels (aj.michels@wolfnet.com)
- * @version			1.0
- * @copyright		Copyright (c) 2012, WolfNet Technologies, LLC
+ * @package       com.mlsfinder.wordpress.listing.template
+ * @title         SimpleListing.php
+ * @contributors  AJ Michels (aj.michels@wolfnet.com)
+ * @version       1.0
+ * @copyright     Copyright (c) 2012, WolfNet Technologies, LLC
  * 
  */
 
@@ -26,15 +26,15 @@
 	</a>
 	<!-- RAW DATA ----------------------------------------------------------------------------------
 	------------------------------------------------------------------------------------------------
-	property_id:      <?php echo $rawData['property_id']		. "\n"; ?>
-	property_url:     <?php echo $rawData['property_url']		. "\n"; ?>
-	listing_price:    <?php echo $rawData['listing_price']		. "\n"; ?>
-	agent_listing:    <?php echo $rawData['agent_listing']		. "\n"; ?>
-	display_address:  <?php echo $rawData['display_address']	. "\n"; ?>
-	city:             <?php echo $rawData['city']				. "\n"; ?>
-	state:            <?php echo $rawData['state']				. "\n"; ?>
-	thumbnail_url:    <?php echo $rawData['thumbnail_url']		. "\n"; ?>
-	bathroom:         <?php echo $rawData['bathroom']			. "\n"; ?>
-	bedrooms:         <?php echo $rawData['bedrooms']			. "\n"; ?>
+	property_id:      <?php echo $rawData['property_id']     . "\n"; ?>
+	property_url:     <?php echo $rawData['property_url']    . "\n"; ?>
+	listing_price:    <?php echo $rawData['listing_price']   . "\n"; ?>
+	agent_listing:    <?php echo $rawData['agent_listing']   . "\n"; ?>
+	display_address:  <?php echo $rawData['display_address'] . "\n"; ?>
+	city:             <?php echo $rawData['city']            . "\n"; ?>
+	state:            <?php echo $rawData['state']           . "\n"; ?>
+	thumbnail_url:    <?php echo $rawData['thumbnail_url']   . "\n"; ?>
+	bathroom:         <?php echo $rawData['bathroom']        . "\n"; ?>
+	bedrooms:         <?php echo $rawData['bedrooms']        . "\n"; ?>
 	-------------------------------------------------------------------------------------------- -->
 </div>

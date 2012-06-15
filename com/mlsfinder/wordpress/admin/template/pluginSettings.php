@@ -1,14 +1,14 @@
 <?php
 
 /**
- * This is an HTML template file for the Plugin Settings page in the WordPress admin. This file should
- * ideally contain very little PHP.
+ * This is an HTML template file for the Plugin Settings page in the WordPress admin. This file 
+ * should ideally contain very little PHP.
  * 
- * @package			com.mlsfinder.wordpress.admin.template
- * @title			pluginSettings.php
- * @contributors	AJ Michels (aj.michels@wolfnet.com)
- * @version			1.0
- * @copyright		Copyright (c) 2012, WolfNet Technologies, LLC
+ * @package       com.mlsfinder.wordpress.admin.template
+ * @title         pluginSettings.php
+ * @contributors  AJ Michels (aj.michels@wolfnet.com)
+ * @version       1.0
+ * @copyright     Copyright (c) 2012, WolfNet Technologies, LLC
  * 
  * @todo: Add Ajax Key validation.
  * 
@@ -43,19 +43,6 @@
 							If you do not have a key please contact WolfNet Technologies at </br>
 							612-342-0088 or toll free at 1-866-WOLFNET. You may also reach us <br/>
 							online via our website <a href="http://wolfnet.com/contact_us.cfm" target="_blank">WolfNet.com</a>.
-						</p>
-					</td>
-				</tr>
-				
-				<tr valign="top">
-					<th scope="row"><label for="wnt_searchSolutionURL">Search Solution URL</label></th>
-					<td>
-						<input id="wnt_searchSolutionURL" name="wnt_searchSolutionURL" type="text" 
-							value="<?php echo $searchSolutionURL; ?>" size="50" />
-						<p class="description">
-							This URL is used by the plugin to determine where to take users <br/>
-							when they click on a property listing or perform a property search.<br/>
-							Ex. http://search.mydomain.com
 						</p>
 					</td>
 				</tr>
