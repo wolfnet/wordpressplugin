@@ -1,10 +1,11 @@
 <?php
 
 /**
- * This view is responsible for displaying the Listings Grid, which is a widget component.
+ * This view is responsible for displaying the Listings Film Strip, which is a widget component.
  * 
- * @package       com.mlsfinder.wordpress.listing
- * @title         gridView.php
+ * @package       com.mlsfinder.wordpress
+ * @subpackage    listing
+ * @title         featuredListingsView.php
  * @extends       com_ajmichels_wppf_abstract_view
  * @implements    com_ajmichels_wppf_interface_iView
  * @contributors  AJ Michels (aj.michels@wolfnet.com)
@@ -13,11 +14,13 @@
  * 
  */
 
-class com_mlsfinder_wordpress_listing_gridView
+class com_mlsfinder_wordpress_listing_featuredListingsView
 extends com_ajmichels_wppf_abstract_view
 implements com_ajmichels_wppf_interface_iView
 {
 	
+	
+	/* PROPERTIES ******************************************************************************* */
 	
 	/**
 	 * This property holds the path to the HTML template file for this view.
@@ -27,6 +30,10 @@ implements com_ajmichels_wppf_interface_iView
 	 */
 	public $template;
 	
+	private $listingView;
+	
+	
+	/* CONSTRUCTOR ****************************************************************************** */
 	
 	/**
 	 * This constructor method simply assigns the template property with a path to the HTML template
@@ -37,10 +44,11 @@ implements com_ajmichels_wppf_interface_iView
 	 */
 	public function __construct ()
 	{
-		$this->log( 'Init com_mlsfinder_wordpress_listing_gridView' );
-		$this->template = $this->formatPath( dirname( __FILE__ ) . '\template\grid.php' );
+		$this->template = $this->formatPath( dirname( __FILE__ ) . '\template\featuredListings.php' );
 	}
 	
+	
+	/* PUBLIC METHODS *************************************************************************** */
 	
 	/**
 	 * This method overwrites the inherited render method and provides some additional functionality.
@@ -57,7 +65,29 @@ implements com_ajmichels_wppf_interface_iView
 		if ( $data != null && array_key_exists( 'listings', $data ) ) {
 			$data['listingContent'] = $this->renderListings( $data['listings'] );
 		}
-		$data['instanceId']	= uniqid( 'mlsFinder_grid_' );
+		
+		$data['instanceId'] = uniqid( 'mlsFinder_featuredListing_' );
+		
+		$data['wait'] = 'false';
+		if ( is_bool( $data['options']['wait'] ) && $data['options']['wait'] ) {
+			$data['wait'] = 'true';
+		}
+		
+		$data['waitLen'] = 1000;
+		if ( is_numeric( $data['options']['waitLen'] ) ) {
+			$data['waitLen'] = $data['options']['waitLen'] * 1000;
+		}
+		
+		$data['speed'] = 40;
+		if ( is_numeric( $data['options']['speed'] ) && $data['options']['speed'] != 0 ) {
+			$data['speed'] = round( 10 / ( $data['options']['speed'] / 100 ) );
+		}
+		
+		$data['scrollCount'] = 0;
+		if ( is_numeric( $data['options']['scrollCount'] ) ) {
+			$data['scrollCount'] = ( $data['options']['scrollCount'] );
+		}
+		
 		return parent::render( $data );
 	}
 	
@@ -67,8 +97,8 @@ implements com_ajmichels_wppf_interface_iView
 	 * of the listingView object for each. The listings are then rendered individually and combined 
 	 * in a string which is returned.
 	 *
-	 * @param   array   $listings  An array of listing objects.
-	 * @return  string             Rendered listing content.
+	 * @param   array  $listings  An array of listing objects.
+	 * @return  string            Rendered listing content.
 	 * 
 	 */
 	private function renderListings ( $listings )

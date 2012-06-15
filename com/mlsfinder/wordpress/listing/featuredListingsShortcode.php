@@ -7,7 +7,8 @@
  * @see http://codex.wordpress.org/Widgets_API
  * @see http://core.trac.wordpress.org/browser/tags/3.3.2/wp-includes/widgets.php
  * 
- * @package       com.mlsfinder.wordpress.listing
+ * @package       com.mlsfinder.wordpress
+ * @subpackage    listing
  * @title         featuredListingsShortcode.php
  * @extends       com_ajmichels_wppf_shortcode_shortcode
  * @contributors  AJ Michels (aj.michels@wolfnet.com)
@@ -25,23 +26,39 @@ extends com_ajmichels_wppf_shortcode_shortcode
 	
 	public $tag = 'FeaturedListings';
 	
+	private $listingService;
+	private $featuredListingsView;
+	
 	/**
 	 * This property holds an array of different options that are available for each widget instance.
 	 *
 	 * @type  array
 	 * 
 	 */
-	protected $attributes = array('wait' => false, 'waitLen' => 1, 'speed' => 50, 'scrollCount' => 0 );
+	protected $attributes = array(
+		'wait'        => false, 
+		'waitLen'     => 1, 
+		'speed'       => 50, 
+		'scrollCount' => 0, 
+		'ownerType'   => 'agent_broker', 
+		'maxResults'  => 50 
+		);
 	
 	
 	/* PUBLIC METHODS *************************************************************************** */
 	
-	public function execute ( $attr, $content = null ) {
+	public function execute ( $attr, $content = null )
+	{
+		$options = $this->getAttributesData( $attr );
+		$featuredListings = $this->getListingService()->getFeaturedListings(
+			$options['ownerType']['value'],
+			$options['maxResults']['value']
+			);
 		$data = array(
-					'listings' => $this->getListingService()->getListings(), 
-					'options'  => $this->getAttributesData( $attr )
-					);
-		return $this->getListingFilmStripView()->render( $data );
+			'listings' => $featuredListings,
+			'options'  => $options
+			);
+		return $this->getFeaturedListingsView()->render( $data );
 	}
 	
 	
@@ -59,15 +76,15 @@ extends com_ajmichels_wppf_shortcode_shortcode
 	}
 	
 	
-	public function getListingFilmStripView ()
+	public function getFeaturedListingsView ()
 	{
-		return $this->listingFilmStripView;
+		return $this->featuredListingsView;
 	}
 	
 	
-	public function setListingFilmStripView ( com_ajmichels_wppf_interface_iView $view )
+	public function setFeaturedListingsView ( com_ajmichels_wppf_interface_iView $view )
 	{
-		$this->listingFilmStripView = $view;
+		$this->featuredListingsView = $view;
 	}
 	
 	

@@ -7,7 +7,8 @@
  * @see http://codex.wordpress.org/Widgets_API
  * @see http://core.trac.wordpress.org/browser/tags/3.3.2/wp-includes/widgets.php
  * 
- * @package       com.mlsfinder.wordpress.listing
+ * @package       com.mlsfinder.wordpress
+ * @subpackage    listing
  * @title         quickSearchShortcode.php
  * @extends       com_ajmichels_wppf_shortcode_shortcode
  * @contributors  AJ Michels (aj.michels@wolfnet.com)
@@ -28,7 +29,8 @@ extends com_ajmichels_wppf_shortcode_shortcode
 	
 	/* PUBLIC METHODS *************************************************************************** */
 	
-	public function execute ( $attr, $content = null ) {
+	public function execute ( $attr, $content = null )
+	{
 		return $this->getQuickSearchView()->render();
 	}
 	

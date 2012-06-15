@@ -1,10 +1,11 @@
 <?php
 
 /**
- * This view is responsible for displaying the Listings Film Strip, which is a widget component.
+ * This view is responsible for displaying the Listings Grid, which is a widget component.
  * 
- * @package       com.mlsfinder.wordpress.listing
- * @title         filmStripView.php
+ * @package       com.mlsfinder.wordpress
+ * @subpackage    listing
+ * @title         listingGridView.php
  * @extends       com_ajmichels_wppf_abstract_view
  * @implements    com_ajmichels_wppf_interface_iView
  * @contributors  AJ Michels (aj.michels@wolfnet.com)
@@ -13,7 +14,7 @@
  * 
  */
 
-class com_mlsfinder_wordpress_listing_filmStripView
+class com_mlsfinder_wordpress_listing_listingGridView
 extends com_ajmichels_wppf_abstract_view
 implements com_ajmichels_wppf_interface_iView
 {
@@ -37,8 +38,7 @@ implements com_ajmichels_wppf_interface_iView
 	 */
 	public function __construct ()
 	{
-		$this->log( 'Init com_mlsfinder_wordpress_listing_filmStripView' );
-		$this->template = $this->formatPath( dirname( __FILE__ ) . '\template\ListingFilmStrip.php' );
+		$this->template = $this->formatPath( dirname( __FILE__ ) . '\template\listingGrid.php' );
 	}
 	
 	
@@ -57,24 +57,7 @@ implements com_ajmichels_wppf_interface_iView
 		if ( $data != null && array_key_exists( 'listings', $data ) ) {
 			$data['listingContent'] = $this->renderListings( $data['listings'] );
 		}
-		
-		$data['instanceId'] = uniqid( 'mlsFinder_listingFilmStrip_' );
-		
-		$data['wait']		= 'false';
-		if ( is_bool( $data['options']['wait'] ) && $data['options']['wait'] ) {
-			$data['wait']		= 'true';
-		}
-		
-		$data['waitLen']	= 1000;
-		if ( is_numeric( $data['options']['waitLen'] ) ) {
-			$data['waitLen']	= $data['options']['waitLen'] * 1000;
-		}
-		
-		$data['speed']		= 40;
-		if ( is_numeric( $data['options']['speed'] ) && $data['options']['speed'] != 0 ) {
-			$data['speed']		= round( 10 / ( $data['options']['speed'] / 100 ) );
-		}
-		
+		$data['instanceId']	= uniqid( 'mlsFinder_listingGrid_' );
 		return parent::render( $data );
 	}
 	
@@ -84,8 +67,8 @@ implements com_ajmichels_wppf_interface_iView
 	 * of the listingView object for each. The listings are then rendered individually and combined 
 	 * in a string which is returned.
 	 *
-	 * @param   array  $listings  An array of listing objects.
-	 * @return  string            Rendered listing content.
+	 * @param   array   $listings  An array of listing objects.
+	 * @return  string             Rendered listing content.
 	 * 
 	 */
 	private function renderListings ( $listings )

@@ -45,23 +45,23 @@
 		</property>
 	</bean>
 	
-	<bean id="ListingView" class="com_mlsfinder_wordpress_listing_view" singleton="false" />
+	<bean id="ListingView" class="com_mlsfinder_wordpress_listing_listingView" singleton="false" />
 	
-	<bean id="ListingFilmStripView" class="com_mlsfinder_wordpress_listing_filmStripView" singleton="false">
+	<bean id="FeaturedListingsView" class="com_mlsfinder_wordpress_listing_featuredListingsView" singleton="false">
 		<property name="ListingView">
 			<ref bean="ListingView" />
 		</property>
 	</bean>
 	
-	<bean id="ListingFilmStripOptionsView" class="com_mlsfinder_wordpress_listing_filmStripOptionsView" singleton="false" />
+	<bean id="FeaturedListingsOptionsView" class="com_mlsfinder_wordpress_listing_featuredListingsOptionsView" singleton="false" />
 	
-	<bean id="GridView" class="com_mlsfinder_wordpress_listing_gridView" singleton="false">
+	<bean id="ListingGridView" class="com_mlsfinder_wordpress_listing_listingGridView" singleton="false">
 		<property name="ListingView">
 			<ref bean="ListingView" />
 		</property>
 	</bean>
 	
-	<bean id="GridOptionsView" class="com_mlsfinder_wordpress_listing_gridOptionsView" singleton="false" />
+	<bean id="ListingGridOptionsView" class="com_mlsfinder_wordpress_listing_listingGridOptionsView" singleton="false" />
 	
 	<bean id="QuickSearchView" class="com_mlsfinder_wordpress_listing_quickSearchView" singleton="false" />
 	
@@ -104,17 +104,17 @@
 		<property name="ListingService">
 			<ref bean="ListingService" />
 		</property>
-		<property name="ListingFilmStripView">
-			<ref bean="ListingFilmStripView" />
+		<property name="FeaturedListingsView">
+			<ref bean="FeaturedListingsView" />
 		</property>
 	</bean>
 	
-	<bean id="GridShortcode" class="com_mlsfinder_wordpress_listing_gridShortcode">
+	<bean id="ListingGridShortcode" class="com_mlsfinder_wordpress_listing_listingGridShortcode">
 		<property name="ListingService">
 			<ref bean="ListingService" />
 		</property>
-		<property name="GridView">
-			<ref bean="GridView" />
+		<property name="ListingGridView">
+			<ref bean="ListingGridView" />
 		</property>
 	</bean>
 	

@@ -4,7 +4,8 @@
  * This is an HTML template file for the Quick Search Form Widget. This file should ideally contain 
  * very little PHP.
  * 
- * @package       com.mlsfinder.wordpress.listing.template
+ * @package       com.mlsfinder.wordpress
+ * @subpackage    listing.template
  * @title         quickSearchForm.php
  * @contributors  AJ Michels (aj.michels@wolfnet.com)
  * @version       1.0
@@ -14,7 +15,7 @@
  
 ?>
 
-<div id="<?php echo $instanceId; ?>" class="mlsFinder_widget mlsFinder_quickSearchForm">
+<div id="<?php echo $instanceId; ?>" class="mlsFinder_widget mlsFinder_quickSearch">
 	
 	<span>QuickSearch</span>
 	
@@ -81,5 +82,7 @@
 </div>
 
 <script type="text/javascript">
-	//var <?php echo $instanceId; ?>_wntQuickSearch = new wntQuickSearch( '<?php echo $instanceId; ?>' );
+	
+	jQuery( '#<?php echo $instanceId; ?>' ).wntQuickSearch( {} );
+	
 </script>

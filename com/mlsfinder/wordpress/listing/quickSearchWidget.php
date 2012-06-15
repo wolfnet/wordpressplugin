@@ -7,7 +7,8 @@
  * @see http://codex.wordpress.org/Widgets_API
  * @see http://core.trac.wordpress.org/browser/tags/3.3.2/wp-includes/widgets.php
  * 
- * @package       com.mlsfinder.wordpress.listing
+ * @package       com.mlsfinder.wordpress
+ * @subpackage    listing
  * @title         quickSearchWidget.php
  * @extends       com_mlsfinder_wordpress_abstract_widget
  * @contributors  AJ Michels (aj.michels@wolfnet.com)
@@ -21,18 +22,24 @@ extends com_mlsfinder_wordpress_abstract_widget
 {
 	
 	
-	/**
-	 * This constructor method passes some key information up to the parent classes and eventionally 
-	 * the information gets registered with the WordPress application.
-	 *
-	 * @return  void
-	 * 
-	 */
+	/* PROPERTIES ******************************************************************************* */
+	
+	private $listingService;
+	private $quickSearchView;
+	
+	
+	/* CONSTRUCTOR METHOD *********************************************************************** */
+	
 	public function __construct ()
 	{
 		parent::__construct( 'mlsFinder_quickSearchWidget', 'Listing Quick Search' );
+		/* The 'sf' property is set in the abstract widget class and is pulled from the plugin instance */
+		$this->setListingService( $this->sf->getBean( 'ListingService' ) );
+		$this->setQuickSearchView( $this->sf->getBean( 'QuickSearchView' ) );
 	}
 	
+	
+	/* PUBLIC METHODS *************************************************************************** */
 	
 	/**
 	 * This method is the primary output for the widget. This is the information the end user of the 
@@ -45,8 +52,13 @@ extends com_mlsfinder_wordpress_abstract_widget
 	 */
 	public function widget ( $args, $instance )
 	{
-		$view = $this->getQuickSearchView();
-		$view->out();
+		$ls = $this->getListingService();
+		$data = array(
+					'prices' => $ls->getPriceData(),
+					'beds'   => $ls->getBedData(),
+					'baths'  => $ls->getBathData()
+					);
+		$this->getQuickSearchView()->out( $data );
 	}
 	
 	
@@ -60,6 +72,7 @@ extends com_mlsfinder_wordpress_abstract_widget
 	 */
 	public function form ( $instance )
 	{
+		/* Admin form for configured widget options. */
 	}
 	
 	
@@ -73,16 +86,33 @@ extends com_mlsfinder_wordpress_abstract_widget
 	 */
 	public function update ( $new_instance, $old_instance )
 	{
+		/* Save action for configuration form. */
 	}
 	
 	
 	/* ACCESSORS ******************************************************************************** */
 	
-	/* The 'sf' property is set in the abstract widget class and is pulled from the plugin instance */
+	public function getListingService ()
+	{
+		return $this->listingService;
+	}
+	
+	
+	public function setListingService ( com_mlsfinder_wordpress_listing_service $service )
+	{
+		$this->listingService = $service;
+	}
+	
 	
 	public function getQuickSearchView ()
 	{
-		return $this->sf->getBean( 'QuickSearchView' );
+		return $this->quickSearchView;
+	}
+	
+	
+	public function setQuickSearchView ( com_ajmichels_wppf_interface_iView $view )
+	{
+		$this->quickSearchView = $view;
 	}
 	
 	

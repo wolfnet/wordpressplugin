@@ -45,8 +45,7 @@ extends com_ajmichels_wppf_action_action
 	 */
 	public function pluginSettingsPage ()
 	{
-		$view = $this->getPluginSettingsView();
-		$view->out();
+		$this->getPluginSettingsView()->out();
 	}
 	
 	

@@ -40,9 +40,10 @@ extends com_ajmichels_wppf_action_action
 	{
 		$this->log( 'Action EnqueueResources' );
 		$url = $this->getPluginUrl();
-		wp_enqueue_script( 'mlsfinderjs',          $url . 'js/MLSFinder.min.js', array('jquery') );
-		wp_enqueue_script( 'mlsfinderfilmsriptjs', $url . 'js/jQuery/jquery.filmStrip.min.js', array('jquery') );
-		wp_enqueue_style(  'mlsfindercss',         $url . 'css/MLSFinder.min.css', array(), false, 'screen' );
+		wp_enqueue_script( 'mlsfinderjs',           $url . 'js/MLSFinder.min.js', array('jquery') );
+		wp_enqueue_script( 'wntfeaturedlistingsjs', $url . 'js/jQuery/jquery.wntFeaturedListings.min.js', array('jquery') );
+		wp_enqueue_script( 'wntquicksearchjs',      $url . 'js/jQuery/jquery.wntQuickSearch.min.js', array('jquery') );
+		wp_enqueue_style(  'mlsfindercss',          $url . 'css/MLSFinder.min.css', array(), false, 'screen' );
 	}
 	
 	

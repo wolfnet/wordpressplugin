@@ -26,8 +26,8 @@ extends com_ajmichels_wppf_action_action
 	 */
 	public function execute ()
 	{
-		register_widget( 'com_mlsfinder_wordpress_listing_filmStripWidget' );
-		register_widget( 'com_mlsfinder_wordpress_listing_gridWidget' );
+		register_widget( 'com_mlsfinder_wordpress_listing_featuredListingsWidget' );
+		register_widget( 'com_mlsfinder_wordpress_listing_listingGridWidget' );
 		register_widget( 'com_mlsfinder_wordpress_listing_quickSearchWidget' );
 	}
 	

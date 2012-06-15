@@ -3,8 +3,9 @@
 /**
  * This view is responsible for displaying a listing record.
  * 
- * @package       com.mlsfinder.wordpress.listing
- * @title         view.php
+ * @package       com.mlsfinder.wordpress
+ * @subpackage    listing
+ * @title         listingView.php
  * @extends       com_ajmichels_wppf_abstract_view
  * @implements    com_ajmichels_wppf_interface_iView
  * @contributors  AJ Michels (aj.michels@wolfnet.com)
@@ -13,11 +14,13 @@
  * 
  */
 
-class com_mlsfinder_wordpress_listing_view
+class com_mlsfinder_wordpress_listing_listingView
 extends com_ajmichels_wppf_abstract_view
 implements com_ajmichels_wppf_interface_iView
 {
 	
+	
+	/* PROPERTIES ******************************************************************************* */
 	
 	/**
 	 * This property holds the path to the HTML template file for this view.
@@ -28,20 +31,23 @@ implements com_ajmichels_wppf_interface_iView
 	public $template;
 	
 	
-	/**
-	 * This constructor method simply assigns the template property with a path to the HTML template
-	 * for this view based on the view files location.
-	 *
-	 * @return  void
-	 * 
-	 */
+	/* CONSTRUCTOR METHOD *********************************************************************** */
 	public function __construct ()
 	{
-		$this->log( 'Init com_mlsfinder_wordpress_listing_view' );
 		$this->setTemplate();
 	}
 	
 	
+	/* PUBLIC METHODS *************************************************************************** */
+	
+	/**
+	 * This is an overwritten version of the parent class method. It must call parent::render at 
+	 * some point.
+	 * 
+	 * @param   array  $data  And array of data which will be available as local variables to the 
+	 *                        template page used in the render process.
+	 * @return  string
+	 */
 	public function render ( $data = array() )
 	{
 		$data['id']       = $data['listing']->getPropertyId();
@@ -56,6 +62,8 @@ implements com_ajmichels_wppf_interface_iView
 		return parent::render( $data );
 	}
 	
+	
+	/* ACCESSOR METHODS ************************************************************************* */
 	
 	/**
 	 * This method creates a way to dynamically specify which HTML template file should be used to 

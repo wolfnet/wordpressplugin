@@ -1,9 +1,8 @@
 /**
- * This jQuery plugin can be applied to any number of containers which hold child elements which will
- * then scroll based on the options that are passes in.
+ * This jQuery plugin can be applied to any number of containers which hold child elements which 
+ * will then scroll based on the options that are passes in.
  * 
- * @package       js.jQuery
- * @title         filmStrip.plugin.php
+ * @title         jquery.wntFeaturedListings.js
  * @contributors  AJ Michels (aj.michels@wolfnet.com)
  * @version       1.0
  * @option  boolean  autoplay  Should the child elements start scrolling right away.
@@ -15,7 +14,7 @@
 
 ( function ( $ ) {
 	
-	$.fn.mlsFinderFilmStrip = function ( options ) {
+	$.fn.wntFeaturedListings = function ( options ) {
 		
 		var opt = $.extend( {
 			'autoplay': true,
@@ -27,12 +26,13 @@
 		return this.each( function () {
 			
 			var self = $(this);
+			var containerClass = 'mlsFinder_featuredListingsContainer';
 			
 			/* Add Extra Elements */
-			self.wrapInner('<div class="filmStripContainer">');
+			self.wrapInner('<div class="' + containerClass + '">');
 			
 			/* Capture Container and set initial position */
-			var cont  = self.find('.filmStripContainer:first')[0];
+			var cont  = self.find('.' + containerClass + ':first')[0];
 			var $cont = $(cont);
 			var p     = 0;
 			var timer = null;

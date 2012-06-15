@@ -3,7 +3,8 @@
 /**
  * This view is responsible for displaying the plugin admin page.
  * 
- * @package       com.mlsfinder.wordpress.admin
+ * @package       com.mlsfinder.wordpress
+ * @subpackage    admin
  * @title         pluginSettingsView.php
  * @extends       com_ajmichels_wppf_abstract_view
  * @implements    com_ajmichels_wppf_interface_iView
@@ -19,6 +20,8 @@ implements com_ajmichels_wppf_interface_iView
 {
 	
 	
+	/* PROPERTIES ******************************************************************************* */
+	
 	/**
 	 * This property holds the path to the HTML template file for this view.
 	 *
@@ -28,19 +31,14 @@ implements com_ajmichels_wppf_interface_iView
 	public $template;
 	
 	
-	/**
-	 * This constructor method simply assigns the template property with a path to the HTML template
-	 * for this view based on the view files location.
-	 *
-	 * @return  void
-	 * 
-	 */
+	/** CONSTRUCTOR METHOD ********************************************************************** */
 	public function __construct ()
 	{
-		$this->log( 'Init com_mlsfinder_wordpress_admin_pluginSettingsView' );
 		$this->template = $this->formatPath( dirname( __FILE__ ) . '\template\pluginSettings.php' );
 	}
 	
+	
+	/* PUBLIC METHODS *************************************************************************** */
 	
 	public function render ( $data = array() )
 	{

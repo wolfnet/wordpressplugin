@@ -7,8 +7,9 @@
  * @see http://codex.wordpress.org/Widgets_API
  * @see http://core.trac.wordpress.org/browser/tags/3.3.2/wp-includes/widgets.php
  * 
- * @package       com.mlsfinder.wordpress.listing
- * @title         gridShortcode.php
+ * @package       com.mlsfinder.wordpress
+ * @subpackage    listing
+ * @title         listingGridShortcode.php
  * @extends       com_ajmichels_wppf_shortcode_shortcode
  * @contributors  AJ Michels (aj.michels@wolfnet.com)
  * @version       1.0
@@ -16,7 +17,7 @@
  * 
  */
 
-class com_mlsfinder_wordpress_listing_gridShortcode
+class com_mlsfinder_wordpress_listing_listingGridShortcode
 extends com_ajmichels_wppf_shortcode_shortcode
 {
 	
@@ -25,23 +26,42 @@ extends com_ajmichels_wppf_shortcode_shortcode
 	
 	public $tag = 'ListingGrid';
 	
+	private $listingService;
+	private $listingGridView;
+	
 	/**
 	 * This property holds an array of different options that are available for each widget instance.
 	 *
 	 * @type  array
 	 * 
 	 */
-	protected $attributes = array('wait' => false, 'waitLen' => 1, 'speed' => 50, 'scrollCount' => 0 );
+	protected $attributes = array( 
+		'min_price'   => '', 
+		'max_price'   => '', 
+		'city'        => '', 
+		'zipcode'     => '', 
+		'agentBroker' => '', 
+		'maxResults'  => 50 
+		);
 	
 	
 	/* PUBLIC METHODS *************************************************************************** */
 	
 	public function execute ( $attr, $content = null ) {
+		$options = $this->getAttributesData( $attr );
+		$gridListings = $this->getListingService()->getGridListings(
+			$options['maxPrice']['value'],
+			$options['minPrice']['value'],
+			$options['city']['value'],
+			$options['zipcode']['value'],
+			$options['agentBroker']['value'],
+			$options['maxResults']['value']
+			);
 		$data = array(
-					'listings' => $this->getListingService()->getListings(), 
-					'options'  => $this->getAttributesData( $attr )
-					);
-		return $this->getGridView()->render( $data );
+			'listings' => $gridListings,
+			'options'  => $options
+			);
+		return $this->getListingGridView()->render( $data );
 	}
 	
 	
@@ -59,15 +79,15 @@ extends com_ajmichels_wppf_shortcode_shortcode
 	}
 	
 	
-	public function getGridView ()
+	public function getListingGridView ()
 	{
-		return $this->gridView;
+		return $this->listingGridView;
 	}
 	
 	
-	public function setGridView ( com_ajmichels_wppf_interface_iView $view )
+	public function setListingGridView ( com_ajmichels_wppf_interface_iView $view )
 	{
-		$this->gridView = $view;
+		$this->listingGridView = $view;
 	}
 	
 	
