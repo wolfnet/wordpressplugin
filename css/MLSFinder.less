@@ -24,10 +24,34 @@
 		height: 140px;
 		text-align: center;
 		
-		.mlsFinder_featuredListingsContainer
+		.mlsFinder_featuredListings_outterContainer
 		{
-			height:140px;
-			
+			height:100%;
+			width:100%;
+			overflow: hidden;
+			white-space: nowrap;
+		}
+		
+		.mlsFinder_featuredListings_prev,
+		.mlsFinder_featuredListings_next
+		{
+			position: absolute;
+			width: 25px;
+			height: 100%;
+			background-color: #333;
+			display:none;
+		}
+		
+		.mlsFinder_featuredListings_prev
+		{
+			top:0;
+			left:0;
+		}
+		
+		.mlsFinder_featuredListings_next
+		{
+			top:0;
+			right:0;
 		}
 		
 	}
@@ -39,11 +63,17 @@
 		position: relative;
 		left: 50%;
 		
+		.mlsFinder_listing
+		{
+			left: -50%;
+		}
+		
 	}
 	
 	&.mlsFinder_featuredListings,
 	&.mlsFinder_listingGrid
 	{
+		position: relative;
 		
 		.mlsFinder_listing
 		{
@@ -52,7 +82,6 @@
 			float: left;
 			margin: 0 auto 1em auto;
 			position: relative;
-			left: -50%;
 			text-align: center;
 			font-size: 11px;
 			

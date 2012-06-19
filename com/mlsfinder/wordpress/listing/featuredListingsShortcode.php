@@ -36,9 +36,11 @@ extends com_ajmichels_wppf_shortcode_shortcode
 	 * 
 	 */
 	protected $attributes = array(
+		'direction'   => 'left', 
+		'autoPlay'    => true, 
 		'wait'        => false, 
 		'waitLen'     => 1, 
-		'speed'       => 50, 
+		'speed'       => 5000, 
 		'scrollCount' => 0, 
 		'ownerType'   => 'agent_broker', 
 		'maxResults'  => 50 

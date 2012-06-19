@@ -47,4 +47,42 @@ implements com_ajmichels_wppf_interface_iView
 	}
 	
 	
+	/* PUBLIC METHODS *************************************************************************** */
+	
+	public function render ( $data = array() )
+	{
+		$data = array_merge( $data, array( 
+			'autoPlayId'       => esc_attr( $data['fields']['autoPlay']['id'] ),
+			'autoPlayName'     => esc_attr( $data['fields']['autoPlay']['name'] ),
+			'autoPlayTrue'     => ( $data['fields']['autoPlay']['value'] == 'true' )  ? ' selected="selected"' : '',
+			'autoPlayFalse'    => ( $data['fields']['autoPlay']['value'] == 'false' ) ? ' selected="selected"' : '',
+			'directionId'     => esc_attr( $data['fields']['direction']['id'] ),
+			'directionName'   => esc_attr( $data['fields']['direction']['name'] ),
+			'directionLeft'   => ( $data['fields']['direction']['value'] == 'left' )  ? ' selected="selected"' : '',
+			'directionRight'  => ( $data['fields']['direction']['value'] == 'right' ) ? ' selected="selected"' : '',
+			'directionUp'     => ( $data['fields']['direction']['value'] == 'up' )    ? ' selected="selected"' : '',
+			'directionDown'   => ( $data['fields']['direction']['value'] == 'down' )  ? ' selected="selected"' : '',
+			'waitId'           => esc_attr( $data['fields']['wait']['id'] ),
+			'waitName'         => esc_attr( $data['fields']['wait']['name'] ),
+			'waitChecked'      => ( $data['fields']['wait']['value'] == 'true' ) ? ' checked="checked"' : '',
+			'waitLenId'        => esc_attr( $data['fields']['waitLen']['id'] ),
+			'waitLenName'      => esc_attr( $data['fields']['waitLen']['name'] ),
+			'waitLenValue'     => esc_attr( $data['fields']['waitLen']['value'] ),
+			'speedId'          => esc_attr( $data['fields']['speed']['id'] ),
+			'speedName'        => esc_attr( $data['fields']['speed']['name'] ),
+			'speedValue'       => esc_attr( $data['fields']['speed']['value'] ),
+			'scrollCountId'    => esc_attr( $data['fields']['scrollCount']['id'] ),
+			'scrollCountName'  => esc_attr( $data['fields']['scrollCount']['name'] ),
+			'scrollCountValue' => esc_attr( $data['fields']['scrollCount']['value'] ),
+			'ownerTypeId'      => esc_attr( $data['fields']['ownerType']['id'] ),
+			'ownerTypeName'    => esc_attr( $data['fields']['ownerType']['name'] ),
+			'ownerTypeValue'   => esc_attr( $data['fields']['ownerType']['value'] ),
+			'maxResultsId'     => esc_attr( $data['fields']['maxResults']['id'] ),
+			'maxResultsName'   => esc_attr( $data['fields']['maxResults']['name'] ),
+			'maxResultsValue'  => esc_attr( $data['fields']['maxResults']['value'] )
+			) );
+		return parent::render( $data );
+	}
+	
+	
 }

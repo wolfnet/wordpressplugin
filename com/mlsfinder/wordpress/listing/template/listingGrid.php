@@ -19,3 +19,9 @@
 	<?php echo ( isset($listingContent) ) ? $listingContent : 'No Listings to Display.'; ?>
 	<div class="clearfix"></div>
 </div>
+
+<script type="text/javascript">
+	
+	jQuery( '#<?php echo $instanceId; ?>' ).wntListingGrid( {} );
+	
+</script>

@@ -291,9 +291,7 @@ implements com_ajmichels_wppf_interface_iService
 			$wsu = $this->getWebServiceUrl();
 		}
 		
-		$om  = $this->getOptionManager();
 		$wsu->setCacheSetting( 15 );
-		$wsu->setScriptPath( '/propertyBar/' . $om->getOptionValueFromWP( 'wnt_productKey' ) );
 		
 		$data = $this->getDataService()->getData( $wsu );
 		
@@ -304,8 +302,10 @@ implements com_ajmichels_wppf_interface_iService
 	private function setFeaturedListingsData ( $owner_type, $maxResults )
 	{
 		$wsu = $this->getWebServiceUrl();
-		$wsu->setParameter( 'owner_type', $owner_type );
-		//$wsu->setParameter( 'maxResults', $maxResults );
+		$wsu->setScriptPath( '/propertyBar/' 
+		                     . $this->getOptionManager()->getOptionValueFromWP( 'wnt_productKey' ) );
+		$wsu->setParameter( 'owner_type',  $owner_type );
+		$wsu->setParameter( 'max_results', $maxResults );
 		$this->setData( $wsu );
 	}
 	
@@ -313,12 +313,14 @@ implements com_ajmichels_wppf_interface_iService
 	private function setGridListingData ( $minPrice, $maxPrice, $city, $zipcode, $owner_type, $maxResults )
 	{
 		$wsu = $this->getWebServiceUrl();
-		//$wsu->setParameter( 'minPrice',   $minPrice );
-		//$wsu->setParameter( 'maxPrice',   $maxPrice );
-		//$wsu->setParameter( 'city',       $city );
-		//$wsu->setParameter( 'zipcode',    $zipcode );
-		//$wsu->setParameter( 'owner_type', $owner_type );
-		//$wsu->setParameter( 'maxResults', $maxResults );
+		$wsu->setScriptPath( '/propertyGrid/' 
+		                     . $this->getOptionManager()->getOptionValueFromWP( 'wnt_productKey' ) );
+		$wsu->setParameter( 'min_price',   $minPrice );
+		$wsu->setParameter( 'max_price',   $maxPrice );
+		$wsu->setParameter( 'city',        $city );
+		$wsu->setParameter( 'zip_code',    $zipcode );
+		$wsu->setParameter( 'owner_type',  $owner_type );
+		$wsu->setParameter( 'max_results', $maxResults );
 		$this->setData( $wsu );
 	}
 	

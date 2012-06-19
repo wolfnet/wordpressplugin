@@ -47,7 +47,7 @@ implements com_ajmichels_wppf_interface_iView
 	}
 	
 	
-	/* CONSTRUCTOR METHOD *********************************************************************** */
+	/* PUBLIC METHODS *************************************************************************** */
 	
 	public function render ( $data = array() )
 	{
@@ -64,9 +64,9 @@ implements com_ajmichels_wppf_interface_iView
 			'zipcodeId'        => esc_attr( $data['fields']['zipcode']['id'] ),
 			'zipcodeName'      => esc_attr( $data['fields']['zipcode']['name'] ),
 			'zipcodeValue'     => esc_attr( $data['fields']['zipcode']['value'] ),
-			'agentBrokerId'    => esc_attr( $data['fields']['agentBroker']['id'] ),
-			'agentBrokerName'  => esc_attr( $data['fields']['agentBroker']['name'] ),
-			'agentBrokerValue' => esc_attr( $data['fields']['agentBroker']['value'] ),
+			'agentBrokerId'    => esc_attr( $data['fields']['ownerType']['id'] ),
+			'agentBrokerName'  => esc_attr( $data['fields']['ownerType']['name'] ),
+			'agentBrokerValue' => esc_attr( $data['fields']['ownerType']['value'] ),
 			'maxResultsId'     => esc_attr( $data['fields']['maxResults']['id'] ),
 			'maxResultsName'   => esc_attr( $data['fields']['maxResults']['name'] ),
 			'maxResultsValue'  => esc_attr( $data['fields']['maxResults']['value'] )

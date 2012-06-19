@@ -22,6 +22,8 @@
 <script type="text/javascript">
 	
 	jQuery( '#<?php echo $instanceId; ?>' ).wntFeaturedListings( {
+		'autoplay'    : <?php echo $autoPlay; ?>, 
+		'direction'   : '<?php echo $direction; ?>', 
 		'wait'        : <?php echo $wait; ?>, 
 		'waitLen'     : <?php echo $waitLen; ?>,
 		'speed'       : <?php echo $speed; ?>,
