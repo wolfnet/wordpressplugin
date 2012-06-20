@@ -13,7 +13,6 @@
  * @copyright     Copyright (c) 2012, WolfNet Technologies, LLC
  * 
  */
-
 class com_mlsfinder_wordpress_admin_pluginSettingsView
 extends com_ajmichels_wppf_abstract_view
 implements com_ajmichels_wppf_interface_iView
@@ -31,7 +30,8 @@ implements com_ajmichels_wppf_interface_iView
 	public $template;
 	
 	
-	/** CONSTRUCTOR METHOD ********************************************************************** */
+	/* CONSTRUCTOR METHOD *********************************************************************** */
+	
 	public function __construct ()
 	{
 		$this->template = $this->formatPath( dirname( __FILE__ ) . '\template\pluginSettings.php' );
@@ -40,24 +40,47 @@ implements com_ajmichels_wppf_interface_iView
 	
 	/* PUBLIC METHODS *************************************************************************** */
 	
+	/**
+	 * This method establishes variable values which will be used by the template when it is render, 
+	 * then the data is passed to to inharited render method.
+	 * 
+	 * @param   array  $data  An associative array of data for the template. Each array key will be 
+	 *                       transformed into a variable.
+	 * @return  string
+	 *
+	 */
 	public function render ( $data = array() )
 	{
 		$optionManager             = $this->getOptionManager();
 		$data['formHeader']        = $optionManager->getSettingsFormHeader();
-		$data['productKey']        = $optionManager->getOptionValueFromWP('wnt_productKey');
-		$data['searchSolutionURL'] = $optionManager->getOptionValueFromWP('wnt_searchSolutionURL');
+		$data['productKey']        = $optionManager->getOptionValueFromWP( 'wnt_productKey' );
+		$data['searchSolutionURL'] = $optionManager->getOptionValueFromWP( 'wnt_searchSolutionURL' );
 		return parent::render( $data );
 	}
 	
 	
 	/* ACCESSORS ******************************************************************************** */
 	
+	/**
+	 * GETTER: This method is a getter for the optionManager property.
+	 * 
+	 * @return com_ajmichels_wppf_option_manager
+	 * 
+	 */
 	public function getOptionManager ()
 	{
 		return $this->optionManager;
 	}
 	
 	
+	/**
+	 * SETTER: This method is a setter for the optionManager property.
+	 * 
+	 * @param   com_ajmichels_wppf_option_manager  $om
+	 * 
+	 * @return  void
+	 * 
+	 */
 	public function setOptionManager ( com_ajmichels_wppf_option_manager $om )
 	{
 		$this->optionManager = $om;

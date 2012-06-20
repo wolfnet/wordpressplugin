@@ -3,7 +3,8 @@
 /**
  * This action is responsible for registering any widgets the plugin makes available.
  * 
- * @package       com.mlsfinder.wordpress.action
+ * @package       com.mlsfinder.wordpress
+ * @subpackage    action
  * @title         registerWidgets.php
  * @extends       com_ajmichels_wppf_action_action
  * @contributors  AJ Michels (aj.michels@wolfnet.com)
@@ -11,7 +12,6 @@
  * @copyright     Copyright (c) 2012, WolfNet Technologies, LLC
  * 
  */
-
 class com_mlsfinder_wordpress_action_registerWidgets
 extends com_ajmichels_wppf_action_action
 {

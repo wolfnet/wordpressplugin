@@ -14,7 +14,6 @@
  * @copyright     Copyright (c) 2012, WolfNet Technologies, LLC
  * 
  */
-
 class com_mlsfinder_wordpress_listing_service
 extends com_ajmichels_wppf_abstract_service
 implements com_ajmichels_wppf_interface_iService
@@ -316,16 +315,16 @@ implements com_ajmichels_wppf_interface_iService
 		$wsu->setScriptPath( '/propertyGrid/' 
 		                     . $this->getOptionManager()->getOptionValueFromWP( 'wnt_productKey' ) );
 		if ( $minPrice != '' ) {
-			$wsu->setParameter( 'min_price',   $minPrice );
+			$wsu->setParameter( 'min_price', $minPrice );
 		}
 		if ( $maxPrice != '' ) {
-			$wsu->setParameter( 'max_price',   $maxPrice );
+			$wsu->setParameter( 'max_price', $maxPrice );
 		}
 		if ( $city != '' ) {
-			$wsu->setParameter( 'city',        $city );
+			$wsu->setParameter( 'city',      $city );
 		}
 		if ( $zipcode != '' ) {
-			$wsu->setParameter( 'zip_code',    $zipcode );
+			$wsu->setParameter( 'zip_code',  $zipcode );
 		}
 		$wsu->setParameter( 'owner_type',  $owner_type );
 		$wsu->setParameter( 'max_results', $maxResults );

@@ -13,7 +13,6 @@
  * @copyright     Copyright (c) 2012, WolfNet Technologies, LLC
  * 
  */
-
 class com_mlsfinder_wordpress_listing_listingView
 extends com_ajmichels_wppf_abstract_view
 implements com_ajmichels_wppf_interface_iView
@@ -32,6 +31,7 @@ implements com_ajmichels_wppf_interface_iView
 	
 	
 	/* CONSTRUCTOR METHOD *********************************************************************** */
+	
 	public function __construct ()
 	{
 		$this->setTemplate();

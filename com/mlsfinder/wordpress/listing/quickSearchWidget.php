@@ -16,7 +16,6 @@
  * @copyright     Copyright (c) 2012, WolfNet Technologies, LLC
  * 
  */
-
 class com_mlsfinder_wordpress_listing_quickSearchWidget
 extends com_mlsfinder_wordpress_abstract_widget
 {

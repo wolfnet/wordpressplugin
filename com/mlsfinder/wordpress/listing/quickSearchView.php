@@ -13,7 +13,6 @@
  * @copyright     Copyright (c) 2012, WolfNet Technologies, LLC
  * 
  */
-
 class com_mlsfinder_wordpress_listing_quickSearchView
 extends com_ajmichels_wppf_abstract_view
 implements com_ajmichels_wppf_interface_iView

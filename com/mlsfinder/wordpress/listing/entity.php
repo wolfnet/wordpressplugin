@@ -23,85 +23,87 @@ implements com_ajmichels_wppf_interface_iEntity
 	
 	/**
 	 * 
-	 * @type mixed
+	 * @type  mixed[string]
 	 * 
 	 */
 	private $property_id     = '';
 	
 	/**
 	 * 
-	 * @type string
+	 * @type  string
 	 * 
 	 */
 	private $property_url    = '';
 	
 	/**
 	 * 
-	 * @type float
+	 * @type  float
 	 * 
 	 */
 	private $listing_price   = 0;
 	
 	/**
 	 * 
-	 * @type boolean
+	 * @type  boolean
 	 * 
 	 */
 	private $agent_listing   = 0;
 	
 	/**
 	 * 
-	 * @type string
+	 * @type  string
 	 * 
 	 */
 	private $display_address = '';
 	
 	/**
 	 * 
-	 * @type string
+	 * @type  string
 	 * 
 	 */
 	private $city            = '';
 	
 	/**
 	 * 
-	 * @type string
+	 * @type  string
 	 * 
 	 */
 	private $state           = '';
 	
 	/**
 	 * 
-	 * @type string
+	 * @type  string
 	 * 
 	 */
 	private $thumbnail_url   = '';
 	
 	/**
 	 * 
-	 * @type numeric
+	 * @type  numeric
 	 * 
 	 */
 	private $bathroom        = 0;
 	
 	/**
 	 * 
-	 * @type numeric
+	 * @type  numeric
 	 * 
 	 */
 	private $bedrooms        = 0;
 	
 	
+	/* PUBLIC METHODS *************************************************************************** */
+	
 	/**
 	 * This method is used to set instance data for the entity. Though it is public by necessity, 
 	 * this method should not be accessed by any object other than the listingDao.
-	 * @see Memento Design Pattern
+	 * ( see Memento Design Pattern )
 	 * 
 	 * @param   array  $data  The primary key of a single listing.
 	 * @return  void
 	 * 
 	 */
-	public function _setMemento ( $data )
+	public function setMemento ( $data )
 	{
 		$this->property_id     = $data['property_id'];
 		$this->property_url    = $data['property_url'];
@@ -116,7 +118,15 @@ implements com_ajmichels_wppf_interface_iEntity
 	}
 	
 	
-	public function _getMemento ()
+	/**
+	 * This method is used to get instance data from the entity. Though it is public by necessity, 
+	 * this method should not be accessed by any object other than the listingDao.
+	 * ( see Memento Design Pattern )
+	 * 
+	 * @return  array  The primary key of a single listing.
+	 * 
+	 */
+	public function getMemento ()
 	{
 		return array( 
 			'property_id'     => $this->property_id,
@@ -132,8 +142,14 @@ implements com_ajmichels_wppf_interface_iEntity
 			);
 	}
 	
-	/* PUBLIC METHODS *************************************************************************** */
 	
+	/**
+	 * This method combines several properties into a single location string. This is done here to 
+	 * hold this logic in a centralized place. 
+	 *
+	 * @return  string  Combined location information in a single string.
+	 * 
+	 */
 	public function getLocation ()
 	{
 		$location = $this->getCity();
@@ -146,6 +162,12 @@ implements com_ajmichels_wppf_interface_iEntity
 	}
 	
 	
+	/**
+	 * This method combines the bedroom and bathroom data into a single string for display. 
+	 * 
+	 * @return  string
+	 *
+	 */
 	public function getBedsAndBaths ()
 	{
 		$bedsAndBaths = '';
@@ -164,15 +186,16 @@ implements com_ajmichels_wppf_interface_iEntity
 	
 	/*	ACCESSORS ******************************************************************************* */
 	
-	public function getPropertyId ()
+	
+	public function __get ( $property )
 	{
-		return $this->property_id;
+		return $this->{$property};
 	}
 	
 	
-	public function getPropertyUrl ()
+	public function __set ( $property, $value )
 	{
-		return $this->property_url;
+		$this->{$property} = $value;
 	}
 	
 	
@@ -184,48 +207,6 @@ implements com_ajmichels_wppf_interface_iEntity
 		else {
 			return $this->listing_price;
 		}
-	}
-	
-	
-	public function getAgentListing ()
-	{
-		return $this->agent_listing;
-	}
-	
-	
-	public function getDisplayAddress ()
-	{
-		return $this->display_address;
-	}
-	
-	
-	public function getCity ()
-	{
-		return $this->city;
-	}
-	
-	
-	public function getState ()
-	{
-		return $this->state;
-	}
-	
-	
-	public function getThumbnailUrl ()
-	{
-		return $this->thumbnail_url;
-	}
-	
-	
-	public function getBathroom ()
-	{
-		return $this->bathroom;
-	}
-	
-	
-	public function getBedrooms ()
-	{
-		return $this->bedrooms;
 	}
 	
 	

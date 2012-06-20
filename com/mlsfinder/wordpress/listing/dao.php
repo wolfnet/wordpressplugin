@@ -5,8 +5,9 @@
  * and outgoing data to and from the listingEntity objects. This object should be replaced in the 
  * event that the method used for data i/o is changed.
  * 
- * @package       com.mlsfinder.wordpress.listing
- * @title         ListingDAO.php
+ * @package       com.mlsfinder.wordpress
+ * @subpackage    listing
+ * @title         dao.php
  * @extends       com_ajmichels_wppf_abstract_dao
  * @implements    com_ajmichels_wppf_interface_iDao
  * @singleton     True
@@ -14,16 +15,14 @@
  * @version       1.0
  * @copyright     Copyright (c) 2012, WolfNet Technologies, LLC
  * 
- * @todo          Re-work the way data is retrieved from the data service. The implementation is 
- *                currently not flexible enough.
- * 
  */
-
 class com_mlsfinder_wordpress_listing_dao
 extends com_ajmichels_wppf_abstract_dao
 implements com_ajmichels_wppf_interface_iDao
 {
 	
+	
+	/* SINGLETON ENFORCEMENT ******************************************************************** */
 	
 	/**
 	 * This private static property holds the singleton instance of this class.
@@ -32,19 +31,6 @@ implements com_ajmichels_wppf_interface_iDao
 	 * 
 	 */
 	private static $instance;
-	
-	
-	/**
-	 * This constructor method is private becuase this class is a singleton and can only be retrieved
-	 * by statically calling the getInstance method.
-	 * 
-	 * @return  void
-	 * 
-	 */
-	private function __construct ()
-	{
-		$this->log( 'Init com_mlsfinder_wordpress_listing_dao' );
-	}
 	
 	
 	/**
@@ -62,6 +48,23 @@ implements com_ajmichels_wppf_interface_iDao
 	}
 	
 	
+	/* CONSTRUCTOR METHOD *********************************************************************** */
+	
+	/**
+	 * This constructor method is private becuase this class is a singleton and can only be retrieved
+	 * by statically calling the getInstance method.
+	 * 
+	 * @return  void
+	 * 
+	 */
+	private function __construct ()
+	{
+		$this->log( 'Init com_mlsfinder_wordpress_listing_dao' );
+	}
+	
+	
+	/* PUBLIC METHODS *************************************************************************** */
+	
 	/**
 	 * This method returns all property listings avaiable to this WordPress plugin instance.
 	 * 
@@ -76,7 +79,7 @@ implements com_ajmichels_wppf_interface_iDao
 		if ( is_array($data) && count($data) > 0 ) {
 			foreach ($data as $listingData) {
 				$listing = clone $listingPrototype;
-				$listing->_setMemento( $listingData );
+				$listing->setMemento( $listingData );
 				// Push Object to Array
 				array_push($listings, $listing);
 			}
@@ -101,13 +104,25 @@ implements com_ajmichels_wppf_interface_iDao
 		$data = $this->getData();
 		if ( $id != 0 && is_array($data) && count($data) > 0 ) {
 			$this->log( 'Listing Data', $data );
-			$listing->_setMemento( $data[0] );
+			$listing->setMemento( $data[0] );
 		}
 		return $listing;
 	}
 	
 	
 	/* ACCESSORS ******************************************************************************** */
+	
+	/**
+	 * GETTER: This getter method is used to get the data property, which is an inherited property.
+	 * 
+	 * @return  array  An array of data.
+	 * 
+	 */
+	public function getData ()
+	{
+		return $this->data;
+	}
+	
 	
 	/**
 	 * SETTER: This setter method is used to set the data property, which is an inherited property.
@@ -119,18 +134,6 @@ implements com_ajmichels_wppf_interface_iDao
 	public function setData ( $data )
 	{
 		$this->data = $data;
-	}
-	
-	
-	/**
-	 * GETTER: This getter method is used to get the data property, which is an inherited property.
-	 * 
-	 * @return  array  An array of data.
-	 * 
-	 */
-	public function getData ()
-	{
-		return $this->data;
 	}
 	
 	

@@ -12,11 +12,12 @@
  * @copyright     Copyright (c) 2012, WolfNet Technologies, LLC
  * 
  */
-
 class com_mlsfinder_wordpress_action_enqueueAdminResources
 extends com_ajmichels_wppf_action_action
 {
 	
+	
+	/* PROPERTIES ******************************************************************************* */
 	
 	/**
 	 * This property holds the URL string to the plugin directory. This URL is needed to accurately 
@@ -27,6 +28,8 @@ extends com_ajmichels_wppf_action_action
 	 */
 	private $pluginUrl = '';
 	
+	
+	/* PUBLIC METHODS *************************************************************************** */
 	
 	/**
 	 * This method is executed by the ActionManager when any hooks that this action is registered to
@@ -39,8 +42,22 @@ extends com_ajmichels_wppf_action_action
 	{
 		$this->log( 'Action EnqueueAdminResources' );
 		$url = $this->getPluginUrl();
-		wp_enqueue_script( 'wntmlsfinderadminjs',      $url . 'js/MLSFinderAdmin.min.js' );
-		wp_enqueue_style(  'mlsfinderadmincss',	$url . 'css/mlsFinderAdmin.min.css', array(), false, 'screen' );
+		wp_enqueue_script( 'wntmlsfinderadminjs', $url . 'js/MLSFinderAdmin.min.js' );
+		wp_enqueue_style(  'mlsfinderadmincss',   $url . 'css/mlsFinderAdmin.min.css', array(), false, 'screen' );
+	}
+	
+	
+	/* ACCESSOR METHODS ************************************************************************* */
+	
+	/**
+	 * GETTER: This method is a getter for the pluginUrl property.
+	 *
+	 * @return  string  The absolute URL to this plugin's directory.
+	 * 
+	 */
+	public function getPluginUrl ()
+	{
+		return $this->pluginUrl;
 	}
 	
 	
@@ -54,18 +71,6 @@ extends com_ajmichels_wppf_action_action
 	public function setPluginUrl ( $url )
 	{
 		$this->pluginUrl = $url;
-	}
-	
-	
-	/**
-	 * GETTER: This method is a getter for the pluginUrl property.
-	 *
-	 * @return  string  The absolute URL to this plugin's directory.
-	 * 
-	 */
-	public function getPluginUrl ()
-	{
-		return $this->pluginUrl;
 	}
 	
 	
