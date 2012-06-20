@@ -315,10 +315,18 @@ implements com_ajmichels_wppf_interface_iService
 		$wsu = $this->getWebServiceUrl();
 		$wsu->setScriptPath( '/propertyGrid/' 
 		                     . $this->getOptionManager()->getOptionValueFromWP( 'wnt_productKey' ) );
-		$wsu->setParameter( 'min_price',   $minPrice );
-		$wsu->setParameter( 'max_price',   $maxPrice );
-		$wsu->setParameter( 'city',        $city );
-		$wsu->setParameter( 'zip_code',    $zipcode );
+		if ( $minPrice != '' ) {
+			$wsu->setParameter( 'min_price',   $minPrice );
+		}
+		if ( $maxPrice != '' ) {
+			$wsu->setParameter( 'max_price',   $maxPrice );
+		}
+		if ( $city != '' ) {
+			$wsu->setParameter( 'city',        $city );
+		}
+		if ( $zipcode != '' ) {
+			$wsu->setParameter( 'zip_code',    $zipcode );
+		}
 		$wsu->setParameter( 'owner_type',  $owner_type );
 		$wsu->setParameter( 'max_results', $maxResults );
 		$this->setData( $wsu );
