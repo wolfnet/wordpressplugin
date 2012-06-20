@@ -23,11 +23,37 @@ extends com_ajmichels_wppf_shortcode_shortcode
 	
 	/* PROPERTIES ******************************************************************************* */
 	
+	/**
+	 * This property contains the string which will be used as the shortcode tag.  
+	 * 
+	 * @type  string
+	 * 
+	 * @TODO  Convert 'tag' property to a constant as it should not be allowed to change during the 
+	 *        request.
+	 * 
+	 */
 	public $tag = 'ListingQuickSearch';
+	
+	
+	/**
+	 * This property contains a instance of the Quick Search View object
+	 * 
+	 * @type  com_ajmichels_wppf_interface_iView
+	 * 
+	 */
+	private $quickSearchView;
 	
 	
 	/* PUBLIC METHODS *************************************************************************** */
 	
+	/**
+	 * This method is called whenever an instance of the shortcode is encountered in a post or page.
+	 * 
+	 * @param   array   $attr
+	 * @param   string  $content
+	 * @return  string
+	 * 
+	 */
 	public function execute ( $attr, $content = null )
 	{
 		return $this->getQuickSearchView()->render();
@@ -36,12 +62,25 @@ extends com_ajmichels_wppf_shortcode_shortcode
 	
 	/* ACCESSORS ******************************************************************************** */
 	
+	/**
+	 * GETTER:  This method is a getter for the quickSearchView property.
+	 * 
+	 * @return  com_ajmichels_wppf_interface_iView
+	 * 
+	 */
 	public function getQuickSearchView ()
 	{
 		return $this->quickSearchView;
 	}
 	
 	
+	/**
+	 * SETTER:  This method is a setter for the quickSearchView property.
+	 * 
+	 * @param   com_ajmichels_wppf_interface_iView  $view
+	 * @return  void
+	 * 
+	 */
 	public function setQuickSearchView ( com_ajmichels_wppf_interface_iView $view )
 	{
 		$this->quickSearchView = $view;

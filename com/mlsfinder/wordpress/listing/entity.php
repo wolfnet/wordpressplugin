@@ -186,19 +186,37 @@ implements com_ajmichels_wppf_interface_iEntity
 	
 	/*	ACCESSORS ******************************************************************************* */
 	
-	
-	public function __get ( $property )
+	/**
+	 * GETTER: This method is a getter for the property_id property.
+	 * 
+	 * @return  mixed[string]
+	 * 
+	 */
+	public function getPropertyId ()
 	{
-		return $this->{$property};
+		return $this->property_id;
 	}
 	
 	
-	public function __set ( $property, $value )
+	/**
+	 * GETTER: This method is a getter for the property_url property.
+	 * 
+	 * @return  string
+	 * 
+	 */
+	public function getPropertyUrl ()
 	{
-		$this->{$property} = $value;
+		return $this->property_url;
 	}
 	
 	
+	/**
+	 * GETTER: This method is a getter for the listing_price property. In addition this method 
+	 * formats any numeric strings for display.
+	 * 
+	 * @return  string
+	 * 
+	 */
 	public function getListingPrice ()
 	{
 		if ( is_numeric( $this->listing_price ) ) {
@@ -207,6 +225,90 @@ implements com_ajmichels_wppf_interface_iEntity
 		else {
 			return $this->listing_price;
 		}
+	}
+	
+	
+	/**
+	 * GETTER: This method is a getter for the agent_listing property.
+	 * 
+	 * @return  boolean
+	 * 
+	 */
+	public function getAgentListing ()
+	{
+		return $this->agent_listing;
+	}
+	
+	
+	/**
+	 * GETTER: This method is a getter for the display_address property.
+	 * 
+	 * @return  string
+	 * 
+	 */
+	public function getDisplayAddress ()
+	{
+		return $this->display_address;
+	}
+	
+	
+	/**
+	 * GETTER: This method is a getter for the city property.
+	 * 
+	 * @return  string
+	 * 
+	 */
+	public function getCity ()
+	{
+		return $this->city;
+	}
+	
+	
+	/**
+	 * GETTER: This method is a getter for the state property.
+	 * 
+	 * @return  string
+	 * 
+	 */
+	public function getState ()
+	{
+		return $this->state;
+	}
+	
+	
+	/**
+	 * GETTER: This method is a getter for the thumbnail_url property.
+	 * 
+	 * @return  string
+	 * 
+	 */
+	public function getThumbnailUrl ()
+	{
+		return $this->thumbnail_url;
+	}
+	
+	
+	/**
+	 * GETTER: This method is a getter for the bathroom property.
+	 * 
+	 * @return  numeric
+	 * 
+	 */
+	public function getBathroom ()
+	{
+		return $this->bathroom;
+	}
+	
+	
+	/**
+	 * GETTER: This method is a getter for the bedrooms property.
+	 * 
+	 * @return  numeric
+	 * 
+	 */
+	public function getBedrooms ()
+	{
+		return $this->bedrooms;
 	}
 	
 	

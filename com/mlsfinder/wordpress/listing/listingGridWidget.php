@@ -16,7 +16,6 @@
  * @copyright     Copyright (c) 2012, WolfNet Technologies, LLC
  * 
  */
-
 class com_mlsfinder_wordpress_listing_listingGridWidget
 extends com_mlsfinder_wordpress_abstract_widget
 {
@@ -39,16 +38,46 @@ extends com_mlsfinder_wordpress_abstract_widget
 		'maxResults'  => 50 
 		);
 	
+	
+	/**
+	 * This property holds an array of options for the widget admin form.
+	 * 
+	 * @type  array
+	 * 
+	 */
 	public $controls = array(
 		'width' => '300px'
 		);
 	
+	
+	/**
+	 * This property holds a references to the Listing Service object.
+	 * 
+	 * @type  com_mlsfinder_wordpress_listing_service
+	 * 
+	 */
 	private $listingService;
+	
+	
+	/**
+	 * This property holds an instance of the Listing Grid View object.
+	 * 
+	 * @type  com_ajmichels_wppf_interface_iView
+	 * 
+	 */
 	private $listingGridView;
+	
+	
+	/**
+	 * This property holds an instance of the Listing Grid Options View object
+	 * 
+	 * @type  com_ajmichels_wppf_interface_iView
+	 * 
+	 */
 	private $listingGridOptionsView;
 	
 	
-	/* CONSTRUCTOR ****************************************************************************** */
+	/* CONSTRUCTOR METHOD *********************************************************************** */
 	
 	/**
 	 * This constructor method passes some key information up to the parent classes and eventionally 
@@ -138,36 +167,75 @@ extends com_mlsfinder_wordpress_abstract_widget
 	
 	/* ACCESSORS ******************************************************************************** */
 	
+	/**
+	 * GETTER:  This method is a getter for the listingService property.
+	 * 
+	 * @return  com_mlsfinder_wordpress_listing_service
+	 * 
+	 */
 	public function getListingService ()
 	{
 		return $this->listingService;
 	}
 	
 	
+	/**
+	 * SETTER:  This method is a setter for the listingService property.
+	 * 
+	 * @param   com_mlsfinder_wordpress_listing_service  $service
+	 * @return  void
+	 * 
+	 */
 	public function setListingService ( com_mlsfinder_wordpress_listing_service $service )
 	{
 		$this->listingService = $service;
 	}
 	
 	
+	/**
+	 * GETTER:  This method is a getter for the listingGridView property.
+	 * 
+	 * @return  com_ajmichels_wppf_interface_iView
+	 * 
+	 */
 	public function getListingGridView ()
 	{
 		return $this->listingGridView;
 	}
 	
 	
+	/**
+	 * SETTER:  This method is a setter for the listingGridView property.
+	 * 
+	 * @param   com_ajmichels_wppf_interface_iView  $service
+	 * @return  void
+	 * 
+	 */
 	public function setListingGridView ( com_ajmichels_wppf_interface_iView $view )
 	{
 		$this->listingGridView = $view;
 	}
 	
 	
+	/**
+	 * GETTER:  This method is a getter for the listingGridOptionsView property.
+	 * 
+	 * @return  com_ajmichels_wppf_interface_iView
+	 * 
+	 */
 	public function getListingGridOptionsView ()
 	{
 		return $this->listingGridOptionsView;
 	}
 	
 	
+	/**
+	 * SETTER:  This method is a setter for the listingGridOptionsView property.
+	 * 
+	 * @param   com_ajmichels_wppf_interface_iView  $service
+	 * @return  void
+	 * 
+	 */
 	public function setListingGridOptionsView ( com_ajmichels_wppf_interface_iView $view )
 	{
 		$this->listingGridOptionsView = $view;

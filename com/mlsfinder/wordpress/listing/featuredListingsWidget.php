@@ -16,7 +16,6 @@
  * @copyright     Copyright (c) 2012, WolfNet Technologies, LLC
  * 
  */
-
 class com_mlsfinder_wordpress_listing_featuredListingsWidget
 extends com_mlsfinder_wordpress_abstract_widget
 {
@@ -41,12 +40,35 @@ extends com_mlsfinder_wordpress_abstract_widget
 		'maxResults'  => 50 
 		);
 	
+	
+	/**
+	 * This property holds a reference to the Listing Service object.
+	 * 
+	 * @type  com_mlsfinder_wordpress_listing_service
+	 * 
+	 */
 	private $listingService;
+	
+	
+	/**
+	 * This property holds an instance of the Featured Listings View object.
+	 * 
+	 * @type  com_ajmichels_wppf_interface_iView
+	 * 
+	 */
 	private $featuredListingsView;
+	
+	
+	/**
+	 * This property holds an instance of the Featured Listings Options View object.
+	 * 
+	 * @type  com_ajmichels_wppf_interface_iView
+	 * 
+	 */
 	private $featuredListingsOptionsView;
 	
 	
-	/* CONSTRUCTOR ****************************************************************************** */
+	/* CONSTRUCTOR METHOD *********************************************************************** */
 	
 	/**
 	 * This constructor method passes some key information up to the parent classes and eventionally 
@@ -79,15 +101,19 @@ extends com_mlsfinder_wordpress_abstract_widget
 	public function widget ( $args, $instance )
 	{
 		$options = $this->getOptionData( $instance );
+		
 		$featuredListings = $this->getListingService()->getFeaturedListings(
 			$options['ownerType']['value'],
 			$options['maxResults']['value']
 			);
+		
 		$data = array(
 			'listings' => $featuredListings,
 			'options'  => $options
 			);
+		
 		$this->getFeaturedListingsView()->out( $data );
+		
 	}
 	
 	
@@ -119,7 +145,7 @@ extends com_mlsfinder_wordpress_abstract_widget
 	 */
 	public function update ( $new_instance, $old_instance )
 	{
-		// processes widget options to be saved
+		/* processes widget options to be saved */
 		$newData = $this->getOptionData( $new_instance );
 		$saveData = array();
 		foreach ( $newData as $opt => $data ) {
@@ -131,36 +157,75 @@ extends com_mlsfinder_wordpress_abstract_widget
 	
 	/* ACCESSORS ******************************************************************************** */
 	
+	/**
+	 * GETTER: This method is a getter for the listingService property.
+	 * 
+	 * @return  com_mlsfinder_wordpress_listing_service
+	 * 
+	 */
 	public function getListingService ()
 	{
 		return $this->listingService;
 	}
 	
 	
+	/**
+	 * SETTER: This method is a setter for the listingService property.
+	 * 
+	 * @param   com_mlsfinder_wordpress_listing_service  $service
+	 * @return  void
+	 * 
+	 */
 	public function setListingService ( com_mlsfinder_wordpress_listing_service $service )
 	{
 		$this->listingService = $service;
 	}
 	
 	
+	/**
+	 * GETTER: This method is a getter for the featuredListingsView property.
+	 * 
+	 * @return  com_ajmichels_wppf_interface_iView
+	 * 
+	 */
 	public function getFeaturedListingsView ()
 	{
 		return $this->featuredListingsView;
 	}
 	
 	
+	/**
+	 * SETTER: This method is a setter for the featuredListingsView property.
+	 * 
+	 * @param   com_ajmichels_wppf_interface_iView  $view
+	 * @return  void
+	 * 
+	 */
 	public function setFeaturedListingsView ( com_ajmichels_wppf_interface_iView $view )
 	{
 		$this->featuredListingsView = $view;
 	}
 	
 	
+	/**
+	 * GETTER: This method is a getter for the featuredListingsOptionsView property.
+	 * 
+	 * @return  com_ajmichels_wppf_interface_iView
+	 * 
+	 */
 	public function getFeaturedListingsOptionsView ()
 	{
 		return $this->featuredListingsOptionsView;
 	}
 	
 	
+	/**
+	 * SETTER: This method is a setter for the featuredListingsOptionsView property.
+	 * 
+	 * @param   com_ajmichels_wppf_interface_iView  $view
+	 * @return  void
+	 * 
+	 */
 	public function setFeaturedListingsOptionsView ( com_ajmichels_wppf_interface_iView $view )
 	{
 		$this->featuredListingsOptionsView = $view;

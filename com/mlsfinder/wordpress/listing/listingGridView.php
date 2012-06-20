@@ -13,12 +13,13 @@
  * @copyright     Copyright (c) 2012, WolfNet Technologies, LLC
  * 
  */
-
 class com_mlsfinder_wordpress_listing_listingGridView
 extends com_ajmichels_wppf_abstract_view
 implements com_ajmichels_wppf_interface_iView
 {
 	
+	
+	/* PROPERTIES ******************************************************************************* */
 	
 	/**
 	 * This property holds the path to the HTML template file for this view.
@@ -28,6 +29,8 @@ implements com_ajmichels_wppf_interface_iView
 	 */
 	public $template;
 	
+	
+	/* CONSTRUCTOR ****************************************************************************** */
 	
 	/**
 	 * This constructor method simply assigns the template property with a path to the HTML template
@@ -42,6 +45,8 @@ implements com_ajmichels_wppf_interface_iView
 	}
 	
 	
+	/* PUBLIC METHODS *************************************************************************** */
+	
 	/**
 	 * This method overwrites the inherited render method and provides some additional functionality.
 	 * Specifically it extracts the listings data from the $data param and passes it to the 
@@ -52,7 +57,7 @@ implements com_ajmichels_wppf_interface_iView
 	 * @return  void
 	 * 
 	 */
-	public function render ( $data = null )
+	public function render ( $data = array() )
 	{
 		if ( $data != null && array_key_exists( 'listings', $data ) ) {
 			$data['listingContent'] = $this->renderListings( $data['listings'] );
@@ -85,12 +90,25 @@ implements com_ajmichels_wppf_interface_iView
 	
 	/* ACCESSORS ******************************************************************************** */
 	
+	/**
+	 * GETTER: This method is a getter for the listingView property.
+	 * 
+	 * @return  com_ajmichels_wppf_interface_iView
+	 * 
+	 */
 	public function getListingView ()
 	{
 		return $this->listingView;
 	}
 	
 	
+	/**
+	 * SETTER: This method is a setter for the listingView property.
+	 * 
+	 * @type    com_ajmichels_wppf_interface_iView  $view
+	 * @return  view
+	 * 
+	 */
 	public function setListingView ( com_ajmichels_wppf_interface_iView $view )
 	{
 		$this->listingView = $view;

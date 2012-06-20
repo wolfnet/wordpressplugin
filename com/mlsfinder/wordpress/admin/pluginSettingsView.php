@@ -45,7 +45,7 @@ implements com_ajmichels_wppf_interface_iView
 	 * then the data is passed to to inharited render method.
 	 * 
 	 * @param   array  $data  An associative array of data for the template. Each array key will be 
-	 *                       transformed into a variable.
+	 *                        transformed into a variable.
 	 * @return  string
 	 *
 	 */

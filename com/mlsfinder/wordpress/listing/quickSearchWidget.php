@@ -23,12 +23,33 @@ extends com_mlsfinder_wordpress_abstract_widget
 	
 	/* PROPERTIES ******************************************************************************* */
 	
+	/**
+	 * This property holds a reference to the Listing Service object.
+	 * 
+	 * @type  com_mlsfinder_wordpress_listing_service  
+	 * 
+	 */
 	private $listingService;
+	
+	
+	/**
+	 * This property holds a reference to the Quick Search View object.
+	 * 
+	 * @type  com_ajmichels_wppf_interface_iView  
+	 * 
+	 */
 	private $quickSearchView;
 	
 	
 	/* CONSTRUCTOR METHOD *********************************************************************** */
 	
+	/**
+	 * This constructor method establishes some default values for the widget and forwards the 
+	 * instantiation on to the parent constructor.
+	 * 
+	 * @return  void
+	 * 
+	 */
 	public function __construct ()
 	{
 		parent::__construct( 'mlsFinder_quickSearchWidget', 'MLS Finder Quick Search' );
@@ -91,24 +112,50 @@ extends com_mlsfinder_wordpress_abstract_widget
 	
 	/* ACCESSORS ******************************************************************************** */
 	
+	/**
+	 * GETTER:  This method is a getter for the listingsService property.
+	 * 
+	 * @return  com_mlsfinder_wordpress_listing_service
+	 * 
+	 */
 	public function getListingService ()
 	{
 		return $this->listingService;
 	}
 	
 	
+	/**
+	 * SETTER:  This method is a setter for the listingsService property.
+	 * 
+	 * @param   com_mlsfinder_wordpress_listing_service  $service
+	 * @return  void
+	 * 
+	 */
 	public function setListingService ( com_mlsfinder_wordpress_listing_service $service )
 	{
 		$this->listingService = $service;
 	}
 	
 	
+	/**
+	 * GETTER:  This method is a getter for the quickSearchView property.
+	 * 
+	 * @return  com_ajmichels_wppf_interface_iView
+	 * 
+	 */
 	public function getQuickSearchView ()
 	{
 		return $this->quickSearchView;
 	}
 	
 	
+	/**
+	 * SETTER:  This method is a setter for the quickSearchView property.
+	 * 
+	 * @param   com_ajmichels_wppf_interface_iView  $service
+	 * @return  void
+	 * 
+	 */
 	public function setQuickSearchView ( com_ajmichels_wppf_interface_iView $view )
 	{
 		$this->quickSearchView = $view;

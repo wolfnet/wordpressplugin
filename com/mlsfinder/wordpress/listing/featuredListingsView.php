@@ -13,7 +13,6 @@
  * @copyright     Copyright (c) 2012, WolfNet Technologies, LLC
  * 
  */
-
 class com_mlsfinder_wordpress_listing_featuredListingsView
 extends com_ajmichels_wppf_abstract_view
 implements com_ajmichels_wppf_interface_iView
@@ -30,10 +29,17 @@ implements com_ajmichels_wppf_interface_iView
 	 */
 	public $template;
 	
+	
+	/**
+	 * This property holds a reference to the listing view.
+	 * 
+	 * @type  com_ajmichels_wppf_interface_iView
+	 *
+	 */
 	private $listingView;
 	
 	
-	/* CONSTRUCTOR ****************************************************************************** */
+	/* CONSTRUCTOR METHOD *********************************************************************** */
 	
 	/**
 	 * This constructor method simply assigns the template property with a path to the HTML template
@@ -57,7 +63,7 @@ implements com_ajmichels_wppf_interface_iView
 	 * indevidual listings.
 	 *
 	 * @param   array  $data  Associative array of data to be injected into the template file.
-	 * @return  void
+	 * @return  string
 	 * 
 	 */
 	public function render ( $data = null )
@@ -125,12 +131,25 @@ implements com_ajmichels_wppf_interface_iView
 	
 	/* ACCESSORS ******************************************************************************** */
 	
+	/**
+	 * GETTER: This method is a getter for the listingView property.
+	 * 
+	 * @return  com_ajmichels_wppf_interface_iView
+	 * 
+	 */
 	public function getListingView ()
 	{
 		return $this->listingView;
 	}
 	
 	
+	/**
+	 * SETTER: This method is a setter for the listingView property.
+	 * 
+	 * @type    com_ajmichels_wppf_interface_iView  $view
+	 * @return  view
+	 * 
+	 */
 	public function setListingView ( com_ajmichels_wppf_interface_iView $view )
 	{
 		$this->listingView = $view;

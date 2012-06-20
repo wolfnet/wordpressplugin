@@ -72,6 +72,7 @@ implements com_ajmichels_wppf_interface_iView
 	 * 
 	 * @param   string  $type  The template type/file to use for rendering.
 	 * @return  void
+	 * 
 	 */
 	public function setTemplate ( $type = 'full' )
 	{

@@ -14,7 +14,6 @@
  * @copyright     Copyright (c) 2012, WolfNet Technologies, LLC
  * 
  */
-
 class com_mlsfinder_wordpress_listing_listingGridOptionsView
 extends com_ajmichels_wppf_abstract_view
 implements com_ajmichels_wppf_interface_iView
@@ -49,6 +48,16 @@ implements com_ajmichels_wppf_interface_iView
 	
 	/* PUBLIC METHODS *************************************************************************** */
 	
+	/**
+	 * This method overwrites the inherited render method and provides some additional functionality.
+	 * Specifically it extracts the listings data from the $data param and passes it to the 
+	 * renderListings method. This separates the concerns of rendering the film strip from rendering
+	 * indevidual listings.
+	 *
+	 * @param   array  $data  Associative array of data to be injected into the template file.
+	 * @return  void
+	 * 
+	 */
 	public function render ( $data = array() )
 	{
 		$data = array_merge( $data, array( 

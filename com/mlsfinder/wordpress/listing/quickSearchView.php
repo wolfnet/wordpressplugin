@@ -19,6 +19,8 @@ implements com_ajmichels_wppf_interface_iView
 {
 	
 	
+	/* PROPERTIES ******************************************************************************* */
+	
 	/**
 	 * This property holds the path to the HTML template file for this view.
 	 *
@@ -27,6 +29,8 @@ implements com_ajmichels_wppf_interface_iView
 	 */
 	public $template;
 	
+	
+	/* CONSTRUCTOR METHOD *********************************************************************** */
 	
 	/**
 	 * This constructor method simply assigns the template property with a path to the HTML template
@@ -44,6 +48,16 @@ implements com_ajmichels_wppf_interface_iView
 	
 	/* PUBLIC METHODS *************************************************************************** */
 	
+	/**
+	 * This method overwrites the inherited render method and provides some additional functionality.
+	 * Specifically it extracts the listings data from the $data param and passes it to the 
+	 * renderListings method. This separates the concerns of rendering the film strip from rendering
+	 * indevidual listings.
+	 *
+	 * @param   array  $data  Associative array of data to be injected into the template file.
+	 * @return  string
+	 * 
+	 */
 	public function render ( $data = array() )
 	{
 		$data['instanceId'] = uniqid( 'mlsFinder_quickSearchForm_' );

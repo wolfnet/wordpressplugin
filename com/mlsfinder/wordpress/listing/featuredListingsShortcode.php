@@ -16,7 +16,6 @@
  * @copyright     Copyright (c) 2012, WolfNet Technologies, LLC
  * 
  */
-
 class com_mlsfinder_wordpress_listing_featuredListingsShortcode
 extends com_ajmichels_wppf_shortcode_shortcode
 {
@@ -24,10 +23,33 @@ extends com_ajmichels_wppf_shortcode_shortcode
 	
 	/* PROPERTIES ******************************************************************************* */
 	
+	/**
+	 * This property holds the tag name which is used to identify shorcodes when they are encountered
+	 * in Posts and Pages.
+	 * 
+	 * @type  string
+	 * 
+	 */
 	public $tag = 'FeaturedListings';
 	
+	
+	/**
+	 * This property holds a reference to the Listing Service object.
+	 * 
+	 * @type  com_mlsfinder_wordpress_listing_service
+	 * 
+	 */
 	private $listingService;
+	
+	
+	/**
+	 * This property holds an instance of the Featured Listings View object.
+	 * 
+	 * @type  com_ajmichels_wppf_interface_iView
+	 * 
+	 */
 	private $featuredListingsView;
+	
 	
 	/**
 	 * This property holds an array of different options that are available for each widget instance.
@@ -49,6 +71,14 @@ extends com_ajmichels_wppf_shortcode_shortcode
 	
 	/* PUBLIC METHODS *************************************************************************** */
 	
+	/**
+	 * This method is called whenever an instance of the shortcode is encountered in a post or page.
+	 * 
+	 * @param   array   $attr
+	 * @param   string  $content
+	 * @return  string
+	 * 
+	 */
 	public function execute ( $attr, $content = null )
 	{
 		$options = $this->getAttributesData( $attr );
@@ -66,24 +96,50 @@ extends com_ajmichels_wppf_shortcode_shortcode
 	
 	/* ACCESSORS ******************************************************************************** */
 	
+	/**
+	 * GETTER:  This method is a getter for the listingService property.
+	 * 
+	 * @return  com_mlsfinder_wordpress_listing_service
+	 * 
+	 */
 	public function getListingService ()
 	{
 		return $this->listingService;
 	}
 	
 	
+	/**
+	 * SETTER:  This method is a setter for the listingService property.
+	 * 
+	 * @param   com_mlsfinder_wordpress_listing_service  $service
+	 * @return  void
+	 * 
+	 */
 	public function setListingService ( com_mlsfinder_wordpress_listing_service $service )
 	{
 		$this->listingService = $service;
 	}
 	
 	
+	/**
+	 * GETTER:  This method is a getter for the featuredListingsView property.
+	 * 
+	 * @return  com_ajmichels_wppf_interface_iView
+	 * 
+	 */
 	public function getFeaturedListingsView ()
 	{
 		return $this->featuredListingsView;
 	}
 	
 	
+	/**
+	 * SETTER:  This method is a setter for the featuredListingsView property.
+	 * 
+	 * @param   com_ajmichels_wppf_interface_iView  $view
+	 * @return  void
+	 * 
+	 */
 	public function setFeaturedListingsView ( com_ajmichels_wppf_interface_iView $view )
 	{
 		$this->featuredListingsView = $view;

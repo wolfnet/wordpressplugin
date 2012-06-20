@@ -14,7 +14,6 @@
  * @copyright     Copyright (c) 2012, WolfNet Technologies, LLC
  * 
  */
-
 class com_mlsfinder_wordpress_listing_featuredListingsOptionsView
 extends com_ajmichels_wppf_abstract_view
 implements com_ajmichels_wppf_interface_iView
@@ -49,19 +48,28 @@ implements com_ajmichels_wppf_interface_iView
 	
 	/* PUBLIC METHODS *************************************************************************** */
 	
+	/**
+	 * This method establishes variable values which will be used by the template when it is render, 
+	 * then the data is passed to to inharited render method.
+	 * 
+	 * @param   array  $data  An associative array of data for the template. Each array key will be 
+	 *                        transformed into a variable.
+	 * @return  string  
+	 * 
+	 */
 	public function render ( $data = array() )
 	{
 		$data = array_merge( $data, array( 
 			'autoPlayId'       => esc_attr( $data['fields']['autoPlay']['id'] ),
 			'autoPlayName'     => esc_attr( $data['fields']['autoPlay']['name'] ),
-			'autoPlayTrue'     => ( $data['fields']['autoPlay']['value'] == 'true' )  ? ' selected="selected"' : '',
-			'autoPlayFalse'    => ( $data['fields']['autoPlay']['value'] == 'false' ) ? ' selected="selected"' : '',
-			'directionId'     => esc_attr( $data['fields']['direction']['id'] ),
-			'directionName'   => esc_attr( $data['fields']['direction']['name'] ),
-			'directionLeft'   => ( $data['fields']['direction']['value'] == 'left' )  ? ' selected="selected"' : '',
-			'directionRight'  => ( $data['fields']['direction']['value'] == 'right' ) ? ' selected="selected"' : '',
-			'directionUp'     => ( $data['fields']['direction']['value'] == 'up' )    ? ' selected="selected"' : '',
-			'directionDown'   => ( $data['fields']['direction']['value'] == 'down' )  ? ' selected="selected"' : '',
+			'autoPlayTrue'     => ( $data['fields']['autoPlay']['value'] == 'true' )   ? ' selected="selected"' : '',
+			'autoPlayFalse'    => ( $data['fields']['autoPlay']['value'] == 'false' )  ? ' selected="selected"' : '',
+			'directionId'      => esc_attr( $data['fields']['direction']['id'] ),
+			'directionName'    => esc_attr( $data['fields']['direction']['name'] ),
+			'directionLeft'    => ( $data['fields']['direction']['value'] == 'left' )  ? ' selected="selected"' : '',
+			'directionRight'   => ( $data['fields']['direction']['value'] == 'right' ) ? ' selected="selected"' : '',
+			'directionUp'      => ( $data['fields']['direction']['value'] == 'up' )    ? ' selected="selected"' : '',
+			'directionDown'    => ( $data['fields']['direction']['value'] == 'down' )  ? ' selected="selected"' : '',
 			'waitId'           => esc_attr( $data['fields']['wait']['id'] ),
 			'waitName'         => esc_attr( $data['fields']['wait']['name'] ),
 			'waitChecked'      => ( $data['fields']['wait']['value'] == 'true' ) ? ' checked="checked"' : '',
