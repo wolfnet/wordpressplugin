@@ -70,24 +70,19 @@ implements com_ajmichels_wppf_interface_iDao
 	 */
 	public function findAll ()
 	{
-		if ( isset( $this->_findAllResults ) ) {
-			return $this->_findAllResults;
-		}
-		else {
-			$listings = array ();
-			$listingPrototype = $this->getEntityPrototype();
-			$data = $this->getData();
-			if ( is_array($data) && count($data) > 0 ) {
-				foreach ($data as $listingData) {
-					$listing = clone $listingPrototype;
-					$listing->_setMemento( $listingData );
-					// Push Object to Array
-					array_push($listings, $listing);
-				}
-				
+		$listings = array ();
+		$listingPrototype = $this->getEntityPrototype();
+		$data = $this->getData();
+		if ( is_array($data) && count($data) > 0 ) {
+			foreach ($data as $listingData) {
+				$listing = clone $listingPrototype;
+				$listing->_setMemento( $listingData );
+				// Push Object to Array
+				array_push($listings, $listing);
 			}
-			$this->_findAllResults = $listings;
+			
 		}
+		$this->_findAllResults = $listings;
 		
 		return $listings;
 	}
