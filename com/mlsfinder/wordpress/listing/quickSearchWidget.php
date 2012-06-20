@@ -32,7 +32,7 @@ extends com_mlsfinder_wordpress_abstract_widget
 	
 	public function __construct ()
 	{
-		parent::__construct( 'mlsFinder_quickSearchWidget', 'Listing Quick Search' );
+		parent::__construct( 'mlsFinder_quickSearchWidget', 'MLS Finder Quick Search' );
 		/* The 'sf' property is set in the abstract widget class and is pulled from the plugin instance */
 		$this->setListingService( $this->sf->getBean( 'ListingService' ) );
 		$this->setQuickSearchView( $this->sf->getBean( 'QuickSearchView' ) );
