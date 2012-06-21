@@ -50,14 +50,17 @@ implements com_ajmichels_wppf_interface_iView
 	 */
 	public function render ( $data = array() )
 	{
-		$data['id']       = $data['listing']->getPropertyId();
-		$data['url']      = $data['listing']->getPropertyUrl();
-		$data['address']  = $data['listing']->getDisplayAddress();
-		$data['image']    = $data['listing']->getThumbnailUrl();
-		$data['price']    = $data['listing']->getListingPrice();
-		$data['location'] = $data['listing']->getLocation();
-		$data['bedbath']  = $data['listing']->getBedsAndBaths();
-		$data['rawData']  = $data['listing']->_getMemento();
+		$data['id']                  = $data['listing']->getPropertyId();
+		$data['url']                 = $data['listing']->getPropertyUrl();
+		$data['address']             = $data['listing']->getDisplayAddress();
+		$data['image']               = $data['listing']->getThumbnailUrl();
+		$data['price']               = $data['listing']->getListingPrice();
+		$data['location']            = $data['listing']->getLocation();
+		$data['bedbath']             = $data['listing']->getBedsAndBaths();
+		$data['branding_brokerLogo'] = $data['listing']->getBranding()->getBrokerLogo();
+		$data['branding_content']    = $data['listing']->getBranding()->getContent();
+		$data['rawData']             = $data['listing']->getMemento();
+		$data['rawData_branding']    = $data['rawData']['branding']->getMemento();
 		
 		return parent::render( $data );
 	}

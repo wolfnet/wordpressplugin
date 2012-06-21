@@ -25,9 +25,20 @@
 		<property name="EntityPrototype">
 			<ref bean="Listing" />
 		</property>
+		<property name="BrandingDao">
+			<ref bean="BrandingDAO" />
+		</property>
 	</bean>
 	
 	<bean id="Listing" class="com_mlsfinder_wordpress_listing_entity" />
+	
+	<bean id="BrandingDAO" class="com_mlsfinder_wordpress_listing_branding_dao">
+		<property name="EntityPrototype">
+			<ref bean="Branding" />
+		</property>
+	</bean>
+	
+	<bean id="Branding" class="com_mlsfinder_wordpress_listing_branding_entity" />
 	
 	<bean id="DefaultWebServiceUrl" class="com_ajmichels_wppf_data_webServiceUrl">
 		<property name="Domain">

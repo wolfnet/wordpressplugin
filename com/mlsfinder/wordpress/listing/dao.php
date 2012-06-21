@@ -48,6 +48,14 @@ implements com_ajmichels_wppf_interface_iDao
 	}
 	
 	
+	/* PROPERTIES ******************************************************************************* */
+	
+	/**
+	 * @type  com_mlsfinder_wordpress_listing_branding_dao
+	 */
+	private $brandingDao;
+	
+	
 	/* CONSTRUCTOR METHOD *********************************************************************** */
 	
 	/**
@@ -73,12 +81,17 @@ implements com_ajmichels_wppf_interface_iDao
 	 */
 	public function findAll ()
 	{
-		$listings = array ();
+		$listings         = array ();
 		$listingPrototype = $this->getEntityPrototype();
-		$data = $this->getData();
+		$brandingDao      = $this->getBrandingDao();
+		$data             = $this->getData();
 		if ( is_array($data) && count($data) > 0 ) {
 			foreach ($data as $listingData) {
 				$listing = clone $listingPrototype;
+				
+				$brandingDao->setData( array( $listingData['branding'] ) );
+				$listingData['branding'] = $brandingDao->firstItem();
+				
 				$listing->setMemento( $listingData );
 				// Push Object to Array
 				array_push($listings, $listing);
@@ -134,6 +147,31 @@ implements com_ajmichels_wppf_interface_iDao
 	public function setData ( $data )
 	{
 		$this->data = $data;
+	}
+	
+	
+	/**
+	 * GETTER: This getter method is used to get the brandingDao property.
+	 * 
+	 * @return  com_mlsfinder_wordpress_listing_branding_dao
+	 * 
+	 */
+	public function getBrandingDao ()
+	{
+		return $this->brandingDao;
+	}
+	
+	
+	/**
+	 * SETTER: This setter method is used to set the brandingDao property.
+	 * 
+	 * @param   com_mlsfinder_wordpress_listing_branding_dao  $dao
+	 * @return  void
+	 * 
+	 */
+	public function setBrandingDao ( com_mlsfinder_wordpress_listing_branding_dao $dao )
+	{
+		$this->brandingDao = $dao;
 	}
 	
 	

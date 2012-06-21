@@ -91,6 +91,13 @@ implements com_ajmichels_wppf_interface_iEntity
 	 */
 	private $bedrooms        = 0;
 	
+	/**
+	 * 
+	 * @type  com_mlsfinder_wordpress_listing_branding_entity
+	 * 
+	 */
+	private $branding        = 0;
+	
 	
 	/* PUBLIC METHODS *************************************************************************** */
 	
@@ -115,6 +122,7 @@ implements com_ajmichels_wppf_interface_iEntity
 		$this->thumbnail_url   = $data['thumbnail_url'];
 		$this->bathroom        = $data['bathroom'];
 		$this->bedrooms        = $data['bedrooms'];
+		$this->branding        = $data['branding'];
 	}
 	
 	
@@ -138,7 +146,8 @@ implements com_ajmichels_wppf_interface_iEntity
 			'state'           => $this->state,
 			'thumbnail_url'   => $this->thumbnail_url,
 			'bathroom'        => $this->bathroom,
-			'bedrooms'        => $this->bedrooms
+			'bedrooms'        => $this->bedrooms,
+			'branding'        => $this->branding
 			);
 	}
 	
@@ -309,6 +318,18 @@ implements com_ajmichels_wppf_interface_iEntity
 	public function getBedrooms ()
 	{
 		return $this->bedrooms;
+	}
+	
+	
+	/**
+	 * GETTER: This method is a getter for the branding property.
+	 * 
+	 * @return  com_mlsfinder_wordpress_listing_branding_entity
+	 * 
+	 */
+	public function getBranding ()
+	{
+		return $this->branding;
 	}
 	
 	
