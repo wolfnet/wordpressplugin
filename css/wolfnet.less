@@ -1,0 +1,137 @@
+/**
+ * CSS Document
+ * 
+ * @package       css
+ * @title         wolfnet.css
+ * @contributors  AJ Michels (aj.michels@wolfnet.com)
+ * @version       1.0
+ * 
+ */
+
+.clearfix
+{
+	clear:both;
+}
+
+.wolfnet_widget
+{
+	margin: 1em auto 2em auto;
+	
+	&.wolfnet_featuredListings
+	{
+		overflow: hidden;
+		white-space: nowrap;
+		height: 140px;
+		text-align: center;
+		
+		.wolfnet_featuredListings_outterContainer
+		{
+			height:100%;
+			width:100%;
+			overflow: hidden;
+			white-space: nowrap;
+		}
+		
+		.wolfnet_featuredListings_prev,
+		.wolfnet_featuredListings_next
+		{
+			position: absolute;
+			width: 25px;
+			height: 100%;
+			background-color: #333;
+			display:none;
+		}
+		
+		.wolfnet_featuredListings_prev
+		{
+			top:0;
+			left:0;
+		}
+		
+		.wolfnet_featuredListings_next
+		{
+			top:0;
+			right:0;
+		}
+		
+	}
+	
+	&.wolfnet_listingGrid
+	{
+		text-align: center;
+		margin: 0 auto 0 auto;
+		position: relative;
+		left: 50%;
+		
+		.wolfnet_listing
+		{
+			left: -50%;
+		}
+		
+	}
+	
+	&.wolfnet_featuredListings,
+	&.wolfnet_listingGrid
+	{
+		position: relative;
+		
+		.wolfnet_listing
+		{
+			width: 150px;
+			height: 140px;
+			float: left;
+			margin: 0 auto 1em auto;
+			position: relative;
+			text-align: center;
+			font-size: 11px;
+			
+			a
+			{
+				color: inherit;
+				text-decoration:none;
+			}
+			
+			.detailsLink
+			{
+				display:block;
+			}
+			
+			.listingImage
+			{
+				width: 100%;
+				height: 75px;
+				display: block;
+				overflow: hidden;
+				padding: 0;
+				margin: 0;
+				text-align: center;
+				
+				img
+				{
+					border:none;
+					height:75px;
+				}
+				
+			}
+			
+			.price
+			{
+				font-weight:bold;
+				display:block;
+			}
+			
+			.location
+			{
+				display:block;
+			}
+			
+			.bed-bath
+			{
+				display:block;
+			}
+			
+		}
+		
+	}
+	
+}

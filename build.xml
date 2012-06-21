@@ -1,4 +1,4 @@
-<project name="MLSFinderWordPressPlugin" default="build" basedir=".">
+<project name="wolfnetWordPressPlugin" default="build" basedir=".">
 	
 	
 	<property name="majorVersion" value="0.1" />
@@ -10,7 +10,7 @@
 	<property name="tool.yuicompressor" value="${basedir}/ant/yuicompressor-2.4.5.jar" />
 	<property name="tool.rhino" value="${basedir}/ant/rhino.jar" />
 	<property name="tool.less" value="${basedir}/ant/less-rhino-1.1.5.js" />
-	<property name="buildName" value="MLSFinder" />
+	<property name="buildName" value="wolfnet" />
 	<property name="buildDir" value="../${buildName}" />
 	<property name="testDir" value="../${buildName}Test" />
 	<property name="dir.js" value="js" />
@@ -38,9 +38,9 @@
 			</fileset>
 		</copy>
 		<!-- Update Plugin Version -->
-		<replace file="${buildDir}/MLSFinder.php" token="{majorVersion}" value="${majorVersion}"/>
-		<replace file="${buildDir}/MLSFinder.php" token="{minorVersion}" value="${minorVersion}"/>
-		<replace file="${buildDir}/MLSFinder.php" token="{X.X.X}" value="${version}"/>
+		<replace file="${buildDir}/wolfnet.php" token="{majorVersion}" value="${majorVersion}"/>
+		<replace file="${buildDir}/wolfnet.php" token="{minorVersion}" value="${minorVersion}"/>
+		<replace file="${buildDir}/wolfnet.php" token="{X.X.X}" value="${version}"/>
 		<replace file="${buildDir}/ReadMe.txt" token="{X.X.X}" value="${version}"/>
 		<!-- Compile Less Files -->
 		<echo>Compiling Less Files</echo>
@@ -95,7 +95,7 @@
 	
 	<target name="package" depends="build,clean-package">
 		<zip destfile="${packageName}.zip" basedir="${buildDir}/../" compress="true" includes="${buildName}/" />
-		<zip destfile="${packageName}_src.zip" basedir="${basedir}" compress="true" excludes="LessCompilerOutput.txt, css/MLSFinder.css" />
+		<zip destfile="${packageName}_src.zip" basedir="${basedir}" compress="true" excludes="LessCompilerOutput.txt, css/wolfnet.css" />
 	</target>
 	
 	

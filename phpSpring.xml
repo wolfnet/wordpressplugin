@@ -3,7 +3,7 @@
 	
 	<!-- Model -->
 	
-	<bean id="ListingService" class="com_mlsfinder_wordpress_listing_service">
+	<bean id="ListingService" class="com_wolfnet_wordpress_listing_service">
 		<property name="DAO">
 			<ref bean="ListingDAO" />
 		</property>
@@ -21,7 +21,7 @@
 		</property>
 	</bean>
 	
-	<bean id="ListingDAO" class="com_mlsfinder_wordpress_listing_dao">
+	<bean id="ListingDAO" class="com_wolfnet_wordpress_listing_dao">
 		<property name="EntityPrototype">
 			<ref bean="Listing" />
 		</property>
@@ -30,15 +30,15 @@
 		</property>
 	</bean>
 	
-	<bean id="Listing" class="com_mlsfinder_wordpress_listing_entity" />
+	<bean id="Listing" class="com_wolfnet_wordpress_listing_entity" />
 	
-	<bean id="BrandingDAO" class="com_mlsfinder_wordpress_listing_branding_dao">
+	<bean id="BrandingDAO" class="com_wolfnet_wordpress_listing_branding_dao">
 		<property name="EntityPrototype">
 			<ref bean="Branding" />
 		</property>
 	</bean>
 	
-	<bean id="Branding" class="com_mlsfinder_wordpress_listing_branding_entity" />
+	<bean id="Branding" class="com_wolfnet_wordpress_listing_branding_entity" />
 	
 	<bean id="DefaultWebServiceUrl" class="com_ajmichels_wppf_data_webServiceUrl">
 		<property name="Domain">
@@ -49,43 +49,43 @@
 	
 	<!-- Views -->
 	
-	<bean id="PluginSettingsView" class="com_mlsfinder_wordpress_admin_pluginSettingsView" singleton="false">
+	<bean id="PluginSettingsView" class="com_wolfnet_wordpress_admin_pluginSettingsView" singleton="false">
 		<property name="OptionManager">
 			<!-- Defined in the WPPF Service Factory -->
 			<ref bean="OptionManager" />
 		</property>
 	</bean>
 	
-	<bean id="ListingView" class="com_mlsfinder_wordpress_listing_listingView" singleton="false" />
+	<bean id="ListingView" class="com_wolfnet_wordpress_listing_listingView" singleton="false" />
 	
-	<bean id="FeaturedListingsView" class="com_mlsfinder_wordpress_listing_featuredListingsView" singleton="false">
+	<bean id="FeaturedListingsView" class="com_wolfnet_wordpress_listing_featuredListingsView" singleton="false">
 		<property name="ListingView">
 			<ref bean="ListingView" />
 		</property>
 	</bean>
 	
-	<bean id="FeaturedListingsOptionsView" class="com_mlsfinder_wordpress_listing_featuredListingsOptionsView" singleton="false" />
+	<bean id="FeaturedListingsOptionsView" class="com_wolfnet_wordpress_listing_featuredListingsOptionsView" singleton="false" />
 	
-	<bean id="ListingGridView" class="com_mlsfinder_wordpress_listing_listingGridView" singleton="false">
+	<bean id="ListingGridView" class="com_wolfnet_wordpress_listing_listingGridView" singleton="false">
 		<property name="ListingView">
 			<ref bean="ListingView" />
 		</property>
 	</bean>
 	
-	<bean id="ListingGridOptionsView" class="com_mlsfinder_wordpress_listing_listingGridOptionsView" singleton="false" />
+	<bean id="ListingGridOptionsView" class="com_wolfnet_wordpress_listing_listingGridOptionsView" singleton="false" />
 	
-	<bean id="QuickSearchView" class="com_mlsfinder_wordpress_listing_quickSearchView" singleton="false" />
+	<bean id="QuickSearchView" class="com_wolfnet_wordpress_listing_quickSearchView" singleton="false" />
 	
 	
 	<!-- Actions -->
 	
-	<bean id="EnqueueResources" class="com_mlsfinder_wordpress_action_enqueueResources">
+	<bean id="EnqueueResources" class="com_wolfnet_wordpress_action_enqueueResources">
 		<property name="pluginUrl">
 			<value>${pluginUrl}</value>
 		</property>
 	</bean>
 	
-	<bean id="CreateAdminPages" class="com_mlsfinder_wordpress_action_createAdminPages">
+	<bean id="CreateAdminPages" class="com_wolfnet_wordpress_action_createAdminPages">
 		<property name="PluginSettingsView">
 			<ref bean="PluginSettingsView" />
 		</property>
@@ -94,9 +94,9 @@
 		</property>
 	</bean>
 	
-	<bean id="RegisterWidgets" class="com_mlsfinder_wordpress_action_registerWidgets" />
+	<bean id="RegisterWidgets" class="com_wolfnet_wordpress_action_registerWidgets" />
 	
-	<bean id="EnqueueAdminResources" class="com_mlsfinder_wordpress_action_enqueueAdminResources">
+	<bean id="EnqueueAdminResources" class="com_wolfnet_wordpress_action_enqueueAdminResources">
 		<property name="pluginUrl">
 			<value>${pluginUrl}</value>
 		</property>
@@ -105,13 +105,13 @@
 	
 	<!-- Shortcodes -->
 	
-	<bean id="ListingQuickSearchShortcode" class="com_mlsfinder_wordpress_listing_quickSearchShortcode">
+	<bean id="ListingQuickSearchShortcode" class="com_wolfnet_wordpress_listing_quickSearchShortcode">
 		<property name="QuickSearchView">
 			<ref bean="QuickSearchView" />
 		</property>
 	</bean>
 	
-	<bean id="FeaturedListingsShortcode" class="com_mlsfinder_wordpress_listing_featuredListingsShortcode">
+	<bean id="FeaturedListingsShortcode" class="com_wolfnet_wordpress_listing_featuredListingsShortcode">
 		<property name="ListingService">
 			<ref bean="ListingService" />
 		</property>
@@ -120,7 +120,7 @@
 		</property>
 	</bean>
 	
-	<bean id="ListingGridShortcode" class="com_mlsfinder_wordpress_listing_listingGridShortcode">
+	<bean id="ListingGridShortcode" class="com_wolfnet_wordpress_listing_listingGridShortcode">
 		<property name="ListingService">
 			<ref bean="ListingService" />
 		</property>
