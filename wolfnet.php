@@ -67,7 +67,7 @@ implements com_ajmichels_common_iSingleton
 		}
 		
 		/* Create Plugin Service Factory */
-		$sfXml = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'phpSpring.xml';
+		$sfXml = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'com/wolfnet/wordpress/phpSpring.xml';
 		$sfProps = array( 
 					'pluginUrl'          => $this->getPluginUrl(),
 					'webServiceDomain'   => 'http://aj.cfdevel.wnt/com/services/index.cfm',
@@ -105,7 +105,6 @@ implements com_ajmichels_common_iSingleton
 	{
 		$this->os->setGroupName( 'wolfnet' );
 		$this->os->register( 'wolfnet_productKey' );
-		$this->os->register( 'wnt_searchSolutionURL' );
 	}
 	
 	

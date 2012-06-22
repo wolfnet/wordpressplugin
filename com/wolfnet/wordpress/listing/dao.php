@@ -89,7 +89,7 @@ implements com_ajmichels_wppf_interface_iDao
 			foreach ($data as $listingData) {
 				$listing = clone $listingPrototype;
 				
-				$brandingDao->setData( array( $listingData['branding'] ) );
+				$brandingDao->setData( array( ( array_key_exists( 'branding', $listingData ) ) ? $listingData['branding'] : array('brokerLogo'=>'','content'=>'') ) );
 				$listingData['branding'] = $brandingDao->firstItem();
 				
 				$listing->setMemento( $listingData );

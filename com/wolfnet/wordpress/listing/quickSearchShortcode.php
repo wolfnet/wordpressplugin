@@ -56,11 +56,41 @@ extends com_ajmichels_wppf_shortcode_shortcode
 	 */
 	public function execute ( $attr, $content = null )
 	{
-		return $this->getQuickSearchView()->render();
+		$ls = $this->getListingService();
+		$data = array(
+					'prices' => $ls->getPriceData(),
+					'beds'   => $ls->getBedData(),
+					'baths'  => $ls->getBathData()
+					);
+		return $this->getQuickSearchView()->render( $data );
 	}
 	
 	
 	/* ACCESSORS ******************************************************************************** */
+	
+	/**
+	 * GETTER:  This method is a getter for the listingsService property.
+	 * 
+	 * @return  com_wolfnet_wordpress_listing_service
+	 * 
+	 */
+	public function getListingService ()
+	{
+		return $this->listingService;
+	}
+	
+	
+	/**
+	 * SETTER:  This method is a setter for the listingsService property.
+	 * 
+	 * @param   com_wolfnet_wordpress_listing_service  $service
+	 * @return  void
+	 * 
+	 */
+	public function setListingService ( com_wolfnet_wordpress_listing_service $service )
+	{
+		$this->listingService = $service;
+	}
 	
 	/**
 	 * GETTER:  This method is a getter for the quickSearchView property.

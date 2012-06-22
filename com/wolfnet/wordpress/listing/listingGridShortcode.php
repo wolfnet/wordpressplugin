@@ -84,7 +84,7 @@ extends com_ajmichels_wppf_shortcode_shortcode
 			$options['maxprice']['value'],
 			$options['city']['value'],
 			$options['zipcode']['value'],
-			$options['agentbroker']['value'],
+			$options['ownertype']['value'],
 			$options['maxresults']['value']
 			);
 		$data = array(

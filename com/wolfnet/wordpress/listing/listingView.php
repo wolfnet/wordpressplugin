@@ -79,7 +79,7 @@ implements com_ajmichels_wppf_interface_iView
 	 */
 	public function setTemplate ( $type = 'full' )
 	{
-		switch ( $format ) {
+		switch ( $type ) {
 			
 			default:
 			case 'simple':

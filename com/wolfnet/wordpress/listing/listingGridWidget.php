@@ -115,7 +115,7 @@ extends com_wolfnet_wordpress_abstract_widget
 			$options['maxprice']['value'],
 			$options['city']['value'],
 			$options['zipcode']['value'],
-			$options['agentbroker']['value'],
+			$options['ownertype']['value'],
 			$options['maxresults']['value']
 			);
 		$data = array(
