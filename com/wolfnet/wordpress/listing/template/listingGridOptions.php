@@ -22,7 +22,7 @@
 		<select id="<?php echo $minPriceId; ?>" name="<?php echo $minPriceName; ?>">
 			<option value="">Min. Price</option>
 			<?php foreach ( $prices as $price ) { ?>
-			<option value="<?php echo $price['value']; ?>"<?php ( $minPriceValue==$price['value'] ) ? ' selected="selected"' : '' ; ?>>
+			<option value="<?php echo $price['value']; ?>"<?php echo ( $minPriceValue == $price['value'] ) ? ' selected="selected"' : '' ; ?>>
 				<?php echo $price['label']; ?>
 			</option>
 			<?php } ?>
@@ -31,7 +31,7 @@
 		<select id="<?php echo $maxPriceId; ?>" name="<?php echo $maxPriceName; ?>">
 			<option value="">Max. Price</option>
 			<?php foreach ( $prices as $price ) { ?>
-			<option value="<?php echo $price['value']; ?>"<?php ( $maxPriceValue==$price['value'] ) ? ' selected="selected"' : '' ; ?>>
+			<option value="<?php echo $price['value']; ?>"<?php echo ( $maxPriceValue == $price['value'] ) ? ' selected="selected"' : '' ; ?>>
 				<?php echo $price['label']; ?>
 			</option>
 			<?php } ?>
@@ -52,10 +52,12 @@
 	
 	<p>
 		<label>Agent/Broker:</label>
-		<select id="<?php echo $agentBrokerId; ?>" name="<?php echo $agentBrokerName; ?>">
-			<option></option>
-			<option></option>
-			<option></option>
+		<select id="<?php echo $ownerTypeId; ?>" name="<?php echo $ownerTypeName; ?>">
+			<?php foreach ( $ownerTypes as $ownerType ) { ?>
+			<option value="<?php echo $ownerType['value']; ?>"<?php echo ( $ownerTypeValue == $ownerType['value'] ) ? ' selected="selected"' : '' ; ?>>
+				<?php echo $ownerType['label']; ?>
+			</option>
+			<?php } ?>
 		</select>
 	</p>
 	

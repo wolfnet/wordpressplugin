@@ -61,24 +61,24 @@ implements com_ajmichels_wppf_interface_iView
 	public function render ( $data = array() )
 	{
 		$data = array_merge( $data, array( 
-			'maxPriceId'       => esc_attr( $data['fields']['maxPrice']['id'] ),
-			'maxPriceName'     => esc_attr( $data['fields']['maxPrice']['name'] ),
-			'maxPriceValue'    => esc_attr( $data['fields']['maxPrice']['value'] ),
-			'minPriceId'       => esc_attr( $data['fields']['minPrice']['id'] ),
-			'minPriceName'     => esc_attr( $data['fields']['minPrice']['name'] ),
-			'minPriceValue'    => esc_attr( $data['fields']['minPrice']['value'] ),
-			'cityId'           => esc_attr( $data['fields']['city']['id'] ),
-			'cityName'         => esc_attr( $data['fields']['city']['name'] ),
-			'cityValue'        => esc_attr( $data['fields']['city']['value'] ),
-			'zipcodeId'        => esc_attr( $data['fields']['zipcode']['id'] ),
-			'zipcodeName'      => esc_attr( $data['fields']['zipcode']['name'] ),
-			'zipcodeValue'     => esc_attr( $data['fields']['zipcode']['value'] ),
-			'agentBrokerId'    => esc_attr( $data['fields']['ownerType']['id'] ),
-			'agentBrokerName'  => esc_attr( $data['fields']['ownerType']['name'] ),
-			'agentBrokerValue' => esc_attr( $data['fields']['ownerType']['value'] ),
-			'maxResultsId'     => esc_attr( $data['fields']['maxResults']['id'] ),
-			'maxResultsName'   => esc_attr( $data['fields']['maxResults']['name'] ),
-			'maxResultsValue'  => esc_attr( $data['fields']['maxResults']['value'] )
+			'maxPriceId'      => esc_attr( $data['fields']['maxprice']['id'] ),
+			'maxPriceName'    => esc_attr( $data['fields']['maxprice']['name'] ),
+			'maxPriceValue'   => $data['fields']['maxprice']['value'],
+			'minPriceId'      => esc_attr( $data['fields']['minprice']['id'] ),
+			'minPriceName'    => esc_attr( $data['fields']['minprice']['name'] ),
+			'minPriceValue'   => $data['fields']['minprice']['value'],
+			'cityId'          => esc_attr( $data['fields']['city']['id'] ),
+			'cityName'        => esc_attr( $data['fields']['city']['name'] ),
+			'cityValue'       => esc_attr( $data['fields']['city']['value'] ),
+			'zipcodeId'       => esc_attr( $data['fields']['zipcode']['id'] ),
+			'zipcodeName'     => esc_attr( $data['fields']['zipcode']['name'] ),
+			'zipcodeValue'    => esc_attr( $data['fields']['zipcode']['value'] ),
+			'ownerTypeId'     => esc_attr( $data['fields']['ownertype']['id'] ),
+			'ownerTypeName'   => esc_attr( $data['fields']['ownertype']['name'] ),
+			'ownerTypeValue'  => $data['fields']['ownertype']['value'],
+			'maxResultsId'    => esc_attr( $data['fields']['maxresults']['id'] ),
+			'maxResultsName'  => esc_attr( $data['fields']['maxresults']['name'] ),
+			'maxResultsValue' => esc_attr( $data['fields']['maxresults']['value'] )
 			) );
 		return parent::render( $data );
 	}

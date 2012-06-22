@@ -58,12 +58,12 @@ extends com_ajmichels_wppf_shortcode_shortcode
 	 * 
 	 */
 	protected $attributes = array( 
-		'min_price'   => '', 
-		'max_price'   => '', 
-		'city'        => '', 
-		'zipcode'     => '', 
-		'agentBroker' => '', 
-		'maxResults'  => 50 
+		'minprice'   => '', 
+		'maxprice'   => '', 
+		'city'       => '', 
+		'zipcode'    => '', 
+		'ownertype'  => 'agent_broker', 
+		'maxresults' => 50 
 		);
 	
 	
@@ -80,12 +80,12 @@ extends com_ajmichels_wppf_shortcode_shortcode
 	public function execute ( $attr, $content = null ) {
 		$options = $this->getAttributesData( $attr );
 		$gridListings = $this->getListingService()->getGridListings(
-			$options['maxPrice']['value'],
-			$options['minPrice']['value'],
+			$options['minprice']['value'],
+			$options['maxprice']['value'],
 			$options['city']['value'],
 			$options['zipcode']['value'],
-			$options['agentBroker']['value'],
-			$options['maxResults']['value']
+			$options['agentbroker']['value'],
+			$options['maxresults']['value']
 			);
 		$data = array(
 			'listings' => $gridListings,

@@ -6,7 +6,8 @@
  * template file should be created and made avaiable in the ListingView class. This file should 
  * ideally contain very little PHP.
  * 
- * @package       com.wolfnet.wordpress.listing.template
+ * @package       com.wolfnet.wordpress
+ * @subpackage    listing.template
  * @title         SimpleListing.php
  * @contributors  AJ Michels (aj.michels@wolfnet.com)
  * @version       1.0

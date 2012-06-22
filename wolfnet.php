@@ -62,6 +62,8 @@ implements com_ajmichels_common_iSingleton
 		/*	If the debug parameter is passed over the url, output the log. */
 		if ( array_key_exists( 'debug', $_REQUEST ) ) {
 			$this->loggerSetting( 'enabled', true );
+			$this->loggerSetting( 'level',   'debug' );
+			$this->loggerSetting( 'minTime', 0 );
 		}
 		
 		/* Create Plugin Service Factory */

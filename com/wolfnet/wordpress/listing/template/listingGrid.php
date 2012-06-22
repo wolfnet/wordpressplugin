@@ -19,6 +19,9 @@
 	<?php echo ( isset($listingContent) ) ? $listingContent : 'No Listings to Display.'; ?>
 	<div class="clearfix"></div>
 </div>
+<div class="wolfnet_marketDisclaimer">
+	<?php echo $listings[0]->getDisclaimer(); ?>
+</div>
 
 <script type="text/javascript">
 	

@@ -31,13 +31,13 @@ extends com_wolfnet_wordpress_abstract_widget
 	 */
 	public $options = array(
 		'direction'   => 'left', 
-		'autoPlay'    => true, 
+		'autoplay'    => true, 
 		'wait'        => false, 
-		'waitLen'     => 1, 
+		'waitlen'     => 1, 
 		'speed'       => 5000, 
-		'scrollCount' => 0, 
-		'ownerType'   => 'agent_broker', 
-		'maxResults'  => 50 
+		'scrollcount' => 0, 
+		'ownertype'   => 'agent_broker', 
+		'maxresults'  => 50 
 		);
 	
 	
@@ -103,8 +103,8 @@ extends com_wolfnet_wordpress_abstract_widget
 		$options = $this->getOptionData( $instance );
 		
 		$featuredListings = $this->getListingService()->getFeaturedListings(
-			$options['ownerType']['value'],
-			$options['maxResults']['value']
+			$options['ownertype']['value'],
+			$options['maxresults']['value']
 			);
 		
 		$data = array(

@@ -59,13 +59,13 @@ extends com_ajmichels_wppf_shortcode_shortcode
 	 */
 	protected $attributes = array(
 		'direction'   => 'left', 
-		'autoPlay'    => true, 
+		'autoplay'    => true, 
 		'wait'        => false, 
-		'waitLen'     => 1, 
+		'waitlen'     => 1, 
 		'speed'       => 5000, 
-		'scrollCount' => 0, 
-		'ownerType'   => 'agent_broker', 
-		'maxResults'  => 50 
+		'scrollcount' => 0, 
+		'ownertype'   => 'agent_broker', 
+		'maxresults'  => 50 
 		);
 	
 	
@@ -83,8 +83,8 @@ extends com_ajmichels_wppf_shortcode_shortcode
 	{
 		$options = $this->getAttributesData( $attr );
 		$featuredListings = $this->getListingService()->getFeaturedListings(
-			$options['ownerType']['value'],
-			$options['maxResults']['value']
+			$options['ownertype']['value'],
+			$options['maxresults']['value']
 			);
 		$data = array(
 			'listings' => $featuredListings,

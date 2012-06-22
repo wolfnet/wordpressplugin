@@ -22,7 +22,7 @@
 <script type="text/javascript">
 	
 	jQuery( '#<?php echo $instanceId; ?>' ).wolfnetFeaturedListings( {
-		'autoplay'    : <?php echo $autoPlay; ?>, 
+		'autoPlay'    : <?php echo $autoPlay; ?>, 
 		'direction'   : '<?php echo $direction; ?>', 
 		'wait'        : <?php echo $wait; ?>, 
 		'waitLen'     : <?php echo $waitLen; ?>,

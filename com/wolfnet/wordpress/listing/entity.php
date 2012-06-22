@@ -3,7 +3,8 @@
 /**
  * This class is the Listing Entity and is a container for listing data.
  * 
- * @package       com.wolfnet.wordpress.listing
+ * @package       com.wolfnet.wordpress
+ * @subpackage    listing
  * @title         entity.php
  * @extends       com_ajmichels_wppf_abstract_entity
  * @implements    com_ajmichels_wppf_interface_iEntity
@@ -93,6 +94,13 @@ implements com_ajmichels_wppf_interface_iEntity
 	
 	/**
 	 * 
+	 * @type  string
+	 * 
+	 */
+	private $disclaimer      = '';
+	
+	/**
+	 * 
 	 * @type  com_wolfnet_wordpress_listing_branding_entity
 	 * 
 	 */
@@ -122,6 +130,7 @@ implements com_ajmichels_wppf_interface_iEntity
 		$this->thumbnail_url   = $data['thumbnail_url'];
 		$this->bathroom        = $data['bathroom'];
 		$this->bedrooms        = $data['bedrooms'];
+		$this->disclaimer      = $data['disclaimer'];
 		$this->branding        = $data['branding'];
 	}
 	
@@ -147,6 +156,7 @@ implements com_ajmichels_wppf_interface_iEntity
 			'thumbnail_url'   => $this->thumbnail_url,
 			'bathroom'        => $this->bathroom,
 			'bedrooms'        => $this->bedrooms,
+			'disclaimer'      => $this->disclaimer,
 			'branding'        => $this->branding
 			);
 	}
@@ -318,6 +328,18 @@ implements com_ajmichels_wppf_interface_iEntity
 	public function getBedrooms ()
 	{
 		return $this->bedrooms;
+	}
+	
+	
+	/**
+	 * GETTER: This method is a getter for the disclaimer property.
+	 * 
+	 * @return  string
+	 * 
+	 */
+	public function getDisclaimer ()
+	{
+		return $this->disclaimer;
 	}
 	
 	

@@ -75,7 +75,7 @@ implements com_ajmichels_wppf_interface_iView
 		$data['instanceId'] = uniqid( 'wolfnet_featuredListing_' );
 		
 		$data['autoPlay'] = 'false';
-		if ( $data['options']['autoPlay']['value'] ) {
+		if ( $data['options']['autoplay']['value'] ) {
 			$data['autoPlay'] = 'true';
 		}
 		
@@ -90,8 +90,8 @@ implements com_ajmichels_wppf_interface_iView
 		}
 		
 		$data['waitLen'] = 1000;
-		if ( is_numeric( $data['options']['waitLen']['value'] ) ) {
-			$data['waitLen'] = $data['options']['waitLen']['value'] * 1000;
+		if ( is_numeric( $data['options']['waitlen']['value'] ) ) {
+			$data['waitLen'] = $data['options']['waitlen']['value'] * 1000;
 		}
 		
 		$data['speed'] = 5000;
@@ -100,8 +100,8 @@ implements com_ajmichels_wppf_interface_iView
 		}
 		
 		$data['scrollCount'] = 0;
-		if ( is_numeric( $data['options']['scrollCount']['value'] ) ) {
-			$data['scrollCount'] = ( $data['options']['scrollCount']['value'] );
+		if ( is_numeric( $data['options']['scrollcount']['value'] ) ) {
+			$data['scrollCount'] = ( $data['options']['scrollcount']['value'] );
 		}
 		
 		return parent::render( $data );

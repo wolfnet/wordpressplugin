@@ -30,12 +30,12 @@ extends com_wolfnet_wordpress_abstract_widget
 	 * 
 	 */
 	public $options = array( 
-		'min_price'   => '', 
-		'max_price'   => '', 
-		'city'        => '', 
-		'zipcode'     => '', 
-		'agentBroker' => '', 
-		'maxResults'  => 50 
+		'minprice'   => '', 
+		'maxprice'   => '', 
+		'city'       => '', 
+		'zipcode'    => '', 
+		'ownertype'  => 'agent_broker', 
+		'maxresults' => 50 
 		);
 	
 	
@@ -111,12 +111,12 @@ extends com_wolfnet_wordpress_abstract_widget
 	{
 		$options = $this->getOptionData( $instance );
 		$gridListings = $this->getListingService()->getGridListings(
-			$options['maxPrice']['value'],
-			$options['minPrice']['value'],
+			$options['minprice']['value'],
+			$options['maxprice']['value'],
 			$options['city']['value'],
 			$options['zipcode']['value'],
-			$options['agentBroker']['value'],
-			$options['maxResults']['value']
+			$options['agentbroker']['value'],
+			$options['maxresults']['value']
 			);
 		$data = array(
 			'listings' => $gridListings,
@@ -139,7 +139,8 @@ extends com_wolfnet_wordpress_abstract_widget
 		$ls = $this->getListingService();
 		$data = array(
 			'fields' => $this->getOptionData( $instance ),
-			'prices' => $ls->getPriceData()
+			'prices' => $ls->getPriceData(), 
+			'ownerTypes' => $this->getListingService()->getOwnerTypeData() 
 			);
 		$this->getListingGridOptionsView()->out( $data );
 	}
