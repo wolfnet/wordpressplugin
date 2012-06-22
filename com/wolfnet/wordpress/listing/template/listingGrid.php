@@ -20,7 +20,7 @@
 	<div class="clearfix"></div>
 </div>
 <div class="wolfnet_marketDisclaimer">
-	<?php echo $listings[0]->getDisclaimer(); ?>
+	<?php echo $marketDisclaimer; ?>
 </div>
 
 <script type="text/javascript">

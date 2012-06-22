@@ -83,7 +83,7 @@ implements com_ajmichels_wppf_interface_iView
 			
 			default:
 			case 'simple':
-				$this->template = $this->formatPath( dirname( __FILE__ ) . '\template\SimpleListing.php' );
+				$this->template = $this->formatPath( dirname( __FILE__ ) . '\template\listingSimple.php' );
 				break;
 				
 		}

@@ -368,22 +368,9 @@ implements com_ajmichels_wppf_interface_iService
 		
 		$wsu->setCacheSetting( 15 );
 		
+		$this->log( (string) $wsu );
+		
 		$data = $this->getDataService()->getData( $wsu );
-		
-		/* Currently the Disclaimer data comes through as a sibling element within the web service
-		 * request. To ensure this data is available when a set of listings is called we check for 
-		 * the disclaimers existance and then insert it as a property for each listing. Ideally this 
-		 * would be retrieved via a separate service request but this would probably results it some 
-		 * messy and confusing code or an additional http request.
-		 * 
-		 * NOTE: We have already discussed breaking this out as a separate API request which we can 
-		 * then cache for a much longer period (24 hours)
-		 */
-		$disclaimerIsSet = array_key_exists( 'disclaimer', $data );
-		
-		foreach ( $data['listings'] as &$listing ) {
-			$listing['disclaimer'] = ( $disclaimerIsSet ) ? $data['disclaimer'] : '' ;
-		}
 		
 		$this->getDAO()->setData( $data['listings'] );
 	}
@@ -484,7 +471,7 @@ implements com_ajmichels_wppf_interface_iService
 	 */
 	public function getWebServiceUrl ()
 	{
-		return $this->webServiceUrl;
+		return clone $this->webServiceUrl;
 	}
 	
 	

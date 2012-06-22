@@ -40,6 +40,32 @@
 	
 	<bean id="Branding" class="com_wolfnet_wordpress_listing_branding_entity" />
 	
+	<bean id="MarketDisclaimerService" class="com_wolfnet_wordpress_market_disclaimer_service">
+		<property name="DAO">
+			<ref bean="MarketDisclaimerDAO" />
+		</property>
+		<property name="DataService">
+			<!-- Defined in WPPF service factory -->
+			<ref bean="JsonDataService" />
+		</property>
+		<property name="WebServiceUrl">
+			<!-- Defined in WPPF service factory -->
+			<ref bean="DefaultWebServiceUrl" />
+		</property>
+		<property name="OptionManager">
+			<!-- Defined in WPPF service factory -->
+			<ref bean="OptionManager" />
+		</property>
+	</bean>
+	
+	<bean id="MarketDisclaimerDAO" class="com_wolfnet_wordpress_market_disclaimer_dao">
+		<property name="EntityPrototype">
+			<ref bean="MarketDisclaimer" />
+		</property>
+	</bean>
+	
+	<bean id="MarketDisclaimer" class="com_wolfnet_wordpress_market_disclaimer_entity" />
+	
 	<bean id="DefaultWebServiceUrl" class="com_ajmichels_wppf_data_webServiceUrl">
 		<property name="Domain">
 			<value>${webServiceDomain}</value>
@@ -69,6 +95,9 @@
 	<bean id="ListingGridView" class="com_wolfnet_wordpress_listing_listingGridView" singleton="false">
 		<property name="ListingView">
 			<ref bean="ListingView" />
+		</property>
+		<property name="MarketDisclaimerService">
+			<ref bean="MarketDisclaimerService" />
 		</property>
 	</bean>
 	
