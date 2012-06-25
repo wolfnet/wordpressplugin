@@ -7,18 +7,28 @@
  * 
  */
 
-( function ( $ ) {
+/**
+ * The following code relies on jQuery so if jQuery has been initialized encapsulate the following 
+ * code inside an immediately invoked function expression (IIFE) to avoid naming conflicts with the $ 
+ * variable.
+ */
+if ( jQuery ) {
 	
-	$.fn.wolfnetQuickSearch = function ( options ) {
+	( function ( $ ) {
 		
-		var opt = $.extend( {}, options );
-		
-		return this.each( function () {
+		$.fn.wolfnetQuickSearch = function ( options ) {
 			
-			var self = $(this);
+			var opt = $.extend( {}, options );
 			
-		});
+			return this.each( function () {
+				
+				var  quickSearch = this;
+				var $quickSearch = $( this );
+				
+			} ); /* END: for each loop of elements the plugin has been applied to. */
+			
+		}; /* END: function $.fn.wolfnetQuickSearch */
 		
-	};
+	} )( jQuery ); /* END: jQuery IIFE */
 	
-} )( jQuery );
+} /* END: If jQuery Exists */

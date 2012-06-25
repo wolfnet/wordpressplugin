@@ -46,7 +46,7 @@ extends com_wolfnet_wordpress_abstract_widget
 	 * 
 	 */
 	public $controls = array(
-		'width' => '300px'
+		'width' => '400px'
 		);
 	
 	

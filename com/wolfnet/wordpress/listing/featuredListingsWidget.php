@@ -42,6 +42,17 @@ extends com_wolfnet_wordpress_abstract_widget
 	
 	
 	/**
+	 * This property holds an array of options for the widget admin form.
+	 * 
+	 * @type  array
+	 * 
+	 */
+	public $controls = array(
+		'width' => '300px'
+		);
+	
+	
+	/**
 	 * This property holds a reference to the Listing Service object.
 	 * 
 	 * @type  com_wolfnet_wordpress_listing_service
