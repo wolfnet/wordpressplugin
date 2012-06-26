@@ -29,11 +29,7 @@
 		
 		<div>
 			<input id="<?php echo $instanceId; ?>_search_text" class="wolfnet_quickSearch_searchText" 
-				name="search_text" type="text"
-				wnt:hint_opentxt="House #, Street, City, State, or Zip" 
-				wnt:name_opentxt="open_text" 
-				wnt:hint_mlsnum="MLS Listing #" 
-				wnt:name_mlsnum="property_id" />
+				name="search_text" type="text" />
 		</div>
 		
 		<div>

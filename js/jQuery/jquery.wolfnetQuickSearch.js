@@ -18,24 +18,37 @@ if ( jQuery ) {
 		
 		$.fn.wolfnetQuickSearch = function ( options ) {
 			
-			var option = $.extend( {}, options );
+			/* Define the default options for the plugin. */
+			var defaultOptions = {
+			        defaultSearchType : '_opentxt',
+			        searchTypes : {
+			            _opentxt : {
+			                hint : 'House #, Street, City, State, or Zip',
+			                name : 'open_text'
+			                },
+			            mlsnum  : {
+			                hint : 'MLS Listing #',
+			                name : 'property_id'
+			                }
+			            }
+			    }
+			
+			/* If the options passed to the plugin contain 'searchTypes' merge them with the default
+			 * search types so that we do not lose them. */
+			if ( options && 'searchTypes' in options ) {
+				options.searchTypes = $.extend( defaultOptions.searchTypes, options.searchTypes );
+			}
+			
+			/* Merge the options passed into the plugin instance with the default options. */
+			var option = $.extend( defaultOptions, options );
 			
 			/* This function establishes the hint text in the search text field based on the search 
-			 * type that has been selected. */
-			var changeSearchType = function ( $searchTypeLink, $input )
+			 * type that has been selected/clicked. */
+			var performTypeChange = function ( $searchTypeLink, $input )
 			{
-				var searchTypeAttr  = 'wnt:search_type';
-				var hintAttrPrefix  = 'wnt:hint_';
-				var nameAttrPrefix  = 'wnt:name_';
-				var searchType      = $searchTypeLink.attr( searchTypeAttr );
-				
-				/* Update the hint text. */
-				$input.prop( 'hint', $input.attr( hintAttrPrefix + searchType ) );
-				$input.val( $input.prop( 'hint' ) );
-				
-				/* Update the text field name so that string is passed to the correct parameter in 
-				 * the search solution. */
-				$input.attr( 'name', $input.attr( nameAttrPrefix + searchType ) );
+				var searchTypeAttr = 'wnt:search_type';
+				var searchType     = $searchTypeLink.attr( searchTypeAttr );
+				$input.get(0).changeSearchType( searchType );
 				
 			}
 			
@@ -62,7 +75,7 @@ if ( jQuery ) {
 				var hint = $input.prop( 'hint' );
 				
 				/* If the input field is empty we still want to show the user the hint. */
-				if ( $input.val().trim() == '' ) {
+				if ( $input.val().trim() == '' || $input.val() == hint ) {
 					
 					$input.val( hint );
 					$input.addClass( 'hintText' ); /* Style the field as as hint text. */
@@ -75,20 +88,48 @@ if ( jQuery ) {
 			return this.each( function () {
 				
 				var $quickSearch       = $( this );
-				var $quickSearchForm   = $quickSearch.find( '.wolfnet_quickSearch_form' );
-				var $searchInput       = $quickSearch.find( '.wolfnet_quickSearch_searchText' );
+				var $quickSearchForm   = $quickSearch.find( '.wolfnet_quickSearch_form:first' );
+				var $searchInput       = $quickSearch.find( '.wolfnet_quickSearch_searchText:first' );
 				var $searchTypeLinks   = $quickSearch.find( 'ul.wolfnet_searchType li a' );
 				var $defaultSearchLink = $searchTypeLinks.first();
 				
-				/* Establish the 'hint' property so that we do not get any errors. */
-				$searchInput.prop( 'hint', '' );
+				/* Establish the new properties of the search text field for managing the hint text.
+				 * this is done this way so that the 'changeSearchType' function is exposed as part 
+				 * of the elements DOM object and can then be manipulated outside of the plugin. */
+				$searchInput.get(0).hint = '';
+				$searchInput.get(0).searchTypes = option.searchTypes;
+				$searchInput.get(0).defaultSearchType = option.defaultSearchType;
+				$searchInput.get(0).changeSearchType = function ( searchType )
+				{
+					
+					/* Make sure the searchType is defined and has the correct properties. */
+					if ( !( searchType in this.searchTypes ) 
+						|| (
+							!( 'hint' in this.searchTypes[searchType] ) 
+							|| !( 'name' in this.searchTypes[searchType] ) 
+						) 
+					) {
+						searchType = this.defaultSearchType;
+					}
+					
+					
+					
+					/* Update the hint text. */
+					this.hint = this.searchTypes[searchType].hint;
+					this.value = this.hint;
+					
+					/* Update the text field name so that string is passed to the correct parameter in 
+					 * the search solution. */
+					this.name = this.searchTypes[searchType].name;
+					
+				};
 				
 				/* Apply the follwing logic to the click event of any 'search type links' within the 
 				 * current quick search instance. This will cause the form to update base on which 
 				 * search type is being used. */
 				$searchTypeLinks.click( function () {
 					
-					changeSearchType( $( this ), $searchInput );
+					performTypeChange( $( this ), $searchInput );
 					
 				} );
 				
@@ -117,7 +158,7 @@ if ( jQuery ) {
 				
 				/* Imediately perform the change search type logic to make sure the defaults are set 
 				 * for the form. */
-				changeSearchType( $defaultSearchLink, $searchInput );
+				performTypeChange( $defaultSearchLink, $searchInput );
 				
 				/* Imediately perform the blur logic to make sure the defaults are set for the form. */
 				performBlur( $searchInput );
