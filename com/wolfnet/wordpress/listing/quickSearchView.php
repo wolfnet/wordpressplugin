@@ -30,6 +30,15 @@ implements com_ajmichels_wppf_interface_iView
 	public $template;
 	
 	
+	/**
+	 * This property holds a reference to the settings service.
+	 *
+	 * @type  com_wolfnet_wordpress_settings_service
+	 * 
+	 */
+	private $settingsService;
+	
+	
 	/* CONSTRUCTOR METHOD *********************************************************************** */
 	
 	/**
@@ -61,7 +70,35 @@ implements com_ajmichels_wppf_interface_iView
 	public function render ( $data = array() )
 	{
 		$data['instanceId'] = uniqid( 'wolfnet_quickSearchForm_' );
+		$data['formAction'] = $this->getSettingsService()->getSettings()->getSITE_BASE_URL();
 		return parent::render( $data );
+	}
+	
+	
+	/* ACCESSOR METHODS ************************************************************************* */
+	
+	/**
+	 * GETTER: This getter method is used to get the setttingsService property.
+	 * 
+	 * @return  com_wolfnet_wordpress_settings_service.
+	 * 
+	 */
+	public function getSettingsService ()
+	{
+		return $this->settingsService;
+	}
+	
+	
+	/**
+	 * SETTER: This setter method is used to set the setttingsService property.
+	 * 
+	 * @param   com_wolfnet_wordpress_settings_service  $service
+	 * @return  void
+	 * 
+	 */
+	public function setSettingsService ( com_wolfnet_wordpress_settings_service $service )
+	{
+		$this->settingsService = $service;
 	}
 	
 	

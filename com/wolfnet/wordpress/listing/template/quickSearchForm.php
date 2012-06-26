@@ -20,7 +20,11 @@
 	<span class="wolfnet_widgetTitle">QuickSearch</span>
 	
 	<form id="<?php echo $instanceId; ?>_quickSearchForm" class="wolfnet_quickSearch_form" 
-		name="<?php echo $instanceId; ?>_quickSearchForm" method="get" action="">
+		name="<?php echo $instanceId; ?>_quickSearchForm" method="get" 
+		action="<?php echo $formAction; ?>">
+		
+		<input name="action" type="hidden" value="newsearchsession" />
+		<input name="submit" type="hidden" value="Search" />
 		
 		<ul class="wolfnet_searchType">
 			<li><a href="javascript:;" wnt:search_type="opentxt"><span>Location</span></a></li>

@@ -66,6 +66,32 @@
 	
 	<bean id="MarketDisclaimer" class="com_wolfnet_wordpress_market_disclaimer_entity" />
 	
+	<bean id="SettingsService" class="com_wolfnet_wordpress_settings_service">
+		<property name="DAO">
+			<ref bean="SettingsDAO" />
+		</property>
+		<property name="DataService">
+			<!-- Defined in WPPF service factory -->
+			<ref bean="JsonDataService" />
+		</property>
+		<property name="WebServiceUrl">
+			<!-- Defined in WPPF service factory -->
+			<ref bean="DefaultWebServiceUrl" />
+		</property>
+		<property name="OptionManager">
+			<!-- Defined in WPPF service factory -->
+			<ref bean="OptionManager" />
+		</property>
+	</bean>
+	
+	<bean id="SettingsDAO" class="com_wolfnet_wordpress_settings_dao">
+		<property name="EntityPrototype">
+			<ref bean="Settings" />
+		</property>
+	</bean>
+	
+	<bean id="Settings" class="com_wolfnet_wordpress_settings_entity" />
+	
 	<bean id="DefaultWebServiceUrl" class="com_ajmichels_wppf_data_webServiceUrl">
 		<property name="Domain">
 			<value>${webServiceDomain}</value>
@@ -103,7 +129,11 @@
 	
 	<bean id="ListingGridOptionsView" class="com_wolfnet_wordpress_listing_listingGridOptionsView" singleton="false" />
 	
-	<bean id="QuickSearchView" class="com_wolfnet_wordpress_listing_quickSearchView" singleton="false" />
+	<bean id="QuickSearchView" class="com_wolfnet_wordpress_listing_quickSearchView" singleton="false">
+		<property name="SettingsService">
+			<ref bean="SettingsService" />
+		</property>
+	</bean>
 	
 	
 	<!-- Actions -->
