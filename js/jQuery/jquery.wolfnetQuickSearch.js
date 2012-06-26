@@ -7,6 +7,13 @@
  * 
  */
 
+ /* Make sure the 'trim' function is available in the String object. Fix for older versions of IE. */
+if(typeof String.prototype.trim !== 'function') {
+	String.prototype.trim = function() {
+		return this.replace(/^\s+|\s+$/g, ''); 
+	}
+}
+
 /**
  * The following code relies on jQuery so if jQuery has been initialized encapsulate the following 
  * code inside an immediately invoked function expression (IIFE) to avoid naming conflicts with the $ 
