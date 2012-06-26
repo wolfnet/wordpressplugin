@@ -36,7 +36,9 @@ if ( jQuery ) {
 				var $autoFields = $widgetCtrls.find( '.wolfnet_featuredListingsOptions_autoPlayOptions:first' ).hide();
 				var $manFields  = $widgetCtrls.find( '.wolfnet_featuredListingsOptions_manualPlayOptions:first' ).hide();
 				
-				var showAutoFields = function () {
+				var showAutoFields = function ()
+				{
+					
 					if ( $manFields.is( ':visible' ) ) {
 						$manFields.val( '' );
 						$manFields.disabled = true;
@@ -50,9 +52,12 @@ if ( jQuery ) {
 						$autoFields.show();
 						$autoFields.find( 'fieldset:first' ).slideDown( animationSpeed, easing );
 					}
+					
 				}
 				
-				var showManFields = function () {
+				var showManFields = function ()
+				{
+					
 					if ( $autoFields.is( ':visible' ) ) {
 						$autoFields.val( '' );
 						$autoFields.disabled = true;
@@ -66,6 +71,7 @@ if ( jQuery ) {
 						$manFields.show();
 						$manFields.find( 'fieldset:first' ).slideDown( animationSpeed, easing );
 					}
+					
 				}
 				
 				$playMode.change( function () {
