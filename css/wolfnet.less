@@ -8,6 +8,8 @@
  * 
  */
 
+@imagesDir: '../img/';
+
 .clearfix
 {
 	clear:both;
@@ -17,59 +19,6 @@
 {
 	margin: 1em auto 2em auto;
 	
-	&.wolfnet_featuredListings
-	{
-		overflow: hidden;
-		white-space: nowrap;
-		height: 140px;
-		text-align: center;
-		
-		.wolfnet_featuredListings_outterContainer
-		{
-			height:100%;
-			width:100%;
-			overflow: hidden;
-			white-space: nowrap;
-		}
-		
-		.wolfnet_featuredListings_prev,
-		.wolfnet_featuredListings_next
-		{
-			position: absolute;
-			width: 25px;
-			height: 100%;
-			background-color: #333;
-			display:none;
-		}
-		
-		.wolfnet_featuredListings_prev
-		{
-			top:0;
-			left:0;
-		}
-		
-		.wolfnet_featuredListings_next
-		{
-			top:0;
-			right:0;
-		}
-		
-	}
-	
-	&.wolfnet_listingGrid
-	{
-		text-align: center;
-		margin: 0 auto 0 auto;
-		position: relative;
-		left: 50%;
-		
-		.wolfnet_listing
-		{
-			left: -50%;
-		}
-		
-	}
-	
 	&.wolfnet_featuredListings,
 	&.wolfnet_listingGrid
 	{
@@ -77,17 +26,17 @@
 		
 		.wolfnet_listing
 		{
-			width: 150px;
-			float: left;
-			margin: 0 auto 1em auto;
-			position: relative;
+			width:      150px;
+			float:      left;
+			margin:     0 auto 1em auto;
+			position:   relative;
 			text-align: center;
-			font-size: 11px;
+			font-size:  11px;
 			
 			a
 			{
-				color: inherit;
-				text-decoration:none;
+				color:           inherit;
+				text-decoration: none;
 			}
 			
 			.detailsLink
@@ -97,36 +46,36 @@
 			
 			.listingImage
 			{
-				width: 100%;
-				height: 75px;
-				display: block;
-				overflow: hidden;
-				padding: 0;
-				margin: 0;
+				width:      100%;
+				height:     75px;
+				display:    block;
+				overflow:   hidden;
+				padding:    0;
+				margin:     0;
 				text-align: center;
 				
 				img
 				{
-					border:none;
-					height:75px;
+					border: none;
+					height: 75px;
 				}
 				
 			}
 			
 			.price
 			{
-				font-weight:bold;
-				display:block;
+				font-weight: bold;
+				display:     block;
 			}
 			
 			.location
 			{
-				display:block;
+				display: block;
 			}
 			
 			.bed-bath
 			{
-				display:block;
+				display: block;
 			}
 			
 			.branding
@@ -134,16 +83,119 @@
 				
 				.brokerLogo
 				{
-					display:block;
+					display: block;
 				}
 				
 				.brandingMessage
 				{
-					display:block;
+					display: block;
 				}
 				
 			}
 			
+		}
+		
+	}
+	
+	&.wolfnet_featuredListings
+	{
+		overflow:    hidden;
+		white-space: nowrap;
+		height:      140px;
+		text-align:  center;
+		
+		.scrollingHotSpotLeft,
+		.scrollingHotSpotRight
+		{
+			/* The hotspots have a minimum width of 100 pixels and if there is room the will grow
+			and occupy 15% of the scrollable area (30% combined). Adjust it to your own taste. */
+			min-width:           75px;
+			width:               10%;
+			height:              100%;
+			background-image:    url('@{imagesDir}big_transparent.gif');
+			                     /* There is a big background image and it's used to solve some 
+			                      * problems I experienced in Internet Explorer 6. */
+			background-repeat:   repeat;
+			background-position: center center;
+			position:            absolute;
+			z-index:             200;
+		}
+		
+		.scrollingHotSpotLeftVisible,
+		.scrollingHotSpotRightVisible
+		{
+			background-color:  #fff;
+			background-repeat: no-repeat;
+			opacity:           0.35; /* Standard CSS3 opacity setting */
+			-moz-opacity:      0.35; /* Opacity for really old versions of Mozilla Firefox (0.9 or older) */
+			/* filter:            alpha('opacity = 35'); /* Opacity for Internet Explorer. */
+			zoom:              1; /* Trigger "hasLayout" in Internet Explorer 6 or older versions */
+		}
+		
+		
+		/* You can alter this CSS in order to give Smooth Div Scroll your own look'n'feel */
+		/* Invisible left hotspot */
+		.scrollingHotSpotLeft
+		{
+			left:   0;
+			/* The first url is for Firefox and other browsers, the second is for Internet Explorer */
+			cursor: url('@{imagesDir}cursor_arrow_left.png'), 
+			        url('@{imagesDir}cursor_arrow_left.cur'), 
+			        w-resize;
+		}
+		
+		/* Visible left hotspot */
+		.scrollingHotSpotLeftVisible
+		{
+			background-image:  url('@{imagesDir}arrow_left.gif');
+		}
+		
+		/* Invisible right hotspot */
+		.scrollingHotSpotRight
+		{
+			right:  0;
+			cursor: url('@{imagesDir}cursor_arrow_right.png'), 
+			        url('@{imagesDir}cursor_arrow_right.cur'),
+			        e-resize;
+		}
+		
+		/* Visible right hotspot */
+		.scrollingHotSpotRightVisible
+		{
+			background-image:  url('@{imagesDir}arrow_right.gif');
+		}
+		
+		/* The scroll wrapper is always the same width and height as the containing element (div).
+		   Overflow is hidden because you don't want to show all of the scrollable area.
+		*/
+		.scrollWrapper
+		{
+			position: relative;
+			overflow: hidden;
+			width:    100%;
+			height:   100%;
+			
+			.scrollableArea
+			{
+				position: relative;
+				width:    auto;
+				height:   100%;
+			}
+			
+		}
+		
+	}
+	
+	&.wolfnet_listingGrid
+	{
+		text-align: center;
+		margin:     0 auto 0 auto;
+		position:   relative;
+		left:       50%;
+		
+		.wolfnet_listing
+		{
+			left: -50%;
 		}
 		
 	}

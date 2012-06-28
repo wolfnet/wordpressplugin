@@ -49,8 +49,6 @@
 									class="wolfnet_featuredListingsOptions_autoDirField">
 									<option value="right"<?php echo $autoDirectionRight; ?>>Left to Right</option>
 									<option value="left"<?php echo $autoDirectionLeft; ?>>Right to Left</option>
-									<!--<option value="down"<?php echo $autoDirectionDown; ?>>Top to Bottom</option>-->
-									<!--<option value="up"<?php echo $autoDirectionUp; ?>>Bottom to Top</option>-->
 								</select>
 							</td>
 						</tr>
@@ -59,61 +57,7 @@
 							<td><label for="<?php echo $speedId; ?>">Animation Speed:</label></td>
 							<td>
 								<input id="<?php echo $speedId; ?>" name="<?php echo $speedName; ?>" type="text" 
-									value="<?php echo $speedValue; ?>" size="4" maxlength="4" />
-							</td>
-						</tr>
-						
-						<tr>
-							<td><label for="<?php echo $waitId; ?>">Pause after each listing:</label></td>
-							<td>
-								<input id="<?php echo $waitId; ?>" name="<?php echo $waitName; ?>" 
-									<?php echo $waitChecked; ?> type="checkbox" value="true" 
-									class="wolfnet_featuredListingsOptions_pauseField" />
-							</td>
-						</tr>
-						
-						<tr>
-							<td><label for="<?php echo $waitLenId; ?>">Pause length (seconds):</label></td>
-							<td>
-								<input id="<?php echo $waitLenId; ?>" name="<?php echo $waitLenName; ?>" 
-									value="<?php echo $waitLenValue; ?>" type="text" size="2" maxlength="2" 
-									class="wolfnet_featuredListingsOptions_pauseLenField" />
-							</td>
-						</tr>
-						
-						<tr>
-							<td><label for="<?php echo $scrollCountId; ?>">Scroll Count:</label></td>
-							<td>
-								<input id="<?php echo $scrollCountId; ?>" name="<?php echo $scrollCountName; ?>" type="text" 
-									value="<?php echo $scrollCountValue; ?>" size="4" maxlength="4" 
-									class="wolfnet_featuredListingsOptions_scrollCountField" />
-							</td>
-						</tr>
-						
-					</table>
-					
-				</fieldset>
-				
-			</td>
-		</tr>
-		
-		<tr class="wolfnet_featuredListingsOptions_manualPlayOptions">
-			<td colspan="2">
-				
-				<fieldset>
-					
-					<legend>Manual Playback Options</legend>
-					
-					<table class="form-table">
-						
-						<tr>
-							<td><label for="manual_<?php echo $directionId; ?>">Direction:</label></td>
-							<td>
-								<select id="manual_<?php echo $directionId; ?>" name="manualDir" 
-									class="wolfnet_featuredListingsOptions_manDirField">
-									<option value="left"<?php echo $manDirectionHorz; ?>>Left and Right</option>
-									<!--<option value="up"<?php echo $manDirectionVert; ?>>Up and Down</option>-->
-								</select>
+									value="<?php echo $speedValue; ?>" size="2" maxlength="2" />
 							</td>
 						</tr>
 						
@@ -151,7 +95,7 @@
 
 <script type="text/javascript">
 	
-	if ( jQuery ) {
+	if ( typeof jQuery != 'undefined' ) {
 		
 		( function ( $ ) {
 			

@@ -19,7 +19,7 @@ if(typeof String.prototype.trim !== 'function') {
  * code inside an immediately invoked function expression (IIFE) to avoid naming conflicts with the $ 
  * variable.
  */
-if ( jQuery ) {
+if ( typeof jQuery != 'undefined' ) {
 	
 	( function ( $ ) {
 		
@@ -118,8 +118,6 @@ if ( jQuery ) {
 					) {
 						searchType = this.defaultSearchType;
 					}
-					
-					
 					
 					/* Update the hint text. */
 					this.hint = this.searchTypes[searchType].hint;

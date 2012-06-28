@@ -88,6 +88,14 @@
 
 <script type="text/javascript">
 	
-	jQuery( '#<?php echo $instanceId; ?>' ).wolfnetQuickSearch();
+	if ( typeof jQuery != 'undefined' ) {
+		
+		( function ( $ ) {
+			
+			jQuery( '#<?php echo $instanceId; ?>' ).wolfnetQuickSearch();
+			
+		} )( jQuery ); /* END: jQuery IIFE */
+		
+	} /* END: If jQuery Exists */
 	
 </script>

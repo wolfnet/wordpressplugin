@@ -25,6 +25,14 @@
 
 <script type="text/javascript">
 	
-	jQuery( '#<?php echo $instanceId; ?>' ).wolfnetListingGrid( {} );
+	if ( typeof jQuery != 'undefined' ) {
+		
+		( function ( $ ) {
+			
+			jQuery( '#<?php echo $instanceId; ?>' ).wolfnetListingGrid( {} );
+			
+		} )( jQuery ); /* END: jQuery IIFE */
+		
+	} /* END: If jQuery Exists */
 	
 </script>

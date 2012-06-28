@@ -20,14 +20,19 @@
 </div>
 
 <script type="text/javascript">
-	
-	jQuery( '#<?php echo $instanceId; ?>' ).wolfnetFeaturedListings( {
-		'autoPlay'    : <?php echo $autoPlay; ?>, 
-		'direction'   : '<?php echo $direction; ?>', 
-		'wait'        : <?php echo $wait; ?>, 
-		'waitLen'     : <?php echo $waitLen; ?>,
-		'speed'       : <?php echo $speed; ?>,
-		'scrollCount' : <?php echo $scrollCount; ?>
-	} );
+				
+	if ( typeof jQuery != 'undefined' ) {
+		
+		( function ( $ ) {
+			
+			$( '#<?php echo $instanceId; ?>' ).wolfnetScrollingItems( {
+				'autoPlay'  : <?php echo $autoPlay; ?>, 
+				'direction' : '<?php echo $direction; ?>', 
+				'speed'     : <?php echo $speed; ?>
+			} );
+			
+		} )( jQuery ); /* END: jQuery IIFE */
+		
+	} /* END: If jQuery Exists */
 	
 </script>
