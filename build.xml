@@ -23,9 +23,11 @@
 		<echo>Creating Build Directory: ${buildDir}</echo>
 		<copy todir="${buildDir}">
 			<fileset dir="${basedir}">
-				<exclude name="build.properties" />
-				<exclude name="build.xml" />
-				<exclude name="phpdoc.dist.xml" />
+				<exclude name=".build.properties" /> <!-- Template Properties Files (does get committed) -->
+				<exclude name="build.properties" /> <!-- Concrete Properties Files (does not get committed) -->
+				<exclude name="build.xml" /> <!-- This file -->
+				<exclude name="phpdoc.dist.xml" /> <!-- Config file for PHP Documentor -->
+				<exclude name="*.bat" /> <!-- Batch files used for building the project or performing othing tasks -->
 				<exclude name="LessCompilerOutput.txt" />
 				<exclude name="ant/" />
 				<exclude name="${dir.js}/**/*.js" />
