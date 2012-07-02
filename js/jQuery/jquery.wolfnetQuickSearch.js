@@ -168,6 +168,26 @@ if ( typeof jQuery != 'undefined' ) {
 				/* Imediately perform the blur logic to make sure the defaults are set for the form. */
 				performBlur( $searchInput );
 				
+				/* Determine the size of the search container and update the container class based
+				 * on the size. This allows for adaptive styling based on the area into which the 
+				 * quicksearch is placed. */
+				var onResize = function ()
+				{
+					var containerWidth = $quickSearch.width();
+					if ( containerWidth > 400 ) {
+						$quickSearch.removeClass( 'wolfnet_wNarrow' );
+						$quickSearch.addClass( 'wolfnet_wWide' );
+					}
+					else {
+						$quickSearch.removeClass( 'wolfnet_wWide' );
+						$quickSearch.addClass( 'wolfnet_wNarrow' );
+					}
+				}
+				
+				$( window ).resize( onResize );
+				
+				onResize();
+				
 			} ); /* END: for each loop of elements the plugin has been applied to. */
 			
 		}; /* END: function $.fn.wolfnetQuickSearch */
