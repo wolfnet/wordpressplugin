@@ -53,7 +53,7 @@ if ( typeof jQuery != 'undefined' ) {
 			 * type that has been selected/clicked. */
 			var performTypeChange = function ( $searchTypeLink, $input )
 			{
-				var searchTypeAttr = 'wnt:search_type';
+				var searchTypeAttr = 'wolfnet:search_type';
 				var searchType     = $searchTypeLink.attr( searchTypeAttr );
 				$input.get(0).changeSearchType( searchType );
 				
@@ -128,12 +128,12 @@ if ( typeof jQuery != 'undefined' ) {
 					this.name = this.searchTypes[searchType].name;
 					
 					$searchTypeLinks.filter( function () {
-						return $( this ).attr( 'wnt:search_type' );
+						return $( this ).attr( 'wolfnet:search_type' );
 					} ).each( function () {
 						var $this = $( this );
-						$this.removeClass( 'active' );
-						if ( $this.attr( 'wnt:search_type' ) == searchType ) {
-							$this.addClass( 'active' );
+						$this.removeClass( 'wolfnet_active' );
+						if ( $this.attr( 'wolfnet:search_type' ) == searchType ) {
+							$this.addClass( 'wolfnet_active' );
 						}
 					} );
 					
