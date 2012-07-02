@@ -27,9 +27,9 @@ if ( typeof jQuery != 'undefined' ) {
 			
 			/* Define the default options for the plugin. */
 			var defaultOptions = {
-			        defaultSearchType : '_opentxt',
+			        defaultSearchType : 'opentxt',
 			        searchTypes : {
-			            _opentxt : {
+			            opentxt : {
 			                hint : 'House #, Street, City, State, or Zip',
 			                name : 'open_text'
 			                },
@@ -126,6 +126,16 @@ if ( typeof jQuery != 'undefined' ) {
 					/* Update the text field name so that string is passed to the correct parameter in 
 					 * the search solution. */
 					this.name = this.searchTypes[searchType].name;
+					
+					$searchTypeLinks.filter( function () {
+						return $( this ).attr( 'wnt:search_type' );
+					} ).each( function () {
+						var $this = $( this );
+						$this.removeClass( 'active' );
+						if ( $this.attr( 'wnt:search_type' ) == searchType ) {
+							$this.addClass( 'active' );
+						}
+					} );
 					
 				};
 				
