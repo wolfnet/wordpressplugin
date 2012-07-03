@@ -70,6 +70,12 @@ implements com_ajmichels_wppf_interface_iView
 		if ( $data != null && array_key_exists( 'listings', $data ) ) {
 			$data['listingContent'] = $this->renderListings( $data['listings'] );
 		}
+		
+		$data['hidebranding'] = false;
+		if ( $data['options']['hidebranding']['value'] == 'true' ) {
+			$data['hidebranding'] = true;
+		}
+		
 		$data['marketDisclaimer'] = $this->getMarketDisclaimerService()->getDisclaimerByType()->getContent();
 		$data['instanceId']	= uniqid( 'wolfnet_listingGrid_' );
 		return parent::render( $data );

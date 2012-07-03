@@ -77,7 +77,7 @@ if ( typeof jQuery != 'undefined' ) {
 				} );
 				
 				$container.children().css( {
-					'float':'left',
+					'float':'left'
 				} );
 				
 				/* ****************************************************************************** */

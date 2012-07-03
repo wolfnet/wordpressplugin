@@ -36,6 +36,7 @@
 				<exclude name="**/*.dev.js" />
 				<exclude name="**/*.less" />
 				<exclude name="**/*.css" />
+				<exclude name="**/*.src.*" />
 				<exclude name="xml/*.xml" />
 			</fileset>
 		</copy>

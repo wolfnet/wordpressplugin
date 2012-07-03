@@ -58,12 +58,13 @@ extends com_ajmichels_wppf_shortcode_shortcode
 	 * 
 	 */
 	protected $attributes = array( 
-		'minprice'   => '', 
-		'maxprice'   => '', 
-		'city'       => '', 
-		'zipcode'    => '', 
-		'ownertype'  => 'agent_broker', 
-		'maxresults' => 50 
+		'minprice'     => '', 
+		'maxprice'     => '', 
+		'city'         => '', 
+		'zipcode'      => '', 
+		'ownertype'    => 'agent_broker', 
+		'hidebranding' => false,
+		'maxresults'   => 50 
 		);
 	
 	

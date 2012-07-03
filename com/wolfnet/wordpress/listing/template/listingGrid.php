@@ -29,7 +29,9 @@
 		
 		( function ( $ ) {
 			
-			jQuery( '#<?php echo $instanceId; ?>' ).wolfnetListingGrid( {} );
+			jQuery( '#<?php echo $instanceId; ?>' ).wolfnetListingGrid( {
+				hideBranding: <?php echo ( $hidebranding ) ? 'true' : 'false'; ?>
+			} );
 			
 		} )( jQuery ); /* END: jQuery IIFE */
 		

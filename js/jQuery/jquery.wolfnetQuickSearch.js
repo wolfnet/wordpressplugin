@@ -94,6 +94,7 @@ if ( typeof jQuery != 'undefined' ) {
 			/* For each of the elements to which the plugin is being applied do the following. */
 			return this.each( function () {
 				
+				var  quickSearch       = this;
 				var $quickSearch       = $( this );
 				var $quickSearchForm   = $quickSearch.find( '.wolfnet_quickSearch_form:first' );
 				var $searchInput       = $quickSearch.find( '.wolfnet_quickSearch_searchText:first' );
@@ -184,7 +185,7 @@ if ( typeof jQuery != 'undefined' ) {
 				var onResize = function ()
 				{
 					var containerWidth = $quickSearch.width();
-					if ( containerWidth > 400 ) {
+					if ( containerWidth > 225 ) {
 						$quickSearch.removeClass( 'wolfnet_wNarrow' );
 						$quickSearch.addClass( 'wolfnet_wWide' );
 					}
@@ -192,11 +193,12 @@ if ( typeof jQuery != 'undefined' ) {
 						$quickSearch.removeClass( 'wolfnet_wWide' );
 						$quickSearch.addClass( 'wolfnet_wNarrow' );
 					}
+					
 				}
 				
 				$( window ).resize( onResize );
 				
-				onResize();
+				$( window ).trigger( 'resize' );
 				
 			} ); /* END: for each loop of elements the plugin has been applied to. */
 			

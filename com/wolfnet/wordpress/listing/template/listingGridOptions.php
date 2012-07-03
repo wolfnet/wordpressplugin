@@ -72,6 +72,14 @@
 		</tr>
 		
 		<tr>
+			<td><label>Hade Branding:</label></td>
+			<td>
+				<input id="<?php echo $hideBrandingId; ?>" name="<?php echo $hideBrandingName; ?>" 
+					type="checkbox" value="true" <?php echo $hideBrandingCheck; ?> />
+			</td>
+		</tr>
+		
+		<tr>
 			<td><label>Max Results:</label></td>
 			<td>
 				<input id="<?php echo $maxResultsId; ?>" name="<?php echo $maxResultsName; ?>" 

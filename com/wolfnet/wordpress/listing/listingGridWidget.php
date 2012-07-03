@@ -30,12 +30,13 @@ extends com_wolfnet_wordpress_abstract_widget
 	 * 
 	 */
 	public $options = array( 
-		'minprice'   => '', 
-		'maxprice'   => '', 
-		'city'       => '', 
-		'zipcode'    => '', 
-		'ownertype'  => 'agent_broker', 
-		'maxresults' => 50 
+		'minprice'     => '', 
+		'maxprice'     => '', 
+		'city'         => '', 
+		'zipcode'      => '', 
+		'ownertype'    => 'agent_broker', 
+		'hidebranding' => false,
+		'maxresults'   => 50 
 		);
 	
 	

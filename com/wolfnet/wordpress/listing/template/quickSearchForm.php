@@ -31,12 +31,12 @@
 			<li><a href="javascript:;" wolfnet:search_type="mlsnum"><span>Listing Number</span></a></li>
 		</ul>
 		
-		<div>
+		<div class="wolfnet_searchTypeField">
 			<input id="<?php echo $instanceId; ?>_search_text" class="wolfnet_quickSearch_searchText" 
 				name="search_text" type="text" />
 		</div>
 		
-		<div>
+		<div class="wolfnet_widgetPrice">
 			
 			<label>Price</label>
 			
@@ -58,29 +58,41 @@
 				</select>
 			</div>
 			
+			<div class="clearfix"></div>
+			
 		</div>
 		
-		<div>
-			<label for="<?php echo $instanceId; ?>_min_beds">Beds</label>
-			<select id="<?php echo $instanceId; ?>_min_beds" name="min_bedrooms">
-				<option value="">Any</option>
-				<?php foreach ( $beds as $bed ) { ?>
-				<option value="<?php echo $bed['value']; ?>"><?php echo $bed['label']; ?></option>
-				<?php } ?>
-			</select>
+		<div class="wolfnet_widgetBedBath">
+		
+			<div class="wolfnet_widgetBeds">
+				<label for="<?php echo $instanceId; ?>_min_beds">Beds</label>
+				<select id="<?php echo $instanceId; ?>_min_beds" name="min_bedrooms">
+					<option value="">Any</option>
+					<?php foreach ( $beds as $bed ) { ?>
+					<option value="<?php echo $bed['value']; ?>"><?php echo $bed['label']; ?></option>
+					<?php } ?>
+				</select>
+			</div>
+			
+			<div class="wolfnet_widgetBaths">
+				
+				<label for="<?php echo $instanceId; ?>_min_baths">Baths</label>
+				<select id="<?php echo $instanceId; ?>_min_baths" name="min_bathrooms">
+					<option value="">Any</option>
+					<?php foreach ( $baths as $bath ) { ?>
+					<option value="<?php echo $bath['value']; ?>"><?php echo $bath['label']; ?></option>
+					<?php } ?>
+				</select>
+				
+			</div>
+			
 		</div>
 		
-		<div>
-			<label for="<?php echo $instanceId; ?>_min_baths">Baths</label>
-			<select id="<?php echo $instanceId; ?>_min_baths" name="min_bathrooms">
-				<option value="">Any</option>
-				<?php foreach ( $baths as $bath ) { ?>
-				<option value="<?php echo $bath['value']; ?>"><?php echo $bath['label']; ?></option>
-				<?php } ?>
-			</select>
+		<div class="wolfnet_quickSearchFormButton">
+			
+			<button class="wolfnet_quickSearchForm_submitButton" name="search" type="submit">Search!</button>
+			
 		</div>
-		
-		<button class="wolfnet_quickSearchForm_submitButton" name="search" type="submit">Search!</button>
 		
 	</form>
 	

@@ -10,14 +10,261 @@
 
 @imagesDir: '../img/';
 
-.clearfix
-{
-	clear:both;
-}
-
 .wolfnet_widget
 {
 	margin: 1em auto 2em auto;
+	
+	&.wolfnet_quickSearch
+	{
+		border:     1px solid #DDD;
+		padding:    8px;
+		background: -moz-linear-gradient(top,  #FFFFFF 60%, #E2E2E2 100%); /* FF3.6+ */
+		background: -webkit-gradient(linear, left top, left bottom, color-stop(60%,#FFFFFF), color-stop(100%,#E2E2E2)); /* Chrome,Safari4+ */
+		background: -webkit-linear-gradient(top,  #FFFFFF 60%,#E2E2E2 100%); /* Chrome10+,Safari5.1+ */
+		background: -o-linear-gradient(top,  #FFFFFF 60%,#E2E2E2 100%); /* Opera 11.10+ */
+		background: -ms-linear-gradient(top,  #FFFFFF 60%,#E2E2E2 100%); /* IE10+ */
+		background: linear-gradient(to bottom,  #FFFFFF 60%,#E2E2E2 100%); /* W3C */
+		filter:     ~'progid:DXImageTransform.Microsoft.gradient(startColorstr="#FFFFFF",endColorstr="#E2E2E2",GradientType=0)'; /* IE6-9 */
+		
+		.wolfnet_widgetTitle
+		{
+			font-size:   1.5em;
+			font-weight: bold;
+		}
+		
+		.wolfnet_quickSearch_form
+		{
+			
+			label
+			{
+				font-size:   1.1em;
+				font-weight: bold;
+				float:       left;
+			}
+			
+			input,
+			select
+			{
+				font-size:             1em;
+				border:                1px solid #BABABA;
+				color:                 #000;
+				margin:                0 0 5px 0;
+				border-radius:         3px;
+				-moz-border-radius:    3px;
+				-webkit-border-radius: 3px;
+				
+				&.hintText
+				{
+					color:     #888;
+				}
+				
+			}
+			
+			.wolfnet_searchType,
+			.wolfnet_searchTypeField,
+			.wolfnet_widgetPrice,
+			.wolfnet_widgetBeds,
+			.wolfnet_widgetBaths,
+			.wolfnet_quickSearchFormButton
+			{
+				width: 100%;
+			}
+			
+			ul.wolfnet_searchType
+			{
+				margin:     0;
+				padding:    0 0 1.5em 0;
+				list-style: none;
+				
+				li
+				{
+					float:       left;
+					margin: 0 1em 0 0;
+					
+					.wolfnet_active
+					{
+						
+						font-weight: bold;
+						
+					}
+					
+				}
+				
+			}
+			
+			.wolfnet_searchTypeField
+			{
+				
+				input
+				{
+					height: 2em;
+					width:  97%;
+					
+				}
+				
+			}
+			
+			.wolfnet_widgetPrice
+			{
+				margin-top: .3em;
+				
+				div
+				{
+					float: right;
+					clear: right;
+				}
+				
+			}
+			
+			.wolfnet_widgetBeds,
+			.wolfnet_widgetBaths
+			{
+				margin-top: .3em;
+				clear:      both;
+				height:     2em;
+				
+				select
+				{
+					float:  right;
+				}
+				
+			}
+			
+			.wolfnet_quickSearchFormButton
+			{
+				margin-top: .3em;
+				clear:      both;
+				height:     2.5em;
+				
+				button
+				{
+					font-size:      1.6em;
+					font-weight:    bold;
+					height:         100%;
+					margin-top:     .6em;
+					width:          100%;
+					margin:         0 auto;
+					vertical-align: middle;
+					text-align:     center;
+					line-height:    1em;
+				}
+				
+			}
+			
+		}
+		
+		&.wolfnet_wWide
+		{
+		
+			.wolfnet_quickSearch_form
+			{
+				
+				.wolfnet_searchType,
+				.wolfnet_searchTypeField,
+				.wolfnet_widgetPrice,
+				.wolfnet_widgetBeds,
+				.wolfnet_widgetBaths,
+				.wolfnet_quickSearchFormButton
+				{
+					width:       auto;
+					line-height: 1.3em;
+				}
+				
+				label
+				{
+					width:   auto;
+					display: inline;
+					float:   none;
+				}
+			
+				.wolfnet_searchTypeField
+				{
+					
+					input
+					{
+						width: 98.5%;
+					}
+					
+				}
+				
+				.wolfnet_widgetPrice,
+				.wolfnet_widgetBeds,
+				.wolfnet_widgetBaths
+				{
+					float:        none;
+					margin-right: 1em;
+					clear:        none;
+				}
+				
+				.wolfnet_widgetPrice
+				{
+					width:      100%;
+					text-align: right;
+					
+					div
+					{
+						display: inline;
+						float:   none;
+						clear:   none;
+						
+						select
+						{
+							display:     inline;
+							margin-left: 1em;
+							float:       none;
+							
+						}
+						
+					}
+					
+				}
+				
+				.wolfnet_widgetBedBath
+				{
+					width:      100%;
+					text-align: right;
+					
+					.wolfnet_widgetBeds,
+					.wolfnet_widgetBaths
+					{
+						display: inline;
+						float:   none;
+						clear:   none;
+						margin:  0 0 0 1em;
+						
+						select
+						{
+							display:     inline;
+							margin-left: 1em;
+							float:       none;
+							clear:       none;
+							
+						}
+						
+					}
+					
+				}
+				
+				.wolfnet_quickSearchFormButton
+				{
+					height:     auto;
+					text-align: right;
+					
+					button
+					{
+						font-size: 1.25em;
+						height:    auto;
+						width:     auto;
+						float:     none;
+					}
+					
+				}
+				
+			}
+			
+		}
+		
+	}
 	
 	&.wolfnet_featuredListings,
 	&.wolfnet_listingGrid
@@ -200,4 +447,49 @@
 		
 	}
 	
+	.wolfnet_moreInfo
+	{
+		width: 100%;
+		height: 18px;
+		background: url('@{imagesDir}info.png') no-repeat center;
+		
+		span
+		{
+			display:none;
+		}
+		
+	}
+	
+}
+
+#tooltip
+{
+	position:         absolute;
+	z-index:          3000;
+	border:           1px solid #111;
+	background-color: #FFF;
+	padding:          1em;
+	
+	h3,
+	div
+	{
+		margin: 0;
+	}
+	
+}
+
+.clearfix:before,
+.clearfix:after
+{
+	content: "";
+	display: table;
+}
+.clearfix:after
+{
+	clear: both;
+}
+.clearfix
+{
+	*zoom: 1;
+	float:none !important;
 }

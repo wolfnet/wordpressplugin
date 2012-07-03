@@ -19,7 +19,7 @@ if ( typeof jQuery != 'undefined' ) {
 		
 		$.fn.wolfnetListingGrid = function ( options ) {
 			
-			var option = $.extend( {}, options );
+			var option = $.extend( { hideBranding:true }, options );
 			
 			return this.each( function () {
 				
@@ -32,38 +32,74 @@ if ( typeof jQuery != 'undefined' ) {
 				
 				$grid.append( '<div class="clearfix" />' );
 				
-				$( document ).ready( function () {
-				
-					$( listingCls ).each( function () {
+				var calculateItemSize = function () {
+					
+					maxHeight = -1;
+					maxWidth  = -1;
+					
+					$( this ).height( $( this ).height() );
+					$( this ).width(  $( this ).width() );
+					
+					$grid.find( listingCls ).each( function () {
 						maxHeight = maxHeight > $( this ).height() ? maxHeight : $( this ).height();
 						maxWidth  = maxWidth  > $( this ).width()  ? maxWidth  : $( this ).width();
 					} );
 					
-					$( listingCls ).each( function () {
+					$grid.find( listingCls ).each( function () {
 						$( this ).height( maxHeight );
 						$( this ).width(  maxWidth );
 					} );
 					
-					/* When the window is resized calculate the appropriate margins for the grid items to 
-					 * ensure that the grid and its items are centered. */
-					var onResize = function ()
-					{
-						
-						var itemWidth   = $grid.find( listingCls + ':first' ).width();
-						var gridWidth   = $grid.width();
-						var numColumns  = Math.floor( gridWidth / itemWidth );
-						var marginWidth = Math.floor( ( ( ( gridWidth % itemWidth ) - 1 ) / numColumns ) / 2 );
-						
-						$grid.find( listingCls ).css( 'margin-right', marginWidth );
-						$grid.find( listingCls ).css( 'margin-left',  marginWidth );
-						
-					};
+				}
+				
+				calculateItemSize();
+				
+				/* When the window is resized calculate the appropriate margins for the grid items to 
+				 * ensure that the grid and its items are centered. */
+				var onResize = function ()
+				{
 					
-					$( window ).resize( onResize );
+					var itemWidth   = $grid.find( listingCls + ':first' ).width();
+					var gridWidth   = $grid.width();
+					var numColumns  = Math.floor( gridWidth / itemWidth );
+					var marginWidth = Math.floor( ( ( ( gridWidth % itemWidth ) - 1 ) / numColumns ) / 2 );
 					
-					onResize();
+					$grid.find( listingCls ).css( 'margin-right', marginWidth );
+					$grid.find( listingCls ).css( 'margin-left',  marginWidth );
 					
-				} );
+				};
+				
+				$( window ).resize( onResize );
+				
+				$( window ).trigger( 'resize' );
+					
+				if ( option.hideBranding ) {
+					
+					var $branding = $grid.find( '.branding' );
+					
+					$branding.hide();
+					$branding.each( function () {
+						var $branding = $( this );
+						$( $branding ).parent().tooltip( {
+							showURL: false,
+							bodyHandler: function() {
+								return $( $branding.html() ).show();
+							}
+						} );
+					} );
+					
+					
+				}
+				else {
+					
+					$grid.find( '.branding' ).imagesLoaded( function () {
+						
+						calculateItemSize();
+						$( window ).trigger( 'resize' );
+						
+					} );
+					
+				}
 				
 			} ); /* END: for each loop of elements the plugin has been applied to. */
 			

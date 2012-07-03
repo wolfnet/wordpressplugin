@@ -61,24 +61,27 @@ implements com_ajmichels_wppf_interface_iView
 	public function render ( $data = array() )
 	{
 		$data = array_merge( $data, array( 
-			'maxPriceId'      => esc_attr( $data['fields']['maxprice']['id'] ),
-			'maxPriceName'    => esc_attr( $data['fields']['maxprice']['name'] ),
-			'maxPriceValue'   => $data['fields']['maxprice']['value'],
-			'minPriceId'      => esc_attr( $data['fields']['minprice']['id'] ),
-			'minPriceName'    => esc_attr( $data['fields']['minprice']['name'] ),
-			'minPriceValue'   => $data['fields']['minprice']['value'],
-			'cityId'          => esc_attr( $data['fields']['city']['id'] ),
-			'cityName'        => esc_attr( $data['fields']['city']['name'] ),
-			'cityValue'       => esc_attr( $data['fields']['city']['value'] ),
-			'zipcodeId'       => esc_attr( $data['fields']['zipcode']['id'] ),
-			'zipcodeName'     => esc_attr( $data['fields']['zipcode']['name'] ),
-			'zipcodeValue'    => esc_attr( $data['fields']['zipcode']['value'] ),
-			'ownerTypeId'     => esc_attr( $data['fields']['ownertype']['id'] ),
-			'ownerTypeName'   => esc_attr( $data['fields']['ownertype']['name'] ),
-			'ownerTypeValue'  => $data['fields']['ownertype']['value'],
-			'maxResultsId'    => esc_attr( $data['fields']['maxresults']['id'] ),
-			'maxResultsName'  => esc_attr( $data['fields']['maxresults']['name'] ),
-			'maxResultsValue' => esc_attr( $data['fields']['maxresults']['value'] )
+			'maxPriceId'        => esc_attr( $data['fields']['maxprice']['id'] ),
+			'maxPriceName'      => esc_attr( $data['fields']['maxprice']['name'] ),
+			'maxPriceValue'     => $data['fields']['maxprice']['value'],
+			'minPriceId'        => esc_attr( $data['fields']['minprice']['id'] ),
+			'minPriceName'      => esc_attr( $data['fields']['minprice']['name'] ),
+			'minPriceValue'     => $data['fields']['minprice']['value'],
+			'cityId'            => esc_attr( $data['fields']['city']['id'] ),
+			'cityName'          => esc_attr( $data['fields']['city']['name'] ),
+			'cityValue'         => esc_attr( $data['fields']['city']['value'] ),
+			'zipcodeId'         => esc_attr( $data['fields']['zipcode']['id'] ),
+			'zipcodeName'       => esc_attr( $data['fields']['zipcode']['name'] ),
+			'zipcodeValue'      => esc_attr( $data['fields']['zipcode']['value'] ),
+			'ownerTypeId'       => esc_attr( $data['fields']['ownertype']['id'] ),
+			'ownerTypeName'     => esc_attr( $data['fields']['ownertype']['name'] ),
+			'ownerTypeValue'    => $data['fields']['ownertype']['value'],
+			'hideBrandingId'    => esc_attr( $data['fields']['hidebranding']['id'] ),
+			'hideBrandingName'  => esc_attr( $data['fields']['hidebranding']['name'] ),
+			'hideBrandingCheck' => ( $data['fields']['hidebranding']['value'] ) ? ' checked="checked"' : '',
+			'maxResultsId'      => esc_attr( $data['fields']['maxresults']['id'] ),
+			'maxResultsName'    => esc_attr( $data['fields']['maxresults']['name'] ),
+			'maxResultsValue'   => esc_attr( $data['fields']['maxresults']['value'] )
 			) );
 		return parent::render( $data );
 	}
