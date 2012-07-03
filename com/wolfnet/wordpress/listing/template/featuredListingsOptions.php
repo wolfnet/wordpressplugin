@@ -43,9 +43,9 @@
 					<table class="form-table">
 						
 						<tr>
-							<td><label for="auto_<?php echo $directionId; ?>">Direction:</label></td>
+							<td><label for="<?php echo $directionId; ?>">Direction:</label></td>
 							<td>
-								<select id="auto_<?php echo $directionId; ?>" name="autoDir" 
+								<select id="<?php echo $directionId; ?>" name="<?php echo $directionName; ?>" 
 									class="wolfnet_featuredListingsOptions_autoDirField">
 									<option value="right"<?php echo $autoDirectionRight; ?>>Left to Right</option>
 									<option value="left"<?php echo $autoDirectionLeft; ?>>Right to Left</option>

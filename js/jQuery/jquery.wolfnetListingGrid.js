@@ -92,12 +92,16 @@ if ( typeof jQuery != 'undefined' ) {
 				}
 				else {
 					
+					/*
+					
 					$grid.find( '.branding' ).imagesLoaded( function () {
 						
 						calculateItemSize();
 						$( window ).trigger( 'resize' );
 						
 					} );
+					
+					*/
 					
 				}
 				
