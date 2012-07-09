@@ -273,12 +273,12 @@
 		
 		.wolfnet_listing
 		{
-			width:      150px;
+			width:      13em;
 			float:      left;
 			margin:     0 auto 1em auto;
 			position:   relative;
 			text-align: center;
-			font-size:  11px;
+			font-size:  .8em;
 			
 			a
 			{
@@ -394,7 +394,7 @@
 		/* Visible left hotspot */
 		.scrollingHotSpotLeftVisible
 		{
-			background-image:  url('@{imagesDir}arrow_left.gif');
+			background-image: url('@{imagesDir}arrow_left.gif');
 		}
 		
 		/* Invisible right hotspot */
@@ -435,27 +435,92 @@
 	
 	&.wolfnet_listingGrid
 	{
-		text-align: center;
+		text-align: left;
 		margin:     0 auto 0 auto;
 		position:   relative;
 		left:       50%;
 		
 		.wolfnet_listing
 		{
-			left: -50%;
+			left:       -50%;
+			height:     25em;
+			text-align: left;
+			position:   relative;
+			
+			.listingImage
+			{
+				margin-bottom:    .5em;
+				border:           1px solid hsl(0, 0%, 87%);
+				background-color: #F5F5F5;
+				padding:          10px 0 10px 0;
+				
+				img
+				{
+					box-shadow:   0 5px 10px hsla(0, 0%, 60%, 0.25);
+				}
+				
+			}
+			
+			.price
+			{
+				font-size: 1.2em;
+			}
+			
+			.bed-bath
+			{
+				position: absolute;
+				top:      104px;
+				right:    0;
+				
+			}
+			
+			.location
+			{
+			}
+			
+			.address
+			{
+			}
+			
+			.branding
+			{
+				padding-top: 2em;
+				
+				.brokerLogo
+				{
+					display: block;
+					
+					img
+					{
+					}
+					
+				}
+				
+				.brandingMessage
+				{
+					display:block;
+				}
+			}
+			
 		}
 		
 	}
 	
+	.wolfnet_marketDisclaimer
+	{
+		clear:      both;
+		margin-top: 2em;
+	}
+	
 	.wolfnet_moreInfo
 	{
-		width: 100%;
-		height: 18px;
+		width:      100%;
+		height:     18px;
 		background: url('@{imagesDir}info.png') no-repeat center;
 		
 		span
 		{
-			display:none;
+			display: none;
 		}
 		
 	}

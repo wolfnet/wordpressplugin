@@ -18,14 +18,22 @@
 ?>
 
 <div id="wolfnet_listing_<?php echo $id; ?>" class="wolfnet_listing" itemscope>
-	<a href="<?php echo $url; ?>" 
-		title="<?php echo $address; ?>" target="_blank">
+	<a href="<?php echo $url; ?>" target="_blank">
 		<span class="listingImage"><img src="<?php echo $image; ?>" /></span>
 		<span class="price" itemprop="price">$<?php echo $price; ?></span>
+		<span class="bed-bath"><?php echo $bedbath; ?></span>
 		<span class="location" itemprop="locality" title="<?php echo $fullLocation; ?>">
 			<?php echo $location; ?>
 		</span>
-		<span class="bed-bath"><?php echo $bedbath; ?></span>
+		<span class="address" itemprop="street-address" title="<?php echo $fullAddress; ?>">
+			<?php echo $address; ?>
+		</span>
+		<?php if ( $branding_brokerLogo != '' || $branding_content != '' ) { ?>
+		<div class="branding">
+			<span class="brokerLogo"><img src="<?php echo $branding_brokerLogo; ?>" /></span>
+			<span class="brandingMessage"><?php echo $branding_content; ?></span>
+		</div>
+		<?php } ?>
 	</a>
 	<!-- RAW DATA ----------------------------------------------------------------------------------
 	------------------------------------------------------------------------------------------------

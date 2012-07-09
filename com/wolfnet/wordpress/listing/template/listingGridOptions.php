@@ -72,7 +72,7 @@
 		</tr>
 		
 		<tr>
-			<td><label>Hade Branding:</label></td>
+			<td><label>Hide Branding:</label></td>
 			<td>
 				<input id="<?php echo $hideBrandingId; ?>" name="<?php echo $hideBrandingName; ?>" 
 					type="checkbox" value="true" <?php echo $hideBrandingCheck; ?> />

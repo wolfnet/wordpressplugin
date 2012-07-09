@@ -2,11 +2,11 @@
 
 /* *********************************************************************************************** /
 
-Plugin Name:  WolfNet
+Plugin Name:  WolfNet IDX for WordPress
 Plugin URI:   http://wordpress.wolfnet.com
-Description:  This plugin provides WordPress integration with wolfnet.com.
-Author:       WolfNet Technologies
+Description:  This plugin provides WordPress integration with mlsfinder.com IDX search solutions.
 Version:      {X.X.X}
+Author:       WolfNet Technologies, LLC.
 Author URI:   http://www.wolfnet.com
 
 / *********************************************************************************************** */

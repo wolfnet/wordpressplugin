@@ -53,16 +53,44 @@ implements com_ajmichels_wppf_interface_iView
 		$data['id']                  = $data['listing']->getPropertyId();
 		$data['url']                 = $data['listing']->getPropertyUrl();
 		$data['address']             = $data['listing']->getDisplayAddress();
+		$data['fullAddress']         = $data['listing']->getDisplayAddress();
 		$data['image']               = $data['listing']->getThumbnailUrl();
 		$data['price']               = $data['listing']->getListingPrice();
 		$data['location']            = $data['listing']->getLocation();
-		$data['bedbath']             = $data['listing']->getBedsAndBaths();
+		$data['fullLocation']        = $data['listing']->getLocation();
+		$data['bedbath']             = $data['listing']->getBedsAndBaths( 'abbreviated' );
 		$data['branding_brokerLogo'] = $data['listing']->getBranding()->getBrokerLogo();
 		$data['branding_content']    = $data['listing']->getBranding()->getContent();
 		$data['rawData']             = $data['listing']->getMemento();
 		$data['rawData_branding']    = $data['rawData']['branding']->getMemento();
 		
+		/* Trim data to ensure that it fits in the alloted space. */
+		$len = 20;
+		$suf = '...';
+		$this->truncateString( $data['location'], $len, $suf );
+		$this->truncateString( $data['address'],  $len, $suf );
+		
 		return parent::render( $data );
+	}
+	
+	
+	/* PRIVATE METHODS ************************************************************************** */
+	
+	private function truncateString ( &$string, $length, $sufix='' )
+	{
+		if ( strlen( $string ) > $length ) {
+			
+			$substrlen = $length;
+			
+			if ( trim( $sufix ) != '' ) {
+				$substrlen = $substrlen - strlen( $sufix );
+			}
+			
+			$string = substr( $string, 0, $substrlen ) . $sufix;
+			
+		}
+		
+		return $string;
 	}
 	
 	
@@ -70,8 +98,8 @@ implements com_ajmichels_wppf_interface_iView
 	
 	/**
 	 * This method creates a way to dynamically specify which HTML template file should be used to 
-	 * render the view.  This is done because listings can be rendered in several different ways using
-	 * the same set of data.
+	 * render the view.  This is done because listings can be rendered in several different ways 
+	 * using the same set of data.
 	 * 
 	 * @param   string  $type  The template type/file to use for rendering.
 	 * @return  void
@@ -83,10 +111,16 @@ implements com_ajmichels_wppf_interface_iView
 			
 			default:
 			case 'simple':
-				$this->template = $this->formatPath( dirname( __FILE__ ) . '\template\listingSimple.php' );
+				$file = '\template\listingSimple.php';
+				break;
+			case 'grid':
+				$file = '\template\gridListing.php';
 				break;
 				
 		}
+		
+		$this->template = $this->formatPath( dirname( __FILE__ ) . $file );
+		
 	}
 	
 	

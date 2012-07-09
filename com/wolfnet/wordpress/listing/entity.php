@@ -178,18 +178,42 @@ implements com_ajmichels_wppf_interface_iEntity
 	 * @return  string
 	 *
 	 */
-	public function getBedsAndBaths ()
+	public function getBedsAndBaths ( $format = '' )
 	{
 		$bedsAndBaths = '';
-		if ( is_numeric( $this->getBedrooms() ) ) {
-			$bedsAndBaths .= $this->getBedrooms() . ' Beds';
+		
+		switch ( $format ) {
+			
+			default:
+				
+				if ( is_numeric( $this->getBedrooms() ) ) {
+					$bedsAndBaths .= $this->getBedrooms() . ' Beds';
+				}
+				if ( is_numeric( $this->getBedrooms() ) && is_numeric( $this->getBathroom() ) ) {
+					$bedsAndBaths .= ', ';
+				}
+				if ( is_numeric( $this->getBathroom() ) ) {
+					$bedsAndBaths .= $this->getBathroom() . ' Baths';
+				}
+				
+				break;
+			
+			case 'abbreviated' :
+				
+				if ( is_numeric( $this->getBedrooms() ) ) {
+					$bedsAndBaths .= $this->getBedrooms() . 'bd';
+				}
+				if ( is_numeric( $this->getBedrooms() ) && is_numeric( $this->getBathroom() ) ) {
+					$bedsAndBaths .= '/';
+				}
+				if ( is_numeric( $this->getBathroom() ) ) {
+					$bedsAndBaths .= $this->getBathroom() . 'ba';
+				}
+				
+				break;
+			
 		}
-		if ( is_numeric( $this->getBedrooms() ) && is_numeric( $this->getBathroom() ) ) {
-			$bedsAndBaths .= ', ';
-		}
-		if ( is_numeric( $this->getBathroom() ) ) {
-			$bedsAndBaths .= $this->getBathroom() . ' Baths';
-		}
+		
 		return $bedsAndBaths;
 	}
 	
