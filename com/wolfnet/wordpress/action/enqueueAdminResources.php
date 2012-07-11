@@ -43,8 +43,8 @@ extends com_ajmichels_wppf_action_action
 	{
 		$this->log( 'Action EnqueueAdminResources' );
 		$url = $this->getPluginUrl();
-		wp_enqueue_script( 'wolfnetadminjs',  $url . 'js/wolfnetAdmin.min.js' );
-		wp_enqueue_style(  'wolfnetadmincss', $url . 'css/wolfnetAdmin.min.css', array(), false, 'screen' );
+		wp_enqueue_script( 'wolfnetadminjs',  $url . 'js/wolfnetAdmin.src.js' );
+		wp_enqueue_style(  'wolfnetadmincss', $url . 'css/wolfnetAdmin.src.css', array(), false, 'screen' );
 	}
 	
 	

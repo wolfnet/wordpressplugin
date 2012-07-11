@@ -62,12 +62,17 @@
 			<td><label>Agent/Broker:</label></td>
 			<td>
 				<select id="<?php echo $ownerTypeId; ?>" name="<?php echo $ownerTypeName; ?>">
+					<option value="all">All</option>
 					<?php foreach ( $ownerTypes as $ownerType ) { ?>
 					<option value="<?php echo $ownerType['value']; ?>"<?php echo ( $ownerTypeValue == $ownerType['value'] ) ? ' selected="selected"' : '' ; ?>>
 						<?php echo $ownerType['label']; ?>
 					</option>
 					<?php } ?>
 				</select>
+				<span class="wolfnet_moreInfo">
+					If set to 'All' (the default) the grid will show listings regardless of whether
+					they are featured by either a broker or the agent.
+				</span>
 			</td>
 		</tr>
 		
@@ -76,6 +81,11 @@
 			<td>
 				<input id="<?php echo $hideBrandingId; ?>" name="<?php echo $hideBrandingName; ?>" 
 					type="checkbox" value="true" <?php echo $hideBrandingCheck; ?> />
+				<span class="wolfnet_moreInfo">
+					When checked agent/broker information assiciated with a listing will only be 
+					visible if the user hovers over the listing. When unchecked this information is 
+					displayed directly below the listing.
+				</span>
 			</td>
 		</tr>
 		
@@ -84,6 +94,11 @@
 			<td>
 				<input id="<?php echo $maxResultsId; ?>" name="<?php echo $maxResultsName; ?>" 
 					type="text" value="<?php echo $maxResultsValue; ?>" />
+				<span class="wolfnet_moreInfo">
+					The maximum number of listings which will be displayed. It is possible for there 
+					to be fewer listings displayed than the value of this field. This field is 
+					capped at 50.
+				</span>
 			</td>
 		</tr>
 		

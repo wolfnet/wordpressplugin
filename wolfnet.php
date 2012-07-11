@@ -111,10 +111,10 @@ implements com_ajmichels_common_iSingleton
 	/* Register Actions with the Action Manager */
 	protected function actions ()
 	{
-		$this->am->register( $this->sf->getBean( 'EnqueueResources' ),      array( 'init' ) );
+		$this->am->register( $this->sf->getBean( 'EnqueueResources' ),      array( 'wp_enqueue_scripts' ) );
 		$this->am->register( $this->sf->getBean( 'CreateAdminPages' ),      array( 'admin_menu' ) );
 		$this->am->register( $this->sf->getBean( 'RegisterWidgets' ),       array( 'widgets_init' ) );
-		$this->am->register( $this->sf->getBean( 'EnqueueAdminResources' ), array( 'admin_init' ) );
+		$this->am->register( $this->sf->getBean( 'EnqueueAdminResources' ), array( 'admin_enqueue_scripts' ) );
 	}
 	
 	
