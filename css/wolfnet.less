@@ -303,7 +303,7 @@
 				
 				img
 				{
-					border: none;
+					border: 1px solid #F2F2F2;
 					height: 75px;
 				}
 				
@@ -457,6 +457,7 @@
 				img
 				{
 					box-shadow:   0 5px 10px hsla(0, 0%, 60%, 0.25);
+					border: 1px solid #EBEBEB;
 				}
 				
 			}
@@ -572,12 +573,15 @@
 	content: "";
 	display: table;
 }
+
 .clearfix:after
 {
 	clear: both;
 }
+
 .clearfix
 {
-	*zoom: 1;
+	/* *zoom: 1; */
 	float:none !important;
+	clear:both;
 }

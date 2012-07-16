@@ -17,8 +17,10 @@
 
 <div id="<?php echo $instanceId; ?>" class="wolfnet_widget wolfnet_listingGrid">
 	<?php echo ( isset($listingContent) ) ? $listingContent : 'No Listings to Display.'; ?>
-	<div class="clearfix"></div>
 </div>
+
+<div class="clearfix"></div>
+
 <div class="wolfnet_marketDisclaimer">
 	<?php echo $marketDisclaimer; ?>
 </div>

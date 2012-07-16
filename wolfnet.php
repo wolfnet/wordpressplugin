@@ -70,7 +70,7 @@ implements com_ajmichels_common_iSingleton
 		$sfXml = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'com/wolfnet/wordpress/phpSpring.xml';
 		$sfProps = array( 
 					'pluginUrl'          => $this->getPluginUrl(),
-					'webServiceDomain'   => 'http://aj.cfdevel.wnt/com/services/index.cfm',
+					'webServiceDomain'   => 'http://aj.cfdevel.wnt/com/mlsfinder/services/index.cfm',
 					'pluginMajorVersion' => $this->majorVersion,
 					'pluginMinorVersion' => $this->minorVersion,
 					'pluginVersion'      => $this->version

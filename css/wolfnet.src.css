@@ -201,7 +201,7 @@
   text-align: center;
 }
 .wolfnet_widget.wolfnet_featuredListings .wolfnet_listing .listingImage img, .wolfnet_widget.wolfnet_listingGrid .wolfnet_listing .listingImage img {
-  border: none;
+  border: 1px solid #F2F2F2;
   height: 75px;
 }
 .wolfnet_widget.wolfnet_featuredListings .wolfnet_listing .price, .wolfnet_widget.wolfnet_listingGrid .wolfnet_listing .price {
@@ -318,6 +318,7 @@
 }
 .wolfnet_widget.wolfnet_listingGrid .wolfnet_listing .listingImage img {
   box-shadow: 0 5px 10px rgba(153, 153, 153, 0.25);
+  border: 1px solid #EBEBEB;
 }
 .wolfnet_widget.wolfnet_listingGrid .wolfnet_listing .price {
   font-size: 1.2em;
@@ -385,6 +386,8 @@
   clear: both;
 }
 .clearfix {
-  *zoom: 1;
+  /* *zoom: 1; */
+
   float: none !important;
+  clear: both;
 }

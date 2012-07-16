@@ -32,7 +32,8 @@ if ( typeof jQuery != 'undefined' ) {
 				
 				$grid.append( '<div class="clearfix" />' );
 				
-				var calculateItemSize = function () {
+				var calculateItemSize = function ()
+				{
 					
 					maxHeight = -1;
 					maxWidth  = -1;
@@ -54,15 +55,42 @@ if ( typeof jQuery != 'undefined' ) {
 				
 				calculateItemSize();
 				
+				var numColumns = 1;
+				
+				var calculateIdealMargin = function ( container, item, minMargin, modifier )
+				{
+					    numColumns    = Math.floor( container / item ) + modifier;
+					var leftOverSpace = container - ( item * numColumns );
+					var marginPerItem = leftOverSpace / numColumns;
+					
+					/* Does work in <=IE8, but avoids single columns */
+					var idealMargin   = marginPerItem / 2; 
+					
+					/* Works in every browser but has single columns */
+					//var idealMargin   = Math.ceil( marginPerItem / 2 ); 
+					
+					if ( idealMargin == -1 ) {
+						idealMargin = 0;
+					}
+					
+					var itemsWithMargins = ( ( idealMargin * 2 ) + item ) * numColumns;
+					
+					var validMargins = ( idealMargin < minMargin || itemsWithMargins > container );
+					
+					if ( validMargins && numColumns > 1 ) {
+						idealMargin = calculateIdealMargin( container, item, minMargin, modifier - 1 );
+					}
+					
+					return idealMargin;
+					
+				}
+				
 				/* When the window is resized calculate the appropriate margins for the grid items to 
 				 * ensure that the grid and its items are centered. */
 				var onResize = function ()
 				{
 					
-					var itemWidth   = $grid.find( listingCls + ':first' ).width();
-					var gridWidth   = $grid.width();
-					var numColumns  = Math.floor( gridWidth / itemWidth );
-					var marginWidth = Math.floor( ( ( ( gridWidth % itemWidth ) - 1 ) / numColumns ) / 2 );
+					var marginWidth = calculateIdealMargin( $grid.width(), $grid.find( listingCls + ':first' ).width(), 2, 0 );
 					
 					$grid.find( listingCls ).css( 'margin-right', marginWidth );
 					$grid.find( listingCls ).css( 'margin-left',  marginWidth );

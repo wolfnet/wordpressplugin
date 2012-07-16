@@ -54,7 +54,7 @@ implements com_ajmichels_wppf_interface_iView
 		$data['url']                 = $data['listing']->getPropertyUrl();
 		$data['address']             = $data['listing']->getDisplayAddress();
 		$data['fullAddress']         = $data['listing']->getDisplayAddress();
-		$data['image']               = $data['listing']->getThumbnailUrl();
+		$data['image']               = $data['listing']->getPhotoUrl();
 		$data['price']               = $data['listing']->getListingPrice();
 		$data['location']            = $data['listing']->getLocation();
 		$data['fullLocation']        = $data['listing']->getLocation();

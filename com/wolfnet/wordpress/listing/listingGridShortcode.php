@@ -62,7 +62,7 @@ extends com_ajmichels_wppf_shortcode_shortcode
 		'maxprice'     => '', 
 		'city'         => '', 
 		'zipcode'      => '', 
-		'ownertype'    => 'agent_broker', 
+		'ownertype'    => 'all', 
 		'hidebranding' => false,
 		'maxresults'   => 50 
 		);

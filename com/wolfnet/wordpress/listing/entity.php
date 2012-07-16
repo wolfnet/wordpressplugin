@@ -80,6 +80,13 @@ implements com_ajmichels_wppf_interface_iEntity
 	
 	/**
 	 * 
+	 * @type  string
+	 * 
+	 */
+	private $photo_url       = '';
+	
+	/**
+	 * 
 	 * @type  numeric
 	 * 
 	 */
@@ -121,6 +128,7 @@ implements com_ajmichels_wppf_interface_iEntity
 		$this->city            = $data['city'];
 		$this->state           = $data['state'];
 		$this->thumbnail_url   = $data['thumbnail_url'];
+		$this->photo_url   = $data['photo_url'];
 		$this->bathroom        = $data['bathroom'];
 		$this->bedrooms        = $data['bedrooms'];
 		$this->branding        = $data['branding'];
@@ -146,6 +154,7 @@ implements com_ajmichels_wppf_interface_iEntity
 			'city'            => $this->city,
 			'state'           => $this->state,
 			'thumbnail_url'   => $this->thumbnail_url,
+			'photo_url'       => $this->photo_url,
 			'bathroom'        => $this->bathroom,
 			'bedrooms'        => $this->bedrooms,
 			'branding'        => $this->branding
@@ -319,6 +328,18 @@ implements com_ajmichels_wppf_interface_iEntity
 	public function getThumbnailUrl ()
 	{
 		return $this->thumbnail_url;
+	}
+	
+	
+	/**
+	 * GETTER: This method is a getter for the thumbnail_url property.
+	 * 
+	 * @return  string
+	 * 
+	 */
+	public function getPhotoUrl ()
+	{
+		return $this->photo_url;
 	}
 	
 	

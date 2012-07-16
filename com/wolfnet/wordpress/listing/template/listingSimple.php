@@ -37,6 +37,7 @@
 	city:             <?php echo $rawData['city']                . "\n"; ?>
 	state:            <?php echo $rawData['state']               . "\n"; ?>
 	thumbnail_url:    <?php echo $rawData['thumbnail_url']       . "\n"; ?>
+	photo_url:        <?php echo $rawData['photo_url']           . "\n"; ?>
 	bathroom:         <?php echo $rawData['bathroom']            . "\n"; ?>
 	bedrooms:         <?php echo $rawData['bedrooms']            . "\n"; ?>
 	branding:         <?php echo $rawData['bedrooms']            . "\n"; ?>
