@@ -30,7 +30,7 @@ extends com_ajmichels_wppf_shortcode_shortcode
 	 * @type  string
 	 * 
 	 */
-	public $tag = 'WolfNetListingGrid';
+	public $tag = 'WolfNetListingGrid,wolfnetlistinggrid,WOLFNETLISTINGGRID,wnt_grid';
 	
 	
 	/**

@@ -32,7 +32,7 @@ extends com_ajmichels_wppf_shortcode_shortcode
 	 *        request.
 	 * 
 	 */
-	public $tag = 'WolfNetListingQuickSearch';
+	public $tag = 'WolfNetListingQuickSearch,wolfnetlistingquicksearch,WOLFNETLISTINGQUICKSEARCH,wnt_search';
 	
 	
 	/**
