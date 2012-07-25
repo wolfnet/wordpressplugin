@@ -76,9 +76,6 @@ implements com_ajmichels_wppf_interface_iView
 			'ownerTypeId'       => esc_attr( $data['fields']['ownertype']['id'] ),
 			'ownerTypeName'     => esc_attr( $data['fields']['ownertype']['name'] ),
 			'ownerTypeValue'    => $data['fields']['ownertype']['value'],
-			'hideBrandingId'    => esc_attr( $data['fields']['hidebranding']['id'] ),
-			'hideBrandingName'  => esc_attr( $data['fields']['hidebranding']['name'] ),
-			'hideBrandingCheck' => ( $data['fields']['hidebranding']['value'] ) ? ' checked="checked"' : '',
 			'maxResultsId'      => esc_attr( $data['fields']['maxresults']['id'] ),
 			'maxResultsName'    => esc_attr( $data['fields']['maxresults']['name'] ),
 			'maxResultsValue'   => esc_attr( $data['fields']['maxresults']['value'] )

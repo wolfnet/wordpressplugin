@@ -31,9 +31,7 @@
 		
 		( function ( $ ) {
 			
-			jQuery( '#<?php echo $instanceId; ?>' ).wolfnetListingGrid( {
-				hideBranding: <?php echo ( $hidebranding ) ? 'true' : 'false'; ?>
-			} );
+			jQuery( '#<?php echo $instanceId; ?>' ).wolfnetListingGrid();
 			
 		} )( jQuery ); /* END: jQuery IIFE */
 		

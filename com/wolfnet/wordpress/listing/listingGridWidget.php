@@ -35,7 +35,6 @@ extends com_wolfnet_wordpress_abstract_widget
 		'city'         => '', 
 		'zipcode'      => '', 
 		'ownertype'    => 'agent_broker', 
-		'hidebranding' => false,
 		'maxresults'   => 50 
 		);
 	

@@ -77,19 +77,6 @@
 		</tr>
 		
 		<tr>
-			<td><label>Hide Branding:</label></td>
-			<td>
-				<input id="<?php echo $hideBrandingId; ?>" name="<?php echo $hideBrandingName; ?>" 
-					type="checkbox" value="true" <?php echo $hideBrandingCheck; ?> />
-				<span class="wolfnet_moreInfo">
-					When checked agent/broker information assiciated with a listing will only be 
-					visible if the user hovers over the listing. When unchecked this information is 
-					displayed directly below the listing.
-				</span>
-			</td>
-		</tr>
-		
-		<tr>
 			<td><label>Max Results:</label></td>
 			<td>
 				<input id="<?php echo $maxResultsId; ?>" name="<?php echo $maxResultsName; ?>" 

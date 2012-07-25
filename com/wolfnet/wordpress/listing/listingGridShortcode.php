@@ -63,7 +63,6 @@ extends com_ajmichels_wppf_shortcode_shortcode
 		'city'         => '', 
 		'zipcode'      => '', 
 		'ownertype'    => 'all', 
-		'hidebranding' => false,
 		'maxresults'   => 50 
 		);
 	

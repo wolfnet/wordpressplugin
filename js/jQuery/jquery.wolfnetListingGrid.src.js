@@ -19,7 +19,7 @@ if ( typeof jQuery != 'undefined' ) {
 		
 		$.fn.wolfnetListingGrid = function ( options ) {
 			
-			var option = $.extend( { hideBranding:true }, options );
+			var option = $.extend( {}, options );
 			
 			return this.each( function () {
 				
@@ -100,38 +100,6 @@ if ( typeof jQuery != 'undefined' ) {
 				$( window ).resize( onResize );
 				
 				$( window ).trigger( 'resize' );
-					
-				if ( option.hideBranding ) {
-					
-					var $branding = $grid.find( '.branding' );
-					
-					$branding.hide();
-					$branding.each( function () {
-						var $branding = $( this );
-						$( $branding ).parent().tooltip( {
-							showURL: false,
-							bodyHandler: function() {
-								return $( $branding.html() ).show();
-							}
-						} );
-					} );
-					
-					
-				}
-				else {
-					
-					/*
-					
-					$grid.find( '.branding' ).imagesLoaded( function () {
-						
-						calculateItemSize();
-						$( window ).trigger( 'resize' );
-						
-					} );
-					
-					*/
-					
-				}
 				
 			} ); /* END: for each loop of elements the plugin has been applied to. */
 			
