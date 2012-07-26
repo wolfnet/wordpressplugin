@@ -115,6 +115,7 @@ implements com_ajmichels_common_iSingleton
 		$this->am->register( $this->sf->getBean( 'CreateAdminPages' ),      array( 'admin_menu' ) );
 		$this->am->register( $this->sf->getBean( 'RegisterWidgets' ),       array( 'widgets_init' ) );
 		$this->am->register( $this->sf->getBean( 'EnqueueAdminResources' ), array( 'admin_enqueue_scripts' ) );
+		$this->am->register( $this->sf->getBean( 'FooterDisclaimer' ),      array( 'wp_footer' ) );
 	}
 	
 	

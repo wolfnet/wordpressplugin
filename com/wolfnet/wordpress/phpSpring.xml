@@ -122,9 +122,6 @@
 		<property name="ListingView">
 			<ref bean="ListingView" />
 		</property>
-		<property name="MarketDisclaimerService">
-			<ref bean="MarketDisclaimerService" />
-		</property>
 	</bean>
 	
 	<bean id="ListingGridOptionsView" class="com_wolfnet_wordpress_listing_listingGridOptionsView" singleton="false" />
@@ -158,6 +155,12 @@
 	<bean id="EnqueueAdminResources" class="com_wolfnet_wordpress_action_enqueueAdminResources">
 		<property name="pluginUrl">
 			<value>${pluginUrl}</value>
+		</property>
+	</bean>
+	
+	<bean id="FooterDisclaimer" class="com_wolfnet_wordpress_action_footerDisclaimer">
+		<property name="MarketDisclaimerService">
+			<ref bean="MarketDisclaimerService" />
 		</property>
 	</bean>
 	

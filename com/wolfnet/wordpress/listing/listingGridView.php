@@ -29,14 +29,6 @@ implements com_ajmichels_wppf_interface_iView
 	 */
 	public $template;
 	
-	/**
-	 * This property holds a reference to the Market Disclaimer Service object.
-	 * 
-	 * @type  com_wolfnet_wordpress_market_disclaimer_service  
-	 * 
-	 */
-	private $marketDisclaimerService;
-	
 	
 	/* CONSTRUCTOR ****************************************************************************** */
 	
@@ -71,7 +63,7 @@ implements com_ajmichels_wppf_interface_iView
 			$data['listingContent'] = $this->renderListings( $data['listings'] );
 		}
 		
-		$data['marketDisclaimer'] = $this->getMarketDisclaimerService()->getDisclaimerByType()->getContent();
+		$_REQUEST['wolfnet_includeDisclaimer'] = true; // For later use in the site footer.
 		$data['instanceId']	= uniqid( 'wolfnet_listingGrid_' );
 		return parent::render( $data );
 	}
@@ -99,30 +91,6 @@ implements com_ajmichels_wppf_interface_iView
 	
 	
 	/* ACCESSORS ******************************************************************************** */
-	
-	/**
-	 * GETTER:  This method is a getter for the marketDisclaimerService property.
-	 * 
-	 * @return  com_wolfnet_wordpress_market_disclaimer_service
-	 * 
-	 */
-	public function getMarketDisclaimerService ()
-	{
-		return $this->marketDisclaimerService;
-	}
-	
-	
-	/**
-	 * SETTER:  This method is a setter for the marketDisclaimerService property.
-	 * 
-	 * @param   com_wolfnet_wordpress_market_disclaimer_service  $service
-	 * @return  void
-	 * 
-	 */
-	public function setMarketDisclaimerService ( com_wolfnet_wordpress_market_disclaimer_service $service )
-	{
-		$this->marketDisclaimerService = $service;
-	}
 	
 	/**
 	 * GETTER: This method is a getter for the listingView property.

@@ -21,10 +21,6 @@
 
 <div class="clearfix"></div>
 
-<div class="wolfnet_marketDisclaimer">
-	<?php echo $marketDisclaimer; ?>
-</div>
-
 <script type="text/javascript">
 	
 	if ( typeof jQuery != 'undefined' ) {
