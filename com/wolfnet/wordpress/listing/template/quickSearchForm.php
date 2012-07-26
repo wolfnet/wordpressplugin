@@ -104,7 +104,7 @@
 		
 		( function ( $ ) {
 			
-			jQuery( '#<?php echo $instanceId; ?>' ).wolfnetQuickSearch();
+			$( '#<?php echo $instanceId; ?>' ).wolfnetQuickSearch();
 			
 		} )( jQuery ); /* END: jQuery IIFE */
 		

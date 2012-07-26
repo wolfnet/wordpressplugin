@@ -27,7 +27,7 @@
 		
 		( function ( $ ) {
 			
-			jQuery( '#<?php echo $instanceId; ?>' ).wolfnetListingGrid();
+			$( '#<?php echo $instanceId; ?>' ).wolfnetListingGrid();
 			
 		} )( jQuery ); /* END: jQuery IIFE */
 		
