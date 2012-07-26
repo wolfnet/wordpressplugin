@@ -57,8 +57,6 @@ implements com_ajmichels_common_iSingleton
 		$this->log( 'Init wolfnet Plugin' );
 		parent::__construct();
 		
-		$this->setPluginPath( __FILE__ );
-		
 		/*	If the debug parameter is passed over the url, output the log. */
 		if ( array_key_exists( 'debug', $_REQUEST ) ) {
 			$this->loggerSetting( 'enabled', true );
