@@ -285,7 +285,7 @@
 			float:      left;
 			margin:     0 auto 1em auto;
 			position:   relative;
-			text-align: center;
+			text-align: left;
 			font-size:  .8em;
 			
 			a
@@ -305,20 +305,25 @@
 				height:     @imageHeight;
 				display:    block;
 				overflow:   hidden;
-				padding:    0;
 				margin:     0;
 				text-align: center;
+				margin-bottom:    .5em;
+				border:           1px solid hsl(0, 0%, 87%);
+				background-color: #F5F5F5;
+				padding:          10px 0 10px 0;
 				
 				img
 				{
-					border: 1px solid #F2F2F2;
 					height: @imageHeight;
+					box-shadow:   0 5px 10px hsla(0, 0%, 60%, 0.25);
+					border: 1px solid #EBEBEB;
 				}
 				
 			}
 			
 			.price
 			{
+				font-size: 1.2em;
 				font-weight: bold;
 				display:     block;
 			}
@@ -331,10 +336,14 @@
 			.bed-bath
 			{
 				display: block;
+				position: absolute;
+				top:      @imageHeight + 30px;
+				right:    0;
 			}
 			
 			.branding
 			{
+				display: none;
 				
 				.brokerLogo
 				{
@@ -357,7 +366,6 @@
 		overflow:    hidden;
 		white-space: nowrap;
 		height:      140px;
-		text-align:  center;
 		
 		.scrollingHotSpotLeft,
 		.scrollingHotSpotRight
@@ -455,44 +463,9 @@
 			text-align: left;
 			position:   relative;
 			
-			.listingImage
-			{
-				margin-bottom:    .5em;
-				border:           1px solid hsl(0, 0%, 87%);
-				background-color: #F5F5F5;
-				padding:          10px 0 10px 0;
-				
-				img
-				{
-					box-shadow:   0 5px 10px hsla(0, 0%, 60%, 0.25);
-					border: 1px solid #EBEBEB;
-				}
-				
-			}
-			
-			.price
-			{
-				font-size: 1.2em;
-			}
-			
-			.bed-bath
-			{
-				position: absolute;
-				top:      @imageHeight + 30px;
-				right:    0;
-				
-			}
-			
-			.location
-			{
-			}
-			
-			.address
-			{
-			}
-			
 			.branding
 			{
+				display: block;
 				padding-top: 2em;
 				
 				.brokerLogo

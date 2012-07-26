@@ -113,9 +113,6 @@ implements com_ajmichels_wppf_interface_iView
 			case 'simple':
 				$file = '\template\listingSimple.php';
 				break;
-			case 'grid':
-				$file = '\template\gridListing.php';
-				break;
 				
 		}
 		

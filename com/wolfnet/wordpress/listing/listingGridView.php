@@ -91,7 +91,7 @@ implements com_ajmichels_wppf_interface_iView
 		$listingContent = '';
 		foreach ( $listings as $listing ) {
 			$view = $this->getListingView();
-			$view->setTemplate( 'grid' );
+			$view->setTemplate( 'simple' );
 			$listingContent .= $view->render( array( 'listing' => $listing ) );
 		}
 		return $listingContent;
