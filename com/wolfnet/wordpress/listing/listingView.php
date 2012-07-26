@@ -63,6 +63,13 @@ implements com_ajmichels_wppf_interface_iView
 		$data['branding_content']    = $data['listing']->getBranding()->getContent();
 		$data['rawData']             = $data['listing']->getMemento();
 		$data['rawData_branding']    = $data['rawData']['branding']->getMemento();
+		$data['listing_class']       = '';
+		
+		if ( trim( $data['branding_brokerLogo'] ) != '' || trim( $data['branding_content'] ) != '' ) {
+			
+			$data['listing_class'] = ' wolfnet_branded';
+			
+		}
 		
 		/* Trim data to ensure that it fits in the alloted space. */
 		$len = 20;

@@ -17,7 +17,7 @@
 
 ?>
 
-<div id="wolfnet_listing_<?php echo $id; ?>" class="wolfnet_listing" itemscope>
+<div id="wolfnet_listing_<?php echo $id; ?>" class="wolfnet_listing<?php echo $listing_class; ?>" itemscope>
 	<a href="<?php echo $url; ?>">
 		<span class="listingImage"><img src="<?php echo $image; ?>" /></span>
 		<span class="price" itemprop="price">$<?php echo $price; ?></span>

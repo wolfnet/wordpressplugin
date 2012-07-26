@@ -8,12 +8,13 @@
  * 
  */
 
-@imagesDir:      '../img/';
-@imageHeight:    95px;
-@propertyWidth:  150px;
-@propertyHeight: 300px;
-@gradientColor1: #FFFFFF;
-@gradientColor2: #E2E2E2;
+@imagesDir:             '../img/';
+@imageHeight:           95px;
+@propertyWidth:         150px;
+@propertyHeight:        185px;
+@propertyHeightBranded: 300px;
+@gradientColor1:        #FFFFFF;
+@gradientColor2:        #E2E2E2;
 
 .wolfnet_widget
 {
@@ -462,6 +463,11 @@
 			height:     @propertyHeight;
 			text-align: left;
 			position:   relative;
+			
+			&.wolfnet_branded
+			{
+				height: @propertyHeightBranded;
+			}
 			
 			.branding
 			{
