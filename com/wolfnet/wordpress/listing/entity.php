@@ -194,6 +194,21 @@ implements com_ajmichels_wppf_interface_iEntity
 		switch ( $format ) {
 			
 			default:
+			case 'full':
+				
+				if ( is_numeric( $this->getBedrooms() ) ) {
+					$bedsAndBaths .= $this->getBedrooms() . ' Bed Rooms';
+				}
+				if ( is_numeric( $this->getBedrooms() ) && is_numeric( $this->getBathroom() ) ) {
+					$bedsAndBaths .= ' & ';
+				}
+				if ( is_numeric( $this->getBathroom() ) ) {
+					$bedsAndBaths .= $this->getBathroom() . ' Bath Rooms';
+				}
+				
+				break;
+			
+			case 'short':
 				
 				if ( is_numeric( $this->getBedrooms() ) ) {
 					$bedsAndBaths .= $this->getBedrooms() . ' Beds';
@@ -224,6 +239,33 @@ implements com_ajmichels_wppf_interface_iEntity
 		}
 		
 		return $bedsAndBaths;
+	}
+	
+	
+	/**
+	 * This method combines all address information into a full address.
+	 * 
+	 * @return  string
+	 * 
+	 */
+	public function getFullAddress ()
+	{
+		$address = $this->getDisplayAddress();
+		
+		if ( $this->getCity() != '' && $address != '' ) {
+			$address .= ', ';
+		}
+		
+		$address .= $this->getCity();
+		
+		if ( $this->getState() != '' && $address != '' ) {
+			$address .= ', ';
+		}
+		
+		$address .= $this->getState();
+		
+		return $address;
+		
 	}
 	
 	

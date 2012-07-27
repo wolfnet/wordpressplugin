@@ -53,12 +53,13 @@ implements com_ajmichels_wppf_interface_iView
 		$data['id']                  = $data['listing']->getPropertyId();
 		$data['url']                 = $data['listing']->getPropertyUrl();
 		$data['address']             = $data['listing']->getDisplayAddress();
-		$data['fullAddress']         = $data['listing']->getDisplayAddress();
+		$data['address_full']        = $data['listing']->getFullAddress();
 		$data['image']               = $data['listing']->getPhotoUrl();
 		$data['price']               = $data['listing']->getListingPrice();
 		$data['location']            = $data['listing']->getLocation();
 		$data['fullLocation']        = $data['listing']->getLocation();
 		$data['bedbath']             = $data['listing']->getBedsAndBaths( 'abbreviated' );
+		$data['bedbath_full']        = $data['listing']->getBedsAndBaths( 'full' );
 		$data['branding_brokerLogo'] = $data['listing']->getBranding()->getBrokerLogo();
 		$data['branding_content']    = $data['listing']->getBranding()->getContent();
 		$data['rawData']             = $data['listing']->getMemento();

@@ -21,12 +21,15 @@
 	<a href="<?php echo $url; ?>">
 		<span class="listingImage"><img src="<?php echo $image; ?>" /></span>
 		<span class="price" itemprop="price">$<?php echo $price; ?></span>
-		<span class="bed-bath"><?php echo $bedbath; ?></span>
-		<span class="location" itemprop="locality" title="<?php echo $fullLocation; ?>">
+		<span class="bed-bath" title="<?php echo $bedbath_full; ?>"><?php echo $bedbath; ?></span>
+		<span class="location" itemprop="locality">
 			<?php echo $location; ?>
 		</span>
-		<span class="address" itemprop="street-address" title="<?php echo $fullAddress; ?>">
+		<span class="address" title="<?php echo $address_full; ?>">
 			<?php echo $address; ?>
+		</span>
+		<span class="full_address" itemprop="street-address" style="display:none;">
+			<?php echo $address_full; ?>
 		</span>
 		<?php if ( $branding_brokerLogo != '' || $branding_content != '' ) { ?>
 		<div class="branding">
