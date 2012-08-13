@@ -7,11 +7,11 @@
 	
 	<property file="build.properties" />
 	
-	<property name="tool.yuicompressor" value="${basedir}/ant/yuicompressor-2.4.5.jar"  />
-	<property name="tool.closure"       value="${basedir}/ant/closure/compiler.jar" />
-	<property name="tool.ant-contrib"   value="${basedir}/ant/ant-contrib/lib/ant-contrib.jar" />
-	<property name="tool.rhino"         value="${basedir}/ant/rhino.jar" />
-	<property name="tool.less"          value="${basedir}/ant/less-rhino-1.1.5.js" />
+	<property name="tool.yuicompressor" value="${basedir}/.ant/yuicompressor-2.4.5.jar"  />
+	<property name="tool.closure"       value="${basedir}/.ant/closure/compiler.jar" />
+	<property name="tool.ant-contrib"   value="${basedir}/.ant/ant-contrib/lib/ant-contrib.jar" />
+	<property name="tool.rhino"         value="${basedir}/.ant/rhino.jar" />
+	<property name="tool.less"          value="${basedir}/.ant/less-rhino-1.1.5.js" />
 	<property name="buildName"          value="wolfnet" />
 	<property name="buildDir"           value="../${buildName}" />
 	<property name="testDir"            value="../${buildName}Test" />
