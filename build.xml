@@ -24,6 +24,7 @@
 	<property name="absBuild"           location="${buildDir}" />
 	
 	
+	<!-- Define the Java Library for the AntContrib project -->
 	<taskdef resource="net/sf/antcontrib/antcontrib.properties">
 		<classpath>
 			<pathelement location="${tool.ant-contrib}" />
@@ -31,6 +32,7 @@
 	</taskdef>
 	
 	
+	<!-- Define the Java Library for the Closure Compiler -->
 	<taskdef name="jscomp" classname="com.google.javascript.jscomp.ant.CompileTask">
 		<classpath>
 			<pathelement location="${tool.closure}" />
@@ -38,10 +40,31 @@
 	</taskdef>
 	
 	
-	<target name="build">
-		<clean-for-build />
-		
+	<target name="compile" depends="compile-less">
+	</target>
+	
+	
+	<target name="compile-less">
 		<compile-less />
+	</target>
+	
+	
+	<target name="minify" depends="minify-css,minify-javascript">
+	</target>
+	
+	
+	<target name="minify-css" depends="compile-less">
+		<min-css />
+	</target>
+	
+	
+	<target name="minify-javascript">
+		<min-js-closure />
+	</target>
+	
+	
+	<target name="build" depends="minify">
+		<clean-for-build />
 		
 		<echo>Creating Build Directory: ${buildDir}</echo>
 		<copy todir="${buildDir}">
@@ -55,6 +78,8 @@
 				<exclude name="ant/" />
 				<exclude name="**/*.less" />
 				<exclude name="xml/*.xml" />
+				<exclude name=".ant/" />
+				<exclude name=".gitconfig" />
 			</fileset>
 		</copy>
 		
@@ -124,8 +149,6 @@
 	<macrodef name="prep-for-package">
 		<sequential>
 			<!-- Minify Source Code -->
-			<min-css />
-			<min-js-closure />
 			<!-- Use min files instead of src files -->
 			<echo>Use Minified Files</echo>
 			<replace dir="${buildDir}">
@@ -168,7 +191,7 @@
 		<sequential>
 			<echo>Minifiying CSS Files</echo>
 			<apply executable="java" parallel="false">
-				<fileset dir="${buildDir}/" >
+				<fileset dir="${basedir}/" >
 					<include name="${dir.css}/**/*.src.css" />
 					<exclude name="${dir.css}/**/*.min.css" />
 				</fileset>
@@ -178,7 +201,7 @@
 				<arg line="--line-break" />
 				<arg line="4000" />
 				<arg line="-o" />
-				<mapper type="glob" from="*.src.css" to="${buildDir}/*.min.css" />
+				<mapper type="glob" from="*.src.css" to="${basedir}/*.min.css" />
 				<targetfile />
 			</apply>
 		</sequential>
@@ -190,7 +213,7 @@
 		<sequential>
 			<echo>Minifiying JavaScript Files</echo>
 			<apply executable="java" parallel="false">
-				<fileset dir="${buildDir}/">
+				<fileset dir="${basedir}/">
 					<include name="${dir.js}/**/*.src.js" />
 					<exclude name="${dir.js}/**/*.min.js" />
 				</fileset>
@@ -200,7 +223,7 @@
 				<arg line="--line-break" />
 				<arg line="4000" />
 				<arg line="-o" />
-				<mapper type="glob" from="*.src.js" to="${buildDir}/*.min.js" />
+				<mapper type="glob" from="*.src.js" to="${basedir}/*.min.js" />
 				<targetfile />
 			</apply>
 		</sequential>
@@ -212,7 +235,7 @@
 		<sequential>
 			<echo>Minifiying JavaScript Files</echo>
 			<apply executable="java" parallel="false">
-				<fileset dir="${buildDir}/">
+				<fileset dir="${basedir}/">
 					<include name="${dir.js}/**/*.src.js" />
 					<exclude name="${dir.js}/**/*.min.js" />
 				</fileset>
@@ -221,7 +244,7 @@
 				<arg line="--js" />
 				<srcfile />
 				<arg line="--js_output_file" />
-				<mapper type="glob" from="*.src.js" to="${buildDir}/*.min.js" />
+				<mapper type="glob" from="*.src.js" to="${basedir}/*.min.js" />
 				<targetfile />
 			</apply>
 		</sequential>

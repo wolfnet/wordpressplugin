@@ -1,7 +1,6 @@
-
+.gitconfig
 /build.properties
 /LessCompilerOutput.txt
-/css/wolfnet.css
-/css/wolfnetAdmin.css
-/css/wolfnetAdmin.src.css
-/css/wolfnet.src.css
+*wolfnet*.css
+*.min.css
+*.min.js
