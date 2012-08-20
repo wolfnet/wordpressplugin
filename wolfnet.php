@@ -12,9 +12,8 @@ Author URI:   http://www.wolfnet.com
 / *********************************************************************************************** */
 
 /* Include and Initialize Class Autoloader */
-$autoLoaderPath = '\com\ajmichels\common\autoLoader.php';
-require_once( dirname(__FILE__) . str_replace( '\\', DIRECTORY_SEPARATOR, $autoLoaderPath ) );
-com_ajmichels_common_autoLoader::getInstance( dirname(__FILE__) );
+require_once( 'com/ajmichels/common/autoLoader.php' );
+com_ajmichels_common_autoLoader::getInstance( dirname( __FILE__ ) );
 
 /**
  * 
