@@ -44,8 +44,8 @@ implements com_ajmichels_common_iSingleton
 	
 	/* PROPERTIES ******************************************************************************* */
 	
-	public $majorVersion = {majorVersion};
-	public $minorVersion = {minorVersion};
+	public $majorVersion = '{majorVersion}';
+	public $minorVersion = '{minorVersion}';
 	public $version      = '{X.X.X}';
 	
 	
