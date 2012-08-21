@@ -73,12 +73,21 @@ extends com_ajmichels_wppf_action_action
 		$url = $this->getPluginUrl();
 		
 		add_menu_page(
-			'WolfNet Settings', 
-			'WolfNet Settings', 
+			'WolfNet', 
+			'WolfNet', 
 			'administrator', 
 			'wolfnet_plugin_settings', 
-			array( &$this, 'pluginSettingsPage' ),
+			null,
 			$url . '/img/wp_wolfnet_nav.png'
+		);
+		
+		add_submenu_page(
+			'wolfnet_plugin_settings', 
+			'General Settings', 
+			'General Settings', 
+			'administrator', 
+			'wolfnet_plugin_settings', 
+			array( &$this, 'pluginSettingsPage' )
 		);
 		
 		add_submenu_page(
