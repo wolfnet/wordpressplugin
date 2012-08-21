@@ -108,6 +108,10 @@
 		</property>
 	</bean>
 	
+	<bean id="PluginInstructionsView" class="com_wolfnet_wordpress_admin_pluginInstructionsView" singleton="false" />
+	
+	<bean id="SearchManagerView" class="com_wolfnet_wordpress_admin_searchManagerView" singleton="false" />
+	
 	<bean id="ListingView" class="com_wolfnet_wordpress_listing_listingView" singleton="false" />
 	
 	<bean id="FeaturedListingsView" class="com_wolfnet_wordpress_listing_featuredListingsView" singleton="false">
@@ -144,6 +148,12 @@
 	<bean id="CreateAdminPages" class="com_wolfnet_wordpress_action_createAdminPages">
 		<property name="PluginSettingsView">
 			<ref bean="PluginSettingsView" />
+		</property>
+		<property name="PluginInstructionsView">
+			<ref bean="PluginInstructionsView" />
+		</property>
+		<property name="SearchManagerView">
+			<ref bean="SearchManagerView" />
 		</property>
 		<property name="pluginUrl">
 			<value>${pluginUrl}</value>
