@@ -16,6 +16,13 @@
 ?>
 
 <div id="<?php echo $instanceId; ?>" class="wolfnet_widget wolfnet_listingGrid">
+	
+	<?php if ( trim( $options['title']['value'] ) != '' ) { ?>
+		
+		<h2><?php echo $options['title']['value']; ?></h2>
+		
+	<?php } ?>
+	
 	<?php echo ( isset($listingContent) ) ? $listingContent : 'No Listings to Display.'; ?>
 </div>
 

@@ -61,6 +61,9 @@ implements com_ajmichels_wppf_interface_iView
 	public function render ( $data = array() )
 	{
 		$data = array_merge( $data, array( 
+			'titleId'           => esc_attr( $data['fields']['title']['id'] ),
+			'titleName'         => esc_attr( $data['fields']['title']['name'] ),
+			'titleValue'        => $data['fields']['title']['value'],
 			'maxPriceId'        => esc_attr( $data['fields']['maxprice']['id'] ),
 			'maxPriceName'      => esc_attr( $data['fields']['maxprice']['name'] ),
 			'maxPriceValue'     => $data['fields']['maxprice']['value'],

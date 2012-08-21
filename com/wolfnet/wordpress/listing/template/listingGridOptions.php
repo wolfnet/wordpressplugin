@@ -20,6 +20,11 @@
 	<table class="form-table">
 		
 		<tr>
+			<td><label>Title:</label></td>
+			<td><input id="<?php echo $titleId; ?>" name="<?php echo $titleName; ?>" value="<?php echo $titleValue; ?>" /></td>
+		</tr>
+		
+		<tr>
 			<td><label>Price:</label></td>
 			<td>
 				<select id="<?php echo $minPriceId; ?>" name="<?php echo $minPriceName; ?>">

@@ -30,6 +30,7 @@ extends com_wolfnet_wordpress_abstract_widget
 	 * 
 	 */
 	public $options = array( 
+		'title'        => '', 
 		'minprice'     => '', 
 		'maxprice'     => '', 
 		'city'         => '', 
