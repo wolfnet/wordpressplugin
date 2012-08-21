@@ -20,7 +20,8 @@ extends com_ajmichels_wppf_action_action
 	/* PROPERTIES ******************************************************************************* */
 	
 	/**
-	 * This property holds a reference to the view page which will be displayed in the plugin admin.
+	 * This property holds a reference to the view page which will be displayed on the primary 
+	 * plugin admin page.
 	 * 
 	 * @type  com_ajmichels_wppf_interface_iView
 	 * 
@@ -28,9 +29,23 @@ extends com_ajmichels_wppf_action_action
 	private $pluginSettingsView;
 	
 	
+	/**
+	 * This property holds a reference to the view page which will be displayed on the plugin admin
+	 * support page.
+	 * 
+	 * @type  com_ajmichels_wppf_interface_iView
+	 * 
+	 */
 	private $pluginInstructionsView;
 	
 	
+	/**
+	 * This property holds a reference to the view page which will be displayed on the plugin admin
+	 * search manager page.
+	 * 
+	 * @type  com_ajmichels_wppf_interface_iView
+	 * 
+	 */
 	private $searchManagerView;
 	
 	
@@ -57,27 +72,33 @@ extends com_ajmichels_wppf_action_action
 	{
 		$url = $this->getPluginUrl();
 		
-		add_menu_page(	'WolfNet Settings', 
-						'WolfNet Settings', 
-						'administrator', 
-						'wolfnet_plugin_settings', 
-						array( &$this, 'pluginSettingsPage' ),
-						$url . '/img/wp_wolfnet_nav.png' );
+		add_menu_page(
+			'WolfNet Settings', 
+			'WolfNet Settings', 
+			'administrator', 
+			'wolfnet_plugin_settings', 
+			array( &$this, 'pluginSettingsPage' ),
+			$url . '/img/wp_wolfnet_nav.png'
+		);
 		
-		add_submenu_page(	'wolfnet_plugin_settings', 
-						'Search Manager', 
-						'Search Manager', 
-						'administrator', 
-						'wolfnet_plugin_search_manager', 
-						array( &$this, 'searchManagerPage' ) );
+		add_submenu_page(
+			'wolfnet_plugin_settings', 
+			'Search Manager', 
+			'Search Manager', 
+			'administrator', 
+			'wolfnet_plugin_search_manager', 
+			array( &$this, 'searchManagerPage' )
+		);
 		
-		add_submenu_page(	'wolfnet_plugin_settings', 
-						'Support', 
-						'Support', 
-						'administrator', 
-						'wolfnet_plugin_support', 
-						array( &$this, 'pluginInstructionsPage' ) );
-						
+		add_submenu_page(
+			'wolfnet_plugin_settings', 
+			'Support', 
+			'Support', 
+			'administrator', 
+			'wolfnet_plugin_support', 
+			array( &$this, 'pluginInstructionsPage' )
+		);
+		
 	}
 	
 	
@@ -95,8 +116,8 @@ extends com_ajmichels_wppf_action_action
 	
 	
 	/**
-	 * This method is responsible for creating and outputing the plugin settings page within the
-	 * WordPress admin.
+	 * This method is responsible for creating and outputing the plugin search manager page within 
+	 * the WordPress admin.
 	 *
 	 * @return	void
 	 * 
@@ -108,7 +129,7 @@ extends com_ajmichels_wppf_action_action
 	
 	
 	/**
-	 * This method is responsible for creating and outputing the plugin settings page within the
+	 * This method is responsible for creating and outputing the plugin support page within the
 	 * WordPress admin.
 	 *
 	 * @return	void
