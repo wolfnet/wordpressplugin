@@ -6,7 +6,7 @@
  * 
  * @package       com.wolfnet.wordpress
  * @subpackage    listing
- * @title         listingListOptionsView.php
+ * @title         propertyListOptionsView.php
  * @extends       com_ajmichels_wppf_abstract_view
  * @implements    com_ajmichels_wppf_interface_iView
  * @contributors  AJ Michels (aj.michels@wolfnet.com)
@@ -14,7 +14,7 @@
  * @copyright     Copyright (c) 2012, WolfNet Technologies, LLC
  * 
  */
-class com_wolfnet_wordpress_listing_listingListOptionsView
+class com_wolfnet_wordpress_listing_propertyListOptionsView
 extends com_ajmichels_wppf_abstract_view
 implements com_ajmichels_wppf_interface_iView
 {
@@ -42,7 +42,7 @@ implements com_ajmichels_wppf_interface_iView
 	 */
 	public function __construct ()
 	{
-		$this->template = $this->formatPath( dirname( __FILE__ ) . '\template\listingListOptions.php' );
+		$this->template = $this->formatPath( dirname( __FILE__ ) . '\template\propertyListOptions.php' );
 	}
 	
 	

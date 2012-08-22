@@ -1,7 +1,7 @@
 <?php
 
 /**
- * This is the listingListWidget object. This object inherites from the base WP_Widget object and 
+ * This is the propertyListWidget object. This object inherites from the base WP_Widget object and 
  * defines the display and functionality of this specific widget.
  * 
  * @see http://codex.wordpress.org/Widgets_API
@@ -9,14 +9,14 @@
  * 
  * @package       com.wolfnet.wordpress
  * @subpackage    listing
- * @title         listingListWidget.php
+ * @title         propertyListWidget.php
  * @extends       com_wolfnet_wordpress_abstract_widget
  * @contributors  AJ Michels (aj.michels@wolfnet.com)
  * @version       1.0
  * @copyright     Copyright (c) 2012, WolfNet Technologies, LLC
  * 
  */
-class com_wolfnet_wordpress_listing_listingListWidget
+class com_wolfnet_wordpress_listing_propertyListWidget
 extends com_wolfnet_wordpress_abstract_widget
 {
 	
@@ -66,7 +66,7 @@ extends com_wolfnet_wordpress_abstract_widget
 	 * @type  com_ajmichels_wppf_interface_iView
 	 * 
 	 */
-	private $listingListView;
+	private $propertyListView;
 	
 	
 	/**
@@ -75,7 +75,7 @@ extends com_wolfnet_wordpress_abstract_widget
 	 * @type  com_ajmichels_wppf_interface_iView
 	 * 
 	 */
-	private $listingListOptionsView;
+	private $propertyListOptionsView;
 	
 	
 	/* CONSTRUCTOR METHOD *********************************************************************** */
@@ -89,11 +89,11 @@ extends com_wolfnet_wordpress_abstract_widget
 	 */
 	public function __construct ()
 	{
-		parent::__construct( 'wolfnet_listingListWidget', 'WolfNet Listing List' );
+		parent::__construct( 'wolfnet_propertyListWidget', 'WolfNet Listing List' );
 		/* The 'sf' property is set in the abstract widget class and is pulled from the plugin instance */
 		$this->setListingService( $this->sf->getBean( 'ListingService' ) );
-		$this->setListingListView( $this->sf->getBean( 'ListingListView' ) );
-		$this->setListingListOptionsView( $this->sf->getBean( 'ListingListOptionsView' ) );
+		$this->setPropertyListView( $this->sf->getBean( 'PropertyListView' ) );
+		$this->setPropertyListOptionsView( $this->sf->getBean( 'PropertyListOptionsView' ) );
 	}
 	
 	
@@ -123,7 +123,7 @@ extends com_wolfnet_wordpress_abstract_widget
 			'listings' => $gridListings,
 			'options'  => $options
 			);
-		$this->getListingListView( $data )->out( $data );
+		$this->getPropertyListView( $data )->out( $data );
 	}
 	
 	
@@ -143,7 +143,7 @@ extends com_wolfnet_wordpress_abstract_widget
 			'prices' => $ls->getPriceData(), 
 			'ownerTypes' => $this->getListingService()->getOwnerTypeData() 
 			);
-		$this->getListingListOptionsView()->out( $data );
+		$this->getPropertyListOptionsView()->out( $data );
 	}
 	
 	
@@ -195,52 +195,52 @@ extends com_wolfnet_wordpress_abstract_widget
 	
 	
 	/**
-	 * GETTER:  This method is a getter for the listingListView property.
+	 * GETTER:  This method is a getter for the propertyListView property.
 	 * 
 	 * @return  com_ajmichels_wppf_interface_iView
 	 * 
 	 */
-	public function getListingListView ()
+	public function getPropertyListView ()
 	{
-		return $this->listingListView;
+		return $this->propertyListView;
 	}
 	
 	
 	/**
-	 * SETTER:  This method is a setter for the listingListView property.
+	 * SETTER:  This method is a setter for the propertyListView property.
 	 * 
 	 * @param   com_ajmichels_wppf_interface_iView  $service
 	 * @return  void
 	 * 
 	 */
-	public function setListingListView ( com_ajmichels_wppf_interface_iView $view )
+	public function setPropertyListView ( com_ajmichels_wppf_interface_iView $view )
 	{
-		$this->listingListView = $view;
+		$this->propertyListView = $view;
 	}
 	
 	
 	/**
-	 * GETTER:  This method is a getter for the listingListOptionsView property.
+	 * GETTER:  This method is a getter for the propertyListOptionsView property.
 	 * 
 	 * @return  com_ajmichels_wppf_interface_iView
 	 * 
 	 */
-	public function getListingListOptionsView ()
+	public function getPropertyListOptionsView ()
 	{
-		return $this->listingListOptionsView;
+		return $this->propertyListOptionsView;
 	}
 	
 	
 	/**
-	 * SETTER:  This method is a setter for the listingListOptionsView property.
+	 * SETTER:  This method is a setter for the propertyListOptionsView property.
 	 * 
 	 * @param   com_ajmichels_wppf_interface_iView  $service
 	 * @return  void
 	 * 
 	 */
-	public function setListingListOptionsView ( com_ajmichels_wppf_interface_iView $view )
+	public function setPropertyListOptionsView ( com_ajmichels_wppf_interface_iView $view )
 	{
-		$this->listingListOptionsView = $view;
+		$this->propertyListOptionsView = $view;
 	}
 	
 	

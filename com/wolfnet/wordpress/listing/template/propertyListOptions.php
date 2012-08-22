@@ -6,7 +6,7 @@
  *
  * @package       com.wolfnet.wordpress
  * @subpackage    listing.template
- * @title         listingListOptions.php
+ * @title         propertyListOptions.php
  * @contributors  AJ Michels (aj.michels@wolfnet.com)
  * @version       1.0
  * @copyright     Copyright (c) 2012, WolfNet Technologies, LLC
@@ -15,7 +15,7 @@
 
 ?>
 
-<div class="wolfnet_listingListOptions">
+<div class="wolfnet_propertyListOptions">
 
 	<table class="form-table">
 

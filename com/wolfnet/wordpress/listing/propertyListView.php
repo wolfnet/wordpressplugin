@@ -5,7 +5,7 @@
  * 
  * @package       com.wolfnet.wordpress
  * @subpackage    listing
- * @title         listingListView.php
+ * @title         propertyListView.php
  * @extends       com_ajmichels_wppf_abstract_view
  * @implements    com_ajmichels_wppf_interface_iView
  * @contributors  AJ Michels (aj.michels@wolfnet.com)
@@ -13,7 +13,7 @@
  * @copyright     Copyright (c) 2012, WolfNet Technologies, LLC
  * 
  */
-class com_wolfnet_wordpress_listing_listingListView
+class com_wolfnet_wordpress_listing_propertyListView
 extends com_ajmichels_wppf_abstract_view
 implements com_ajmichels_wppf_interface_iView
 {
@@ -41,7 +41,7 @@ implements com_ajmichels_wppf_interface_iView
 	 */
 	public function __construct ()
 	{
-		$this->template = $this->formatPath( dirname( __FILE__ ) . '\template\listingList.php' );
+		$this->template = $this->formatPath( dirname( __FILE__ ) . '\template\propertyList.php' );
 	}
 	
 	
@@ -64,7 +64,7 @@ implements com_ajmichels_wppf_interface_iView
 		}
 		
 		$_REQUEST['wolfnet_includeDisclaimer'] = true; // For later use in the site footer.
-		$data['instanceId']	= uniqid( 'wolfnet_listingList_' );
+		$data['instanceId']	= uniqid( 'wolfnet_propertyList_' );
 		return parent::render( $data );
 	}
 	

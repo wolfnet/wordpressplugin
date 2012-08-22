@@ -2,7 +2,7 @@
  * This jQuery plugin can be applied to any number of containers which hold child elements which 
  * will then be displayed in a list format.
  * 
- * @title         jquery.wolfnetListingList.src.js
+ * @title         jquery.wolfnetPropertyList.src.js
  * @contributors  AJ Michels (aj.michels@wolfnet.com)
  * @version       1.0
  * 
@@ -24,7 +24,7 @@ if ( typeof jQuery != 'undefined' ) {
 	
 	( function ( $ ) {
 		
-		$.fn.wolfnetListingList = function ( options ) {
+		$.fn.wolfnetPropertyList = function ( options ) {
 			
 			var option = $.extend( {}, options );
 			
@@ -65,7 +65,7 @@ if ( typeof jQuery != 'undefined' ) {
 				
 			} ); /* END: for each loop of elements the plugin has been applied to. */
 			
-		}; /* END: function $.fn.wolfnetListingList */
+		}; /* END: function $.fn.wolfnetPropertyList */
 		
 	} )( jQuery ); /* END: jQuery IIFE */
 	

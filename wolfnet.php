@@ -122,7 +122,7 @@ implements com_ajmichels_common_iSingleton
 		$this->sm->register( $this->sf->getBean( 'ListingQuickSearchShortcode' ) );
 		$this->sm->register( $this->sf->getBean( 'FeaturedListingsShortcode' ) );
 		$this->sm->register( $this->sf->getBean( 'ListingGridShortcode' ) );
-		$this->sm->register( $this->sf->getBean( 'ListingListShortcode' ) );
+		$this->sm->register( $this->sf->getBean( 'PropertyListShortcode' ) );
 	}
 	
 	

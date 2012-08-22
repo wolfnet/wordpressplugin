@@ -138,13 +138,13 @@
 	
 	<bean id="ListingGridOptionsView" class="com_wolfnet_wordpress_listing_listingGridOptionsView" singleton="false" />
 	
-	<bean id="ListingListView" class="com_wolfnet_wordpress_listing_listingListView" singleton="false">
+	<bean id="PropertyListView" class="com_wolfnet_wordpress_listing_propertyListView" singleton="false">
 		<property name="ListingView">
 			<ref bean="ListingView" />
 		</property>
 	</bean>
 	
-	<bean id="ListingListOptionsView" class="com_wolfnet_wordpress_listing_listingListOptionsView" singleton="false" />
+	<bean id="PropertyListOptionsView" class="com_wolfnet_wordpress_listing_propertyListOptionsView" singleton="false" />
 	
 	<bean id="QuickSearchView" class="com_wolfnet_wordpress_listing_quickSearchView" singleton="false">
 		<property name="SettingsService">
@@ -220,12 +220,12 @@
 		</property>
 	</bean>
 	
-	<bean id="ListingListShortcode" class="com_wolfnet_wordpress_listing_listingListShortcode">
+	<bean id="PropertyListShortcode" class="com_wolfnet_wordpress_listing_propertyListShortcode">
 		<property name="ListingService">
 			<ref bean="ListingService" />
 		</property>
-		<property name="ListingListView">
-			<ref bean="ListingListView" />
+		<property name="PropertyListView">
+			<ref bean="PropertyListView" />
 		</property>
 	</bean>
 	

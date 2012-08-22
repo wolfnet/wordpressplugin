@@ -9,14 +9,14 @@
  * 
  * @package       com.wolfnet.wordpress
  * @subpackage    listing
- * @title         listingListShortcode.php
+ * @title         propertyListShortcode.php
  * @extends       com_ajmichels_wppf_shortcode_shortcode
  * @contributors  AJ Michels (aj.michels@wolfnet.com)
  * @version       1.0
  * @copyright     Copyright (c) 2012, WolfNet Technologies, LLC
  * 
  */
-class com_wolfnet_wordpress_listing_listingListShortcode
+class com_wolfnet_wordpress_listing_propertyListShortcode
 extends com_ajmichels_wppf_shortcode_shortcode
 {
 	
@@ -30,7 +30,7 @@ extends com_ajmichels_wppf_shortcode_shortcode
 	 * @type  string
 	 * 
 	 */
-	public $tag = 'WolfNetListingList,wolfnetlistinglist,WOLFNETLISTINGLIST,wnt_list';
+	public $tag = 'WolfNetPropertyList,wolfnetpropertylist,WOLFNETPROPERTYLIST,wnt_list';
 	
 	
 	/**
@@ -48,7 +48,7 @@ extends com_ajmichels_wppf_shortcode_shortcode
 	 * @type  
 	 * 
 	 */
-	private $listingListView;
+	private $propertyListView;
 	
 	
 	/**
@@ -92,7 +92,7 @@ extends com_ajmichels_wppf_shortcode_shortcode
 			'listings' => $gridListings,
 			'options'  => $options
 			);
-		return $this->getListingListView()->render( $data );
+		return $this->getPropertyListView()->render( $data );
 	}
 	
 	
@@ -124,27 +124,27 @@ extends com_ajmichels_wppf_shortcode_shortcode
 	
 	
 	/**
-	 * GETTER:  This method is a getter for the listingListView property.
+	 * GETTER:  This method is a getter for the propertyListView property.
 	 * 
 	 * @return  com_ajmichels_wppf_interface_iView
 	 * 
 	 */
-	public function getListingListView ()
+	public function getPropertyListView ()
 	{
-		return $this->listingListView;
+		return $this->propertyListView;
 	}
 	
 	
 	/**
-	 * SETTER:  This method is a setter for the listingListView property.
+	 * SETTER:  This method is a setter for the propertyListView property.
 	 * 
 	 * @param   com_ajmichels_wppf_interface_iView  $view
 	 * @return  void
 	 * 
 	 */
-	public function setListingListView ( com_ajmichels_wppf_interface_iView $view )
+	public function setPropertyListView ( com_ajmichels_wppf_interface_iView $view )
 	{
-		$this->listingListView = $view;
+		$this->propertyListView = $view;
 	}
 	
 	

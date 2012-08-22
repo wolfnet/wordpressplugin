@@ -6,7 +6,7 @@
  * 
  * @package       com.wolfnet.wordpress
  * @subpackage    listing.template
- * @title         listingList.php
+ * @title         propertyList.php
  * @contributors  AJ Michels (aj.michels@wolfnet.com)
  * @version       1.0
  * @copyright     Copyright (c) 2012, WolfNet Technologies, LLC
@@ -15,7 +15,7 @@
 
 ?>
 
-<div id="<?php echo $instanceId; ?>" class="widget wolfnet_widget wolfnet_listingList">
+<div id="<?php echo $instanceId; ?>" class="widget wolfnet_widget wolfnet_propertyList">
 	
 	<?php if ( trim( $options['title']['value'] ) != '' ) { ?>
 		
@@ -34,7 +34,7 @@
 		
 		( function ( $ ) {
 			
-			$( '.wolfnet_listingList' ).wolfnetListingList({});
+			$( '.wolfnet_propertyList' ).wolfnetPropertyList({});
 			
 		} )( jQuery );
 		
