@@ -12,12 +12,22 @@
  * @copyright     Copyright (c) 2012, WolfNet Technologies, LLC
  * 
  */
-
+ 
 ?>
 <div class="wrap">
 	
-	<h3>Search Manager</h3>
+	<div id="icon-options-wolfnet" class="icon32"><br></div>
 	
+	<h2>WolfNet - Search Manager</h2>
 	
+	<p></p>
+	
+	<div>
+		
+		
+		
+	</div>
+	
+	<?php echo $search_form; ?>
 	
 </div>

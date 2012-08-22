@@ -20,7 +20,7 @@
 	
 	<div id="icon-options-wolfnet" class="icon32"><br></div>
 	
-	<h2>WolfNet - Plugin Settings</h2>
+	<h2>WolfNet - General Settings</h2>
 	
 	<form method="post" action="options.php">
 		
