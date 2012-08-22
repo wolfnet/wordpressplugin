@@ -2,13 +2,13 @@
  * CSS Document
  *
  * @package       css
- * @title         wolfnet.css
+ * @title         wolfnet.less
  * @contributors  AJ Michels (aj.michels@wolfnet.com)
  * @version       1.0
  *
  */
 
-@imagesDir:             '../img/';
+@imagesDir: '../img/';
 @imageHeight:           95px;
 @propertyWidth:         150px;
 @propertyHeight:        185px;
@@ -511,26 +511,19 @@
 		margin-top: 2em;
 	}
 
-	.wolfnet_moreInfo
-	{
-		width:      100%;
-		height:     18px;
-		background: url('@{imagesDir}info.png') no-repeat center;
-
-		span
-		{
-			display: none;
-		}
-
-	}
-
 }
 
 .wolfnet_moreInfo
 {
-	display:    block;
-	font-style: italic;
-	font-size:  .9em;
+	width:      100%;
+	height:     18px;
+	background: url('@{imagesDir}info.png') no-repeat center;
+
+	span
+	{
+		display: none;
+	}
+
 }
 
 .wolfnet_moreInfoIcon

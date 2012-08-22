@@ -1,12 +1,12 @@
 <project name="wolfnetWordPressPlugin" default="build" basedir=".">
-	
-	
+
+
 	<property name="majorVersion" value="0.2" />
 	<property name="minorVersion" value="4" />
 	<property name="version" value="${majorVersion}.${minorVersion}" />
-	
+
 	<property file="build.properties" />
-	
+
 	<property name="tool.yuicompressor" value="${basedir}/.ant/yuicompressor-2.4.5.jar"  />
 	<property name="tool.closure"       value="${basedir}/.ant/closure/compiler.jar" />
 	<property name="tool.ant-contrib"   value="${basedir}/.ant/ant-contrib/lib/ant-contrib.jar" />
@@ -19,53 +19,53 @@
 	<property name="dir.css"            value="css" />
 	<property name="packageDir"         value="../" />
 	<property name="packageName"        value="${packageDir}${buildName}_${version}" />
-	
+
 	<property name="absBase"            location="${basedir}" />
 	<property name="absBuild"           location="${buildDir}" />
-	
-	
+
+
 	<!-- Define the Java Library for the AntContrib project -->
 	<taskdef resource="net/sf/antcontrib/antcontrib.properties">
 		<classpath>
 			<pathelement location="${tool.ant-contrib}" />
 		</classpath>
 	</taskdef>
-	
-	
+
+
 	<!-- Define the Java Library for the Closure Compiler -->
 	<taskdef name="jscomp" classname="com.google.javascript.jscomp.ant.CompileTask">
 		<classpath>
 			<pathelement location="${tool.closure}" />
 		</classpath>
 	</taskdef>
-	
-	
+
+
 	<target name="compile" depends="compile-less">
 	</target>
-	
-	
+
+
 	<target name="compile-less">
 		<compile-less />
 	</target>
-	
-	
+
+
 	<target name="minify" depends="minify-css,minify-javascript">
 	</target>
-	
-	
+
+
 	<target name="minify-css" depends="compile-less">
 		<min-css />
 	</target>
-	
-	
+
+
 	<target name="minify-javascript">
 		<min-js-closure />
 	</target>
-	
-	
+
+
 	<target name="build" depends="minify">
 		<clean-for-build />
-		
+
 		<echo>Creating Build Directory: ${buildDir}</echo>
 		<copy todir="${buildDir}">
 			<fileset dir="${basedir}">
@@ -82,37 +82,37 @@
 				<exclude name=".gitconfig" />
 			</fileset>
 		</copy>
-		
+
 		<!-- Update Plugin Version -->
 		<replace file="${buildDir}/wolfnet.php" token="{majorVersion}" value="${majorVersion}" />
 		<replace file="${buildDir}/wolfnet.php" token="{minorVersion}" value="${minorVersion}" />
 		<replace file="${buildDir}/wolfnet.php" token="{X.X.X}" value="${version}" />
 		<replace file="${buildDir}/ReadMe.txt" token="{X.X.X}" value="${version}" />
-		
+
 	</target>
-	
-	
+
+
 	<target name="test" depends="build">
 		<clean-for-test />
 		<copy todir="${testDir}">
 			<fileset dir="${buildDir}" />
 		</copy>
 	</target>
-	
-	
+
+
 	<target name="package" depends="build">
 		<clean-for-package />
 		<prep-for-package />
 		<zip destfile="${packageName}.zip" basedir="${buildDir}/../" compress="true" includes="${buildName}/" />
 		<zip destfile="${packageName}_src.zip" basedir="${basedir}" compress="true" excludes="LessCompilerOutput.txt, css/wolfnet.css" />
 	</target>
-	
-	
+
+
 	<target name="package-build" depends="build">
 		<prep-for-package />
 	</target>
-	
-	
+
+
 	<target name="package-test" depends="build">
 		<clean-for-test />
 		<prep-for-package />
@@ -120,32 +120,32 @@
 			<fileset dir="${buildDir}" />
 		</copy>
 	</target>
-	
-	
+
+
 	<!-- MACROS -->
-	
+
 	<macrodef name="clean-for-build">
 		<sequential>
 			<delete dir="${buildDir}" />
 		</sequential>
 	</macrodef>
-	
-	
+
+
 	<macrodef name="clean-for-test">
 		<sequential>
 			<delete dir="${testDir}" />
 		</sequential>
 	</macrodef>
-	
-	
+
+
 	<macrodef name="clean-for-package">
 		<sequential>
 			<delete file="${packageName}.zip" />
 			<delete file="${packageName}_src.zip" />
 		</sequential>
 	</macrodef>
-	
-	
+
+
 	<macrodef name="prep-for-package">
 		<sequential>
 			<!-- Minify Source Code -->
@@ -163,13 +163,13 @@
 			</delete>
 		</sequential>
 	</macrodef>
-	
-	
+
+
 	<macrodef name="compile-less">
 		<sequential>
 			<!-- Compile Less Files -->
 			<echo>Compiling Less Files</echo>
-			<apply executable="java" parallel="false" output="${basedir}/LessCompilerOutput.txt">
+			<apply executable="java" parallel="false" output="${basedir}/LessCompilerOutput.txt" append="true" failonerror="true">
 				<fileset dir="${basedir}/" >
 					<include name="${dir.css}/**/*.less" />
 					<exclude name="${dir.css}/**/*.inc.less" />
@@ -184,8 +184,8 @@
 			</apply>
 		</sequential>
 	</macrodef>
-	
-	
+
+
 	<macrodef name="min-css">
 		<!-- Minify CSS Files -->
 		<sequential>
@@ -206,8 +206,8 @@
 			</apply>
 		</sequential>
 	</macrodef>
-	
-	
+
+
 	<macrodef name="min-js">
 		<!-- Minify JS Files -->
 		<sequential>
@@ -228,8 +228,8 @@
 			</apply>
 		</sequential>
 	</macrodef>
-	
-	
+
+
 	<macrodef name="min-js-closure">
 		<!-- Minify JS Files -->
 		<sequential>
@@ -249,6 +249,6 @@
 			</apply>
 		</sequential>
 	</macrodef>
-	
-	
+
+
 </project>
