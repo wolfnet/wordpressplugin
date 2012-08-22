@@ -15,13 +15,17 @@
 
 ?>
 
+
 <div class="wolfnet_featuredListingsOptions">
-	
+
 	<input id="<?php echo $directionId; ?>" name="<?php echo $directionName; ?>" type="hidden" 
 		class="wolfnet_featuredListingsOptions_dirField" />
 	
 	<table class="form-table">
-		
+		<tr>
+			<td><label>Title:</label></td>
+			<td><input id="<?php echo $titleId; ?>" name="<?php echo $titleName; ?>" value="<?php echo $titleValue; ?>" /></td>
+		</tr>
 		<tr>
 			<td><label for="<?php echo $autoPlayId; ?>">Scroll Control</label></td>
 			<td>

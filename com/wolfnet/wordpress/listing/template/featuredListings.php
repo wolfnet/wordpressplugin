@@ -15,6 +15,10 @@
  
 ?>
 
+<?php if ( trim( $options['title']['value'] ) != '' ) { ?>
+	<h2><?php echo $options['title']['value']; ?></h2>
+<?php } ?>
+
 <div id="<?php echo $instanceId; ?>" class="wolfnet_widget wolfnet_featuredListings">
 	<?php echo ( isset($listingContent) ) ? $listingContent : 'No Listings to Display.'; ?>
 </div>
