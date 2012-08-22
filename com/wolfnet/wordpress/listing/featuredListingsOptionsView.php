@@ -60,6 +60,9 @@ implements com_ajmichels_wppf_interface_iView
 	public function render ( $data = array() )
 	{
 		$data = array_merge( $data, array( 
+			'titleId'            => esc_attr( $data['fields']['title']['id'] ),
+			'titleName'          => esc_attr( $data['fields']['title']['name'] ),
+			'titleValue'         => $data['fields']['title']['value'],
 			'autoPlayId'         => esc_attr( $data['fields']['autoplay']['id'] ),
 			'autoPlayName'       => esc_attr( $data['fields']['autoplay']['name'] ),
 			'autoPlayTrue'       => selected( $data['fields']['autoplay']['value'], 'true', false ),

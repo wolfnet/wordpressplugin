@@ -30,6 +30,7 @@ extends com_wolfnet_wordpress_abstract_widget
 	 * 
 	 */
 	public $options = array(
+		'title'       => '',
 		'direction'   => 'left', 
 		'autoplay'    => true, 
 		'speed'       => 5, 
