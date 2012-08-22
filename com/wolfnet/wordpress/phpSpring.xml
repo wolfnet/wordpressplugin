@@ -110,7 +110,15 @@
 	
 	<bean id="PluginInstructionsView" class="com_wolfnet_wordpress_admin_pluginInstructionsView" singleton="false" />
 	
-	<bean id="SearchManagerView" class="com_wolfnet_wordpress_admin_searchManagerView" singleton="false" />
+	<bean id="SearchManagerView" class="com_wolfnet_wordpress_admin_searchManagerView" singleton="false">
+		<property name="OptionManager">
+			<!-- Defined in the WPPF Service Factory -->
+			<ref bean="OptionManager" />
+		</property>
+		<property name="SettingsService">
+			<ref bean="SettingsService" />
+		</property>
+	</bean>
 	
 	<bean id="ListingView" class="com_wolfnet_wordpress_listing_listingView" singleton="false" />
 	
@@ -129,6 +137,14 @@
 	</bean>
 	
 	<bean id="ListingGridOptionsView" class="com_wolfnet_wordpress_listing_listingGridOptionsView" singleton="false" />
+	
+	<bean id="ListingListView" class="com_wolfnet_wordpress_listing_listingListView" singleton="false">
+		<property name="ListingView">
+			<ref bean="ListingView" />
+		</property>
+	</bean>
+	
+	<bean id="ListingListOptionsView" class="com_wolfnet_wordpress_listing_listingListOptionsView" singleton="false" />
 	
 	<bean id="QuickSearchView" class="com_wolfnet_wordpress_listing_quickSearchView" singleton="false">
 		<property name="SettingsService">
@@ -201,6 +217,15 @@
 		</property>
 		<property name="ListingGridView">
 			<ref bean="ListingGridView" />
+		</property>
+	</bean>
+	
+	<bean id="ListingListShortcode" class="com_wolfnet_wordpress_listing_listingListShortcode">
+		<property name="ListingService">
+			<ref bean="ListingService" />
+		</property>
+		<property name="ListingListView">
+			<ref bean="ListingListView" />
 		</property>
 	</bean>
 	

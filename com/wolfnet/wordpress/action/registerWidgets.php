@@ -28,6 +28,7 @@ extends com_ajmichels_wppf_action_action
 	{
 		register_widget( 'com_wolfnet_wordpress_listing_featuredListingsWidget' );
 		register_widget( 'com_wolfnet_wordpress_listing_listingGridWidget' );
+		register_widget( 'com_wolfnet_wordpress_listing_listingListWidget' );
 		register_widget( 'com_wolfnet_wordpress_listing_quickSearchWidget' );
 	}
 	

@@ -121,6 +121,9 @@ implements com_ajmichels_wppf_interface_iView
 			case 'simple':
 				$file = '\template\listingSimple.php';
 				break;
+			case 'brief':
+				$file = '\template\listingBrief.php';
+				break;
 				
 		}
 		
