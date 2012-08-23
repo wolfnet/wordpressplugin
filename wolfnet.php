@@ -16,23 +16,23 @@ require_once( 'com/ajmichels/common/autoLoader.php' );
 com_ajmichels_common_autoLoader::getInstance( dirname( __FILE__ ) );
 
 /**
- * 
+ *
  * @title         wolfnet.php
  * @contributors  AJ Michels (http://aj.michels@wolfnet.com)
  * @version       1.0
  * @copyright     Copyright (c) 2012, WolfNet Technologies, LLC
- * 
+ *
  */
 class wolfnet
 extends com_ajmichels_wppf_bootstrap
 implements com_ajmichels_common_iSingleton
 {
-	
-	
+
+
 	/* SINGLETON ENFORCEMENT ******************************************************************** */
-	
+
 	private static $instance;
-	
+
 	public static function getInstance ()
 	{
 		if ( !isset( self::$instance ) ) {
@@ -40,32 +40,32 @@ implements com_ajmichels_common_iSingleton
 		}
 		return self::$instance;
 	}
-	
-	
+
+
 	/* PROPERTIES ******************************************************************************* */
-	
+
 	public $majorVersion = '{majorVersion}';
 	public $minorVersion = '{minorVersion}';
 	public $version      = '{X.X.X}';
-	
-	
+
+
 	/* CONSTRUCT PLUGIN ************************************************************************* */
-	
+
 	public function __construct ()
 	{
 		$this->log( 'Init wolfnet Plugin' );
 		parent::__construct();
-		
+
 		/*	If the debug parameter is passed over the url, output the log. */
 		if ( array_key_exists( 'debug', $_REQUEST ) ) {
 			$this->loggerSetting( 'enabled', true );
 			$this->loggerSetting( 'level',   'debug' );
 			$this->loggerSetting( 'minTime', 0 );
 		}
-		
+
 		/* Create Plugin Service Factory */
 		$sfXml = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'com/wolfnet/wordpress/phpSpring.xml';
-		$sfProps = array( 
+		$sfProps = array(
 					'pluginUrl'          => $this->getPluginUrl(),
 					'webServiceDomain'   => 'http://services.mlsfinder.com/v1',
 					'pluginMajorVersion' => $this->majorVersion,
@@ -74,18 +74,18 @@ implements com_ajmichels_common_iSingleton
 					);
 		$this->sf = new com_ajmichels_phpSpring_bean_factory_default( $sfXml, array(), $sfProps );
 		$this->sf->setParent( $this->wppf_serviceFactory );
-		
+
 		$defaultUrl = $this->sf->getBean( 'DefaultWebServiceUrl' );
 		$defaultUrl->setParameter( 'pluginVersion', $this->version );
-		
+
 		/* Notify the bootstrap that we are ready to initialize the plugin. */
 		parent::initPlugin();
-		
+
 	}
-	
-	
+
+
 	/* PLUGIN LIFE-CYCLE HOOKS ****************************************************************** */
-	
+
 	/* Runs when the page output is complete and PHP script execution is about to end. */
 	public function shutdown ()
 	{
@@ -93,29 +93,30 @@ implements com_ajmichels_common_iSingleton
 			echo '<!-- Testing Server: ' . $_SERVER['SERVER_ADDR'] . ' -->';
 		}
 	}
-	
-	
+
+
 	/* MANAGER REGISTRATIONS ******************************************************************** */
-	
+
 	/* Register Options with the Option Manager */
 	protected function options ()
 	{
 		$this->os->setGroupName( 'wolfnet' );
 		$this->os->register( 'wolfnet_productKey' );
 	}
-	
-	
+
+
 	/* Register Actions with the Action Manager */
 	protected function actions ()
 	{
-		$this->am->register( $this->sf->getBean( 'EnqueueResources' ),      array( 'wp_enqueue_scripts' ) );
-		$this->am->register( $this->sf->getBean( 'CreateAdminPages' ),      array( 'admin_menu' ) );
-		$this->am->register( $this->sf->getBean( 'RegisterWidgets' ),       array( 'widgets_init' ) );
-		$this->am->register( $this->sf->getBean( 'EnqueueAdminResources' ), array( 'admin_enqueue_scripts' ) );
-		$this->am->register( $this->sf->getBean( 'FooterDisclaimer' ),      array( 'wp_footer' ) );
+		$this->am->register( $this->sf->getBean( 'AddShortcodeBuilderButton' ), array( 'admin_init' ) );
+		$this->am->register( $this->sf->getBean( 'EnqueueResources' ),          array( 'wp_enqueue_scripts' ) );
+		$this->am->register( $this->sf->getBean( 'CreateAdminPages' ),          array( 'admin_menu' ) );
+		$this->am->register( $this->sf->getBean( 'RegisterWidgets' ),           array( 'widgets_init' ) );
+		$this->am->register( $this->sf->getBean( 'EnqueueAdminResources' ),     array( 'admin_enqueue_scripts' ) );
+		$this->am->register( $this->sf->getBean( 'FooterDisclaimer' ),          array( 'wp_footer' ) );
 	}
-	
-	
+
+
 	/* Register Shortcodes with the Shortcode Manager */
 	protected function shortcodes ()
 	{
@@ -124,8 +125,8 @@ implements com_ajmichels_common_iSingleton
 		$this->sm->register( $this->sf->getBean( 'ListingGridShortcode' ) );
 		$this->sm->register( $this->sf->getBean( 'PropertyListShortcode' ) );
 	}
-	
-	
+
+
 }
 
 

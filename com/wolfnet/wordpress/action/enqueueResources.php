@@ -45,14 +45,14 @@ extends com_ajmichels_wppf_action_action
 		$this->log( 'Action EnqueueResources' );
 		$url = $this->getPluginUrl();
 
-		wp_enqueue_script( 'tooltipjs',               $url . 'js/jQuery/jquery.tooltip.src.js',               array('jquery') );
-		wp_enqueue_script( 'imagesloadedjs',          $url . 'js/jQuery/jquery.imagesloaded.src.js',          array('jquery') );
-		wp_enqueue_script( 'mousewheeljs',            $url . 'js/jQuery/jquery.mousewheel.src.js',            array('jquery') );
-		wp_enqueue_script( 'smoothdivscrolljs',       $url . 'js/jQuery/jquery.smoothDivScroll-1.2.src.js',   array('mousewheeljs','jquery-ui-core','jquery-ui-widget','jquery-effects-core') );
-		wp_enqueue_script( 'wolfnetscrollingitemsjs', $url . 'js/jQuery/jquery.wolfnetScrollingItems.src.js', array('smoothdivscrolljs') );
-		wp_enqueue_script( 'wolfnetquicksearchjs',    $url . 'js/jQuery/jquery.wolfnetQuickSearch.src.js',    array('jquery') );
-		wp_enqueue_script( 'wolfnetlistinggridjs',    $url . 'js/jQuery/jquery.wolfnetListingGrid.src.js',    array('jquery','tooltipjs','imagesloadedjs') );
-		wp_enqueue_script( 'wolfnetpropertylistjs',    $url . 'js/jQuery/jquery.wolfnetPropertyList.src.js',    array('jquery') );
+		wp_enqueue_script( 'tooltipjs',               $url . 'js/jquery.tooltip.src.js',               array('jquery') );
+		wp_enqueue_script( 'imagesloadedjs',          $url . 'js/jquery.imagesloaded.src.js',          array('jquery') );
+		wp_enqueue_script( 'mousewheeljs',            $url . 'js/jquery.mousewheel.src.js',            array('jquery') );
+		wp_enqueue_script( 'smoothdivscrolljs',       $url . 'js/jquery.smoothDivScroll-1.2.src.js',   array('mousewheeljs','jquery-ui-core','jquery-ui-widget','jquery-effects-core') );
+		wp_enqueue_script( 'wolfnetscrollingitemsjs', $url . 'js/jquery.wolfnetScrollingItems.src.js', array('smoothdivscrolljs') );
+		wp_enqueue_script( 'wolfnetquicksearchjs',    $url . 'js/jquery.wolfnetQuickSearch.src.js',    array('jquery') );
+		wp_enqueue_script( 'wolfnetlistinggridjs',    $url . 'js/jquery.wolfnetListingGrid.src.js',    array('jquery','tooltipjs','imagesloadedjs') );
+		wp_enqueue_script( 'wolfnetpropertylistjs',   $url . 'js/jquery.wolfnetPropertyList.src.js',   array('jquery') );
 		wp_enqueue_script( 'wolfnetjs',               $url . 'js/wolfnet.src.js',                             array('jquery','tooltipjs') );
 
 		wp_enqueue_style(  'wolfnetcss',              $url . 'css/wolfnet.src.css',                           array(), false, 'screen' );
