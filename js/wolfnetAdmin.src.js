@@ -81,20 +81,11 @@ if ( typeof jQuery != 'undefined' ) {
 			var validClass      = 'valid';
 			var invalidClass    = 'invalid';
 			var wrapperClass    = 'wolfnetProductKeyValidationWrapper';
+			var validEvent      = 'validProductKey';
+			var invalidEvent    = 'invalidProductKey';
 			var validationEvent = 'validateProductKey';
 			//var apiUri          = 'http://services.mlsfinder.com/validateKey/';
 			var apiUri          = 'http://aj.cfdevel.wnt/com/mlsfinder/services/index.cfm/validateKey/';
-
-			/* Validate the key. */
-			var validate = function ( key )
-			{
-				if ( validatePrefix( key ) && validateLength( key ) /*&& validateViaApi( key )*/ ) {
-					return true;
-				}
-				else {
-					return false;
-				}
-			}
 
 			/* Validate that the key has the appropriate prefix. */
 			var validatePrefix = function ( key )
@@ -121,22 +112,35 @@ if ( typeof jQuery != 'undefined' ) {
 			}
 
 			/* Send the key to the API and validate that the key is active in mlsfinder.com */
-			var validateViaApi = function ( key )
+			var validateViaApi = function ( input )
 			{
+				var $this    = $( input );
+				var key      = $this.val();
+
 				$.ajax( {
-					url: apiUri + key,
+					url: apiUri + key + '.jsonp',
 					dataType: 'jsonp',
+					cache: false,
 					success: function ( data ) {
-						var data = $.parseJSON( data );
-						if ( !'error' in data ) {
-							return true;
+						/* If no errors are returned the key is valid. */
+						if ( !data.error.status ) {
+							$this.trigger( validEvent );
+						}
+						/* If the validation failed because the key is disabled notify the user */
+						else if ( data.error.status === true && data.error.message == 'Product Key is Disabled' ) {
+							$this.trigger( invalidEvent );
+							alert( 'The product key you have entered is currently disabled. Please contact customer services for more information.' );
+						}
+						else {
+							$this.trigger( invalidEvent );
 						}
 					},
 					error: function () {
+						/* If the Ajax request failed notify the user that validation of the key was not possible. */
+						$this.trigger( invalidEvent );
 						alert( 'Unable to validate the product key at this time.' );
 					}
 				} );
-				return false;
 			}
 
 			/* This callback function is called whenever the validation event is trigger and takes
@@ -145,22 +149,37 @@ if ( typeof jQuery != 'undefined' ) {
 			{
 				var $this    = $( this );
 				var $wrapper = $this.parent();
-				var key      = $( this ).val();
+				var key      = $this.val();
 
 				if ( key != '' ) {
-					if ( validate( key ) === true ) {
-						$wrapper.addClass( validClass );
-						$wrapper.removeClass( invalidClass );
+					if ( validatePrefix( key ) === true && validateLength( key ) === true ) {
+						$this.trigger( validEvent );
+						validateViaApi( this );
 					}
 					else {
-						$wrapper.addClass( invalidClass );
-						$wrapper.removeClass( validClass );
+						$this.trigger( invalidEvent );
 					}
 				}
 				else {
 					$wrapper.removeClass( validClass );
 					$wrapper.removeClass( invalidClass );
 				}
+			}
+
+			var onValidEvent = function ()
+			{
+				var $this    = $( this );
+				var $wrapper = $this.parent();
+				$wrapper.addClass( validClass );
+				$wrapper.removeClass( invalidClass );
+			}
+
+			var onInvalidEvent = function ()
+			{
+				var $this    = $( this );
+				var $wrapper = $this.parent();
+				$wrapper.addClass( invalidClass );
+				$wrapper.removeClass( validClass );
 			}
 
 			return this.each( function () {
@@ -182,16 +201,13 @@ if ( typeof jQuery != 'undefined' ) {
 					$this.after( $wrapper );
 					$this.appendTo( $wrapper );
 
-					/* Bind the onValidateEvent callback function to a custom event on the input field. */
+					/* Bind the some custom events to callback */
 					$this.bind( validationEvent, onValidateEvent );
+					$this.bind( validEvent, onValidEvent );
+					$this.bind( invalidEvent, onInvalidEvent );
 
 					/* Trigger the validation even every time a key is pressed in input field. */
 					$this.keyup( function () {
-						$this.trigger( validationEvent );
-					} );
-
-					/* Trigger the validation event every time to input field is taken out of focus. */
-					$this.blur( function () {
 						$this.trigger( validationEvent );
 					} );
 
