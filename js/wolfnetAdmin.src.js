@@ -16,55 +16,191 @@ if ( typeof jQuery != 'undefined' ) {
 
 	( function ( $ ) {
 
-		/* Make sure there is always a scrollbar on the window so there is no jumping of content
-		 * when sections are expanded and collapsed. */
-		$( 'html' ).css( 'overflow-y', 'scroll' );
+		$( document ).ready( function () {
 
-		$.fn.wolfnetFeaturedListingsControls = function ( options ) {
+			/* simple browser detection */
+			if ( navigator.appName == 'Microsoft Internet Explorer' ) {
+				$( 'html' ).addClass( 'ie' );
+			}
+
+		} );
+
+		$.fn.wolfnetFeaturedListingsControls = function ( options )
+		{
 
 			var option = $.extend( {}, options );
 
 			var animationSpeed = 'fast';
 			var easing         = 'swing';
 
+			var showAutoFields = function ( $autoFields )
+			{
+				$autoFields.disabled = false;
+				$autoFields.show();
+				$autoFields.find( 'fieldset:first' ).slideDown( animationSpeed, easing );
+			}
+
+			var hideAutoFields = function ( $autoFields )
+			{
+				$autoFields.val( '' );
+				$autoFields.disabled = true;
+				$autoFields.find( 'fieldset:first' ).slideUp( animationSpeed, easing, function () {
+					$autoFields.hide();
+				} );
+			}
+
 			return this.each( function () {
 
-				var  widgetCtrls = this;
 				var $widgetCtrls = $( this );
 
 				var $playMode   = $widgetCtrls.find( '.wolfnet_featuredListingsOptions_autoPlayField:first' );
 				var $autoFields = $widgetCtrls.find( '.wolfnet_featuredListingsOptions_autoPlayOptions:first' ).hide();
 
-				var showAutoFields = function ()
-				{
-					$autoFields.disabled = false;
-					$autoFields.show();
-					$autoFields.find( 'fieldset:first' ).slideDown( animationSpeed, easing );
-				}
-
-				var hideAutoFields = function ()
-				{
-					$autoFields.val( '' );
-					$autoFields.disabled = true;
-					$autoFields.find( 'fieldset:first' ).slideUp( animationSpeed, easing, function () {
-						$autoFields.hide();
-					} );
-				}
-
 				$playMode.change( function () {
 
 					/* Automatic */
 					if ( $( this ).val() == 'true' ) {
-						showAutoFields();
+						showAutoFields( $autoFields );
 					}
 					/* Manual */
 					else {
-						hideAutoFields();
+						hideAutoFields( $autoFields );
 					}
 
 				} );
 
 				$playMode.trigger( 'change' );
+
+			} );
+
+		}
+
+		$.fn.wolfnetValidateProductKey = function ()
+		{
+
+			var validClass      = 'valid';
+			var invalidClass    = 'invalid';
+			var wrapperClass    = 'wolfnetProductKeyValidationWrapper';
+			var validationEvent = 'validateProductKey';
+			//var apiUri          = 'http://services.mlsfinder.com/validateKey/';
+			var apiUri          = 'http://aj.cfdevel.wnt/com/mlsfinder/services/index.cfm/validateKey/';
+
+			/* Validate the key. */
+			var validate = function ( key )
+			{
+				if ( validatePrefix( key ) && validateLength( key ) /*&& validateViaApi( key )*/ ) {
+					return true;
+				}
+				else {
+					return false;
+				}
+			}
+
+			/* Validate that the key has the appropriate prefix. */
+			var validatePrefix = function ( key )
+			{
+				if ( key.substring( 0, 3 ).toLowerCase() == 'wp_' ) {
+					return true;
+				}
+				else {
+					return false;
+				}
+
+			}
+
+			/* Validate that the key is of an appropriate length. */
+			var validateLength = function ( key )
+			{
+				if ( key.length == 35 ) {
+					return true;
+				}
+				else {
+					return false;
+				}
+
+			}
+
+			/* Send the key to the API and validate that the key is active in mlsfinder.com */
+			var validateViaApi = function ( key )
+			{
+				$.ajax( {
+					url: apiUri + key,
+					dataType: 'jsonp',
+					success: function ( data ) {
+						var data = $.parseJSON( data );
+						if ( !'error' in data ) {
+							return true;
+						}
+					},
+					error: function () {
+						alert( 'Unable to validate the product key at this time.' );
+					}
+				} );
+				return false;
+			}
+
+			/* This callback function is called whenever the validation event is trigger and takes
+			 * any neccessary action to notify the user if the key is valid or not. */
+			var onValidateEvent = function ()
+			{
+				var $this    = $( this );
+				var $wrapper = $this.parent();
+				var key      = $( this ).val();
+
+				if ( key != '' ) {
+					if ( validate( key ) === true ) {
+						$wrapper.addClass( validClass );
+						$wrapper.removeClass( invalidClass );
+					}
+					else {
+						$wrapper.addClass( invalidClass );
+						$wrapper.removeClass( validClass );
+					}
+				}
+				else {
+					$wrapper.removeClass( validClass );
+					$wrapper.removeClass( invalidClass );
+				}
+			}
+
+			return this.each( function () {
+
+				var $this = $( this );
+
+				/* Ensure the plugin is only applied to input elements. */
+				if ( this.nodeName.toLowerCase() != 'input' ) {
+					throw "wolfnetValidateProductKey jQuery plugin can only be applied to an input element!"
+				}
+				else {
+
+					/* Create an element to wrap the input field with. ( this will make styling easier ) */
+					var $wrapper = $( '<span/>' );
+					$wrapper.addClass( wrapperClass );
+
+					/* Add the wrapper element to the DOM immediately after the input field. Then
+					 * move the input field inside of the wrapper. */
+					$this.after( $wrapper );
+					$this.appendTo( $wrapper );
+
+					/* Bind the onValidateEvent callback function to a custom event on the input field. */
+					$this.bind( validationEvent, onValidateEvent );
+
+					/* Trigger the validation even every time a key is pressed in input field. */
+					$this.keyup( function () {
+						$this.trigger( validationEvent );
+					} );
+
+					/* Trigger the validation event every time to input field is taken out of focus. */
+					$this.blur( function () {
+						$this.trigger( validationEvent );
+					} );
+
+					/* Trigger the validation event when the document is ready. */
+					$( document ).ready( function () {
+						$this.trigger( validationEvent );
+					} );
+
+				}
 
 			} );
 

@@ -48,7 +48,7 @@ extends com_ajmichels_wppf_action_action
 
 		wp_enqueue_script( 'tooltipjs',               $url . 'js/jquery.tooltip.src.js',                   array('jquery') );
 		wp_enqueue_script( 'wolfnetshortcodebuilder', $url . 'js/jquery.wolfnet_shortcode_builder.src.js', array('jquery-ui-core','jquery-ui-widget') );
-		wp_enqueue_script( 'wolfnetadminjs',          $url . 'js/wolfnet.src.js',                          array('jquery','tooltipjs') );
+		wp_enqueue_script( 'wolfnetjs',               $url . 'js/wolfnet.src.js',                          array('jquery','tooltipjs') );
 		wp_enqueue_script( 'wolfnetadminjs',          $url . 'js/wolfnetAdmin.src.js',                     array('jquery') );
 
 		$jquery_ui = $wp_scripts->query('jquery-ui-core');

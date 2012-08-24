@@ -62,3 +62,17 @@
 	</form>
 
 </div>
+
+<script type="text/javascript">
+
+	if ( typeof jQuery != 'undefined' ) {
+
+		( function ( $ ) {
+
+			$( '#wolfnet_productKey' ).wolfnetValidateProductKey();
+
+		} )( jQuery );
+
+	}
+
+</script>

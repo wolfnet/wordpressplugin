@@ -10,6 +10,13 @@
 
 @imagesDir: '../img/';
 
+html
+{
+	/* This ensures there is always a scrollbar on the window so there is no jumping of content
+	   when the length of the page is changed by javascript content changes. */
+	overflow-y: scroll !important;
+}
+
 .wp-admin
 {
 
@@ -89,6 +96,52 @@
 		color: #999;
 	}
 
+}
+
+.wolfnetProductKeyValidationWrapper
+{
+	display:        inline-block;
+	vertical-align: middle;
+
+	input
+	{
+		height:     25px;
+	}
+
+	&.valid
+	{
+		padding-right:    35px;
+		background: url('@{imagesDir}valid.png') no-repeat right;
+
+		input
+		{
+			-moz-box-shadow:    0px 0px 10px 1px green;
+			-webkit-box-shadow: 0px 0px 10px 1px green;
+			box-shadow:         0px 0px 10px 1px green;
+		}
+	}
+	&.invalid
+	{
+		padding-right:    35px;
+		background: url('@{imagesDir}invalid.png') no-repeat right;
+
+		input
+		{
+			-moz-box-shadow:    0px 0px 10px 1px red;
+			-webkit-box-shadow: 0px 0px 10px 1px red;
+			box-shadow:         0px 0px 10px 1px red;
+		}
+	}
+}
+
+html.ie .wolfnetProductKeyValidationWrapper.valid input
+{
+	border-color: green !important;
+}
+
+html.ie .wolfnetProductKeyValidationWrapper.invalid input
+{
+	border-color: red !important;
 }
 
 #wolfnetShortcodeBuilderWindow
