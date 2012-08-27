@@ -84,8 +84,7 @@ if ( typeof jQuery != 'undefined' ) {
 			var validEvent      = 'validProductKey';
 			var invalidEvent    = 'invalidProductKey';
 			var validationEvent = 'validateProductKey';
-			//var apiUri          = 'http://services.mlsfinder.com/validateKey/';
-			var apiUri          = 'http://aj.cfdevel.wnt/com/mlsfinder/services/index.cfm/validateKey/';
+			var apiUri          = 'http://services.mlsfinder.com/validateKey/';
 
 			/* Validate that the key has the appropriate prefix. */
 			var validatePrefix = function ( key )
@@ -120,7 +119,15 @@ if ( typeof jQuery != 'undefined' ) {
 				$.ajax( {
 					url: apiUri + key + '.jsonp',
 					dataType: 'jsonp',
+					type: 'GET',
 					cache: false,
+					timeout: 2500,
+					statusCode: {
+						404: function () {
+							console.log( '404' );
+							commFailure();
+						}
+					},
 					success: function ( data ) {
 						/* If no errors are returned the key is valid. */
 						if ( !data.error.status ) {
@@ -138,7 +145,7 @@ if ( typeof jQuery != 'undefined' ) {
 					error: function () {
 						/* If the Ajax request failed notify the user that validation of the key was not possible. */
 						$this.trigger( invalidEvent );
-						alert( 'Unable to validate the product key at this time.' );
+						alert( 'Your product key appears to be formated correctly but we are unable to validate it against our servers at this time.' );
 					}
 				} );
 			}
