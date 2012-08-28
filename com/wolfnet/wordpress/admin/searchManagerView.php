@@ -41,6 +41,9 @@ implements com_ajmichels_wppf_interface_iView
 	private $settingsService;
 
 
+	private $sessionKey = 'wolfnetSearchManagerCookies';
+
+
 	/* CONSTRUCTOR METHOD *********************************************************************** */
 
 	public function __construct ()
@@ -62,14 +65,12 @@ implements com_ajmichels_wppf_interface_iView
 	 */
 	public function render ( $data = array() )
 	{
-		// TODO: Update this to perform a validation check on the product key.
-		//$optionManager = $this->getOptionManager();
-		//$productKey    = $optionManager->getOptionValueFromWP( 'wolfnet_productKey' );
-		$validKey      = true;
-		if ( !$validKey ) {
+		if ( !$this->getSettingsService()->isKeyValid() ) {
 			$this->template = $this->formatPath( dirname( __FILE__ ) . '\template\invalidProductKey.php' );
 		}
-		$data['search_form'] = $this->getSearchForm();
+		else {
+			$data['search_form'] = $this->getSearchForm();
+		}
 		return parent::render( $data );
 	}
 
@@ -78,16 +79,42 @@ implements com_ajmichels_wppf_interface_iView
 
 	private function getSearchForm ()
 	{
-		$settings = $this->getSettingsService()->getSettings();
+		$baseUrl   = $this->getSettingsService()->getSettings()->getSITE_BASE_URL();
+		$url       = $baseUrl . '/index.cfm?action=wpshortcodebuilder&search_mode=form';
+		$resParams = array( 'page', 'action', 'market_guid', 'reinit', 'show_header_footer', 'search_mode' );
 
-		//$url = 'http://aj.vm.mlsfinder.com/mn_rmls/2point5c/index.cfm?action=wpshortcodebuilder&search_mode=form';
-		//
-		//$http = wp_remote_get( $url );
-		//
-		//return $http['body'];
+		foreach ( $_GET as $param => $paramValue ) {
+			if ( !array_search( $param, $resParams ) ) {
+				$paramValue = urlencode( $paramValue );
+				$url .= "&{$param}={$paramValue}";
+			}
+		}
 
-		return '';
+		$http    = wp_remote_get( $url, array( 'cookies' => $this->getCookieData() ) );
 
+		if ( !is_wp_error( $http ) && $http['response']['code'] == '200' ) {
+			$this->setCookieData( $http['cookies'] );
+			return $http['body'];
+		}
+		else {
+			return '';
+		}
+
+	}
+
+
+	private function getCookieData ()
+	{
+		if ( !array_key_exists( $this->getSessionKey(), $_SESSION ) ) {
+			$_SESSION[$this->getSessionKey()] = array();
+		}
+		return $_SESSION[$this->getSessionKey()];
+	}
+
+
+	private function setCookieData ( array $cookies )
+	{
+		$_SESSION[$this->getSessionKey()] = $cookies;
 	}
 
 
@@ -141,6 +168,31 @@ implements com_ajmichels_wppf_interface_iView
 	public function setSettingsService ( com_wolfnet_wordpress_settings_service $service )
 	{
 		$this->settingsService = $service;
+	}
+
+
+	/**
+	 * GETTER: This method is a getter for the settingsService property.
+	 *
+	 * @return  string  The absolute URL to this plugin's directory.
+	 *
+	 */
+	public function getSessionKey ()
+	{
+		return $this->sessionKey;
+	}
+
+
+	/**
+	 * SETTER: This method is a setter for the settingsService property.
+	 *
+	 * @param   string  $url  The absolute URL to this plugin's directory.
+	 * @return  void
+	 *
+	 */
+	public function setSessionKey ( $key )
+	{
+		$this->sessionKey = $key;
 	}
 
 

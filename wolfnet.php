@@ -79,6 +79,10 @@ implements com_ajmichels_common_iSingleton
 		$defaultUrl = $this->sf->getBean( 'DefaultWebServiceUrl' );
 		$defaultUrl->setParameter( 'pluginVersion', $this->version );
 
+		if ( !session_id() ) {
+			session_start();
+		}
+
 		/* Notify the bootstrap that we are ready to initialize the plugin. */
 		parent::initPlugin();
 
