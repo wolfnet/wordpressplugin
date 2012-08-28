@@ -22,7 +22,7 @@ extends com_wolfnet_wordpress_abstract_widget
 
 
 	/* PROPERTIES ******************************************************************************* */
-
+	public $template;
 	/**
 	 * This property holds an array of different options that are available for each widget instance.
 	 *
@@ -30,6 +30,7 @@ extends com_wolfnet_wordpress_abstract_widget
 	 *
 	 */
 	public $options = array(
+		'title'        => 'QuickSearch',
 		'description'  => 'Display a quick search form which when submitted takes a user to full featured search results.'
 		);
 
@@ -49,6 +50,13 @@ extends com_wolfnet_wordpress_abstract_widget
 	 *
 	 */
 	private $quickSearchView;
+	
+	/**
+	 * This property holds an instance of the Quicksearch Options View object
+	 *
+	 * @type  com_ajmichels_wppf_interface_iView
+	 */
+	private $quickSearchOptionsView;
 
 
 	/* CONSTRUCTOR METHOD *********************************************************************** */
@@ -66,6 +74,7 @@ extends com_wolfnet_wordpress_abstract_widget
 		/* The 'sf' property is set in the abstract widget class and is pulled from the plugin instance */
 		$this->setListingService( $this->sf->getBean( 'ListingService' ) );
 		$this->setQuickSearchView( $this->sf->getBean( 'QuickSearchView' ) );
+		$this->setQuickSearchOptionsView( $this->sf->getBean( 'QuickSearchOptionsView' ) );
 	}
 
 
@@ -83,10 +92,9 @@ extends com_wolfnet_wordpress_abstract_widget
 	public function widget ( $args, $instance )
 	{
 		$ls = $this->getListingService();
+		$options = $this->getOptionData( $instance );
 		$data = array(
-					'prices' => $ls->getPriceData(),
-					'beds'   => $ls->getBedData(),
-					'baths'  => $ls->getBathData()
+					'options'  => $options
 					);
 		$this->getQuickSearchView()->out( $data );
 	}
@@ -102,7 +110,11 @@ extends com_wolfnet_wordpress_abstract_widget
 	 */
 	public function form ( $instance )
 	{
-		/* Admin form for configured widget options. */
+		$data = array(
+			'fields' => $this->getOptionData( $instance )
+			);
+	
+		$this->getQuickSearchOptionsView()->out( $data );
 	}
 
 
@@ -116,7 +128,13 @@ extends com_wolfnet_wordpress_abstract_widget
 	 */
 	public function update ( $new_instance, $old_instance )
 	{
-		/* Save action for configuration form. */
+		// processes widget options to be saved
+		$newData = $this->getOptionData( $new_instance );
+		$saveData = array();
+		foreach ( $newData as $opt => $data ) {
+			$saveData[$opt] = strip_tags( $data['value'] );
+		}
+		return $saveData;
 	}
 
 
@@ -171,5 +189,28 @@ extends com_wolfnet_wordpress_abstract_widget
 		$this->quickSearchView = $view;
 	}
 
+	/**
+	 * GETTER:  This method is a getter for the quickSearchOptionsView property.
+	 *
+	 * @return  com_ajmichels_wppf_interface_iView
+	 *
+	 */
+	public function getQuickSearchOptionsView ()
+	{
+		return $this->quickSearchOptionsView;
+	}
+
+
+	/**
+	 * SETTER:  This method is a setter for the quickSearchOptionsView property.
+	 *
+	 * @param   com_ajmichels_wppf_interface_iView  $service
+	 * @return  void
+	 *
+	 */
+	public function setQuickSearchOptionsView ( com_ajmichels_wppf_interface_iView $view )
+	{
+		$this->quickSearchOptionsView = $view;
+	}
 
 }
