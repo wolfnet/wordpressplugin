@@ -55,7 +55,14 @@ extends com_ajmichels_wppf_action_action
 
 	public function addPluginJavaScript ( array $plugins )
 	{
-		$plugins['wolfnetShortcodeBuilder'] = $this->getPluginUrl() . 'js/tinymce.wolfnet_shortcode_builder.src.js';
+		$url = $this->getPluginUrl();
+		echo '<script type="text/javascript">var wordpressBaseUrl = "' . get_bloginfo('url') . '";</script>';
+		wp_enqueue_script(
+			'wolfnetshortcodebuilder',
+			$url . 'js/jquery.wolfnet_shortcode_builder.src.js',
+			array( 'jquery-ui-core', 'jquery-ui-widget', 'jquery-effects-core' )
+		);
+		$plugins['wolfnetShortcodeBuilder'] = $url . 'js/tinymce.wolfnet_shortcode_builder.src.js';
 		return $plugins;
 	}
 

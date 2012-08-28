@@ -10,24 +10,34 @@ var wolfnet = function ()
 {
 }
 
+wolfnet.initMoreInfo = function (  $moreInfoItems )
+{
+
+	( function ( $ ) {
+
+		$moreInfoItems.hide();
+
+		$moreInfoItems.before( '<span class="wolfnet_moreInfoIcon"/>' );
+
+		$( '.wolfnet_moreInfoIcon' ).tooltip( {
+			showURL     : false,
+			width       : 200,
+			bodyHandler : function () {
+				return $( this ).siblings( '.wolfnet_moreInfo' ).html();
+			}
+		} );
+
+	} )( jQuery );
+
+}
+
 if ( typeof jQuery != 'undefined' ) {
 
 	( function ( $ ) {
 
 		$( document ).ready( function () {
 
-			var $moreInfoItems = $( '.wolfnet_moreInfo' );
-
-			$moreInfoItems.hide();
-
-			$moreInfoItems.before( '<span class="wolfnet_moreInfoIcon"/>' );
-
-			$( '.wolfnet_moreInfoIcon' ).tooltip( {
-				showURL     : false,
-				bodyHandler : function () {
-					return $( this ).siblings( '.wolfnet_moreInfo' ).html();
-				}
-			} );
+			wolfnet.initMoreInfo( $( '.wolfnet_moreInfo' ) );
 
 		} );
 

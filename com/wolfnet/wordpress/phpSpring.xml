@@ -196,6 +196,23 @@
 		</property>
 	</bean>
 
+	<bean id="RegisterRewriteRules" class="com_wolfnet_wordpress_action_registerRewriteRules" />
+
+	<bean id="ManageRewritePages" class="com_wolfnet_wordpress_action_manageRewritePages">
+		<property name="ListingService">
+			<ref bean="ListingService" />
+		</property>
+		<property name="FeaturedListingsOptionsView">
+			<ref bean="FeaturedListingsOptionsView" />
+		</property>
+		<property name="ListingGridOptionsView">
+			<ref bean="ListingGridOptionsView" />
+		</property>
+		<property name="PropertyListOptionsView">
+			<ref bean="PropertyListOptionsView" />
+		</property>
+	</bean>
+
 
 	<!-- Shortcodes -->
 

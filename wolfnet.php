@@ -67,7 +67,8 @@ implements com_ajmichels_common_iSingleton
 		$sfXml = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'com/wolfnet/wordpress/phpSpring.xml';
 		$sfProps = array(
 					'pluginUrl'          => $this->getPluginUrl(),
-					'webServiceDomain'   => 'http://services.mlsfinder.com/v1',
+					//'webServiceDomain'   => 'http://services.mlsfinder.com/v1',
+					'webServiceDomain'   => 'http://aj.cfdevel.wnt/com/mlsfinder/services/index.cfm',
 					'pluginMajorVersion' => $this->majorVersion,
 					'pluginMinorVersion' => $this->minorVersion,
 					'pluginVersion'      => $this->version
@@ -85,6 +86,18 @@ implements com_ajmichels_common_iSingleton
 
 
 	/* PLUGIN LIFE-CYCLE HOOKS ****************************************************************** */
+
+	public function activate ()
+	{
+		$this->sf->getBean( 'RegisterRewriteRules' )->execute();
+		flush_rewrite_rules();
+	}
+
+	public function deactivate ()
+	{
+		flush_rewrite_rules();
+	}
+
 
 	/* Runs when the page output is complete and PHP script execution is about to end. */
 	public function shutdown ()
@@ -108,11 +121,13 @@ implements com_ajmichels_common_iSingleton
 	/* Register Actions with the Action Manager */
 	protected function actions ()
 	{
+		$this->am->register( $this->sf->getBean( 'RegisterRewriteRules' ),      array( 'init' ) );
 		$this->am->register( $this->sf->getBean( 'AddShortcodeBuilderButton' ), array( 'admin_init' ) );
 		$this->am->register( $this->sf->getBean( 'EnqueueResources' ),          array( 'wp_enqueue_scripts' ) );
 		$this->am->register( $this->sf->getBean( 'CreateAdminPages' ),          array( 'admin_menu' ) );
 		$this->am->register( $this->sf->getBean( 'RegisterWidgets' ),           array( 'widgets_init' ) );
 		$this->am->register( $this->sf->getBean( 'EnqueueAdminResources' ),     array( 'admin_enqueue_scripts' ) );
+		$this->am->register( $this->sf->getBean( 'ManageRewritePages' ),        array( 'template_redirect' ) );
 		$this->am->register( $this->sf->getBean( 'FooterDisclaimer' ),          array( 'wp_footer' ) );
 	}
 
