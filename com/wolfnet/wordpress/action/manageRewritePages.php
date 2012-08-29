@@ -55,6 +55,15 @@ extends com_ajmichels_wppf_action_action
 	private $propertyListOptionsView;
 
 
+	/**
+	 * This property holds an instance of the Quick Search Options View object
+	 *
+	 * @type  com_ajmichels_wppf_interface_iView
+	 *
+	 */
+	private $quickSearchOptionsView;
+
+
 	/* PUBLIC METHODS *************************************************************************** */
 
 	/**
@@ -86,6 +95,11 @@ extends com_ajmichels_wppf_action_action
 
 				case 'featured-options':
 					$this->renderFeaturedListingsOptions();
+					exit;
+					break;
+
+				case 'quicksearch-options':
+					$this->renderQuickSearchOptions();
 					exit;
 					break;
 
@@ -153,6 +167,18 @@ extends com_ajmichels_wppf_action_action
 			'ownerTypes' => $this->getListingService()->getOwnerTypeData()
 		);
 		$this->getPropertyListOptionsView()->out( $data );
+	}
+
+
+	private function renderQuickSearchOptions ()
+	{
+		$this->updateHttpHeader();
+		$data = array(
+			'fields' => array(
+				'title'      => array( 'name' => 'title', 'value' => 'QuickSearch' )
+			)
+		);
+		$this->getQuickSearchOptionsView()->out( $data );
 	}
 
 
@@ -261,6 +287,31 @@ extends com_ajmichels_wppf_action_action
 	public function setPropertyListOptionsView ( com_ajmichels_wppf_interface_iView $view )
 	{
 		$this->propertyListOptionsView = $view;
+	}
+
+
+	/**
+	 * GETTER:  This method is a getter for the propertyListOptionsView property.
+	 *
+	 * @return  com_ajmichels_wppf_interface_iView
+	 *
+	 */
+	public function getQuickSearchOptionsView ()
+	{
+		return $this->quickSearchOptionsView;
+	}
+
+
+	/**
+	 * SETTER:  This method is a setter for the propertyListOptionsView property.
+	 *
+	 * @param   com_ajmichels_wppf_interface_iView  $service
+	 * @return  void
+	 *
+	 */
+	public function setQuickSearchOptionsView ( com_ajmichels_wppf_interface_iView $view )
+	{
+		$this->quickSearchOptionsView = $view;
 	}
 
 

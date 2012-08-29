@@ -56,7 +56,9 @@ if ( typeof String.prototype.trim !== 'function' ) {
 				},
 				quickSearch : {
 					buttonLabel : 'Add QuickSearch',
-					shortcode   : 'wnt_search'
+					shortcode   : 'wnt_search',
+					pageTitle   : 'QuickSearch Shortcode',
+					uri         : 'quicksearch-options'
 				}
 			}
 		},
@@ -215,15 +217,7 @@ if ( typeof String.prototype.trim !== 'function' ) {
 			var option      = this.options;
 			var container   = this.element;
 			var $container = $( container );
-			var $activePage = widget._getPage( widget._activePage )
-
-			if ( page == 'quickSearch' ) {
-
-				widget._buildShortcode( page );
-				$container.trigger( 'insertShortcodeEvent' );
-				return;
-
-			}
+			var $activePage = widget._getPage( widget._activePage );
 
 			if ( page != widget._activePage ) {
 
@@ -265,35 +259,31 @@ if ( typeof String.prototype.trim !== 'function' ) {
 			var attrs  = {};
 			var string = '[' + option.menuItems[page].shortcode + ' /]';
 
-			if ( page != 'quickSearch' ) {
+			$page.find( 'input, select' ).each( function () {
 
-				$page.find( 'input, select' ).each( function () {
+				if ( this.name != '' ) {
 
-					if ( this.name != '' ) {
+					switch ( this.type ) {
 
-						switch ( this.type ) {
+						default:
+							if ( this.value.trim() != '' ) {
+								attrs[this.name] = this.value.trim();
+							}
+							break;
 
-							default:
-								if ( this.value.trim() != '' ) {
-									attrs[this.name] = this.value.trim();
-								}
-								break;
-
-							//case 'checkbox':
-							//	attrs[this.name] = this.value;
-							//	break;
-                            //
-							//case 'radio':
-							//	attrs[this.name] = this.value;
-							//	break;
-
-						}
+						//case 'checkbox':
+						//	attrs[this.name] = this.value;
+						//	break;
+						//
+						//case 'radio':
+						//	attrs[this.name] = this.value;
+						//	break;
 
 					}
 
-				} );
+				}
 
-			}
+			} );
 
 			for ( var attr in attrs ) {
 				string = string.replace( '/]', ' ' + attr + '="' + attrs[attr] + '" /]' );
