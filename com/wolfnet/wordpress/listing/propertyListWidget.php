@@ -124,7 +124,7 @@ extends com_wolfnet_wordpress_abstract_widget
 			'listings' => $gridListings,
 			'options'  => $options
 			);
-		$this->getPropertyListView( $data )->out( $data );
+		$this->getPropertyListView()->out( $data );
 	}
 
 
