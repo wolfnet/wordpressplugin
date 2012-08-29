@@ -147,7 +147,7 @@
 	<bean id="PropertyListOptionsView" class="com_wolfnet_wordpress_listing_propertyListOptionsView" singleton="false" />
 
 	<bean id="QuickSearchOptionsView" class="com_wolfnet_wordpress_listing_quickSearchOptionsView" singleton="false" />
-	
+
 	<bean id="QuickSearchView" class="com_wolfnet_wordpress_listing_quickSearchView" singleton="false">
 		<property name="SettingsService">
 			<ref bean="SettingsService" />
@@ -212,6 +212,9 @@
 		</property>
 		<property name="PropertyListOptionsView">
 			<ref bean="PropertyListOptionsView" />
+		</property>
+		<property name="QuickSearchOptionsView">
+			<ref bean="QuickSearchOptionsView" />
 		</property>
 	</bean>
 
