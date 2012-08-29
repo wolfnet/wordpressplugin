@@ -69,7 +69,9 @@
 
 		( function ( $ ) {
 
-			$( '#wolfnet_productKey' ).wolfnetValidateProductKey();
+			$( '#wolfnet_productKey' ).wolfnetValidateProductKey( {
+				<?php echo ( array_key_exists( 'wolfnetApiUrl', $_SESSION ) ) ? 'apiUri:"' . $_SESSION['wolfnetApiUrl'] . '/validateKey/"' : ''; ?>
+			} );
 
 		} )( jQuery );
 

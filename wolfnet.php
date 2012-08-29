@@ -63,12 +63,30 @@ implements com_ajmichels_common_iSingleton
 			$this->loggerSetting( 'minTime', 0 );
 		}
 
+		$webServiceDomain = 'http://services.mlsfinder.com/v1';
+
+		if ( !session_id() ) {
+			session_start();
+		}
+
+		if ( array_key_exists( '__wolfnetApiUrl', $_GET ) ) {
+			if ( trim( $_GET['__wolfnetApiUrl'] ) != '' ) {
+				$_SESSION['wolfnetApiUrl'] = trim( $_GET['__wolfnetApiUrl'] );
+			}
+			else {
+				$_SESSION['wolfnetApiUrl'] = $webServiceDomain;
+			}
+		}
+
+		if ( array_key_exists( 'wolfnetApiUrl', $_SESSION ) ) {
+			$webServiceDomain = $_SESSION['wolfnetApiUrl'];
+		}
+
 		/* Create Plugin Service Factory */
 		$sfXml = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'com/wolfnet/wordpress/phpSpring.xml';
 		$sfProps = array(
 					'pluginUrl'          => $this->getPluginUrl(),
-					//'webServiceDomain'   => 'http://services.mlsfinder.com/v1',
-					'webServiceDomain'   => 'http://aj.cfdevel.wnt/com/mlsfinder/services/index.cfm',
+					'webServiceDomain'   => $webServiceDomain,
 					'pluginMajorVersion' => $this->majorVersion,
 					'pluginMinorVersion' => $this->minorVersion,
 					'pluginVersion'      => $this->version

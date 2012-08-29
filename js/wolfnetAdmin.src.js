@@ -75,16 +75,19 @@ if ( typeof jQuery != 'undefined' ) {
 
 		}
 
-		$.fn.wolfnetValidateProductKey = function ()
+		$.fn.wolfnetValidateProductKey = function ( clientOptions )
 		{
 
-			var validClass      = 'valid';
-			var invalidClass    = 'invalid';
-			var wrapperClass    = 'wolfnetProductKeyValidationWrapper';
-			var validEvent      = 'validProductKey';
-			var invalidEvent    = 'invalidProductKey';
-			var validationEvent = 'validateProductKey';
-			var apiUri          = 'http://services.mlsfinder.com/validateKey/';
+			var options = {
+				validClass      : 'valid',
+				invalidClass    : 'invalid',
+				wrapperClass    : 'wolfnetProductKeyValidationWrapper',
+				validEvent      : 'validProductKey',
+				invalidEvent    : 'invalidProductKey',
+				validationEvent : 'validateProductKey',
+				apiUri          : 'http://services.mlsfinder.com/validateKey/'
+			};
+			$.extend( options, clientOptions );
 
 			/* Validate that the key has the appropriate prefix. */
 			var validatePrefix = function ( key )
@@ -117,7 +120,7 @@ if ( typeof jQuery != 'undefined' ) {
 				var key      = $this.val();
 
 				$.ajax( {
-					url: apiUri + key + '.jsonp',
+					url: options.apiUri + key + '.jsonp',
 					dataType: 'jsonp',
 					type: 'GET',
 					cache: false,
@@ -131,20 +134,20 @@ if ( typeof jQuery != 'undefined' ) {
 					success: function ( data ) {
 						/* If no errors are returned the key is valid. */
 						if ( !data.error.status ) {
-							$this.trigger( validEvent );
+							$this.trigger( options.validEvent );
 						}
 						/* If the validation failed because the key is disabled notify the user */
 						else if ( data.error.status === true && data.error.message == 'Product Key is Disabled' ) {
-							$this.trigger( invalidEvent );
+							$this.trigger( options.invalidEvent );
 							alert( 'The product key you have entered is currently disabled. Please contact customer services for more information.' );
 						}
 						else {
-							$this.trigger( invalidEvent );
+							$this.trigger( options.invalidEvent );
 						}
 					},
 					error: function () {
 						/* If the Ajax request failed notify the user that validation of the key was not possible. */
-						$this.trigger( invalidEvent );
+						$this.trigger( options.invalidEvent );
 						alert( 'Your product key appears to be formated correctly but we are unable to validate it against our servers at this time.' );
 					}
 				} );
@@ -160,16 +163,16 @@ if ( typeof jQuery != 'undefined' ) {
 
 				if ( key != '' ) {
 					if ( validatePrefix( key ) === true && validateLength( key ) === true ) {
-						$this.trigger( validEvent );
+						$this.trigger( options.validEvent );
 						validateViaApi( this );
 					}
 					else {
-						$this.trigger( invalidEvent );
+						$this.trigger( options.invalidEvent );
 					}
 				}
 				else {
-					$wrapper.removeClass( validClass );
-					$wrapper.removeClass( invalidClass );
+					$wrapper.removeClass( options.validClass );
+					$wrapper.removeClass( options.invalidClass );
 				}
 			}
 
@@ -177,16 +180,16 @@ if ( typeof jQuery != 'undefined' ) {
 			{
 				var $this    = $( this );
 				var $wrapper = $this.parent();
-				$wrapper.addClass( validClass );
-				$wrapper.removeClass( invalidClass );
+				$wrapper.addClass( options.validClass );
+				$wrapper.removeClass( options.invalidClass );
 			}
 
 			var onInvalidEvent = function ()
 			{
 				var $this    = $( this );
 				var $wrapper = $this.parent();
-				$wrapper.addClass( invalidClass );
-				$wrapper.removeClass( validClass );
+				$wrapper.addClass( options.invalidClass );
+				$wrapper.removeClass( options.validClass );
 			}
 
 			return this.each( function () {
@@ -201,7 +204,7 @@ if ( typeof jQuery != 'undefined' ) {
 
 					/* Create an element to wrap the input field with. ( this will make styling easier ) */
 					var $wrapper = $( '<span/>' );
-					$wrapper.addClass( wrapperClass );
+					$wrapper.addClass( options.wrapperClass );
 
 					/* Add the wrapper element to the DOM immediately after the input field. Then
 					 * move the input field inside of the wrapper. */
@@ -209,18 +212,18 @@ if ( typeof jQuery != 'undefined' ) {
 					$this.appendTo( $wrapper );
 
 					/* Bind the some custom events to callback */
-					$this.bind( validationEvent, onValidateEvent );
-					$this.bind( validEvent, onValidEvent );
-					$this.bind( invalidEvent, onInvalidEvent );
+					$this.bind( options.validationEvent, onValidateEvent );
+					$this.bind( options.validEvent, onValidEvent );
+					$this.bind( options.invalidEvent, onInvalidEvent );
 
 					/* Trigger the validation even every time a key is pressed in input field. */
 					$this.keyup( function () {
-						$this.trigger( validationEvent );
+						$this.trigger( options.validationEvent );
 					} );
 
 					/* Trigger the validation event when the document is ready. */
 					$( document ).ready( function () {
-						$this.trigger( validationEvent );
+						$this.trigger( options.validationEvent );
 					} );
 
 				}
