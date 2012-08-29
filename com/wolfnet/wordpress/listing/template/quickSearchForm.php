@@ -17,7 +17,10 @@
 
 <div id="<?php echo $instanceId; ?>" class="wolfnet_widget wolfnet_quickSearch">
 	
-	<span class="wolfnet_widgetTitle">QuickSearch</span>
+	
+	<?php if ( trim( $options['title']['value'] ) != '' ) { ?>
+		<span class="wolfnet_widgetTitle"><?php echo $options['title']['value']; ?></span>
+	<?php } ?>
 	
 	<form id="<?php echo $instanceId; ?>_quickSearchForm" class="wolfnet_quickSearch_form" 
 		name="<?php echo $instanceId; ?>_quickSearchForm" method="get" 
