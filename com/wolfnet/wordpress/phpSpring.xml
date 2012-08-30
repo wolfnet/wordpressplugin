@@ -98,6 +98,8 @@
 		</property>
 	</bean>
 
+	<bean id="SearchService" class="com_wolfnet_wordpress_search_service" />
+
 
 	<!-- Views -->
 
@@ -204,6 +206,9 @@
 		<property name="ListingService">
 			<ref bean="ListingService" />
 		</property>
+		<property name="SearchService">
+			<ref bean="SearchService" />
+		</property>
 		<property name="FeaturedListingsOptionsView">
 			<ref bean="FeaturedListingsOptionsView" />
 		</property>
@@ -217,6 +222,8 @@
 			<ref bean="QuickSearchOptionsView" />
 		</property>
 	</bean>
+
+	<bean id="RegisterCustomPostTypes" class="com_wolfnet_wordpress_action_registerCustomPostTypes" />
 
 
 	<!-- Shortcodes -->

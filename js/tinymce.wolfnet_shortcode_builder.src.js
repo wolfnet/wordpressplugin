@@ -31,8 +31,8 @@ if ( typeof tinymce != 'undefined' && typeof jQuery != 'undefined' ) {
 				var wolfnetPluginUrl = url.substring( 0, url.length - 2 );
 				$window.wolfnetShortcodeBuilder( {
 					tinymce   : editor,
-					rootUri   : wordpressBaseUrl + '/index.php?pagename=wolfnet-admin-shortcodebuilder-optionform&formpage=',
-					leaderUri : wolfnetPluginUrl + 'img/loader.gif'
+					rootUri   : wordpressBaseUrl + '/index.php?pagename=wolfnet-admin-shortcodebuilder',
+					loaderUri : wolfnetPluginUrl + 'img/loader.gif'
 				} );
 				editor.addButton( 'wolfnetShortcodeBuilderButton', {
 					title   : 'WolfNet Shortcode Builder',

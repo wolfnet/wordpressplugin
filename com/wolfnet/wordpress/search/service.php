@@ -46,8 +46,9 @@ implements com_ajmichels_wppf_interface_iService
 	}
 
 
-	/* PROPERTIES ******************************************************************************* */
+	/* CONSTANTS ******************************************************************************** */
 
+	const WOLFNET_SEARCH_POST = 'wolfnet_search';
 
 
 	/* CONSTRUCTOR ****************************************************************************** */
@@ -66,18 +67,59 @@ implements com_ajmichels_wppf_interface_iService
 
 	/* PUBLIC METHODS *************************************************************************** */
 
-	public function getSearchBuilder ()
-	{
 
+	public function getSearches ()
+	{
+		$dataArgs = array(
+			'numberposts' => -1,
+			'post_type'   => self::WOLFNET_SEARCH_POST
+		);
+
+		$posts = get_posts( $dataArgs );
+
+		foreach ( $posts as $post ) {
+
+			$customFields = get_post_custom( $post->ID );
+
+			foreach ( $customFields as $field => $value ) {
+
+				if ( substr( $field, 0, 1 ) != '_' ) {
+					$post->data[$field] = $value[0];
+				}
+
+			}
+
+		}
+
+		return $posts;
 	}
 
 
-	/* PRIVATE METHODS ************************************************************************** */
+	public function saveSearch ( $title, $criteria )
+	{
+		// Create post object
+		$my_post = array(
+			 'post_title'  => $title,
+			 'post_status' => 'publish',
+			 'post_author' => wp_get_current_user()->ID,
+			 'post_type'   => self::WOLFNET_SEARCH_POST
+		);
+
+		// Insert the post into the database
+		$post_id = wp_insert_post( $my_post );
+
+		foreach ( $criteria as $field => $value ) {
+
+			add_post_meta( $post_id, $field, $value, true );
+
+		}
+	}
 
 
-
-	/* ACCESSOR METHODS ************************************************************************* */
-
+	public function deleteSearch ( $id )
+	{
+		wp_delete_post( $id, true );
+	}
 
 
 }

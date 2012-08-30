@@ -20,6 +20,12 @@
 
 	<h2>WolfNet - Search Manager</h2>
 
+	<noscript>
+		<div class="error">
+			This page will not work without JavaScript enabled.
+		</div>
+	</noscript>
+
 	<div style="width:875px">
 
 		<p>The <strong>search manager</strong> allows you to create easily create and save custom search
@@ -70,46 +76,96 @@
 	( function ( $ ) {
 
 		var savedSearches = {};
-		var $tbody        = $( '#savedsearches tbody' );
-		var $form         = $( '#savedsearches tfoot' );
+		var $container    = $( '#savedsearches' );
+		var $tbody        = $container.find( 'tbody:first' );
+		var $form         = $container.find( 'tfoot:first' );
 		var $desc         = $form.find( 'input:first' );
 		var $save         = $form.find( 'button:first' );
 		var idprefix      = 'savedsearch_';
 		var apiUrl        = 'http://localhost/wordpress/?pagename=wolfnet-admin-searchmanager';
+		var apiGetUrl     = apiUrl + '-get';
+		var apiPostUrl    = apiUrl + '-save';
+		var apiDeleteUrl  = apiUrl + '-delete';
 		var loaded        = false;
 		var saving        = false;
+		var loaderUri     = 'http://localhost/wordpress/wp-content/plugins/wolfnet/img/loader.gif';
+		var $loaderImage  = $container.find( '#loader:first' );
 
-		var S4 = function ()
+		var createLoaderImage = function ()
 		{
-		   return ( ( ( 1 + Math.random() ) * 0x10000 ) | 0 ).toString( 16 ).substring( 1 );
+
+			/* If the window element doesn't exist create it and add it to the page. */
+			if ( $loaderImage.length == 0 ) {
+				$loaderImage = $( '<div/>' );
+				$loaderImage.append( $( '<img src="' + loaderUri + '" />' ) );
+				$loaderImage.attr( 'id', 'loader' );
+				$loaderImage.addClass( 'wolfnet_loaderImage' );
+				$loaderImage.hide();
+				$loaderImage.appendTo( $container );
+			}
 		}
 
-		var getGuid = function ()
+		var getData = function ()
 		{
-			return ( S4() + S4() + "-" + S4() + "-" + S4() + "-" + S4() + "-" + S4() + S4() + S4() );
+			$.ajax( {
+				url: apiGetUrl,
+				dataType: 'json',
+				type: 'GET',
+				beforeSend: function () {
+					$loaderImage.show();
+				},
+				success: function ( data ) {
+					savedSearches = data;
+					refreshTable();
+				},
+				complete: function () {
+					$loaderImage.hide();
+					loaded = true;
+				}
+			} );
 		}
 
 		var saveSearch = function ()
 		{
 			if ( loaded && !saving ) {
 				if ( $desc.val().trim() == '' ) {
-					$desc.addClass( 'valid' );
+					$desc.addClass( 'invalid' );
 					alert( 'You must specify a description to save your search.' );
 				}
 				else {
+
 					$desc.removeClass( 'invalid' );
-					savedSearches[getGuid()] = {
-						data:        WNTWP.returnSearchParams(),
-						cdate:       new Date().getTime(),
-						description: $desc.val()
-					};
+
+					$.ajax( {
+						url: apiPostUrl,
+						dataType: 'json',
+						type: 'POST',
+						data: {
+							post_title    : $desc.val(),
+							custom_fields : WNTWP.returnSearchParams()
+						},
+						beforeSend: function () {
+							$loaderImage.show();
+							saving = true;
+						},
+						success: function ( data ) {
+							savedSearches = data;
+							refreshTable();
+						},
+						complete: function () {
+							$loaderImage.hide();
+							saving = false;
+						}
+					} );
+
 					$desc.val( '' );
-					saveData();
+
 				}
 			}
 			else {
 				alert( 'Cannot save, please wait until the data has updated.' );
 			}
+
 		}
 
 		var deleteSearch = function ()
@@ -118,8 +174,28 @@
 				var $this = $( this );
 				var $row  = $this.closest( 'tr' );
 				var id    = $row.attr( 'id' ).replace( idprefix, '' );
-				delete savedSearches[id];
-				saveData();
+
+				$.ajax( {
+					url: apiDeleteUrl,
+					dataType: 'json',
+					type: 'GET',
+					data: {
+						ID : id
+					},
+					beforeSend: function () {
+						$loaderImage.show();
+						saving = true;
+					},
+					success: function ( data ) {
+						savedSearches = data;
+						refreshTable();
+					},
+					complete: function () {
+						$loaderImage.hide();
+						saving = false;
+					}
+				} );
+
 			}
 			else {
 				alert( 'Cannot delete, please wait until the data has updated.' );
@@ -135,16 +211,16 @@
 			for ( var i in savedSearches ) {
 
 				$row = $( '<tr/>' );
-				$row.attr( 'id', idprefix + i );
+				$row.attr( 'id', idprefix + savedSearches[i].ID );
 				$row.addClass( 'savedsearch' );
 				$row.appendTo( $tbody );
 
 				$descCell = $( '<td/>' );
-				$descCell.html( savedSearches[i].description );
+				$descCell.html( savedSearches[i].post_title );
 				$descCell.appendTo( $row );
 
 				$cdateCell = $( '<td/>' );
-				$cdateCell.html( new Date( Number( savedSearches[i].cdate ) ).toDateString() );
+				$cdateCell.html( new Date( savedSearches[i].post_date ).toDateString() );
 				$cdateCell.appendTo( $row );
 
 				$ctrlCell = $( '<td/>' );
@@ -159,45 +235,6 @@
 
 		}
 
-		var saveData = function ()
-		{
-			console.log( savedSearches );
-			$.ajax( {
-				url: apiUrl + '-save',
-				dataType: 'json',
-				type: 'POST',
-				data: { savedSearches:savedSearches },
-				beforeSend: function () {
-					saving = true;
-				},
-				success: function ( data ) {
-					if ( $.isPlainObject( data ) ) {
-						savedSearches = data;
-						refreshTable();
-					}
-				},
-				complete: function () {
-					saving = false;
-				}
-			} );
-		}
-
-		var getData = function ()
-		{
-			$.ajax( {
-				url: apiUrl + '-get',
-				dataType: 'json',
-				type: 'GET',
-				success: function ( data ) {
-					if ( $.isPlainObject( data ) ) {
-						savedSearches = data;
-						refreshTable();
-					}
-					loaded = true;
-				}
-			} );
-		}
-
 		$save.click( saveSearch );
 		$desc.keypress( function ( event ) {
 			if ( event.keyCode == 13 ) {
@@ -205,6 +242,7 @@
 			}
 		} );
 		$( document ).ready( function () {
+			createLoaderImage();
 			getData();
 		} );
 

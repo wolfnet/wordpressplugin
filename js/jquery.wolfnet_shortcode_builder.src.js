@@ -31,7 +31,7 @@ if ( typeof String.prototype.trim !== 'function' ) {
 			defaultTitle : 'WolfNet Shortcode Builder',
 			elmPrefix    : 'wolfnetShortcodeBuilder_',
 			rootUri      : '',
-			leaderUri    : '',
+			loaderUri    : '',
 			loaderId     : 'loaderImage',
 			menuId       : 'menuPage',
 			pageSuffix   : '_page',
@@ -40,25 +40,25 @@ if ( typeof String.prototype.trim !== 'function' ) {
 					buttonLabel : 'Add Featured Listings',
 					shortcode   : 'wnt_featured',
 					pageTitle   : 'Featured Listing Shortcode',
-					uri         : 'featured-options'
+					uri         : '-options-featured'
 				},
 				listingGrid : {
 					buttonLabel : 'Add Listing Grid',
 					shortcode   : 'wnt_grid',
 					pageTitle   : 'Listing Grid Shortcode',
-					uri         : 'grid-options'
+					uri         : '-options-grid'
 				},
 				propertyList : {
 					buttonLabel : 'Add Property List',
 					shortcode   : 'wnt_list',
 					pageTitle   : 'Property List Shortcode',
-					uri         : 'list-options'
+					uri         : '-options-list'
 				},
 				quickSearch : {
 					buttonLabel : 'Add QuickSearch',
 					shortcode   : 'wnt_search',
 					pageTitle   : 'QuickSearch Shortcode',
-					uri         : 'quicksearch-options'
+					uri         : '-options-quicksearch'
 				}
 			}
 		},
@@ -138,9 +138,10 @@ if ( typeof String.prototype.trim !== 'function' ) {
 
 			/* If the window element doesn't exist create it and add it to the page. */
 			if ( $loader.length == 0 ) {
-				$loader = $( '<img/>' );
+				$loader = $( '<div/>' );
+				$loader.append( $( '<img src="' + option.loaderUri + '" />' ) );
 				$loader.attr( 'id', loaderId );
-				$loader.attr( 'src', option.leaderUri );
+				$loader.addClass( 'wolfnet_loaderImage' );
 				$loader.hide();
 				$loader.appendTo( container );
 			}
@@ -180,6 +181,7 @@ if ( typeof String.prototype.trim !== 'function' ) {
 					type: 'GET',
 					dataType: 'html',
 					url: pageUri,
+					cache: false,
 					beforeSend: function () {
 						$page.hide();
 						$loaderImg.show();

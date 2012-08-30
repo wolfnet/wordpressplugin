@@ -29,6 +29,15 @@ extends com_ajmichels_wppf_action_action
 
 
 	/**
+	 * This property holds a references to the Search Service object.
+	 *
+	 * @type  com_wolfnet_wordpress_search_service
+	 *
+	 */
+	private $searchService;
+
+
+	/**
 	 * This property holds an instance of the Listing Grid Options View object
 	 *
 	 * @type  com_ajmichels_wppf_interface_iView
@@ -75,63 +84,26 @@ extends com_ajmichels_wppf_action_action
 	 */
 	public function execute ()
 	{
-		$pagename = get_query_var('pagename');
-		$isAdmin  = ( current_user_can( 'edit_posts' ) || current_user_can( 'edit_posts' ) ) ? true : false;
+		$pagename    = strtolower( get_query_var( 'pagename' ) );
+		$adminPrefix = 'wolfnet-admin-';
+		$isAdmin     = ( current_user_can( 'edit_pages' ) || current_user_can( 'edit_posts' ) );
 
-		if ( $isAdmin && substr( $pagename, 0, 13 ) == 'wolfnet-admin' ) {
+		if ( substr( $pagename, 0, strlen( $adminPrefix ) ) == $adminPrefix ) {
 
-			switch ( $pagename ) {
-
-				default:
-					status_header( 404 );
-					exit;
-					break;
-
-				case 'wolfnet-admin-shortcodebuilder-optionform':
-					$formpage = get_query_var('formpage');
-					switch( $formpage ) {
-
-						default:
-							status_header( 404 );
-							exit;
-							break;
-
-						case 'grid-options':
-							$this->renderListingGridOptions();
-							exit;
-							break;
-
-						case 'list-options':
-							$this->renderPropertyListOptions();
-							exit;
-							break;
-
-						case 'featured-options':
-							$this->renderFeaturedListingsOptions();
-							exit;
-							break;
-
-						case 'quicksearch-options':
-							$this->renderQuickSearchOptions();
-							exit;
-							break;
-
-					}
-					break;
-
-				case 'wolfnet-admin-searchmanager-get':
-					$this->getSearchManagerData();
-					break;
-
-				case 'wolfnet-admin-searchmanager-save':
-					$this->saveSearchManagerData();
-					break;
-
+			if ( !$isAdmin ) {
+				$this->statusNotAuthorized();
+				exit;
 			}
-		}
-		else if ( !$isAdmin && substr( $pagename, 0, 13 ) == 'wolfnet-admin' ) {
-			status_header( 401 );
-			exit;
+
+			$method = str_replace( '-', '_', str_replace( $adminPrefix, '', $pagename ) );
+
+			if ( !method_exists( $this, $method ) ) {
+				$this->statusNotFound();
+				exit;
+			}
+
+			call_user_method( $method, $this );
+
 		}
 
 	}
@@ -139,29 +111,10 @@ extends com_ajmichels_wppf_action_action
 
 	/* PRIVATE METHODS ************************************************************************** */
 
-	private function renderListingGridOptions ()
+	private function shortcodebuilder_options_featured ()
 	{
-		status_header( 200 );
-		$data = array(
-			'fields' => array(
-				'title'      => array( 'name' => 'title' ),
-				'maxprice'   => array( 'name' => 'maxprice' ),
-				'minprice'   => array( 'name' => 'minprice' ),
-				'city'       => array( 'name' => 'city' ),
-				'zipcode'    => array( 'name' => 'zipcode' ),
-				'ownertype'  => array( 'name' => 'ownertype' ),
-				'maxresults' => array( 'name' => 'maxresults' )
-			),
-			'prices' => $this->getListingService()->getPriceData(),
-			'ownerTypes' => $this->getListingService()->getOwnerTypeData()
-		);
-		$this->getListingGridOptionsView()->out( $data );
-	}
+		$this->statusSuccess();
 
-
-	private function renderFeaturedListingsOptions ()
-	{
-		status_header( 200 );
 		$data = array(
 			'fields'     => array(
 				'title'      => array( 'name' => 'title' ),
@@ -173,13 +126,18 @@ extends com_ajmichels_wppf_action_action
 			),
 			'ownerTypes' => $this->getListingService()->getOwnerTypeData()
 		);
+
 		$this->getFeaturedListingsOptionsView()->out( $data );
+
+		exit;
+
 	}
 
 
-	private function renderPropertyListOptions ()
+	private function shortcodebuilder_options_grid ()
 	{
-		status_header( 200 );
+		$this->statusSuccess();
+
 		$data = array(
 			'fields' => array(
 				'title'      => array( 'name' => 'title' ),
@@ -193,52 +151,111 @@ extends com_ajmichels_wppf_action_action
 			'prices' => $this->getListingService()->getPriceData(),
 			'ownerTypes' => $this->getListingService()->getOwnerTypeData()
 		);
-		$this->getPropertyListOptionsView()->out( $data );
-	}
 
+		$this->getListingGridOptionsView()->out( $data );
 
-	private function renderQuickSearchOptions ()
-	{
-		status_header( 200 );
-		$data = array(
-			'fields' => array(
-				'title'      => array( 'name' => 'title', 'value' => 'QuickSearch' )
-			)
-		);
-		$this->getQuickSearchOptionsView()->out( $data );
-	}
-
-
-	private function getSearchManagerData ()
-	{
-		if ( !$data = get_transient( 'wolfnet_savedsearches' ) ) {
-			$data = [];
-		}
-		status_header( 200 );
-		print json_encode( $data );
 		exit;
 	}
 
 
-	private function saveSearchManagerData ()
+	private function shortcodebuilder_options_list ()
 	{
-		if ( !$data = get_transient( 'wolfnet_savedsearches' ) ) {
-			$data = [];
-		}
-		$data = array_merge( $data, $_POST['savedSearches'] );
-		set_transient( 'wolfnet_savedsearches', $data );
-		$this->getSearchManagerData();
+		$this->statusSuccess();
+
+		$data = array(
+			'fields' => array(
+				'title'      => array( 'name' => 'title' ),
+				'maxprice'   => array( 'name' => 'maxprice' ),
+				'minprice'   => array( 'name' => 'minprice' ),
+				'city'       => array( 'name' => 'city' ),
+				'zipcode'    => array( 'name' => 'zipcode' ),
+				'ownertype'  => array( 'name' => 'ownertype' ),
+				'maxresults' => array( 'name' => 'maxresults' )
+			),
+			'prices' => $this->getListingService()->getPriceData(),
+			'ownerTypes' => $this->getListingService()->getOwnerTypeData()
+		);
+
+		$this->getPropertyListOptionsView()->out( $data );
+
+		exit;
+
 	}
 
 
-	private function deleteSearchManagerData ()
+	private function shortcodebuilder_options_quicksearch ()
 	{
-		if ( !$data = get_transient( 'wolfnet_savedsearches' ) ) {
-			$data = [];
+		$this->statusSuccess();
+
+		$data = array(
+			'fields' => array(
+				'title' => array( 'name' => 'title', 'value' => 'QuickSearch' )
+			)
+		);
+
+		$this->getQuickSearchOptionsView()->out( $data );
+
+		exit;
+
+	}
+
+
+	private function searchmanager_get ()
+	{
+
+		$this->statusSuccess();
+
+		print( json_encode( $this->getSearchService()->getSearches() ) );
+
+		exit;
+	}
+
+
+	private function searchmanager_save ()
+	{
+		$canInsert = ( current_user_can( 'edit_pages' ) || current_user_can( 'edit_posts' ) ) ? true : false;
+
+		if ( $canInsert ) {
+
+			$this->getSearchService()->saveSearch( $_POST['post_title'], $_POST['custom_fields'] );
+
 		}
-		$data = array_merge( $data, $_POST['savedSearches'] );
-		set_transient( 'wolfnet_savedsearches', $data );
-		$this->getSearchManagerData();
+
+		$this->searchmanager_get();
+
+	}
+
+
+	private function searchmanager_delete ()
+	{
+		$canDelete = ( current_user_can( 'delete_pages' ) || current_user_can( 'delete_posts' ) ) ? true : false;
+
+		if ( $canDelete ) {
+
+			$this->getSearchService()->deleteSearch( $_GET['ID'] );
+
+		}
+
+		$this->searchmanager_get();
+
+	}
+
+
+	private function statusSuccess ()
+	{
+		status_header( 200 );
+	}
+
+
+	private function statusNotFound ()
+	{
+		status_header( 404 );
+	}
+
+
+	private function statusNotAuthorized ()
+	{
+		status_header( 401 );
 	}
 
 
@@ -266,6 +283,31 @@ extends com_ajmichels_wppf_action_action
 	public function setListingService ( com_wolfnet_wordpress_listing_service $service )
 	{
 		$this->listingService = $service;
+	}
+
+
+	/**
+	 * GETTER:  This method is a getter for the searchService property.
+	 *
+	 * @return  com_wolfnet_wordpress_search_service
+	 *
+	 */
+	public function getSearchService ()
+	{
+		return $this->searchService;
+	}
+
+
+	/**
+	 * SETTER:  This method is a setter for the searchService property.
+	 *
+	 * @param   com_wolfnet_wordpress_search_service  $service
+	 * @return  void
+	 *
+	 */
+	public function setSearchService ( com_wolfnet_wordpress_search_service $service )
+	{
+		$this->searchService = $service;
 	}
 
 

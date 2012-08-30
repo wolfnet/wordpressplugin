@@ -144,6 +144,7 @@ implements com_ajmichels_common_iSingleton
 	protected function actions ()
 	{
 		$this->am->register( $this->sf->getBean( 'RegisterRewriteRules' ),      array( 'init' ) );
+		$this->am->register( $this->sf->getBean( 'RegisterCustomPostTypes' ),   array( 'init' ) );
 		$this->am->register( $this->sf->getBean( 'AddShortcodeBuilderButton' ), array( 'admin_init' ) );
 		$this->am->register( $this->sf->getBean( 'EnqueueResources' ),          array( 'wp_enqueue_scripts' ) );
 		$this->am->register( $this->sf->getBean( 'CreateAdminPages' ),          array( 'admin_menu' ) );
