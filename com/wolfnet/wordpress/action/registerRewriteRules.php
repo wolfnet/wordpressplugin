@@ -28,10 +28,14 @@ extends com_ajmichels_wppf_action_action
 	 */
 	public function execute ()
 	{
-		$rule    = '^wolfnet/shortcode-builder/option-form/([^/]*)?';
-		$rewrite = 'index.php?pagename=wolfnet_shortcode_builder_option_form&formpage=$matches[1]';
+		$rule    = '^wolfnet/admin/shortcodebuilder/optionform/([^/]*)?';
+		$rewrite = 'index.php?pagename=wolfnet-admin-shortcodebuilder-optionform&formpage=$matches[1]';
 		add_rewrite_rule( $rule, $rewrite, 'top' );
 		add_rewrite_tag( '%formpage%', '([^&]+)' );
+
+		$rule    = '^wolfnet/admin/searchmanager/save?';
+		$rewrite = 'index.php?pagename=wolfnet-admin-searchmanager-save';
+		add_rewrite_rule( $rule, $rewrite, 'top' );
 	}
 
 

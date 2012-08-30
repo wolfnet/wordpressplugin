@@ -76,35 +76,62 @@ extends com_ajmichels_wppf_action_action
 	public function execute ()
 	{
 		$pagename = get_query_var('pagename');
+		$isAdmin  = ( current_user_can( 'edit_posts' ) || current_user_can( 'edit_posts' ) ) ? true : false;
 
-		if ( $pagename == 'wolfnet_shortcode_builder_option_form' ) {
+		if ( $isAdmin && substr( $pagename, 0, 13 ) == 'wolfnet-admin' ) {
 
-			$formpage       = get_query_var('formpage');
+			switch ( $pagename ) {
 
-			switch( $formpage ) {
-
-				case 'grid-options':
-					$this->renderListingGridOptions();
+				default:
+					status_header( 404 );
 					exit;
 					break;
 
-				case 'list-options':
-					$this->renderPropertyListOptions();
-					exit;
+				case 'wolfnet-admin-shortcodebuilder-optionform':
+					$formpage = get_query_var('formpage');
+					switch( $formpage ) {
+
+						default:
+							status_header( 404 );
+							exit;
+							break;
+
+						case 'grid-options':
+							$this->renderListingGridOptions();
+							exit;
+							break;
+
+						case 'list-options':
+							$this->renderPropertyListOptions();
+							exit;
+							break;
+
+						case 'featured-options':
+							$this->renderFeaturedListingsOptions();
+							exit;
+							break;
+
+						case 'quicksearch-options':
+							$this->renderQuickSearchOptions();
+							exit;
+							break;
+
+					}
 					break;
 
-				case 'featured-options':
-					$this->renderFeaturedListingsOptions();
-					exit;
+				case 'wolfnet-admin-searchmanager-get':
+					$this->getSearchManagerData();
 					break;
 
-				case 'quicksearch-options':
-					$this->renderQuickSearchOptions();
-					exit;
+				case 'wolfnet-admin-searchmanager-save':
+					$this->saveSearchManagerData();
 					break;
 
 			}
-
+		}
+		else if ( !$isAdmin && substr( $pagename, 0, 13 ) == 'wolfnet-admin' ) {
+			status_header( 401 );
+			exit;
 		}
 
 	}
@@ -114,7 +141,7 @@ extends com_ajmichels_wppf_action_action
 
 	private function renderListingGridOptions ()
 	{
-		$this->updateHttpHeader();
+		status_header( 200 );
 		$data = array(
 			'fields' => array(
 				'title'      => array( 'name' => 'title' ),
@@ -134,7 +161,7 @@ extends com_ajmichels_wppf_action_action
 
 	private function renderFeaturedListingsOptions ()
 	{
-		$this->updateHttpHeader();
+		status_header( 200 );
 		$data = array(
 			'fields'     => array(
 				'title'      => array( 'name' => 'title' ),
@@ -152,7 +179,7 @@ extends com_ajmichels_wppf_action_action
 
 	private function renderPropertyListOptions ()
 	{
-		$this->updateHttpHeader();
+		status_header( 200 );
 		$data = array(
 			'fields' => array(
 				'title'      => array( 'name' => 'title' ),
@@ -172,7 +199,7 @@ extends com_ajmichels_wppf_action_action
 
 	private function renderQuickSearchOptions ()
 	{
-		$this->updateHttpHeader();
+		status_header( 200 );
 		$data = array(
 			'fields' => array(
 				'title'      => array( 'name' => 'title', 'value' => 'QuickSearch' )
@@ -182,9 +209,36 @@ extends com_ajmichels_wppf_action_action
 	}
 
 
-	private function updateHttpHeader ()
+	private function getSearchManagerData ()
 	{
+		if ( !$data = get_transient( 'wolfnet_savedsearches' ) ) {
+			$data = [];
+		}
 		status_header( 200 );
+		print json_encode( $data );
+		exit;
+	}
+
+
+	private function saveSearchManagerData ()
+	{
+		if ( !$data = get_transient( 'wolfnet_savedsearches' ) ) {
+			$data = [];
+		}
+		$data = array_merge( $data, $_POST['savedSearches'] );
+		set_transient( 'wolfnet_savedsearches', $data );
+		$this->getSearchManagerData();
+	}
+
+
+	private function deleteSearchManagerData ()
+	{
+		if ( !$data = get_transient( 'wolfnet_savedsearches' ) ) {
+			$data = [];
+		}
+		$data = array_merge( $data, $_POST['savedSearches'] );
+		set_transient( 'wolfnet_savedsearches', $data );
+		$this->getSearchManagerData();
 	}
 
 

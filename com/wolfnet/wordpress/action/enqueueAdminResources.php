@@ -46,14 +46,16 @@ extends com_ajmichels_wppf_action_action
 		$this->log( 'Action EnqueueAdminResources' );
 		$url = $this->getPluginUrl();
 
-		wp_enqueue_script( 'tooltipjs',               $url . 'js/jquery.tooltip.src.js',                   array('jquery') );
-		wp_enqueue_script( 'wolfnetjs',               $url . 'js/wolfnet.src.js',                          array('jquery','tooltipjs') );
-		wp_enqueue_script( 'wolfnetadminjs',          $url . 'js/wolfnetAdmin.src.js',                     array('jquery') );
+		wp_enqueue_script( 'tooltipjs',      $url . 'js/jquery.tooltip.src.js', array('jquery') );
+		//wp_enqueue_script( 'jqgridjs',       $url . 'js/jquery.jqGrid.src.js',  array('jquery','jquery-ui-core','jquery-ui-widget') );
+		wp_enqueue_script( 'wolfnetjs',      $url . 'js/wolfnet.src.js',        array('jquery','tooltipjs') );
+		wp_enqueue_script( 'wolfnetadminjs', $url . 'js/wolfnetAdmin.src.js',   array('jquery') );
 
 		$jquery_ui = $wp_scripts->query('jquery-ui-core');
 
-		wp_enqueue_style(  'wolfnetadmincss', $url . 'css/wolfnetAdmin.src.css',        array(), false, 'screen' );
 		wp_enqueue_style(  'jquery-ui-css',  'http://ajax.googleapis.com/ajax/libs/jqueryui/' . $jquery_ui->ver . '/themes/smoothness/jquery-ui.css' );
+		//wp_enqueue_style(  'jqgridcss',       $url . 'css/ui.jqgrid.src.css',    array(), false, 'screen' );
+		wp_enqueue_style(  'wolfnetadmincss', $url . 'css/wolfnetAdmin.src.css', array(), false, 'screen' );
 	}
 
 
