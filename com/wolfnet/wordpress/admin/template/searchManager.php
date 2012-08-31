@@ -82,7 +82,7 @@
 		var $desc         = $form.find( 'input:first' );
 		var $save         = $form.find( 'button:first' );
 		var idprefix      = 'savedsearch_';
-		var apiUrl        = '<?php echo bloginfo( 'url' ); ?>?pagename=wolfnet-admin-searchmanager';
+		var apiUrl        = '<?php echo bloginfo( 'url' ); ?>/?pagename=wolfnet-admin-searchmanager';
 		var apiGetUrl     = apiUrl + '-get';
 		var apiPostUrl    = apiUrl + '-save';
 		var apiDeleteUrl  = apiUrl + '-delete';
