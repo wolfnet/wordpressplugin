@@ -122,11 +122,21 @@
 		</property>
 	</bean>
 
-	<bean id="ListingView" class="com_wolfnet_wordpress_listing_listingView" singleton="false" />
+	<bean id="SimpleListingView" class="com_wolfnet_wordpress_listing_listingView" singleton="false">
+		<property name="Template">
+			<value>/template/listingSimple.php</value>
+		</property>
+	</bean>
+
+	<bean id="BriefListingView" class="com_wolfnet_wordpress_listing_listingView" singleton="false">
+		<property name="Template">
+			<value>/template/listingBrief.php</value>
+		</property>
+	</bean>
 
 	<bean id="FeaturedListingsView" class="com_wolfnet_wordpress_listing_featuredListingsView" singleton="false">
 		<property name="ListingView">
-			<ref bean="ListingView" />
+			<ref bean="SimpleListingView" />
 		</property>
 	</bean>
 
@@ -134,19 +144,23 @@
 
 	<bean id="ListingGridView" class="com_wolfnet_wordpress_listing_listingGridView" singleton="false">
 		<property name="ListingView">
-			<ref bean="ListingView" />
+			<ref bean="SimpleListingView" />
+		</property>
+		<property name="Template">
+			<value>/template/listingGrid.php</value>
 		</property>
 	</bean>
 
 	<bean id="ListingGridOptionsView" class="com_wolfnet_wordpress_listing_listingGridOptionsView" singleton="false" />
 
-	<bean id="PropertyListView" class="com_wolfnet_wordpress_listing_propertyListView" singleton="false">
+	<bean id="PropertyListView" class="com_wolfnet_wordpress_listing_listingGridView" singleton="false">
 		<property name="ListingView">
-			<ref bean="ListingView" />
+			<ref bean="BriefListingView" />
+		</property>
+		<property name="Template">
+			<value>/template/propertyList.php</value>
 		</property>
 	</bean>
-
-	<bean id="PropertyListOptionsView" class="com_wolfnet_wordpress_listing_propertyListOptionsView" singleton="false" />
 
 	<bean id="QuickSearchOptionsView" class="com_wolfnet_wordpress_listing_quickSearchOptionsView" singleton="false" />
 
@@ -215,9 +229,6 @@
 		<property name="ListingGridOptionsView">
 			<ref bean="ListingGridOptionsView" />
 		</property>
-		<property name="PropertyListOptionsView">
-			<ref bean="PropertyListOptionsView" />
-		</property>
 		<property name="QuickSearchOptionsView">
 			<ref bean="QuickSearchOptionsView" />
 		</property>
@@ -259,7 +270,7 @@
 		<property name="ListingService">
 			<ref bean="ListingService" />
 		</property>
-		<property name="PropertyListView">
+		<property name="ListingGridView">
 			<ref bean="PropertyListView" />
 		</property>
 	</bean>

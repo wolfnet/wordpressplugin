@@ -2,7 +2,7 @@
 
 /**
  * This view is responsible for displaying a listing record.
- * 
+ *
  * @package       com.wolfnet.wordpress
  * @subpackage    listing
  * @title         listingView.php
@@ -11,40 +11,32 @@
  * @contributors  AJ Michels (aj.michels@wolfnet.com)
  * @version       1.0
  * @copyright     Copyright (c) 2012, WolfNet Technologies, LLC
- * 
+ *
  */
 class com_wolfnet_wordpress_listing_listingView
 extends com_ajmichels_wppf_abstract_view
 implements com_ajmichels_wppf_interface_iView
 {
-	
-	
+
+
 	/* PROPERTIES ******************************************************************************* */
-	
+
 	/**
 	 * This property holds the path to the HTML template file for this view.
 	 *
 	 * @type  string
-	 * 
+	 *
 	 */
 	public $template;
-	
-	
-	/* CONSTRUCTOR METHOD *********************************************************************** */
-	
-	public function __construct ()
-	{
-		$this->setTemplate();
-	}
-	
-	
+
+
 	/* PUBLIC METHODS *************************************************************************** */
-	
+
 	/**
-	 * This is an overwritten version of the parent class method. It must call parent::render at 
+	 * This is an overwritten version of the parent class method. It must call parent::render at
 	 * some point.
-	 * 
-	 * @param   array  $data  And array of data which will be available as local variables to the 
+	 *
+	 * @param   array  $data  And array of data which will be available as local variables to the
 	 *                        template page used in the render process.
 	 * @return  string
 	 */
@@ -65,71 +57,68 @@ implements com_ajmichels_wppf_interface_iView
 		$data['rawData']             = $data['listing']->getMemento();
 		$data['rawData_branding']    = $data['rawData']['branding']->getMemento();
 		$data['listing_class']       = '';
-		
+
 		if ( trim( $data['branding_brokerLogo'] ) != '' || trim( $data['branding_content'] ) != '' ) {
-			
+
 			$data['listing_class'] = ' wolfnet_branded';
-			
+
 		}
-		
+
 		/* Trim data to ensure that it fits in the alloted space. */
 		$len = 20;
 		$suf = '...';
 		$this->truncateString( $data['location'], $len, $suf );
 		$this->truncateString( $data['address'],  $len, $suf );
-		
+
 		return parent::render( $data );
 	}
-	
-	
+
+
 	/* PRIVATE METHODS ************************************************************************** */
-	
+
 	private function truncateString ( &$string, $length, $sufix='' )
 	{
 		if ( strlen( $string ) > $length ) {
-			
+
 			$substrlen = $length;
-			
+
 			if ( trim( $sufix ) != '' ) {
 				$substrlen = $substrlen - strlen( $sufix );
 			}
-			
+
 			$string = substr( $string, 0, $substrlen ) . $sufix;
-			
+
 		}
-		
+
 		return $string;
 	}
-	
-	
+
+
 	/* ACCESSOR METHODS ************************************************************************* */
-	
+
 	/**
-	 * This method creates a way to dynamically specify which HTML template file should be used to 
-	 * render the view.  This is done because listings can be rendered in several different ways 
-	 * using the same set of data.
-	 * 
-	 * @param   string  $type  The template type/file to use for rendering.
-	 * @return  void
-	 * 
+	 * GETTER: This method is a getter for the listingView property.
+	 *
+	 * @return  string
+	 *
 	 */
-	public function setTemplate ( $type = 'full' )
+	public function getTemplate ()
 	{
-		switch ( $type ) {
-			
-			default:
-			case 'simple':
-				$file = '\template\listingSimple.php';
-				break;
-			case 'brief':
-				$file = '\template\listingBrief.php';
-				break;
-				
-		}
-		
-		$this->template = $this->formatPath( dirname( __FILE__ ) . $file );
-		
+		return $this->template;
 	}
-	
-	
+
+
+	/**
+	 * SETTER: This method is a setter for the listingView property.
+	 *
+	 * @type    string  $template
+	 * @return  void
+	 *
+	 */
+	public function setTemplate ( $template )
+	{
+		$this->template = $this->formatPath( dirname( __FILE__ ) . $template );
+	}
+
+
 }

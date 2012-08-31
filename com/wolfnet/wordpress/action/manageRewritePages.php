@@ -149,7 +149,8 @@ extends com_ajmichels_wppf_action_action
 				'maxresults' => array( 'name' => 'maxresults' )
 			),
 			'prices' => $this->getListingService()->getPriceData(),
-			'ownerTypes' => $this->getListingService()->getOwnerTypeData()
+			'ownerTypes' => $this->getListingService()->getOwnerTypeData(),
+			'savedSearches' => $this->getSearchService()->getSearches()
 		);
 
 		$this->getListingGridOptionsView()->out( $data );
@@ -173,10 +174,11 @@ extends com_ajmichels_wppf_action_action
 				'maxresults' => array( 'name' => 'maxresults' )
 			),
 			'prices' => $this->getListingService()->getPriceData(),
-			'ownerTypes' => $this->getListingService()->getOwnerTypeData()
+			'ownerTypes' => $this->getListingService()->getOwnerTypeData(),
+			'savedSearches' => $this->getSearchService()->getSearches()
 		);
 
-		$this->getPropertyListOptionsView()->out( $data );
+		$this->getListingGridOptionsView()->out( $data );
 
 		exit;
 
@@ -358,31 +360,6 @@ extends com_ajmichels_wppf_action_action
 	public function setFeaturedListingsOptionsView ( com_ajmichels_wppf_interface_iView $view )
 	{
 		$this->featuredListingsOptionsView = $view;
-	}
-
-
-	/**
-	 * GETTER:  This method is a getter for the propertyListOptionsView property.
-	 *
-	 * @return  com_ajmichels_wppf_interface_iView
-	 *
-	 */
-	public function getPropertyListOptionsView ()
-	{
-		return $this->propertyListOptionsView;
-	}
-
-
-	/**
-	 * SETTER:  This method is a setter for the propertyListOptionsView property.
-	 *
-	 * @param   com_ajmichels_wppf_interface_iView  $service
-	 * @return  void
-	 *
-	 */
-	public function setPropertyListOptionsView ( com_ajmichels_wppf_interface_iView $view )
-	{
-		$this->propertyListOptionsView = $view;
 	}
 
 

@@ -23,6 +23,11 @@ extends com_wolfnet_wordpress_abstract_widget
 
 	/* PROPERTIES ******************************************************************************* */
 
+	public $id = 'wolfnet_listingGridWidget';
+
+
+	public $name = 'WolfNet Listing Grid';
+
 	/**
 	 * This property holds an array of different options that are available for each widget instance.
 	 *
@@ -32,10 +37,13 @@ extends com_wolfnet_wordpress_abstract_widget
 	public $options = array(
 		'title'        => '',
 		'description'  => 'Display a grid of properties based on user defined criteria. Includes an image, address, beds & baths, and price',
+		'criteria'     => '',
+		'mode'         => '',
+		'savedsearch'  => '',
+		'zipcode'      => '',
+		'city'         => '',
 		'minprice'     => '',
 		'maxprice'     => '',
-		'city'         => '',
-		'zipcode'      => '',
 		'ownertype'    => 'agent_broker',
 		'maxresults'   => 50
 		);
@@ -59,6 +67,15 @@ extends com_wolfnet_wordpress_abstract_widget
 	 *
 	 */
 	private $listingService;
+
+
+	/**
+	 * This property holds a references to the Search Service object.
+	 *
+	 * @type  com_wolfnet_wordpress_search_service
+	 *
+	 */
+	private $searchService;
 
 
 	/**
@@ -90,9 +107,10 @@ extends com_wolfnet_wordpress_abstract_widget
 	 */
 	public function __construct ()
 	{
-		parent::__construct( 'wolfnet_listingGridWidget', 'WolfNet Listing Grid' );
+		parent::__construct( $this->id, $this->name );
 		/* The 'sf' property is set in the abstract widget class and is pulled from the plugin instance */
 		$this->setListingService( $this->sf->getBean( 'ListingService' ) );
+		$this->setSearchService( $this->sf->getBean( 'SearchService' ) );
 		$this->setListingGridView( $this->sf->getBean( 'ListingGridView' ) );
 		$this->setListingGridOptionsView( $this->sf->getBean( 'ListingGridOptionsView' ) );
 	}
@@ -112,11 +130,12 @@ extends com_wolfnet_wordpress_abstract_widget
 	public function widget ( $args, $instance )
 	{
 		$options = $this->getOptionData( $instance );
+		$criteria = json_decode( $options['criteria']['value'], true );
+		if ( !is_array( $criteria ) ) {
+			$criteria = array();
+		}
 		$gridListings = $this->getListingService()->getGridListings(
-			$options['minprice']['value'],
-			$options['maxprice']['value'],
-			$options['city']['value'],
-			$options['zipcode']['value'],
+			$criteria,
 			$options['ownertype']['value'],
 			$options['maxresults']['value']
 			);
@@ -139,10 +158,21 @@ extends com_wolfnet_wordpress_abstract_widget
 	public function form ( $instance )
 	{
 		$ls = $this->getListingService();
+		$fields = $this->getOptionData( $instance );
+		$criteria = json_decode( $fields['criteria']['value'], true );
+		if ( !is_array( $criteria ) ) {
+			$criteria = array();
+		}
+		foreach ( $criteria as $field => $value ) {
+			if ( array_key_exists( $field, $fields ) ) {
+				$fields[$field]['value'] = $value;
+			}
+		}
 		$data = array(
-			'fields' => $this->getOptionData( $instance ),
+			'fields' => $fields,
 			'prices' => $ls->getPriceData(),
-			'ownerTypes' => $this->getListingService()->getOwnerTypeData()
+			'ownerTypes' => $this->getListingService()->getOwnerTypeData(),
+			'savedSearches' => $this->getSearchService()->getSearches()
 			);
 		$this->getListingGridOptionsView()->out( $data );
 	}
@@ -164,6 +194,47 @@ extends com_wolfnet_wordpress_abstract_widget
 		foreach ( $newData as $opt => $data ) {
 			$saveData[$opt] = strip_tags( $data['value'] );
 		}
+		if ( $saveData['mode'] == 'basic' ) {
+			$criteria = array();
+			if ( $saveData['minprice'] != '' ) {
+				$criteria['minprice'] = $saveData['minprice'];
+			}
+			if ( $saveData['maxprice'] != '' ) {
+				$criteria['maxprice'] = $saveData['maxprice'];
+			}
+			if ( $saveData['city'] != '' ) {
+				$criteria['city'] = $saveData['city'];
+			}
+			if ( $saveData['zipcode'] != '' ) {
+				$criteria['zipcode'] = $saveData['zipcode'];
+			}
+			$saveData['criteria'] = json_encode( $criteria );
+		}
+		else {
+			if ( $saveData['savedsearch'] == 'deleted' ) {
+				// Maintain the existing search criteria
+			}
+			else {
+
+				$criteria = array();
+				$customFields = get_post_custom( $saveData['savedsearch'] );
+
+				foreach ( $customFields as $field => $value ) {
+
+					if ( substr( $field, 0, 1 ) != '_' ) {
+						$criteria[$field] = $value[0];
+					}
+
+				}
+
+				$saveData['criteria'] = json_encode( $criteria );
+
+			}
+		}
+		unset( $saveData['zipcode'] );
+		unset( $saveData['city'] );
+		unset( $saveData['minprice'] );
+		unset( $saveData['maxprice'] );
 		return $saveData;
 	}
 
@@ -192,6 +263,31 @@ extends com_wolfnet_wordpress_abstract_widget
 	public function setListingService ( com_wolfnet_wordpress_listing_service $service )
 	{
 		$this->listingService = $service;
+	}
+
+
+	/**
+	 * GETTER:  This method is a getter for the SearchService property.
+	 *
+	 * @return  com_wolfnet_wordpress_search_service
+	 *
+	 */
+	public function getSearchService ()
+	{
+		return $this->searchService;
+	}
+
+
+	/**
+	 * SETTER:  This method is a setter for the SearchService property.
+	 *
+	 * @param   com_wolfnet_wordpress_search_service  $service
+	 * @return  void
+	 *
+	 */
+	public function setSearchService ( com_wolfnet_wordpress_search_service $service )
+	{
+		$this->searchService = $service;
 	}
 
 

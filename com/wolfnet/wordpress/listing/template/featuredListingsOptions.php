@@ -26,6 +26,7 @@
 			<td><label>Title:</label></td>
 			<td><input id="<?php echo $titleId; ?>" name="<?php echo $titleName; ?>" value="<?php echo $titleValue; ?>" type="text" /></td>
 		</tr>
+
 		<tr>
 			<td><label for="<?php echo $autoPlayId; ?>">Scroll Control</label></td>
 			<td>
@@ -41,6 +42,8 @@
 				</span>
 			</td>
 		</tr>
+
+
 
 		<tr class="wolfnet_featuredListingsOptions_autoPlayOptions">
 			<td colspan="2">

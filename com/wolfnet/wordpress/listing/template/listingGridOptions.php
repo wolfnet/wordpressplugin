@@ -17,6 +17,8 @@
 
 <div class="wolfnet_listingGridOptions">
 
+	<input id="<?php echo $criteriaId; ?>" name="<?php echo $criteriaName; ?>" value="<?php echo $criteriaValue; ?>" type="hidden" />
+
 	<table class="form-table">
 
 		<tr>
@@ -25,6 +27,32 @@
 		</tr>
 
 		<tr>
+			<td><label>Mode:</label></td>
+			<td>
+				<input id="<?php echo $modeId; ?>" name="<?php echo $modeName; ?>" value="basic" type="radio" <?php echo $modeBasic; ?> /> Basic <br/>
+				<input id="<?php echo $modeId; ?>" name="<?php echo $modeName; ?>" value="advanced" type="radio" <?php echo $modeAdvanced; ?> /> Advanced
+			</td>
+		</tr>
+
+		<tr class="advanced-option">
+			<td><label>Saved Search:</label></td>
+			<td>
+				<select id="<?php echo $savedSearchId; ?>" name="<?php echo $savedSearchName; ?>">
+					<option value="">-- Saved Search --</option>
+					<!--<option value="deleted">** Deleted **</option>-->
+					<?php foreach ( $savedSearches as $savedSearch ) { ?>
+					<option value="<?php echo $savedSearch->ID; ?>"<?php echo ( $savedSearchValue == $savedSearch->ID ) ? ' selected="selected"' : '' ; ?>>
+						<?php echo $savedSearch->post_title; ?>
+					</option>
+					<?php } ?>
+				</select>
+				<span class="wolfnet_moreInfo">
+					Saved searches are created on the "Search Manager" page within the WolfNet plugin admin section.
+				</span>
+			</td>
+		</tr>
+
+		<tr class="basic-option">
 			<td><label>Price:</label></td>
 			<td>
 				<select id="<?php echo $minPriceId; ?>" name="<?php echo $minPriceName; ?>">
@@ -47,7 +75,7 @@
 			</td>
 		</tr>
 
-		<tr>
+		<tr class="basic-option">
 			<td><label>City:</label></td>
 			<td>
 				<input id="<?php echo $cityId; ?>" name="<?php echo $cityName; ?>"
@@ -55,7 +83,7 @@
 			</td>
 		</tr>
 
-		<tr>
+		<tr class="basic-option">
 			<td><label>Zipcode:</label></td>
 			<td>
 				<input id="<?php echo $zipcodeId; ?>" name="<?php echo $zipcodeName; ?>"
