@@ -44,6 +44,9 @@ implements com_ajmichels_wppf_interface_iView
 	private $sessionKey = 'wolfnetSearchManagerCookies';
 
 
+	private $pluginUrl;
+
+
 	/* CONSTRUCTOR METHOD *********************************************************************** */
 
 	public function __construct ()
@@ -71,6 +74,7 @@ implements com_ajmichels_wppf_interface_iView
 		else {
 			$data['search_form'] = $this->getSearchForm();
 		}
+		$data['pluginUrl'] = $this->getPluginUrl();
 		return parent::render( $data );
 	}
 
@@ -149,7 +153,7 @@ implements com_ajmichels_wppf_interface_iView
 	/**
 	 * GETTER: This method is a getter for the settingsService property.
 	 *
-	 * @return  string  The absolute URL to this plugin's directory.
+	 * @return  com_wolfnet_wordpress_settings_service
 	 *
 	 */
 	public function getSettingsService ()
@@ -161,7 +165,7 @@ implements com_ajmichels_wppf_interface_iView
 	/**
 	 * SETTER: This method is a setter for the settingsService property.
 	 *
-	 * @param   string  $url  The absolute URL to this plugin's directory.
+	 * @param   com_wolfnet_wordpress_settings_service  $service
 	 * @return  void
 	 *
 	 */
@@ -172,9 +176,9 @@ implements com_ajmichels_wppf_interface_iView
 
 
 	/**
-	 * GETTER: This method is a getter for the settingsService property.
+	 * GETTER: This method is a getter for the sessionKey property.
 	 *
-	 * @return  string  The absolute URL to this plugin's directory.
+	 * @return  string
 	 *
 	 */
 	public function getSessionKey ()
@@ -184,15 +188,40 @@ implements com_ajmichels_wppf_interface_iView
 
 
 	/**
-	 * SETTER: This method is a setter for the settingsService property.
+	 * SETTER: This method is a setter for the sessionKey property.
 	 *
-	 * @param   string  $url  The absolute URL to this plugin's directory.
+	 * @param   string  $key
 	 * @return  void
 	 *
 	 */
 	public function setSessionKey ( $key )
 	{
 		$this->sessionKey = $key;
+	}
+
+
+	/**
+	 * GETTER: This method is a getter for the pluginUrl property.
+	 *
+	 * @return  string  The absolute URL to this plugin's directory.
+	 *
+	 */
+	public function getPluginUrl ()
+	{
+		return $this->pluginUrl;
+	}
+
+
+	/**
+	 * SETTER: This method is a setter for the pluginUrl property.
+	 *
+	 * @param   string  $url  The absolute URL to this plugin's directory.
+	 * @return  void
+	 *
+	 */
+	public function setPluginUrl ( $url )
+	{
+		$this->pluginUrl = $url;
 	}
 
 

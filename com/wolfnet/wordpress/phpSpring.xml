@@ -120,6 +120,9 @@
 		<property name="SettingsService">
 			<ref bean="SettingsService" />
 		</property>
+		<property name="pluginUrl">
+			<value>${pluginUrl}</value>
+		</property>
 	</bean>
 
 	<bean id="SimpleListingView" class="com_wolfnet_wordpress_listing_listingView" singleton="false">

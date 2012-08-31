@@ -82,13 +82,13 @@
 		var $desc         = $form.find( 'input:first' );
 		var $save         = $form.find( 'button:first' );
 		var idprefix      = 'savedsearch_';
-		var apiUrl        = 'http://localhost/wordpress/?pagename=wolfnet-admin-searchmanager';
+		var apiUrl        = '<?php echo bloginfo( 'url' ); ?>?pagename=wolfnet-admin-searchmanager';
 		var apiGetUrl     = apiUrl + '-get';
 		var apiPostUrl    = apiUrl + '-save';
 		var apiDeleteUrl  = apiUrl + '-delete';
 		var loaded        = false;
 		var saving        = false;
-		var loaderUri     = 'http://localhost/wordpress/wp-content/plugins/wolfnet/img/loader.gif';
+		var loaderUri     = '<?php echo $pluginUrl; ?>img/loader.gif';
 		var $loaderImage  = $container.find( '#loader:first' );
 
 		var createLoaderImage = function ()
