@@ -73,6 +73,13 @@
 
 <script type="text/javascript">
 
+	 /* Make sure the 'trim' function is available in the String object. Fix for older versions of IE. */
+	if(typeof String.prototype.trim !== 'function') {
+		String.prototype.trim = function() {
+			return this.replace(/^\s+|\s+$/g, '');
+		}
+	}
+
 	( function ( $ ) {
 
 		var savedSearches = {};

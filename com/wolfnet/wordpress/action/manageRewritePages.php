@@ -213,7 +213,7 @@ extends com_ajmichels_wppf_action_action
 
 		if ( $canInsert ) {
 
-			$this->getSearchService()->saveSearch( $_POST['post_title'], $_POST['custom_fields'] );
+			$this->getSearchService()->saveSearch( $_REQUEST['post_title'], $_REQUEST['custom_fields'] );
 
 		}
 

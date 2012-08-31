@@ -121,15 +121,6 @@ implements com_ajmichels_common_iSingleton
 	}
 
 
-	/* Runs when the page output is complete and PHP script execution is about to end. */
-	public function shutdown ()
-	{
-		if ( $_SERVER['SERVER_ADDR'] == '127.0.0.1' || $_SERVER['SERVER_ADDR'] == '172.28.0.206' ) {
-			echo '<!-- Testing Server: ' . $_SERVER['SERVER_ADDR'] . ' -->';
-		}
-	}
-
-
 	/* MANAGER REGISTRATIONS ******************************************************************** */
 
 	/* Register Options with the Option Manager */

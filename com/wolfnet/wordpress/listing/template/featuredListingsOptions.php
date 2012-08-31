@@ -128,6 +128,8 @@
 
 			$('#<?php echo $instanceId; ?>').wolfnetFeaturedListingsControls();
 
+			wolfnet.initMoreInfo( $( '#<?php echo $instanceId; ?> .wolfnet_moreInfo' ) );
+
 		} )( jQuery ); /* END: jQuery IIFE */
 
 	} /* END: If jQuery Exists */
