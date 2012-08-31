@@ -38,15 +38,15 @@ extends com_wolfnet_wordpress_abstract_widget
 		'title'        => '',
 		'description'  => 'Display a grid of properties based on user defined criteria. Includes an image, address, beds & baths, and price',
 		'criteria'     => '',
-		'mode'         => '',
+		'mode'         => 'advanced',
 		'savedsearch'  => '',
 		'zipcode'      => '',
 		'city'         => '',
 		'minprice'     => '',
 		'maxprice'     => '',
-		'ownertype'    => 'agent_broker',
+		'ownertype'    => 'all',
 		'maxresults'   => 50
-		);
+	);
 
 
 	/**
@@ -129,21 +129,21 @@ extends com_wolfnet_wordpress_abstract_widget
 	 */
 	public function widget ( $args, $instance )
 	{
-		$options = $this->getOptionData( $instance );
-		$criteria = json_decode( $options['criteria']['value'], true );
-		if ( !is_array( $criteria ) ) {
-			$criteria = array();
-		}
+		$options  = $this->getOptionData( $instance );
+
 		$gridListings = $this->getListingService()->getGridListings(
-			$criteria,
+			$this->convertCriteriaJsonToArray( $options ),
 			$options['ownertype']['value'],
 			$options['maxresults']['value']
 			);
+
 		$data = array(
 			'listings' => $gridListings,
 			'options'  => $options
-			);
-		$this->getListingGridView( $data )->out( $data );
+		);
+
+		$this->getListingGridView()->out( $data );
+
 	}
 
 
@@ -157,23 +157,18 @@ extends com_wolfnet_wordpress_abstract_widget
 	 */
 	public function form ( $instance )
 	{
-		$ls = $this->getListingService();
+		$ls     = $this->getListingService();
 		$fields = $this->getOptionData( $instance );
-		$criteria = json_decode( $fields['criteria']['value'], true );
-		if ( !is_array( $criteria ) ) {
-			$criteria = array();
-		}
-		foreach ( $criteria as $field => $value ) {
-			if ( array_key_exists( $field, $fields ) ) {
-				$fields[$field]['value'] = $value;
-			}
-		}
+
+		$this->convertCriteriaJsonToOptions( $fields );
+
 		$data = array(
-			'fields' => $fields,
-			'prices' => $ls->getPriceData(),
-			'ownerTypes' => $this->getListingService()->getOwnerTypeData(),
+			'fields'        => $fields,
+			'prices'        => $ls->getPriceData(),
+			'ownerTypes'    => $this->getListingService()->getOwnerTypeData(),
 			'savedSearches' => $this->getSearchService()->getSearches()
-			);
+		);
+
 		$this->getListingGridOptionsView()->out( $data );
 	}
 
@@ -189,12 +184,28 @@ extends com_wolfnet_wordpress_abstract_widget
 	public function update ( $new_instance, $old_instance )
 	{
 		// processes widget options to be saved
-		$newData = $this->getOptionData( $new_instance );
+		$newData  = $this->getOptionData( $new_instance );
 		$saveData = array();
+
 		foreach ( $newData as $opt => $data ) {
 			$saveData[$opt] = strip_tags( $data['value'] );
 		}
-		if ( $saveData['mode'] == 'basic' ) {
+
+		/* Advanced Mode */
+		if ( $saveData['mode'] == 'advanced' ) {
+			if ( $saveData['savedsearch'] == 'deleted' ) {
+				/* Maintain the existing search criteria */
+			}
+			else {
+
+				$criteria = $this->getSearchService()->getSearchCriteria( $saveData['savedsearch'] );
+				$saveData['criteria'] = json_encode( $criteria );
+
+			}
+		}
+
+		/* Basic Mode */
+		else {
 			$criteria = array();
 			if ( $saveData['minprice'] != '' ) {
 				$criteria['minprice'] = $saveData['minprice'];
@@ -210,32 +221,42 @@ extends com_wolfnet_wordpress_abstract_widget
 			}
 			$saveData['criteria'] = json_encode( $criteria );
 		}
-		else {
-			if ( $saveData['savedsearch'] == 'deleted' ) {
-				// Maintain the existing search criteria
-			}
-			else {
 
-				$criteria = array();
-				$customFields = get_post_custom( $saveData['savedsearch'] );
-
-				foreach ( $customFields as $field => $value ) {
-
-					if ( substr( $field, 0, 1 ) != '_' ) {
-						$criteria[$field] = $value[0];
-					}
-
-				}
-
-				$saveData['criteria'] = json_encode( $criteria );
-
-			}
-		}
+		/* Remove these values since they have already been included in the criteria */
 		unset( $saveData['zipcode'] );
 		unset( $saveData['city'] );
 		unset( $saveData['minprice'] );
 		unset( $saveData['maxprice'] );
+
 		return $saveData;
+
+	}
+
+
+	/* PRIVATE METHODS ************************************************************************** */
+
+	private function convertCriteriaJsonToOptions ( array &$fields )
+	{
+		$criteria = $this->convertCriteriaJsonToArray( $fields );
+
+		foreach ( $criteria as $field => $value ) {
+			if ( array_key_exists( $field, $fields ) ) {
+				$fields[$field]['value'] = $value;
+			}
+		}
+
+	}
+
+
+	private function convertCriteriaJsonToArray ( array $fields )
+	{
+		$criteria = json_decode( $fields['criteria']['value'], true );
+
+		if ( !is_array( $criteria ) ) {
+			$criteria = array();
+		}
+
+		return $criteria;
 	}
 
 

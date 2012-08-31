@@ -140,13 +140,16 @@ extends com_ajmichels_wppf_action_action
 
 		$data = array(
 			'fields' => array(
-				'title'      => array( 'name' => 'title' ),
-				'maxprice'   => array( 'name' => 'maxprice' ),
-				'minprice'   => array( 'name' => 'minprice' ),
-				'city'       => array( 'name' => 'city' ),
-				'zipcode'    => array( 'name' => 'zipcode' ),
-				'ownertype'  => array( 'name' => 'ownertype' ),
-				'maxresults' => array( 'name' => 'maxresults' )
+				'title'       => array( 'name' => 'title' ),
+				'criteria'    => array( 'name' => 'criteria' ),
+				'mode'        => array( 'name' => 'mode', 'value' => 'advanced' ),
+				'savedsearch' => array( 'name' => 'savedsearch' ),
+				'maxprice'    => array( 'name' => 'maxprice' ),
+				'minprice'    => array( 'name' => 'minprice' ),
+				'city'        => array( 'name' => 'city' ),
+				'zipcode'     => array( 'name' => 'zipcode' ),
+				'ownertype'   => array( 'name' => 'ownertype' ),
+				'maxresults'  => array( 'name' => 'maxresults' )
 			),
 			'prices' => $this->getListingService()->getPriceData(),
 			'ownerTypes' => $this->getListingService()->getOwnerTypeData(),
@@ -161,27 +164,7 @@ extends com_ajmichels_wppf_action_action
 
 	private function shortcodebuilder_options_list ()
 	{
-		$this->statusSuccess();
-
-		$data = array(
-			'fields' => array(
-				'title'      => array( 'name' => 'title' ),
-				'maxprice'   => array( 'name' => 'maxprice' ),
-				'minprice'   => array( 'name' => 'minprice' ),
-				'city'       => array( 'name' => 'city' ),
-				'zipcode'    => array( 'name' => 'zipcode' ),
-				'ownertype'  => array( 'name' => 'ownertype' ),
-				'maxresults' => array( 'name' => 'maxresults' )
-			),
-			'prices' => $this->getListingService()->getPriceData(),
-			'ownerTypes' => $this->getListingService()->getOwnerTypeData(),
-			'savedSearches' => $this->getSearchService()->getSearches()
-		);
-
-		$this->getListingGridOptionsView()->out( $data );
-
-		exit;
-
+		$this->shortcodebuilder_options_grid();
 	}
 
 
@@ -199,6 +182,17 @@ extends com_ajmichels_wppf_action_action
 
 		exit;
 
+	}
+
+
+	private function shortcodebuilder_saved_search ()
+	{
+
+		$this->statusSuccess();
+
+		print( json_encode( $this->getSearchService()->getSearchCriteria( $_GET['ID'] ) ) );
+
+		exit;
 	}
 
 

@@ -56,8 +56,8 @@ implements com_ajmichels_common_iSingleton
 		$this->log( 'Init wolfnet Plugin' );
 		parent::__construct();
 
-		/*	If the debug parameter is passed over the url, output the log. */
-		if ( array_key_exists( 'debug', $_REQUEST ) ) {
+		/* If the wordpress install is set to debug mode enable logging and debug output */
+		if ( WP_DEBUG ) {
 			$this->loggerSetting( 'enabled', true );
 			$this->loggerSetting( 'level',   'debug' );
 			$this->loggerSetting( 'minTime', 0 );

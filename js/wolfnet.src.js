@@ -13,15 +13,30 @@ var wolfnet = function ()
 wolfnet.initMoreInfo = function (  $moreInfoItems )
 {
 
+	var iconClass = 'wolfnet_moreInfoIcon';
+
 	( function ( $ ) {
 
 		$moreInfoItems.hide();
 
-		$moreInfoItems.before( '<span class="wolfnet_moreInfoIcon"/>' );
+		$moreInfoItems.each( function () {
 
-		$( '.wolfnet_moreInfoIcon' ).tooltip( {
+			var $item     = $( this );
+			var $icon     = $item.siblings( 'span.' + iconClass );
+
+			if ( $icon.length == 0 ) {
+
+				$icon = $( '<span />' );
+				$icon.addClass( iconClass );
+				$item.before( $icon );
+
+			}
+
+		} );
+
+		$( '.' + iconClass ).tooltip( {
 			showURL     : false,
-			width       : 200,
+			//width       : 200,
 			bodyHandler : function () {
 				return $( this ).siblings( '.wolfnet_moreInfo' ).html();
 			}

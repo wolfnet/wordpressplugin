@@ -95,6 +95,29 @@ implements com_ajmichels_wppf_interface_iService
 	}
 
 
+	public function getSearchCriteria ( $id = 0 )
+	{
+		$data = array();
+
+		$customFields = get_post_custom( $id );
+
+		if ( $customFields !== false ) {
+
+			foreach ( $customFields as $field => $value ) {
+
+				if ( substr( $field, 0, 1 ) != '_' ) {
+					$data[$field] = $value[0];
+				}
+
+			}
+
+		}
+
+		return $data;
+
+	}
+
+
 	public function saveSearch ( $title, $criteria )
 	{
 		// Create post object

@@ -93,6 +93,7 @@ implements com_ajmichels_wppf_interface_iView
 			'maxResultsName'    => esc_attr( $data['fields']['maxresults']['name'] ),
 			'maxResultsValue'   => esc_attr( $data['fields']['maxresults']['value'] )
 			) );
+		$data['instanceId']	= uniqid( 'wolfnet_listingsOptions_' );
 		return parent::render( $data );
 	}
 

@@ -16,7 +16,7 @@
 ?>
 
 
-<div class="wolfnet_featuredListingsOptions">
+<div id="<?php echo $instanceId; ?>" class="wolfnet_featuredListingsOptions">
 
 	<input id="<?php echo $directionId; ?>" name="<?php echo $directionName; ?>" type="hidden"
 		class="wolfnet_featuredListingsOptions_dirField" />
@@ -126,7 +126,7 @@
 
 		( function ( $ ) {
 
-			$('.wolfnet_featuredListingsOptions').wolfnetFeaturedListingsControls();
+			$('#<?php echo $instanceId; ?>').wolfnetFeaturedListingsControls();
 
 		} )( jQuery ); /* END: jQuery IIFE */
 

@@ -197,7 +197,6 @@ if ( typeof String.prototype.trim !== 'function' ) {
 						$insertButton.appendTo( $page );
 						$insertButton.click( function () {
 							widget._buildShortcode( page );
-							$container.trigger( 'insertShortcodeEvent' );
 						} );
 
 					}
@@ -255,15 +254,21 @@ if ( typeof String.prototype.trim !== 'function' ) {
 
 		_buildShortcode : function ( page )
 		{
-			var widget = this;
-			var option = widget.options;
-			var $page  = widget._getPage( page );
-			var attrs  = {};
-			var string = '[' + option.menuItems[page].shortcode + ' /]';
+			var widget   = this;
+			var option   = widget.options;
+			var $page    = widget._getPage( page );
+			var attrs    = {};
+			var code     = '[' + option.menuItems[page].shortcode + ' /]';
+			var exclAttr = ['mode','savedsearch','criteria'];
+			var $advMode = $page.find( 'input[type="radio"][name="mode"][value="advanced"]:first:checked' );
+			var $savSrch = $page.find( 'select[name="savedsearch"]:first' );
+			var $loaderImg    = widget.loaderImage;
+
+			$loaderImg.show();
 
 			$page.find( 'input, select' ).each( function () {
 
-				if ( this.name != '' ) {
+				if ( this.name != '' && $.inArray( this.name, exclAttr ) == -1 ) {
 
 					switch ( this.type ) {
 
@@ -273,13 +278,12 @@ if ( typeof String.prototype.trim !== 'function' ) {
 							}
 							break;
 
-						//case 'checkbox':
-						//	attrs[this.name] = this.value;
-						//	break;
-						//
-						//case 'radio':
-						//	attrs[this.name] = this.value;
-						//	break;
+						case 'checkbox':
+						case 'radio':
+							if ( this.checked == true ) {
+								attrs[this.name] = this.value;
+							}
+							break;
 
 					}
 
@@ -287,11 +291,51 @@ if ( typeof String.prototype.trim !== 'function' ) {
 
 			} );
 
+			if ( $advMode.length != 0 && $savSrch.length != 0 ) {
+
+				delete attrs.zipcode;
+				delete attrs.city;
+				delete attrs.minprice;
+				delete attrs.maxprice;
+
+				$.ajax( {
+					url: option.rootUri + '-saved-search',
+					type: 'GET',
+					dataType: 'json',
+					data: { ID: $savSrch.val() },
+					success: function ( data ) {
+						for ( var field in data ) {
+							attrs[field] = data[field];
+						}
+						widget._buildShortcodeString( attrs, code );
+					},
+					complete: function () {
+						$loaderImg.hide();
+					}
+				} );
+
+			}
+			else {
+
+				widget._buildShortcodeString( attrs, code );
+				$loaderImg.hide();
+
+			}
+
+		},
+
+		_buildShortcodeString : function ( attrs, code )
+		{
+			var widget     = this;
+			var $container = $( widget.element );
+			var string     = code;
+
 			for ( var attr in attrs ) {
 				string = string.replace( '/]', ' ' + attr + '="' + attrs[attr] + '" /]' );
 			}
 
 			widget.shortcode = string;
+			$container.trigger( 'insertShortcodeEvent' );
 
 		},
 

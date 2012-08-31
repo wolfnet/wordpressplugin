@@ -15,7 +15,7 @@
 
 ?>
 
-<div class="wolfnet_listingGridOptions">
+<div id="<?php echo $instanceId; ?>" class="wolfnet_listingGridOptions">
 
 	<input id="<?php echo $criteriaId; ?>" name="<?php echo $criteriaName; ?>" value="<?php echo $criteriaValue; ?>" type="hidden" />
 
@@ -26,7 +26,7 @@
 			<td><input id="<?php echo $titleId; ?>" name="<?php echo $titleName; ?>" value="<?php echo $titleValue; ?>" type="text" /></td>
 		</tr>
 
-		<tr>
+		<tr class="modeField">
 			<td><label>Mode:</label></td>
 			<td>
 				<input id="<?php echo $modeId; ?>" name="<?php echo $modeName; ?>" value="basic" type="radio" <?php echo $modeBasic; ?> /> Basic <br/>
@@ -34,16 +34,21 @@
 			</td>
 		</tr>
 
-		<tr class="advanced-option">
+		<tr class="advanced-option savedSearchField">
 			<td><label>Saved Search:</label></td>
 			<td>
 				<select id="<?php echo $savedSearchId; ?>" name="<?php echo $savedSearchName; ?>">
+					<?php $foundOne = false; ?>
 					<option value="">-- Saved Search --</option>
-					<!--<option value="deleted">** Deleted **</option>-->
 					<?php foreach ( $savedSearches as $savedSearch ) { ?>
-					<option value="<?php echo $savedSearch->ID; ?>"<?php echo ( $savedSearchValue == $savedSearch->ID ) ? ' selected="selected"' : '' ; ?>>
+					<?php $selected = ( $savedSearchValue == $savedSearch->ID ) ? ' selected="selected"' : ''; ?>
+					<?php if ( $selected != '' ) { $foundOne = true; }; ?>
+					<option value="<?php echo $savedSearch->ID; ?>"<?php echo $selected; ?>>
 						<?php echo $savedSearch->post_title; ?>
 					</option>
+					<?php } ?>
+					<?php if ( !$foundOne && $modeAdvanced != '' ) { ?>
+					<option value="deleted" selected="selected">** DELETED **</option>
 					<?php } ?>
 				</select>
 				<span class="wolfnet_moreInfo">
@@ -125,3 +130,19 @@
 	</table>
 
 </div>
+
+<script type="text/javascript">
+
+	if ( typeof jQuery != 'undefined' ) {
+
+		( function ( $ ) {
+
+			$('#<?php echo $instanceId; ?>').wolfnetListingGridControls();
+
+			wolfnet.initMoreInfo( $( '.wolfnet_moreInfo' ) );
+
+		} )( jQuery ); /* END: jQuery IIFE */
+
+	} /* END: If jQuery Exists */
+
+</script>

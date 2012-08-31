@@ -75,6 +75,96 @@ if ( typeof jQuery != 'undefined' ) {
 
 		}
 
+
+		$.fn.wolfnetListingGridControls = function ( options )
+		{
+
+			var option = $.extend( {}, options );
+
+			var animationSpeed = 'fast';
+			var easing         = 'swing';
+
+			var showAdvancedOptions = function ( $fields )
+			{
+				$fields.filter( '.basic-option' ).hide();
+				$fields.filter( '.advanced-option' ).show();
+			}
+			var showBasicOptions = function ( $fields )
+			{
+				$fields.filter( '.advanced-option' ).hide();
+				$fields.filter( '.basic-option' ).show();
+			}
+
+			var eventHandler = function ()
+			{
+				var $mode   = $( this );
+				var $fields = this.$fields;
+
+				if ( $mode.is( ':checked' ) ) {
+
+					switch ( $mode.val() ) {
+
+						case 'basic':
+							showBasicOptions( $fields );
+							break;
+
+						case 'advanced':
+							showAdvancedOptions( $fields );
+							break;
+
+					}
+
+				}
+
+			}
+
+			var savedSearchEventHandler = function ()
+			{
+				if ( !this.beenWarned ) {
+					alert(
+						'The Saved Search that was previously used for this widget no longer exists. ' +
+						'The widget will contiue to function using the same search criteria unless you ' +
+						'change the saved search value to something other than ** DELETED **.'
+					);
+					this.beenWarned = true;
+				}
+			}
+
+			return this.each( function () {
+
+				var $form   = $( this );
+				var $fields = $form.find( 'tr.basic-option,tr.advanced-option' );
+				var $mode   = $form.find( '.modeField input' );
+
+				$fields.hide();
+
+				$mode.each( function () {
+					this.$fields = $fields;
+				} );
+
+				$mode.click( eventHandler );
+				$mode.bind( 'ready', eventHandler );
+
+				$( document ).ready( function () {
+					$mode.trigger( 'ready' );
+				} );
+
+				var $savedSearch = $form.find( '.savedSearchField select:first' );
+
+				if ( $savedSearch.val() == 'deleted' ) {
+
+					$savedSearch.each( function () {
+						this.beenWarned = false;
+					} );
+					$savedSearch.click( savedSearchEventHandler );
+					$savedSearch.focus( savedSearchEventHandler );
+
+				}
+
+			} );
+
+		}
+
 		$.fn.wolfnetValidateProductKey = function ( clientOptions )
 		{
 
