@@ -34,8 +34,6 @@ if ( typeof jQuery != 'undefined' ) {
 				var listWidth  = $this.width();
 				var $items     = $this.find( 'div.wolfnet_listing' );
 
-				console.log( listWidth );
-
 				$this.css( {
 					'position' : 'absolute'
 				} );
@@ -55,8 +53,6 @@ if ( typeof jQuery != 'undefined' ) {
 					var cont  = $addr.html();
 					var len   = cont.length;
 					var trim  = 1;
-
-					console.log( $link, $link, $link.width() );
 
 					while ( $link.width() > listWidth ) {
 
