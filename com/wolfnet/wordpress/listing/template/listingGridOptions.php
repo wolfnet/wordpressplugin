@@ -47,7 +47,7 @@
 						<?php echo $savedSearch->post_title; ?>
 					</option>
 					<?php } ?>
-					<?php if ( !$foundOne && $modeAdvanced != '' ) { ?>
+					<?php if ( !$foundOne && ( $criteriaValue != '' && $criteriaValue != '[]' ) ) { ?>
 					<option value="deleted" selected="selected">** DELETED **</option>
 					<?php } ?>
 				</select>
