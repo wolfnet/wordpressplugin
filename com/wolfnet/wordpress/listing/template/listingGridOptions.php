@@ -139,7 +139,9 @@
 
 			$('#<?php echo $instanceId; ?>').wolfnetListingGridControls();
 
-			wolfnet.initMoreInfo( $( '#<?php echo $instanceId; ?> .wolfnet_moreInfo' ) );
+			$( document ).ready( function () {
+				wolfnet.initMoreInfo( $( '#<?php echo $instanceId; ?> .wolfnet_moreInfo' ) );
+			} );
 
 		} )( jQuery ); /* END: jQuery IIFE */
 
