@@ -98,7 +98,11 @@
 		</property>
 	</bean>
 
-	<bean id="SearchService" class="com_wolfnet_wordpress_search_service" />
+	<bean id="SearchService" class="com_wolfnet_wordpress_search_service">
+		<property name="SettingsService">
+			<ref bean="SettingsService" />
+		</property>
+	</bean>
 
 
 	<!-- Views -->
@@ -113,12 +117,11 @@
 	<bean id="PluginInstructionsView" class="com_wolfnet_wordpress_admin_pluginInstructionsView" singleton="false" />
 
 	<bean id="SearchManagerView" class="com_wolfnet_wordpress_admin_searchManagerView" singleton="false">
-		<property name="OptionManager">
-			<!-- Defined in the WPPF Service Factory -->
-			<ref bean="OptionManager" />
-		</property>
 		<property name="SettingsService">
 			<ref bean="SettingsService" />
+		</property>
+		<property name="SearchService">
+			<ref bean="SearchService" />
 		</property>
 		<property name="pluginUrl">
 			<value>${pluginUrl}</value>

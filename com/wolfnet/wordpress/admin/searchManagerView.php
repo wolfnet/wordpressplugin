@@ -29,19 +29,8 @@ implements com_ajmichels_wppf_interface_iView
 	 */
 	public $template;
 
-	/**
-	 * This property holds a reference to the OptionManager object.
-	 *
-	 * @type  string
-	 *
-	 */
-	public $optionManager;
-
 
 	private $settingsService;
-
-
-	private $sessionKey = 'wolfnetSearchManagerCookies';
 
 
 	private $pluginUrl;
@@ -72,82 +61,20 @@ implements com_ajmichels_wppf_interface_iView
 			$this->template = $this->formatPath( dirname( __FILE__ ) . '\template\invalidProductKey.php' );
 		}
 		else {
-			$data['search_form'] = $this->getSearchForm();
+			$data['search_form']  = '<script type="text/javascript">';
+			$data['search_form'] .= 'var wntcfid = "' . $this->getSearchService()->getCfId() . '";';
+			$data['search_form'] .= 'var wntcftoken = "' . $this->getSearchService()->getCfToken() . '";';
+			$data['search_form'] .= '</script>';
+			$data['search_form'] .= $this->getSearchService()->getSearchManagerHtml();
 		}
+		$this->log( $this->getSearchService()->getCfId() );
+		$this->log( $this->getSearchService()->getCfToken() );
 		$data['pluginUrl'] = $this->getPluginUrl();
 		return parent::render( $data );
 	}
 
 
-	/* PRIVATE ********************************************************************************** */
-
-	private function getSearchForm ()
-	{
-		$baseUrl   = $this->getSettingsService()->getSettings()->getSITE_BASE_URL();
-		$url       = $baseUrl . '/index.cfm?action=wpshortcodebuilder&search_mode=form';
-		$resParams = array( 'page', 'action', 'market_guid', 'reinit', 'show_header_footer', 'search_mode' );
-
-		foreach ( $_GET as $param => $paramValue ) {
-			if ( !array_search( $param, $resParams ) ) {
-				$paramValue = urlencode( $paramValue );
-				$url .= "&{$param}={$paramValue}";
-			}
-		}
-
-		$http    = wp_remote_get( $url, array( 'cookies' => $this->getCookieData() ) );
-
-		if ( !is_wp_error( $http ) && $http['response']['code'] == '200' ) {
-			$this->setCookieData( $http['cookies'] );
-			return $http['body'];
-		}
-		else {
-			return '';
-		}
-
-	}
-
-
-	private function getCookieData ()
-	{
-		if ( !array_key_exists( $this->getSessionKey(), $_SESSION ) ) {
-			$_SESSION[$this->getSessionKey()] = array();
-		}
-		return $_SESSION[$this->getSessionKey()];
-	}
-
-
-	private function setCookieData ( array $cookies )
-	{
-		$_SESSION[$this->getSessionKey()] = $cookies;
-	}
-
-
 	/* ACCESSORS ******************************************************************************** */
-
-	/**
-	 * GETTER: This method is a getter for the optionManager property.
-	 *
-	 * @return com_ajmichels_wppf_option_manager
-	 *
-	 */
-	public function getOptionManager ()
-	{
-		return $this->optionManager;
-	}
-
-
-	/**
-	 * SETTER: This method is a setter for the optionManager property.
-	 *
-	 * @param   com_ajmichels_wppf_option_manager  $om
-	 *
-	 * @return  void
-	 *
-	 */
-	public function setOptionManager ( com_ajmichels_wppf_option_manager $om )
-	{
-		$this->optionManager = $om;
-	}
 
 
 	/**
@@ -176,27 +103,27 @@ implements com_ajmichels_wppf_interface_iView
 
 
 	/**
-	 * GETTER: This method is a getter for the sessionKey property.
+	 * GETTER: This method is a getter for the searchService property.
 	 *
-	 * @return  string
+	 * @return  com_wolfnet_wordpress_search_service
 	 *
 	 */
-	public function getSessionKey ()
+	public function getSearchService ()
 	{
-		return $this->sessionKey;
+		return $this->searchService;
 	}
 
 
 	/**
-	 * SETTER: This method is a setter for the sessionKey property.
+	 * SETTER: This method is a setter for the searchService property.
 	 *
-	 * @param   string  $key
+	 * @param   com_wolfnet_wordpress_search_service  $service
 	 * @return  void
 	 *
 	 */
-	public function setSessionKey ( $key )
+	public function setSearchService ( com_wolfnet_wordpress_search_service $service )
 	{
-		$this->sessionKey = $key;
+		$this->searchService = $service;
 	}
 
 
