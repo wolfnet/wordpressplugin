@@ -201,7 +201,16 @@ extends com_ajmichels_wppf_action_action
 
 		$this->statusSuccess();
 
-		print( json_encode( $this->getSearchService()->getSearches() ) );
+		$data = $this->getSearchService()->getSearches();
+
+		/* Convert the dates to a human readable format. */
+		foreach ( $data as &$item ) {
+			if ( property_exists( $item, 'post_date' ) ) {
+				$item->post_date = date( 'm-d-Y h:i:s a', strtotime( $item->post_date ) );
+			}
+		}
+
+		print( json_encode( $data ) );
 
 		exit;
 	}

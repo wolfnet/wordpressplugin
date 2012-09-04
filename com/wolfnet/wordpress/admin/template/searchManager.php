@@ -46,6 +46,13 @@
 
 	<?php echo $search_form; ?>
 
+	<style type="text/css">
+		/* Fixing issue caused by wolfnet search builder css */
+		body {
+			background-color: transparent !important;
+		}
+	</style>
+
 	<div id="savedsearches" class="style_box">
 		<div class="style_box_header">Saved Searches</div>
 		<div class="style_box_content">
@@ -227,7 +234,7 @@
 				$descCell.appendTo( $row );
 
 				$cdateCell = $( '<td/>' );
-				$cdateCell.html( new Date( savedSearches[i].post_date ).toDateString() );
+				$cdateCell.html( savedSearches[i].post_date );
 				$cdateCell.appendTo( $row );
 
 				$ctrlCell = $( '<td/>' );
