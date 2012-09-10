@@ -1,8 +1,8 @@
 <project name="wolfnetWordPressPlugin" default="build" basedir=".">
 
 
-	<property name="majorVersion" value="0.2" />
-	<property name="minorVersion" value="4" />
+	<property name="majorVersion" value="1.0" />
+	<property name="minorVersion" value="0" />
 	<property name="version" value="${majorVersion}.${minorVersion}" />
 
 	<property file="build.properties" />
@@ -75,19 +75,13 @@
 				<exclude name="phpdoc.dist.xml" /> <!-- Config file for PHP Documentor -->
 				<exclude name="*.bat" /> <!-- Batch files used for building the project or performing othing tasks -->
 				<exclude name="LessCompilerOutput.txt" />
-				<exclude name="ant/" />
+				<exclude name=".ant/" />
 				<exclude name="**/*.less" />
 				<exclude name="xml/*.xml" />
 				<exclude name=".ant/" />
 				<exclude name=".gitconfig" />
 			</fileset>
 		</copy>
-
-		<!-- Update Plugin Version -->
-		<replace file="${buildDir}/wolfnet.php" token="{majorVersion}" value="${majorVersion}" />
-		<replace file="${buildDir}/wolfnet.php" token="{minorVersion}" value="${minorVersion}" />
-		<replace file="${buildDir}/wolfnet.php" token="{X.X.X}" value="${version}" />
-		<replace file="${buildDir}/ReadMe.txt" token="{X.X.X}" value="${version}" />
 
 	</target>
 
@@ -103,8 +97,12 @@
 	<target name="package" depends="build">
 		<clean-for-package />
 		<prep-for-package />
-		<zip destfile="${packageName}.zip" basedir="${buildDir}/../" compress="true" includes="${buildName}/" />
-		<zip destfile="${packageName}_src.zip" basedir="${basedir}" compress="true" excludes="LessCompilerOutput.txt, css/wolfnet.css" />
+		<zip destfile="${packageName}.zip" compress="true">
+			<zipfileset dir="${buildDir}" prefix="${buildName}" />
+		</zip>
+		<zip destfile="${packageName}_src.zip" compress="true">
+			<zipfileset dir="${basedir}" prefix="${buildName}" />
+		</zip>
 	</target>
 
 
@@ -150,17 +148,18 @@
 		<sequential>
 			<!-- Minify Source Code -->
 			<!-- Use min files instead of src files -->
-			<echo>Use Minified Files</echo>
+			<echo>Switch to Minified Files</echo>
+			<echo>Update Version Numbers</echo>
 			<replace dir="${buildDir}">
 				<include name="**/*.php" />
+				<include name="ReadMe.txt" />
 				<replacefilter token=".src.js"  value=".min.js" />
 				<replacefilter token=".src.css" value=".min.css" />
+				<replacefilter token="{majorVersion}" value="${majorVersion}" />
+				<replacefilter token="{minorVersion}" value="${minorVersion}" />
+				<replacefilter token="{X.X.X}" value="${version}" />
+				<replacefilter token="{X.X.X}" value="${version}" />
 			</replace>
-			<!-- Delete all source files not needed for deployment -->
-			<echo>Delete Source Files</echo>
-			<delete>
-				<fileset dir="${buildDir}" includes="**/*.src.*" />
-			</delete>
 		</sequential>
 	</macrodef>
 
