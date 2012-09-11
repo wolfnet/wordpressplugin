@@ -58,10 +58,6 @@ extends com_ajmichels_wppf_shortcode_shortcode
 	 *
 	 */
 	protected $attributes = array(
-		'minprice'     => '',
-		'maxprice'     => '',
-		'city'         => '',
-		'zipcode'      => '',
 		'ownertype'    => 'all',
 		'maxresults'   => 50
 		);
@@ -82,7 +78,7 @@ extends com_ajmichels_wppf_shortcode_shortcode
 		$criteria = array();
 		foreach ( $attr as $field => $value ) {
 			if ( !array_key_exists( $field, $options ) ) {
-				$criteria[$field] = $value;
+				$criteria[strtolower($field)] = $value;
 			}
 		}
 		$gridListings = $this->getListingService()->getGridListings(

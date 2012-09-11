@@ -419,17 +419,24 @@ implements com_ajmichels_wppf_interface_iService
 
 		foreach ( $criteria as $field => $value ) {
 
-			if ( $field == 'minprice' ) {
-				$wsu->setParameter( 'min_price', $value );
-			}
-			if ( $field == 'maxprice' ) {
-				$wsu->setParameter( 'max_price', $value );
-			}
-			if ( $field == 'zipcode' ) {
-				$wsu->setParameter( 'zip_code', $value );
-			}
-			else {
-				$wsu->setParameter( $field, $value );
+			switch ( strtolower( $field ) ) {
+
+				case 'minprice':
+					$wsu->setParameter( 'min_price', $value );
+					break;
+
+				case 'maxprice':
+					$wsu->setParameter( 'max_price', $value );
+					break;
+
+				case 'zipcode':
+					$wsu->setParameter( 'zip_code', $value );
+					break;
+
+				default:
+					$wsu->setParameter( $field, $value );
+					break;
+
 			}
 
 		}
