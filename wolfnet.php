@@ -69,18 +69,14 @@ implements com_ajmichels_common_iSingleton
 			session_start();
 		}
 
-		if ( array_key_exists( '__wolfnetApiUrl', $_GET ) ) {
-			if ( trim( $_GET['__wolfnetApiUrl'] ) != '' ) {
-				$_SESSION['wolfnetApiUrl'] = trim( $_GET['__wolfnetApiUrl'] );
-			}
-			else {
-				$_SESSION['wolfnetApiUrl'] = $webServiceDomain;
-			}
+		if ( trim( $_GET['__wolfnetApiUrl'] ) != '' ) {
+			$_SESSION['wolfnetApiUrl'] = trim( $_GET['__wolfnetApiUrl'] );
+		}
+		else {
+			$_SESSION['wolfnetApiUrl'] = $webServiceDomain;
 		}
 
-		if ( array_key_exists( 'wolfnetApiUrl', $_SESSION ) ) {
-			$webServiceDomain = $_SESSION['wolfnetApiUrl'];
-		}
+		$webServiceDomain = $_SESSION['wolfnetApiUrl'];
 
 		/* Create Plugin Service Factory */
 		$sfXml = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'com/wolfnet/wordpress/phpSpring.xml';

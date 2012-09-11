@@ -175,7 +175,7 @@ if ( typeof jQuery != 'undefined' ) {
 				validEvent      : 'validProductKey',
 				invalidEvent    : 'invalidProductKey',
 				validationEvent : 'validateProductKey',
-				apiUri          : 'http://services.mlsfinder.com/validateKey/'
+				apiUri          : 'http://services.mlsfinder.com/v1/validateKey/'
 			};
 			$.extend( options, clientOptions );
 
