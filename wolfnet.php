@@ -72,7 +72,7 @@ implements com_ajmichels_common_iSingleton
 		if ( trim( $_GET['__wolfnetApiUrl'] ) != '' ) {
 			$_SESSION['wolfnetApiUrl'] = trim( $_GET['__wolfnetApiUrl'] );
 		}
-		else {
+		else if ( !array_key_exists( 'wolfnetApiUrl', $_SESSION ) ) {
 			$_SESSION['wolfnetApiUrl'] = $webServiceDomain;
 		}
 
