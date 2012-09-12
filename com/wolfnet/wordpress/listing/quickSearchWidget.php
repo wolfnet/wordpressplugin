@@ -22,7 +22,7 @@ extends com_wolfnet_wordpress_abstract_widget
 
 
 	/* PROPERTIES ******************************************************************************* */
-	public $template;
+
 	/**
 	 * This property holds an array of different options that are available for each widget instance.
 	 *
@@ -50,7 +50,7 @@ extends com_wolfnet_wordpress_abstract_widget
 	 *
 	 */
 	private $quickSearchView;
-	
+
 	/**
 	 * This property holds an instance of the Quicksearch Options View object
 	 *
@@ -113,7 +113,7 @@ extends com_wolfnet_wordpress_abstract_widget
 		$data = array(
 			'fields' => $this->getOptionData( $instance )
 			);
-	
+
 		$this->getQuickSearchOptionsView()->out( $data );
 	}
 

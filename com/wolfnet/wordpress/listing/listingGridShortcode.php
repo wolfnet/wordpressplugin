@@ -76,9 +76,11 @@ extends com_ajmichels_wppf_shortcode_shortcode
 	public function execute ( $attr, $content = null ) {
 		$options = $this->getAttributesData( $attr );
 		$criteria = array();
-		foreach ( $attr as $field => $value ) {
-			if ( !array_key_exists( $field, $options ) ) {
-				$criteria[strtolower($field)] = $value;
+		if ( is_array( $attr ) ) {
+			foreach ( $attr as $field => $value ) {
+				if ( !array_key_exists( $field, $options ) ) {
+					$criteria[strtolower($field)] = $value;
+				}
 			}
 		}
 		$gridListings = $this->getListingService()->getGridListings(
