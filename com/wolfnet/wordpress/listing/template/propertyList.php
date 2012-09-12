@@ -17,7 +17,7 @@
 
 <div id="<?php echo $instanceId; ?>" class="widget wolfnet_widget wolfnet_propertyList">
 
-	<?php if ( array_key_exists( 'title', $options ) && trim( $options['title']['value'] ) != '' ) { ?>
+	<?php if ( trim( $options['title']['value'] ) != '' ) { ?>
 
 		<h2 class="widget-title"><?php echo $options['title']['value']; ?></h2>
 

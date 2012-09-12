@@ -150,13 +150,21 @@
 
 					$desc.removeClass( 'invalid' );
 
+					var data = WNTWP.returnSearchParams();
+
+					for ( var i in data ) {
+
+						data[i] = decodeURIComponent( data[i] );
+
+					}
+
 					$.ajax( {
 						url: apiPostUrl,
 						dataType: 'json',
 						type: 'POST',
 						data: {
 							post_title    : $desc.val(),
-							custom_fields : WNTWP.returnSearchParams()
+							custom_fields : data
 						},
 						beforeSend: function () {
 							$loaderImage.show();
@@ -224,17 +232,19 @@
 
 			for ( var i in savedSearches ) {
 
+				var post_url = 'post.php?action=edit&post=' + savedSearches[i].ID;
+
 				$row = $( '<tr/>' );
 				$row.attr( 'id', idprefix + savedSearches[i].ID );
 				$row.addClass( 'savedsearch' );
 				$row.appendTo( $tbody );
 
 				$descCell = $( '<td/>' );
-				$descCell.html( savedSearches[i].post_title );
+				$descCell.html( savedSearches[i].post_title + ' (<a href="' + post_url + '">View Criteria</a>)' );
 				$descCell.appendTo( $row );
 
 				$cdateCell = $( '<td/>' );
-				$cdateCell.html( savedSearches[i].post_date );
+				$cdateCell.html( savedSearches[i].post_date);
 				$cdateCell.appendTo( $row );
 
 				$ctrlCell = $( '<td/>' );

@@ -58,6 +58,7 @@ extends com_ajmichels_wppf_shortcode_shortcode
 	 *
 	 */
 	protected $attributes = array(
+		'title'        => '',
 		'ownertype'    => 'all',
 		'maxresults'   => 50
 		);

@@ -34,14 +34,17 @@ extends com_ajmichels_wppf_shortcode_shortcode
 	 */
 	public $tag = 'WolfNetListingQuickSearch,wolfnetlistingquicksearch,WOLFNETLISTINGQUICKSEARCH,wnt_search,WolfNetQuickSearch,wolfnetquicksearch,WOLFNETQUICKSEARCH';
 
+
 	/**
-	 * This property holds an array of different options that are available for each shortcode instance.
+	 * This property holds an array of different options that are available for each widget instance.
 	 *
 	 * @type  array
 	 *
 	 */
-	public $options = array(
-		'title'        => 'QuickSearch'
+	protected $attributes = array(
+		'title'        => 'QuickSearch',
+		'ownertype'    => 'all',
+		'maxresults'   => 50
 		);
 
 
