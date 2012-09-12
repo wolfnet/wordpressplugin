@@ -69,8 +69,10 @@ implements com_ajmichels_common_iSingleton
 			session_start();
 		}
 
-		if ( trim( $_GET['__wolfnetApiUrl'] ) != '' ) {
-			$_SESSION['wolfnetApiUrl'] = trim( $_GET['__wolfnetApiUrl'] );
+		$apiUrlKey = '__wolfnetApiUrl';
+
+		if ( array_key_exists( $apiUrlKey, $_GET ) && trim( $_GET[$apiUrlKey] ) != '' ) {
+			$_SESSION['wolfnetApiUrl'] = trim( $_GET[$apiUrlKey] );
 		}
 		else if ( !array_key_exists( 'wolfnetApiUrl', $_SESSION ) ) {
 			$_SESSION['wolfnetApiUrl'] = $webServiceDomain;
