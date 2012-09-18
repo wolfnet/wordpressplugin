@@ -6,7 +6,7 @@
  *
  * @package       com.wolfnet.wordpress
  * @subpackage    listing.template
- * @title         listingGrid.php
+ * @title         propertyList.php
  * @contributors  AJ Michels (aj.michels@wolfnet.com)
  * @version       1.0
  * @copyright     Copyright (c) 2012, WolfNet Technologies, LLC
@@ -15,11 +15,11 @@
 
 ?>
 
-<div id="<?php echo $instanceId; ?>" class="wolfnet_widget wolfnet_listingGrid">
+<div id="<?php echo $instanceId; ?>" class="widget wolfnet_widget wolfnet_propertyList">
 
 	<?php if ( array_key_exists( 'title', $options ) && trim( $options['title']['value'] ) != '' ) { ?>
 
-		<h2><?php echo $options['title']['value']; ?></h2>
+		<h2 class="widget-title"><?php echo $options['title']['value']; ?></h2>
 
 	<?php } ?>
 
@@ -34,10 +34,10 @@
 
 		( function ( $ ) {
 
-			$( '#<?php echo $instanceId; ?>' ).wolfnetListingGrid();
+			$( '#<?php echo $instanceId; ?>' ).wolfnetPropertyList({});
 
-		} )( jQuery ); /* END: jQuery IIFE */
+		} )( jQuery );
 
-	} /* END: If jQuery Exists */
+	}
 
 </script>

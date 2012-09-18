@@ -6,14 +6,14 @@
  *
  * @package       com.wolfnet.wordpress
  * @subpackage    action
- * @title         enqueueAdminResources.php
+ * @title         addShortcodeBuilderButton.php
  * @extends       com_ajmichels_wppf_action_action
  * @contributors  AJ Michels (aj.michels@wolfnet.com)
  * @version       1.0
  * @copyright     Copyright (c) 2012, WolfNet Technologies, LLC
  *
  */
-class com_wolfnet_wordpress_action_enqueueAdminResources
+class com_wolfnet_wordpress_action_addShortcodeBuilderButton
 extends com_ajmichels_wppf_action_action
 {
 
@@ -41,22 +41,36 @@ extends com_ajmichels_wppf_action_action
 	 */
 	public function execute ()
 	{
-		global $wp_scripts;
+		if ( ! current_user_can('edit_posts') && ! current_user_can('edit_pages') ) {
+			return;
+		}
+		else {
+			if ( get_user_option( 'rich_editing' ) == 'true' ) {
+				add_filter( 'mce_external_plugins', array( &$this, 'addPluginJavaScript' ) );
+				add_filter( 'mce_buttons', array( &$this, 'registerButton' ) );
+			}
+		}
+	}
 
-		$this->log( 'Action EnqueueAdminResources' );
+
+	public function addPluginJavaScript ( array $plugins )
+	{
 		$url = $this->getPluginUrl();
+		echo '<script type="text/javascript">var wordpressBaseUrl = "' . get_bloginfo('url') . '";</script>';
+		wp_enqueue_script(
+			'wolfnetshortcodebuilder',
+			$url . 'js/jquery.wolfnet_shortcode_builder.src.js',
+			array( 'jquery-ui-core', 'jquery-ui-widget', 'jquery-effects-core' )
+		);
+		$plugins['wolfnetShortcodeBuilder'] = $url . 'js/tinymce.wolfnet_shortcode_builder.src.js';
+		return $plugins;
+	}
 
-		wp_enqueue_script( 'tooltipjs',      $url . 'js/jquery.tooltip.src.js', array('jquery') );
-		wp_enqueue_script( 'wolfnetjs',      $url . 'js/wolfnet.src.js',        array('jquery','tooltipjs') );
-		wp_enqueue_script( 'wolfnetadminjs', $url . 'js/wolfnetAdmin.src.js',   array('jquery') );
 
-		wp_enqueue_script( 'jquery-ui-datepicker' );
-
-		$jquery_ui = $wp_scripts->query('jquery-ui-core');
-
-		wp_enqueue_style(  'jquery-ui-css',  'http://ajax.googleapis.com/ajax/libs/jqueryui/' . $jquery_ui->ver . '/themes/smoothness/jquery-ui.css' );
-		wp_enqueue_style(  'wolfnetadmincss', $url . 'css/wolfnetAdmin.src.css', array(), false, 'screen' );
-
+	public function registerButton ( array $buttons )
+	{
+		array_push( $buttons, '|', 'wolfnetShortcodeBuilderButton' );
+		return $buttons;
 	}
 
 

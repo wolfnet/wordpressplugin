@@ -20,12 +20,33 @@ extends com_ajmichels_wppf_action_action
 	/* PROPERTIES ******************************************************************************* */
 	
 	/**
-	 * This property holds a reference to the view page which will be displayed in the plugin admin.
+	 * This property holds a reference to the view page which will be displayed on the primary 
+	 * plugin admin page.
 	 * 
 	 * @type  com_ajmichels_wppf_interface_iView
 	 * 
 	 */
 	private $pluginSettingsView;
+	
+	
+	/**
+	 * This property holds a reference to the view page which will be displayed on the plugin admin
+	 * support page.
+	 * 
+	 * @type  com_ajmichels_wppf_interface_iView
+	 * 
+	 */
+	private $pluginInstructionsView;
+	
+	
+	/**
+	 * This property holds a reference to the view page which will be displayed on the plugin admin
+	 * search manager page.
+	 * 
+	 * @type  com_ajmichels_wppf_interface_iView
+	 * 
+	 */
+	private $searchManagerView;
 	
 	
 	/**
@@ -50,12 +71,43 @@ extends com_ajmichels_wppf_action_action
 	public function execute ()
 	{
 		$url = $this->getPluginUrl();
-		add_menu_page(	'WolfNet Settings', 
-						'WolfNet Settings', 
-						'administrator', 
-						'wolfnet_plugin_settings', 
-						array( &$this, 'pluginSettingsPage' ),
-						$url . '/img/wp_wolfnet_nav.png' );
+		
+		add_menu_page(
+			'WolfNet', 
+			'WolfNet', 
+			'administrator', 
+			'wolfnet_plugin_settings', 
+			null,
+			$url . '/img/wp_wolfnet_nav.png'
+		);
+		
+		add_submenu_page(
+			'wolfnet_plugin_settings', 
+			'General Settings', 
+			'General Settings', 
+			'administrator', 
+			'wolfnet_plugin_settings', 
+			array( &$this, 'pluginSettingsPage' )
+		);
+		
+		add_submenu_page(
+			'wolfnet_plugin_settings', 
+			'Search Manager', 
+			'Search Manager', 
+			'administrator', 
+			'wolfnet_plugin_search_manager', 
+			array( &$this, 'searchManagerPage' )
+		);
+		
+		add_submenu_page(
+			'wolfnet_plugin_settings', 
+			'Support', 
+			'Support', 
+			'administrator', 
+			'wolfnet_plugin_support', 
+			array( &$this, 'pluginInstructionsPage' )
+		);
+		
 	}
 	
 	
@@ -69,6 +121,32 @@ extends com_ajmichels_wppf_action_action
 	public function pluginSettingsPage ()
 	{
 		$this->getPluginSettingsView()->out();
+	}
+	
+	
+	/**
+	 * This method is responsible for creating and outputing the plugin search manager page within 
+	 * the WordPress admin.
+	 *
+	 * @return	void
+	 * 
+	 */
+	public function searchManagerPage ()
+	{
+		$this->getSearchManagerView()->out();
+	}
+	
+	
+	/**
+	 * This method is responsible for creating and outputing the plugin support page within the
+	 * WordPress admin.
+	 *
+	 * @return	void
+	 * 
+	 */
+	public function pluginInstructionsPage ()
+	{
+		$this->getPluginInstructionsView()->out();
 	}
 	
 	
@@ -96,6 +174,56 @@ extends com_ajmichels_wppf_action_action
 	public function setPluginSettingsView ( com_ajmichels_wppf_interface_iView $view )
 	{
 		$this->pluginSettingsView = $view;
+	}
+	
+	
+	/**
+	 * GETTER: This method is a getter for the pluginInstructionsView property.
+	 *
+	 * @return  com_ajmichels_wppf_interface_iView
+	 * 
+	 */
+	public function getPluginInstructionsView ()
+	{
+		return $this->pluginInstructionsView;
+	}
+	
+	
+	/**
+	 * SETTER: This method is a setter for the pluginInstructionsView property.
+	 *
+	 * @param   com_ajmichels_wppf_interface_iView  $view
+	 * @return  void
+	 * 
+	 */
+	public function setPluginInstructionsView ( com_ajmichels_wppf_interface_iView $view )
+	{
+		$this->pluginInstructionsView = $view;
+	}
+	
+	
+	/**
+	 * GETTER: This method is a getter for the searchManagerView property.
+	 *
+	 * @return  com_ajmichels_wppf_interface_iView
+	 * 
+	 */
+	public function getSearchManagerView ()
+	{
+		return $this->searchManagerView;
+	}
+	
+	
+	/**
+	 * SETTER: This method is a setter for the searchManagerView property.
+	 *
+	 * @param   com_ajmichels_wppf_interface_iView  $view
+	 * @return  void
+	 * 
+	 */
+	public function setSearchManagerView ( com_ajmichels_wppf_interface_iView $view )
+	{
+		$this->searchManagerView = $view;
 	}
 	
 	

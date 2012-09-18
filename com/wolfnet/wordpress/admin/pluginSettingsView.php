@@ -29,6 +29,14 @@ implements com_ajmichels_wppf_interface_iView
 	 */
 	public $template;
 	
+	/**
+	 * This property holds a reference to the OptionManager object.
+	 *
+	 * @type  string
+	 * 
+	 */
+	public $optionManager;
+	
 	
 	/* CONSTRUCTOR METHOD *********************************************************************** */
 	
@@ -51,10 +59,12 @@ implements com_ajmichels_wppf_interface_iView
 	 */
 	public function render ( $data = array() )
 	{
-		$optionManager             = $this->getOptionManager();
-		$data['formHeader']        = $optionManager->getSettingsFormHeader();
-		$data['productKey']        = $optionManager->getOptionValueFromWP( 'wolfnet_productKey' );
+		$optionManager      = $this->getOptionManager();
+		$data['formHeader'] = $optionManager->getSettingsFormHeader();
+		$data['productKey'] = $optionManager->getOptionValueFromWP( 'wolfnet_productKey' );
+		
 		return parent::render( $data );
+		
 	}
 	
 	
