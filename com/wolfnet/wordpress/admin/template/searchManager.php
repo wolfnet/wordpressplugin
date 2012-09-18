@@ -266,6 +266,7 @@
 			}
 		} );
 		$( document ).ready( function () {
+			$( '.hasDatepicker' ).datepicker().datepicker("show");
 			createLoaderImage();
 			getData();
 		} );
