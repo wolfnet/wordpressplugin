@@ -36,9 +36,10 @@
 					<option value="false"<?php echo $autoPlayFalse; ?>>Manual Only</option>
 				</select>
 				<span class="wolfnet_moreInfo">
-					When set to 'Manual Only' users will only be able to see additional properties
-					by directly interacting with the listings. Controls will be made available on
-					either side which when hovered over will advance through the listings.
+					Define user control of the scrolling featured properties. When set to Automatic
+					&amp; Manual, featured properties scroll upon page load, but the user can
+					override the animation via controls displayed on hover. When set to Manual Only,
+					the user must activate animation via controls displayed on hover.
 				</span>
 			</td>
 		</tr>
@@ -71,8 +72,8 @@
 								<input id="<?php echo $speedId; ?>" name="<?php echo $speedName; ?>" type="text"
 									value="<?php echo $speedValue; ?>" size="2" maxlength="2" />
 								<span class="wolfnet_moreInfo">
-									Animation speed controls how fast the listings will scroll by
-									when the scroll control option is set to Automatic.
+									Set the speed for the scrolling animation. Enter a value between
+									1 and 99; the higher the number, the slower the speed.
 								</span>
 							</td>
 						</tr>
@@ -95,10 +96,9 @@
 					<?php } ?>
 				</select>
 				<span class="wolfnet_moreInfo">
-					By default as many agent listings are show as possible.  If there are fewer
-					agent listings than is set for the maximum results the remaining spaces are
-					filled with broker listings. The other options allow for choosing between only
-					displaying broker listings and only agent listings.
+					Define the properties to be featured. Appropriate properties are included as
+					indicated by the name of the option (ie, Agent Then Broker, Agent Only, Broker
+					Only).
 				</span>
 			</td>
 		</tr>
@@ -109,9 +109,8 @@
 				<input id="<?php echo $maxResultsId; ?>" name="<?php echo $maxResultsName; ?>"
 					value="<?php echo $maxResultsValue; ?>" type="text" size="2" maxlength="2" />
 				<span class="wolfnet_moreInfo">
-					The maximum number of listings which will be displayed. It is possible for there
-					to be fewer listings displayed than the value of this field. This field is
-					capped at 50.
+					Define the number of properties to be featured.  The maximum number of
+					properties that can be included is 50.
 				</span>
 			</td>
 		</tr>

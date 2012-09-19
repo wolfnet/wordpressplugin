@@ -37,7 +37,7 @@
 		<tr class="advanced-option savedSearchField">
 			<td><label>Saved Search:</label></td>
 			<td>
-				<select id="<?php echo $savedSearchId; ?>" name="<?php echo $savedSearchName; ?>">
+				<select id="<?php echo $savedSearchId; ?>" name="<?php echo $savedSearchName; ?>" style="width:200px;">
 					<?php $foundOne = false; ?>
 					<option value="">-- Saved Search --</option>
 					<?php foreach ( $savedSearches as $savedSearch ) { ?>
@@ -52,7 +52,8 @@
 					<?php } ?>
 				</select>
 				<span class="wolfnet_moreInfo">
-					Saved searches are created on the "Search Manager" page within the WolfNet plugin admin section.
+					Select a saved search to define the properties to be displayed. Saved searches
+					are created via the Search Manager page within the WolfNet plugin admin section.
 				</span>
 			</td>
 		</tr>
@@ -108,8 +109,11 @@
 					<?php } ?>
 				</select>
 				<span class="wolfnet_moreInfo">
-					If set to 'All' (the default) the grid will show listings regardless of whether
-					they are featured by either a broker or the agent.
+					Restrict search results by brokerage and/or agent. When All (the default) is
+					selected, all matching properties display, regardless of listing brokerage and
+					agent. When any of the other options is selected, search results are restricted
+					to the site owning agent or brokerage, as indicated by the name of the option
+					(ie, Agent Then Broker, Agent Only, Broker Only).
 				</span>
 			</td>
 		</tr>
@@ -120,9 +124,8 @@
 				<input id="<?php echo $maxResultsId; ?>" name="<?php echo $maxResultsName; ?>"
 					type="text" value="<?php echo $maxResultsValue; ?>" />
 				<span class="wolfnet_moreInfo">
-					The maximum number of listings which will be displayed. It is possible for there
-					to be fewer listings displayed than the value of this field. This field is
-					capped at 50.
+					Define the number of properties to be included in a search results set.
+					he maximum number of properties that can be displayed is 50.
 				</span>
 			</td>
 		</tr>

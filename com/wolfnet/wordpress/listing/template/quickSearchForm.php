@@ -19,7 +19,7 @@
 
 
 	<?php if ( array_key_exists( 'title', $options ) && trim( $options['title']['value'] ) != '' ) { ?>
-		<span class="wolfnet_widgetTitle"><?php echo $options['title']['value']; ?></span>
+		<h2 class="wolfnet_widgetTitle"><?php echo $options['title']['value']; ?></h2>
 	<?php } ?>
 
 	<form id="<?php echo $instanceId; ?>_quickSearchForm" class="wolfnet_quickSearch_form"
