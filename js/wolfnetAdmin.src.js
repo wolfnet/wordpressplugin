@@ -123,7 +123,7 @@ if ( typeof jQuery != 'undefined' ) {
 				if ( !this.beenWarned ) {
 					alert(
 						'The Saved Search that was previously used for this widget no longer exists. ' +
-						'The widget will contiue to function using the same search criteria unless you ' +
+						'The widget will continue to function using the same search criteria unless you ' +
 						'change the saved search value to something other than ** DELETED **.'
 					);
 					this.beenWarned = true;
