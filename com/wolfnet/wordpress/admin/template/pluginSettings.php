@@ -38,12 +38,15 @@
 						<input id="wolfnet_productKey" name="wolfnet_productKey" type="text"
 							value="<?php echo $productKey; ?>" size="50" />
 						<p class="description" style="width:400px;">
-							This Product Key ties your WordPress site back to the WolfNet
-							servers (MLS Finder) so that we can provide you with accurate data
-							tailored to your needs. You will not be able to received any data
-							without a valid key. If you do not have a key please contact WolfNet
-							Technologies at 612-342-0088 or toll free at 1-866-WOLFNET. You may also
-							reach us online via our website <a href="http://wolfnet.com/contact_us.cfm" target="_blank">WolfNet.com</a>.
+							Enter your unique product key for the WolfNet WordPress plugin. The
+							product key is required to connect your WordPress site to your WolfNet
+							property search. WolfNet Plugin features will not be available until the
+							correct key has been entered. If you do not have a key, please contact
+							WolfNet Technologies via phone at 612-342-0088 or toll free at
+							1-866-WOLFNET, or via email at
+							<a href="mailto:service@wolfnet.com">service@wolfnet.com</a>.
+							You may also find us online at
+							<a href="http://wolfnet.com" target="_blank">WolfNet.com</a>.
 						</p>
 					</td>
 				</tr>
