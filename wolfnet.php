@@ -4,7 +4,7 @@
 
 Plugin Name:  WolfNet IDX for WordPress
 Plugin URI:   http://wordpress.wolfnet.com
-Description:  This plugin provides WordPress integration with mlsfinder.com IDX search solutions.
+Description:  The WolfNet IDX for WordPress plugin provides IDX search solution integration with any WordPress website.
 Version:      {X.X.X}
 Author:       WolfNet Technologies, LLC.
 Author URI:   http://www.wolfnet.com
