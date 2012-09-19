@@ -280,7 +280,16 @@ implements com_ajmichels_wppf_interface_iService
 			array( 'value' => 5000000,   'label' => '$5,000,000' ),
 			array( 'value' => 6000000,   'label' => '$6,000,000' ),
 			array( 'value' => 8000000,   'label' => '$8,000,000' ),
-			array( 'value' => 10000000,  'label' => '$10,000,000' )
+			array( 'value' => 10000000,  'label' => '$10,000,000' ),
+			array( 'value' => 20000000,  'label' => '$20,000,000' ),
+			array( 'value' => 30000000,  'label' => '$30,000,000' ),
+			array( 'value' => 40000000,  'label' => '$40,000,000' ),
+			array( 'value' => 50000000,  'label' => '$50,000,000' ),
+			array( 'value' => 60000000,  'label' => '$60,000,000' ),
+			array( 'value' => 70000000,  'label' => '$70,000,000' ),
+			array( 'value' => 80000000,  'label' => '$80,000,000' ),
+			array( 'value' => 90000000,  'label' => '$90,000,000' ),
+			array( 'value' => 100000000, 'label' => '$100,000,000' )
 		);
 	}
 
