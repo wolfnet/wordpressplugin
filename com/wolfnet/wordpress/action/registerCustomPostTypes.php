@@ -43,13 +43,13 @@ extends com_ajmichels_wppf_action_action
 					'slug'       => 'wolfnet/search',
 					'with_front' => false
 				),
-				'supports'  => array( 'title', 'author' ),
+				'supports'  => array( 'title' ),
 				'labels'    => array(
 					'name'               => 'Saved Searches',
 					'singular_name'      => 'Saved Search',
 					'add_new'            => 'Add Search',
 					'add_new_item'       => 'Add Search',
-					'edit_item'          => 'Edit Search',
+					'edit_item'          => 'View Saved Search',
 					'new_item'           => 'New Saved Search',
 					'view_item'          => 'View Saved Searches',
 					'search_items'       => 'Find Saved Searches',

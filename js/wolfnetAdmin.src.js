@@ -23,6 +23,13 @@ if ( typeof jQuery != 'undefined' ) {
 				$( 'html' ).addClass( 'ie' );
 			}
 
+			/* This is a HACK to remove some unwanted controls on the Saved Search custom post type. */
+			var $formWrap = $( '.post-php .icon32-posts-wolfnet_search' ).parent();
+			if ( $formWrap.length != 0 ) {
+				$formWrap.find( '.add-new-h2' ).remove();
+				$formWrap.find( '#submitpost #minor-publishing' ).remove();
+			}
+
 		} );
 
 		$.fn.wolfnetFeaturedListingsControls = function ( options )
