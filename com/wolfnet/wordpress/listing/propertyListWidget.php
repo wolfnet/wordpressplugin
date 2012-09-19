@@ -34,7 +34,7 @@ extends com_wolfnet_wordpress_listing_listingGridWidget
 	{
 		$this->id = 'wolfnet_propertyListWidget';
 		$this->name = 'WolfNet Property List';
-		$this->options['description'] = 'Display a list of property addresses and prices based on user defined criteria.';
+		$this->options['description'] = 'Define criteria to display a text list of matching properties. The text display includes the property address and price for each property.';
 		parent::__construct();
 		/* The 'sf' property is set in the abstract widget class and is pulled from the plugin instance */
 		$this->setListingGridView( $this->sf->getBean( 'PropertyListView' ) );

@@ -31,7 +31,7 @@ extends com_wolfnet_wordpress_abstract_widget
 	 */
 	public $options = array(
 		'title'        => 'QuickSearch',
-		'description'  => 'Display a quick search form which when submitted takes a user to full featured search results.'
+		'description'  => 'Configure a quick search to include on your website.  When executed, the user is directed to matching properties within your WolfNet property search.'
 		);
 
 	/**

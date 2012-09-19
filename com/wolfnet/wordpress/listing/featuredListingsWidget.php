@@ -31,7 +31,7 @@ extends com_wolfnet_wordpress_abstract_widget
 	 */
 	public $options = array(
 		'title'       => '',
-		'description'  => 'Display a scrollable list of featured properties based on user defined criteria.',
+		'description'  => 'Configure a scrollable list to feature your properties.',
 		'direction'   => 'left',
 		'autoplay'    => true,
 		'speed'       => 5,

@@ -36,7 +36,7 @@ extends com_wolfnet_wordpress_abstract_widget
 	 */
 	public $options = array(
 		'title'        => '',
-		'description'  => 'Display a grid of properties based on user defined criteria. Includes an image, address, beds & baths, and price',
+		'description'  => 'Define criteria to display a grid of matching properties. The grid display includes an image, price, number of bedrooms, number of bathrooms, and address.',
 		'criteria'     => '',
 		'mode'         => 'advanced',
 		'savedsearch'  => '',
