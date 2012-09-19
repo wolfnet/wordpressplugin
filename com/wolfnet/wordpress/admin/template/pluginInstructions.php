@@ -20,8 +20,10 @@
 
 	<h2>WolfNet - Plugin Support</h2>
 
-	<p>For questions about the plugin please contact WolfNet Technologies customer services at
-		612-342-0088 or toll free at 1-866-WOLFNET. You may also reach us online via our website
-		<a href="http://wolfnet.com/contact_us.cfm" target="_blank">WolfNet.com</a>.</p>
+	<p>
+		Please contact WolfNet Technologies via phone at 612-342-0088 or toll-free at 1-866-WOLFNET,
+		or via email at <a href="mailto:service@wolfnet.com">service@wolfnet.com</a>.
+		You may also find us online at <a href="http://wolfnet.com" target="_blank">WolfNet.com</a>.
+	</p>
 
 </div>
