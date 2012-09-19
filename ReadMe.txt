@@ -24,6 +24,12 @@ There are no special instructions for installing the plugin, however a valid pro
 entered before any IDX data can be displayed.
 
 
+== Frequently Asked Questions ==
+
+
+== Screenshots ==
+
+
 == Changelog ==
 
 = 0.1.0 =
@@ -74,4 +80,7 @@ entered before any IDX data can be displayed.
 * Fixed some PHP warnings and notices.
 
 = 1.0.4 =
+
+
+== Upgrade Notice ==
 
