@@ -1,6 +1,6 @@
 === WolfNet IDX for WordPress  ===
 Author:             WolfNet Technologies, LLC
-Contributors:       ajmichels
+Contributors:       wolfnettech, ajmichels
 Tags:               idx, mls, homes
 Requires at least:  3.3.0
 Tested up to:       3.4.1
@@ -22,7 +22,18 @@ free at 1-866-WOLFNET, or via email at service@wolfnet.com.
 
 == Installation ==
 There are no special instructions for installing the plugin, however a valid product key must be
-entered before any IDX data can be displayed.
+entered in the "WolfNet >> General Settings" page before any IDX data can be displayed.
+
+= WordPress.org Installation =
+1. From the your WordPress admin (http://example.com/wp-admin) go to the Plugins page.
+1. Click "Add New"
+1. Search for "WolfNet".
+1. Click "Install Now" under the "WolfNet IDX for WordPress" plugin.
+1. Click "Activate Plugin"
+
+= Manual Installation =
+1. Place the 'wolfnet' folder in your '/wp-content/plugins/' directory.
+1. Activate "WolfNet IDX for WordPress" from the "Plugins" page in the admin.
 
 
 == Frequently Asked Questions ==
@@ -49,13 +60,13 @@ entered before any IDX data can be displayed.
 * Added Search Manager for creating advanced search criteria.
 * Added Custom Post Type to save search manager data.
 * Updated Widgets and Shortcodes to support "advanced" mode to pull from saved search criteria.
-* Added ascychronis product key validation
+* Added asynchronous product key validation
 * Created "Shortcode Wizard" as a new button on the Post/Page edit form.
 * Moved jQuery files into root JS directory (all JS files are now in the same directory)
 * Aligned save button on settings page with fields rather than labels.
 * Added custom description to each widget.
 * Added input types to widget option forms which were missing them.
-* Fixed some issues with css and javascript.
+* Fixed some issues with CSS and JavaScript.
 * Added new shortcode and widget for displaying properties in a list with address and price (wnt_list).
 * Implemented updated framework code.
 * Simplified the inclusion of the autoloader class.
@@ -81,7 +92,18 @@ entered before any IDX data can be displayed.
 * Fixed some PHP warnings and notices.
 
 = 1.0.4 =
+* Fixed bug with jQuery datepicker in Search Manager.
 
+= 1.0.5 =
+* Increased price cap from $10mil to $100mil.
+* Updated text on General Settings page.
+* Updated text on Support page.
+* Updated text in JavaScript message displayed when the user is about the changed a widget using a deleted saved search.
+* Updated text on Search Manager page.
+* Updated Info Tooltip text on widget and shortcode pages.
+* Updated widget and shortcode descriptions.
+* Added JavaScript to remove unused buttons on Saved Search custom post type edit screen.
+* Updated Listing Grid jQuery plugin to account for the varying heights of grid items.
 
 == Upgrade Notice ==
 
