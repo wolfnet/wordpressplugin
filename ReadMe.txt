@@ -17,7 +17,8 @@ The WolfNet IDX for WordPress plugin provides IDX search solution integration wi
 website. To integrate WolfNet IDX data with your WordPress website, you must have a WolfNet IDX
 property search solution. To activate the WolfNet IDX for WordPress plugin, you must have a unique
 product key. Please contact WolfNet Customer Service for support via phone at 612-342-0088 or toll
-free at 1-866-WOLFNET, or via email at service@wolfnet.com.
+free at 1-866-WOLFNET, or via email at service@wolfnet.com. You may also find us online at 
+[WolfNet.com](http://wolfnet.com).
 
 
 == Installation ==
@@ -25,7 +26,7 @@ There are no special instructions for installing the plugin, however a valid pro
 entered in the "WolfNet >> General Settings" page before any IDX data can be displayed.
 
 = WordPress.org Installation =
-1. From the your WordPress admin (http://example.com/wp-admin) go to the Plugins page.
+1. From the your WordPress websites admin section go to the Plugins page.
 1. Click "Add New"
 1. Search for "WolfNet".
 1. Click "Install Now" under the "WolfNet IDX for WordPress" plugin.
