@@ -80,6 +80,7 @@
 				<exclude name="xml/*.xml" />
 				<exclude name=".ant/" />
 				<exclude name=".gitconfig" />
+				<exclude name="**/*.tmp" />
 			</fileset>
 		</copy>
 
