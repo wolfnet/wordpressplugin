@@ -114,7 +114,11 @@
 		</property>
 	</bean>
 
-	<bean id="PluginInstructionsView" class="com_wolfnet_wordpress_admin_pluginInstructionsView" singleton="false" />
+	<bean id="PluginInstructionsView" class="com_wolfnet_wordpress_admin_pluginInstructionsView" singleton="false">
+		<property name="pluginUrl">
+			<value>${pluginUrl}</value>
+		</property>
+	</bean>
 
 	<bean id="SearchManagerView" class="com_wolfnet_wordpress_admin_searchManagerView" singleton="false">
 		<property name="SettingsService">

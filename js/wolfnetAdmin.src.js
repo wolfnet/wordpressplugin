@@ -30,6 +30,59 @@ if ( typeof jQuery != 'undefined' ) {
 				$formWrap.find( '#submitpost #minor-publishing' ).remove();
 			}
 
+			/* The following code is responsible for displaying full version images of the
+			 * "thumbnail" images on the support page. */
+			( function () {
+
+				var $supportPage = $( '#wolfnet_support_page' );
+				var $thumbnailModal = $supportPage.find( '#thumbnail_modal' );
+
+				if ( $thumbnailModal.length == 0 ) {
+					$thumbnailModal = $( '<div />' );
+					$thumbnailModal.css( 'text-align', 'center' );
+					$supportPage.append( $thumbnailModal );
+					$thumbnailModal.dialog( { autoOpen:false, modal:true, width:550, height:450 } );
+				}
+
+				$supportPage.find( 'a img.wolfnet_thumbnail' ).parent().click( function ( event ) {
+					var $img = $( '<img />' );
+					var maxHeight = $thumbnailModal.height() - 50;
+					var maxWidth  = $thumbnailModal.width()  - 35;
+					$img.attr( 'src', $( this ).attr( 'href' ) );
+					$img.attr( 'align', 'center' );
+					$img.css( { 'max-height':maxHeight, 'max-width':maxWidth, 'margin':'0' } );
+					$img.click( function () {
+						window.open( this.src );
+					} );
+					$thumbnailModal.html( $img );
+					$thumbnailModal.dialog( 'open' );
+					event.preventDefault();
+					return false;
+				} );
+
+				updateModalHeight = function () {
+					var windowHeight = $( window ).height();
+					var windowWidth  = $( window ).width();
+					$thumbnailModal.dialog( { height:( windowHeight * .8 ), width:( windowWidth * .8 ) } );
+				}
+				updateModalHeight();
+
+				$( window ).resize( function () {
+					updateModalHeight();
+				} );
+
+				var $supportContent = $( '#wolfnet_support_content' );
+				var $supportNav     = $supportContent.find( 'ol:first' );
+
+				/* Remove Table of Contents Header */
+				$supportContent.find( 'h3:contains(Table of Contents)' ).remove();
+
+				$supportNav.find( 'li > ol,li > ul' ).remove();
+
+				$supportContent.tabs();
+
+			})();
+
 		} );
 
 		$.fn.wolfnetFeaturedListingsControls = function ( options )
