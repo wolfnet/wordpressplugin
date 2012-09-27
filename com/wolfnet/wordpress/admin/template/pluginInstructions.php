@@ -621,7 +621,7 @@ function wolfnet_print_thumbnail ( $img, $imgdir )
 
 				<p>A post or page can be published directly from the Add post/page form. Once published, the post or page is added to your WordPress website in real time.</p>
 
-				<?php wolfnet_print_thumbnail( 'support-publish-page.png', $imgdir ); ?>
+				<?php wolfnet_print_thumbnail( 'support-post-edit2.png', $imgdir ); ?>
 
 				<?php wolfnet_print_thumbnail( 'support-posts.png', $imgdir ); ?>
 
@@ -633,7 +633,7 @@ function wolfnet_print_thumbnail ( $img, $imgdir )
 
 				<p>A post or page can be edited at any time via the Edit option within the Posts and Pages section of your WordPress dashboard. To publish edits to your WordPress website, select the Update call to action. Once published, the post or page is updated on your WordPress website in real time.</p>
 
-				<?php wolfnet_print_thumbnail( 'support-post-edit2.png', $imgdir ); ?>
+				<?php wolfnet_print_thumbnail( 'support-publish-page.png', $imgdir ); ?>
 
 			</div>
 
