@@ -2,7 +2,7 @@
 
 /**
  * This class is the listingService and is a Facade used to interact with all other listing information.
- * 
+ *
  * @package       com.wolfnet.wordpress
  * @subpackage    listing
  * @title         service.php
@@ -12,30 +12,44 @@
  * @contributors  AJ Michels (aj.michels@wolfnet.com)
  * @version       1.0
  * @copyright     Copyright (c) 2012, WolfNet Technologies, LLC
- * 
+ *                
+ *                This program is free software; you can redistribute it and/or
+ *                modify it under the terms of the GNU General Public License
+ *                as published by the Free Software Foundation; either version 2
+ *                of the License, or (at your option) any later version.
+ *                
+ *                This program is distributed in the hope that it will be useful,
+ *                but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *                MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *                GNU General Public License for more details.
+ *                
+ *                You should have received a copy of the GNU General Public License
+ *                along with this program; if not, write to the Free Software
+ *                Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ *
  */
 class com_wolfnet_wordpress_listing_service
 extends com_ajmichels_wppf_abstract_service
 implements com_ajmichels_wppf_interface_iService
 {
-	
-	
+
+
 	/* SINGLETON ENFORCEMENT ******************************************************************** */
-	
+
 	/**
 	 * This private static property holds the singleton instance of this class.
 	 *
 	 * @type  com_wolfnet_wordpress_listing_service
-	 * 
+	 *
 	 */
 	private static $instance;
-	
-	
+
+
 	/**
 	 * This static method is used to retrieve the singleton instance of this class.
-	 * 
+	 *
 	 * @return  com_wolfnet_wordpress_listing_service
-	 * 
+	 *
 	 */
 	public static function getInstance ()
 	{
@@ -44,100 +58,100 @@ implements com_ajmichels_wppf_interface_iService
 		}
 		return self::$instance;
 	}
-	
-	
+
+
 	/* PROPERTIES ******************************************************************************* */
-	
+
 	/**
 	 * This property holds a reference to the WPPF Data Service instance within the plugin instance.
-	 * 
+	 *
 	 * @type  com_ajmichels_wppf_data_service
-	 * 
+	 *
 	 */
 	private $dataService;
-	
-	
+
+
 	/**
-	 * This property holds a reference to the Web Service URL object which represents the URI which 
+	 * This property holds a reference to the Web Service URL object which represents the URI which
 	 * will be used to retrieve data from a remove service.
-	 * 
+	 *
 	 * @type  com_ajmichels_wppf_data_webServiceUrl
-	 * 
+	 *
 	 */
 	private $webServiceUrl;
-	
-	
+
+
 	/**
-	 * This property holds a reference to the WPPF Option Manager instance within the plugin 
+	 * This property holds a reference to the WPPF Option Manager instance within the plugin
 	 * instance.
-	 * 
+	 *
 	 * @type  com_ajmichels_wppf_option_manager
-	 * 
+	 *
 	 */
 	private $optionManager;
-	
-	
+
+
 	/* CONSTRUCTOR ****************************************************************************** */
-	
+
 	/**
 	 * This constructor method is private becuase this class is a singleton and can only be retrieved
 	 * by statically calling the getInstance method.
-	 * 
+	 *
 	 * @return  void
-	 * 
+	 *
 	 */
 	private function __construct ()
 	{
 	}
-	
-	
+
+
 	/* PUBLIC METHODS *************************************************************************** */
-	
+
 	/**
 	 * This method returns all featured property listings.
-	 * 
-	 * @param   string   $owner_type  The type of data that should be returned 'agent_broker', 
+	 *
+	 * @param   string   $owner_type  The type of data that should be returned 'agent_broker',
 	 *                                'agent', or 'broker'.
-	 * @param   numeric  $maxResults  The maximum number of listings which can be returned from the 
+	 * @param   numeric  $maxResults  The maximum number of listings which can be returned from the
 	 *                                web service request. The cap is 50.
 	 * @return  array    An array of listing objects (com_wolfnet_wordpress_listing_entity)
-	 * 
+	 *
 	 */
 	public function getFeaturedListings ( $owner_type, $maxResults )
 	{
 		$this->setFeaturedListingsData( $owner_type, $maxResults );
 		return $this->getDAO()->findAll();
 	}
-	
-	
+
+
 	/**
 	 * This method returns all grid property listings.
-	 * 
+	 *
 	 * @param   numeric  $minPrice    The minimum price for listings which can be returned.
 	 * @param   numeric  $maxPrice    The maximum price for listings which can be returned.
 	 * @param   string   $city        The name of a city to limit listing results to.
 	 * @param   string   $zipcode     The zipcode to limit listing results to.
-	 * @param   string   $owner_type  The type of data that should be returned 'agent_broker', 
+	 * @param   string   $owner_type  The type of data that should be returned 'agent_broker',
 	 *                                'agent', or 'broker'.
-	 * @param   numeric  $maxResults  The maximum number of listings which can be returned from the 
+	 * @param   numeric  $maxResults  The maximum number of listings which can be returned from the
 	 *                                web service request. The cap is 50.
 	 * @return  array    An array of listing objects (com_wolfnet_wordpress_listing_entity)
-	 * 
+	 *
 	 */
-	public function getGridListings ( $minPrice, $maxPrice, $city, $zipcode, $owner_type, $maxResults )
+	public function getGridListings ( $criteria, $owner_type, $maxResults )
 	{
-		$this->setGridListingData( $minPrice, $maxPrice, $city, $zipcode, $owner_type, $maxResults );
+		$this->setGridListingData( $criteria, $owner_type, $maxResults );
 		return $this->getDAO()->findAll();
 	}
-	
-	
+
+
 	/**
-	 * This method gets an array of prices. This data is used for drop down lists in the quick 
+	 * This method gets an array of prices. This data is used for drop down lists in the quick
 	 * search and admin forms.
-	 * 
-	 * @return  array  An array of associative arrays containing price data.  Each associative array 
+	 *
+	 * @return  array  An array of associative arrays containing price data.  Each associative array
 	 *                 contains a 'value' key and a 'label' key.
-	 * 
+	 *
 	 */
 	public function getPriceData ()
 	{
@@ -280,18 +294,27 @@ implements com_ajmichels_wppf_interface_iService
 			array( 'value' => 5000000,   'label' => '$5,000,000' ),
 			array( 'value' => 6000000,   'label' => '$6,000,000' ),
 			array( 'value' => 8000000,   'label' => '$8,000,000' ),
-			array( 'value' => 10000000,  'label' => '$10,000,000' )
+			array( 'value' => 10000000,  'label' => '$10,000,000' ),
+			array( 'value' => 20000000,  'label' => '$20,000,000' ),
+			array( 'value' => 30000000,  'label' => '$30,000,000' ),
+			array( 'value' => 40000000,  'label' => '$40,000,000' ),
+			array( 'value' => 50000000,  'label' => '$50,000,000' ),
+			array( 'value' => 60000000,  'label' => '$60,000,000' ),
+			array( 'value' => 70000000,  'label' => '$70,000,000' ),
+			array( 'value' => 80000000,  'label' => '$80,000,000' ),
+			array( 'value' => 90000000,  'label' => '$90,000,000' ),
+			array( 'value' => 100000000, 'label' => '$100,000,000' )
 		);
 	}
-	
-	
+
+
 	/**
-	 * This method gets an array of Bedroom data.  This data is used for drop down lists in the 
+	 * This method gets an array of Bedroom data.  This data is used for drop down lists in the
 	 * quick search and admin forms.
-	 * 
-	 * @return  array  An array of associative arrays containing price data.  Each associative array 
+	 *
+	 * @return  array  An array of associative arrays containing price data.  Each associative array
 	 *                 contains a 'value' key and a 'label' key.
-	 * 
+	 *
 	 */
 	public function getBedData ()
 	{
@@ -305,15 +328,15 @@ implements com_ajmichels_wppf_interface_iService
 			array( 'value' => 7,  'label' => '7' )
 		);
 	}
-	
-	
+
+
 	/**
-	 * This method gets an array of Bathroom data.  This data is used for drop down lists in the 
+	 * This method gets an array of Bathroom data.  This data is used for drop down lists in the
 	 * quick search and admin forms.
-	 * 
-	 * @return  array  An array of associative arrays containing price data.  Each associative array 
+	 *
+	 * @return  array  An array of associative arrays containing price data.  Each associative array
 	 *                 contains a 'value' key and a 'label' key.
-	 * 
+	 *
 	 */
 	public function getBathData ()
 	{
@@ -327,190 +350,208 @@ implements com_ajmichels_wppf_interface_iService
 			array( 'value' => 7,  'label' => '7' )
 		);
 	}
-	
-	
+
+
 	/**
-	 * This method gets an array of Listing Owner Type data.  This data is used for drop down lists 
+	 * This method gets an array of Listing Owner Type data.  This data is used for drop down lists
 	 * in admin forms.
-	 * 
-	 * @return  array  An array of associative arrays containing price data.  Each associative array 
+	 *
+	 * @return  array  An array of associative arrays containing price data.  Each associative array
 	 *                 contains a 'value' key and a 'label' key.
-	 * 
+	 *
 	 */
 	public function getOwnerTypeData ()
 	{
-		return array( 
+		return array(
 			array( 'value' =>'agent_broker',  'label' => 'Agent Then Broker' ),
 			array( 'value' =>'agent',         'label' => 'Agent Only' ),
 			array( 'value' =>'broker',        'label' => 'Broker Only' )
 			);
 	}
-	
-	
+
+
 	/* PRIVATE METHODS ************************************************************************** */
-	
+
 	/**
-	 * This method established the URL parameters to be sent to the remote web service and sends the 
-	 * URL to the Data Service object and injects the resulting data into the DAO. This method 
-	 * contains general configurations and accepts a Web Service URL object as an argument which can 
+	 * This method established the URL parameters to be sent to the remote web service and sends the
+	 * URL to the Data Service object and injects the resulting data into the DAO. This method
+	 * contains general configurations and accepts a Web Service URL object as an argument which can
 	 * contain more specific configuration.
-	 * 
+	 *
 	 * @param   com_ajmichels_wppf_data_webServiceUrl  $wsu  A reference to a web service url object.
 	 * @return  void
-	 * 
+	 *
 	 */
 	private function setData ( com_ajmichels_wppf_data_webServiceUrl &$wsu = null )
 	{
-		
+
 		if ( $wsu == null ) {
 			$wsu = $this->getWebServiceUrl();
 		}
-		
+
 		$wsu->setCacheSetting( 15 );
-		
+
 		$this->log( (string) $wsu );
-		
+
 		$data = $this->getDataService()->getData( $wsu );
-		
+
 		$this->getDAO()->setData( $data['listings'] );
 	}
-	
-	
+
+
 	/**
-	 * This method establishes specific URL parameters for featured listings and then forwards the 
+	 * This method establishes specific URL parameters for featured listings and then forwards the
 	 * URL Object on to the more general setData method.
-	 * 
-	 * @param   string   $owner_type  The type of data that should be returned 'agent_broker', 
+	 *
+	 * @param   string   $owner_type  The type of data that should be returned 'agent_broker',
 	 *                                'agent', or 'broker'.
-	 * @param   numeric  $maxResults  The maximum number of listings which can be returned from the 
+	 * @param   numeric  $maxResults  The maximum number of listings which can be returned from the
 	 *                                web service request. The cap is 50.
 	 * @return  void
-	 * 
+	 *
 	 */
 	private function setFeaturedListingsData ( $owner_type, $maxResults )
 	{
 		$wsu = $this->getWebServiceUrl();
-		$wsu->setScriptPath( '/propertyBar/' 
-		                     . $this->getOptionManager()->getOptionValueFromWP( 'wolfnet_productKey' ) );
+		$wsu->setScriptPath( '/propertyBar/' . $this->getProductKey() );
 		$wsu->setParameter( 'owner_type',  $owner_type );
 		$wsu->setParameter( 'max_results', $maxResults );
 		$this->setData( $wsu );
 	}
-	
-	
+
+
 	/**
-	 * This method establishes specific URL parameters for grid listings and then forwards the 
+	 * This method establishes specific URL parameters for grid listings and then forwards the
 	 * URL Object on to the more general setData method.
-	 * 
+	 *
 	 * @param   numeric  $minPrice    The minimum price for listings which can be returned.
 	 * @param   numeric  $maxPrice    The maximum price for listings which can be returned.
 	 * @param   string   $city        The name of a city to limit listing results to.
 	 * @param   string   $zipcode     The zipcode to limit listing results to.
-	 * @param   string   $owner_type  The type of data that should be returned 'agent_broker', 
+	 * @param   string   $owner_type  The type of data that should be returned 'agent_broker',
 	 *                                'agent', or 'broker'.
-	 * @param   numeric  $maxResults  The maximum number of listings which can be returned from the 
+	 * @param   numeric  $maxResults  The maximum number of listings which can be returned from the
 	 *                                web service request. The cap is 50.
 	 * @return  void
-	 * 
+	 *
 	 */
-	private function setGridListingData ( $minPrice, $maxPrice, $city, $zipcode, $owner_type, $maxResults )
+	private function setGridListingData ( $criteria = array(), $owner_type, $maxResults )
 	{
 		$wsu = $this->getWebServiceUrl();
-		$wsu->setScriptPath( '/propertyGrid/' 
-		                     . $this->getOptionManager()->getOptionValueFromWP( 'wolfnet_productKey' ) );
-		if ( $minPrice != '' ) {
-			$wsu->setParameter( 'min_price', $minPrice );
+		$wsu->setScriptPath( '/propertyGrid/' . $this->getProductKey() );
+
+		foreach ( $criteria as $field => $value ) {
+
+			switch ( strtolower( $field ) ) {
+
+				case 'minprice':
+					$wsu->setParameter( 'min_price', $value );
+					break;
+
+				case 'maxprice':
+					$wsu->setParameter( 'max_price', $value );
+					break;
+
+				case 'zipcode':
+					$wsu->setParameter( 'zip_code', $value );
+					break;
+
+				default:
+					$wsu->setParameter( $field, $value );
+					break;
+
+			}
+
 		}
-		if ( $maxPrice != '' ) {
-			$wsu->setParameter( 'max_price', $maxPrice );
-		}
-		if ( $city != '' ) {
-			$wsu->setParameter( 'city',      $city );
-		}
-		if ( $zipcode != '' ) {
-			$wsu->setParameter( 'zip_code',  $zipcode );
-		}
+
 		$wsu->setParameter( 'owner_type',  $owner_type );
 		$wsu->setParameter( 'max_results', $maxResults );
+
 		$this->setData( $wsu );
 	}
-	
-	
+
+
+	private function getProductKey ()
+	{
+		return $this->getOptionManager()->getOptionValueFromWP( 'wolfnet_productKey' );
+	}
+
+
 	/* ACCESSOR METHODS ************************************************************************* */
-	
+
 	/**
 	 * GETTER: This method is a getter for the dataService property.
-	 * 
+	 *
 	 * @return  com_ajmichels_wppf_data_service
-	 * 
+	 *
 	 */
 	public function getDataService ()
 	{
 		return $this->dataService;
 	}
-	
-	
+
+
 	/**
 	 * SETTER: This method is a setter for the dataService property.
-	 * 
+	 *
 	 * @param   com_ajmichels_wppf_data_service  $service
 	 * @return  void
-	 * 
+	 *
 	 */
 	public function setDataService ( com_ajmichels_wppf_data_service $service )
 	{
 		$this->dataService = $service;
 	}
-	
-	
+
+
 	/**
 	 * GETTER: This method is a getter for the webServiceUrl property.
-	 * 
+	 *
 	 * @return  com_ajmichels_wppf_data_webServiceUrl
-	 * 
+	 *
 	 */
 	public function getWebServiceUrl ()
 	{
 		return clone $this->webServiceUrl;
 	}
-	
-	
+
+
 	/**
 	 * SETTER: This method is a setter for the webServiceUrl property.
-	 * 
+	 *
 	 * @param   com_ajmichels_wppf_data_webServiceUrl  $url
 	 * @return  void
-	 * 
+	 *
 	 */
 	public function setWebServiceUrl ( com_ajmichels_wppf_data_webServiceUrl $url )
 	{
 		$this->webServiceUrl = $url;
 	}
-	
-	
+
+
 	/**
 	 * GETTER: This method is a getter for the optionManager property.
-	 * 
+	 *
 	 * @return  com_ajmichels_wppf_option_manager
-	 * 
+	 *
 	 */
 	public function getOptionManager ()
 	{
 		return $this->optionManager;
 	}
-	
-	
+
+
 	/**
 	 * SETTER: This method is a setter for the optionManager property.
-	 * 
+	 *
 	 * @param   com_ajmichels_wppf_option_manager  $manager
 	 * @return  void
-	 * 
+	 *
 	 */
 	public function setOptionManager ( com_ajmichels_wppf_option_manager $manager )
 	{
 		$this->optionManager = $manager;
 	}
-	
-	
+
+
 }
