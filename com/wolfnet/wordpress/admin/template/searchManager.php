@@ -28,7 +28,7 @@
  */
 
 ?>
-<div class="wrap">
+<div id="wolfnet-search-manager" class="wrap">
 
 	<div id="icon-options-wolfnet" class="icon32"><br></div>
 
@@ -60,35 +60,25 @@
 
 	<?php echo $search_form; ?>
 
-	<style type="text/css">
-		/* Fixing issue caused by wolfnet search builder css */
-		body {
-			background-color: transparent !important;
-		}
-	</style>
-
-	<div id="savedsearches" class="style_box">
-		<div class="style_box_header">Saved Searches</div>
+	<div id="save_search" class="style_box">
+		<div class="style_box_header">Save</div>
 		<div class="style_box_content">
-			<table style="width:100%;">
-				<thead>
-					<tr>
-						<th style="text-align:left;">Description</th>
-						<th style="wwidth:200px;">Date Created</th>
-						<th style="width:110px;"></th>
-					</tr>
-				</thead>
-				<tbody>
-				</tbody>
-				<tfoot>
-					<tr>
-						<td colspan="2"><input type="text" title="Description" style="width:100%;" /></td>
-						<td style="text-align:center;"><button>Save Search</button></td>
-					</tr>
-				</tfoot>
-			</table>
+			<input type="text" title="Description" style="width: 85%;">
+			<button class="button-primary" style="margin-left: 15px;">Save Search</button>
 		</div>
 	</div>
+
+	<table id="savedsearches" class="wp-list-table widefat" style="width:100%;">
+		<thead>
+			<tr>
+				<th style="text-align:left;">Description</th>
+				<th style="wwidth:200px;">Date Created</th>
+				<th style="width:110px;"></th>
+			</tr>
+		</thead>
+		<tbody>
+		</tbody>
+	</table>
 
 </div>
 
@@ -107,8 +97,8 @@
 		var $container    = $( '#savedsearches' );
 		var $tbody        = $container.find( 'tbody:first' );
 		var $form         = $container.find( 'tfoot:first' );
-		var $desc         = $form.find( 'input:first' );
-		var $save         = $form.find( 'button:first' );
+		var $desc         = $( '#save_search input:first' );
+		var $save         = $( '#save_search button:first' );
 		var idprefix      = 'savedsearch_';
 		var apiUrl        = '<?php echo bloginfo( 'url' ); ?>/?pagename=wolfnet-admin-searchmanager';
 		var apiGetUrl     = apiUrl + '-get';
@@ -252,6 +242,9 @@
 				$row.attr( 'id', idprefix + savedSearches[i].ID );
 				$row.addClass( 'savedsearch' );
 				$row.appendTo( $tbody );
+				if ( i % 2 == 0 ) {
+					$row.addClass( 'alternate' );
+				}
 
 				$descCell = $( '<td/>' );
 				$descCell.html( savedSearches[i].post_title + ' (<a href="' + post_url + '">View Criteria</a>)' );
@@ -265,6 +258,7 @@
 				$ctrlCell.appendTo( $row );
 
 				$delBtn = $( '<button/>' );
+				$delBtn.addClass( 'button-secondary' );
 				$delBtn.html( 'Delete' );
 				$delBtn.appendTo( $ctrlCell );
 				$delBtn.click( deleteSearch );

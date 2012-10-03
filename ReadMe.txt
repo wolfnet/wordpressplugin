@@ -17,7 +17,7 @@ The WolfNet IDX for WordPress plugin provides IDX search solution integration wi
 website. To integrate WolfNet IDX data with your WordPress website, you must have a WolfNet IDX
 property search solution. To activate the WolfNet IDX for WordPress plugin, you must have a unique
 product key. Please contact WolfNet Customer Service for support via phone at 612-342-0088 or toll
-free at 1-866-WOLFNET, or via email at service@wolfnet.com. You may also find us online at 
+free at 1-866-WOLFNET, or via email at service@wolfnet.com. You may also find us online at
 [WolfNet.com](http://wolfnet.com).
 
 
@@ -45,14 +45,44 @@ entered in the "WolfNet >> General Settings" page before any IDX data can be dis
 
 == Changelog ==
 
-= 0.1.0 =
-* Initial beta release for limited distribution.
+= 1.0.6 =
+* Updating WPPF code to v1.1.5
+* Added method to retrieve only site_base_url settings.
+* Updated search service to build search manager URL a little more intelligently.
+* Updated styles on the search manager page to more closely match the default WordPress admin styles.
 
-= 0.1.1 =
-* Fixed CSS issue causing a hidden overlapping element to interfere with other elements on the page.
+= 1.0.5 =
+* Increased price cap from $10mil to $100mil.
+* Updated text on General Settings page.
+* Updated text on Support page.
+* Updated text in JavaScript message displayed when the user is about the changed a widget using a deleted saved search.
+* Updated text on Search Manager page.
+* Updated Info Tooltip text on widget and shortcode pages.
+* Updated widget and shortcode descriptions.
+* Added JavaScript to remove unused buttons on Saved Search custom post type edit screen.
+* Updated Listing Grid jQuery plugin to account for the varying heights of grid items.
 
-= 0.1.2 =
-* Implemented new version of WPPF which fixed some HTTP web service issues.
+= 1.0.4 =
+* Fixed bug with jQuery datepicker in Search Manager.
+
+= 1.0.3 =
+* Fixed some minor bugs based on initial QA feedback.
+* Fixed some PHP warnings and notices.
+
+= 1.0.2 =
+* Fixed bug preventing original Grid parameters from working correctly.
+
+= 1.0.1 =
+* Updated hardcoded URI in admin JS.
+* Adding placeholder content for support page.
+* Moved search builder HTTP call to service and added support for cfid and cftoken in mlsfinder URLs.
+* Fixed JavaScript compatability issue with date by moving date formating into the backend.
+* Fixing minor bug preventing "more info" tool tips from being displayed in widget forms.
+* Fixing minor bug causing ** DELETED ** item to be displayed on new widget instances.
+* Fixed JavaScript for property list widgets
+* Fixed some bugs with IE
+* Fixed bug causing URLs with no trailing slash to break ajax requests.
+* Fixed minor bug with Abs/Rel paths.
 
 = 1.0.0 =
 * Initial version for public release.
@@ -73,38 +103,14 @@ entered in the "WolfNet >> General Settings" page before any IDX data can be dis
 * Simplified the inclusion of the autoloader class.
 * Removed some unnecessary styles.
 
-= 1.0.1 =
-* Updated hardcoded URI in admin JS.
-* Adding placeholder content for support page.
-* Moved search builder HTTP call to service and added support for cfid and cftoken in mlsfinder URLs.
-* Fixed JavaScript compatability issue with date by moving date formating into the backend.
-* Fixing minor bug preventing "more info" tool tips from being displayed in widget forms.
-* Fixing minor bug causing ** DELETED ** item to be displayed on new widget instances.
-* Fixed JavaScript for property list widgets
-* Fixed some bugs with IE
-* Fixed bug causing URLs with no trailing slash to break ajax requests.
-* Fixed minor bug with Abs/Rel paths.
+= 0.1.2 =
+* Implemented new version of WPPF which fixed some HTTP web service issues.
 
-= 1.0.2 =
-* Fixed bug preventing original Grid parameters from working correctly.
+= 0.1.1 =
+* Fixed CSS issue causing a hidden overlapping element to interfere with other elements on the page.
 
-= 1.0.3 =
-* Fixed some minor bugs based on initial QA feedback.
-* Fixed some PHP warnings and notices.
-
-= 1.0.4 =
-* Fixed bug with jQuery datepicker in Search Manager.
-
-= 1.0.5 =
-* Increased price cap from $10mil to $100mil.
-* Updated text on General Settings page.
-* Updated text on Support page.
-* Updated text in JavaScript message displayed when the user is about the changed a widget using a deleted saved search.
-* Updated text on Search Manager page.
-* Updated Info Tooltip text on widget and shortcode pages.
-* Updated widget and shortcode descriptions.
-* Added JavaScript to remove unused buttons on Saved Search custom post type edit screen.
-* Updated Listing Grid jQuery plugin to account for the varying heights of grid items.
+= 0.1.0 =
+* Initial beta release for limited distribution.
 
 == Upgrade Notice ==
 
