@@ -12,17 +12,17 @@
  * @contributors  AJ Michels (aj.michels@wolfnet.com)
  * @version       1.0
  * @copyright     Copyright (c) 2012, WolfNet Technologies, LLC
- *                
+ *
  *                This program is free software; you can redistribute it and/or
  *                modify it under the terms of the GNU General Public License
  *                as published by the Free Software Foundation; either version 2
  *                of the License, or (at your option) any later version.
- *                
+ *
  *                This program is distributed in the hope that it will be useful,
  *                but WITHOUT ANY WARRANTY; without even the implied warranty of
  *                MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *                GNU General Public License for more details.
- *                
+ *
  *                You should have received a copy of the GNU General Public License
  *                along with this program; if not, write to the Free Software
  *                Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
@@ -176,11 +176,22 @@ implements com_ajmichels_wppf_interface_iService
 
 	public function getSearchManagerHtml ()
 	{
-		$baseUrl   = $this->getSettingsService()->getSettings()->getSITE_BASE_URL();
-		$url       = $baseUrl . '/index.cfm?action=wpshortcodebuilder&search_mode=form'
-		           . '&cfid=' . $this->getCfId()
-		           . '&cftoken=' . $this->getCfToken()
-		           . '&jsessionid=' . $this->getJSessionId();
+		$baseUrl = $this->getSettingsService()->getSiteBaseUrl();
+
+		if ( !strstr($baseUrl, 'index.cfm' ) ) {
+			if ( substr( $baseUrl, strlen( $baseUrl ) - 1 ) != '/' ) {
+				$baseUrl .= '/';
+			}
+			$baseUrl .= 'index.cfm';
+		}
+
+		$url = $baseUrl
+		     . ( ( !strstr( $baseUrl, '?' ) ) ? '?' : '' )
+		     . '&action=wpshortcodebuilder&search_mode=form'
+		     . '&cfid=' . $this->getCfId()
+		     . '&cftoken=' . $this->getCfToken()
+		     . '&jsessionid=' . $this->getJSessionId();
+
 		$resParams = array( 'page', 'action', 'market_guid', 'reinit', 'show_header_footer', 'search_mode' );
 
 		$this->log( $url );
