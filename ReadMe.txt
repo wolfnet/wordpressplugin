@@ -45,6 +45,9 @@ entered in the "WolfNet >> General Settings" page before any IDX data can be dis
 
 == Changelog ==
 
+= 1.0.6 =
+* Updating WPPF code to v1.1.5
+
 = 1.0.5 =
 * Increased price cap from $10mil to $100mil.
 * Updated text on General Settings page.
