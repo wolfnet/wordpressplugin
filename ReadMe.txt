@@ -49,6 +49,7 @@ entered in the "WolfNet >> General Settings" page before any IDX data can be dis
 * Updating WPPF code to v1.1.5
 * Added method to retrieve only site_base_url settings.
 * Updated search service to build search manager URL a little more intelligently.
+* Updated styles on the search manager page to more closely match the default WordPress admin styles.
 
 = 1.0.5 =
 * Increased price cap from $10mil to $100mil.
