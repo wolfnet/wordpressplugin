@@ -50,9 +50,52 @@ if ( typeof jQuery != 'undefined' ) {
 
 	( function ( $ ) {
 
+		var isPlaceholderSupported = function ()
+		{
+			var test = document.createElement( 'input' );
+			return ( 'placeholder' in test );
+		}
+
 		$( document ).ready( function () {
 
 			wolfnet.initMoreInfo( $( '.wolfnet_moreInfo' ) );
+
+			( function () {
+
+				if ( !isPlaceholderSupported() ) {
+
+					var $placeHolderInputs = $( 'input[placeholder]');
+
+					var inputBlur = function ()
+					{
+						var $this = $( this );
+						var placeholder = $this.attr( 'placeholder' );
+						if ( $this.val().trim() == '' || $this.val().trim() == placeholder ) {
+							$this.val( placeholder );
+							$this.addClass( 'input-placeholder' );
+						}
+					}
+
+					var inputFocus = function ()
+					{
+						var $this = $( this );
+						var placeholder = $this.attr( 'placeholder' );
+						if ( $this.val().trim() == placeholder ) {
+							$this.val('');
+						}
+						$this.removeClass( 'input-placeholder' );
+
+					}
+
+					$placeHolderInputs.blur( inputBlur );
+					$placeHolderInputs.change( inputBlur );
+					$placeHolderInputs.focus( inputFocus );
+					$placeHolderInputs.submit( inputFocus );
+					$placeHolderInputs.trigger( 'blur' );
+
+				}
+
+			} )();
 
 		} );
 

@@ -63,7 +63,7 @@
 	<div id="save_search" class="style_box">
 		<div class="style_box_header">Save</div>
 		<div class="style_box_content">
-			<input type="text" title="Description" style="width: 85%;">
+			<input type="text" title="Description" style="width: 85%;" placeholder="Description">
 			<button class="button-primary" style="margin-left: 15px;">Save Search</button>
 		</div>
 	</div>
@@ -82,203 +82,21 @@
 
 </div>
 
+<script type="text/javascript" src="<?php echo $pluginUrl; ?>/js/jquery.wolfnetSearchManager.src.js"></script>
 <script type="text/javascript">
 
-	 /* Make sure the 'trim' function is available in the String object. Fix for older versions of IE. */
-	if(typeof String.prototype.trim !== 'function') {
-		String.prototype.trim = function() {
-			return this.replace(/^\s+|\s+$/g, '');
-		}
-	}
+	if ( typeof jQuery != 'undefined' ) {
 
-	( function ( $ ) {
+		( function ( $ ) {
 
-		var savedSearches = {};
-		var $container    = $( '#savedsearches' );
-		var $tbody        = $container.find( 'tbody:first' );
-		var $form         = $container.find( 'tfoot:first' );
-		var $desc         = $( '#save_search input:first' );
-		var $save         = $( '#save_search button:first' );
-		var idprefix      = 'savedsearch_';
-		var apiUrl        = '<?php echo bloginfo( 'url' ); ?>/?pagename=wolfnet-admin-searchmanager';
-		var apiGetUrl     = apiUrl + '-get';
-		var apiPostUrl    = apiUrl + '-save';
-		var apiDeleteUrl  = apiUrl + '-delete';
-		var loaded        = false;
-		var saving        = false;
-		var loaderUri     = '<?php echo $pluginUrl; ?>img/loader.gif';
-		var $loaderImage  = $container.find( '#loader:first' );
-
-		var createLoaderImage = function ()
-		{
-
-			/* If the window element doesn't exist create it and add it to the page. */
-			if ( $loaderImage.length == 0 ) {
-				$loaderImage = $( '<div/>' );
-				$loaderImage.append( $( '<img src="' + loaderUri + '" />' ) );
-				$loaderImage.attr( 'id', 'loader' );
-				$loaderImage.addClass( 'wolfnet_loaderImage' );
-				$loaderImage.hide();
-				$loaderImage.appendTo( $container );
-			}
-		}
-
-		var getData = function ()
-		{
-			$.ajax( {
-				url: apiGetUrl,
-				dataType: 'json',
-				type: 'GET',
-				beforeSend: function () {
-					$loaderImage.show();
-				},
-				success: function ( data ) {
-					savedSearches = data;
-					refreshTable();
-				},
-				complete: function () {
-					$loaderImage.hide();
-					loaded = true;
-				}
+			$( '#savedsearches' ).wolfnetSearchManager( {
+				apiUrl    : '<?php echo bloginfo( 'url' ); ?>/?pagename=wolfnet-admin-searchmanager',
+				loaderUri : '<?php echo $pluginUrl; ?>img/loader.gif',
+				saveForm  : $( '#save_search' )
 			} );
-		}
 
-		var saveSearch = function ()
-		{
-			if ( loaded && !saving ) {
-				if ( $desc.val().trim() == '' ) {
-					$desc.addClass( 'invalid' );
-					alert( 'You must specify a description to save your search.' );
-				}
-				else {
+		} )( jQuery );
 
-					$desc.removeClass( 'invalid' );
-
-					var data = WNTWP.returnSearchParams();
-
-					for ( var i in data ) {
-
-						data[i] = decodeURIComponent( data[i] );
-
-					}
-
-					$.ajax( {
-						url: apiPostUrl,
-						dataType: 'json',
-						type: 'POST',
-						data: {
-							post_title    : $desc.val(),
-							custom_fields : data
-						},
-						beforeSend: function () {
-							$loaderImage.show();
-							saving = true;
-						},
-						success: function ( data ) {
-							savedSearches = data;
-							refreshTable();
-						},
-						complete: function () {
-							$loaderImage.hide();
-							saving = false;
-						}
-					} );
-
-					$desc.val( '' );
-
-				}
-			}
-			else {
-				alert( 'Cannot save, please wait until the data has updated.' );
-			}
-
-		}
-
-		var deleteSearch = function ()
-		{
-			if ( loaded && !saving ) {
-				var $this = $( this );
-				var $row  = $this.closest( 'tr' );
-				var id    = $row.attr( 'id' ).replace( idprefix, '' );
-
-				$.ajax( {
-					url: apiDeleteUrl,
-					dataType: 'json',
-					type: 'GET',
-					data: {
-						ID : id
-					},
-					beforeSend: function () {
-						$loaderImage.show();
-						saving = true;
-					},
-					success: function ( data ) {
-						savedSearches = data;
-						refreshTable();
-					},
-					complete: function () {
-						$loaderImage.hide();
-						saving = false;
-					}
-				} );
-
-			}
-			else {
-				alert( 'Cannot delete, please wait until the data has updated.' );
-			}
-		}
-
-		var refreshTable = function ()
-		{
-			var $row, $descCell, $cdateCell, $ctrlCell, $delBtn;
-
-			$tbody.children().remove();
-
-			for ( var i in savedSearches ) {
-
-				var post_url = 'post.php?action=edit&post=' + savedSearches[i].ID;
-
-				$row = $( '<tr/>' );
-				$row.attr( 'id', idprefix + savedSearches[i].ID );
-				$row.addClass( 'savedsearch' );
-				$row.appendTo( $tbody );
-				if ( i % 2 == 0 ) {
-					$row.addClass( 'alternate' );
-				}
-
-				$descCell = $( '<td/>' );
-				$descCell.html( savedSearches[i].post_title + ' (<a href="' + post_url + '">View Criteria</a>)' );
-				$descCell.appendTo( $row );
-
-				$cdateCell = $( '<td/>' );
-				$cdateCell.html( savedSearches[i].post_date);
-				$cdateCell.appendTo( $row );
-
-				$ctrlCell = $( '<td/>' );
-				$ctrlCell.appendTo( $row );
-
-				$delBtn = $( '<button/>' );
-				$delBtn.addClass( 'button-secondary' );
-				$delBtn.html( 'Delete' );
-				$delBtn.appendTo( $ctrlCell );
-				$delBtn.click( deleteSearch );
-
-			}
-
-		}
-
-		$save.click( saveSearch );
-		$desc.keypress( function ( event ) {
-			if ( event.keyCode == 13 ) {
-				saveSearch();
-			}
-		} );
-		$( document ).ready( function () {
-			$( '.hasDatepicker' ).datepicker();
-			createLoaderImage();
-			getData();
-		} );
-
-	} )( jQuery );
+	}
 
 </script>
