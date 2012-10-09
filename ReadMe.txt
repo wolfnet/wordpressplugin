@@ -45,6 +45,9 @@ entered in the "WolfNet >> General Settings" page before any IDX data can be dis
 
 == Changelog ==
 
+= 1.0.7 =
+* Updated WPPF code to v1.1.6. Fixed a bug caused created in version 1.0.6 affecting sites running older version of PHP (<5.3)
+
 = 1.0.6 =
 * Updating WPPF code to v1.1.5
 * Added method to retrieve only site_base_url settings.
