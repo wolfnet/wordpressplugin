@@ -1,6 +1,6 @@
 === WolfNet IDX for WordPress  ===
 Author:             WolfNet Technologies, LLC
-Contributors:       wolfnettech, ajmichels
+Contributors:       wolfnettech, ajmichels, asbaumgart
 Tags:               idx, mls, homes
 Requires at least:  3.3.0
 Tested up to:       3.4.1
@@ -44,6 +44,9 @@ entered in the "WolfNet >> General Settings" page before any IDX data can be dis
 
 
 == Changelog ==
+
+= 1.0.9 =
+* Fixed bug preventing drop down listing from populating in QuickSearch widget.
 
 = 1.0.8 =
 * Updated QuickSearch view to use new site_base_url method. Fixing bug preventing form action from being populated.

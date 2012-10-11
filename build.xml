@@ -2,7 +2,7 @@
 
 
 	<property name="majorVersion" value="1.0" />
-	<property name="minorVersion" value="8" />
+	<property name="minorVersion" value="9" />
 	<property name="version" value="${majorVersion}.${minorVersion}" />
 
 	<property file="build.properties" />
