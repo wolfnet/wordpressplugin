@@ -45,8 +45,11 @@ entered in the "WolfNet >> General Settings" page before any IDX data can be dis
 
 == Changelog ==
 
+= 1.0.10 =
+* Added regular expression replacement to remove included jQuery source from search builder code. This fixes a bug caused by jQuery being included more than once.
+
 = 1.0.9 =
-* Fixed bug preventing drop down listing from populating in QuickSearch widget.
+* Fixed bug preventing drop down lists from populating in QuickSearch widget.
 
 = 1.0.8 =
 * Updated QuickSearch view to use new site_base_url method. Fixing bug preventing form action from being populated.
@@ -84,10 +87,10 @@ entered in the "WolfNet >> General Settings" page before any IDX data can be dis
 * Fixed bug preventing original Grid parameters from working correctly.
 
 = 1.0.1 =
-* Updated hardcoded URI in admin JS.
+* Updated hard-coded URI in admin JS.
 * Adding placeholder content for support page.
 * Moved search builder HTTP call to service and added support for cfid and cftoken in mlsfinder URLs.
-* Fixed JavaScript compatability issue with date by moving date formating into the backend.
+* Fixed JavaScript compatibility issue with date by moving date formating into the back-end.
 * Fixing minor bug preventing "more info" tool tips from being displayed in widget forms.
 * Fixing minor bug causing ** DELETED ** item to be displayed on new widget instances.
 * Fixed JavaScript for property list widgets
@@ -122,5 +125,6 @@ entered in the "WolfNet >> General Settings" page before any IDX data can be dis
 
 = 0.1.0 =
 * Initial beta release for limited distribution.
+
 
 == Upgrade Notice ==
