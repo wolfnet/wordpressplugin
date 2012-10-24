@@ -47,6 +47,7 @@ entered in the "WolfNet >> General Settings" page before any IDX data can be dis
 
 = 1.0.10 =
 * Added regular expression replacement to remove included jQuery source from search builder code. This fixes a bug caused by jQuery being included more than once.
+* Fixed CSS issue with Property List causing price and address to be on different lines in some browsers.
 
 = 1.0.9 =
 * Fixed bug preventing drop down lists from populating in QuickSearch widget.
