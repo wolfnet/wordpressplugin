@@ -81,7 +81,7 @@ implements com_ajmichels_wppf_interface_iView
 		/* Register WordPress filters for each variable being used in the view. (except the rawData) */
 		foreach ( $data as $key => $item ) {
 			if ( strpos( $key, 'rawData' ) === false) {
-				$data[$key] = apply_filters( 'wolfnet_listingView_' & $key, $item );
+				$data[$key] = apply_filters( 'wolfnet_listingView_' . $key, $item );
 			}
 		}
 
