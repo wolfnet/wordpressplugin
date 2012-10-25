@@ -48,6 +48,20 @@ entered in the "WolfNet >> General Settings" page before any IDX data can be dis
 = 1.0.10 =
 * Added regular expression replacement to remove included jQuery source from search builder code. This fixes a bug caused by jQuery being included more than once.
 * Fixed CSS issue with Property List causing price and address to be on different lines in some browsers.
+* Added the following WordPress filters which will effect the display for all listing displays:
+	wolfnet_listingView_id,
+	wolfnet_listingView_url,
+	wolfnet_listingView_address,
+	wolfnet_listingView_address_full,
+	wolfnet_listingView_image,
+	wolfnet_listingView_price,
+	wolfnet_listingView_location,
+	wolfnet_listingView_fullLocation,
+	wolfnet_listingView_bedbath,
+	wolfnet_listingView_bedbath_full,
+	wolfnet_listingView_branding_brokerLogo,
+	wolfnet_listingView_branding_content,
+	wolfnet_listingView_listing_class
 
 = 1.0.9 =
 * Fixed bug preventing drop down lists from populating in QuickSearch widget.
