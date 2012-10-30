@@ -6,8 +6,8 @@
  * @package       com.wolfnet.wordpress
  * @subpackage    search
  * @title         service.php
- * @extends       com_ajmichels_wppf_abstract_service
- * @implements    com_ajmichels_wppf_interface_iService
+ * @extends       com_greentiedev_wppf_abstract_service
+ * @implements    com_greentiedev_wppf_interface_iService
  * @singleton     True
  * @contributors  AJ Michels (aj.michels@wolfnet.com)
  * @version       1.0
@@ -29,8 +29,8 @@
  *
  */
 class com_wolfnet_wordpress_search_service
-extends com_ajmichels_wppf_abstract_service
-implements com_ajmichels_wppf_interface_iService
+extends com_greentiedev_wppf_abstract_service
+implements com_greentiedev_wppf_interface_iService
 {
 
 

@@ -60,7 +60,7 @@ extends com_wolfnet_wordpress_abstract_widget
 	/**
 	 * This property holds a reference to the Quick Search View object.
 	 *
-	 * @type  com_ajmichels_wppf_interface_iView
+	 * @type  com_greentiedev_wppf_interface_iView
 	 *
 	 */
 	private $quickSearchView;
@@ -68,7 +68,7 @@ extends com_wolfnet_wordpress_abstract_widget
 	/**
 	 * This property holds an instance of the Quicksearch Options View object
 	 *
-	 * @type  com_ajmichels_wppf_interface_iView
+	 * @type  com_greentiedev_wppf_interface_iView
 	 */
 	private $quickSearchOptionsView;
 
@@ -185,7 +185,7 @@ extends com_wolfnet_wordpress_abstract_widget
 	/**
 	 * GETTER:  This method is a getter for the quickSearchView property.
 	 *
-	 * @return  com_ajmichels_wppf_interface_iView
+	 * @return  com_greentiedev_wppf_interface_iView
 	 *
 	 */
 	public function getQuickSearchView ()
@@ -197,11 +197,11 @@ extends com_wolfnet_wordpress_abstract_widget
 	/**
 	 * SETTER:  This method is a setter for the quickSearchView property.
 	 *
-	 * @param   com_ajmichels_wppf_interface_iView  $service
+	 * @param   com_greentiedev_wppf_interface_iView  $service
 	 * @return  void
 	 *
 	 */
-	public function setQuickSearchView ( com_ajmichels_wppf_interface_iView $view )
+	public function setQuickSearchView ( com_greentiedev_wppf_interface_iView $view )
 	{
 		$this->quickSearchView = $view;
 	}
@@ -209,7 +209,7 @@ extends com_wolfnet_wordpress_abstract_widget
 	/**
 	 * GETTER:  This method is a getter for the quickSearchOptionsView property.
 	 *
-	 * @return  com_ajmichels_wppf_interface_iView
+	 * @return  com_greentiedev_wppf_interface_iView
 	 *
 	 */
 	public function getQuickSearchOptionsView ()
@@ -221,11 +221,11 @@ extends com_wolfnet_wordpress_abstract_widget
 	/**
 	 * SETTER:  This method is a setter for the quickSearchOptionsView property.
 	 *
-	 * @param   com_ajmichels_wppf_interface_iView  $service
+	 * @param   com_greentiedev_wppf_interface_iView  $service
 	 * @return  void
 	 *
 	 */
-	public function setQuickSearchOptionsView ( com_ajmichels_wppf_interface_iView $view )
+	public function setQuickSearchOptionsView ( com_greentiedev_wppf_interface_iView $view )
 	{
 		$this->quickSearchOptionsView = $view;
 	}

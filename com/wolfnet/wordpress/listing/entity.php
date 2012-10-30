@@ -2,136 +2,136 @@
 
 /**
  * This class is the Listing Entity and is a container for listing data.
- * 
+ *
  * @package       com.wolfnet.wordpress
  * @subpackage    listing
  * @title         entity.php
- * @extends       com_ajmichels_wppf_abstract_entity
- * @implements    com_ajmichels_wppf_interface_iEntity
+ * @extends       com_greentiedev_wppf_abstract_entity
+ * @implements    com_greentiedev_wppf_interface_iEntity
  * @contributors  AJ Michels (aj.michels@wolfnet.com)
  * @version       1.0
  * @copyright     Copyright (c) 2012, WolfNet Technologies, LLC
- *                
+ *
  *                This program is free software; you can redistribute it and/or
  *                modify it under the terms of the GNU General Public License
  *                as published by the Free Software Foundation; either version 2
  *                of the License, or (at your option) any later version.
- *                
+ *
  *                This program is distributed in the hope that it will be useful,
  *                but WITHOUT ANY WARRANTY; without even the implied warranty of
  *                MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *                GNU General Public License for more details.
- *                
+ *
  *                You should have received a copy of the GNU General Public License
  *                along with this program; if not, write to the Free Software
  *                Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * 
+ *
  */
 
 class com_wolfnet_wordpress_listing_entity
-extends com_ajmichels_wppf_abstract_entity
-implements com_ajmichels_wppf_interface_iEntity
+extends com_greentiedev_wppf_abstract_entity
+implements com_greentiedev_wppf_interface_iEntity
 {
-	
-	
+
+
 	/* PROPERTIES ******************************************************************************* */
-	
+
 	/**
-	 * 
+	 *
 	 * @type  mixed[string]
-	 * 
+	 *
 	 */
 	private $property_id     = '';
-	
+
 	/**
-	 * 
+	 *
 	 * @type  string
-	 * 
+	 *
 	 */
 	private $property_url    = '';
-	
+
 	/**
-	 * 
+	 *
 	 * @type  float
-	 * 
+	 *
 	 */
 	private $listing_price   = 0;
-	
+
 	/**
-	 * 
+	 *
 	 * @type  boolean
-	 * 
+	 *
 	 */
 	private $agent_listing   = 0;
-	
+
 	/**
-	 * 
+	 *
 	 * @type  string
-	 * 
+	 *
 	 */
 	private $display_address = '';
-	
+
 	/**
-	 * 
+	 *
 	 * @type  string
-	 * 
+	 *
 	 */
 	private $city            = '';
-	
+
 	/**
-	 * 
+	 *
 	 * @type  string
-	 * 
+	 *
 	 */
 	private $state           = '';
-	
+
 	/**
-	 * 
+	 *
 	 * @type  string
-	 * 
+	 *
 	 */
 	private $thumbnail_url   = '';
-	
+
 	/**
-	 * 
+	 *
 	 * @type  string
-	 * 
+	 *
 	 */
 	private $photo_url       = '';
-	
+
 	/**
-	 * 
+	 *
 	 * @type  numeric
-	 * 
+	 *
 	 */
 	private $bathroom        = 0;
-	
+
 	/**
-	 * 
+	 *
 	 * @type  numeric
-	 * 
+	 *
 	 */
 	private $bedrooms        = 0;
-	
+
 	/**
-	 * 
+	 *
 	 * @type  com_wolfnet_wordpress_listing_branding_entity
-	 * 
+	 *
 	 */
 	private $branding        = 0;
-	
-	
+
+
 	/* PUBLIC METHODS *************************************************************************** */
-	
+
 	/**
-	 * This method is used to set instance data for the entity. Though it is public by necessity, 
+	 * This method is used to set instance data for the entity. Though it is public by necessity,
 	 * this method should not be accessed by any object other than the listingDao.
 	 * ( see Memento Design Pattern )
-	 * 
+	 *
 	 * @param   array  $data  The primary key of a single listing.
 	 * @return  void
-	 * 
+	 *
 	 */
 	public function setMemento ( $data )
 	{
@@ -148,19 +148,19 @@ implements com_ajmichels_wppf_interface_iEntity
 		$this->bedrooms        = $data['bedrooms'];
 		$this->branding        = $data['branding'];
 	}
-	
-	
+
+
 	/**
-	 * This method is used to get instance data from the entity. Though it is public by necessity, 
+	 * This method is used to get instance data from the entity. Though it is public by necessity,
 	 * this method should not be accessed by any object other than the listingDao.
 	 * ( see Memento Design Pattern )
-	 * 
+	 *
 	 * @return  array  The primary key of a single listing.
-	 * 
+	 *
 	 */
 	public function getMemento ()
 	{
-		return array( 
+		return array(
 			'property_id'     => $this->property_id,
 			'property_url'    => $this->property_url,
 			'listing_price'   => $this->listing_price,
@@ -175,14 +175,14 @@ implements com_ajmichels_wppf_interface_iEntity
 			'branding'        => $this->branding
 			);
 	}
-	
-	
+
+
 	/**
-	 * This method combines several properties into a single location string. This is done here to 
-	 * hold this logic in a centralized place. 
+	 * This method combines several properties into a single location string. This is done here to
+	 * hold this logic in a centralized place.
 	 *
 	 * @return  string  Combined location information in a single string.
-	 * 
+	 *
 	 */
 	public function getLocation ()
 	{
@@ -192,25 +192,25 @@ implements com_ajmichels_wppf_interface_iEntity
 		}
 		$location .= $this->getState();
 		return $location;
-		
+
 	}
-	
-	
+
+
 	/**
-	 * This method combines the bedroom and bathroom data into a single string for display. 
-	 * 
+	 * This method combines the bedroom and bathroom data into a single string for display.
+	 *
 	 * @return  string
 	 *
 	 */
 	public function getBedsAndBaths ( $format = '' )
 	{
 		$bedsAndBaths = '';
-		
+
 		switch ( $format ) {
-			
+
 			default:
 			case 'full':
-				
+
 				if ( is_numeric( $this->getBedrooms() ) ) {
 					$bedsAndBaths .= $this->getBedrooms() . ' Bed Rooms';
 				}
@@ -220,11 +220,11 @@ implements com_ajmichels_wppf_interface_iEntity
 				if ( is_numeric( $this->getBathroom() ) ) {
 					$bedsAndBaths .= $this->getBathroom() . ' Bath Rooms';
 				}
-				
+
 				break;
-			
+
 			case 'short':
-				
+
 				if ( is_numeric( $this->getBedrooms() ) ) {
 					$bedsAndBaths .= $this->getBedrooms() . ' Beds';
 				}
@@ -234,11 +234,11 @@ implements com_ajmichels_wppf_interface_iEntity
 				if ( is_numeric( $this->getBathroom() ) ) {
 					$bedsAndBaths .= $this->getBathroom() . ' Baths';
 				}
-				
+
 				break;
-			
+
 			case 'abbreviated' :
-				
+
 				if ( is_numeric( $this->getBedrooms() ) ) {
 					$bedsAndBaths .= $this->getBedrooms() . 'bd';
 				}
@@ -248,74 +248,74 @@ implements com_ajmichels_wppf_interface_iEntity
 				if ( is_numeric( $this->getBathroom() ) ) {
 					$bedsAndBaths .= $this->getBathroom() . 'ba';
 				}
-				
+
 				break;
-			
+
 		}
-		
+
 		return $bedsAndBaths;
 	}
-	
-	
+
+
 	/**
 	 * This method combines all address information into a full address.
-	 * 
+	 *
 	 * @return  string
-	 * 
+	 *
 	 */
 	public function getFullAddress ()
 	{
 		$address = $this->getDisplayAddress();
-		
+
 		if ( $this->getCity() != '' && $address != '' ) {
 			$address .= ', ';
 		}
-		
+
 		$address .= $this->getCity();
-		
+
 		if ( $this->getState() != '' && $address != '' ) {
 			$address .= ', ';
 		}
-		
+
 		$address .= $this->getState();
-		
+
 		return $address;
-		
+
 	}
-	
-	
+
+
 	/*	ACCESSORS ******************************************************************************* */
-	
+
 	/**
 	 * GETTER: This method is a getter for the property_id property.
-	 * 
+	 *
 	 * @return  mixed[string]
-	 * 
+	 *
 	 */
 	public function getPropertyId ()
 	{
 		return $this->property_id;
 	}
-	
-	
+
+
 	/**
 	 * GETTER: This method is a getter for the property_url property.
-	 * 
+	 *
 	 * @return  string
-	 * 
+	 *
 	 */
 	public function getPropertyUrl ()
 	{
 		return $this->property_url;
 	}
-	
-	
+
+
 	/**
-	 * GETTER: This method is a getter for the listing_price property. In addition this method 
+	 * GETTER: This method is a getter for the listing_price property. In addition this method
 	 * formats any numeric strings for display.
-	 * 
+	 *
 	 * @return  string
-	 * 
+	 *
 	 */
 	public function getListingPrice ()
 	{
@@ -326,114 +326,114 @@ implements com_ajmichels_wppf_interface_iEntity
 			return $this->listing_price;
 		}
 	}
-	
-	
+
+
 	/**
 	 * GETTER: This method is a getter for the agent_listing property.
-	 * 
+	 *
 	 * @return  boolean
-	 * 
+	 *
 	 */
 	public function getAgentListing ()
 	{
 		return $this->agent_listing;
 	}
-	
-	
+
+
 	/**
 	 * GETTER: This method is a getter for the display_address property.
-	 * 
+	 *
 	 * @return  string
-	 * 
+	 *
 	 */
 	public function getDisplayAddress ()
 	{
 		return $this->display_address;
 	}
-	
-	
+
+
 	/**
 	 * GETTER: This method is a getter for the city property.
-	 * 
+	 *
 	 * @return  string
-	 * 
+	 *
 	 */
 	public function getCity ()
 	{
 		return $this->city;
 	}
-	
-	
+
+
 	/**
 	 * GETTER: This method is a getter for the state property.
-	 * 
+	 *
 	 * @return  string
-	 * 
+	 *
 	 */
 	public function getState ()
 	{
 		return $this->state;
 	}
-	
-	
+
+
 	/**
 	 * GETTER: This method is a getter for the thumbnail_url property.
-	 * 
+	 *
 	 * @return  string
-	 * 
+	 *
 	 */
 	public function getThumbnailUrl ()
 	{
 		return $this->thumbnail_url;
 	}
-	
-	
+
+
 	/**
 	 * GETTER: This method is a getter for the thumbnail_url property.
-	 * 
+	 *
 	 * @return  string
-	 * 
+	 *
 	 */
 	public function getPhotoUrl ()
 	{
 		return $this->photo_url;
 	}
-	
-	
+
+
 	/**
 	 * GETTER: This method is a getter for the bathroom property.
-	 * 
+	 *
 	 * @return  numeric
-	 * 
+	 *
 	 */
 	public function getBathroom ()
 	{
 		return $this->bathroom;
 	}
-	
-	
+
+
 	/**
 	 * GETTER: This method is a getter for the bedrooms property.
-	 * 
+	 *
 	 * @return  numeric
-	 * 
+	 *
 	 */
 	public function getBedrooms ()
 	{
 		return $this->bedrooms;
 	}
-	
-	
+
+
 	/**
 	 * GETTER: This method is a getter for the branding property.
-	 * 
+	 *
 	 * @return  com_wolfnet_wordpress_listing_branding_entity
-	 * 
+	 *
 	 */
 	public function getBranding ()
 	{
 		return $this->branding;
 	}
-	
-	
+
+
 }

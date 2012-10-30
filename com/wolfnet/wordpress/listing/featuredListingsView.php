@@ -6,30 +6,30 @@
  * @package       com.wolfnet.wordpress
  * @subpackage    listing
  * @title         featuredListingsView.php
- * @extends       com_ajmichels_wppf_abstract_view
- * @implements    com_ajmichels_wppf_interface_iView
+ * @extends       com_greentiedev_wppf_abstract_view
+ * @implements    com_greentiedev_wppf_interface_iView
  * @contributors  AJ Michels (aj.michels@wolfnet.com)
  * @version       1.0
  * @copyright     Copyright (c) 2012, WolfNet Technologies, LLC
- *                
+ *
  *                This program is free software; you can redistribute it and/or
  *                modify it under the terms of the GNU General Public License
  *                as published by the Free Software Foundation; either version 2
  *                of the License, or (at your option) any later version.
- *                
+ *
  *                This program is distributed in the hope that it will be useful,
  *                but WITHOUT ANY WARRANTY; without even the implied warranty of
  *                MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *                GNU General Public License for more details.
- *                
+ *
  *                You should have received a copy of the GNU General Public License
  *                along with this program; if not, write to the Free Software
  *                Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  */
 class com_wolfnet_wordpress_listing_featuredListingsView
-extends com_ajmichels_wppf_abstract_view
-implements com_ajmichels_wppf_interface_iView
+extends com_greentiedev_wppf_abstract_view
+implements com_greentiedev_wppf_interface_iView
 {
 
 
@@ -47,7 +47,7 @@ implements com_ajmichels_wppf_interface_iView
 	/**
 	 * This property holds a reference to the listing view.
 	 *
-	 * @type  com_ajmichels_wppf_interface_iView
+	 * @type  com_greentiedev_wppf_interface_iView
 	 *
 	 */
 	private $listingView;
@@ -132,7 +132,7 @@ implements com_ajmichels_wppf_interface_iView
 	/**
 	 * GETTER: This method is a getter for the listingView property.
 	 *
-	 * @return  com_ajmichels_wppf_interface_iView
+	 * @return  com_greentiedev_wppf_interface_iView
 	 *
 	 */
 	public function getListingView ()
@@ -144,11 +144,11 @@ implements com_ajmichels_wppf_interface_iView
 	/**
 	 * SETTER: This method is a setter for the listingView property.
 	 *
-	 * @type    com_ajmichels_wppf_interface_iView  $view
+	 * @type    com_greentiedev_wppf_interface_iView  $view
 	 * @return  view
 	 *
 	 */
-	public function setListingView ( com_ajmichels_wppf_interface_iView $view )
+	public function setListingView ( com_greentiedev_wppf_interface_iView $view )
 	{
 		$this->listingView = $view;
 	}

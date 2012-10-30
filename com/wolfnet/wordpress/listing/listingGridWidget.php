@@ -14,17 +14,17 @@
  * @contributors  AJ Michels (aj.michels@wolfnet.com)
  * @version       1.0
  * @copyright     Copyright (c) 2012, WolfNet Technologies, LLC
- *                
+ *
  *                This program is free software; you can redistribute it and/or
  *                modify it under the terms of the GNU General Public License
  *                as published by the Free Software Foundation; either version 2
  *                of the License, or (at your option) any later version.
- *                
+ *
  *                This program is distributed in the hope that it will be useful,
  *                but WITHOUT ANY WARRANTY; without even the implied warranty of
  *                MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *                GNU General Public License for more details.
- *                
+ *
  *                You should have received a copy of the GNU General Public License
  *                along with this program; if not, write to the Free Software
  *                Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
@@ -95,7 +95,7 @@ extends com_wolfnet_wordpress_abstract_widget
 	/**
 	 * This property holds an instance of the Listing Grid View object.
 	 *
-	 * @type  com_ajmichels_wppf_interface_iView
+	 * @type  com_greentiedev_wppf_interface_iView
 	 *
 	 */
 	private $listingGridView;
@@ -104,7 +104,7 @@ extends com_wolfnet_wordpress_abstract_widget
 	/**
 	 * This property holds an instance of the Listing Grid Options View object
 	 *
-	 * @type  com_ajmichels_wppf_interface_iView
+	 * @type  com_greentiedev_wppf_interface_iView
 	 *
 	 */
 	private $listingGridOptionsView;
@@ -329,7 +329,7 @@ extends com_wolfnet_wordpress_abstract_widget
 	/**
 	 * GETTER:  This method is a getter for the listingGridView property.
 	 *
-	 * @return  com_ajmichels_wppf_interface_iView
+	 * @return  com_greentiedev_wppf_interface_iView
 	 *
 	 */
 	public function getListingGridView ()
@@ -341,11 +341,11 @@ extends com_wolfnet_wordpress_abstract_widget
 	/**
 	 * SETTER:  This method is a setter for the listingGridView property.
 	 *
-	 * @param   com_ajmichels_wppf_interface_iView  $service
+	 * @param   com_greentiedev_wppf_interface_iView  $service
 	 * @return  void
 	 *
 	 */
-	public function setListingGridView ( com_ajmichels_wppf_interface_iView $view )
+	public function setListingGridView ( com_greentiedev_wppf_interface_iView $view )
 	{
 		$this->listingGridView = $view;
 	}
@@ -354,7 +354,7 @@ extends com_wolfnet_wordpress_abstract_widget
 	/**
 	 * GETTER:  This method is a getter for the listingGridOptionsView property.
 	 *
-	 * @return  com_ajmichels_wppf_interface_iView
+	 * @return  com_greentiedev_wppf_interface_iView
 	 *
 	 */
 	public function getListingGridOptionsView ()
@@ -366,11 +366,11 @@ extends com_wolfnet_wordpress_abstract_widget
 	/**
 	 * SETTER:  This method is a setter for the listingGridOptionsView property.
 	 *
-	 * @param   com_ajmichels_wppf_interface_iView  $service
+	 * @param   com_greentiedev_wppf_interface_iView  $service
 	 * @return  void
 	 *
 	 */
-	public function setListingGridOptionsView ( com_ajmichels_wppf_interface_iView $view )
+	public function setListingGridOptionsView ( com_greentiedev_wppf_interface_iView $view )
 	{
 		$this->listingGridOptionsView = $view;
 	}

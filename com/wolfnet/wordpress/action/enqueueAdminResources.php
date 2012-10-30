@@ -7,7 +7,7 @@
  * @package       com.wolfnet.wordpress
  * @subpackage    action
  * @title         enqueueAdminResources.php
- * @extends       com_ajmichels_wppf_action_action
+ * @extends       com_greentiedev_wppf_action_action
  * @contributors  AJ Michels (aj.michels@wolfnet.com)
  * @version       1.0
  * @copyright     Copyright (c) 2012, WolfNet Technologies, LLC
@@ -28,7 +28,7 @@
  *
  */
 class com_wolfnet_wordpress_action_enqueueAdminResources
-extends com_ajmichels_wppf_action_action
+extends com_greentiedev_wppf_action_action
 {
 
 

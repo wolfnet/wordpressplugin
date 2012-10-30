@@ -12,8 +12,8 @@ Author URI:   http://www.wolfnet.com
 / *********************************************************************************************** */
 
 /* Include and Initialize Class Autoloader */
-require_once( 'com/ajmichels/common/autoLoader.php' );
-com_ajmichels_common_autoLoader::getInstance( dirname( __FILE__ ) );
+require_once( 'com/greentiedev/phpCommon/autoLoader.php' );
+com_greentiedev_phpCommon_autoLoader::getInstance( dirname( __FILE__ ) );
 
 /**
  *
@@ -37,8 +37,8 @@ com_ajmichels_common_autoLoader::getInstance( dirname( __FILE__ ) );
  *                Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 class wolfnet
-extends com_ajmichels_wppf_bootstrap
-implements com_ajmichels_common_iSingleton
+extends com_greentiedev_wppf_bootstrap
+implements com_greentiedev_phpCommon_iSingleton
 {
 
 
@@ -102,7 +102,7 @@ implements com_ajmichels_common_iSingleton
 					'pluginMinorVersion' => $this->minorVersion,
 					'pluginVersion'      => $this->version
 					);
-		$this->sf = new com_ajmichels_phpSpring_bean_factory_default( $sfXml, array(), $sfProps );
+		$this->sf = new com_greentiedev_phpSpring_bean_factory_default( $sfXml, array(), $sfProps );
 		$this->sf->setParent( $this->wppf_serviceFactory );
 
 		$defaultUrl = $this->sf->getBean( 'DefaultWebServiceUrl' );
