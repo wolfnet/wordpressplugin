@@ -92,7 +92,7 @@
 
 	<bean id="Settings" class="com_wolfnet_wordpress_settings_entity" />
 
-	<bean id="DefaultWebServiceUrl" class="com_ajmichels_wppf_data_webServiceUrl">
+	<bean id="DefaultWebServiceUrl" class="com_greentiedev_wppf_data_webServiceUrl">
 		<property name="Domain">
 			<value>${webServiceDomain}</value>
 		</property>

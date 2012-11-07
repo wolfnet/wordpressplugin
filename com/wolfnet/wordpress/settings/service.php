@@ -7,8 +7,8 @@
  * @package       com.wolfnet.wordpress
  * @subpackage    settings
  * @title         service.php
- * @extends       com_ajmichels_wppf_abstract_service
- * @implements    com_ajmichels_wppf_interface_iService
+ * @extends       com_greentiedev_wppf_abstract_service
+ * @implements    com_greentiedev_wppf_interface_iService
  * @singleton     True
  * @contributors  AJ Michels (aj.michels@wolfnet.com)
  * @version       1.0
@@ -30,8 +30,8 @@
  *
  */
 class com_wolfnet_wordpress_settings_service
-extends com_ajmichels_wppf_abstract_service
-implements com_ajmichels_wppf_interface_iService
+extends com_greentiedev_wppf_abstract_service
+implements com_greentiedev_wppf_interface_iService
 {
 
 
@@ -66,7 +66,7 @@ implements com_ajmichels_wppf_interface_iService
 	/**
 	 * This property holds a reference to the WPPF Data Service instance within the plugin instance.
 	 *
-	 * @type  com_ajmichels_wppf_data_service
+	 * @type  com_greentiedev_wppf_data_service
 	 *
 	 */
 	private $dataService;
@@ -76,7 +76,7 @@ implements com_ajmichels_wppf_interface_iService
 	 * This property holds a reference to the Web Service URL object which represents the URI which
 	 * will be used to retrieve data from a remove service.
 	 *
-	 * @type  com_ajmichels_wppf_data_webServiceUrl
+	 * @type  com_greentiedev_wppf_data_webServiceUrl
 	 *
 	 */
 	private $webServiceUrl;
@@ -86,7 +86,7 @@ implements com_ajmichels_wppf_interface_iService
 	 * This property holds a reference to the WPPF Option Manager instance within the plugin
 	 * instance.
 	 *
-	 * @type  com_ajmichels_wppf_option_manager
+	 * @type  com_greentiedev_wppf_option_manager
 	 *
 	 */
 	private $optionManager;
@@ -182,7 +182,7 @@ implements com_ajmichels_wppf_interface_iService
 	/**
 	 * GETTER: This method is a getter for the dataService property.
 	 *
-	 * @return  com_ajmichels_wppf_data_service
+	 * @return  com_greentiedev_wppf_data_service
 	 *
 	 */
 	public function getDataService ()
@@ -194,11 +194,11 @@ implements com_ajmichels_wppf_interface_iService
 	/**
 	 * SETTER: This method is a setter for the dataService property.
 	 *
-	 * @param   com_ajmichels_wppf_data_service  $service
+	 * @param   com_greentiedev_wppf_data_service  $service
 	 * @return  void
 	 *
 	 */
-	public function setDataService ( com_ajmichels_wppf_data_service $service )
+	public function setDataService ( com_greentiedev_wppf_data_service $service )
 	{
 		$this->dataService = $service;
 	}
@@ -207,7 +207,7 @@ implements com_ajmichels_wppf_interface_iService
 	/**
 	 * GETTER: This method is a getter for the webServiceUrl property.
 	 *
-	 * @return  com_ajmichels_wppf_data_webServiceUrl
+	 * @return  com_greentiedev_wppf_data_webServiceUrl
 	 *
 	 */
 	public function getWebServiceUrl ()
@@ -219,11 +219,11 @@ implements com_ajmichels_wppf_interface_iService
 	/**
 	 * SETTER: This method is a setter for the webServiceUrl property.
 	 *
-	 * @param   com_ajmichels_wppf_data_webServiceUrl  $url
+	 * @param   com_greentiedev_wppf_data_webServiceUrl  $url
 	 * @return  void
 	 *
 	 */
-	public function setWebServiceUrl ( com_ajmichels_wppf_data_webServiceUrl $url )
+	public function setWebServiceUrl ( com_greentiedev_wppf_data_webServiceUrl $url )
 	{
 		$this->webServiceUrl = $url;
 	}
@@ -232,7 +232,7 @@ implements com_ajmichels_wppf_interface_iService
 	/**
 	 * GETTER: This method is a getter for the optionManager property.
 	 *
-	 * @return  com_ajmichels_wppf_option_manager
+	 * @return  com_greentiedev_wppf_option_manager
 	 *
 	 */
 	public function getOptionManager ()
@@ -244,11 +244,11 @@ implements com_ajmichels_wppf_interface_iService
 	/**
 	 * SETTER: This method is a setter for the optionManager property.
 	 *
-	 * @param   com_ajmichels_wppf_option_manager  $manager
+	 * @param   com_greentiedev_wppf_option_manager  $manager
 	 * @return  void
 	 *
 	 */
-	public function setOptionManager ( com_ajmichels_wppf_option_manager $manager )
+	public function setOptionManager ( com_greentiedev_wppf_option_manager $manager )
 	{
 		$this->optionManager = $manager;
 	}

@@ -6,8 +6,8 @@
  * @package       com.wolfnet.wordpress
  * @subpackage    admin
  * @title         pluginInstructionsView.php
- * @extends       com_ajmichels_wppf_abstract_view
- * @implements    com_ajmichels_wppf_interface_iView
+ * @extends       com_greentiedev_wppf_abstract_view
+ * @implements    com_greentiedev_wppf_interface_iView
  * @contributors  AJ Michels (aj.michels@wolfnet.com)
  * @version       1.0
  * @copyright     Copyright (c) 2012, WolfNet Technologies, LLC
@@ -29,8 +29,8 @@
  *
  */
 class com_wolfnet_wordpress_admin_pluginInstructionsView
-extends com_ajmichels_wppf_abstract_view
-implements com_ajmichels_wppf_interface_iView
+extends com_greentiedev_wppf_abstract_view
+implements com_greentiedev_wppf_interface_iView
 {
 
 
