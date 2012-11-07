@@ -62,6 +62,7 @@ entered in the "WolfNet >> General Settings" page before any IDX data can be dis
 	wolfnet_listingView_branding_brokerLogo,
 	wolfnet_listingView_branding_content,
 	wolfnet_listingView_listing_class
+* Switched framework code to newly re-branded GreenTie Development code.
 
 = 1.0.9 =
 * Fixed bug preventing drop down lists from populating in QuickSearch widget.
