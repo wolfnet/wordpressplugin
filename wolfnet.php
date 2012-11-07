@@ -12,7 +12,7 @@ Author URI:   http://www.wolfnet.com
 / *********************************************************************************************** */
 
 /* Include and Initialize Class Autoloader */
-require_once( 'com/greentiedev/common/autoLoader.php' );
+require_once( 'com/greentiedev/phpCommon/autoLoader.php' );
 com_greentiedev_phpCommon_autoLoader::getInstance( dirname( __FILE__ ) );
 
 /**
