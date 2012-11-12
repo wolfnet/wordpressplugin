@@ -209,7 +209,7 @@ implements com_greentiedev_wppf_interface_iService
 
 		if ( !is_wp_error( $http ) && $http['response']['code'] == '200' ) {
 			$this->setCookieData( $http['cookies'] );
-			return $http['body'];
+			return $this->removeJqueryFromHTML( $http['body'] );
 		}
 		else {
 			return '';
@@ -274,6 +274,12 @@ implements com_greentiedev_wppf_interface_iService
 			}
 		}
 		return '';
+	}
+
+
+	private function removeJqueryFromHTML ( $string )
+	{
+		return preg_replace( '/(<script)(.*)(jquery\.min\.js)(.*)(<\/script>)/i', '', $string );
 	}
 
 
