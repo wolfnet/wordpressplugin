@@ -46,7 +46,7 @@ entered in the "WolfNet >> General Settings" page before any IDX data can be dis
 == Changelog ==
 
 = 1.0.11 =
-* Fixing bug and was already fixed but reverted some how.
+* Fixing bug that was already fixed but reverted some how.
 
 = 1.0.10 =
 * Added regular expression replacement to remove included jQuery source from search builder code. This fixes a bug caused by jQuery being included more than once.
