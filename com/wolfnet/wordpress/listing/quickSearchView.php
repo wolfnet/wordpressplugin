@@ -86,6 +86,14 @@ implements com_greentiedev_wppf_interface_iView
 	{
 		$data['instanceId'] = uniqid( 'wolfnet_quickSearchForm_' );
 		$data['formAction'] = $this->getSettingsService()->getSiteBaseUrl();
+
+		/* Register WordPress filters for each variable being used in the view. (except the rawData) */
+		foreach ( $data as $key => $item ) {
+			if ( strpos( $key, 'rawData' ) === false ) {
+				$data[$key] = apply_filters( 'wolfnet_quickSearchView_' . $key, $item );
+			}
+		}
+
 		return parent::render( $data );
 	}
 
