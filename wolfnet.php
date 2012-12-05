@@ -78,21 +78,6 @@ implements com_greentiedev_phpCommon_iSingleton
 
 		$webServiceDomain = 'http://services.mlsfinder.com/v1';
 
-		if ( !session_id() ) {
-			session_start();
-		}
-
-		$apiUrlKey = '__wolfnetApiUrl';
-
-		if ( array_key_exists( $apiUrlKey, $_GET ) && trim( $_GET[$apiUrlKey] ) != '' ) {
-			$_SESSION['wolfnetApiUrl'] = trim( $_GET[$apiUrlKey] );
-		}
-		else if ( !array_key_exists( 'wolfnetApiUrl', $_SESSION ) ) {
-			$_SESSION['wolfnetApiUrl'] = $webServiceDomain;
-		}
-
-		$webServiceDomain = $_SESSION['wolfnetApiUrl'];
-
 		/* Create Plugin Service Factory */
 		$sfXml = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'com/wolfnet/wordpress/phpSpring.xml';
 		$sfProps = array(
