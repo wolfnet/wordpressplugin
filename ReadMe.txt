@@ -45,6 +45,10 @@ entered in the "WolfNet >> General Settings" page before any IDX data can be dis
 
 == Changelog ==
 
+= 1.0.12 =
+* Fixing bug with & special character in query strings.
+* Removed some debug code.
+
 = 1.0.11 =
 * Fixing bug that was already fixed but reverted some how.
 
