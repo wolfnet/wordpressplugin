@@ -4,3 +4,4 @@
 *.min.css
 *.min.js
 Desktop.ini
+*.sublime*
