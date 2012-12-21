@@ -87,6 +87,15 @@ extends com_greentiedev_wppf_action_action
 	private $quickSearchOptionsView;
 
 
+	/**
+	 * This property holds an instance of the Quick Search Options View object
+	 *
+	 * @type  com_wolfnet_wordpress_action_enqueueResources
+	 *
+	 */
+	private $enqueueResourcesAction;
+
+
 	/* PUBLIC METHODS *************************************************************************** */
 
 	/**
@@ -98,9 +107,10 @@ extends com_greentiedev_wppf_action_action
 	 */
 	public function execute ()
 	{
-		$pagename    = strtolower( get_query_var( 'pagename' ) );
-		$adminPrefix = 'wolfnet-admin-';
-		$isAdmin     = ( current_user_can( 'edit_pages' ) || current_user_can( 'edit_posts' ) );
+		$pagename     = strtolower( get_query_var( 'pagename' ) );
+		$adminPrefix  = 'wolfnet-admin-';
+		$publicPrefix = 'wolfnet-';
+		$isAdmin      = ( current_user_can( 'edit_pages' ) || current_user_can( 'edit_posts' ) );
 
 		if ( substr( $pagename, 0, strlen( $adminPrefix ) ) == $adminPrefix ) {
 
@@ -109,7 +119,19 @@ extends com_greentiedev_wppf_action_action
 				exit;
 			}
 
-			$method = str_replace( '-', '_', str_replace( $adminPrefix, '', $pagename ) );
+			$method = 'admin_' . str_replace( '-', '_', str_replace( $adminPrefix, '', $pagename ) );
+
+			if ( !method_exists( $this, $method ) ) {
+				$this->statusNotFound();
+				exit;
+			}
+
+			call_user_method( $method, $this );
+
+		}
+		else if ( substr( $pagename, 0, strlen( $publicPrefix ) ) == $publicPrefix ) {
+
+			$method = str_replace( '-', '_', str_replace( $publicPrefix, '', $pagename ) );
 
 			if ( !method_exists( $this, $method ) ) {
 				$this->statusNotFound();
@@ -125,7 +147,7 @@ extends com_greentiedev_wppf_action_action
 
 	/* PRIVATE METHODS ************************************************************************** */
 
-	private function shortcodebuilder_options_featured ()
+	private function admin_shortcodebuilder_options_featured ()
 	{
 		$this->statusSuccess();
 
@@ -148,7 +170,7 @@ extends com_greentiedev_wppf_action_action
 	}
 
 
-	private function shortcodebuilder_options_grid ()
+	private function admin_shortcodebuilder_options_grid ()
 	{
 		$this->statusSuccess();
 
@@ -176,13 +198,13 @@ extends com_greentiedev_wppf_action_action
 	}
 
 
-	private function shortcodebuilder_options_list ()
+	private function admin_shortcodebuilder_options_list ()
 	{
 		$this->shortcodebuilder_options_grid();
 	}
 
 
-	private function shortcodebuilder_options_quicksearch ()
+	private function admin_shortcodebuilder_options_quicksearch ()
 	{
 		$this->statusSuccess();
 
@@ -199,7 +221,7 @@ extends com_greentiedev_wppf_action_action
 	}
 
 
-	private function shortcodebuilder_saved_search ()
+	private function admin_shortcodebuilder_saved_search ()
 	{
 
 		$this->statusSuccess();
@@ -210,7 +232,7 @@ extends com_greentiedev_wppf_action_action
 	}
 
 
-	private function searchmanager_get ()
+	private function admin_searchmanager_get ()
 	{
 
 		$this->statusSuccess();
@@ -230,7 +252,7 @@ extends com_greentiedev_wppf_action_action
 	}
 
 
-	private function searchmanager_save ()
+	private function admin_searchmanager_save ()
 	{
 		$canInsert = ( current_user_can( 'edit_pages' ) || current_user_can( 'edit_posts' ) ) ? true : false;
 
@@ -245,7 +267,7 @@ extends com_greentiedev_wppf_action_action
 	}
 
 
-	private function searchmanager_delete ()
+	private function admin_searchmanager_delete ()
 	{
 		$canDelete = ( current_user_can( 'delete_pages' ) || current_user_can( 'delete_posts' ) ) ? true : false;
 
@@ -257,6 +279,35 @@ extends com_greentiedev_wppf_action_action
 
 		$this->searchmanager_get();
 
+	}
+
+
+	private function content_header ()
+	{
+		// Output the header of the current theme and exit
+		global $wp_query;
+		if ($wp_query->is_404) {
+			$wp_query->is_404 = false;
+			$wp_query->is_archive = true;
+		}
+		$this->statusSuccess();
+		get_header();
+		exit;
+	}
+
+
+	private function content_footer ()
+	{
+		// Output the footer of the current theme and exit
+		global $wp_query;
+		if ($wp_query->is_404) {
+			$wp_query->is_404 = false;
+			$wp_query->is_archive = true;
+		}
+		$this->getEnqueueResourcesAction()->execute();
+		$this->statusSuccess();
+		get_footer();
+		exit;
 	}
 
 
@@ -395,13 +446,38 @@ extends com_greentiedev_wppf_action_action
 	/**
 	 * SETTER:  This method is a setter for the propertyListOptionsView property.
 	 *
-	 * @param   com_greentiedev_wppf_interface_iView  $service
+	 * @param   com_greentiedev_wppf_interface_iView  $view
 	 * @return  void
 	 *
 	 */
 	public function setQuickSearchOptionsView ( com_greentiedev_wppf_interface_iView $view )
 	{
 		$this->quickSearchOptionsView = $view;
+	}
+
+
+	/**
+	 * GETTER:  This method is a getter for the enqueueResourcesAction property.
+	 *
+	 * @return  com_wolfnet_wordpress_action_enqueueResources
+	 *
+	 */
+	public function getEnqueueResourcesAction ()
+	{
+		return $this->enqueueResourcesAction;
+	}
+
+
+	/**
+	 * SETTER:  This method is a setter for the enqueueResourcesAction property.
+	 *
+	 * @param   com_wolfnet_wordpress_action_enqueueResources  $action
+	 * @return  void
+	 *
+	 */
+	public function setEnqueueResourcesAction ( com_wolfnet_wordpress_action_enqueueResources $action )
+	{
+		$this->enqueueResourcesAction = $action;
 	}
 
 
