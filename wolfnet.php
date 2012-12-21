@@ -67,6 +67,11 @@ implements com_greentiedev_phpCommon_iSingleton
 	public function __construct ()
 	{
 		$this->log( 'Init wolfnet Plugin' );
+
+		if ( !session_id() ) {
+			session_start();
+		}
+
 		parent::__construct();
 
 		/* If the wordpress install is set to debug mode enable logging and debug output */
