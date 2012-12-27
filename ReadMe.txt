@@ -45,6 +45,9 @@ entered in the "WolfNet >> General Settings" page before any IDX data can be dis
 
 == Changelog ==
 
+= 1.1.0 =
+* Exposed dynamic URLs which can be used to retrieve the header and footer of the wordpress site for use in wrapper a MLSFinder subdomain search solution.
+
 = 1.0.12 =
 * Fixing bug with & special character in query strings.
 * Removed some debug code.
