@@ -50,6 +50,15 @@ extends com_greentiedev_wppf_action_action
 		$rule    = '^wolfnet/admin/searchmanager/save?';
 		$rewrite = 'index.php?pagename=wolfnet-admin-searchmanager-save';
 		add_rewrite_rule( $rule, $rewrite, 'top' );
+
+		$rule    = '^wolfnet/content/header?';
+		$rewrite = 'index.php?pagename=wolfnet-content-header';
+		add_rewrite_rule( $rule, $rewrite, 'top' );
+
+		$rule    = '^wolfnet/content/footer?';
+		$rewrite = 'index.php?pagename=wolfnet-content-footer';
+		add_rewrite_rule( $rule, $rewrite, 'top' );
+
 	}
 
 

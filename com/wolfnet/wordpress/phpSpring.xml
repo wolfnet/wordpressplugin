@@ -242,6 +242,9 @@
 		<property name="QuickSearchOptionsView">
 			<ref bean="QuickSearchOptionsView" />
 		</property>
+		<property name="EnqueueResourcesAction">
+			<ref bean="EnqueueResources" />
+		</property>
 	</bean>
 
 	<bean id="RegisterCustomPostTypes" class="com_wolfnet_wordpress_action_registerCustomPostTypes" />

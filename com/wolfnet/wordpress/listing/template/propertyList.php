@@ -47,11 +47,11 @@
 
 	if ( typeof jQuery != 'undefined' ) {
 
-		( function ( $ ) {
+		jQuery( document ).ready( function () {
 
-			$( '#<?php echo $instanceId; ?>' ).wolfnetPropertyList({});
+			jQuery( '#<?php echo $instanceId; ?>' ).wolfnetPropertyList({});
 
-		} )( jQuery );
+		} );
 
 	}
 
