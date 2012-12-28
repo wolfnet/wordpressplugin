@@ -116,7 +116,7 @@ if ( typeof jQuery != 'undefined' ) {
 
 					var $this = $( this );
 
-					$this.append( '<div class="clearfix" />' );
+					$this.append( '<div class="wolfnet_clearfix" />' );
 
 					//methods._calculateItemSize.apply( plugin );
 
