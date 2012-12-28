@@ -33,7 +33,7 @@
 
 <div id="wolfnet_listing_<?php echo $id; ?>" class="wolfnet_listing" itemscope>
 	<a href="<?php echo $url; ?>" title="<?php echo $address_full . ' - ' . $price; ?>">
-		<span class="full_address"><?php echo $address_full; ?></span>
+		<span class="wolfnet_full_address"><?php echo $address_full; ?></span>
 		<span class="wolfnet_price" itemprop="price">$<?php echo $price; ?></span>
 		<span itemprop="street-address" style="display:none;"><?php echo $address_full; ?></span>
 	</a>

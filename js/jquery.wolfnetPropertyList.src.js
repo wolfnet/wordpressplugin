@@ -64,7 +64,7 @@ if ( typeof jQuery != 'undefined' ) {
 
 					var $item = $( this );
 					var $link = $item.find( 'a:first' );
-					var $addr = $item.find( '.full_address:first' );
+					var $addr = $item.find( '.wolfnet_full_address:first' );
 					var cont  = $addr.html();
 					var len   = cont.length;
 					var trim  = 1;
@@ -88,11 +88,11 @@ if ( typeof jQuery != 'undefined' ) {
 
 						$( this ).append( '<div class="wolfnet_clearfix"></div>' );
 
-						$( this ).find( 'span.full_address' ).css( {
+						$( this ).find( 'span.wolfnet_full_address' ).css( {
 							'float' : 'left'
 						} );
 
-						$this.find( 'span.price' ).css( {
+						$this.find( 'span.wolfnet_price' ).css( {
 							'float' : 'right'
 						} );
 
