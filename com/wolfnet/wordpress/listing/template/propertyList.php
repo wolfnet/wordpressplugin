@@ -39,7 +39,7 @@
 
 	<?php echo ( isset($listingContent) ) ? $listingContent : 'No Listings to Display.'; ?>
 
-	<div class="clearfix"></div>
+	<div class="wolfnet_clearfix"></div>
 
 </div>
 

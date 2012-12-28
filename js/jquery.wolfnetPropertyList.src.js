@@ -86,7 +86,7 @@ if ( typeof jQuery != 'undefined' ) {
 
 					$( this ).find( 'a' ).each( function () {
 
-						$( this ).append( '<div class="clearfix"></div>' );
+						$( this ).append( '<div class="wolfnet_clearfix"></div>' );
 
 						$( this ).find( 'span.full_address' ).css( {
 							'float' : 'left'

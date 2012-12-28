@@ -1,57 +1,57 @@
 <?php
 
 /**
- * This is an HTML template file for the listing entity. This specific template is meant to be very 
- * simple with limited information. If more information is need to be displayed on the page a new 
- * template file should be created and made avaiable in the ListingView class. This file should 
+ * This is an HTML template file for the listing entity. This specific template is meant to be very
+ * simple with limited information. If more information is need to be displayed on the page a new
+ * template file should be created and made avaiable in the ListingView class. This file should
  * ideally contain very little PHP.
- * 
+ *
  * @package       com.wolfnet.wordpress
  * @subpackage    listing.template
  * @title         SimpleListing.php
  * @contributors  AJ Michels (aj.michels@wolfnet.com)
  * @version       1.0
  * @copyright     Copyright (c) 2012, WolfNet Technologies, LLC
- *                
+ *
  *                This program is free software; you can redistribute it and/or
  *                modify it under the terms of the GNU General Public License
  *                as published by the Free Software Foundation; either version 2
  *                of the License, or (at your option) any later version.
- *                
+ *
  *                This program is distributed in the hope that it will be useful,
  *                but WITHOUT ANY WARRANTY; without even the implied warranty of
  *                MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *                GNU General Public License for more details.
- *                
+ *
  *                You should have received a copy of the GNU General Public License
  *                along with this program; if not, write to the Free Software
  *                Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * 
+ *
  */
 
 ?>
 
 <div id="wolfnet_listing_<?php echo $id; ?>" class="wolfnet_listing<?php echo $listing_class; ?>" itemscope>
 	<a href="<?php echo $url; ?>">
-		<span class="listingImage"><img src="<?php echo $image; ?>" /></span>
-		<span class="price" itemprop="price">$<?php echo $price; ?></span>
-		<span class="bed-bath" title="<?php echo $bedbath_full; ?>"><?php echo $bedbath; ?></span>
+		<span class="wolfnet_listingImage"><img src="<?php echo $image; ?>" /></span>
+		<span class="wolfnet_price" itemprop="price">$<?php echo $price; ?></span>
+		<span class="wolfnet_bed_bath" title="<?php echo $bedbath_full; ?>"><?php echo $bedbath; ?></span>
 		<span title="<?php echo $address_full; ?>">
-			<span class="location" itemprop="locality">
+			<span class="wolfnet_location" itemprop="locality">
 				<?php echo $location; ?>
 			</span>
-			<span class="address">
+			<span class="wolfnet_address">
 				<?php echo $address; ?>
 			</span>
-			<span class="full_address" itemprop="street-address" style="display:none;">
+			<span class="wolfnet_full_address" itemprop="street-address" style="display:none;">
 				<?php echo $address_full; ?>
 			</span>
 		</span>
 		<?php if ( $branding_brokerLogo != '' || $branding_content != '' ) { ?>
-		<div class="branding">
-			<span class="brokerLogo"><img src="<?php echo $branding_brokerLogo; ?>" /></span>
-			<span class="brandingMessage"><?php echo $branding_content; ?></span>
+		<div class="wolfnet_branding">
+			<span class="wolfnet_brokerLogo"><img src="<?php echo $branding_brokerLogo; ?>" /></span>
+			<span class="wolfnet_brandingMessage"><?php echo $branding_content; ?></span>
 		</div>
 		<?php } ?>
 	</a>
