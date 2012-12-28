@@ -45,6 +45,9 @@ entered in the "WolfNet >> General Settings" page before any IDX data can be dis
 
 == Changelog ==
 
+= 1.1.1 =
+* Updated all plugin specific CSS classes to make sure they are prefixed to avoid conflicts.
+
 = 1.1.0 =
 * Exposed dynamic URLs which can be used to retrieve the header and footer of the wordpress site for use in wrapper a MLSFinder subdomain search solution.
 

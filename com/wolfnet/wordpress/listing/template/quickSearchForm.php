@@ -75,7 +75,7 @@
 				</select>
 			</div>
 
-			<div class="clearfix"></div>
+			<div class="wolfnet_clearfix"></div>
 
 		</div>
 
