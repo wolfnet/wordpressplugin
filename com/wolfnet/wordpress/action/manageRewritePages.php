@@ -121,8 +121,6 @@ extends com_greentiedev_wppf_action_action
 
 			$method = 'admin_' . str_replace( '-', '_', str_replace( $adminPrefix, '', $pagename ) );
 
-			var_dump( $method );
-
 			if ( !method_exists( $this, $method ) ) {
 				$this->statusNotFound();
 				exit;
@@ -287,11 +285,6 @@ extends com_greentiedev_wppf_action_action
 	private function content_header ()
 	{
 		// Output the header of the current theme and exit
-		global $wp_query;
-		if ($wp_query->is_404) {
-			$wp_query->is_404 = false;
-			$wp_query->is_archive = true;
-		}
 		$this->statusSuccess();
 		get_header();
 		exit;
@@ -301,11 +294,6 @@ extends com_greentiedev_wppf_action_action
 	private function content_footer ()
 	{
 		// Output the footer of the current theme and exit
-		global $wp_query;
-		if ($wp_query->is_404) {
-			$wp_query->is_404 = false;
-			$wp_query->is_archive = true;
-		}
 		$this->getEnqueueResourcesAction()->execute();
 		$this->statusSuccess();
 		get_footer();
@@ -315,6 +303,11 @@ extends com_greentiedev_wppf_action_action
 
 	private function statusSuccess ()
 	{
+		global $wp_query;
+		if ($wp_query->is_404) {
+			$wp_query->is_404 = false;
+			$wp_query->is_archive = true;
+		}
 		status_header( 200 );
 	}
 
@@ -327,6 +320,11 @@ extends com_greentiedev_wppf_action_action
 
 	private function statusNotAuthorized ()
 	{
+		global $wp_query;
+		if ($wp_query->is_404) {
+			$wp_query->is_404 = false;
+			$wp_query->is_archive = true;
+		}
 		status_header( 401 );
 	}
 

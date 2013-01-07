@@ -45,6 +45,9 @@ entered in the "WolfNet >> General Settings" page before any IDX data can be dis
 
 == Changelog ==
 
+= 1.1.3 =
+* Updated to ensure that dynamic pages created by the plugin return the correct status code.
+
 = 1.1.2 =
 * Fixed bug with shortcode builder introduced in version 1.1.0.
 
