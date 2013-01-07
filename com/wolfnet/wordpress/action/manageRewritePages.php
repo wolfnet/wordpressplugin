@@ -121,6 +121,8 @@ extends com_greentiedev_wppf_action_action
 
 			$method = 'admin_' . str_replace( '-', '_', str_replace( $adminPrefix, '', $pagename ) );
 
+			var_dump( $method );
+
 			if ( !method_exists( $this, $method ) ) {
 				$this->statusNotFound();
 				exit;
@@ -200,7 +202,7 @@ extends com_greentiedev_wppf_action_action
 
 	private function admin_shortcodebuilder_options_list ()
 	{
-		$this->shortcodebuilder_options_grid();
+		$this->admin_shortcodebuilder_options_grid();
 	}
 
 

@@ -45,6 +45,9 @@ entered in the "WolfNet >> General Settings" page before any IDX data can be dis
 
 == Changelog ==
 
+= 1.1.2 =
+* Fixed bug with shortcode builder introduced in version 1.1.0.
+
 = 1.1.1 =
 * Updated all plugin specific CSS classes to make sure they are prefixed to avoid conflicts.
 
