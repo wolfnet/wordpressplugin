@@ -133,7 +133,23 @@
 		</tr>
 
 		<tr>
-			<td><label>Max Results:</label></td>
+			<td><label>Pagination Enabled/Disabled:</label></td>
+			<td>
+
+				<select id="<?php echo $paginatedId; ?>" name="<?php echo $paginatedName; ?>" >
+					<option value="false" <?php echo $paginatedFalse; ?> >Disabled</option>
+					<option value="true"  <?php echo $paginatedTrue; ?>  >Enabled</option>
+				</select>
+				<span class="wolfnet_moreInfo">
+					Informative blurb.
+				</span>
+
+
+			</td>
+		</tr>
+
+		<tr>
+			<td><label>Max Results Per Page:</label></td>
 			<td>
 				<input id="<?php echo $maxResultsId; ?>" name="<?php echo $maxResultsName; ?>"
 					type="text" value="<?php echo $maxResultsValue; ?>" />

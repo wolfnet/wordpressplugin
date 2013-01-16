@@ -185,6 +185,7 @@ extends com_greentiedev_wppf_action_action
 				'city'        => array( 'name' => 'city' ),
 				'zipcode'     => array( 'name' => 'zipcode' ),
 				'ownertype'   => array( 'name' => 'ownertype' ),
+				'paginated'   => array( 'name' => 'paginated' ),
 				'maxresults'  => array( 'name' => 'maxresults' )
 			),
 			'prices' => $this->getListingService()->getPriceData(),

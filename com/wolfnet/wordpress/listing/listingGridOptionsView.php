@@ -103,6 +103,10 @@ implements com_greentiedev_wppf_interface_iView
 			'ownerTypeId'       => esc_attr( $data['fields']['ownertype']['id'] ),
 			'ownerTypeName'     => esc_attr( $data['fields']['ownertype']['name'] ),
 			'ownerTypeValue'    => $data['fields']['ownertype']['value'],
+			'paginatedId'	    => esc_attr( $data['fields']['paginated']['id'] ),
+			'paginatedName'	    => esc_attr( $data['fields']['paginated']['name'] ),
+			'paginatedTrue'	    => selected( $data['fields']['paginated']['value'], 'true', false ),
+			'paginatedFalse'    => selected( $data['fields']['paginated']['value'], 'false', false ),
 			'maxResultsId'      => esc_attr( $data['fields']['maxresults']['id'] ),
 			'maxResultsName'    => esc_attr( $data['fields']['maxresults']['name'] ),
 			'maxResultsValue'   => esc_attr( $data['fields']['maxresults']['value'] )
@@ -110,6 +114,5 @@ implements com_greentiedev_wppf_interface_iView
 		$data['instanceId']	= uniqid( 'wolfnet_listingsOptions_' );
 		return parent::render( $data );
 	}
-
 
 }
