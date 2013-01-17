@@ -1,3 +1,4 @@
+
 <?php
 
 /**
@@ -49,18 +50,18 @@ extends com_wolfnet_wordpress_abstract_widget
 	 *
 	 */
 	public $options = array(
-		'title'        => '',
-		'description'  => 'Define criteria to display a grid of matching properties. The grid display includes an image, price, number of bedrooms, number of bathrooms, and address.',
-		'criteria'     => '',
-		'mode'         => 'advanced',
-		'savedsearch'  => '',
-		'zipcode'      => '',
-		'city'         => '',
-		'minprice'     => '',
-		'maxprice'     => '',
-		'ownertype'    => 'all',
-		'paginated'    => false,
-		'maxresults'   => 50
+		'title'        		=> '',
+		'description'  		=> 'Define criteria to display a grid of matching properties. The grid display includes an image, price, number of bedrooms, number of bathrooms, and address.',
+		'criteria'     		=> '',
+		'mode'         		=> 'advanced',
+		'savedsearch'  		=> '',
+		'zipcode'      		=> '',
+		'city'         		=> '',
+		'minprice'     		=> '',
+		'maxprice'     		=> '',
+		'ownertype'    		=> 'all',
+		'usesPagination'	=> false,
+		'maxresults'   		=> 50
 	);
 
 

@@ -176,17 +176,17 @@ extends com_greentiedev_wppf_action_action
 
 		$data = array(
 			'fields' => array(
-				'title'       => array( 'name' => 'title' ),
-				'criteria'    => array( 'name' => 'criteria' ),
-				'mode'        => array( 'name' => 'mode', 'value' => 'advanced' ),
-				'savedsearch' => array( 'name' => 'savedsearch' ),
-				'maxprice'    => array( 'name' => 'maxprice' ),
-				'minprice'    => array( 'name' => 'minprice' ),
-				'city'        => array( 'name' => 'city' ),
-				'zipcode'     => array( 'name' => 'zipcode' ),
-				'ownertype'   => array( 'name' => 'ownertype' ),
-				'paginated'   => array( 'name' => 'paginated' ),
-				'maxresults'  => array( 'name' => 'maxresults' )
+				'title'       		=> array( 'name' => 'title' ),
+				'criteria'    		=> array( 'name' => 'criteria' ),
+				'mode'        		=> array( 'name' => 'mode', 'value' => 'advanced' ),
+				'savedsearch' 		=> array( 'name' => 'savedsearch' ),
+				'maxprice'    		=> array( 'name' => 'maxprice' ),
+				'minprice'    		=> array( 'name' => 'minprice' ),
+				'city'        		=> array( 'name' => 'city' ),
+				'zipcode'     		=> array( 'name' => 'zipcode' ),
+				'ownertype'   		=> array( 'name' => 'ownertype' ),
+				'usesPagination'	=> array( 'name' => 'usesPagination' ),
+				'maxresults'  		=> array( 'name' => 'maxresults' )
 			),
 			'prices' => $this->getListingService()->getPriceData(),
 			'ownerTypes' => $this->getListingService()->getOwnerTypeData(),

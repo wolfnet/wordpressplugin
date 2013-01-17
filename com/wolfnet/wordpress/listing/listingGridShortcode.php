@@ -72,10 +72,10 @@ extends com_greentiedev_wppf_shortcode_shortcode
 	 *
 	 */
 	protected $attributes = array(
-		'title'        => '',
-		'ownertype'    => 'all',
-		'paginated'    => false,
-		'maxresults'   => 50
+		'title'        		=> '',
+		'ownertype'    		=> 'all',
+		'usesPagination'	=> false,
+		'maxresults'   		=> 50
 		);
 
 

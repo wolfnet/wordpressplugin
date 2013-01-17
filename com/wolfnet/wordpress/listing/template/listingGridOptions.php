@@ -136,12 +136,13 @@
 			<td><label>Pagination Enabled/Disabled:</label></td>
 			<td>
 
-				<select id="<?php echo $paginatedId; ?>" name="<?php echo $paginatedName; ?>" >
-					<option value="false" <?php echo $paginatedFalse; ?> >Disabled</option>
-					<option value="true"  <?php echo $paginatedTrue; ?>  >Enabled</option>
+				<select id="<?php echo $usesPaginationId; ?>" name="<?php echo $usesPaginationName; ?>" >
+					<option value="false" <?php echo $usesPaginationFalse; ?> >Disabled</option>
+					<option value="true"  <?php echo $usesPaginationTrue; ?>  >Enabled</option>
 				</select>
 				<span class="wolfnet_moreInfo">
-					Informative blurb.
+					Enable to add pagination capabilities to the result set.
+					Results per page can be defined below in the Max Results Per Page field.
 				</span>
 
 
