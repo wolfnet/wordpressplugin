@@ -81,7 +81,7 @@ implements com_greentiedev_phpCommon_iSingleton
 			$this->loggerSetting( 'minTime', 0 );
 		}
 
-		$webServiceDomain = 'http://services.mlsfinder.com/v1';
+		$webServiceDomain = 'http://andrew.cfdevel.wnt/com/mlsfinder/services/index.cfm';
 
 		/* Create Plugin Service Factory */
 		$sfXml = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'com/wolfnet/wordpress/phpSpring.xml';

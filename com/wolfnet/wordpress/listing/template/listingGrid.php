@@ -50,15 +50,9 @@
 
 			var instance = '#<?php echo $instanceId; ?>';
 
+			jQuery( instance ).wolfnetToolbar();
+
 			jQuery( instance ).wolfnetListingGrid();
-
-			jQuery( instance ).wolfnetResultsToolbar();
-
-			<?php if ( $options['title']['paginated'] ) { ?>
-
-			jQuery( instance ).wolfnetPaginationToolbar();
-
-			<?php } ?>
 
 		} );
 
