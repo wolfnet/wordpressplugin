@@ -68,8 +68,8 @@ extends com_greentiedev_wppf_action_action
 		wp_enqueue_script( 'wolfnetscrollingitemsjs',   $url . 'js/jquery.wolfnetScrollingItems.src.js',   array('smoothdivscrolljs'), null, true );
 		wp_enqueue_script( 'wolfnetquicksearchjs',      $url . 'js/jquery.wolfnetQuickSearch.src.js',      array('jquery'), null, true );
 		wp_enqueue_script( 'wolfnetlistinggridjs',      $url . 'js/jquery.wolfnetListingGrid.src.js',      array('jquery','tooltipjs','imagesloadedjs'), null, true );
-		wp_enqueue_script( 'wolfnetpaginationtoolbarjs',$url . 'js/jquery.wolfnetPaginationToolbar.src.js',array('jquery','tooltipjs','imagesloadedjs'), null, true );
-		wp_enqueue_script( 'wolfnetresultstoolbarjs',   $url . 'js/jquery.wolfnetResultsToolbar.src.js',   array('jquery','tooltipjs','imagesloadedjs'), null, true );
+		wp_enqueue_script( 'wolfnetpaginationtoolbarjs',$url . 'js/jquery.wolfnetPaginationToolbar.src.js',array('jquery' ), null, true );
+		wp_enqueue_script( 'wolfnetresultstoolbarjs',   $url . 'js/jquery.wolfnetResultsToolbar.src.js',   array('jquery' ), null, true );
 		wp_enqueue_script( 'wolfnetpropertylistjs',     $url . 'js/jquery.wolfnetPropertyList.src.js',     array('jquery'), null, true );
 		wp_enqueue_script( 'wolfnetjs',                 $url . 'js/wolfnet.src.js',                        array('jquery','tooltipjs'), null, true );
 		wp_enqueue_style(  'wolfnetcss',                $url . 'css/wolfnet.src.css',                      array(), false, 'screen' );

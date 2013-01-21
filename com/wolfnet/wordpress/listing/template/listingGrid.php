@@ -46,23 +46,19 @@
 
 	if ( typeof jQuery != 'undefined' ) {
 
-		var usesPagination = "<?php echo $options['title']['paginated']; ?>";
-
 		jQuery( document ).ready( function () {
-			
-			if (usesPagination == true) {
-				jQuery( '#<?php echo $instanceId; ?>' ).wolfnetPaginationToolbar();
-			}
 
-			jQuery( '#<?php echo $instanceId; ?>' ).wolfnetResultsToolbar();
+			var instance = '#<?php echo $instanceId; ?>';
 
-			jQuery( '#<?php echo $instanceId; ?>' ).wolfnetListingGrid();
-			
-			jQuery( '#<?php echo $instanceId; ?>' ).wolfnetResultsToolbar();
+			jQuery( instance ).wolfnetListingGrid();
 
-			if (usesPagination == true) {
-				jQuery( '#<?php echo $instanceId; ?>' ).wolfnetPaginationToolbar();
-			}
+			jQuery( instance ).wolfnetResultsToolbar();
+
+			<?php if ( $options['title']['paginated'] ) { ?>
+
+			jQuery( instance ).wolfnetPaginationToolbar();
+
+			<?php } ?>
 
 		} );
 
