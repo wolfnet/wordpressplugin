@@ -47,9 +47,21 @@
 
 	if ( typeof jQuery != 'undefined' ) {
 
+		var usesPagination = "<?php echo $options['title']['paginated']; ?>";
+
 		jQuery( document ).ready( function () {
+			
+			if (usesPagination == true) {
+				jQuery( '#<?php echo $instanceId; ?>' ).wolfnetPaginationToolbar();
+			}
+			jQuery( '#<?php echo $instanceId; ?>' ).wolfnetResultsToolbar();
 
 			jQuery( '#<?php echo $instanceId; ?>' ).wolfnetPropertyList({});
+
+			jQuery( '#<?php echo $instanceId; ?>' ).wolfnetResultsToolbar();
+			if (usesPagination == true) {
+				jQuery( '#<?php echo $instanceId; ?>' ).wolfnetPaginationToolbar();
+			}
 
 		} );
 
