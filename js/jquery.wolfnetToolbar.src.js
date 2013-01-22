@@ -7,6 +7,7 @@
  *
  *		-also, pagination Previous/Next if enabled via admin (setting: paginated)
  */
+ 
 if ( typeof jQuery != 'undefined' ) {
 	( function ( $ ) {
 		$.fn.wolfnetToolbar = function () {
@@ -19,25 +20,26 @@ if ( typeof jQuery != 'undefined' ) {
 		} /* END: function $.fn.wolfnetToolbar */
 
 		var renderResultsToolbar = function () {
-			alert("hello wordpress");
+			//alert("hello wordpress!!");
 
-/*
-			//table for plugin
-			var pluginTable = $('table').addClass('pluginTbl');
+			var resultTools = $('<div></div>').addClass('results_tools');
 
-			//append row; results toolbar plugin will be a single table row
-			var row = $('tr');
-			$(pluginTable).append(row);
+			for (var i=1; i<=3; i++) {
+				$('<div id="cell_' + i + '">rippy' + i + '</div>')
+					.addClass('wolfnet_tools_div')
+					.appendTo(resultTools);
+			}
 
-			//build Sort By dropdown and append to row 
-			var sortByDropdown = $('select');
+			//Build Sort By dropdown and append to cell_1
+			var sortByDropdown = $('<select></select>');
 
-			//append Results count display to row
-			$(row).append('<td>Results x-X of XXX</td>')
+			//Build results preview string and append to cell_2
+			var resultsPreview = "Results x-X of XXX";
 
-			//build Show # Per Page dropdown and append to row
-			var showDropdown = $('select');
-*/
+			//Build Show X Per Page dropdown & append to cell_3
+			var showDropdown = $('<select></select>');
+			//$(resultTools).appendTo(document.body);
+
 		}
 
 	} )( jQuery ); /* END: jQuery IIFE */
