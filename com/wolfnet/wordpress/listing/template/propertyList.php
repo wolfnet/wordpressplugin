@@ -50,8 +50,9 @@
 		jQuery( document ).ready( function () {
 
 			var instance = '#<?php echo $instanceId; ?>';
+			var usesPagination = "<?php echo $options['paginated']['value']; ?>";
 
-			jQuery( instance ).wolfnetToolbar();
+			jQuery( instance ).wolfnetToolbar( usesPagination );
 
 			jQuery( instance ).wolfnetPropertyList({});
 
