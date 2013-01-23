@@ -31,13 +31,8 @@
 
 <div id="<?php echo $instanceId; ?>" class="wolfnet_widget wolfnet_listingGrid">
 
-	<?php if ( array_key_exists( 'title', $options ) && trim( $options['title']['value'] ) != '' ) { ?>
-
-		<h2><?php echo $options['title']['value']; ?></h2>
-
-	<?php } ?>
-
 	<?php echo ( isset($listingContent) ) ? $listingContent : 'No Listings to Display.'; ?>
+	
 </div>
 
 <div class="wolfnet_clearfix"></div>
@@ -50,9 +45,12 @@
 
 			var instance = '#<?php echo $instanceId; ?>';
 			var usesPagination = "<?php echo $options['paginated']['value']; ?>";
-			var resultsPerPage =  "<?php echo $options['maxresults']['value']; ?>";
+			var resultsPerPage = "<?php echo $options['maxresults']['value']; ?>";
+			var componentTitle = "<?php echo $options['title']['value']; ?>"; 
 
-			jQuery( instance ).wolfnetToolbar( usesPagination, resultsPerPage );
+			jQuery( instance ).wolfnetToolbar( usesPagination
+											 , resultsPerPage 
+											 , componentTitle);
 
 			jQuery( instance ).wolfnetListingGrid();
 

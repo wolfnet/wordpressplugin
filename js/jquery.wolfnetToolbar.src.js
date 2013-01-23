@@ -11,39 +11,43 @@
  
 if ( typeof jQuery != 'undefined' ) {
 	( function ( $ ) {
-		$.fn.wolfnetToolbar = function ( usesPagination,
-										 resultsPerPage ) {
+		$.fn.wolfnetToolbar = function ( usesPagination
+									   , resultsPerPage 
+									   , titleString ) {
 
-			var toolbar = renderResultsToolbar();
+			var title = getTitleHeader(titleString);
+
+			var toolbar = renderResultsToolbar( usesPagination,resultsPerPage );
 			$( this ).prepend( toolbar.clone() ).append( toolbar.clone() );
-			
+
 			if (usesPagination == 'true') {				
-				var pagination = renderPaginationToolbar();
+				var pagination = renderPaginationToolbar( usesPagination,resultsPerPage );
 				$( this ).prepend( pagination.clone() ).append( pagination.clone() );
 			}
 
-		} /* END: function $.fn.wolfnetToolbar */
+			$( this ).prepend( title.clone() );
 
+		} /*END: function $.fn.wolfnetToolbar*/
+
+		var getTitleHeader = function ( titleString ) {
+			var header = $('<h2>').text(titleString);
+			return header;
+		}
 
 		// Method to build out results toolbar
-		var renderResultsToolbar = function () {
+		var renderResultsToolbar = function ( usesPagination
+											, resultsPerPage ) {
 
-			var resultTools = $('<div>').addClass('toolbar_div').css( {'width':'100%'} );
+			var resultTools = $('<div>').addClass('toolbar_div').css( {'width':'100%','clear':'both'} );
 
 			// Horizontal cells within toolbar div
 			var cells = [];
 			cells[1] = $('<div>').appendTo(resultTools).css( 
-				{'width':'33%',
-				 'display':'table-cell',
-				 'float':'left'} );
+				{'width':'33%','float':'left','test-align':'left'} );
 			cells[2] = $('<div>').appendTo(resultTools).css( 
-				{'width':'33%',
-			 	 'display':'table-cell',
-			 	 'text-align':'center'} ); 
+				{'width':'33%','float':'left','text-align':'center'} );
 			cells[3] = $('<div>').appendTo(resultTools).css( 
-				{'width':'33%',
-				 'display':'table-cell',
-				 'float':'right'} ); 
+				{'width':'33%','float':'right','text-align':'right'} ); 
 
 			//Build Sort By dropdown and append to first cell
 			var sortByDropdown = $('<select>').addClass( 'sortoptions' );
@@ -62,8 +66,8 @@ if ( typeof jQuery != 'undefined' ) {
 			$(sortByDropdown).appendTo(cells[1]);
 
 			//Build results preview string and append to second cell
-			var resultsCount = getResultsCountString();
-			$(cells[2]).text(resultsCount).addClass();
+			var resultsCount = getResultsCountString(usesPagination,resultsPerPage);
+			$(cells[2]).text(resultsCount);
 
 			//Build show # of listings dropdown and append to third cell
 			var showDropdown = $('<select>').addClass( 'showlistings' );
@@ -78,25 +82,24 @@ if ( typeof jQuery != 'undefined' ) {
 					}
 				}
 			});			
-			$(showDropdown).appendTo(cells[3]);
+			var showPerPage = $(showDropdown).before('Show').after('per page');
+			$(showPerPage).appendTo(cells[3]);
 
 			return resultTools;
 		}
 
 
 		// Method to build out results toolbar
-		var renderPaginationToolbar = function () {
-			var paginationToolbar = $('<div>').addClass('pagination_div');
+		var renderPaginationToolbar = function ( usesPagination
+											   , resultsPerPage ) {
+
+			var paginationToolbar = $('<div>').addClass('pagination_div').css( {'width':'100%','clear':'both'} );;
 
 			var cells = [];
 			cells[1] = $('<div>').appendTo(paginationToolbar).css( 
-				{'width':'50%',
-				 'display':'table-cell',
-				 'float':'left'} );
+				{'width':'50%','float':'left','test-align':'left'} );
 			cells[2] = $('<div>').appendTo(paginationToolbar).css( 
-				{'width':'50%',
-			 	 'display':'table-cell',
-			 	 'float':'right'} ); 
+				{'width':'50%','float':'right','text-align':'right'} );  
 
 			cells[1].text('<<Previous');
 			cells[2].text('Next>>');
@@ -105,8 +108,10 @@ if ( typeof jQuery != 'undefined' ) {
 		}
 
 		// Method to calculate and return results preview string
-		var getResultsCountString = function () {
-			var preview = "Results x-YY of XXX";
+		var getResultsCountString = function ( usesPagination
+											 , resultsPerPage ) {
+			if (usesPagination == 'false')
+			var preview = 'Results 1-' + resultsPerPage + ' of XXX';
 			return preview;
 		}
 
