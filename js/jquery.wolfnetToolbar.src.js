@@ -11,13 +11,15 @@
  
 if ( typeof jQuery != 'undefined' ) {
 	( function ( $ ) {
-		$.fn.wolfnetToolbar = function ( usesPagination ) {
+		$.fn.wolfnetToolbar = function ( usesPagination,
+										 resultsPerPage ) {
 
 			var toolbar = renderResultsToolbar();
 			$( this ).prepend( toolbar.clone() ).append( toolbar.clone() );
-
+			
 			if (usesPagination == 'true') {				
 				var pagination = renderPaginationToolbar();
+				$( this ).prepend( pagination.clone() ).append( pagination.clone() );
 			}
 
 		} /* END: function $.fn.wolfnetToolbar */
@@ -26,13 +28,22 @@ if ( typeof jQuery != 'undefined' ) {
 		// Method to build out results toolbar
 		var renderResultsToolbar = function () {
 
-			var resultTools = $('<div>').addClass('toolbar_div');
-			var cells = [];
+			var resultTools = $('<div>').addClass('toolbar_div').css( {'width':'100%'} );
 
-			for (var i=1; i<=3; i++) {
-				cells[i] = $('<div>').appendTo(resultTools);
-				//$(cells[i]).css = ("display","table-cell");
-			}
+			// Horizontal cells within toolbar div
+			var cells = [];
+			cells[1] = $('<div>').appendTo(resultTools).css( 
+				{'width':'33%',
+				 'display':'table-cell',
+				 'float':'left'} );
+			cells[2] = $('<div>').appendTo(resultTools).css( 
+				{'width':'33%',
+			 	 'display':'table-cell',
+			 	 'text-align':'center'} ); 
+			cells[3] = $('<div>').appendTo(resultTools).css( 
+				{'width':'33%',
+				 'display':'table-cell',
+				 'float':'right'} ); 
 
 			//Build Sort By dropdown and append to first cell
 			var sortByDropdown = $('<select>').addClass( 'sortoptions' );
@@ -51,9 +62,8 @@ if ( typeof jQuery != 'undefined' ) {
 			$(sortByDropdown).appendTo(cells[1]);
 
 			//Build results preview string and append to second cell
-			var resultsPreview = "Results x-XX of XXX";
-			$(cells[2]).text(resultsPreview).addClass();
-
+			var resultsCount = getResultsCountString();
+			$(cells[2]).text(resultsCount).addClass();
 
 			//Build show # of listings dropdown and append to third cell
 			var showDropdown = $('<select>').addClass( 'showlistings' );
@@ -65,7 +75,6 @@ if ( typeof jQuery != 'undefined' ) {
 					select.empty();
 					for ( var key in data ) {
 						$("<option>", {value:data[key],text:data[key]}).appendTo( select );
-
 					}
 				}
 			});			
@@ -76,12 +85,32 @@ if ( typeof jQuery != 'undefined' ) {
 
 
 		// Method to build out results toolbar
-
 		var renderPaginationToolbar = function () {
-			var paginationControls = $('<div>').addClass('pagination_div');
+			var paginationToolbar = $('<div>').addClass('pagination_div');
 
-			return paginationControls;
+			var cells = [];
+			cells[1] = $('<div>').appendTo(paginationToolbar).css( 
+				{'width':'50%',
+				 'display':'table-cell',
+				 'float':'left'} );
+			cells[2] = $('<div>').appendTo(paginationToolbar).css( 
+				{'width':'50%',
+			 	 'display':'table-cell',
+			 	 'float':'right'} ); 
+
+			cells[1].text('<<Previous');
+			cells[2].text('Next>>');
+
+			return paginationToolbar;
 		}
+
+		// Method to calculate and return results preview string
+		var getResultsCountString = function () {
+			var preview = "Results x-YY of XXX";
+			return preview;
+		}
+
 
 	} )( jQuery ); /* END: jQuery IIFE */
 } /* END: If jQuery Exists */
+

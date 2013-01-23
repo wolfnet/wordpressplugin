@@ -51,8 +51,9 @@
 
 			var instance = '#<?php echo $instanceId; ?>';
 			var usesPagination = "<?php echo $options['paginated']['value']; ?>";
+			var resultsPerPage =  "<?php echo $options['maxresults']['value']; ?>";
 
-			jQuery( instance ).wolfnetToolbar( usesPagination );
+			jQuery( instance ).wolfnetToolbar( usesPagination, resultsPerPage );
 
 			jQuery( instance ).wolfnetPropertyList({});
 
