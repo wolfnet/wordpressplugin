@@ -31,6 +31,12 @@
 
 <div id="<?php echo $instanceId; ?>" class="widget wolfnet_widget wolfnet_propertyList">
 
+	<?php if ( array_key_exists( 'title', $options ) && trim( $options['title']['value'] ) != '' ) { ?>
+
+		<h2 class="widget-title"><?php echo $options['title']['value']; ?></h2>
+
+	<?php } ?>
+
 	<?php echo ( isset($listingContent) ) ? $listingContent : 'No Listings to Display.'; ?>
 
 	<div class="wolfnet_clearfix"></div>
@@ -44,13 +50,12 @@
 		jQuery( document ).ready( function () {
 
 			var instance = '#<?php echo $instanceId; ?>';
-			var usesPagination = "<?php echo $options['paginated']['value']; ?>";
-			var resultsPerPage =  "<?php echo $options['maxresults']['value']; ?>";
-			var componentTitle = "<?php echo $options['title']['value']; ?>"; 
 
-			jQuery( instance ).wolfnetToolbar( usesPagination
-											 , resultsPerPage 
-											 , componentTitle);
+			jQuery( instance ).wolfnetToolbar({ 
+				usesPagination:<?php echo ($options['paginated']['value'] == 'true') ? 'true' : 'false'; ?>
+			   ,resultsPerPage :<?php echo (is_numeric($options['maxresults']['value'])) ? $options['maxresults']['value'] : 15; ?>
+			   ,criteria : <?php echo $criteria; ?>
+			});
 
 			jQuery( instance ).wolfnetPropertyList({});
 

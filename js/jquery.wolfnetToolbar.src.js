@@ -11,35 +11,51 @@
  
 if ( typeof jQuery != 'undefined' ) {
 	( function ( $ ) {
-		$.fn.wolfnetToolbar = function ( usesPagination
-									   , resultsPerPage 
-									   , titleString ) {
 
-			var title = getTitleHeader(titleString);
+		var datakey = 'wolfnetToolbarData';
 
-			var toolbar = renderSortDropdown( usesPagination,resultsPerPage );
-			$( this ).prepend( toolbar.clone() ).append( toolbar.clone() );
+		$.fn.wolfnetToolbar = function ( options ) {
 
-			if (usesPagination == 'true') {				
-				var pagination = renderSortByDropdown( resultsPerPage );
-				$( this ).prepend( pagination.clone() ).append( pagination.clone() );
-			}
 
-			$( this ).prepend( title.clone() );
+			var options = $.extend( {usesPagination:true,
+									 page:1,
+									 resultsPerPage:20,
+								 	 sort:'',
+								 	}
+								    ,options );
+
+			return this.each( function () {			
+	
+				$( this ).data( datakey , options );
+
+				$( this ).data( 'state' , { page:options.page,
+							   resultsPerPage:options.resultsPerPage,
+							   sort:options.sort });				
+
+				var sortDropdown = renderSortDropdown.call( this );
+
+				$( this ).append( sortDropdown.clone(true) );
+				$( this ).find('h2.widget-title').after( sortDropdown.clone(true) );
+					
+				if (options.usesPagination == true) {
+					var pagination = renderPaginationTools.call( this, options.resultsPerPage );
+					$( this ).append( pagination.clone(true) );
+					$( this ).find('h2.widget-title').after( pagination.clone(true) );
+				}
+	
+
+			});
 
 		} /*END: function $.fn.wolfnetToolbar*/
 
 
-		var getTitleHeader = function ( titleString ) {
-			var header = $('<h2>').text(titleString);
-			return header;
-		}
-
-
 		// Method to build out results toolbar
-		var renderSortDropdown = function ( usesPagination
-											, resultsPerPage ) {
-
+		var renderSortDropdown = function ( ) {
+ 
+ 			var container = $( this );
+ 			var options = container.data(datakey);
+ 			var state = container.data('state');
+		
 			var resultTools = $('<div>').addClass('sort_div').css( {'width':'100%','clear':'both'} );
 
 			// Horizontal cells within toolbar div
@@ -48,7 +64,16 @@ if ( typeof jQuery != 'undefined' ) {
 				{'width':'99%','clear':'both','text-align':'left'} );
 
 			//Build Sort By dropdown and append to first cell
-			var sortByDropdown = $('<select>').addClass( 'sortoptions' );
+			var sortByDropdown = $('<select>')
+				.addClass( 'sortoptions' )
+				.change(function(event){
+					//console.log('sort',$( this).val());
+
+					state.sort = $(this).val();
+
+					updateResultSet.call(container, event);
+
+				});;
 			$.ajax({ 
 				url: '?pagename=wolfnet-listing-sortoptions',
 				dataType: 'json',
@@ -68,12 +93,23 @@ if ( typeof jQuery != 'undefined' ) {
 
 
 		// Method to build out results toolbar
-		var renderSortByDropdown = function ( resultsPerPage ) {
+		var renderPaginationTools = function ( resultsPerPage ) {
 
+ 			var container = $( this );
+ 			var options = container.data(datakey);
+ 			var state = container.data('state');
 			var paginationToolbar = $('<div>').addClass('pagination_div').css( {'width':'100%','clear':'both'} );;
 
 			//Build show # of listings dropdown and append to third cell
-			var showDropdown = $('<select>').addClass( 'showlistings' );
+			var showDropdown = $('<select>')
+				.addClass( 'showlistings' )
+				.change(function(event){
+					//console.log('show #',$( this).val());
+
+					state.resultsPerPage = $(this).val();
+
+					updateResultSet.call(container, event);
+				});
 			$.ajax({ 
 				url: '?pagename=wolfnet-listing-showlistings',
 				dataType: 'json',
@@ -88,7 +124,7 @@ if ( typeof jQuery != 'undefined' ) {
 			});			
 			var showPerPage = $(showDropdown).before('Show').after('per page');
 
-			// Horizontal cells within toolbar div
+			// Horizontal cells within pagination toolbar
 			var cells = [];
 			cells[0] = $('<div>').appendTo(paginationToolbar).css( 
 				{'width':'33%','float':'left','test-align':'left'} );
@@ -97,46 +133,66 @@ if ( typeof jQuery != 'undefined' ) {
 			cells[2] = $('<div>').appendTo(paginationToolbar).css( 
 				{'width':'33%','float':'right','text-align':'right'} ); 
 
-			//cell to store Show # dropdown
+			//new horizontal cell to store Show # dropdown
 			cells[3] = $('<div>').appendTo(paginationToolbar).css( 
 				{'width':'99%','clear':'both','text-align':'center'} ); 
 
 			//Build results preview string and append to second cell
 			var resultsCount = getResultsCountString(resultsPerPage);
-			$(cells[1]).text(resultsCount);
+			$(cells[1]).html(resultsCount);
 
 			$(showPerPage).appendTo(cells[3]);
 
-			cells[0].text('<<Previous');
-			cells[2].text('Next>>');
+			$("<a>").appendTo(cells[0]).addClass("previousPage").html("<span>Previous</span>").attr("href","javascript:;")
+				.click(function (event) {
+					//console.log("previous");
 
-/*
-			$("<a>").appendTo(cells[0]).addClass("previousPage").text("<<Previous").attr("href","?pagename=wolfnet-get-previous-results");
-			$("<a>").appendTo(cells[2]).addClass("nextPage").text("Next>>").attr("href","?pagename=wolfnet-get-next-results");;
+					state.page = options.page - 1;
 
-			$('.previousPage').click(function(e){
-				e.preventDefault();
-				var valueToPass = $(this).text();
-				var url = "?pagename=wolfnet-get-previous-results";
-				$.post(url, { data: valueToPass }, function( data ){
+					updateResultSet.call(container, event);
+				});
 
-				} );
-			});
+			$("<a>").appendTo(cells[2]).addClass("nextPage").html("<span>Next</span>").attr("href","javascript:;")
+				.click(function (event) {
+					//console.log("next");
 
-			$('.nextPage').click(function(e){
-				e.preventDefault();
-				var valueToPass = $(this).text();
-				var url = "?pagename=wolfnet-get-next-results";
-				$.post(url, { data: valueToPass }, function( data ){
+					state.page = options.page + 1;
 
-				} );
-			});
-*/
+					updateResultSet.call(container, event);
+				});
+
+
 			return paginationToolbar;
 		}
 
 
+		//Method that updates the state of the ajax call to get the new listings
+		var updateResultSet = function ( event ) {
+			//console.log('result update');
+
+			var container = this;
+			var options = container.data(datakey);
+			var state = container.data('state');
+
+			var data = $.extend(state,options.criteria);
+				data.ownerType = options.ownerType;
+
+			$.ajax({ 
+				url: '?pagename=wolfnet-listings-get',
+				dataType: 'json',
+				data: data,
+				success: function ( data ) {
+					console.log(data);
+
+					//call function to rewrite data coming back to render on page
+					buildData.call( container, data );
+				}
+			});	
+		}
+
+
 		// Method to calculate and return results preview string
+		// keep track of pagination increments to traverse results set forward/backward
 		var getResultsCountString = function ( resultsPerPage ) {
 			var preview = 'Results 1-' + resultsPerPage + ' of XXX';
 			return preview;

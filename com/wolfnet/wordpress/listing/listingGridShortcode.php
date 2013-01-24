@@ -106,7 +106,8 @@ extends com_greentiedev_wppf_shortcode_shortcode
 			);
 		$data = array(
 			'listings' => $gridListings,
-			'options'  => $options
+			'options'  => $options,
+			'criteria' => json_encode($criteria)
 			);
 		return $this->getListingGridView()->render( $data );
 	}

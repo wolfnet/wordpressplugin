@@ -339,6 +339,19 @@ extends com_greentiedev_wppf_action_action
 
 	}
 
+	private function listings_get () {
+		$this->statusSuccess();		
+		$listings = $this->getListingService()->getGridListings( $_GET, 'agent', $_GET['resultsPerPage'] );
+		$data = array();
+		foreach( $listings as $listing ) {
+			$data[] = $listing->getMemento();
+		}
+		echo json_encode( $data );
+ 
+
+		exit;
+	}
+
 	private function statusSuccess ()
 	{
 		global $wp_query;
