@@ -76,11 +76,14 @@
 				<exclude name="*.bat" /> <!-- Batch files used for building the project or performing othing tasks -->
 				<exclude name="LessCompilerOutput.txt" />
 				<exclude name=".ant/" />
+				<exclude name="docs/" />
+				<exclude name="phpdoc*.xml" />
 				<exclude name="**/*.less" />
 				<exclude name="xml/*.xml" />
 				<exclude name=".ant/" />
 				<exclude name=".gitconfig" />
 				<exclude name="**/*.tmp" />
+				<exclude name="*.sublime*" />
 			</fileset>
 		</copy>
 
