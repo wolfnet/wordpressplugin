@@ -1,0 +1,584 @@
+<!DOCTYPE html><html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+<meta charset="utf-8">
+<title>WolfNet IDX for WordPress Plugin » com\wolfnet\wordpress</title>
+<meta name="author" content="Mike van Riel">
+<meta name="description" content="">
+<link href="../css/template.css" rel="stylesheet" media="all">
+<script src="../js/jquery-1.7.1.min.js" type="text/javascript"></script><script src="../js/jquery-ui-1.8.2.custom.min.js" type="text/javascript"></script><script src="../js/jquery.mousewheel.min.js" type="text/javascript"></script><script src="../js/bootstrap.js" type="text/javascript"></script><script src="../js/template.js" type="text/javascript"></script><script src="../js/prettify/prettify.min.js" type="text/javascript"></script><link rel="shortcut icon" href="../img/favicon.ico">
+<link rel="apple-touch-icon" href="../img/apple-touch-icon.png">
+<link rel="apple-touch-icon" sizes="72x72" href="../img/apple-touch-icon-72x72.png">
+<link rel="apple-touch-icon" sizes="114x114" href="../img/apple-touch-icon-114x114.png">
+</head>
+<body>
+<div class="navbar navbar-fixed-top">
+<div class="navbar-inner"><div class="container">
+<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></a><a class="brand" href="../index.html">WolfNet IDX for WordPress Plugin</a><div class="nav-collapse"><ul class="nav">
+<li class="dropdown">
+<a href="#api" class="dropdown-toggle" data-toggle="dropdown">
+                                    API Documentation <b class="caret"></b></a><ul class="dropdown-menu">
+<li><a>Packages</a></li>
+<li><a href="../packages/Default.html"><i class="icon-folder-open"></i> Default</a></li>
+<li><a href="../packages/com.html"><i class="icon-folder-open"></i> com</a></li>
+</ul>
+</li>
+<li class="dropdown" id="charts-menu">
+<a href="#charts" class="dropdown-toggle" data-toggle="dropdown">
+                                    Charts <b class="caret"></b></a><ul class="dropdown-menu"><li><a href="../graph_class.html"><i class="icon-list-alt"></i> Class hierarchy diagram</a></li></ul>
+</li>
+<li class="dropdown" id="reports-menu">
+<a href="#reports" class="dropdown-toggle" data-toggle="dropdown">
+                                    Reports <b class="caret"></b></a><ul class="dropdown-menu">
+<li><a href="../errors.html"><i class="icon-remove-sign"></i> Errors 
+                <span class="label label-info">579</span></a></li>
+<li><a href="../markers.html"><i class="icon-map-marker"></i> Markers 
+                <ul><li>todo 
+                <span class="label label-info">14</span>
+</li></ul></a></li>
+<li><a href="../deprecated.html"><i class="icon-stop"></i> Deprecated elements 
+                <span class="label label-info">0</span></a></li>
+</ul>
+</li>
+</ul></div>
+</div></div>
+<div class="go_to_top"><a href="#___" style="color: inherit">Back to top  <i class="icon-upload icon-white"></i></a></div>
+</div>
+<div id="___" class="container">
+<noscript><div class="alert alert-warning">
+                            Javascript is disabled; several features are only available
+                            if Javascript is enabled.
+                        </div></noscript>
+<div class="row">
+<div class="span4">
+<div class="btn-group view pull-right" data-toggle="buttons-radio">
+<button class="btn details" title="Show descriptions and method names"><i class="icon-list"></i></button><button class="btn simple" title="Show only method names"><i class="icon-align-justify"></i></button>
+</div>
+<ul class="side-nav nav nav-list">
+<li class="nav-header">
+<i class="icon-map-marker"></i> Packages</li>
+<li>
+<span class="empty-package"><i class="icon-folder-close"></i>wordpress</span><ul class="nav nav-list nav-packages">
+<li>
+<a href="../packages/com.wolfnet.wordpress.abstract.html" title="abstract"><i class="icon-folder-open"></i>abstract</a><ul class="nav nav-list nav-packages"></ul>
+</li>
+<li>
+<a href="../packages/com.wolfnet.wordpress.action.html" title="action"><i class="icon-folder-open"></i>action</a><ul class="nav nav-list nav-packages"></ul>
+</li>
+<li>
+<a href="../packages/com.wolfnet.wordpress.admin.html" title="admin"><i class="icon-folder-open"></i>admin</a><ul class="nav nav-list nav-packages"><li>
+<a href="../packages/com.wolfnet.wordpress.admin.template.html" title="template"><i class="icon-folder-open"></i>template</a><ul class="nav nav-list nav-packages"></ul>
+</li></ul>
+</li>
+<li>
+<a href="../packages/com.wolfnet.wordpress.listing.html" title="listing"><i class="icon-folder-open"></i>listing</a><ul class="nav nav-list nav-packages"><li>
+<a href="../packages/com.wolfnet.wordpress.listing.branding.html" title="branding"><i class="icon-folder-open"></i>branding</a><ul class="nav nav-list nav-packages"></ul>
+</li></ul>
+</li>
+<li>
+<span class="empty-package"><i class="icon-folder-close"></i>market</span><ul class="nav nav-list nav-packages"><li>
+<a href="../packages/com.wolfnet.wordpress.market.disclaimer.html" title="disclaimer"><i class="icon-folder-open"></i>disclaimer</a><ul class="nav nav-list nav-packages"></ul>
+</li></ul>
+</li>
+<li>
+<a href="../packages/com.wolfnet.wordpress.search.html" title="search"><i class="icon-folder-open"></i>search</a><ul class="nav nav-list nav-packages"></ul>
+</li>
+<li>
+<a href="../packages/com.wolfnet.wordpress.settings.html" title="settings"><i class="icon-folder-open"></i>settings</a><ul class="nav nav-list nav-packages"></ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="span8 package-contents">
+<ul class="breadcrumb"><li>
+<a href="../index.html"><i class="icon-folder-open"></i></a><span class="divider">\</span><li><a href="../packages/com.html">com</a></li>
+<li>
+<span class="divider">\</span><a href="../packages/com.wolfnet.html">wolfnet</a>
+</li>
+<li class="active">
+<span class="divider">\</span><a href="../packages/com.wolfnet.wordpress.html">wordpress</a>
+</li>
+</li></ul>
+<div class="package-indent">
+<ul class="breadcrumb"><li>
+<a href="../index.html"><i class="icon-folder-open"></i></a><span class="divider">\</span><li><a href="../packages/com.html">com</a></li>
+<li>
+<span class="divider">\</span><a href="../packages/com.wolfnet.html">wolfnet</a>
+</li>
+<li>
+<span class="divider">\</span><a href="../packages/com.wolfnet.wordpress.html">wordpress</a>
+</li>
+<li class="active">
+<span class="divider">\</span><a href="../packages/com.wolfnet.wordpress.abstract.html">abstract</a>
+</li>
+</li></ul>
+<div class="package-indent">
+<h3>
+<i class="icon-custom icon-class"></i> Classes and interfaces</h3>
+<div id="com_wolfnet_wordpress_abstract_widget" class="element ajax clickable class">
+<h1>com_wolfnet_wordpress_abstract_widget<a href="../classes/com_wolfnet_wordpress_abstract_widget.html">¶</a>
+</h1>
+<p class="short_description">This object provides some additional wolfnet specific logic to abstract widget class.</p>
+<div class="details collapse"></div>
+<a href="../classes/com_wolfnet_wordpress_abstract_widget.html" class="more">« More »</a>
+</div>
+</div>
+<ul class="breadcrumb"><li>
+<a href="../index.html"><i class="icon-folder-open"></i></a><span class="divider">\</span><li><a href="../packages/com.html">com</a></li>
+<li>
+<span class="divider">\</span><a href="../packages/com.wolfnet.html">wolfnet</a>
+</li>
+<li>
+<span class="divider">\</span><a href="../packages/com.wolfnet.wordpress.html">wordpress</a>
+</li>
+<li class="active">
+<span class="divider">\</span><a href="../packages/com.wolfnet.wordpress.action.html">action</a>
+</li>
+</li></ul>
+<div class="package-indent">
+<h3>
+<i class="icon-custom icon-class"></i> Classes and interfaces</h3>
+<div id="com_wolfnet_wordpress_action_addShortcodeBuilderButton" class="element ajax clickable class">
+<h1>com_wolfnet_wordpress_action_addShortcodeBuilderButton<a href="../classes/com_wolfnet_wordpress_action_addShortcodeBuilderButton.html">¶</a>
+</h1>
+<p class="short_description">This action is responsible for enqueuing any admin resources such as JavaScript and CSS that are
+needed for any code generated in the WordPress admin for the plugin.</p>
+<div class="details collapse"></div>
+<a href="../classes/com_wolfnet_wordpress_action_addShortcodeBuilderButton.html" class="more">« More »</a>
+</div>
+<div id="com_wolfnet_wordpress_action_createAdminPages" class="element ajax clickable class">
+<h1>com_wolfnet_wordpress_action_createAdminPages<a href="../classes/com_wolfnet_wordpress_action_createAdminPages.html">¶</a>
+</h1>
+<p class="short_description">This action is responsible for creating the plugin admin pages within the WordPress admin.</p>
+<div class="details collapse"></div>
+<a href="../classes/com_wolfnet_wordpress_action_createAdminPages.html" class="more">« More »</a>
+</div>
+<div id="com_wolfnet_wordpress_action_enqueueAdminResources" class="element ajax clickable class">
+<h1>com_wolfnet_wordpress_action_enqueueAdminResources<a href="../classes/com_wolfnet_wordpress_action_enqueueAdminResources.html">¶</a>
+</h1>
+<p class="short_description">This action is responsible for enqueuing any admin resources such as JavaScript and CSS that are
+needed for any code generated in the WordPress admin for the plugin.</p>
+<div class="details collapse"></div>
+<a href="../classes/com_wolfnet_wordpress_action_enqueueAdminResources.html" class="more">« More »</a>
+</div>
+<div id="com_wolfnet_wordpress_action_enqueueResources" class="element ajax clickable class">
+<h1>com_wolfnet_wordpress_action_enqueueResources<a href="../classes/com_wolfnet_wordpress_action_enqueueResources.html">¶</a>
+</h1>
+<p class="short_description">This action is responsible for enqueuing any resources such as JavaScript and CSS that are
+needed for any code generated by the plugin in public ares of the site.</p>
+<div class="details collapse"></div>
+<a href="../classes/com_wolfnet_wordpress_action_enqueueResources.html" class="more">« More »</a>
+</div>
+<div id="com_wolfnet_wordpress_action_footerDisclaimer" class="element ajax clickable class">
+<h1>com_wolfnet_wordpress_action_footerDisclaimer<a href="../classes/com_wolfnet_wordpress_action_footerDisclaimer.html">¶</a>
+</h1>
+<p class="short_description">This action is responsible for enqueuing any admin resources such as JavaScript and CSS that are
+needed for any code generated in the WordPress admin for the plugin.</p>
+<div class="details collapse"></div>
+<a href="../classes/com_wolfnet_wordpress_action_footerDisclaimer.html" class="more">« More »</a>
+</div>
+<div id="com_wolfnet_wordpress_action_manageRewritePages" class="element ajax clickable class">
+<h1>com_wolfnet_wordpress_action_manageRewritePages<a href="../classes/com_wolfnet_wordpress_action_manageRewritePages.html">¶</a>
+</h1>
+<p class="short_description">This action is responsible for creating the plugin admin pages within the WordPress admin.</p>
+<div class="details collapse"></div>
+<a href="../classes/com_wolfnet_wordpress_action_manageRewritePages.html" class="more">« More »</a>
+</div>
+<div id="com_wolfnet_wordpress_action_registerCustomPostTypes" class="element ajax clickable class">
+<h1>com_wolfnet_wordpress_action_registerCustomPostTypes<a href="../classes/com_wolfnet_wordpress_action_registerCustomPostTypes.html">¶</a>
+</h1>
+<p class="short_description">This action is responsible for enqueuing any resources such as JavaScript and CSS that are
+needed for any code generated by the plugin in public ares of the site.</p>
+<div class="details collapse"></div>
+<a href="../classes/com_wolfnet_wordpress_action_registerCustomPostTypes.html" class="more">« More »</a>
+</div>
+<div id="com_wolfnet_wordpress_action_registerRewriteRules" class="element ajax clickable class">
+<h1>com_wolfnet_wordpress_action_registerRewriteRules<a href="../classes/com_wolfnet_wordpress_action_registerRewriteRules.html">¶</a>
+</h1>
+<p class="short_description">This action is responsible for creating the plugin admin pages within the WordPress admin.</p>
+<div class="details collapse"></div>
+<a href="../classes/com_wolfnet_wordpress_action_registerRewriteRules.html" class="more">« More »</a>
+</div>
+<div id="com_wolfnet_wordpress_action_registerWidgets" class="element ajax clickable class">
+<h1>com_wolfnet_wordpress_action_registerWidgets<a href="../classes/com_wolfnet_wordpress_action_registerWidgets.html">¶</a>
+</h1>
+<p class="short_description">This action is responsible for registering any widgets the plugin makes available.</p>
+<div class="details collapse"></div>
+<a href="../classes/com_wolfnet_wordpress_action_registerWidgets.html" class="more">« More »</a>
+</div>
+</div>
+<ul class="breadcrumb"><li>
+<a href="../index.html"><i class="icon-folder-open"></i></a><span class="divider">\</span><li><a href="../packages/com.html">com</a></li>
+<li>
+<span class="divider">\</span><a href="../packages/com.wolfnet.html">wolfnet</a>
+</li>
+<li>
+<span class="divider">\</span><a href="../packages/com.wolfnet.wordpress.html">wordpress</a>
+</li>
+<li class="active">
+<span class="divider">\</span><a href="../packages/com.wolfnet.wordpress.admin.html">admin</a>
+</li>
+</li></ul>
+<div class="package-indent">
+<h3>
+<i class="icon-custom icon-class"></i> Classes and interfaces</h3>
+<div id="com_wolfnet_wordpress_admin_pluginInstructionsView" class="element ajax clickable class">
+<h1>com_wolfnet_wordpress_admin_pluginInstructionsView<a href="../classes/com_wolfnet_wordpress_admin_pluginInstructionsView.html">¶</a>
+</h1>
+<p class="short_description">This view is responsible for displaying the plugin admin page.</p>
+<div class="details collapse"></div>
+<a href="../classes/com_wolfnet_wordpress_admin_pluginInstructionsView.html" class="more">« More »</a>
+</div>
+<div id="com_wolfnet_wordpress_admin_pluginSettingsView" class="element ajax clickable class">
+<h1>com_wolfnet_wordpress_admin_pluginSettingsView<a href="../classes/com_wolfnet_wordpress_admin_pluginSettingsView.html">¶</a>
+</h1>
+<p class="short_description">This view is responsible for displaying the plugin admin page.</p>
+<div class="details collapse"></div>
+<a href="../classes/com_wolfnet_wordpress_admin_pluginSettingsView.html" class="more">« More »</a>
+</div>
+<div id="com_wolfnet_wordpress_admin_searchManagerView" class="element ajax clickable class">
+<h1>com_wolfnet_wordpress_admin_searchManagerView<a href="../classes/com_wolfnet_wordpress_admin_searchManagerView.html">¶</a>
+</h1>
+<p class="short_description">This view is responsible for displaying the plugin admin page.</p>
+<div class="details collapse"></div>
+<a href="../classes/com_wolfnet_wordpress_admin_searchManagerView.html" class="more">« More »</a>
+</div>
+<ul class="breadcrumb"><li>
+<a href="../index.html"><i class="icon-folder-open"></i></a><span class="divider">\</span><li><a href="../packages/com.html">com</a></li>
+<li>
+<span class="divider">\</span><a href="../packages/com.wolfnet.html">wolfnet</a>
+</li>
+<li>
+<span class="divider">\</span><a href="../packages/com.wolfnet.wordpress.html">wordpress</a>
+</li>
+<li>
+<span class="divider">\</span><a href="../packages/com.wolfnet.wordpress.admin.html">admin</a>
+</li>
+<li class="active">
+<span class="divider">\</span><a href="../packages/com.wolfnet.wordpress.admin.template.html">template</a>
+</li>
+</li></ul>
+<div class="package-indent">
+<h3>
+<i class="icon-custom icon-function"></i> Functions</h3>
+<a id="function_wolfnet_print_thumbnail"></a><div class="element clickable function  function_wolfnet_print_thumbnail" data-toggle="collapse" data-target=".function_wolfnet_print_thumbnail .collapse">
+<h2>wolfnet_print_thumbnail()
+        </h2>
+<pre>wolfnet_print_thumbnail($img, $imgdir) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument"><h4>$img</h4></div>
+<div class="subelement argument"><h4>$imgdir</h4></div>
+</div></div>
+</div>
+</div>
+</div>
+<ul class="breadcrumb"><li>
+<a href="../index.html"><i class="icon-folder-open"></i></a><span class="divider">\</span><li><a href="../packages/com.html">com</a></li>
+<li>
+<span class="divider">\</span><a href="../packages/com.wolfnet.html">wolfnet</a>
+</li>
+<li>
+<span class="divider">\</span><a href="../packages/com.wolfnet.wordpress.html">wordpress</a>
+</li>
+<li class="active">
+<span class="divider">\</span><a href="../packages/com.wolfnet.wordpress.listing.html">listing</a>
+</li>
+</li></ul>
+<div class="package-indent">
+<h3>
+<i class="icon-custom icon-class"></i> Classes and interfaces</h3>
+<div id="com_wolfnet_wordpress_listing_dao" class="element ajax clickable class">
+<h1>com_wolfnet_wordpress_listing_dao<a href="../classes/com_wolfnet_wordpress_listing_dao.html">¶</a>
+</h1>
+<p class="short_description">This class is the listingDAO (data access object) and is responsible for translating the incoming
+and outgoing data to and from the listingEntity objects.</p>
+<div class="details collapse"></div>
+<a href="../classes/com_wolfnet_wordpress_listing_dao.html" class="more">« More »</a>
+</div>
+<div id="com_wolfnet_wordpress_listing_entity" class="element ajax clickable class">
+<h1>com_wolfnet_wordpress_listing_entity<a href="../classes/com_wolfnet_wordpress_listing_entity.html">¶</a>
+</h1>
+<p class="short_description">This class is the Listing Entity and is a container for listing data.</p>
+<div class="details collapse"></div>
+<a href="../classes/com_wolfnet_wordpress_listing_entity.html" class="more">« More »</a>
+</div>
+<div id="com_wolfnet_wordpress_listing_featuredListingsOptionsView" class="element ajax clickable class">
+<h1>com_wolfnet_wordpress_listing_featuredListingsOptionsView<a href="../classes/com_wolfnet_wordpress_listing_featuredListingsOptionsView.html">¶</a>
+</h1>
+<p class="short_description">This view is repsondible for displaying the Film Strip Widget Options in the WordPress admin.</p>
+<div class="details collapse"></div>
+<a href="../classes/com_wolfnet_wordpress_listing_featuredListingsOptionsView.html" class="more">« More »</a>
+</div>
+<div id="com_wolfnet_wordpress_listing_featuredListingsShortcode" class="element ajax clickable class">
+<h1>com_wolfnet_wordpress_listing_featuredListingsShortcode<a href="../classes/com_wolfnet_wordpress_listing_featuredListingsShortcode.html">¶</a>
+</h1>
+<p class="short_description">This is the filmStripWidget object.</p>
+<div class="details collapse"></div>
+<a href="../classes/com_wolfnet_wordpress_listing_featuredListingsShortcode.html" class="more">« More »</a>
+</div>
+<div id="com_wolfnet_wordpress_listing_featuredListingsView" class="element ajax clickable class">
+<h1>com_wolfnet_wordpress_listing_featuredListingsView<a href="../classes/com_wolfnet_wordpress_listing_featuredListingsView.html">¶</a>
+</h1>
+<p class="short_description">This view is responsible for displaying the Listings Film Strip, which is a widget component.</p>
+<div class="details collapse"></div>
+<a href="../classes/com_wolfnet_wordpress_listing_featuredListingsView.html" class="more">« More »</a>
+</div>
+<div id="com_wolfnet_wordpress_listing_featuredListingsWidget" class="element ajax clickable class">
+<h1>com_wolfnet_wordpress_listing_featuredListingsWidget<a href="../classes/com_wolfnet_wordpress_listing_featuredListingsWidget.html">¶</a>
+</h1>
+<p class="short_description">This is the featuredListingsWidget object.</p>
+<div class="details collapse"></div>
+<a href="../classes/com_wolfnet_wordpress_listing_featuredListingsWidget.html" class="more">« More »</a>
+</div>
+<div id="com_wolfnet_wordpress_listing_listingGridOptionsView" class="element ajax clickable class">
+<h1>com_wolfnet_wordpress_listing_listingGridOptionsView<a href="../classes/com_wolfnet_wordpress_listing_listingGridOptionsView.html">¶</a>
+</h1>
+<p class="short_description">This view is repsondible for displaying the Grid Widget Options in the WordPress admin.</p>
+<div class="details collapse"></div>
+<a href="../classes/com_wolfnet_wordpress_listing_listingGridOptionsView.html" class="more">« More »</a>
+</div>
+<div id="com_wolfnet_wordpress_listing_listingGridShortcode" class="element ajax clickable class">
+<h1>com_wolfnet_wordpress_listing_listingGridShortcode<a href="../classes/com_wolfnet_wordpress_listing_listingGridShortcode.html">¶</a>
+</h1>
+<p class="short_description">This is the filmStripWidget object.</p>
+<div class="details collapse"></div>
+<a href="../classes/com_wolfnet_wordpress_listing_listingGridShortcode.html" class="more">« More »</a>
+</div>
+<div id="com_wolfnet_wordpress_listing_listingGridView" class="element ajax clickable class">
+<h1>com_wolfnet_wordpress_listing_listingGridView<a href="../classes/com_wolfnet_wordpress_listing_listingGridView.html">¶</a>
+</h1>
+<p class="short_description">This view is responsible for displaying the Listings Grid, which is a widget component.</p>
+<div class="details collapse"></div>
+<a href="../classes/com_wolfnet_wordpress_listing_listingGridView.html" class="more">« More »</a>
+</div>
+<div id="com_wolfnet_wordpress_listing_listingGridWidget" class="element ajax clickable class">
+<h1>com_wolfnet_wordpress_listing_listingGridWidget<a href="../classes/com_wolfnet_wordpress_listing_listingGridWidget.html">¶</a>
+</h1>
+<p class="short_description">This is the listingGridWidget object.</p>
+<div class="details collapse"></div>
+<a href="../classes/com_wolfnet_wordpress_listing_listingGridWidget.html" class="more">« More »</a>
+</div>
+<div id="com_wolfnet_wordpress_listing_listingView" class="element ajax clickable class">
+<h1>com_wolfnet_wordpress_listing_listingView<a href="../classes/com_wolfnet_wordpress_listing_listingView.html">¶</a>
+</h1>
+<p class="short_description">This view is responsible for displaying a listing record.</p>
+<div class="details collapse"></div>
+<a href="../classes/com_wolfnet_wordpress_listing_listingView.html" class="more">« More »</a>
+</div>
+<div id="com_wolfnet_wordpress_listing_propertyListShortcode" class="element ajax clickable class">
+<h1>com_wolfnet_wordpress_listing_propertyListShortcode<a href="../classes/com_wolfnet_wordpress_listing_propertyListShortcode.html">¶</a>
+</h1>
+<p class="short_description">This is the filmStripWidget object.</p>
+<div class="details collapse"></div>
+<a href="../classes/com_wolfnet_wordpress_listing_propertyListShortcode.html" class="more">« More »</a>
+</div>
+<div id="com_wolfnet_wordpress_listing_propertyListWidget" class="element ajax clickable class">
+<h1>com_wolfnet_wordpress_listing_propertyListWidget<a href="../classes/com_wolfnet_wordpress_listing_propertyListWidget.html">¶</a>
+</h1>
+<p class="short_description">This is the propertyListWidget object.</p>
+<div class="details collapse"></div>
+<a href="../classes/com_wolfnet_wordpress_listing_propertyListWidget.html" class="more">« More »</a>
+</div>
+<div id="com_wolfnet_wordpress_listing_quickSearchOptionsView" class="element ajax clickable class">
+<h1>com_wolfnet_wordpress_listing_quickSearchOptionsView<a href="../classes/com_wolfnet_wordpress_listing_quickSearchOptionsView.html">¶</a>
+</h1>
+<p class="short_description">This view is responsible for displaying the QuickSearch Widget Options in the WordPress admin.</p>
+<div class="details collapse"></div>
+<a href="../classes/com_wolfnet_wordpress_listing_quickSearchOptionsView.html" class="more">« More »</a>
+</div>
+<div id="com_wolfnet_wordpress_listing_quickSearchShortcode" class="element ajax clickable class">
+<h1>com_wolfnet_wordpress_listing_quickSearchShortcode<a href="../classes/com_wolfnet_wordpress_listing_quickSearchShortcode.html">¶</a>
+</h1>
+<p class="short_description">This is the filmStripWidget object.</p>
+<div class="details collapse"></div>
+<a href="../classes/com_wolfnet_wordpress_listing_quickSearchShortcode.html" class="more">« More »</a>
+</div>
+<div id="com_wolfnet_wordpress_listing_quickSearchView" class="element ajax clickable class">
+<h1>com_wolfnet_wordpress_listing_quickSearchView<a href="../classes/com_wolfnet_wordpress_listing_quickSearchView.html">¶</a>
+</h1>
+<p class="short_description">This view is responsible for displaying the Quick Search Form, which is a widget component.</p>
+<div class="details collapse"></div>
+<a href="../classes/com_wolfnet_wordpress_listing_quickSearchView.html" class="more">« More »</a>
+</div>
+<div id="com_wolfnet_wordpress_listing_quickSearchWidget" class="element ajax clickable class">
+<h1>com_wolfnet_wordpress_listing_quickSearchWidget<a href="../classes/com_wolfnet_wordpress_listing_quickSearchWidget.html">¶</a>
+</h1>
+<p class="short_description">This is the quickSearchWidget object.</p>
+<div class="details collapse"></div>
+<a href="../classes/com_wolfnet_wordpress_listing_quickSearchWidget.html" class="more">« More »</a>
+</div>
+<div id="com_wolfnet_wordpress_listing_service" class="element ajax clickable class">
+<h1>com_wolfnet_wordpress_listing_service<a href="../classes/com_wolfnet_wordpress_listing_service.html">¶</a>
+</h1>
+<p class="short_description">This class is the listingService and is a Facade used to interact with all other listing information.</p>
+<div class="details collapse"></div>
+<a href="../classes/com_wolfnet_wordpress_listing_service.html" class="more">« More »</a>
+</div>
+<ul class="breadcrumb"><li>
+<a href="../index.html"><i class="icon-folder-open"></i></a><span class="divider">\</span><li><a href="../packages/com.html">com</a></li>
+<li>
+<span class="divider">\</span><a href="../packages/com.wolfnet.html">wolfnet</a>
+</li>
+<li>
+<span class="divider">\</span><a href="../packages/com.wolfnet.wordpress.html">wordpress</a>
+</li>
+<li>
+<span class="divider">\</span><a href="../packages/com.wolfnet.wordpress.listing.html">listing</a>
+</li>
+<li class="active">
+<span class="divider">\</span><a href="../packages/com.wolfnet.wordpress.listing.branding.html">branding</a>
+</li>
+</li></ul>
+<div class="package-indent">
+<h3>
+<i class="icon-custom icon-class"></i> Classes and interfaces</h3>
+<div id="com_wolfnet_wordpress_listing_branding_dao" class="element ajax clickable class">
+<h1>com_wolfnet_wordpress_listing_branding_dao<a href="../classes/com_wolfnet_wordpress_listing_branding_dao.html">¶</a>
+</h1>
+<p class="short_description">This class is the Listing Branding DAO (Data Access Object) and is responsible for translating
+the incoming and outgoing data to and from the Listing Branding Entity object.</p>
+<div class="details collapse"></div>
+<a href="../classes/com_wolfnet_wordpress_listing_branding_dao.html" class="more">« More »</a>
+</div>
+<div id="com_wolfnet_wordpress_listing_branding_entity" class="element ajax clickable class">
+<h1>com_wolfnet_wordpress_listing_branding_entity<a href="../classes/com_wolfnet_wordpress_listing_branding_entity.html">¶</a>
+</h1>
+<p class="short_description">This class is an entity bean for the Listing Branding data.</p>
+<div class="details collapse"></div>
+<a href="../classes/com_wolfnet_wordpress_listing_branding_entity.html" class="more">« More »</a>
+</div>
+</div>
+</div>
+<ul class="breadcrumb"><li>
+<a href="../index.html"><i class="icon-folder-open"></i></a><span class="divider">\</span><li><a href="../packages/com.html">com</a></li>
+<li>
+<span class="divider">\</span><a href="../packages/com.wolfnet.html">wolfnet</a>
+</li>
+<li>
+<span class="divider">\</span><a href="../packages/com.wolfnet.wordpress.html">wordpress</a>
+</li>
+<li class="active">
+<span class="divider">\</span><a href="../packages/com.wolfnet.wordpress.market.html">market</a>
+</li>
+</li></ul>
+<div class="package-indent">
+<ul class="breadcrumb"><li>
+<a href="../index.html"><i class="icon-folder-open"></i></a><span class="divider">\</span><li><a href="../packages/com.html">com</a></li>
+<li>
+<span class="divider">\</span><a href="../packages/com.wolfnet.html">wolfnet</a>
+</li>
+<li>
+<span class="divider">\</span><a href="../packages/com.wolfnet.wordpress.html">wordpress</a>
+</li>
+<li>
+<span class="divider">\</span><a href="../packages/com.wolfnet.wordpress.market.html">market</a>
+</li>
+<li class="active">
+<span class="divider">\</span><a href="../packages/com.wolfnet.wordpress.market.disclaimer.html">disclaimer</a>
+</li>
+</li></ul>
+<div class="package-indent">
+<h3>
+<i class="icon-custom icon-class"></i> Classes and interfaces</h3>
+<div id="com_wolfnet_wordpress_market_disclaimer_dao" class="element ajax clickable class">
+<h1>com_wolfnet_wordpress_market_disclaimer_dao<a href="../classes/com_wolfnet_wordpress_market_disclaimer_dao.html">¶</a>
+</h1>
+<p class="short_description">This class is the listingDAO (data access object) and is responsible for translating the incoming
+and outgoing data to and from the listingEntity objects.</p>
+<div class="details collapse"></div>
+<a href="../classes/com_wolfnet_wordpress_market_disclaimer_dao.html" class="more">« More »</a>
+</div>
+<div id="com_wolfnet_wordpress_market_disclaimer_entity" class="element ajax clickable class">
+<h1>com_wolfnet_wordpress_market_disclaimer_entity<a href="../classes/com_wolfnet_wordpress_market_disclaimer_entity.html">¶</a>
+</h1>
+<p class="short_description">This class is the Listing Entity and is a container for listing data.</p>
+<div class="details collapse"></div>
+<a href="../classes/com_wolfnet_wordpress_market_disclaimer_entity.html" class="more">« More »</a>
+</div>
+<div id="com_wolfnet_wordpress_market_disclaimer_service" class="element ajax clickable class">
+<h1>com_wolfnet_wordpress_market_disclaimer_service<a href="../classes/com_wolfnet_wordpress_market_disclaimer_service.html">¶</a>
+</h1>
+<p class="short_description">This class is the Market Disclaimer Service and is a Facade used to interact with all other
+market information.</p>
+<div class="details collapse"></div>
+<a href="../classes/com_wolfnet_wordpress_market_disclaimer_service.html" class="more">« More »</a>
+</div>
+</div>
+</div>
+<ul class="breadcrumb"><li>
+<a href="../index.html"><i class="icon-folder-open"></i></a><span class="divider">\</span><li><a href="../packages/com.html">com</a></li>
+<li>
+<span class="divider">\</span><a href="../packages/com.wolfnet.html">wolfnet</a>
+</li>
+<li>
+<span class="divider">\</span><a href="../packages/com.wolfnet.wordpress.html">wordpress</a>
+</li>
+<li class="active">
+<span class="divider">\</span><a href="../packages/com.wolfnet.wordpress.search.html">search</a>
+</li>
+</li></ul>
+<div class="package-indent">
+<h3>
+<i class="icon-custom icon-class"></i> Classes and interfaces</h3>
+<div id="com_wolfnet_wordpress_search_service" class="element ajax clickable class">
+<h1>com_wolfnet_wordpress_search_service<a href="../classes/com_wolfnet_wordpress_search_service.html">¶</a>
+</h1>
+<p class="short_description">This class is the searchService and is a Facade used to interact with all other search information.</p>
+<div class="details collapse"></div>
+<a href="../classes/com_wolfnet_wordpress_search_service.html" class="more">« More »</a>
+</div>
+</div>
+<ul class="breadcrumb"><li>
+<a href="../index.html"><i class="icon-folder-open"></i></a><span class="divider">\</span><li><a href="../packages/com.html">com</a></li>
+<li>
+<span class="divider">\</span><a href="../packages/com.wolfnet.html">wolfnet</a>
+</li>
+<li>
+<span class="divider">\</span><a href="../packages/com.wolfnet.wordpress.html">wordpress</a>
+</li>
+<li class="active">
+<span class="divider">\</span><a href="../packages/com.wolfnet.wordpress.settings.html">settings</a>
+</li>
+</li></ul>
+<div class="package-indent">
+<h3>
+<i class="icon-custom icon-class"></i> Classes and interfaces</h3>
+<div id="com_wolfnet_wordpress_settings_dao" class="element ajax clickable class">
+<h1>com_wolfnet_wordpress_settings_dao<a href="../classes/com_wolfnet_wordpress_settings_dao.html">¶</a>
+</h1>
+<p class="short_description">This class is the listingDAO (data access object) and is responsible for translating the incoming
+and outgoing data to and from the listingEntity objects.</p>
+<div class="details collapse"></div>
+<a href="../classes/com_wolfnet_wordpress_settings_dao.html" class="more">« More »</a>
+</div>
+<div id="com_wolfnet_wordpress_settings_entity" class="element ajax clickable class">
+<h1>com_wolfnet_wordpress_settings_entity<a href="../classes/com_wolfnet_wordpress_settings_entity.html">¶</a>
+</h1>
+<p class="short_description">This class is the Listing Entity and is a container for listing data.</p>
+<div class="details collapse"></div>
+<a href="../classes/com_wolfnet_wordpress_settings_entity.html" class="more">« More »</a>
+</div>
+<div id="com_wolfnet_wordpress_settings_service" class="element ajax clickable class">
+<h1>com_wolfnet_wordpress_settings_service<a href="../classes/com_wolfnet_wordpress_settings_service.html">¶</a>
+</h1>
+<p class="short_description">This class is the Settings Service and is a Facade used to interact with all other
+market information.</p>
+<div class="details collapse"></div>
+<a href="../classes/com_wolfnet_wordpress_settings_service.html" class="more">« More »</a>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="row"><footer class="span12">
+            Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by <a href="http://glyphicons.com/">Glyphicons</a>.<br>
+            Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.0.0a12</a> and<br>
+            generated on 2013-01-25T08:53:10-06:00.<br></footer></div>
+</div>
+</body>
+</html>
