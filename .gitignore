@@ -1,7 +1,7 @@
 /build.properties
 /LessCompilerOutput.txt
-*wolfnet*.css
-*.min.css
-*.min.js
+/css/*wolfnet*.css
+/css/*.min.css
+/js/*.min.js
 Desktop.ini
 *.sublime*
