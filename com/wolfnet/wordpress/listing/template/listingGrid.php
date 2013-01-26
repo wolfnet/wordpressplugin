@@ -53,9 +53,10 @@
 			var instance = '#<?php echo $instanceId; ?>';
 
 			jQuery( instance ).wolfnetToolbar({ 
-				usesPagination:<?php echo ($options['paginated']['value'] == 'true') ? 'true' : 'false'; ?>
-			   ,resultsPerPage :<?php echo (is_numeric($options['maxresults']['value'])) ? $options['maxresults']['value'] : 15; ?>
-			   ,criteria : <?php echo $criteria; ?>
+				usesPagination	: 	<?php echo ($options['paginated']['value'] == 'true') ? 'true' : 'false'; ?>
+			   ,numrows      	: 	<?php echo (is_numeric($options['maxresults']['value'])) ? $options['maxresults']['value'] : 15; ?>
+			   ,ownerType 		: 	'<?php echo $options['ownertype']['value']; ?>'
+			   ,criteria 		: 	<?php echo $criteria; ?>
 			});
 
 			jQuery( instance ).wolfnetListingGrid();

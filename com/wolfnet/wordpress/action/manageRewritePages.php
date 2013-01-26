@@ -302,7 +302,7 @@ extends com_greentiedev_wppf_action_action
 		exit;
 	}
 
-	private function listing_sortoptions ()
+	private function get_sortOptions_dropdown ()
 	{
 		$data = array(
 			array( 'price_asc'  , 'Ascending by Price' ),
@@ -326,29 +326,28 @@ extends com_greentiedev_wppf_action_action
 		$this->statusSuccess();
 		echo json_encode( $data );
 		exit;
-
 	}
 
-	private function listing_showlistings ()
+	private function get_showNumberOfListings_dropdown ()
 	{
 		$data = array(5,10,15,20,25,30,35,40,45,50);
 
 		$this->statusSuccess();
 		echo json_encode( $data );
 		exit;
-
 	}
 
 	private function listings_get () {
 		$this->statusSuccess();		
-		$listings = $this->getListingService()->getGridListings( $_GET, 'agent', $_GET['resultsPerPage'] );
+
+		$listings = $this->getListingService()->getGridListings( $_GET, $_GET['ownerType'], $_GET['resultsPerPage'] );
 		$data = array();
 		foreach( $listings as $listing ) {
 			$data[] = $listing->getMemento();
 		}
+
 		echo json_encode( $data );
  
-
 		exit;
 	}
 
@@ -367,7 +366,6 @@ extends com_greentiedev_wppf_action_action
 	{
 		status_header( 404 );
 	}
-
 
 	private function statusNotAuthorized ()
 	{
