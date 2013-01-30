@@ -135,22 +135,36 @@ if ( typeof jQuery != 'undefined' ) {
 
 			// Horizontal cells within pagination toolbar
 			var cells = [];
-			cells[0] = $('<div>').appendTo(paginationToolbar).css( 
-				{'width':'33%','float':'left','test-align':'left'} );
-			cells[1] = $('<div>').appendTo(paginationToolbar).css( 
-				{'width':'33%','float':'left','text-align':'center'} );
-			cells[2] = $('<div>').appendTo(paginationToolbar).css( 
-				{'width':'33%','float':'right','text-align':'right'} ); 
+			cells[0] = $('<div>').appendTo(paginationToolbar)
+								 .css( {'width':'33%','float':'left','test-align':'left'} );
+			cells[1] = $('<div>').appendTo(paginationToolbar)
+							     .css( {'width':'33%','float':'left','text-align':'center'} );
+			cells[2] = $('<div>').appendTo(paginationToolbar)
+								 .css( {'width':'33%','float':'right','text-align':'right'} ); 
 
 			//new horizontal cell to store Show # dropdown
-			cells[3] = $('<div>').appendTo(paginationToolbar).css( 
-				{'width':'99%','clear':'both','text-align':'center'} ); 
+			cells[3] = $('<div>').appendTo(paginationToolbar)
+							     .css( {'width':'99%','clear':'both','text-align':'center'} ); 
 
-			//Build results preview string and append to second cell
-			var resultsCount = getResultsCountString(numrows);
-			$(cells[1]).html(resultsCount);
+			//Build results preview string dom which will be dynamically updated later by span class
+			var resultsDisplay = $('<span>');
+			var start = $('<span>').addClass('startrowSpan')
+					               .before('Results ')
+					               .text(state.startrow);
+			resultsDisplay.append(start);
+ 
+			var rowcount = $('<span>').addClass('numrowSpan')
+									  .before('-')
+									  .text(state.numrows);
+			resultsDisplay.append(rowcount);
+							              
+			var totalresults = $('<span>').addClass('totalrecordsSpan')
+										  .before(' of ')
+										  .text(9999);
+			resultsDisplay.append(totalresults);		
+			resultsDisplay.appendTo(cells[1]);
 
-			$(showPerPage).appendTo(cells[3]);
+			showPerPage.appendTo(cells[3]);
 
 			$('<a>').appendTo(cells[0])
 				    .addClass('previousPage')
@@ -287,7 +301,7 @@ if ( typeof jQuery != 'undefined' ) {
 
 
 		// Method to calculate and return results preview string based on state of pagination control vars
-		var getResultsCountString = function ( numrows ) {
+		var getResultsCountString = function ( startrow, numrows ) {
 			//need to update this to Results [startrow] - [numrows] of [totalrows returned from API call]
 			var preview = 'Results 1-' + numrows + ' of XXX';
 			return preview;
