@@ -7,17 +7,17 @@
  * @title         tinymce.wolfnet_shortcode_builder.src.js
  * @contributors  AJ Michels (aj.michels@wolfnet.com)
  * @copyright     Copyright (c) 2012, WolfNet Technologies, LLC
- *                
+ *
  *                This program is free software; you can redistribute it and/or
  *                modify it under the terms of the GNU General Public License
  *                as published by the Free Software Foundation; either version 2
  *                of the License, or (at your option) any later version.
- *                
+ *
  *                This program is distributed in the hope that it will be useful,
  *                but WITHOUT ANY WARRANTY; without even the implied warranty of
  *                MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *                GNU General Public License for more details.
- *                
+ *
  *                You should have received a copy of the GNU General Public License
  *                along with this program; if not, write to the Free Software
  *                Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
@@ -28,37 +28,34 @@ if ( typeof tinymce != 'undefined' && typeof jQuery != 'undefined' ) {
 
 	( function ( $ ) {
 
-		var builderId = 'wolfnetShortcodeBuilderWindow';
-		var $window  = $( '#' + builderId );
-
-		/* If the window element doesn't exist create it and add it to the page. */
-		if ( $window.length == 0 ) {
-			$window = $( '<div/>' );
-			$window.attr( 'id', builderId );
-			$window.hide();
-			$window.appendTo( $( 'body:first' ) );
-		}
-
-		tinymce.create( 'tinymce.plugins.wolfnetShortcodeBuilder', {
+		tinyMCE.create( 'tinymce.plugins.wolfnetShortcodeBuilder', {
 
 			init : function( editor, url )
 			{
 				var wolfnetPluginUrl = url.substring( 0, url.length - 2 );
-				$window.wolfnetShortcodeBuilder( {
+				var $container       = $( '#' + editor.id );
+
+				$container.wolfnetShortcodeBuilder( {
 					tinymce   : editor,
 					rootUri   : wordpressBaseUrl + '/index.php?pagename=wolfnet-admin-shortcodebuilder',
 					loaderUri : wolfnetPluginUrl + 'img/loader.gif'
 				} );
+
 				editor.addButton( 'wolfnetShortcodeBuilderButton', {
+
 					title   : 'WolfNet Shortcode Builder',
+
 					/* since the URL automatically include the js directory we need to strip it off
 					 * to get to the img directory. */
 					image   : wolfnetPluginUrl + 'img/wp_wolfnet_nav.png',
+
 					onclick : function ()
 					{
-						$window.wolfnetShortcodeBuilder( 'open' );
+						$container.wolfnetShortcodeBuilder( 'open', editor );
 					}
+
 				} );
+
 			}
 
 		} );

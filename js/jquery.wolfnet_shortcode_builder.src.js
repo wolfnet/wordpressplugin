@@ -1,49 +1,18 @@
-/**
- * This jQuery script defines the functionality of the WolfNet Shortcode Builder tinyMCE button.
- *
- * @title         jquery.wolfnet_shortcode_builder.src.js
- * @contributors  AJ Michels (aj.michels@wolfnet.com)
- * @version       1.0
- * @copyright     Copyright (c) 2012, WolfNet Technologies, LLC
- *                
- *                This program is free software; you can redistribute it and/or
- *                modify it under the terms of the GNU General Public License
- *                as published by the Free Software Foundation; either version 2
- *                of the License, or (at your option) any later version.
- *                
- *                This program is distributed in the hope that it will be useful,
- *                but WITHOUT ANY WARRANTY; without even the implied warranty of
- *                MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *                GNU General Public License for more details.
- *                
- *                You should have received a copy of the GNU General Public License
- *                along with this program; if not, write to the Free Software
- *                Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
- *
- */
+if ( typeof jQuery != 'undefined' ) {
 
- /* Make sure the 'trim' function is available in the String object. Fix for older versions of IE. */
-if ( typeof String.prototype.trim !== 'function' ) {
-	String.prototype.trim = function() {
-		return this.replace(/^\s+|\s+$/g, '');
-	}
-}
+	( function ( $ ) {
 
-/**
- * The following code relies on jQuery so if jQuery has been initialized encapsulate the following
- * code inside an immediately invoked function expression (IIFE) to avoid naming conflicts with the
- * $ variable.
- */
-( function ( $ ) {
+		var properties = {
+			pluginName      : 'wolfnetShortcodeBuilder',
+			builderWindowId : 'wolfnetShortcodeBuilder',
+			$builderWindow  : null,
+			activeEditor    : null,
+			windowTitle     : 'WolfNet Shortcode Builder',
+			activePage      : null
+		};
 
-	$.widget( "ui.wolfnetShortcodeBuilder", $.ui.dialog, {
 
-		options : {
-			autoOpen     : false,
-			height       : 450,
-			width        : 475,
-			modal        : true,
-			defaultTitle : 'WolfNet Shortcode Builder',
+		var defaultOptions = {
 			elmPrefix    : 'wolfnetShortcodeBuilder_',
 			rootUri      : '',
 			loaderUri    : '',
@@ -76,289 +45,282 @@ if ( typeof String.prototype.trim !== 'function' ) {
 					uri         : '-options-quicksearch'
 				}
 			}
-		},
+		};
 
-		shortcode : '',
+		var methods = {
 
-		_create : function ()
-		{
-			var  widget    = this;
-			var  option    = this.options;
-			var  container = this.element;
+			init : function ( options )
+			{
 
-			widget._createLoaderImage();
-			widget._createMenuPage();
-			widget._establishEvents();
-			widget._activePage = option.menuId;
+				return this.each( function () {
 
-			option.title = option.defaultTitle;
+					var $this = $( this );
 
-			$.ui.dialog.prototype._create.call( this );
-		},
+					var data = {
+						option : $.extend( defaultOptions, options )
+					}
 
-		_establishEvents : function ()
-		{
-			var widget     = this;
-			var $container = $( this.element );
+					if ( typeof data.option.saveForm == 'jQuery' ) {
+						data.saveForm = data.option.saveForm;
+					}
+					else {
+						data.saveForm = $( data.option.saveForm );
+					}
 
-			$container.bind( 'insertShortcodeEvent', function () {
-				widget.insertShortcode();
-				widget.close();
-			} );
+					$this.data( properties.pluginName, data );
 
-		},
+				} );
 
-		_createMenuPage : function ()
-		{
-			var widget     = this;
-			var option     = this.options;
-			var container  = this.element;
-			var $container = $( container );
-			var menuPageId = option.elmPrefix + option.menuId + option.pageSuffix;
-			var $menuPage  = container.find( '#' + menuPageId );
-			var menuItems  = option.menuItems;
-			var $button    = null;
+			},
 
-			if ( $menuPage.length == 0 ) {
+			open : function ( editor )
+			{
 
-				$menuPage = $( '<div/>' );
-				$menuPage.attr( 'id', menuPageId );
+				properties.activeEditor = editor||null;
+
+				methods._createDialogIfNotExists();
+
+				if ( properties.$builderWindow != null ) {
+					properties.$builderWindow.dialog( 'open' );
+				}
+
+			},
+
+			close : function ()
+			{
+
+				if ( properties.$builderWindow != null ) {
+					properties.$builderWindow.dialog( 'close' );
+				}
+
+			},
+
+			openPage : function ( page )
+			{
+				var pageId      = page||defaultOptions.menuId;
+				var $activePage = methods._getPage( properties.activePage )||$();
+
+				if ( pageId != properties.activePage ) {
+
+					$activePage.hide();
+
+					properties.activePage = pageId;
+
+					/* Update the window title. */
+					if ( pageId in defaultOptions.menuItems && 'pageTitle' in defaultOptions.menuItems[pageId] ) {
+						methods._setTitle( properties.windowTitle + ': ' + defaultOptions.menuItems[pageId].pageTitle );
+					}
+					else {
+						methods._setTitle( properties.windowTitle );
+					}
+
+					methods._getPage( pageId ).show();
+
+				}
+
+			},
+
+			closePage : function ()
+			{
+
+				if ( properties.activePage != defaultOptions.menuId ) {
+					methods.openPage( defaultOptions.menuId );
+				}
+
+			},
+
+			insertShortcode : function ()
+			{
+
+				if ( properties.activeEditor instanceof tinyMCE ) {
+					properties.activeEditor.activeEditor.execCommand( 'mceInsertContent', false, methods._buildShortcodeString() );
+				}
+
+			},
+
+			_createDialogIfNotExists : function ()
+			{
+
+				if ( properties.$builderWindow == null ) {
+					properties.$builderWindow  = $( '#' + properties.builderWindowId );
+				}
+
+				/* If the window element doesn't exist create it and add it to the document body. */
+				if ( !(properties.$builderWindow instanceof $) || properties.$builderWindow.length == 0 ) {
+
+					properties.$builderWindow = $( '<div/>' );
+					properties.$builderWindow.attr( 'id', properties.builderWindowId );
+					properties.$builderWindow.hide();
+					properties.$builderWindow.appendTo( $( 'body:first' ) );
+					properties.$builderWindow.dialog( {
+						autoOpen : false,
+						height   : 450,
+						width    : 475,
+						modal    : true,
+						title    : properties.windowTitle
+					} );
+
+					methods.openPage( defaultOptions.menuId );
+
+				}
+
+			},
+
+			_defineEvents : function ()
+			{
+
+				return this.each( function () {
+
+					var $this = $( this );
+
+					$this.bind( 'insertShortcodeEvent', function ( event ) {
+						$this[properties.pluginName]('insertShortcode');
+						$this[properties.pluginName]('close');
+					} );
+
+				} );
+
+			},
+
+			_createMenuPage : function ()
+			{
+				var menuItems = defaultOptions.menuItems;
+				var $menuPage = null;
+
+				var $menuPage = $( '<div/>' )
+					.attr( 'id', defaultOptions.elmPrefix + defaultOptions.menuId + defaultOptions.pageSuffix );
 
 				for ( var pageId in menuItems ) {
 
-					$button = $( '<button/>' );
-					$button.html( menuItems[pageId].buttonLabel );
-					$button.addClass( 'pageButton' );
-					$button.appendTo( $menuPage );
-					$button[0].pageId = pageId;
-					$button.click( function () {
-						widget.openPage( this.pageId );
+					$( '<button/>' )
+					.html( menuItems[pageId].buttonLabel )
+					.addClass( 'pageButton' )
+					.attr( 'wolfnet:page', pageId )
+					.appendTo( $menuPage )
+					.click( function () {
+						methods.openPage( $( this ).attr( 'wolfnet:page' ) );
 					} );
 
 				}
 
-				$menuPage.appendTo( $container );
+				$menuPage.appendTo( properties.$builderWindow );
 
-			}
+				properties.activePage = defaultOptions.menuId;
 
-		},
+				return $menuPage;
 
-		_createLoaderImage : function ()
-		{
-			var widget    = this;
-			var option    = this.options;
-			var container = this.element;
-			var loaderId  = option.elmPrefix + option.loaderId ;
-			var $loader   = $( '#' + loaderId );
+			},
 
-			/* If the window element doesn't exist create it and add it to the page. */
-			if ( $loader.length == 0 ) {
-				$loader = $( '<div/>' );
-				$loader.append( $( '<img src="' + option.loaderUri + '" />' ) );
-				$loader.attr( 'id', loaderId );
-				$loader.addClass( 'wolfnet_loaderImage' );
-				$loader.hide();
-				$loader.appendTo( container );
-			}
+			_createLoaderImage : function ()
+			{
 
-			/* Store a reference to the loader image in memory. */
-			widget.loaderImage = $loader;
-		},
+			},
 
-		_createPage : function ( page )
-		{
-			var widget        = this;
-			var option        = this.options;
-			var container     = this.element;
-			var $container    = $( container );
-			var $loaderImg    = widget.loaderImage;
-			var $pageTitle    = null;
-			var $backButton   = null;
-			var $insertButton = null;
+			_createPage : function ( page )
+			{
 
-			if ( ( 'uri' in option.menuItems[page] ) && option.menuItems[page].uri != '') {
+				console.log( page );
 
-				var pageUri = option.rootUri + option.menuItems[page].uri;
+				if ( page in defaultOptions.menuItems && 'uri' in defaultOptions.menuItems[page] && defaultOptions.menuItems[page].uri != '' ) {
 
-				$page = $( '<div/>' );
-				$page.attr( 'id', option.elmPrefix + page + option.pageSuffix );
-				$page.attr( 'class', ( option.elmPrefix + option.pageSuffix ).replace( '__', '_' ) );
-				$page.appendTo( $container );
+					var pageUri = defaultOptions.rootUri + defaultOptions.menuItems[page].uri;
 
-				$backButton = $( '<button/>' );
-				$backButton.html( 'Back' );
-				$backButton.appendTo( $page );
-				$backButton.click( function () {
-					widget.closePage();
-				} );
+					var $page = $( '<div/>' )
+						.attr( 'id', defaultOptions.elmPrefix + page + defaultOptions.pageSuffix )
+						.attr( 'class', ( defaultOptions.elmPrefix + defaultOptions.pageSuffix ).replace( '__', '_' ) )
+						.appendTo( properties.$builderWindow );
 
-				$.ajax( {
-					type: 'GET',
-					dataType: 'html',
-					url: pageUri,
-					cache: false,
-					beforeSend: function () {
-						$page.hide();
-						$loaderImg.show();
-					},
-					success: function ( data ) {
-						$page.append( data );
-						wolfnet.initMoreInfo( $page.find( '.wolfnet_moreInfo' ) );
-						$loaderImg.hide();
-						$page.show();
-
-						$insertButton = $( '<button/>' );
-						$insertButton.html( 'Insert Shortcode' );
-						$insertButton.appendTo( $page );
-						$insertButton.click( function () {
-							widget._buildShortcode( page );
+					$( '<button/>' )
+						.html( 'Back' )
+						.appendTo( $page )
+						.click( function () {
+							methods.closePage();
 						} );
 
-					}
-				} );
+					$.ajax( {
+						url      : pageUri,
+						type     : 'GET',
+						dataType : 'html',
+						cache    : false,
+						success  : function ( data ) {
+							$page.append( data ).show();
+							$( '<button/>' )
+								.html( 'Insert Shortcode' )
+								.appendTo( $page )
+								.click( function () {
+									methods._buildShortcode( page );
+								} );
+							wolfnet.initMoreInfo( $page.find( '.wolfnet_moreInfo' ) );
+						}
+					} );
 
-			}
-		},
+					return $page;
 
-		_getPage : function ( page )
-		{
-			var option = this.options;
-			var pageId = option.elmPrefix + page + option.pageSuffix;
-			return $( '#' + pageId );
-		},
-
-		openPage : function ( page )
-		{
-			var widget      = this;
-			var option      = this.options;
-			var container   = this.element;
-			var $container = $( container );
-			var $activePage = widget._getPage( widget._activePage );
-
-			if ( page != widget._activePage ) {
-
-				var $page = widget._getPage( page );
-				widget._activePage = page;
-				$activePage.hide();
-
-				if ( page in option.menuItems && 'pageTitle' in option.menuItems[page] ) {
-					widget._setOption( 'title', option.defaultTitle + ': ' + option.menuItems[page].pageTitle );
 				}
-				else {
-					widget._setOption( 'title', option.defaultTitle );
-				}
+
+			},
+
+			_getPage : function ( page )
+			{
+
+				var pageId = defaultOptions.elmPrefix + page + defaultOptions.pageSuffix;
+				var $page  = $( '#' + pageId );
 
 				if ( $page.length == 0 ) {
-					widget._createPage( page );
-					$page = widget._getPage( page );
+					if ( page == defaultOptions.menuId ) {
+						$page = methods._createMenuPage();
+					}
+					else {
+						$page = methods._createPage( page );
+					}
 				}
-				else {
-					$page.show();
+
+				return $page;
+
+			},
+
+			_buildShortcode : function ()
+			{
+
+			},
+
+			_buildShortcodeString : function ()
+			{
+
+			},
+
+			_setTitle : function ( title )
+			{
+
+				if ( properties.$builderWindow != null ) {
+					properties.$builderWindow.dialog( { title:title } );
 				}
 
 			}
 
-		},
+		};
 
-		closePage : function ()
+		$.fn[properties.pluginName] = function ( method )
 		{
-			var widget      = this;
-			var option      = this.options;
-			widget.openPage( option.menuId );
-		},
 
-		_buildShortcode : function ( page )
-		{
-			var widget   = this;
-			var option   = widget.options;
-			var $page    = widget._getPage( page );
-			var attrs    = {};
-			var code     = '[' + option.menuItems[page].shortcode + ' /]';
-			var exclAttr = ['mode','savedsearch','criteria'];
-			var $advMode = $page.find( 'input[type="radio"][name="mode"][value="advanced"]:first:checked' );
-			var $savSrch = $page.find( 'select[name="savedsearch"]:first' );
-			var $loaderImg    = widget.loaderImage;
+			if ( methods[method] ) {
 
-			$loaderImg.show();
+				return methods[method].apply( this, Array.prototype.slice.call( arguments, 1 ));
 
-			$page.find( 'input, select' ).each( function () {
+			}
+			else if ( typeof method === 'object' || ! method ) {
 
-				if ( this.name != '' && $.inArray( this.name, exclAttr ) == -1 ) {
-
-					switch ( this.type ) {
-
-						default:
-							if ( this.value.trim() != '' ) {
-								attrs[this.name] = this.value.trim();
-							}
-							break;
-
-						case 'checkbox':
-						case 'radio':
-							if ( this.checked == true ) {
-								attrs[this.name] = this.value;
-							}
-							break;
-
-					}
-
-				}
-
-			} );
-
-			if ( $advMode.length != 0 && $savSrch.length != 0 ) {
-
-				delete attrs.zipcode;
-				delete attrs.city;
-				delete attrs.minprice;
-				delete attrs.maxprice;
-
-				$.ajax( {
-					url: option.rootUri + '-saved-search',
-					type: 'GET',
-					dataType: 'json',
-					data: { ID: $savSrch.val() },
-					success: function ( data ) {
-						for ( var field in data ) {
-							attrs[field] = data[field];
-						}
-						widget._buildShortcodeString( attrs, code );
-					},
-					complete: function () {
-						$loaderImg.hide();
-					}
-				} );
+				return methods.init.apply( this, arguments );
 
 			}
 			else {
 
-				widget._buildShortcodeString( attrs, code );
-				$loaderImg.hide();
+				$.error( 'Method ' +  method + ' does not exist in jQuery.' + pluginName );
 
 			}
 
-		},
-
-		_buildShortcodeString : function ( attrs, code )
-		{
-			var widget     = this;
-			var $container = $( widget.element );
-			var string     = code;
-
-			for ( var attr in attrs ) {
-				string = string.replace( '/]', ' ' + attr + '="' + attrs[attr] + '" /]' );
-			}
-
-			widget.shortcode = string;
-			$container.trigger( 'insertShortcodeEvent' );
-
-		},
-
-		insertShortcode : function ()
-		{
-			this.options.tinymce.execCommand( 'mceInsertContent', false, this.shortcode );
 		}
 
-	} );
+	} )( jQuery );
 
-} )( jQuery );
+}
