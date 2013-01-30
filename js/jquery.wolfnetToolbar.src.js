@@ -22,31 +22,34 @@ if ( typeof jQuery != 'undefined' ) {
 									 numrows        : 	options.numrows,
 								 	 sort 			: 	'',
 								 	 ownerType		: 	options.ownerType,
+								 	 criteria 		:   {}
 								 	}
 								    ,options );
 
 			return this.each( function () {			
 
 				$( this ).data( datakey , options );
-				$( this ).data( 'state' 
-					          , { 	page 			: 	options.page,
-					          	    startrow		: 	options.startrow,
-							   		numrows	        : 	options.numrows,
-							   		sort 			: 	options.sort,
-							   		ownerType		:   options.ownerType
-							   	});				
+
+				$( this ).data('state' 
+					         ,{ page 		: 	options.page,
+					            startrow	: 	options.startrow,
+							    numrows	    : 	options.numrows,
+							    sort 		: 	options.sort,
+							    ownerType	:   options.ownerType,
+							    criteria 	: 	options.criteria							   
+							});				
 
 
 				//Sort dropdown - build and insert to interface before & after listings
 				var sortDropdown = renderSortDropdown.call( this );
-				$( this ).append( sortDropdown.clone(true) );
 				$( this ).find('h2.widget-title').after( sortDropdown.clone(true) );
+				$( this ).append( sortDropdown.clone(true) );
 
 				//Pagination controls - build and insert to interface before & after listings, if enabled
 				if (options.usesPagination == true) {
 					var pagination = renderPaginationTools.call( this, options.numrows );
-					$( this ).append( pagination.clone(true) );
 					$( this ).find('h2.widget-title').after( pagination.clone(true) );
+					$( this ).append( pagination.clone(true) );
 				}
 
 			});
@@ -67,20 +70,16 @@ if ( typeof jQuery != 'undefined' ) {
 
 			// Horizontal cells within toolbar div
 			var cells = [];
-			cells[0] = $('<div>')
-				.appendTo(resultTools)
-				.css( {'width':'99%','clear':'both','text-align':'left'} );
+			cells[0] = $('<div>').appendTo(resultTools)
+								 .css( {'width':'99%','clear':'both','text-align':'left'} );
 
 			//Build Sort By dropdown and append to first cell
-			var sortByDropdown = $('<select>')
-				.addClass( 'sortoptions' )
+			var sortByDropdown = $('<select>').addClass( 'sortoptions' )
 				.change(function(event){
-
-					//console.log('sort',$( this).val());
 					state.sort = $(this).val();
 					state.page = 1;
 					state.startrow = 1;
-					updateResultSet.call(container, event);
+					updateResultSetEventHandler.call(container, event);
 
 				});;
 
@@ -91,7 +90,7 @@ if ( typeof jQuery != 'undefined' ) {
 					var select = $( '.sort_div' ).find( 'select.sortoptions' );
 					select.empty();
 					for ( var key in data ) {
-						$("<option>", {value:data[key][0],text:data[key][1]}).appendTo( select );
+						$('<option>', {value:data[key][0],text:data[key][1]}).appendTo( select );
 					}
 				}
 			});
@@ -108,19 +107,16 @@ if ( typeof jQuery != 'undefined' ) {
  			var options = container.data(datakey);
  			var state = container.data('state');
 
-			var paginationToolbar = $('<div>')
-				.addClass('pagination_div')
-				.css( {'width':'100%','clear':'both'} );;
+			var paginationToolbar = $('<div>').addClass('pagination_div')
+											  .css( {'width':'100%','clear':'both'} );;
 
 			//Build show # of listings dropdown and append to third cell
-			var showDropdown = $('<select>')
-				.addClass( 'showlistings' )
+			var showDropdown = $('<select>').addClass( 'showlistings' )
 				.change(function(event){
-
-					//console.log('show #',$( this).val());
 					state.numrows = $(this).val();
-					updateResultSet.call(container, event);
-
+					state.page = 1;
+					state.startrow = 1;
+					updateResultSetEventHandler.call(container, event);
 				});
 
 			$.ajax({ 
@@ -130,9 +126,9 @@ if ( typeof jQuery != 'undefined' ) {
 					var select = $( '.pagination_div' ).find( 'select.showlistings' );
 					select.empty();
 					for ( var key in data ) {
-						$("<option>", {value:data[key],text:data[key]}).appendTo( select );
+						$('<option>', {value:data[key],text:data[key]}).appendTo( select );
 					}
-					$("<option>", {value:numrows,text:numrows}).appendTo(select).attr("selected","selected");;
+					$('<option>', {value:numrows,text:numrows}).appendTo(select).attr('selected','selected');
 				}
 			});			
 			var showPerPage = $(showDropdown).before('Show').after('per page');
@@ -156,20 +152,24 @@ if ( typeof jQuery != 'undefined' ) {
 
 			$(showPerPage).appendTo(cells[3]);
 
-			$("<a>").appendTo(cells[0]).addClass("previousPage").html("<span>Previous</span>").attr("href","javascript:;")
+			$('<a>').appendTo(cells[0])
+				    .addClass('previousPage')
+				    .html('<span>Previous</span>')
+				    .attr('href','javascript:;')
 				.click(function ( event ) {
-					//console.log("previous");
-					state.page = options.page - 1;
+					state.page = state.page - 1;
 					state.startrow = state.startrow - state.numrows;
-					updateResultSet.call(container, event);
+					updateResultSetEventHandler.call(container, event);
 				});
 
-			$("<a>").appendTo(cells[2]).addClass("nextPage").html("<span>Next</span>").attr("href","javascript:;")
+			$("<a>").appendTo(cells[2])
+					.addClass('nextPage')
+					.html('<span>Next</span>')
+					.attr('href','javascript:;')
 				.click(function ( event ) {
-					//console.log("next");
-					state.page = options.page + 1;
-					state.startrow = state.startrow + state.numrows;					
-					updateResultSet.call(container, event);
+					state.page = state.page + 1;
+					state.startrow = state.startrow + state.numrows;
+					updateResultSetEventHandler.call(container, event);
 				});
 
 			return paginationToolbar;
@@ -177,8 +177,7 @@ if ( typeof jQuery != 'undefined' ) {
 
 
 		//Method that updates the state of the ajax call to get the new listings
-		var updateResultSet = function ( event ) {
-			//console.log('result update');
+		var updateResultSetEventHandler = function ( event ) {
 
 			var container = this;
 			var options = container.data(datakey);
@@ -192,21 +191,117 @@ if ( typeof jQuery != 'undefined' ) {
 				dataType: 'json',
 				data: data,
 				success: function ( data ) {
-					//console.log("ajax success");
-					//call function to rewrite data coming back to render on page
-					//var buildData.call( container, data );
-				}
+					updateResultSetRenderPage( data
+						                      ,container
+						                      ,options.usesPagination
+						                      ,state.numrows);
+				} 
 			});	
 		}
 
 
-		// Method to calculate and return results preview string
-		// keep track of pagination increments to traverse results set forward/backward
+		var updateResultSetRenderPage = function ( data, container, paginationEnabled, numrows ) {
+
+			//clear listings from widget
+			container.find('.wolfnet_listing').remove();
+
+			//rebuild list or grid component html doms
+			if ( container.hasClass('wolfnet_listingGrid') ) {				
+
+				//START:  rebuild listing grid dom (listingGrid uses listingSimple.php template)
+				//loop listings in data object and build new listing entity to append to dom
+				for (var i=0; i<data.length; i++) {
+			
+					var listingEntity = $('<div>').addClass('wolfnet_listing')
+							  					  .attr('id','wolfnet_listing_'+data[i].property_id);
+					container.find('.grid-listings-widget').append(listingEntity);
+									
+					var link = $('<a>').attr('href',data[i].property_url);
+					listingEntity.append(link);
+
+					var listingImageSpan = $('<span>').addClass('wolfnet_listingImage');
+					var listingImgSrc = $('<img>').attr('src',data[i].thumbnail_url).appendTo(listingImageSpan);
+					link.append(listingImageSpan);
+
+					var price = $('<span>').addClass('wolfnet_price')
+									       .attr('itemprop','price')
+										   .text(priceFormatter(data[i].listing_price));
+					listingImageSpan.after(price);						 
+
+					var bedbath = $('<span>').addClass('wolfnet_bed_bath')
+											 .attr('title',data[i].bedrooms+' Bedrooms & '+data[i].bathroom+' Bathrooms')
+											 .text(data[i].bedrooms+'bd/'+data[i].bathroom+'ba');
+					price.after(bedbath);
+
+					var citystate = data[i].city + ', ' + data[i].state;
+					var fullAdress = data[i].display_address + ', ' + citystate;
+					var location = $('<span>').attr('title',fullAdress);
+					$('<span>').addClass('wolfnet_location')
+							   .attr('itemprop','locality')
+							   .text(citystate)
+							   .appendTo(location);
+					$('<span>').addClass('wolfnet_address')
+							   .text(data[i].display_address)
+							   .appendTo(location);
+					$('<span>').addClass('wolfnet_full_address')
+							   .attr({'itemprop':'street_address','style':'display:none;'})
+							   .text(fullAdress)
+							   .appendTo(location);
+					bedbath.after(location);
+
+					var branding = $('<span>').addClass('wolfnet_branding');
+					location.after(branding);
+				}//END: rebuild listing grid dom
+			}
+			else if ( container.hasClass('wolfnet_propertyList') ) {
+
+				//START:  rebuild property list dom (propertyList uses listingBrief.php)
+				//loop listings in data object and build new listing entity to append to dom
+				for (var i=0; i<data.length; i++) {
+
+					var listingEntity = $('<div>').addClass('wolfnet_listing')
+							  					  .attr('id','wolfnet_listing_'+data[i].property_id);
+					container.find('.list-listings-widget').append(listingEntity);
+
+					var citystate = data[i].city + ', ' + data[i].state;
+					var fullAdress = data[i].display_address + ', ' + citystate;
+					var link = $('<a>').attr({'href':data[i].property_url,'title':fullAdress});
+					listingEntity.append(link);
+
+					var location = $('<span>').addClass('wolfnet_full_address')
+											 .text(fullAdress);
+					link.append(location);
+
+					var price = $('<span>').addClass('wolfnet_price')
+									       .attr('itemprop','price')
+										   .text(priceFormatter(data[i].listing_price));
+					location.after(price);	
+
+					var streetAddress = $('<span>').attr({'itemprop':'street-address','style':'display:none;'})
+												   .text(fullAdress);
+					price.after(streetAddress);
+				}//END: rebuild property list dom
+			}
+
+		}//end: updateResultSetRenderPage
+
+
+		// Method to calculate and return results preview string based on state of pagination control vars
 		var getResultsCountString = function ( numrows ) {
+			//need to update this to Results [startrow] - [numrows] of [totalrows returned from API call]
 			var preview = 'Results 1-' + numrows + ' of XXX';
 			return preview;
 		}
 
+
+		var priceFormatter = function ( number ) {
+    		var number = number.toString(), 
+    		dollars = number.split('.')[0], 
+    		dollars = dollars.split('').reverse().join('')
+    		    .replace(/(\d{3}(?!$))/g, '$1,')
+    		    .split('').reverse().join('');
+    		return '$' + dollars;
+		}
 
 	} )( jQuery ); /* END: jQuery IIFE */
 } /* END: If jQuery Exists */

@@ -38,7 +38,9 @@
 
 	<?php } ?>
 
-	<?php echo ( isset($listingContent) ) ? $listingContent : 'No Listings to Display.'; ?>
+	<div class="grid-listings-widget">
+		<?php echo ( isset($listingContent) ) ? $listingContent : 'No Listings to Display.'; ?>
+	</div>
 	
 </div>
 

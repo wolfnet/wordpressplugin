@@ -110,11 +110,13 @@ extends com_greentiedev_wppf_action_action
 		$pagename     = strtolower( get_query_var( 'pagename' ) );
 		$adminPrefix  = 'wolfnet-admin-';
 		$publicPrefix = 'wolfnet-';
-		$isAdmin      = ( current_user_can( 'edit_pages' ) || current_user_can( 'edit_posts' ) );
-		wolfnet::getInstance()->loggerSetting( 'enabled', false );
+		$isAdmin      = ( current_user_can( 'edit_pages' ) || current_user_can( 'edit_posts' ) );		
 
 		if ( substr( $pagename, 0, strlen( $adminPrefix ) ) == $adminPrefix ) {
 
+			if (!array_key_exists('debug', $_REQUEST)) {
+				wolfnet::getInstance()->loggerSetting( 'enabled', false );
+			}
 			if ( !$isAdmin ) {
 				$this->statusNotAuthorized();
 				exit;
@@ -131,7 +133,9 @@ extends com_greentiedev_wppf_action_action
 
 		}
 		else if ( substr( $pagename, 0, strlen( $publicPrefix ) ) == $publicPrefix ) {
-
+			if (!array_key_exists('debug', $_REQUEST)) {
+				wolfnet::getInstance()->loggerSetting( 'enabled', false );			
+			}
 			$method = str_replace( '-', '_', str_replace( $publicPrefix, '', $pagename ) );
 
 			if ( !method_exists( $this, $method ) ) {
@@ -322,7 +326,6 @@ extends com_greentiedev_wppf_action_action
 			array( 'date_asc'   , 'Ascending by Date Listed' ),
 			array( 'date_desc'  , 'Descending by Date Listed' )
 		);
-
 		$this->statusSuccess();
 		echo json_encode( $data );
 		exit;
@@ -331,7 +334,6 @@ extends com_greentiedev_wppf_action_action
 	private function get_showNumberOfListings_dropdown ()
 	{
 		$data = array(5,10,15,20,25,30,35,40,45,50);
-
 		$this->statusSuccess();
 		echo json_encode( $data );
 		exit;
@@ -339,13 +341,11 @@ extends com_greentiedev_wppf_action_action
 
 	private function listings_get () {
 		$this->statusSuccess();		
-
-		$listings = $this->getListingService()->getGridListings( $_GET, $_GET['ownerType'], $_GET['resultsPerPage'] );
+		$listings = $this->getListingService()->getGridListings( $_GET, $_GET['ownerType'], 250 ); 
 		$data = array();
 		foreach( $listings as $listing ) {
 			$data[] = $listing->getMemento();
 		}
-
 		echo json_encode( $data );
  
 		exit;

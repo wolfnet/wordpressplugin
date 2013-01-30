@@ -37,7 +37,9 @@
 
 	<?php } ?>
 
-	<?php echo ( isset($listingContent) ) ? $listingContent : 'No Listings to Display.'; ?>
+	<div class="list-listings-widget">
+		<?php echo ( isset($listingContent) ) ? $listingContent : 'No Listings to Display.'; ?>
+	</div>
 
 	<div class="wolfnet_clearfix"></div>
 
