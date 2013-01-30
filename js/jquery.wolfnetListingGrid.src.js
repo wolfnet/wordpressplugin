@@ -107,7 +107,7 @@ if ( typeof jQuery != 'undefined' ) {
 				var plugin = this;
 
 				this.data( name, {
-					option : $.extend( defaultOptions, options )
+					option : $.extend( defaultOptions, options || this.data(name) || {} )
 				} );
 
 				var option = this.data( name ).option;
@@ -127,13 +127,21 @@ if ( typeof jQuery != 'undefined' ) {
 					} );
 					//methods.resize.apply( plugin );
 
-					$this.bind( 'allImagesLoaded.' + name, function () {
+					$this.bind( 'allImagesLoaded.' + name, function () {					
 						methods.resizeHeight.apply( plugin );
 					} );
 
 					monitorImages( this );
 
 				} ); /* END: for each loop of elements the plugin has been applied to. */
+
+			},
+
+			reload : function () {
+			
+			return this.each( function () {
+				monitorImages( $(this) );		
+			});
 
 			},
 
@@ -210,7 +218,7 @@ if ( typeof jQuery != 'undefined' ) {
 			resizeHeight : function ()
 			{
 				var option = this.data( name ).option;
-
+console.log(option);
 				return this.each( function () {
 
 					var $this          = $( this );

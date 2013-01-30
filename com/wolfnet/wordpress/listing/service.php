@@ -395,6 +395,12 @@ implements com_greentiedev_wppf_interface_iService
 
 		$data = $this->getDataService()->getData( $wsu );
 
+		if ( array_key_exists('total_rows', $data)) {
+			foreach ( $data['listings'] as &$listing) {
+				$listing['total_rows'] = $data['total_rows'];
+			}
+		}
+
 		$this->getDAO()->setData( $data['listings'] );
 	}
 

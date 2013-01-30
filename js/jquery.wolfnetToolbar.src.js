@@ -22,6 +22,7 @@ if ( typeof jQuery != 'undefined' ) {
 									 numrows        : 	options.numrows,
 								 	 sort 			: 	'',
 								 	 ownerType		: 	options.ownerType,
+								 	 total_rows     :   options.total_rows,
 								 	 criteria 		:   {}
 								 	}
 								    ,options );
@@ -36,9 +37,9 @@ if ( typeof jQuery != 'undefined' ) {
 							    numrows	    : 	options.numrows,
 							    sort 		: 	options.sort,
 							    ownerType	:   options.ownerType,
+							    total_rows  :   options.total_rows,
 							    criteria 	: 	options.criteria							   
 							});				
-
 
 				//Sort dropdown - build and insert to interface before & after listings
 				var sortDropdown = renderSortDropdown.call( this );
@@ -47,7 +48,7 @@ if ( typeof jQuery != 'undefined' ) {
 
 				//Pagination controls - build and insert to interface before & after listings, if enabled
 				if (options.usesPagination == true) {
-					var pagination = renderPaginationTools.call( this, options.numrows );
+					var pagination = renderPaginationTools.call( this );
 					$( this ).find('h2.widget-title').after( pagination.clone(true) );
 					$( this ).append( pagination.clone(true) );
 				}
@@ -81,7 +82,7 @@ if ( typeof jQuery != 'undefined' ) {
 					state.startrow = 1;
 					updateResultSetEventHandler.call(container, event);
 
-				});;
+				});
 
 			$.ajax({ 
 				url: '?pagename=wolfnet-get-sortOptions-dropdown',
@@ -101,7 +102,7 @@ if ( typeof jQuery != 'undefined' ) {
 
 
 		// Method to build out results toolbar
-		var renderPaginationTools = function ( numrows ) {
+		var renderPaginationTools = function ( ) {
 
  			var container = $( this );
  			var options = container.data(datakey);
@@ -130,7 +131,7 @@ if ( typeof jQuery != 'undefined' ) {
 					}
 					$('<option>', {value:numrows,text:numrows}).appendTo(select).attr('selected','selected');
 				}
-			});			
+			});				
 			var showPerPage = $(showDropdown).before('Show').after('per page');
 
 			// Horizontal cells within pagination toolbar
@@ -157,32 +158,39 @@ if ( typeof jQuery != 'undefined' ) {
 									  .before('-')
 									  .text(state.numrows);
 			resultsDisplay.append(rowcount);
-							              
+
 			var totalresults = $('<span>').addClass('totalrecordsSpan')
 										  .before(' of ')
-										  .text(9999);
+										  .text(options.total_rows);
 			resultsDisplay.append(totalresults);		
 			resultsDisplay.appendTo(cells[1]);
 
 			showPerPage.appendTo(cells[3]);
 
 			$('<a>').appendTo(cells[0])
-				    .addClass('previousPage')
-				    .html('<span>Previous</span>')
-				    .attr('href','javascript:;')
+				    //.addClass('previousPage')
+				    .html('<span class="previousPage">Previous</span>')
+				    //.attr('href','javascript:;')
 				.click(function ( event ) {
-					state.page = state.page - 1;
-					state.startrow = state.startrow - state.numrows;
+					state.page = Number(state.page) - 1;
+					state.startrow = Number(state.startrow) - Number(state.numrows);
 					updateResultSetEventHandler.call(container, event);
 				});
+
+//hide 'Previous' link since this is page 1
+			if (state.page == 1) {
+console.log('previousPage tweak');
+				cells[0].find('.previousPage').attr({'href':'javascript:;','display':'none'});
+			}
+
 
 			$("<a>").appendTo(cells[2])
 					.addClass('nextPage')
 					.html('<span>Next</span>')
 					.attr('href','javascript:;')
 				.click(function ( event ) {
-					state.page = state.page + 1;
-					state.startrow = state.startrow + state.numrows;
+					state.page = Number(state.page) + 1;
+					state.startrow = Number(state.startrow) + Number(state.numrows);
 					updateResultSetEventHandler.call(container, event);
 				});
 
@@ -208,13 +216,14 @@ if ( typeof jQuery != 'undefined' ) {
 					updateResultSetRenderPage( data
 						                      ,container
 						                      ,options.usesPagination
+						                      ,state.startrow
 						                      ,state.numrows);
 				} 
 			});	
 		}
 
 
-		var updateResultSetRenderPage = function ( data, container, paginationEnabled, numrows ) {
+		var updateResultSetRenderPage = function ( data, container, paginationEnabled, startrow, numrows ) {
 
 			//clear listings from widget
 			container.find('.wolfnet_listing').remove();
@@ -266,6 +275,8 @@ if ( typeof jQuery != 'undefined' ) {
 					var branding = $('<span>').addClass('wolfnet_branding');
 					location.after(branding);
 				}//END: rebuild listing grid dom
+
+				container.wolfnetListingGrid('reload');
 			}
 			else if ( container.hasClass('wolfnet_propertyList') ) {
 
@@ -297,15 +308,13 @@ if ( typeof jQuery != 'undefined' ) {
 				}//END: rebuild property list dom
 			}
 
+
+			//update results count display
+			var x = (Number(startrow) - 1) + Number(numrows);
+			container.find('.startrowSpan').html(startrow);
+			container.find('.numrowSpan').html(x);
+
 		}//end: updateResultSetRenderPage
-
-
-		// Method to calculate and return results preview string based on state of pagination control vars
-		var getResultsCountString = function ( startrow, numrows ) {
-			//need to update this to Results [startrow] - [numrows] of [totalrows returned from API call]
-			var preview = 'Results 1-' + numrows + ' of XXX';
-			return preview;
-		}
 
 
 		var priceFormatter = function ( number ) {

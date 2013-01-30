@@ -45,6 +45,7 @@
 
 </div>
 
+
 <script type="text/javascript">
 
 	if ( typeof jQuery != 'undefined' ) {
@@ -54,10 +55,11 @@
 			var instance = '#<?php echo $instanceId; ?>';
 
 			jQuery( instance ).wolfnetToolbar({ 
-				usesPagination	: 	<?php echo ($options['paginated']['value'] == 'true') ? 'true' : 'false'; ?>
-			   ,numrows	        : 	<?php echo (is_numeric($options['maxresults']['value'])) ? $options['maxresults']['value'] : 15; ?>
+				usesPagination	: 	 <?php echo ($options['paginated']['value'] == 'true') ? 'true' : 'false'; ?>
+			   ,numrows	        : 	 <?php echo (is_numeric($options['maxresults']['value'])) ? $options['maxresults']['value'] : 15; ?>
 			   ,ownerType 		: 	'<?php echo $options['ownertype']['value']; ?>'
-			   ,criteria 		: 	<?php echo $criteria; ?>
+			   ,total_rows      :    <?php echo (count($listings) > 0 ) ? $listings[0]->getTotalResults() : 0; ?>
+			   ,criteria 		: 	 <?php echo $criteria; ?>
 			});
 
 			jQuery( instance ).wolfnetPropertyList();
