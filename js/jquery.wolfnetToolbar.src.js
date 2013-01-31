@@ -240,15 +240,15 @@ if ( typeof jQuery != 'undefined' ) {
 				for (var i=0; i<data.length; i++) {
 
 					//check for branding
-					var brokerLogo= data[i].branding['brokerLogo'];
-					var brokerName= data[i].branding['content'];
-					if ( brokerLogo != '' || brokerName != '' ) {
-						var hasBranding = true;
-						var listingEntityClass = 'wolfnet_listing wolfnet_branded';
+					var brokerLogo= data[i].branding.brokerLogo;
+					var brokerName= data[i].branding.content;
+					if ( isEmpty(brokerLogo) && isEmpty(brokerName) ) {
+						var hasBranding = false;
+						var listingEntityClass = 'wolfnet_listing';
 					}
 					else {
-						var hasBranding = false;
-						var listingEntityClass = 'wolfnet_listing';	
+						var hasBranding = true;
+						var listingEntityClass = 'wolfnet_listing wolfnet_branded';	
 					}
 
 					var listingEntity = $('<div>').addClass(listingEntityClass)
@@ -344,6 +344,9 @@ if ( typeof jQuery != 'undefined' ) {
 			container.find('.startrowSpan').html(startrow);
 			container.find('.numrowSpan').html(rowcountDisplay);
 
+			//clear show # select's options' selected attributes
+			container.find('select.showlistings option').removeAttr('selected');
+			container.find('select.showlistings option[value=\''+numrows+'\']').attr('selected','');
 
 		}//end: updateResultSetRenderPage
 
@@ -357,6 +360,10 @@ if ( typeof jQuery != 'undefined' ) {
     		return '$' + dollars;
 		}
 
+
+		var isEmpty = function ( str ) {
+    		return (!str || 0 === str.length);
+		}	
 	} )( jQuery ); /* END: jQuery IIFE */
 } /* END: If jQuery Exists */
 
