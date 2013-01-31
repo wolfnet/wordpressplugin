@@ -34,13 +34,17 @@ wolfnet.initMoreInfo = function (  $moreInfoItems )
 
 		} );
 
-		$( '.' + iconClass ).tooltip( {
-			showURL     : false,
-			//width       : 200,
-			bodyHandler : function () {
-				return $( this ).siblings( '.wolfnet_moreInfo' ).html();
-			}
-		} );
+		if ( typeof $.fn.tooltip != 'undefined' ) {
+
+			$( '.' + iconClass ).tooltip( {
+				showURL     : false,
+				//width       : 200,
+				bodyHandler : function () {
+					return $( this ).siblings( '.wolfnet_moreInfo' ).html();
+				}
+			} );
+
+		}
 
 	} )( jQuery );
 

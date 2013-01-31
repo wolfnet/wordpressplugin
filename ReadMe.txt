@@ -46,6 +46,9 @@ entered in the "WolfNet >> General Settings" page before any IDX data can be dis
 == Changelog ==
 
 = 1.1.3 =
+* Fixed a bug preventing the shortcode builder from working correctly when there is more than one instance of TinyMCE on the page at a time.
+
+= 1.1.3 =
 * Updated to ensure that dynamic pages created by the plugin return the correct status code.
 
 = 1.1.2 =

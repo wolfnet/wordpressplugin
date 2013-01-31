@@ -277,7 +277,6 @@ if ( typeof jQuery != 'undefined' ) {
 					timeout: 2500,
 					statusCode: {
 						404: function () {
-							console.log( '404' );
 							commFailure();
 						}
 					},
