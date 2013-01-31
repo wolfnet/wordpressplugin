@@ -137,12 +137,10 @@ if ( typeof jQuery != 'undefined' ) {
 
 			},
 
-			reload : function () {
-			
-			return this.each( function () {
-				monitorImages( $(this) );		
-			});
-
+			reload : function () {			
+				return this.each( function () {
+					monitorImages( $(this) );		
+				});
 			},
 
 			/* This method provides a safe way for the plugin to be removed from elements on the page. */
@@ -218,7 +216,7 @@ if ( typeof jQuery != 'undefined' ) {
 			resizeHeight : function ()
 			{
 				var option = this.data( name ).option;
-console.log(option);
+
 				return this.each( function () {
 
 					var $this          = $( this );
