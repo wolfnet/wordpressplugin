@@ -127,9 +127,21 @@ if ( typeof jQuery != 'undefined' ) {
 					var select = $( '.pagination_div' ).find( 'select.showlistings' );
 					select.empty();
 					for ( var key in data ) {
-						$('<option>', {value:data[key],text:data[key]}).appendTo( select );
+
+						if (data[key] != state.numrows) {
+							$('<option>',{value:data[key],text:data[key]})
+									    .addClass('showNum_'+data[key])
+									    .appendTo( select );
+						}
+
+						if (state.numrows >= data[key]) {
+							$('<option>',{value:state.numrows,text:state.numrows})
+								.addClass('showNum_'+state.numrows)
+							    .appendTo(select)
+								.attr('selected','selected');							
+						}
+
 					}
-					$('<option>', {value:numrows,text:numrows}).appendTo(select).attr('selected','selected');
 				}
 			});				
 			var showPerPage = $(showDropdown).before('Show').after('per page');
@@ -168,21 +180,14 @@ if ( typeof jQuery != 'undefined' ) {
 			showPerPage.appendTo(cells[3]);
 
 			$('<a>').appendTo(cells[0])
-				    //.addClass('previousPage')
+				    .addClass('previousPage')
 				    .html('<span class="previousPage">Previous</span>')
-				    //.attr('href','javascript:;')
+				    .attr('href','javascript:;')
 				.click(function ( event ) {
 					state.page = Number(state.page) - 1;
 					state.startrow = Number(state.startrow) - Number(state.numrows);
 					updateResultSetEventHandler.call(container, event);
 				});
-
-//hide 'Previous' link since this is page 1
-			if (state.page == 1) {
-console.log('previousPage tweak');
-				cells[0].find('.previousPage').attr({'href':'javascript:;','display':'none'});
-			}
-
 
 			$("<a>").appendTo(cells[2])
 					.addClass('nextPage')
@@ -231,11 +236,22 @@ console.log('previousPage tweak');
 			//rebuild list or grid component html doms
 			if ( container.hasClass('wolfnet_listingGrid') ) {				
 
-				//START:  rebuild listing grid dom (listingGrid uses listingSimple.php template)
-				//loop listings in data object and build new listing entity to append to dom
+				//START:  loop to rebuild listing grid dom (listingGrid uses listingSimple.php template)
 				for (var i=0; i<data.length; i++) {
-			
-					var listingEntity = $('<div>').addClass('wolfnet_listing')
+
+					//check for branding
+					var brokerLogo= data[i].branding['brokerLogo'];
+					var brokerName= data[i].branding['content'];
+					if ( brokerLogo != '' || brokerName != '' ) {
+						var hasBranding = true;
+						var listingEntityClass = 'wolfnet_listing wolfnet_branded';
+					}
+					else {
+						var hasBranding = false;
+						var listingEntityClass = 'wolfnet_listing';	
+					}
+
+					var listingEntity = $('<div>').addClass(listingEntityClass)
 							  					  .attr('id','wolfnet_listing_'+data[i].property_id);
 					container.find('.grid-listings-widget').append(listingEntity);
 									
@@ -272,9 +288,24 @@ console.log('previousPage tweak');
 							   .appendTo(location);
 					bedbath.after(location);
 
-					var branding = $('<span>').addClass('wolfnet_branding');
-					location.after(branding);
-				}//END: rebuild listing grid dom
+//if (i==0) { console.log( data[i].property_id ); }
+//if (i==0) { console.log( data[i].branding ); }
+//if (i==0) { console.log( 'logo ' + brokerLogo ); }
+//if (i==0) { console.log( 'name ' + brokerName ); }
+
+					if (hasBranding) {
+						var branding = $('<span>').addClass('wolfnet_branding');
+
+						var imageSpan = $('<span>').addClass('wolfnet_brokerLogo');
+						var image = $('<img>').attr('src',brokerLogo)
+											  .appendTo(imageSpan);
+						imageSpan.appendTo(branding);
+						$('<span>').addClass('wolfnet_brandingMessage')	
+								   .text(brokerName)
+								   .appendTo(branding);
+						location.after(branding);
+					}
+				}//END: loop to rebuild listing grid dom
 
 				container.wolfnetListingGrid('reload');
 			}
@@ -308,11 +339,11 @@ console.log('previousPage tweak');
 				}//END: rebuild property list dom
 			}
 
-
 			//update results count display
-			var x = (Number(startrow) - 1) + Number(numrows);
+			var rowcountDisplay = (Number(startrow) - 1) + Number(numrows);
 			container.find('.startrowSpan').html(startrow);
-			container.find('.numrowSpan').html(x);
+			container.find('.numrowSpan').html(rowcountDisplay);
+
 
 		}//end: updateResultSetRenderPage
 
