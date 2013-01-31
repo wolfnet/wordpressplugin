@@ -169,7 +169,7 @@ implements com_greentiedev_wppf_interface_iEntity
 	 */
 	public function getMemento ()
 	{
-		return array(
+		$values = array(
 			'property_id'     => $this->property_id,
 			'property_url'    => $this->property_url,
 			'listing_price'   => $this->listing_price,
@@ -184,6 +184,12 @@ implements com_greentiedev_wppf_interface_iEntity
 			'branding'        => $this->branding,
 			'total_rows'      => $this->totalrecords
 			);
+
+		if ( get_class($this->branding) == 'com_wolfnet_wordpress_listing_branding_entity' ) {
+			$values['branding'] = $this->branding->getMemento();
+		}
+
+		return $values;
 	}
 
 

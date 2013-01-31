@@ -13,6 +13,7 @@ if ( typeof jQuery != 'undefined' ) {
 	( function ( $ ) {
 
 		var datakey = 'wolfnetToolbarData';
+		var listingLimit = 50;
 
 		$.fn.wolfnetToolbar = function ( options ) {
 
@@ -39,7 +40,7 @@ if ( typeof jQuery != 'undefined' ) {
 							    ownerType	:   options.ownerType,
 							    total_rows  :   options.total_rows,
 							    criteria 	: 	options.criteria							   
-							});				
+							});	
 
 				//Sort dropdown - build and insert to interface before & after listings
 				var sortDropdown = renderSortDropdown.call( this );
@@ -180,9 +181,9 @@ if ( typeof jQuery != 'undefined' ) {
 			showPerPage.appendTo(cells[3]);
 
 			$('<a>').appendTo(cells[0])
-				    .addClass('previousPage')
-				    .html('<span class="previousPage">Previous</span>')
-				    .attr('href','javascript:;')
+				    .addClass('previousPageLink')
+				    .text('Previous')
+				    .css('color','#000000;')
 				.click(function ( event ) {
 					state.page = Number(state.page) - 1;
 					state.startrow = Number(state.startrow) - Number(state.numrows);
@@ -190,8 +191,8 @@ if ( typeof jQuery != 'undefined' ) {
 				});
 
 			$("<a>").appendTo(cells[2])
-					.addClass('nextPage')
-					.html('<span>Next</span>')
+					.addClass('nextPageLink')
+					.text('Next')
 					.attr('href','javascript:;')
 				.click(function ( event ) {
 					state.page = Number(state.page) + 1;
@@ -222,13 +223,15 @@ if ( typeof jQuery != 'undefined' ) {
 						                      ,container
 						                      ,options.usesPagination
 						                      ,state.startrow
-						                      ,state.numrows);
+						                      ,state.numrows
+						                      ,state.page
+						                      ,state.total_rows);
 				} 
 			});	
 		}
 
 
-		var updateResultSetRenderPage = function ( data, container, paginationEnabled, startrow, numrows ) {
+		var updateResultSetRenderPage = function ( data, container, paginationEnabled, startrow, numrows, page, totalRows ) {
 
 			//clear listings from widget
 			container.find('.wolfnet_listing').remove();
@@ -240,9 +243,10 @@ if ( typeof jQuery != 'undefined' ) {
 				for (var i=0; i<data.length; i++) {
 
 					//check for branding
-					var brokerLogo= data[i].branding.brokerLogo;
-					var brokerName= data[i].branding.content;
-					if ( isEmpty(brokerLogo) && isEmpty(brokerName) ) {
+					var brokerLogo= data[i].branding.brokerLogo  || null;
+					var brokerName= data[i].branding.content || null;
+
+					if ( brokerLogo == null && brokerName == null ) {
 						var hasBranding = false;
 						var listingEntityClass = 'wolfnet_listing';
 					}
@@ -283,15 +287,11 @@ if ( typeof jQuery != 'undefined' ) {
 							   .text(data[i].display_address)
 							   .appendTo(location);
 					$('<span>').addClass('wolfnet_full_address')
-							   .attr({'itemprop':'street_address','style':'display:none;'})
+							   .attr('itemprop','street_address')
+							   .css('display','none')
 							   .text(fullAdress)
 							   .appendTo(location);
 					bedbath.after(location);
-
-//if (i==0) { console.log( data[i].property_id ); }
-//if (i==0) { console.log( data[i].branding ); }
-//if (i==0) { console.log( 'logo ' + brokerLogo ); }
-//if (i==0) { console.log( 'name ' + brokerName ); }
 
 					if (hasBranding) {
 						var branding = $('<span>').addClass('wolfnet_branding');
@@ -333,10 +333,14 @@ if ( typeof jQuery != 'undefined' ) {
 										   .text(priceFormatter(data[i].listing_price));
 					location.after(price);	
 
-					var streetAddress = $('<span>').attr({'itemprop':'street-address','style':'display:none;'})
+					var streetAddress = $('<span>').attr('itemprop','street-address')
+												   .css('display','none')
 												   .text(fullAdress);
 					price.after(streetAddress);
+
 				}//END: rebuild property list dom
+
+				container.wolfnetPropertyList();
 			}
 
 			//update results count display
@@ -348,6 +352,24 @@ if ( typeof jQuery != 'undefined' ) {
 			container.find('select.showlistings option').removeAttr('selected');
 			container.find('select.showlistings option[value=\''+numrows+'\']').attr('selected','');
 
+			//first page and last page logic
+			if (page == 1) {
+				container.find('a.previousPageLink').css('color','#000000;');
+				container.find('a.previousPageLink').removeAttr('href');
+			}
+			else {
+				container.find('a.previousPageLink').removeAttr('style');
+				container.find('a.previousPageLink').attr('href','javascript:;');
+			}
+
+			if (page == getLastPageNum(numrows,totalRows) ) {
+				container.find('a.nextPageLink').css('color','#000000;');
+				container.find('a.nextPageLink').removeAttr('href');
+			}
+			else {
+				container.find('a.nextPageLink').removeAttr('style');
+				container.find('a.nextPageLink').attr('href','javascript:;');
+			}		
 		}//end: updateResultSetRenderPage
 
 
@@ -364,6 +386,34 @@ if ( typeof jQuery != 'undefined' ) {
 		var isEmpty = function ( str ) {
     		return (!str || 0 === str.length);
 		}	
+
+
+		var calcLastPage = function ( numrows, rowcount ) {
+			var maxrows;
+
+			if (rowcount < listingLimit) {
+				maxrows = rowcount;
+			}
+			else {
+				maxrows = listingLimit;
+			}
+
+			return Math.floor( Number(maxrows) / Number(numrows) );
+		}	
+
+		var getLastPageNum = function ( numrows, rowcount ) {
+			var maxrows;
+
+			if (rowcount < listingLimit) {
+				maxrows = rowcount;
+			}
+			else {
+				maxrows = listingLimit;
+			}
+
+			return Math.floor( Number(maxrows) / Number(numrows) );
+		}			
+
 	} )( jQuery ); /* END: jQuery IIFE */
 } /* END: If jQuery Exists */
 
