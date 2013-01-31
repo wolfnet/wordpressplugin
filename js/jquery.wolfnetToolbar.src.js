@@ -43,9 +43,9 @@ if ( typeof jQuery != 'undefined' ) {
 							});	
 
 				//Sort dropdown - build and insert to interface before & after listings
-				var sortDropdown = renderSortDropdown.call( this );
-				$( this ).find('h2.widget-title').after( sortDropdown.clone(true) );
-				$( this ).append( sortDropdown.clone(true) );
+//				var sortDropdown = renderSortDropdown.call( this );
+//				$( this ).find('h2.widget-title').after( sortDropdown.clone(true) );
+//				$( this ).append( sortDropdown.clone(true) );
 
 				//Pagination controls - build and insert to interface before & after listings, if enabled
 				if (options.usesPagination == true) {
@@ -235,6 +235,7 @@ if ( typeof jQuery != 'undefined' ) {
 
 			//clear listings from widget
 			container.find('.wolfnet_listing').remove();
+			container.find('.wolfnet_clearfix').remove();
 
 			//rebuild list or grid component html doms
 			if ( container.hasClass('wolfnet_listingGrid') ) {				
