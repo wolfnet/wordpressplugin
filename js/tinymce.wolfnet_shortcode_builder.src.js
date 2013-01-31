@@ -32,11 +32,10 @@ if ( typeof tinymce != 'undefined' && typeof jQuery != 'undefined' ) {
 
 			init : function( editor, url )
 			{
-				var wolfnetPluginUrl = url.substring( 0, url.length - 2 );
-				var $container       = $( '#' + editor.id );
 
-				$container.wolfnetShortcodeBuilder( {
-					tinymce   : editor,
+				var wolfnetPluginUrl = url.substring( 0, url.length - 2 );
+
+				$(document).wolfnetShortcodeBuilder( {
 					rootUri   : wordpressBaseUrl + '/index.php?pagename=wolfnet-admin-shortcodebuilder',
 					loaderUri : wolfnetPluginUrl + 'img/loader.gif'
 				} );
@@ -51,7 +50,7 @@ if ( typeof tinymce != 'undefined' && typeof jQuery != 'undefined' ) {
 
 					onclick : function ()
 					{
-						$container.wolfnetShortcodeBuilder( 'open', editor );
+						$(document).wolfnetShortcodeBuilder( 'open', editor );
 					}
 
 				} );
