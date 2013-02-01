@@ -45,9 +45,9 @@ if ( typeof jQuery != 'undefined' ) {
 							});	
 
 				//Sort dropdown - build and insert to interface before & after listings
-//				var sortDropdown = renderSortDropdown.call( this );
-//				$( this ).find('h2.widget-title').after( sortDropdown.clone(true) );
-//				$( this ).append( sortDropdown.clone(true) );
+				var sortDropdown = renderSortDropdown.call( this );
+				$( this ).find('h2.widget-title').after( sortDropdown.clone(true) );
+				$( this ).append( sortDropdown.clone(true) );
 
 				//Pagination controls - build and insert to interface before & after listings, if enabled
 				if (options.usesPagination == true) {
@@ -93,8 +93,8 @@ if ( typeof jQuery != 'undefined' ) {
 				success: function ( data ) {
 					var select = $( '.sort_div' ).find( 'select.sortoptions' );
 					select.empty();
-					for ( var key in data ) {
-						$('<option>', {value:data[key][0],text:data[key][1]}).appendTo( select );
+					for ( var i=0; i<data.length; i++ ) {					
+						$('<option>', {value:data[i]['value'],text:data[i]['label']}).appendTo( select );
 					}
 				}
 			});

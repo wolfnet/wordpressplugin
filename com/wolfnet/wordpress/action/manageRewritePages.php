@@ -95,6 +95,14 @@ extends com_greentiedev_wppf_action_action
 	 */
 	private $enqueueResourcesAction;
 
+	/**
+	 * This property holds the sort service.
+	 *
+	 * @type  com_wolfnet_wordpress_sort_service
+	 *
+	 */	
+	private $sortService;	
+
 
 	/* PUBLIC METHODS *************************************************************************** */
 
@@ -308,24 +316,12 @@ extends com_greentiedev_wppf_action_action
 
 	private function get_sortOptions_dropdown ()
 	{
-		$data = array(
-			array( 'price_asc'  , 'Ascending by Price' ),
-			array( 'price_desc' , 'Descending by Price' ),
-			array( 'city_asc'   , 'Ascending by City' ),
-			array( 'city_desc'  , 'Descending by City' ),
-			array( 'type_asc'   , 'Ascending by Type' ),
-			array( 'type_desc'  , 'Descending by Type' ),
-			array( 'year_asc'   , 'Ascending by Year' ),
-			array( 'year_desc'  , 'Descending by Year' ),
-			array( 'sqft_asc'   , 'Ascending by Sq. Feet' ),
-			array( 'sqft_desc'  , 'Descending by Sq. Feet' ),
-			array( 'mls_asc'    , 'Ascending by MLS #' ),
-			array( 'mls_desc'   , 'Descending by MLS #' ),
-			array( 'zip_asc'    , 'Ascending by Zip Code' ),
-			array( 'zip_desc'   , 'Descending by Zip Code' ),
-			array( 'date_asc'   , 'Ascending by Date Listed' ),
-			array( 'date_desc'  , 'Descending by Date Listed' )
-		);
+		$sortOptions = $this->getSortService()->getSort();
+
+		$data = array();
+		foreach( $sortOptions as $sortOption ) {
+			$data[] = $sortOption->getMemento();
+		}
 		$this->statusSuccess();
 		echo json_encode( $data );
 		exit;
@@ -529,5 +525,28 @@ extends com_greentiedev_wppf_action_action
 		$this->enqueueResourcesAction = $action;
 	}
 
+	/**
+	 * GETTER: This method is a getter for the sortService property.
+	 *
+	 * @return  com_wolfnet_wordpress_sort_service
+	 *
+	 */
+	public function getSortService ()
+	{
+		return $this->sortService;
+	}
+
+
+	/**
+	 * SETTER: This method is a setter for the sortService property.
+	 *
+	 * @type    com_wolfnet_wordpress_sort_service  $sortService
+	 * @return  void
+	 *
+	 */
+	public function setSortService ( $sortService )
+	{
+		$this->sortService = $sortService;
+	}
 
 }

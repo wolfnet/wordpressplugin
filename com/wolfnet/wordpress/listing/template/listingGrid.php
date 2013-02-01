@@ -27,6 +27,8 @@
  *
  */
 
+	
+
 ?>
 
 <div id="<?php echo $instanceId; ?>" class="wolfnet_widget wolfnet_listingGrid">
