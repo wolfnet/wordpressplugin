@@ -341,7 +341,7 @@ extends com_greentiedev_wppf_action_action
 
 	private function listings_get () {
 		$this->statusSuccess();		
-		$listings = $this->getListingService()->getGridListings( $_GET, $_GET['ownerType'], 250 ); 
+		$listings = $this->getListingService()->getGridListings( $_GET, $_GET['ownerType'], $_GET['max_results'] ); 
 		$data = array();
 		foreach( $listings as $listing ) {
 			$data[] = $listing->getMemento();

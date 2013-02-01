@@ -13,7 +13,7 @@ if ( typeof jQuery != 'undefined' ) {
 	( function ( $ ) {
 
 		var datakey = 'wolfnetToolbarData';
-		var listingLimit = 50;
+		var listingLimit = 250;
 
 		$.fn.wolfnetToolbar = function ( options ) {
 
@@ -24,6 +24,7 @@ if ( typeof jQuery != 'undefined' ) {
 								 	 sort 			: 	'',
 								 	 ownerType		: 	options.ownerType,
 								 	 total_rows     :   options.total_rows,
+								 	 max_results    :   listingLimit,
 								 	 criteria 		:   {}
 								 	}
 								    ,options );
@@ -39,6 +40,7 @@ if ( typeof jQuery != 'undefined' ) {
 							    sort 		: 	options.sort,
 							    ownerType	:   options.ownerType,
 							    total_rows  :   options.total_rows,
+							    max_results :   options.max_results,
 							    criteria 	: 	options.criteria							   
 							});	
 
