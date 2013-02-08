@@ -12,8 +12,8 @@
 if ( typeof jQuery != 'undefined' ) {
 	( function ( $ ) {
 
-		var datakey = 'wolfnetToolbarData';
 		var listingLimit = 250;
+		var datakey = 'wolfnetToolbarData';	
 
 		$.fn.wolfnetToolbar = function ( options ) {
 
@@ -33,6 +33,13 @@ if ( typeof jQuery != 'undefined' ) {
 
 				$( this ).data( datakey , options );
 
+				if (options.total_rows > listingLimit) {
+					var previewLimitCount = listingLimit;
+				}
+				else {
+					var previewLimitCount = options.total_rows;
+				}
+
 				$( this ).data('state' 
 					         ,{ page 		: 	options.page,
 					            startrow	: 	options.startrow,
@@ -40,7 +47,7 @@ if ( typeof jQuery != 'undefined' ) {
 							    sort 		: 	options.sort,
 							    ownerType	:   options.ownerType,
 							    total_rows  :   options.total_rows,
-							    max_results :   options.max_results,
+							    max_results :   previewLimitCount,
 							    criteria 	: 	options.criteria							   
 							});	
 
@@ -176,7 +183,7 @@ if ( typeof jQuery != 'undefined' ) {
 
 			var totalresults = $('<span>').addClass('totalrecordsSpan')
 										  .before(' of ')
-										  .text(options.total_rows);
+										  .text(state.max_results);
 			resultsDisplay.append(totalresults);		
 			resultsDisplay.appendTo(cells[1]);
 
@@ -185,10 +192,17 @@ if ( typeof jQuery != 'undefined' ) {
 			$('<a>').appendTo(cells[0])
 				    .addClass('previousPageLink')
 				    .text('Previous')
-				    .css('color','#000000;')
+				    .attr('href','javascript:;')
 				.click(function ( event ) {
 					state.page = Number(state.page) - 1;
 					state.startrow = Number(state.startrow) - Number(state.numrows);
+
+					if (state.page < 1) {
+						//reset state vars to carousel to last page
+						state.page = getLastPageNum(state.numrows,state.total_rows);
+						state.startrow = ( Number(state.numrows) * (Number(state.page) - 1 ) ) + 1;
+					}
+
 					updateResultSetEventHandler.call(container, event);
 				});
 
@@ -199,6 +213,13 @@ if ( typeof jQuery != 'undefined' ) {
 				.click(function ( event ) {
 					state.page = Number(state.page) + 1;
 					state.startrow = Number(state.startrow) + Number(state.numrows);
+
+					if (state.page > getLastPageNum(state.numrows,state.total_rows)) {
+						//reset state vars to carousel to 1st page
+						state.page = 1;
+						state.startrow = 1;
+					}
+
 					updateResultSetEventHandler.call(container, event);
 				});
 
@@ -221,6 +242,7 @@ if ( typeof jQuery != 'undefined' ) {
 				dataType: 'json',
 				data: data,
 				success: function ( data ) {
+					//event handler
 					updateResultSetRenderPage( data
 						                      ,container
 						                      ,options.usesPagination
@@ -234,7 +256,7 @@ if ( typeof jQuery != 'undefined' ) {
 
 
 		var updateResultSetRenderPage = function ( data, container, paginationEnabled, startrow, numrows, page, totalRows ) {
-
+	
 			//clear listings from widget
 			container.find('.wolfnet_listing').remove();
 			container.find('.wolfnet_clearfix').remove();
@@ -348,31 +370,16 @@ if ( typeof jQuery != 'undefined' ) {
 
 			//update results count display
 			var rowcountDisplay = (Number(startrow) - 1) + Number(numrows);
+			if (rowcountDisplay > listingLimit) {
+				rowcountDisplay = listingLimit;
+			}
 			container.find('.startrowSpan').html(startrow);
 			container.find('.numrowSpan').html(rowcountDisplay);
 
-			//clear show # select's options' selected attributes
+			//clear show # select's options' selected attributes and update
 			container.find('select.showlistings option').removeAttr('selected');
 			container.find('select.showlistings option[value=\''+numrows+'\']').attr('selected','');
 
-			//first page and last page logic
-			if (page == 1) {
-				container.find('a.previousPageLink').css('color','#000000;');
-				container.find('a.previousPageLink').removeAttr('href');
-			}
-			else {
-				container.find('a.previousPageLink').removeAttr('style');
-				container.find('a.previousPageLink').attr('href','javascript:;');
-			}
-
-			if (page == getLastPageNum(numrows,totalRows) ) {
-				container.find('a.nextPageLink').css('color','#000000;');
-				container.find('a.nextPageLink').removeAttr('href');
-			}
-			else {
-				container.find('a.nextPageLink').removeAttr('style');
-				container.find('a.nextPageLink').attr('href','javascript:;');
-			}		
 		}//end: updateResultSetRenderPage
 
 
@@ -386,35 +393,15 @@ if ( typeof jQuery != 'undefined' ) {
 		}
 
 
-		var isEmpty = function ( str ) {
-    		return (!str || 0 === str.length);
-		}	
-
-
-		var calcLastPage = function ( numrows, rowcount ) {
-			var maxrows;
-
-			if (rowcount < listingLimit) {
-				maxrows = rowcount;
-			}
-			else {
-				maxrows = listingLimit;
-			}
-
-			return Math.floor( Number(maxrows) / Number(numrows) );
-		}	
-
 		var getLastPageNum = function ( numrows, rowcount ) {
 			var maxrows;
-
 			if (rowcount < listingLimit) {
 				maxrows = rowcount;
 			}
 			else {
 				maxrows = listingLimit;
 			}
-
-			return Math.floor( Number(maxrows) / Number(numrows) );
+			return Math.ceil( Number(maxrows) / Number(numrows) );
 		}			
 
 	} )( jQuery ); /* END: jQuery IIFE */

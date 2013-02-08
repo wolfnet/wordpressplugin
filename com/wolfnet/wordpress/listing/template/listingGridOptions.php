@@ -155,8 +155,8 @@
 				<input id="<?php echo $maxResultsId; ?>" name="<?php echo $maxResultsName; ?>"
 					type="text" value="<?php echo $maxResultsValue; ?>" />
 				<span class="wolfnet_moreInfo">
-					Define the number of properties to be included in a search results set.
-					The maximum number of properties that can be displayed is 50.
+					Define the number of properties to display per search results page.  
+					The maximum number of properties that can be displayed per page is 50.					
 				</span>
 			</td>
 		</tr>
