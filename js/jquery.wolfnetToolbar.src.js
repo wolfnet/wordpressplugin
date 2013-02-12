@@ -13,6 +13,7 @@ if ( typeof jQuery != 'undefined' ) {
 	( function ( $ ) {
 
 		var listingLimit = 250;
+		var previewLimitCount;
 		var datakey = 'wolfnetToolbarData';	
 
 		$.fn.wolfnetToolbar = function ( options ) {
@@ -34,10 +35,10 @@ if ( typeof jQuery != 'undefined' ) {
 				$( this ).data( datakey , options );
 
 				if (options.total_rows > listingLimit) {
-					var previewLimitCount = listingLimit;
+					previewLimitCount = listingLimit;
 				}
 				else {
-					var previewLimitCount = options.total_rows;
+					previewLimitCount = options.total_rows;
 				}
 
 				$( this ).data('state' 
@@ -47,8 +48,7 @@ if ( typeof jQuery != 'undefined' ) {
 							    sort 		: 	options.sort,
 							    ownerType	:   options.ownerType,
 							    total_rows  :   options.total_rows,
-							    max_results :   previewLimitCount,
-							    criteria 	: 	options.criteria							   
+							    max_results :   previewLimitCount					   
 							});	
 
 				//Sort dropdown - build and insert to interface before & after listings
@@ -370,8 +370,8 @@ if ( typeof jQuery != 'undefined' ) {
 
 			//update results count display
 			var rowcountDisplay = (Number(startrow) - 1) + Number(numrows);
-			if (rowcountDisplay > listingLimit) {
-				rowcountDisplay = listingLimit;
+			if (rowcountDisplay > previewLimitCount) {
+				rowcountDisplay = previewLimitCount;
 			}
 			container.find('.startrowSpan').html(startrow);
 			container.find('.numrowSpan').html(rowcountDisplay);
@@ -395,11 +395,11 @@ if ( typeof jQuery != 'undefined' ) {
 
 		var getLastPageNum = function ( numrows, rowcount ) {
 			var maxrows;
-			if (rowcount < listingLimit) {
+			if (rowcount < previewLimitCount) {
 				maxrows = rowcount;
 			}
 			else {
-				maxrows = listingLimit;
+				maxrows = previewLimitCount;
 			}
 			return Math.ceil( Number(maxrows) / Number(numrows) );
 		}			
