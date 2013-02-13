@@ -203,9 +203,9 @@ implements com_greentiedev_wppf_interface_iService
 			}
 		}
 
-		$http = wp_remote_get( $url, array( 'cookies' => $this->getCookieData() ) );
+		$http = wp_remote_get( $url, array( 'cookies' => $this->getCookieData(), 'timeout'=>180 ) );
 
-		//$this->log( $http );
+		$this->log( $http );
 
 		if ( !is_wp_error( $http ) && $http['response']['code'] == '200' ) {
 			$this->setCookieData( $http['cookies'] );
