@@ -12,6 +12,7 @@
 if ( typeof jQuery != 'undefined' ) {
 	( function ( $ ) {
 
+		//number of listings in a result set cannot be >250 (requirement)
 		var listingLimit = 250;
 		var previewLimitCount;
 		var datakey = 'wolfnetToolbarData';	
@@ -28,12 +29,12 @@ if ( typeof jQuery != 'undefined' ) {
 								 	 max_results    :   listingLimit,
 								 	 criteria 		:   {}
 								 	}
-								    ,options );
+								    ,options );	
 
 			return this.each( function () {			
 
 				$( this ).data( datakey , options );
-
+				
 				if (options.total_rows > listingLimit) {
 					previewLimitCount = listingLimit;
 				}
@@ -136,21 +137,18 @@ if ( typeof jQuery != 'undefined' ) {
 				success: function ( data ) {
 					var select = $( '.pagination_div' ).find( 'select.showlistings' );
 					select.empty();
-					for ( var key in data ) {
 
-						if (data[key] != state.numrows) {
+					$('<option>',{value:state.numrows,text:state.numrows})
+						.addClass('showNum_'+state.numrows)
+					    .appendTo(select)
+						.attr('selected','selected');		
+
+					for ( var key in data ) {
+						if ( data[key] != state.numrows ) {
 							$('<option>',{value:data[key],text:data[key]})
 									    .addClass('showNum_'+data[key])
 									    .appendTo( select );
 						}
-
-						if (state.numrows >= data[key]) {
-							$('<option>',{value:state.numrows,text:state.numrows})
-								.addClass('showNum_'+state.numrows)
-							    .appendTo(select)
-								.attr('selected','selected');							
-						}
-
 					}
 				}
 			});				
@@ -242,7 +240,7 @@ if ( typeof jQuery != 'undefined' ) {
 				dataType: 'json',
 				data: data,
 				success: function ( data ) {
-					//event handler
+					//event handler logic
 					updateResultSetRenderPage( data
 						                      ,container
 						                      ,options.usesPagination
@@ -406,4 +404,5 @@ if ( typeof jQuery != 'undefined' ) {
 
 	} )( jQuery ); /* END: jQuery IIFE */
 } /* END: If jQuery Exists */
+
 
