@@ -233,6 +233,9 @@
 		<property name="SearchService">
 			<ref bean="SearchService" />
 		</property>
+		<property name="SettingsService">
+			<ref bean="SettingsService" />
+		</property>
 		<property name="FeaturedListingsOptionsView">
 			<ref bean="FeaturedListingsOptionsView" />
 		</property>
