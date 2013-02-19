@@ -234,8 +234,7 @@ if ( typeof jQuery != 'undefined' ) {
 				wrapperClass    : 'wolfnetProductKeyValidationWrapper',
 				validEvent      : 'validProductKey',
 				invalidEvent    : 'invalidProductKey',
-				validationEvent : 'validateProductKey',
-				apiUri          : 'http://services.mlsfinder.com/v1/validateKey/'
+				validationEvent : 'validateProductKey'
 			};
 			$.extend( options, clientOptions );
 
@@ -270,8 +269,9 @@ if ( typeof jQuery != 'undefined' ) {
 				var key      = $this.val();
 
 				$.ajax( {
-					url: options.apiUri + key + '.jsonp',
-					dataType: 'jsonp',
+					url: options.rootUri,
+					data: { key:key },
+					dataType: 'json',
 					type: 'GET',
 					cache: false,
 					timeout: 2500,
@@ -281,14 +281,8 @@ if ( typeof jQuery != 'undefined' ) {
 						}
 					},
 					success: function ( data ) {
-						/* If no errors are returned the key is valid. */
-						if ( !data.error.status ) {
+						if ( data === true ) {
 							$this.trigger( options.validEvent );
-						}
-						/* If the validation failed because the key is disabled notify the user */
-						else if ( data.error.status === true && data.error.message == 'Product Key is Disabled' ) {
-							$this.trigger( options.invalidEvent );
-							alert( 'The product key you have entered is currently disabled. Please contact customer services for more information.' );
 						}
 						else {
 							$this.trigger( options.invalidEvent );

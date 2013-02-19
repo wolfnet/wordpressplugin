@@ -52,6 +52,15 @@ extends com_greentiedev_wppf_action_action
 
 
 	/**
+	 * This property holds a references to the Settings Service object.
+	 *
+	 * @type  com_wolfnet_wordpress_settings_service
+	 *
+	 */
+	private $settingsService;
+
+
+	/**
 	 * This property holds an instance of the Listing Grid Options View object
 	 *
 	 * @type  com_greentiedev_wppf_interface_iView
@@ -296,6 +305,23 @@ extends com_greentiedev_wppf_action_action
 	}
 
 
+	private function admin_validate_key ()
+	{
+		$settingsService = $this->getSettingsService();
+
+		$valid = false;
+
+		if ( array_key_exists( 'key', $_GET ) ) {
+			$valid = $settingsService->isKeyValid( $_GET['key'] );
+		}
+
+		$this->statusSuccess();
+		print ( $valid ) ? 'true' : 'false';
+		exit;
+
+	}
+
+
 	private function content_header ()
 	{
 		// Output the header of the current theme and exit
@@ -423,6 +449,31 @@ extends com_greentiedev_wppf_action_action
 	public function setSearchService ( com_wolfnet_wordpress_search_service $service )
 	{
 		$this->searchService = $service;
+	}
+
+
+	/**
+	 * GETTER:  This method is a getter for the settingsService property.
+	 *
+	 * @return  com_wolfnet_wordpress_settings_service
+	 *
+	 */
+	public function getSettingsService ()
+	{
+		return $this->settingsService;
+	}
+
+
+	/**
+	 * SETTER:  This method is a setter for the settingsService property.
+	 *
+	 * @param   com_wolfnet_wordpress_settings_service  $service
+	 * @return  void
+	 *
+	 */
+	public function setSettingsService ( com_wolfnet_wordpress_settings_service $service )
+	{
+		$this->settingsService = $service;
 	}
 
 

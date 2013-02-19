@@ -160,13 +160,18 @@ implements com_greentiedev_wppf_interface_iService
 	}
 
 
-	public function isKeyValid ()
+	public function isKeyValid ( $key=null )
 	{
 		$isValid    = false;
-		$productKey = $this->getOptionManager()->getOptionValueFromWP( 'wolfnet_productKey' );
+		if ( $key != null ) {
+			$productKey = $key;
+		}
+		else {
+			$productKey = $this->getOptionManager()->getOptionValueFromWP( 'wolfnet_productKey' );
+		}
 		$wsu        = $this->getWebServiceUrl();
 		$wsu->setScriptPath( '/validateKey/' . $productKey );
-		$http       = wp_remote_get( (string) $wsu );
+		$http       = wp_remote_get( (string) $wsu, array( 'timeout'=>180 ) );
 		if ( !is_wp_error( $http ) && $http['response']['code'] == '200' ) {
 			$data = json_decode( $http['body'] );
 			if ( property_exists( $data, 'error') && property_exists( $data->error, 'status') && $data->error->status === false ) {
