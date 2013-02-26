@@ -51,6 +51,10 @@ extends com_greentiedev_wppf_action_action
 		$rewrite = 'index.php?pagename=wolfnet-admin-searchmanager-save';
 		add_rewrite_rule( $rule, $rewrite, 'top' );
 
+		$rule    = '^wolfnet/content?';
+		$rewrite = 'index.php?pagename=wolfnet-content';
+		add_rewrite_rule( $rule, $rewrite, 'top' );
+
 		$rule    = '^wolfnet/content/header?';
 		$rewrite = 'index.php?pagename=wolfnet-content-header';
 		add_rewrite_rule( $rule, $rewrite, 'top' );
