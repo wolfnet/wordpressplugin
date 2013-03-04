@@ -271,7 +271,7 @@ extends com_greentiedev_wppf_action_action
 
 		}
 
-		$this->searchmanager_get();
+		$this->admin_searchmanager_get();
 
 	}
 
@@ -286,7 +286,7 @@ extends com_greentiedev_wppf_action_action
 
 		}
 
-		$this->searchmanager_get();
+		$this->admin_searchmanager_get();
 
 	}
 
