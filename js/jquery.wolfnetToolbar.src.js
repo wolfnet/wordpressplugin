@@ -52,13 +52,14 @@ if ( typeof jQuery != 'undefined' ) {
 							    max_results :   previewLimitCount					   
 							});	
 
+
 				//Sort dropdown - build and insert to interface before & after listings
 				var sortDropdown = renderSortDropdown.call( this );
 				$( this ).find('h2.widget-title').after( sortDropdown.clone(true) );
 				$( this ).append( sortDropdown.clone(true) );
 
-				//Pagination controls - build and insert to interface before & after listings, if enabled
-				if (options.usesPagination == true) {
+				//Pagination controls - build and insert to interface before & after listings
+				if ( options.usesPagination == true && options.total_rows > options.numrows ) {
 					var pagination = renderPaginationTools.call( this );
 					$( this ).find('h2.widget-title').after( pagination.clone(true) );
 					$( this ).append( pagination.clone(true) );
@@ -204,7 +205,7 @@ if ( typeof jQuery != 'undefined' ) {
 					updateResultSetEventHandler.call(container, event);
 				});
 
-			$("<a>").appendTo(cells[2])
+			$('<a>').appendTo(cells[2])
 					.addClass('nextPageLink')
 					.text('Next')
 					.attr('href','javascript:;')
