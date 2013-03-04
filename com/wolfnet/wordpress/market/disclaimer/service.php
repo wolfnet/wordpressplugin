@@ -123,9 +123,9 @@ implements com_greentiedev_wppf_interface_iService
 
 		/* Cache for 24 hours */
 		$wsu->setCacheSetting( 1440 );
+		$productKey = $this->getOptionManager()->getOptionValueFromWP( 'wolfnet_productKey' );
 
-		$wsu->setScriptPath( '/marketDisclaimer/'
-		                     . $this->getOptionManager()->getOptionValueFromWP( 'wolfnet_productKey' ) );
+		$wsu->setScriptPath( '/marketDisclaimer/' . $productKey . '.json' );
 
 		$wsu->setParameter( 'type',  $type );
 

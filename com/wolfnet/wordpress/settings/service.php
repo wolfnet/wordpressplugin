@@ -123,7 +123,7 @@ implements com_greentiedev_wppf_interface_iService
 
 		/* Cache for 24 hours */
 		$wsu->setCacheSetting( 1440 );
-		$wsu->setScriptPath( '/setting/' . $productKey );
+		$wsu->setScriptPath( '/setting/' . $productKey . '.json' );
 		$wsu->setParameter( 'setting',  'getallsettings' );
 
 		$this->log( (string) $wsu );
@@ -145,7 +145,7 @@ implements com_greentiedev_wppf_interface_iService
 
 		/* Cache for 24 hours */
 		$wsu->setCacheSetting( 1440 );
-		$wsu->setScriptPath( '/setting/' . $productKey );
+		$wsu->setScriptPath( '/setting/' . $productKey . '.json' );
 		$wsu->setParameter( 'setting',  'SITE_BASE_URL' );
 
 		$data = $this->getDataService()->getData( $wsu );
@@ -170,7 +170,7 @@ implements com_greentiedev_wppf_interface_iService
 			$productKey = $this->getOptionManager()->getOptionValueFromWP( 'wolfnet_productKey' );
 		}
 		$wsu        = $this->getWebServiceUrl();
-		$wsu->setScriptPath( '/validateKey/' . $productKey );
+		$wsu->setScriptPath( '/validateKey/' . $productKey . '.json' );
 		$http       = wp_remote_get( (string) $wsu, array( 'timeout'=>180 ) );
 		if ( !is_wp_error( $http ) && $http['response']['code'] == '200' ) {
 			$data = json_decode( $http['body'] );
