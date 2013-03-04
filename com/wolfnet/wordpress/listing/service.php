@@ -395,7 +395,16 @@ implements com_greentiedev_wppf_interface_iService
 
 		$data = $this->getDataService()->getData( $wsu );
 
-		$this->getDAO()->setData( $data['listings'] );
+		if ( !array_key_exists( 'listings', $data ) ) {
+			echo '<!-- WNT ERROR: The data returned from the remote service call is not valid listing data. -->';
+			$data = array();
+		}
+		else {
+			$data = $data['listings'];
+		}
+
+		$this->getDAO()->setData( $data );
+
 	}
 
 
