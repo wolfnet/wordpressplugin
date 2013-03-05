@@ -52,7 +52,6 @@ if ( typeof jQuery != 'undefined' ) {
 							    max_results :   previewLimitCount					   
 							});	
 
-
 				var listingContainer = $( this );
 
 				//Sort dropdown - build and insert to interface before & after listings
@@ -65,20 +64,29 @@ if ( typeof jQuery != 'undefined' ) {
 					var pagination = renderPaginationTools.call( this );
 					$( this ).find('h2.widget-title').after( pagination.clone(true) );
 					$( this ).append( pagination.clone(true) );
+				}
 
-					// logic to scroll to top of component from bottom pagination toolbar
-					var toolbars = $( this ).find('.pagination_div');
+				//logic to scroll to component header when bottom toolbar is used
+				var scrollHandler = function () {
+					$('html,body').scrollTop(listingContainer.offset().top);
+				}
 
-					if (toolbars.length > 1 ) {
-						var toolbar = $(toolbars[1]);
+				var toolbars = $( this ).find('.wntToolbar');
 
-						var scrollHandler = function () {
-							$('html,body').scrollTop(listingContainer.offset().top);
-						}
+				if ( options.usesPagination == true && options.total_rows > options.numrows ) {
+					//adding scroll to bottom sort dropdown
+					var toolbar = $(toolbars[2]);
+					toolbar.find('select').change( scrollHandler);
 
-						toolbar.find('a').click( scrollHandler );
-						toolbar.find('select').change( scrollHandler);
-					}
+					//adding scroll to bottom pagination toolbar
+					toolbar = $(toolbars[3]);					
+					toolbar.find('a').click( scrollHandler );
+					toolbar.find('select').change( scrollHandler);
+				} 
+				else {			
+					//adding scroll to bottom sort dropdown
+					var toolbar = $(toolbars[1]);
+					toolbar.find('select').change( scrollHandler );
 				}
 
 			});
@@ -94,8 +102,8 @@ if ( typeof jQuery != 'undefined' ) {
  			var state = container.data('state');
 		
 			var resultTools = $('<div>')
-				.addClass('sort_div')
-				.css( {'width':'100%','clear':'both'} );
+				.css( {'width':'100%','clear':'both'} )
+				.addClass( 'wntSorting wntToolbar' );
 
 			// Horizontal cells within toolbar div
 			var cells = [];
@@ -103,7 +111,7 @@ if ( typeof jQuery != 'undefined' ) {
 								 .css( {'width':'99%','clear':'both','text-align':'left'} );
 
 			//Build Sort By dropdown and append to first cell
-			var sortByDropdown = $('<select>').addClass( 'sortoptions' )
+			var sortByDropdown = $('<select>').addClass( 'wntSortoptions' )
 				.change(function(event){
 					state.sort = $(this).val();
 					state.page = 1;
@@ -116,7 +124,7 @@ if ( typeof jQuery != 'undefined' ) {
 				url: '?pagename=wolfnet-get-sortOptions-dropdown',
 				dataType: 'json',
 				success: function ( data ) {
-					var select = $( '.sort_div' ).find( 'select.sortoptions' );
+					var select = $( '.wntSorting' ).find( 'select.wntSortoptions' );
 					select.empty();
 					for ( var i=0; i<data.length; i++ ) {					
 						$('<option>', {value:data[i]['value'],text:data[i]['label']}).appendTo( select );
@@ -136,11 +144,11 @@ if ( typeof jQuery != 'undefined' ) {
  			var options = container.data(datakey);
  			var state = container.data('state');
 
-			var paginationToolbar = $('<div>').addClass('pagination_div')
+			var paginationToolbar = $('<div>').addClass('wntPagination wntToolbar')
 											  .css( {'width':'100%','clear':'both'} );;
 
 			//Build show # of listings dropdown and append to third cell
-			var showDropdown = $('<select>').addClass( 'showlistings' )
+			var showDropdown = $('<select>').addClass( 'wntShowlistings' )
 				.change(function(event){
 					state.numrows = $(this).val();
 					state.page = 1;
@@ -152,7 +160,7 @@ if ( typeof jQuery != 'undefined' ) {
 				url: '?pagename=wolfnet-get-showNumberOfListings-dropdown',
 				dataType: 'json',
 				success: function ( data ) {
-					var select = $( '.pagination_div' ).find( 'select.showlistings' );
+					var select = $( '.wntPagination' ).find( 'select.wntShowlistings' );
 					select.empty();
 
 					$('<option>',{value:state.numrows,text:state.numrows})
@@ -392,8 +400,8 @@ if ( typeof jQuery != 'undefined' ) {
 			container.find('.numrowSpan').html(rowcountDisplay);
 
 			//clear show # select's options' selected attributes and update
-			container.find('select.showlistings option').removeAttr('selected');
-			container.find('select.showlistings option[value=\''+numrows+'\']').attr('selected','');
+			container.find('select.wntShowlistings option').removeAttr('selected');
+			container.find('select.wntShowlistings option[value=\''+numrows+'\']').attr('selected','');
 
 		}//end: updateResultSetRenderPage
 
