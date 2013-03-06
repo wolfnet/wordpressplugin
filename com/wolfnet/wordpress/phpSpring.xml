@@ -185,6 +185,9 @@
 		<property name="Template">
 			<value>/template/listingGrid.php</value>
 		</property>
+		<property name="SettingsService">
+			<ref bean="SettingsService" />
+		</property>
 	</bean>
 
 	<bean id="ListingGridOptionsView" class="com_wolfnet_wordpress_listing_listingGridOptionsView" singleton="false" />

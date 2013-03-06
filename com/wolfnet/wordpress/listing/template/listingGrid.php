@@ -56,11 +56,12 @@
 			var instance = '#<?php echo $instanceId; ?>';
 
 			jQuery( instance ).wolfnetToolbar({ 
-				usesPagination	: 	<?php echo ($options['paginated']['value'] == 'true') ? 'true' : 'false'; ?>
-			   ,numrows      	: 	<?php echo (is_numeric($options['maxresults']['value'])) ? $options['maxresults']['value'] : 15; ?>
+				usesPagination	: 	 <?php echo ($options['paginated']['value'] == 'true') ? 'true' : 'false'; ?>
+			   ,numrows      	: 	 <?php echo (is_numeric($options['maxresults']['value'])) ? $options['maxresults']['value'] : 15; ?>
 			   ,ownerType 		: 	'<?php echo $options['ownertype']['value']; ?>'
 			   ,total_rows      :    <?php echo (count($listings) > 0 ) ? $listings[0]->getTotalResults() : 0; ?>
-			   ,criteria 		: 	<?php echo $criteria; ?>
+			   ,criteria 		: 	 <?php echo $criteria; ?>
+			   ,max_results     : 	 <?php echo $max_results; ?>
 			});
 
 			jQuery( instance ).wolfnetListingGrid();

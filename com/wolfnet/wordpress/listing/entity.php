@@ -142,7 +142,6 @@ implements com_greentiedev_wppf_interface_iEntity
 	 */
 	public function setMemento ( $data )
 	{
-//var_dump($data);
 		$this->property_id     = $data['property_id'];
 		$this->property_url    = $data['property_url'];
 		$this->listing_price   = $data['listing_price'];

@@ -60,6 +60,7 @@
 			   ,ownerType 		: 	'<?php echo $options['ownertype']['value']; ?>'
 			   ,total_rows      :    <?php echo (count($listings) > 0 ) ? $listings[0]->getTotalResults() : 0; ?>
 			   ,criteria 		: 	 <?php echo $criteria; ?>
+			   ,max_results     : 	 <?php echo $max_results; ?>
 			});
 
 			jQuery( instance ).wolfnetPropertyList();

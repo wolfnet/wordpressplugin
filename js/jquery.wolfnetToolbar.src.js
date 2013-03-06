@@ -11,9 +11,6 @@
  
 if ( typeof jQuery != 'undefined' ) {
 	( function ( $ ) {
-
-		//number of listings in a result set cannot be >250 (requirement)
-		var listingLimit = 250;
 		var previewLimitCount;
 		var datakey = 'wolfnetToolbarData';	
 
@@ -26,7 +23,7 @@ if ( typeof jQuery != 'undefined' ) {
 								 	 sort 			: 	'',
 								 	 ownerType		: 	options.ownerType,
 								 	 total_rows     :   options.total_rows,
-								 	 max_results    :   listingLimit,
+								 	 max_results    :   options.max_results,
 								 	 criteria 		:   {}
 								 	}
 								    ,options );	
@@ -35,8 +32,8 @@ if ( typeof jQuery != 'undefined' ) {
 
 				$( this ).data( datakey , options );
 				
-				if (options.total_rows > listingLimit) {
-					previewLimitCount = listingLimit;
+				if (options.total_rows > options.max_results) {
+					previewLimitCount = options.max_results;
 				}
 				else {
 					previewLimitCount = options.total_rows;
