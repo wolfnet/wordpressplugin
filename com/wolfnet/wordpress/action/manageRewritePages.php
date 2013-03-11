@@ -308,11 +308,22 @@ extends com_greentiedev_wppf_action_action
 	}
 
 
+	private function content ()
+	{
+		// Output the header of the current theme and exit
+		$this->getEnqueueResourcesAction()->execute();
+		$this->statusSuccess();
+		echo $this->getWpHeader();
+		echo $this->getWpFooter();
+		exit;
+	}
+
+
 	private function content_header ()
 	{
 		// Output the header of the current theme and exit
 		$this->statusSuccess();
-		get_header();
+		echo $this->getWpHeader();
 		exit;
 	}
 
@@ -322,7 +333,7 @@ extends com_greentiedev_wppf_action_action
 		// Output the footer of the current theme and exit
 		$this->getEnqueueResourcesAction()->execute();
 		$this->statusSuccess();
-		get_footer();
+		echo $this->getWpFooter();
 		exit;
 	}
 
@@ -352,6 +363,43 @@ extends com_greentiedev_wppf_action_action
 			$wp_query->is_archive = true;
 		}
 		status_header( 401 );
+	}
+
+
+	private function getWpHeader ()
+	{
+		$wntClass = 'wnt-wrapper';
+		ob_start();
+		get_header();
+		$header = ob_get_clean();
+		$htmlTags = array();
+		$hasHtmlTags = preg_match_all( "(<html([^\>]*)>)", $header, $htmlTags, PREG_PATTERN_ORDER );
+		if ( $hasHtmlTags > 0 ) {
+			foreach ( $htmlTags[0] as $tag ) {
+				$classRegex = "/(?<=class\=[\"|\'])([^\"|\']*)/";
+				$currentClassArray=array();
+				$hasClassAttr = preg_match( $classRegex, $tag, $currentClassArray );
+				if ( $hasClassAttr > 0) {
+					$currentClasses = ( $hasClassAttr > 0 ) ? $currentClassArray[0] : "";
+					$newTag = preg_replace( $classRegex, $currentClasses . ' ' . $wntClass, $tag );
+				}
+				else {
+					$newTag = str_replace( '>', ' class="' . $wntClass . '">', $tag );
+				}
+				$this->dump( $tag );$this->dump( $newTag );
+				$header = str_replace( $tag, $newTag, $header );
+			}
+		}
+		return $header;
+	}
+
+
+	private function getWpFooter ()
+	{
+		ob_start();
+		get_footer();
+		$footer = ob_get_clean();
+		return $footer;
 	}
 
 
