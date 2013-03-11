@@ -96,7 +96,7 @@ implements com_greentiedev_wppf_interface_iDao
 	 */
 	public function findAll ()
 	{
-		$disclaimers          = array ();
+		$disclaimers          = array();
 		$disclaimerPrototype = $this->getEntityPrototype();
 		$data                = $this->getData();
 		if ( is_array($data) && count($data) > 0 ) {
@@ -109,7 +109,14 @@ implements com_greentiedev_wppf_interface_iDao
 
 		}
 
-		return $disclaimers[0];
+		if ( count( $disclaimers ) > 0 ) {
+			return $disclaimers[0];
+		}
+		else {
+			return $disclaimerPrototype;
+		}
+
+
 	}
 
 

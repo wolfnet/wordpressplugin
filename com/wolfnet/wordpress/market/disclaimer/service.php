@@ -133,7 +133,15 @@ implements com_greentiedev_wppf_interface_iService
 
 		$data = $this->getDataService()->getData( $wsu );
 
-		$this->getDAO()->setData( array( array( 'content' => $data['disclaimer'] ) ) );
+		if ( !array_key_exists( 'disclaimer', $data ) ) {
+			echo '<!-- WNT ERROR: The data returned from the remote service call is not valid disclaimer data. -->';
+			$data = array();
+		}
+		else {
+			$data = array( array( 'content' => $data['disclaimer'] ) );
+		}
+
+		$this->getDAO()->setData( $data );
 
 		return $this->getDAO()->findAll();
 
