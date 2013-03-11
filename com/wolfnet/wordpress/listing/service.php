@@ -413,7 +413,7 @@ implements com_greentiedev_wppf_interface_iService
 	private function setFeaturedListingsData ( $owner_type, $maxResults )
 	{
 		$wsu = $this->getWebServiceUrl();
-		$wsu->setScriptPath( '/propertyBar/' . $this->getProductKey() );
+		$wsu->setScriptPath( '/propertyBar/' . $this->getProductKey() . '.json' );
 		$wsu->setParameter( 'owner_type',  $owner_type );
 		$wsu->setParameter( 'max_results', $maxResults );
 		$this->setData( $wsu );
@@ -438,7 +438,7 @@ implements com_greentiedev_wppf_interface_iService
 	private function setGridListingData ( $criteria = array(), $owner_type, $maxResults )
 	{
 		$wsu = $this->getWebServiceUrl();
-		$wsu->setScriptPath( '/propertyGrid/' . $this->getProductKey() );
+		$wsu->setScriptPath( '/propertyGrid/' . $this->getProductKey() . '.json' );
 
 		foreach ( $criteria as $field => $value ) {
 
