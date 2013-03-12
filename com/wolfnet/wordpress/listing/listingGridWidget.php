@@ -59,6 +59,7 @@ extends com_wolfnet_wordpress_abstract_widget
 		'minprice'     => '',
 		'maxprice'     => '',
 		'ownertype'    => 'all',
+		'paginated'    => false,
 		'maxresults'   => 50
 	);
 
@@ -153,7 +154,8 @@ extends com_wolfnet_wordpress_abstract_widget
 
 		$data = array(
 			'listings' => $gridListings,
-			'options'  => $options
+			'options'  => $options,
+			'criteria' => $options['criteria']['value']
 		);
 
 		$this->getListingGridView()->out( $data );

@@ -1,8 +1,8 @@
 <project name="wolfnetWordPressPlugin" default="build" basedir=".">
 
 
-	<property name="majorVersion" value="1.1" />
-	<property name="minorVersion" value="4" />
+	<property name="majorVersion" value="1.2" />
+	<property name="minorVersion" value="2" />
 	<property name="version" value="${majorVersion}.${minorVersion}" />
 
 	<property file="build.properties" />

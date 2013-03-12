@@ -43,6 +43,14 @@ implements com_greentiedev_wppf_interface_iView
 	 */
 	public $template;
 
+	/**
+	 * This property holds a reference to the settings service.
+	 *
+	 * @type  com_wolfnet_wordpress_settings_service
+	 *
+	 */
+	public $settingsService;	
+
 
 	/* PUBLIC METHODS *************************************************************************** */
 
@@ -64,6 +72,8 @@ implements com_greentiedev_wppf_interface_iView
 
 		$_REQUEST['wolfnet_includeDisclaimer'] = true; // For later use in the site footer.
 		$data['instanceId']	= uniqid( 'wolfnet_listings_' );
+		$data['max_results'] = $this->getSettingsService()->getSettings()->getMaxResults();
+
 		return parent::render( $data );
 	}
 
@@ -138,5 +148,29 @@ implements com_greentiedev_wppf_interface_iView
 		$this->template = $this->formatPath( dirname( __FILE__ ) . $template );
 	}
 
+
+	/**
+	 * GETTER: This method is a getter for the SettingsService property.
+	 *
+	 * @return  com_wolfnet_wordpress_settings_service
+	 *
+	 */
+	public function getSettingsService ()
+	{
+		return $this->settingsService;
+	}
+
+
+	/**
+	 * SETTER: This method is a setter for the SettingsService property.
+	 *
+	 * @type    com_wolfnet_wordpress_settings_service  $settingsService
+	 * @return  void
+	 *
+	 */
+	public function setSettingsService ( com_wolfnet_wordpress_settings_service $settingsService )
+	{
+		$this->settingsService = $settingsService;
+	}
 
 }

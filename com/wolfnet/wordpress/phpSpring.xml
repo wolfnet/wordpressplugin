@@ -92,6 +92,32 @@
 
 	<bean id="Settings" class="com_wolfnet_wordpress_settings_entity" />
 
+	<bean id="SortService" class="com_wolfnet_wordpress_sort_service">
+		<property name="DAO">
+			<ref bean="SortDAO" />
+		</property>
+		<property name="DataService">
+			<!-- Defined in WPPF service factory -->
+			<ref bean="JsonDataService" />
+		</property>
+		<property name="WebServiceUrl">
+			<!-- Defined in WPPF service factory -->
+			<ref bean="DefaultWebServiceUrl" />
+		</property>
+		<property name="OptionManager">
+			<!-- Defined in WPPF service factory -->
+			<ref bean="OptionManager" />
+		</property>
+	</bean>
+
+	<bean id="SortDAO" class="com_wolfnet_wordpress_sort_dao">
+		<property name="EntityPrototype">
+			<ref bean="Sort" />
+		</property>
+	</bean>
+
+	<bean id="Sort" class="com_wolfnet_wordpress_sort_entity" />	
+
 	<bean id="DefaultWebServiceUrl" class="com_greentiedev_wppf_data_webServiceUrl">
 		<property name="Domain">
 			<value>${webServiceDomain}</value>
@@ -158,6 +184,9 @@
 		</property>
 		<property name="Template">
 			<value>/template/listingGrid.php</value>
+		</property>
+		<property name="SettingsService">
+			<ref bean="SettingsService" />
 		</property>
 	</bean>
 
@@ -247,6 +276,9 @@
 		</property>
 		<property name="EnqueueResourcesAction">
 			<ref bean="EnqueueResources" />
+		</property>
+		<property name="SortService">
+			<ref bean="SortService" />
 		</property>
 	</bean>
 

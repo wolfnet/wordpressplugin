@@ -400,11 +400,17 @@ implements com_greentiedev_wppf_interface_iService
 			$data = array();
 		}
 		else {
+
+			if ( array_key_exists('total_rows', $data)) {
+				foreach ( $data['listings'] as &$listing) {
+					$listing['total_rows'] = $data['total_rows'];
+				}
+			}
+
 			$data = $data['listings'];
 		}
 
 		$this->getDAO()->setData( $data );
-
 	}
 
 

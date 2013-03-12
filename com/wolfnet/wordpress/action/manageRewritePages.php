@@ -104,6 +104,14 @@ extends com_greentiedev_wppf_action_action
 	 */
 	private $enqueueResourcesAction;
 
+	/**
+	 * This property holds the sort service.
+	 *
+	 * @type  com_wolfnet_wordpress_sort_service
+	 *
+	 */	
+	private $sortService;	
+
 
 	/* PUBLIC METHODS *************************************************************************** */
 
@@ -119,10 +127,13 @@ extends com_greentiedev_wppf_action_action
 		$pagename     = strtolower( get_query_var( 'pagename' ) );
 		$adminPrefix  = 'wolfnet-admin-';
 		$publicPrefix = 'wolfnet-';
-		$isAdmin      = ( current_user_can( 'edit_pages' ) || current_user_can( 'edit_posts' ) );
+		$isAdmin      = ( current_user_can( 'edit_pages' ) || current_user_can( 'edit_posts' ) );		
 
 		if ( substr( $pagename, 0, strlen( $adminPrefix ) ) == $adminPrefix ) {
 
+			if (!array_key_exists('debug', $_REQUEST)) {
+				wolfnet::getInstance()->loggerSetting( 'enabled', false );
+			}
 			if ( !$isAdmin ) {
 				$this->statusNotAuthorized();
 				exit;
@@ -139,7 +150,9 @@ extends com_greentiedev_wppf_action_action
 
 		}
 		else if ( substr( $pagename, 0, strlen( $publicPrefix ) ) == $publicPrefix ) {
-
+			if (!array_key_exists('debug', $_REQUEST)) {
+				wolfnet::getInstance()->loggerSetting( 'enabled', false );			
+			}
 			$method = str_replace( '-', '_', str_replace( $publicPrefix, '', $pagename ) );
 
 			if ( !method_exists( $this, $method ) ) {
@@ -194,6 +207,7 @@ extends com_greentiedev_wppf_action_action
 				'city'        => array( 'name' => 'city' ),
 				'zipcode'     => array( 'name' => 'zipcode' ),
 				'ownertype'   => array( 'name' => 'ownertype' ),
+				'paginated'   => array( 'name' => 'paginated' ),
 				'maxresults'  => array( 'name' => 'maxresults' )
 			),
 			'prices' => $this->getListingService()->getPriceData(),
@@ -337,6 +351,38 @@ extends com_greentiedev_wppf_action_action
 		exit;
 	}
 
+	private function get_sortOptions_dropdown ()
+	{
+		$sortOptions = $this->getSortService()->getSort();
+
+		$data = array();
+		foreach( $sortOptions as $sortOption ) {
+			$data[] = $sortOption->getMemento();
+		}
+		$this->statusSuccess();
+		echo json_encode( $data );
+		exit;
+	}
+
+	private function get_showNumberOfListings_dropdown ()
+	{
+		$data = array(5,10,15,20,25,30,35,40,45,50);
+		$this->statusSuccess();
+		echo json_encode( $data );
+		exit;
+	}
+
+	private function listings_get () {
+		$this->statusSuccess();		
+		$listings = $this->getListingService()->getGridListings( $_GET, $_GET['ownerType'], $_GET['max_results'] ); 
+		$data = array();
+		foreach( $listings as $listing ) {
+			$data[] = $listing->getMemento();
+		}
+		echo json_encode( $data );
+ 
+		exit;
+	}
 
 	private function statusSuccess ()
 	{
@@ -353,7 +399,6 @@ extends com_greentiedev_wppf_action_action
 	{
 		status_header( 404 );
 	}
-
 
 	private function statusNotAuthorized ()
 	{
@@ -579,5 +624,28 @@ extends com_greentiedev_wppf_action_action
 		$this->enqueueResourcesAction = $action;
 	}
 
+	/**
+	 * GETTER: This method is a getter for the sortService property.
+	 *
+	 * @return  com_wolfnet_wordpress_sort_service
+	 *
+	 */
+	public function getSortService ()
+	{
+		return $this->sortService;
+	}
+
+
+	/**
+	 * SETTER: This method is a setter for the sortService property.
+	 *
+	 * @type    com_wolfnet_wordpress_sort_service  $sortService
+	 * @return  void
+	 *
+	 */
+	public function setSortService ( $sortService )
+	{
+		$this->sortService = $sortService;
+	}
 
 }

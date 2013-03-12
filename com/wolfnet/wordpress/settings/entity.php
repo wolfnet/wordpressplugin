@@ -43,6 +43,8 @@ implements com_greentiedev_wppf_interface_iEntity
 	 *
 	 */
 	private $SITE_BASE_URL = '';
+	private $max_results = 250;
+
 
 
 	/* PUBLIC METHODS *************************************************************************** */
@@ -58,7 +60,8 @@ implements com_greentiedev_wppf_interface_iEntity
 	 */
 	public function setMemento ( $data )
 	{
-		$this->SITE_BASE_URL = $data['SITE_BASE_URL'];
+		$this->SITE_BASE_URL = $data['SITE_BASE_URL'];	
+		$this->max_results = $data['SITE_TEXT']['Max Results'];
 	}
 
 
@@ -74,6 +77,7 @@ implements com_greentiedev_wppf_interface_iEntity
 	{
 		return array(
 			'SITE_BASE_URL' => $this->SITE_BASE_URL,
+			'max_results' => $this->max_results,
 			);
 	}
 
@@ -91,5 +95,16 @@ implements com_greentiedev_wppf_interface_iEntity
 		return $this->SITE_BASE_URL;
 	}
 
+	/**
+	 * GETTER: This method is a getter for the content property.
+	 *
+	 * @return  string
+	 *
+	 */
+	public function getMaxResults ()
+	{
+		return $this->max_results;
+	}
 
 }
+

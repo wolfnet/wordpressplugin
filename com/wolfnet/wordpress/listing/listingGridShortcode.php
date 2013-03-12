@@ -74,6 +74,7 @@ extends com_greentiedev_wppf_shortcode_shortcode
 	protected $attributes = array(
 		'title'        => '',
 		'ownertype'    => 'all',
+		'paginated'    => false,
 		'maxresults'   => 50
 		);
 
@@ -98,6 +99,12 @@ extends com_greentiedev_wppf_shortcode_shortcode
 				}
 			}
 		}
+
+		//Max of 50 results for this setting (requirement)
+		if ( $options['maxresults']['value'] > 50 ) {
+			$options['maxresults']['value'] = 50;
+		}
+
 		$gridListings = $this->getListingService()->getGridListings(
 			$criteria,
 			$options['ownertype']['value'],
@@ -105,7 +112,8 @@ extends com_greentiedev_wppf_shortcode_shortcode
 			);
 		$data = array(
 			'listings' => $gridListings,
-			'options'  => $options
+			'options'  => $options,
+			'criteria' => json_encode($criteria)
 			);
 		return $this->getListingGridView()->render( $data );
 	}
