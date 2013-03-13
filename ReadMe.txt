@@ -45,6 +45,17 @@ entered in the "WolfNet >> General Settings" page before any IDX data can be dis
 
 == Changelog ==
 
+= 1.3.0 =
+* Fixing bug with search manager saving and deleting functionality.
+* Updated API calls to explicitly include .json file type.
+* Updated wppf code and other service code to avoid caching data if there is a server side error.
+* Added wnt class to the html tag on dynamic content pages, for easier styling integration with MLSFinder search solutions.
+* Updated to perform ajax key validation against plugin exposed endpoint rather than calling the WolfNet API directly.
+* Increased timeout for remote call to 3 minutes.
+* Re-wrote shortcode builder javascript
+* Removed a couple styles which were causing issues in IE7.
+* Introduced pagination feature to Listing Grid and Property List.
+
 = 1.1.3 =
 * Fixed a bug preventing the shortcode builder from working correctly when there is more than one instance of TinyMCE on the page at a time.
 

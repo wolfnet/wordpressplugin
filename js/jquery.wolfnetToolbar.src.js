@@ -269,13 +269,14 @@ if ( typeof jQuery != 'undefined' ) {
 						                      ,state.startrow
 						                      ,state.numrows
 						                      ,state.page
-						                      ,state.total_rows);
+						                      ,state.total_rows
+						                      ,state.sort);
 				} 
 			});	
 		}
 
 
-		var updateResultSetRenderPage = function ( data, container, paginationEnabled, startrow, numrows, page, totalRows ) {
+		var updateResultSetRenderPage = function ( data, container, paginationEnabled, startrow, numrows, page, totalRows, sortBy ) {
 	
 			//clear listings from widget
 			container.find('.wolfnet_listing').remove();
@@ -400,6 +401,9 @@ if ( typeof jQuery != 'undefined' ) {
 			container.find('select.wntShowlistings option').removeAttr('selected');
 			container.find('select.wntShowlistings option[value=\''+numrows+'\']').attr('selected','');
 
+			//clear the sort option's selected attributes and update
+			container.find('select.wntSortoptions option').removeAttr('selected');
+			container.find('select.wntSortoptions option[value=\''+sortBy+'\']').attr('selected','');
 		}//end: updateResultSetRenderPage
 
 
