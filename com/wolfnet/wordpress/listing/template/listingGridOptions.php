@@ -153,7 +153,7 @@
 			<td><label>Max Results Per Page:</label></td>
 			<td>
 				<input id="<?php echo $maxResultsId; ?>" name="<?php echo $maxResultsName; ?>"
-					type="text" value="<?php echo $maxResultsValue; ?>" />
+					type="text" maxlength="2" size="2" value="<?php echo $maxResultsValue; ?>" />
 				<span class="wolfnet_moreInfo">
 					Define the number of properties to display per search results page.  
 					The maximum number of properties that can be displayed per page is 50.					

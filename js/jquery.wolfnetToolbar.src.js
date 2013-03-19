@@ -51,7 +51,8 @@ if ( typeof jQuery != 'undefined' ) {
 
 				var listingContainer = $( this );
 
-				if ( options.total_rows > options.numrows ) {
+				//only display toolbars if there are listings
+				if ( options.total_rows > 0 ) {
 
 					//Sort dropdown - build and insert to interface before & after listings
 					var sortDropdown = renderSortDropdown.call( this );
@@ -59,8 +60,9 @@ if ( typeof jQuery != 'undefined' ) {
 					$( this ).append( sortDropdown.clone(true) );	
 				
 
-					//Pagination controls - build and insert to interface before & after listings
-					if ( options.usesPagination == true ) {
+					//only display pagination toolbars if enabled & if there are enough listings to paginate thru
+					if ( options.usesPagination == true && options.total_rows > options.numrows ) {
+						//Pagination controls - build and insert to interface before & after listings
 						var pagination = renderPaginationTools.call( this );
 						$( this ).find('h2.widget-title').after( pagination.clone(true) );
 						$( this ).append( pagination.clone(true) );
@@ -175,7 +177,6 @@ if ( typeof jQuery != 'undefined' ) {
 							    .appendTo(select)
 								.attr('selected','selected');		
 						}
-
 						if ( data[key] != state.numrows ) {
 							$('<option>',{value:data[key],text:data[key]})
 									    .addClass('showNum_'+data[key])
