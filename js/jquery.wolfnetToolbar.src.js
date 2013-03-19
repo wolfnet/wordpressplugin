@@ -116,7 +116,7 @@ if ( typeof jQuery != 'undefined' ) {
 								 .css( {'width':'99%','clear':'both','text-align':'left'} );
 
 			//Build Sort By dropdown and append to first cell
-			var sortByDropdown = $('<select>').addClass( 'wntSortoptions' )
+			var sortByDropdown = $('<select>').addClass( 'wntSortoptions wntToolbars' )
 				.change(function(event){
 					state.sort = $(this).val();
 					state.page = 1;
@@ -153,7 +153,7 @@ if ( typeof jQuery != 'undefined' ) {
 											  .css( {'width':'100%','clear':'both'} );;
 
 			//Build show # of listings dropdown and append to third cell
-			var showDropdown = $('<select>').addClass( 'wntShowlistings' )
+			var showDropdown = $('<select>').addClass( 'wntShowlistings wntToolbars' )
 				.change(function(event){
 					state.numrows = $(this).val();
 					state.page = 1;
@@ -200,10 +200,10 @@ if ( typeof jQuery != 'undefined' ) {
 			//new horizontal cell to store Show # dropdown
 			cells[3] = $('<div>').appendTo(paginationToolbar)
 							     .css( {'width':'99%','clear':'both','text-align':'center'} )
-							     .addClass('wntShowDropdownSpan'); 
+							     .addClass('wntShowDropdownSpan wntToolbars'); 
 
 			//Build results preview string dom which will be dynamically updated later by span class
-			var resultsDisplay = $('<span>').addClass('wntTotalResultsSpan');
+			var resultsDisplay = $('<span>').addClass('wntTotalResultsSpan wntToolbars');
 			var start = $('<span>').addClass('startrowSpan')
 					               .text(state.startrow);
 			resultsDisplay.append(start);
@@ -222,7 +222,7 @@ if ( typeof jQuery != 'undefined' ) {
 			showPerPage.appendTo(cells[3]);
 
 			$('<a>').appendTo(cells[0])
-				    .addClass('wntPaginateLinkSpan')
+				    .addClass('wntPaginateLinkSpan wntToolbars')
 				    .text('Previous')
 				    .attr('href','javascript:;')
 				.click(function ( event ) {
@@ -239,7 +239,7 @@ if ( typeof jQuery != 'undefined' ) {
 				});
 
 			$('<a>').appendTo(cells[2])
-					.addClass('wntPaginateLinkSpan')
+					.addClass('wntPaginateLinkSpan wntToolbars')
 					.text('Next')
 					.attr('href','javascript:;')
 				.click(function ( event ) {
