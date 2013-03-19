@@ -156,6 +156,8 @@ if ( typeof jQuery != 'undefined' ) {
 			// Get the requested page, set it as the current page, and show it.
 			$currentPage = $builderDialog.find('div#' + idPrefix + pageId ).show();
 
+			$currentPage.find('.modeField input').trigger('ready');
+
 		}
 
 		var createPage = function ( pageId )
