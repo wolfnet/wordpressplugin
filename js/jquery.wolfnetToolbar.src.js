@@ -51,39 +51,45 @@ if ( typeof jQuery != 'undefined' ) {
 
 				var listingContainer = $( this );
 
-				//Sort dropdown - build and insert to interface before & after listings
-				var sortDropdown = renderSortDropdown.call( this );
-				$( this ).find('h2.widget-title').after( sortDropdown.clone(true) );
-				$( this ).append( sortDropdown.clone(true) );	
+				if ( options.total_rows > options.numrows ) {
 
-				//Pagination controls - build and insert to interface before & after listings
-				if ( options.usesPagination == true && options.total_rows > options.numrows ) {
-					var pagination = renderPaginationTools.call( this );
-					$( this ).find('h2.widget-title').after( pagination.clone(true) );
-					$( this ).append( pagination.clone(true) );
-				}
+					//Sort dropdown - build and insert to interface before & after listings
+					var sortDropdown = renderSortDropdown.call( this );
+					$( this ).find('h2.widget-title').after( sortDropdown.clone(true) );
+					$( this ).append( sortDropdown.clone(true) );	
+				
 
-				//logic to scroll to component header when bottom toolbar is used
-				var scrollHandler = function () {
-					$('html,body').scrollTop(listingContainer.offset().top);
-				}
+					//Pagination controls - build and insert to interface before & after listings
+					if ( options.usesPagination == true ) {
+						var pagination = renderPaginationTools.call( this );
+						$( this ).find('h2.widget-title').after( pagination.clone(true) );
+						$( this ).append( pagination.clone(true) );
+					}
 
-				var toolbars = $( this ).find('.wntToolbar');
 
-				if ( options.usesPagination == true && options.total_rows > options.numrows ) {
-					//adding scroll to bottom sort dropdown
-					var toolbar = $(toolbars[2]);
-					toolbar.find('select').change( scrollHandler);
+					//logic to scroll to component header when bottom toolbar is used
+					var scrollHandler = function () {
+						$('html,body').scrollTop(listingContainer.offset().top);
+					}
+	
+						var toolbars = $( this ).find('.wntToolbar');
+	
+						if ( options.usesPagination == true && options.total_rows > options.numrows ) {
+							//adding scroll to bottom sort dropdown
+							var toolbar = $(toolbars[2]);
+							toolbar.find('select').change( scrollHandler);
+	
+							//adding scroll to bottom pagination toolbar
+							toolbar = $(toolbars[3]);					
+							toolbar.find('a').click( scrollHandler );
+							toolbar.find('select').change( scrollHandler);
+						} 
+						else {			
+							//adding scroll to bottom sort dropdown
+							var toolbar = $(toolbars[1]);
+							toolbar.find('select').change( scrollHandler );
+					}
 
-					//adding scroll to bottom pagination toolbar
-					toolbar = $(toolbars[3]);					
-					toolbar.find('a').click( scrollHandler );
-					toolbar.find('select').change( scrollHandler);
-				} 
-				else {			
-					//adding scroll to bottom sort dropdown
-					var toolbar = $(toolbars[1]);
-					toolbar.find('select').change( scrollHandler );
 				}
 
 			});
@@ -160,21 +166,26 @@ if ( typeof jQuery != 'undefined' ) {
 					var select = $( '.wntPagination' ).find( 'select.wntShowlistings' );
 					select.empty();
 
-					$('<option>',{value:state.numrows,text:state.numrows})
-						.addClass('showNum_'+state.numrows)
-					    .appendTo(select)
-						.attr('selected','selected');		
-
+					var defaultNotInserted = true;
 					for ( var key in data ) {
+						if ( state.numrows <= data[key] && defaultNotInserted ) {
+							defaultNotInserted = false;
+							$('<option>',{value:state.numrows,text:state.numrows})
+								.addClass('showNum_'+state.numrows)
+							    .appendTo(select)
+								.attr('selected','selected');		
+						}
+
 						if ( data[key] != state.numrows ) {
 							$('<option>',{value:data[key],text:data[key]})
 									    .addClass('showNum_'+data[key])
 									    .appendTo( select );
-						}
+						}				
 					}
 				}
 			});				
-			var showPerPage = $(showDropdown).before('Show').after('per page');
+
+			var showPerPage = $(showDropdown).before('Show');
 
 			// Horizontal cells within pagination toolbar
 			var cells = [];
@@ -187,12 +198,12 @@ if ( typeof jQuery != 'undefined' ) {
 
 			//new horizontal cell to store Show # dropdown
 			cells[3] = $('<div>').appendTo(paginationToolbar)
-							     .css( {'width':'99%','clear':'both','text-align':'center'} ); 
+							     .css( {'width':'99%','clear':'both','text-align':'center'} )
+							     .addClass('wntShowDropdownSpan'); 
 
 			//Build results preview string dom which will be dynamically updated later by span class
-			var resultsDisplay = $('<span>');
+			var resultsDisplay = $('<span>').addClass('wntTotalResultsSpan');
 			var start = $('<span>').addClass('startrowSpan')
-					               .before('Results ')
 					               .text(state.startrow);
 			resultsDisplay.append(start);
  
@@ -210,7 +221,7 @@ if ( typeof jQuery != 'undefined' ) {
 			showPerPage.appendTo(cells[3]);
 
 			$('<a>').appendTo(cells[0])
-				    .addClass('previousPageLink')
+				    .addClass('wntPaginateLinkSpan')
 				    .text('Previous')
 				    .attr('href','javascript:;')
 				.click(function ( event ) {
@@ -227,7 +238,7 @@ if ( typeof jQuery != 'undefined' ) {
 				});
 
 			$('<a>').appendTo(cells[2])
-					.addClass('nextPageLink')
+					.addClass('wntPaginateLinkSpan')
 					.text('Next')
 					.attr('href','javascript:;')
 				.click(function ( event ) {
@@ -430,5 +441,3 @@ if ( typeof jQuery != 'undefined' ) {
 
 	} )( jQuery ); /* END: jQuery IIFE */
 } /* END: If jQuery Exists */
-
-
