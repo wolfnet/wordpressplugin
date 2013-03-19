@@ -55,8 +55,8 @@
 		</div>
 		<?php } ?>
 	</a>
+	<?php if ( array_key_exists( '-debug', $_REQUEST ) ) { ?>
 	<!-- RAW DATA ----------------------------------------------------------------------------------
-	------------------------------------------------------------------------------------------------
 	property_id:      <?php echo $rawData['property_id']         . "\n"; ?>
 	property_url:     <?php echo $rawData['property_url']        . "\n"; ?>
 	listing_price:    <?php echo $rawData['listing_price']       . "\n"; ?>
@@ -72,4 +72,5 @@
 		brokerLogo:   <?php echo $rawData_branding['brokerLogo'] . "\n"; ?>
 		content:      <?php echo $rawData_branding['content']    . "\n"; ?>
 	-------------------------------------------------------------------------------------------- -->
+	<?php } ?>
 </div>
