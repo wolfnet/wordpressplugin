@@ -27,17 +27,22 @@
  *
  */
 
+	
+
 ?>
 
 <div id="<?php echo $instanceId; ?>" class="wolfnet_widget wolfnet_listingGrid">
 
-	<?php if ( array_key_exists( 'title', $options ) && trim( $options['title']['value'] ) != '' ) { ?>
+	<h2 class="widget-title">
+		<?php if ( array_key_exists( 'title', $options ) && trim( $options['title']['value'] ) != '' ) { ?>
+			<?php echo $options['title']['value']; ?>
+		<?php } ?>
+	</h2>
 
-		<h2><?php echo $options['title']['value']; ?></h2>
-
-	<?php } ?>
-
-	<?php echo ( isset($listingContent) ) ? $listingContent : 'No Listings to Display.'; ?>
+	<div class="grid-listings-widget">
+		<?php echo ( isset($listingContent) ) ? $listingContent : 'No Listings to Display.'; ?>
+	</div>
+	
 </div>
 
 <div class="wolfnet_clearfix"></div>
@@ -48,7 +53,23 @@
 
 		jQuery( document ).ready( function () {
 
-			jQuery( '#<?php echo $instanceId; ?>' ).wolfnetListingGrid();
+			var instance = '#<?php echo $instanceId; ?>';
+			var listingsLimit = '<?php echo $max_results; ?>';
+
+			if (listingsLimit == '') {
+				listingsLimit = 250;
+			}
+
+			jQuery( instance ).wolfnetToolbar({ 
+				usesPagination	: 	 <?php echo ($options['paginated']['value'] == 'true') ? 'true' : 'false'; ?>
+			   ,numrows      	: 	 <?php echo (is_numeric($options['maxresults']['value'])) ? $options['maxresults']['value'] : 15; ?>
+			   ,ownerType 		: 	'<?php echo $options['ownertype']['value']; ?>'
+			   ,total_rows      :    <?php echo (count($listings) > 0 ) ? $listings[0]->getTotalResults() : 0; ?>
+			   ,criteria 		: 	 <?php echo $criteria; ?>
+			   ,max_results     : 	 listingsLimit
+			});
+
+			jQuery( instance ).wolfnetListingGrid();
 
 		} );
 
