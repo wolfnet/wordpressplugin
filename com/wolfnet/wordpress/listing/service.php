@@ -395,7 +395,22 @@ implements com_greentiedev_wppf_interface_iService
 
 		$data = $this->getDataService()->getData( $wsu );
 
-		$this->getDAO()->setData( $data['listings'] );
+		if ( !array_key_exists( 'listings', $data ) ) {
+			echo '<!-- WNT ERROR: The data returned from the remote service call is not valid listing data. -->';
+			$data = array();
+		}
+		else {
+
+			if ( array_key_exists('total_rows', $data)) {
+				foreach ( $data['listings'] as &$listing) {
+					$listing['total_rows'] = $data['total_rows'];
+				}
+			}
+
+			$data = $data['listings'];
+		}
+
+		$this->getDAO()->setData( $data );
 	}
 
 
@@ -413,7 +428,7 @@ implements com_greentiedev_wppf_interface_iService
 	private function setFeaturedListingsData ( $owner_type, $maxResults )
 	{
 		$wsu = $this->getWebServiceUrl();
-		$wsu->setScriptPath( '/propertyBar/' . $this->getProductKey() );
+		$wsu->setScriptPath( '/propertyBar/' . $this->getProductKey() . '.json' );
 		$wsu->setParameter( 'owner_type',  $owner_type );
 		$wsu->setParameter( 'max_results', $maxResults );
 		$this->setData( $wsu );
@@ -438,7 +453,7 @@ implements com_greentiedev_wppf_interface_iService
 	private function setGridListingData ( $criteria = array(), $owner_type, $maxResults )
 	{
 		$wsu = $this->getWebServiceUrl();
-		$wsu->setScriptPath( '/propertyGrid/' . $this->getProductKey() );
+		$wsu->setScriptPath( '/propertyGrid/' . $this->getProductKey() . '.json' );
 
 		foreach ( $criteria as $field => $value ) {
 

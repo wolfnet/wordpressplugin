@@ -1,8 +1,8 @@
 <project name="wolfnetWordPressPlugin" default="build" basedir=".">
 
 
-	<property name="majorVersion" value="1.1" />
-	<property name="minorVersion" value="4" />
+	<property name="majorVersion" value="1.3" />
+	<property name="minorVersion" value="2" />
 	<property name="version" value="${majorVersion}.${minorVersion}" />
 
 	<property file="build.properties" />
@@ -76,11 +76,14 @@
 				<exclude name="*.bat" /> <!-- Batch files used for building the project or performing othing tasks -->
 				<exclude name="LessCompilerOutput.txt" />
 				<exclude name=".ant/" />
+				<exclude name="docs/" />
+				<exclude name="phpdoc*.xml" />
 				<exclude name="**/*.less" />
 				<exclude name="xml/*.xml" />
 				<exclude name=".ant/" />
 				<exclude name=".gitconfig" />
 				<exclude name="**/*.tmp" />
+				<exclude name="*.sublime*" />
 			</fileset>
 		</copy>
 

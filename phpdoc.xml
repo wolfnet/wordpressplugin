@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <phpdocumentor>
-	
-	
-	<title><![CDATA[WolfNet WordPress Plugin]]></title>
-	
-	
+
+
+	<title><![CDATA[WolfNet IDX for WordPress Plugin]]></title>
+
+
 	<parser>
 		<default-package-name>root</default-package-name>
-		<target>../docs</target>
+		<target>docs</target>
 	</parser>
-	
-	
+
+
 	<transformer>
-		<target>../docs</target>
+		<target>docs</target>
 	</transformer>
-	
-	
+
+
 	<files>
 		<directory>.</directory>
 		<ignore>tests/*,</ignore>
@@ -23,27 +23,15 @@
 		<ignore>js/*</ignore>
 		<ignore>css/*</ignore>
 	</files>
-	
-	
-	<logging>
-		
-		<level>debug</level>
-		
-		<paths>
-			<default>{APP_ROOT}../docs/log/{DATE}.log</default>
-			<errors>{APP_ROOT}../docs/log/{DATE}.errors.log</errors>
-		</paths>
-		
-	</logging>
-	
-	
+
+
 	<plugins>
-		
+
 		<plugin path="Core">
 			<option name="a">value</option>
 		</plugin>
-		
+
 	</plugins>
-	
-	
+
+
 </phpdocumentor>

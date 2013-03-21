@@ -52,6 +52,15 @@ extends com_greentiedev_wppf_action_action
 
 
 	/**
+	 * This property holds a references to the Settings Service object.
+	 *
+	 * @type  com_wolfnet_wordpress_settings_service
+	 *
+	 */
+	private $settingsService;
+
+
+	/**
 	 * This property holds an instance of the Listing Grid Options View object
 	 *
 	 * @type  com_greentiedev_wppf_interface_iView
@@ -95,6 +104,14 @@ extends com_greentiedev_wppf_action_action
 	 */
 	private $enqueueResourcesAction;
 
+	/**
+	 * This property holds the sort service.
+	 *
+	 * @type  com_wolfnet_wordpress_sort_service
+	 *
+	 */	
+	private $sortService;	
+
 
 	/* PUBLIC METHODS *************************************************************************** */
 
@@ -110,10 +127,13 @@ extends com_greentiedev_wppf_action_action
 		$pagename     = strtolower( get_query_var( 'pagename' ) );
 		$adminPrefix  = 'wolfnet-admin-';
 		$publicPrefix = 'wolfnet-';
-		$isAdmin      = ( current_user_can( 'edit_pages' ) || current_user_can( 'edit_posts' ) );
+		$isAdmin      = ( current_user_can( 'edit_pages' ) || current_user_can( 'edit_posts' ) );		
 
 		if ( substr( $pagename, 0, strlen( $adminPrefix ) ) == $adminPrefix ) {
 
+			if (!array_key_exists('debug', $_REQUEST)) {
+				wolfnet::getInstance()->loggerSetting( 'enabled', false );
+			}
 			if ( !$isAdmin ) {
 				$this->statusNotAuthorized();
 				exit;
@@ -130,7 +150,9 @@ extends com_greentiedev_wppf_action_action
 
 		}
 		else if ( substr( $pagename, 0, strlen( $publicPrefix ) ) == $publicPrefix ) {
-
+			if (!array_key_exists('debug', $_REQUEST)) {
+				wolfnet::getInstance()->loggerSetting( 'enabled', false );			
+			}
 			$method = str_replace( '-', '_', str_replace( $publicPrefix, '', $pagename ) );
 
 			if ( !method_exists( $this, $method ) ) {
@@ -185,6 +207,7 @@ extends com_greentiedev_wppf_action_action
 				'city'        => array( 'name' => 'city' ),
 				'zipcode'     => array( 'name' => 'zipcode' ),
 				'ownertype'   => array( 'name' => 'ownertype' ),
+				'paginated'   => array( 'name' => 'paginated' ),
 				'maxresults'  => array( 'name' => 'maxresults' )
 			),
 			'prices' => $this->getListingService()->getPriceData(),
@@ -262,7 +285,7 @@ extends com_greentiedev_wppf_action_action
 
 		}
 
-		$this->searchmanager_get();
+		$this->admin_searchmanager_get();
 
 	}
 
@@ -277,8 +300,36 @@ extends com_greentiedev_wppf_action_action
 
 		}
 
-		$this->searchmanager_get();
+		$this->admin_searchmanager_get();
 
+	}
+
+
+	private function admin_validate_key ()
+	{
+		$settingsService = $this->getSettingsService();
+
+		$valid = false;
+
+		if ( array_key_exists( 'key', $_GET ) ) {
+			$valid = $settingsService->isKeyValid( $_GET['key'] );
+		}
+
+		$this->statusSuccess();
+		print ( $valid ) ? 'true' : 'false';
+		exit;
+
+	}
+
+
+	private function content ()
+	{
+		// Output the header of the current theme and exit
+		$this->getEnqueueResourcesAction()->execute();
+		$this->statusSuccess();
+		echo $this->getWpHeader();
+		echo $this->getWpFooter();
+		exit;
 	}
 
 
@@ -286,7 +337,7 @@ extends com_greentiedev_wppf_action_action
 	{
 		// Output the header of the current theme and exit
 		$this->statusSuccess();
-		get_header();
+		echo $this->getWpHeader();
 		exit;
 	}
 
@@ -296,10 +347,42 @@ extends com_greentiedev_wppf_action_action
 		// Output the footer of the current theme and exit
 		$this->getEnqueueResourcesAction()->execute();
 		$this->statusSuccess();
-		get_footer();
+		echo $this->getWpFooter();
 		exit;
 	}
 
+	private function get_sortOptions_dropdown ()
+	{
+		$sortOptions = $this->getSortService()->getSort();
+
+		$data = array();
+		foreach( $sortOptions as $sortOption ) {
+			$data[] = $sortOption->getMemento();
+		}
+		$this->statusSuccess();
+		echo json_encode( $data );
+		exit;
+	}
+
+	private function get_showNumberOfListings_dropdown ()
+	{
+		$data = array(5,10,15,20,25,30,35,40,45,50);
+		$this->statusSuccess();
+		echo json_encode( $data );
+		exit;
+	}
+
+	private function listings_get () {
+		$this->statusSuccess();		
+		$listings = $this->getListingService()->getGridListings( $_GET, $_GET['ownerType'], $_GET['max_results'] ); 
+		$data = array();
+		foreach( $listings as $listing ) {
+			$data[] = $listing->getMemento();
+		}
+		echo json_encode( $data );
+ 
+		exit;
+	}
 
 	private function statusSuccess ()
 	{
@@ -317,7 +400,6 @@ extends com_greentiedev_wppf_action_action
 		status_header( 404 );
 	}
 
-
 	private function statusNotAuthorized ()
 	{
 		global $wp_query;
@@ -326,6 +408,43 @@ extends com_greentiedev_wppf_action_action
 			$wp_query->is_archive = true;
 		}
 		status_header( 401 );
+	}
+
+
+	private function getWpHeader ()
+	{
+		$wntClass = 'wnt-wrapper';
+		ob_start();
+		get_header();
+		$header = ob_get_clean();
+		$htmlTags = array();
+		$hasHtmlTags = preg_match_all( "(<html([^\>]*)>)", $header, $htmlTags, PREG_PATTERN_ORDER );
+		if ( $hasHtmlTags > 0 ) {
+			foreach ( $htmlTags[0] as $tag ) {
+				$classRegex = "/(?<=class\=[\"|\'])([^\"|\']*)/";
+				$currentClassArray=array();
+				$hasClassAttr = preg_match( $classRegex, $tag, $currentClassArray );
+				if ( $hasClassAttr > 0) {
+					$currentClasses = ( $hasClassAttr > 0 ) ? $currentClassArray[0] : "";
+					$newTag = preg_replace( $classRegex, $currentClasses . ' ' . $wntClass, $tag );
+				}
+				else {
+					$newTag = str_replace( '>', ' class="' . $wntClass . '">', $tag );
+				}
+				$this->dump( $tag );$this->dump( $newTag );
+				$header = str_replace( $tag, $newTag, $header );
+			}
+		}
+		return $header;
+	}
+
+
+	private function getWpFooter ()
+	{
+		ob_start();
+		get_footer();
+		$footer = ob_get_clean();
+		return $footer;
 	}
 
 
@@ -378,6 +497,31 @@ extends com_greentiedev_wppf_action_action
 	public function setSearchService ( com_wolfnet_wordpress_search_service $service )
 	{
 		$this->searchService = $service;
+	}
+
+
+	/**
+	 * GETTER:  This method is a getter for the settingsService property.
+	 *
+	 * @return  com_wolfnet_wordpress_settings_service
+	 *
+	 */
+	public function getSettingsService ()
+	{
+		return $this->settingsService;
+	}
+
+
+	/**
+	 * SETTER:  This method is a setter for the settingsService property.
+	 *
+	 * @param   com_wolfnet_wordpress_settings_service  $service
+	 * @return  void
+	 *
+	 */
+	public function setSettingsService ( com_wolfnet_wordpress_settings_service $service )
+	{
+		$this->settingsService = $service;
 	}
 
 
@@ -480,5 +624,28 @@ extends com_greentiedev_wppf_action_action
 		$this->enqueueResourcesAction = $action;
 	}
 
+	/**
+	 * GETTER: This method is a getter for the sortService property.
+	 *
+	 * @return  com_wolfnet_wordpress_sort_service
+	 *
+	 */
+	public function getSortService ()
+	{
+		return $this->sortService;
+	}
+
+
+	/**
+	 * SETTER: This method is a setter for the sortService property.
+	 *
+	 * @type    com_wolfnet_wordpress_sort_service  $sortService
+	 * @return  void
+	 *
+	 */
+	public function setSortService ( $sortService )
+	{
+		$this->sortService = $sortService;
+	}
 
 }

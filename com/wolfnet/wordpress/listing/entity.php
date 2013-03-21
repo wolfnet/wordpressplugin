@@ -121,6 +121,13 @@ implements com_greentiedev_wppf_interface_iEntity
 	 */
 	private $branding        = 0;
 
+	/**
+	 *
+	 * @type  numeric
+	 *
+	 */
+	private $totalrecords    = 0;
+
 
 	/* PUBLIC METHODS *************************************************************************** */
 
@@ -143,10 +150,11 @@ implements com_greentiedev_wppf_interface_iEntity
 		$this->city            = $data['city'];
 		$this->state           = $data['state'];
 		$this->thumbnail_url   = $data['thumbnail_url'];
-		$this->photo_url   = $data['photo_url'];
+		$this->photo_url       = $data['photo_url'];
 		$this->bathroom        = $data['bathroom'];
 		$this->bedrooms        = $data['bedrooms'];
 		$this->branding        = $data['branding'];
+		$this->totalrecords    = $data['total_rows'];
 	}
 
 
@@ -160,7 +168,7 @@ implements com_greentiedev_wppf_interface_iEntity
 	 */
 	public function getMemento ()
 	{
-		return array(
+		$values = array(
 			'property_id'     => $this->property_id,
 			'property_url'    => $this->property_url,
 			'listing_price'   => $this->listing_price,
@@ -172,8 +180,15 @@ implements com_greentiedev_wppf_interface_iEntity
 			'photo_url'       => $this->photo_url,
 			'bathroom'        => $this->bathroom,
 			'bedrooms'        => $this->bedrooms,
-			'branding'        => $this->branding
+			'branding'        => $this->branding,
+			'total_rows'      => $this->totalrecords
 			);
+
+		if ( get_class($this->branding) == 'com_wolfnet_wordpress_listing_branding_entity' ) {
+			$values['branding'] = $this->branding->getMemento();
+		}
+
+		return $values;
 	}
 
 
@@ -433,6 +448,17 @@ implements com_greentiedev_wppf_interface_iEntity
 	public function getBranding ()
 	{
 		return $this->branding;
+	}
+
+	/**
+	 * GETTER: This method is a getter for the total results
+	 *
+	 * @return  numeric
+	 *
+	 */
+	public function getTotalResults ()
+	{
+		return $this->totalrecords;
 	}
 
 

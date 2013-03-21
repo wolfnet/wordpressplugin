@@ -69,7 +69,7 @@ implements com_greentiedev_wppf_interface_iView
 		$data['branding_brokerLogo'] = $data['listing']->getBranding()->getBrokerLogo();
 		$data['branding_content']    = $data['listing']->getBranding()->getContent();
 		$data['rawData']             = $data['listing']->getMemento();
-		$data['rawData_branding']    = $data['rawData']['branding']->getMemento();
+		$data['rawData_branding']    = $data['rawData']['branding'];
 		$data['listing_class']       = '';
 
 		if ( trim( $data['branding_brokerLogo'] ) != '' || trim( $data['branding_content'] ) != '' ) {
