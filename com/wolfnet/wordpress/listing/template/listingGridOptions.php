@@ -135,7 +135,6 @@
 		<tr>
 			<td><label>Pagination Enabled/Disabled:</label></td>
 			<td>
-
 				<select id="<?php echo $paginatedId; ?>" name="<?php echo $paginatedName; ?>" >
 					<option value="false" <?php echo $paginatedFalse; ?> >Disabled</option>
 					<option value="true"  <?php echo $paginatedTrue; ?>  >Enabled</option>
@@ -167,8 +166,8 @@
 				<input id="<?php echo $maxResultsId; ?>" name="<?php echo $maxResultsName; ?>"
 					type="text" maxlength="2" size="2" value="<?php echo $maxResultsValue; ?>" />
 				<span class="wolfnet_moreInfo">
-					Define the number of properties to display per search results page.  
-					The maximum number of properties that can be displayed per page is 50.					
+					Define the number of properties to display per search results page.
+					The maximum number of properties that can be displayed per page is 50.
 				</span>
 			</td>
 		</tr>

@@ -109,8 +109,8 @@ extends com_greentiedev_wppf_action_action
 	 *
 	 * @type  com_wolfnet_wordpress_sort_service
 	 *
-	 */	
-	private $sortService;	
+	 */
+	private $sortService;
 
 
 	/* PUBLIC METHODS *************************************************************************** */
@@ -127,7 +127,7 @@ extends com_greentiedev_wppf_action_action
 		$pagename     = strtolower( get_query_var( 'pagename' ) );
 		$adminPrefix  = 'wolfnet-admin-';
 		$publicPrefix = 'wolfnet-';
-		$isAdmin      = ( current_user_can( 'edit_pages' ) || current_user_can( 'edit_posts' ) );		
+		$isAdmin      = ( current_user_can( 'edit_pages' ) || current_user_can( 'edit_posts' ) );
 
 		if ( substr( $pagename, 0, strlen( $adminPrefix ) ) == $adminPrefix ) {
 
@@ -374,14 +374,14 @@ extends com_greentiedev_wppf_action_action
 	}
 
 	private function listings_get () {
-		$this->statusSuccess();		
-		$listings = $this->getListingService()->getGridListings( $_GET, $_GET['ownerType'], $_GET['max_results'] ); 
+		$this->statusSuccess();
+		$listings = $this->getListingService()->getGridListings( $_GET, $_GET['ownerType'], $_GET['max_results'] );
 		$data = array();
 		foreach( $listings as $listing ) {
 			$data[] = $listing->getMemento();
 		}
 		echo json_encode( $data );
- 
+
 		exit;
 	}
 

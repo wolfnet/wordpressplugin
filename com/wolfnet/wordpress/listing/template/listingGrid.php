@@ -27,7 +27,7 @@
  *
  */
 
-	
+
 
 ?>
 
@@ -42,7 +42,7 @@
 	<div class="grid-listings-widget">
 		<?php echo ( isset($listingContent) ) ? $listingContent : 'No Listings to Display.'; ?>
 	</div>
-	
+
 </div>
 
 <div class="wolfnet_clearfix"></div>
