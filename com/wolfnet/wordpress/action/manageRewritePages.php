@@ -151,7 +151,7 @@ extends com_greentiedev_wppf_action_action
 		}
 		else if ( substr( $pagename, 0, strlen( $publicPrefix ) ) == $publicPrefix ) {
 			if (!array_key_exists('debug', $_REQUEST)) {
-				wolfnet::getInstance()->loggerSetting( 'enabled', false );			
+				wolfnet::getInstance()->loggerSetting( 'enabled', false );
 			}
 			$method = str_replace( '-', '_', str_replace( $publicPrefix, '', $pagename ) );
 
@@ -208,6 +208,7 @@ extends com_greentiedev_wppf_action_action
 				'zipcode'     => array( 'name' => 'zipcode' ),
 				'ownertype'   => array( 'name' => 'ownertype' ),
 				'paginated'   => array( 'name' => 'paginated' ),
+				'sortoptions' => array( 'name' => 'sortoptions' ),
 				'maxresults'  => array( 'name' => 'maxresults' )
 			),
 			'prices' => $this->getListingService()->getPriceData(),

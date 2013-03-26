@@ -16,15 +16,16 @@ if ( typeof jQuery != 'undefined' ) {
 		$.fn.wolfnetToolbar = function ( options ) {
 
 			var defaultOptions = {
-				usesPagination : options.usesPagination,
-				page           : 1,
-				startrow       : 1,
-				numrows        : options.numrows,
-				sort           : '',
-				ownerType      : options.ownerType,
-				total_rows     : options.total_rows,
-				max_results    : options.max_results,
-				criteria       : {}
+				usesPagination  : options.usesPagination,
+				page            : 1,
+				startrow        : 1,
+				numrows         : options.numrows,
+				sort            : '',
+				ownerType       : options.ownerType,
+				total_rows      : options.total_rows,
+				max_results     : options.max_results,
+				criteria        : {},
+				showSortOptions : false
 				};
 			var options = $.extend( defaultOptions, options );
 			var previewLimitCount;
@@ -429,11 +430,13 @@ if ( typeof jQuery != 'undefined' ) {
 				//only display toolbars if there are listings
 				if ( options.total_rows > 0 ) {
 
-					//Sort dropdown - build and insert to interface before & after listings
-					var sortDropdown = renderSortDropdown.call( this );
+					if ( options.showSortOptions === true ) {
+						//Sort dropdown - build and insert to interface before & after listings
+						var sortDropdown = renderSortDropdown.call( this );
 
-					listingContainer.find('h2.widget-title').after( sortDropdown.clone(true) );
-					listingContainer.append( sortDropdown.clone(true) );
+						listingContainer.find('h2.widget-title').after( sortDropdown.clone(true) );
+						listingContainer.append( sortDropdown.clone(true) );
+					}
 
 					//only display pagination toolbars if enabled & if there are enough listings to paginate thru
 					if ( options.usesPagination == true && options.total_rows > options.numrows ) {

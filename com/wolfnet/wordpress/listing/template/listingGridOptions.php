@@ -144,8 +144,20 @@
 					Enable to add pagination capabilities for the user to the result set.
 					Results per page can be defined below in the Max Results Per Page field.
 				</span>
+			</td>
+		</tr>
 
-
+		<tr>
+			<td><label>Sort Options</label></td>
+			<td>
+				<select id="<?php echo $sortoptionsId; ?>" name="<?php echo $sortoptionsName; ?>" >
+					<option value="false" <?php echo $sortoptionsFalse; ?> >Disabled</option>
+					<option value="true"  <?php echo $sortoptionsTrue; ?>  >Enabled</option>
+				</select>
+				<span class="wolfnet_moreInfo">
+					Enable to add a drop-down menu which will allow users to sort listings by a
+					predefined set of data fields.
+				</span>
 			</td>
 		</tr>
 

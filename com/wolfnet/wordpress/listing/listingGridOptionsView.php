@@ -107,6 +107,10 @@ implements com_greentiedev_wppf_interface_iView
 			'paginatedName'	    => esc_attr( $data['fields']['paginated']['name'] ),
 			'paginatedTrue'	    => selected( $data['fields']['paginated']['value'], 'true', false ),
 			'paginatedFalse'    => selected( $data['fields']['paginated']['value'], 'false', false ),
+			'sortoptionsId'     => esc_attr( $data['fields']['sortoptions']['id'] ),
+			'sortoptionsName'   => esc_attr( $data['fields']['sortoptions']['name'] ),
+			'sortoptionsTrue'   => selected( $data['fields']['sortoptions']['value'], 'true', false ),
+			'sortoptionsFalse'  => selected( $data['fields']['sortoptions']['value'], 'false', false ),
 			'maxResultsId'      => esc_attr( $data['fields']['maxresults']['id'] ),
 			'maxResultsName'    => esc_attr( $data['fields']['maxresults']['name'] ),
 			'maxResultsValue'   => esc_attr( $data['fields']['maxresults']['value'] )
