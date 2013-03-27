@@ -278,6 +278,7 @@ if ( typeof jQuery != 'undefined' ) {
 						data     : data,
 						beforeSend : function () {
 							state.refreshing = true;
+							$container.find('.wolfnet_listings').addClass('wolfnet_refreshing');
 						}
 					} )
 					.done( function ( data ) {
@@ -286,6 +287,7 @@ if ( typeof jQuery != 'undefined' ) {
 					} )
 					.always( function () {
 						state.refreshing = false;
+						$container.find('.wolfnet_listings').removeClass('wolfnet_refreshing');
 					} );
 
 				}
