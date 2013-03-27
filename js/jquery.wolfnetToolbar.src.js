@@ -206,7 +206,7 @@ if ( typeof jQuery != 'undefined' ) {
 							// An array to hold our option elements.
 							var options = [];
 
-							for ( var key in data ) {
+							for ( var key=0; key<data.length; key++ ) {
 								var $option = $('<option>', {value:data[key],text:data[key]} );
 								if ( data[key] == state.numrows ) {
 									$option.attr( 'selected', 'selected' );
@@ -247,7 +247,7 @@ if ( typeof jQuery != 'undefined' ) {
 							// An array to hold our option elements.
 							var options = [];
 
-							for ( var key in data ) {
+							for ( var key=0; key<data.length; key++ ) {
 								options.push( $('<option>', {value:data[key].value,text:data[key].label} ) );
 							}
 
