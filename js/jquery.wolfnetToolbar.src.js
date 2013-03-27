@@ -597,8 +597,9 @@ if ( typeof jQuery != 'undefined' ) {
 							.find('.wolfnet_listings:first')
 							.after( $toolbar.clone(true).addClass('wolfnet_toolbarBottom') );
 
-						// The toolbars are loaded so trigger the event.
+						// The toolbars are loaded so trigger some events.
 						$listingContainer.trigger('wolfnet.toolbarsRendered');
+						$listingContainer.trigger('wolfnet.listingsRendered');
 
 					}
 

@@ -127,7 +127,7 @@ if ( typeof jQuery != 'undefined' ) {
 					} );
 					//methods.resize.apply( plugin );
 
-					$this.bind( 'allImagesLoaded.' + name, function () {					
+					$this.bind( 'allImagesLoaded.' + name, function () {
 						methods.resizeHeight.apply( plugin );
 					} );
 
@@ -137,9 +137,10 @@ if ( typeof jQuery != 'undefined' ) {
 
 			},
 
-			reload : function () {			
+			reload : function () {
+				$(document).trigger( 'resize.' + name );
 				return this.each( function () {
-					monitorImages( $(this) );		
+					monitorImages( $(this) );
 				});
 			},
 
