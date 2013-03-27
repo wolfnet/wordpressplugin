@@ -33,13 +33,13 @@
 
 <div id="<?php echo $instanceId; ?>" class="wolfnet_widget wolfnet_listingGrid">
 
-	<h2 class="widget-title">
-		<?php if ( array_key_exists( 'title', $options ) && trim( $options['title']['value'] ) != '' ) { ?>
+	<?php if ( array_key_exists( 'title', $options ) && trim( $options['title']['value'] ) != '' ) { ?>
+		<h2 class="widget-title">
 			<?php echo $options['title']['value']; ?>
-		<?php } ?>
-	</h2>
+		</h2>
+	<?php } ?>
 
-	<div class="grid-listings-widget">
+	<div class="wolfnet_listings">
 		<?php echo ( isset($listingContent) ) ? $listingContent : 'No Listings to Display.'; ?>
 	</div>
 
