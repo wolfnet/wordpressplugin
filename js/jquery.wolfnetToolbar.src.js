@@ -18,9 +18,14 @@ if ( typeof jQuery != 'undefined' ) {
 		{
 			var number = number.toString();
 			var dollars = number.split('.')[0];
-			var dollars = dollars.split('').reverse().join('')
-			    .replace(/(\d{3}(?!$))/g, '$1,')
-			    .split('').reverse().join('');
+			var dollars = dollars
+				.split('')
+				.reverse()
+				.join('')
+				.replace(/(\d{3}(?!$))/g, '$1,')
+				.split('')
+				.reverse()
+				.join('');
 
 			return '$' + dollars;
 
