@@ -191,7 +191,7 @@ if ( typeof jQuery != 'undefined' ) {
 				// Wait until the toolbars have been added to the DOM.
 				$(this).on("wolfnet.toolbarsRendered", function () {
 
-					var $select = $(this).find('.wolfnet_toolbar .wolfnet_page_items_select select');
+					var $select = $(this).find('.wolfnet_page_items_select select');
 					var state   = $(this).data('state');
 
 					$.ajax( {
@@ -232,7 +232,7 @@ if ( typeof jQuery != 'undefined' ) {
 				// Wait until the toolbars have been added to the DOM.
 				$(this).on("wolfnet.toolbarsRendered", function () {
 
-					var $select = $(this).find('.wolfnet_toolbar .wolfnet_sortoptions select');
+					var $select = $(this).find('.wolfnet_sortoptions select');
 					var state   = $(this).data('state');
 
 					$.ajax( {
