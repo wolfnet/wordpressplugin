@@ -453,13 +453,21 @@ if ( typeof jQuery != 'undefined' ) {
 						if (hasBranding) {
 							var branding = $('<span>').addClass('wolfnet_branding');
 
-							var imageSpan = $('<span>').addClass('wolfnet_brokerLogo');
-							var image = $('<img>').attr('src',brokerLogo)
-												  .appendTo(imageSpan);
-							imageSpan.appendTo(branding);
-							$('<span>').addClass('wolfnet_brandingMessage')
-									   .text(brokerName)
-									   .appendTo(branding);
+							if ( brokerLogo != null ) {
+								var imageSpan = $('<span>')
+									.addClass('wolfnet_brokerLogo');
+								var image = $('<img>')
+									.attr('src',brokerLogo)
+									.appendTo(imageSpan);
+								imageSpan.appendTo(branding);
+							}
+
+							if ( brokerName != null ) {
+								$('<span>').addClass('wolfnet_brandingMessage')
+										   .text(brokerName)
+										   .appendTo(branding);
+							}
+
 							location.after(branding);
 						}
 					}//END: loop to rebuild listing grid dom
