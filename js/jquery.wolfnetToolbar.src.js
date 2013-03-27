@@ -191,8 +191,9 @@ if ( typeof jQuery != 'undefined' ) {
 
 					$.ajax( {
 						url      : '?pagename=wolfnet-get-showNumberOfListings-dropdown',
-						dataType : 'json',
-						success  : function ( data ) {
+						dataType : 'json'
+					} )
+					.done( function ( data ) {
 
 							// Clear out any existing options.
 							$select.children().remove();
@@ -210,7 +211,6 @@ if ( typeof jQuery != 'undefined' ) {
 
 							$select.append(options);
 
-						}
 					} );
 
 				} );
@@ -232,8 +232,9 @@ if ( typeof jQuery != 'undefined' ) {
 
 					$.ajax( {
 						url      : '?pagename=wolfnet-get-sortOptions-dropdown',
-						dataType : 'json',
-						success  : function ( data ) {
+						dataType : 'json'
+					} )
+					.done( function ( data ) {
 
 							// Clear out any existing options.
 							$select.children().remove();
@@ -247,7 +248,6 @@ if ( typeof jQuery != 'undefined' ) {
 
 							$select.append(options);
 
-						}
 					} );
 
 				});
