@@ -519,6 +519,22 @@ if ( typeof jQuery != 'undefined' ) {
 
 			var listingsRenderedEventHandler = function ( event, target )
 			{
+				var $container = $(this);
+				var state = $container.data('state');
+
+				if ( state.page - 1 < 1 ) {
+					$container.find('a.wolfnet_page_nav_prev').addClass('wolfnet_disabled');
+				}
+				else {
+					$container.find('a.wolfnet_page_nav_prev').removeClass('wolfnet_disabled');
+				}
+
+				if ( state.page + 1 > getLastPageNum( state.numrows, state.total_rows ) ) {
+					$container.find('a.wolfnet_page_nav_next').addClass('wolfnet_disabled');
+				}
+				else {
+					$container.find('a.wolfnet_page_nav_next').removeClass('wolfnet_disabled');
+				}
 
 				// If the element that triggered the event was in the bottom toolbar scroll to the top of the page.
 				if ( target != undefined && $(target).closest('.wolfnet_toolbar')[0] == $(this).find('.wolfnet_toolbarBottom')[0] ) {
