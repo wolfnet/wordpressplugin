@@ -257,7 +257,7 @@ if ( typeof jQuery != 'undefined' ) {
 			}
 
 
-			var loadData = function ( event, target )
+			var loadDataEventHandler = function ( event, target )
 			{
 				var $container = $( this );
 				var state      = $container.data('state');
@@ -580,7 +580,7 @@ if ( typeof jQuery != 'undefined' ) {
 					$listingContainer.bind( 'wolfnet.prevPage', prevPageEventHandler );
 					$listingContainer.bind( 'wolfnet.itemsPerPage', itemsPerPageEventHandler );
 					$listingContainer.bind( 'wolfnet.sortChange', sortChangeEventHandler );
-					$listingContainer.bind( 'wolfnet.refreshData', loadData );
+					$listingContainer.bind( 'wolfnet.refreshData', loadDataEventHandler );
 					$listingContainer.bind( 'wolfnet.dataLoaded', dataLoadedEventHandler );
 					$listingContainer.bind( 'wolfnet.listingsRendered', listingsRenderedEventHandler );
 
