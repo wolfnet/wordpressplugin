@@ -127,11 +127,11 @@ if ( typeof jQuery != 'undefined' ) {
 					.append( function () {
 						return $('<span>')
 							.addClass('wolfnet_page_items')
-							.append( $('<span>').addClass('wolfnet_page_start').html(state.startrow) )
+							.append( $('<span>').addClass('wolfnet_page_start').text(state.startrow) )
 							.append( '-' )
-							.append( $('<span>').addClass('wolfnet_page_end').html(state.numrows) )
+							.append( $('<span>').addClass('wolfnet_page_end').text(state.numrows) )
 							.append( ' of ' )
-							.append( $('<span>').addClass('wolfnet_page_total').html(state.max_results) )
+							.append( $('<span>').addClass('wolfnet_page_total').text(state.max_results) )
 					} )
 					.append( function () {
 						return $('<span>')
@@ -518,8 +518,8 @@ if ( typeof jQuery != 'undefined' ) {
 				}
 
 				// Update page information
-				container.find('.wolfnet_page_start').html(startrow);
-				container.find('.wolfnet_page_end').html(rowcountDisplay);
+				container.find('.wolfnet_page_start').text(startrow);
+				container.find('.wolfnet_page_end').text(rowcountDisplay);
 
 				// clear show # select's options' selected attributes and update
 				container.find('.wolfnet_page_items_select select').val( numrows );
