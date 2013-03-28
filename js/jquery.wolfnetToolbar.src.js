@@ -111,15 +111,14 @@ if ( typeof jQuery != 'undefined' ) {
 				var controls = [];
 
 				// Create the "Previous" button/link.
-				var $nextBtn = $('<a>')
+				var $nextBtn = $('<a title="Previous Page" href="javascript:;">')
 					.addClass('wolfnet_page_nav wolfnet_page_nav_prev')
 					.html('<span>Previous</span>')
-					.attr( { title:'Previous Page', href:'javascript:;' } )
 					.click( function ( event ) {
 						$listingContainer.trigger('wolfnet.prevPage', [this]);
 					} );
 
-				controls.push($nextBtn);
+				controls.push($nextBtn[0]);
 
 				// Create the page info section of the toolbar. item range and number of items per page.
 				var $pageInfo = $('<span>')
@@ -147,18 +146,17 @@ if ( typeof jQuery != 'undefined' ) {
 							.append('per page');
 					} );
 
-				controls.push($pageInfo);
+				controls.push($pageInfo[0]);
 
 				// Create the "Next" button/link.
-				var $prevBtn = $('<a>')
+				var $prevBtn = $('<a title="Next Page" href="javascript:;">')
 					.addClass('wolfnet_page_nav wolfnet_page_nav_next')
 					.html('<span>Next</span>')
-					.attr( { title:'Next Page', href:'javascript:;'} )
 					.click( function () {
 						$listingContainer.trigger('wolfnet.nextPage', [this]);
 					} );
 
-				controls.push($prevBtn);
+				controls.push($prevBtn[0]);
 
 				return controls;
 
@@ -203,8 +201,6 @@ if ( typeof jQuery != 'undefined' ) {
 							// Clear out any existing options.
 							$select.children().remove();
 
-							// An array to hold our option elements.
-							var options = [];
 							// If the 'default' value is not in the data set we need to add it.
 							if ( $.inArray( state.numrows ) == -1 ) {
 								var newData = [];
@@ -219,15 +215,14 @@ if ( typeof jQuery != 'undefined' ) {
 								data = newData;
 							}
 
+							// Add an option to the select element for each item in the array.
 							for ( var key=0; key<data.length; key++ ) {
 								var $option = $('<option>', {value:data[key],text:data[key]} );
 								if ( data[key] == state.numrows ) {
 									$option.attr( 'selected', 'selected' );
 								}
-								options.push( $option );
+								$select.append( $option );
 							}
-
-							$select.append(options);
 
 					} );
 
@@ -257,14 +252,11 @@ if ( typeof jQuery != 'undefined' ) {
 							// Clear out any existing options.
 							$select.children().remove();
 
-							// An array to hold our option elements.
-							var options = [];
-
 							for ( var key=0; key<data.length; key++ ) {
-								options.push( $('<option>', {value:data[key].value,text:data[key].label} ) );
+								$select.append(
+									$('<option>', {value:data[key].value,text:data[key].label} )
+								);
 							}
-
-							$select.append(options);
 
 					} );
 
