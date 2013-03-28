@@ -205,6 +205,19 @@ if ( typeof jQuery != 'undefined' ) {
 
 							// An array to hold our option elements.
 							var options = [];
+							// If the 'default' value is not in the data set we need to add it.
+							if ( $.inArray( state.numrows ) == -1 ) {
+								var newData = [];
+								var defaultUsed = false;
+								for ( var i=0; i<data.length; i++ ) {
+									if ( !defaultUsed && data[i] > state.numrows ) {
+										newData[newData.length] = state.numrows;
+										defaultUsed = true;
+									}
+									newData[newData.length] = data[i];
+								}
+								data = newData;
+							}
 
 							for ( var key=0; key<data.length; key++ ) {
 								var $option = $('<option>', {value:data[key],text:data[key]} );
