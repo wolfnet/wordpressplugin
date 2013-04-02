@@ -370,6 +370,95 @@
 
 	}
 
+	&.wolfnet_listingGrid,
+	&.wolfnet_propertyList
+	{
+
+		.wolfnet_toolbar
+		{
+			width:100%;
+			clear:both;
+			height:2em;
+
+			&.wolfnet_toolbarTop {
+				margin:2em 0 1.75em 0;
+			}
+
+			&.wolfnet_toolbarBottom {
+				margin:1.75em 0 2em 0;
+			}
+
+			/* If the toolbar has both pagination and sorting tools give it a little extra height. */
+			&.wolfnet_withPagination.wolfnet_withSortOptions {
+				height:3em;
+			}
+
+			.wolfnet_page_nav
+			{
+				display:inline-block;
+				width:20%;
+				white-space:nowrap;
+
+				&.wolfnet_page_nav_prev
+				{
+					float:left;
+					text-align:left;
+				}
+
+				&.wolfnet_page_nav_next
+				{
+					float:right;
+					text-align:right;
+				}
+
+				&.wolfnet_disabled
+				{
+					text-decoration:none;
+					opacity:0.5;
+					filter:alpha(opacity=50);
+					cursor: default;
+
+				}
+
+			}
+
+			.wolfnet_page_info
+			{
+				display:inline-block;
+				width:60%;
+				float:left;
+				text-align:center;
+
+				.wolfnet_page_items
+				{
+					white-space:nowrap;
+					display:inline-block;
+					padding-right:1em;
+
+					.wolfnet_page_start {}
+					.wolfnet_page_end {}
+					.wolfnet_page_total {}
+
+				}
+
+				.wolfnet_page_items_select
+				{
+					white-space:nowrap;
+					display:inline-block;
+					padding-right:1em;
+				}
+
+				.wolfnet_sortoptions
+				{
+					display:inline-block;
+				}
+
+			}
+
+		}
+
+	}
+
 	&.wolfnet_featuredListings
 	{
 		overflow:    hidden;
@@ -588,8 +677,4 @@
 	/* *zoom: 1; */
 	float:none !important;
 	clear:both;
-}
-
-.wntToolbars {
-	 font-size:10px!important;
 }

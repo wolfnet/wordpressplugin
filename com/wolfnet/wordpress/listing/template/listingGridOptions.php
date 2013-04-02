@@ -135,7 +135,6 @@
 		<tr>
 			<td><label>Pagination Enabled/Disabled:</label></td>
 			<td>
-
 				<select id="<?php echo $paginatedId; ?>" name="<?php echo $paginatedName; ?>" >
 					<option value="false" <?php echo $paginatedFalse; ?> >Disabled</option>
 					<option value="true"  <?php echo $paginatedTrue; ?>  >Enabled</option>
@@ -144,8 +143,20 @@
 					Enable to add pagination capabilities for the user to the result set.
 					Results per page can be defined below in the Max Results Per Page field.
 				</span>
+			</td>
+		</tr>
 
-
+		<tr>
+			<td><label>Sort Options</label></td>
+			<td>
+				<select id="<?php echo $sortoptionsId; ?>" name="<?php echo $sortoptionsName; ?>" >
+					<option value="false" <?php echo $sortoptionsFalse; ?> >Disabled</option>
+					<option value="true"  <?php echo $sortoptionsTrue; ?>  >Enabled</option>
+				</select>
+				<span class="wolfnet_moreInfo">
+					Enable to add a drop-down menu which will allow users to sort listings by a
+					predefined set of data fields.
+				</span>
 			</td>
 		</tr>
 
@@ -155,8 +166,8 @@
 				<input id="<?php echo $maxResultsId; ?>" name="<?php echo $maxResultsName; ?>"
 					type="text" maxlength="2" size="2" value="<?php echo $maxResultsValue; ?>" />
 				<span class="wolfnet_moreInfo">
-					Define the number of properties to display per search results page.  
-					The maximum number of properties that can be displayed per page is 50.					
+					Define the number of properties to display per search results page.
+					The maximum number of properties that can be displayed per page is 50.
 				</span>
 			</td>
 		</tr>

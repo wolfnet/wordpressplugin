@@ -75,6 +75,7 @@ extends com_greentiedev_wppf_shortcode_shortcode
 		'title'        => '',
 		'ownertype'    => 'all',
 		'paginated'    => false,
+		'sortoptions'  => false,
 		'maxresults'   => 50
 		);
 

@@ -31,13 +31,13 @@
 
 <div id="<?php echo $instanceId; ?>" class="widget wolfnet_widget wolfnet_propertyList">
 
-	<h2 class="widget-title">
-		<?php if ( array_key_exists( 'title', $options ) && trim( $options['title']['value'] ) != '' ) { ?>
+	<?php if ( array_key_exists( 'title', $options ) && trim( $options['title']['value'] ) != '' ) { ?>
+		<h2 class="widget-title">
 			<?php echo $options['title']['value']; ?>
-		<?php } ?>
-	</h2>
+		</h2>
+	<?php } ?>
 
-	<div class="list-listings-widget">
+	<div class="wolfnet_listings">
 		<?php echo ( isset($listingContent) ) ? $listingContent : 'No Listings to Display.'; ?>
 	</div>
 
@@ -53,19 +53,15 @@
 		jQuery( document ).ready( function () {
 
 			var instance = '#<?php echo $instanceId; ?>';
-			var listingsLimit = '<?php echo $max_results; ?>';
 
-			if (listingsLimit == '') {
-				listingsLimit = 250;
-			}
-
-			jQuery( instance ).wolfnetToolbar({ 
-				usesPagination	: 	 <?php echo ($options['paginated']['value'] == 'true') ? 'true' : 'false'; ?>
-			   ,numrows	        : 	 <?php echo (is_numeric($options['maxresults']['value'])) ? $options['maxresults']['value'] : 15; ?>
-			   ,ownerType 		: 	'<?php echo $options['ownertype']['value']; ?>'
-			   ,total_rows      :    <?php echo (count($listings) > 0 ) ? $listings[0]->getTotalResults() : 0; ?>
-			   ,criteria 		: 	 <?php echo $criteria; ?>
-			   ,max_results     : 	 listingsLimit
+			jQuery( instance ).wolfnetToolbar({
+				usesPagination   : <?php echo ($options['paginated']['value'] == 'true') ? 'true' : 'false'; ?>
+				,numrows         : <?php echo (is_numeric($options['maxresults']['value'])) ? $options['maxresults']['value'] : 15; ?>
+				,ownerType       : '<?php echo $options['ownertype']['value']; ?>'
+				,total_rows      : <?php echo (count($listings) > 0 ) ? $listings[0]->getTotalResults() : 0; ?>
+				,criteria        : <?php echo (trim($criteria)!='') ? $criteria : '{}'; ?>
+				,max_results     : <?php echo ($max_results=='') ? '250' : $max_results; ?>
+				,showSortOptions : <?php echo ($options['sortoptions']['value'] == 'true') ? 'true' : 'false'; ?>
 			});
 
 			jQuery( instance ).wolfnetPropertyList();

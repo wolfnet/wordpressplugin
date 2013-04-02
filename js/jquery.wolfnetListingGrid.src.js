@@ -88,6 +88,7 @@ if ( typeof jQuery != 'undefined' ) {
 			} );
 
 			if ( loadedImgs >= imageCount ) {
+				$(window).trigger( 'resize' );
 				$container.trigger( 'allImagesLoaded.' + name );
 			}
 			else {
@@ -122,12 +123,12 @@ if ( typeof jQuery != 'undefined' ) {
 
 					/* When the window is resized calculate the appropriate margins for the grid items to
 					 * ensure that the grid and its items are centered. */
-					$( window ).bind( 'resize.' + name, function () {
+					$( window ).bind( 'resize', function () {
 						methods.resizeWidth.apply( plugin );
 					} );
 					//methods.resize.apply( plugin );
 
-					$this.bind( 'allImagesLoaded.' + name, function () {					
+					$this.bind( 'allImagesLoaded.' + name, function () {
 						methods.resizeHeight.apply( plugin );
 					} );
 
@@ -137,9 +138,10 @@ if ( typeof jQuery != 'undefined' ) {
 
 			},
 
-			reload : function () {			
+			reload : function () {
+				$(window).trigger( 'resize' );
 				return this.each( function () {
-					monitorImages( $(this) );		
+					monitorImages( $(this) );
 				});
 			},
 
