@@ -3,7 +3,7 @@ Author:             WolfNet Technologies, LLC
 Contributors:       wolfnettech, ajmichels, asbaumgart
 Tags:               idx, mls, homes
 Requires at least:  3.3.0
-Tested up to:       3.4.1
+Tested up to:       3.5.1
 Stable tag:         {X.X.X}
 License:            GPLv2 or later
 License URI:        http://www.gnu.org/licenses/gpl-2.0.html
@@ -44,6 +44,10 @@ entered in the "WolfNet >> General Settings" page before any IDX data can be dis
 
 
 == Changelog ==
+
+= 1.3.3 =
+* Updated styles and some javascript improve appearance of controls.
+* Implemented option to enable sort options. It is now disabled by default.
 
 = 1.3.0 =
 * Fixing bug with search manager saving and deleting functionality.

@@ -60,6 +60,7 @@ extends com_wolfnet_wordpress_abstract_widget
 		'maxprice'     => '',
 		'ownertype'    => 'all',
 		'paginated'    => false,
+		'sortoptions'  => false,
 		'maxresults'   => 50
 	);
 
