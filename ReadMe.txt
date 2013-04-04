@@ -45,6 +45,9 @@ entered in the "WolfNet >> General Settings" page before any IDX data can be dis
 
 == Changelog ==
 
+= 1.3.4 =
+* Fixed bug with HTTP User-Agents getting caught by MLSFinder mobile browser detection.
+
 = 1.3.3 =
 * Updated styles and some javascript improve appearance of controls.
 * Implemented option to enable sort options. It is now disabled by default.
