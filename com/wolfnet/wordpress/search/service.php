@@ -194,8 +194,6 @@ implements com_greentiedev_wppf_interface_iService
 
 		$resParams = array( 'page', 'action', 'market_guid', 'reinit', 'show_header_footer', 'search_mode' );
 
-		$this->log( $url );
-
 		foreach ( $_GET as $param => $paramValue ) {
 			if ( !array_search( $param, $resParams ) ) {
 				$paramValue = urlencode( $paramValue );
@@ -203,7 +201,15 @@ implements com_greentiedev_wppf_interface_iService
 			}
 		}
 
-		$http = wp_remote_get( $url, array( 'cookies' => $this->getCookieData(), 'timeout'=>180 ) );
+		$reqHeaders = array(
+			'cookies'    => $this->getCookieData(),
+			'timeout'    => 180,
+			'user-agent' => 'WordPress/' . $wp_version
+			);
+
+		$http = wp_remote_get( $url, $reqHeaders );
+
+		$this->log( $url );
 
 		$this->log( $http );
 
