@@ -201,7 +201,13 @@ implements com_greentiedev_wppf_interface_iService
 			}
 		}
 
-		$http = wp_remote_get( $url, array( 'cookies' => $this->getCookieData(), 'timeout'=>180 ) );
+		$reqHeaders = array(
+			'cookies'    => $this->getCookieData(),
+			'timeout'    => 180,
+			'user-agent' => 'WordPress/' . $wp_version
+			);
+
+		$http = wp_remote_get( $url, $reqHeaders );
 
 		$this->log( $url );
 
