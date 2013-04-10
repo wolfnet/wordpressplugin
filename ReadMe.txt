@@ -45,6 +45,9 @@ entered in the "WolfNet >> General Settings" page before any IDX data can be dis
 
 == Changelog ==
 
+= 1.3.6 =
+* Fixed minor JavaScript bug.
+
 = 1.3.5 =
 * Updated to new version of WPPF with caching strategy that uses the WordPress Transient API instead of flat files.
 

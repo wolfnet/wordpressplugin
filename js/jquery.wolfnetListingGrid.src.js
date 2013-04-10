@@ -108,10 +108,8 @@ if ( typeof jQuery != 'undefined' ) {
 				var plugin = this;
 
 				this.data( name, {
-					option : $.extend( defaultOptions, options || this.data(name) || {} )
+					option : $.extend( defaultOptions, options || {} )
 				} );
-
-				var option = this.data( name ).option;
 
 				return this.each( function () {
 
