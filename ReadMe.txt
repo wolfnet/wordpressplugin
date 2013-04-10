@@ -45,6 +45,9 @@ entered in the "WolfNet >> General Settings" page before any IDX data can be dis
 
 == Changelog ==
 
+= 1.3.5 =
+* Updated to new version of WPPF with caching strategy that uses the WordPress Transient API instead of flat files.
+
 = 1.3.4 =
 * Fixed bug with HTTP User-Agents getting caught by MLSFinder mobile browser detection.
 
