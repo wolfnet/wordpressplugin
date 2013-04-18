@@ -386,134 +386,25 @@ if ( typeof jQuery != 'undefined' ) {
 
 			var dataLoadedEventHandler = function ( event, data, target )
 			{
-				var container = $(this);
-				var state     = container.data('state');
-				var startrow  = state.startrow;
-				var numrows   = state.numrows;
-				var page      = state.page;
-				var totalRows = state.total_rows;
-				var sortBy    = state.sort;
+				var $container = $(this);
+				var state      = $container.data('state');
+				var startrow   = state.startrow;
+				var numrows    = state.numrows;
+				var page       = state.page;
+				var totalRows  = state.total_rows;
+				var sortBy     = state.sort;
 
 				// Clear pre-existing items
-				container.find('.wolfnet_listing').remove();
-				container.find('.wolfnet_clearfix').remove();
+				$container.find('.wolfnet_listing').remove();
+				$container.find('.wolfnet_clearfix').remove();
 
 				// Render Listing Grid Items
-				if ( container.hasClass('wolfnet_listingGrid') ) {
-
-					//START:  loop to rebuild listing grid dom (listingGrid uses listingSimple.php template)
-					for (var i=0; i<data.length; i++) {
-
-						//check for branding
-						var brokerLogo= data[i].branding.brokerLogo  || null;
-						var brokerName= data[i].branding.content || null;
-
-						if ( brokerLogo == null && brokerName == null ) {
-							var hasBranding = false;
-							var listingEntityClass = 'wolfnet_listing';
-						}
-						else {
-							var hasBranding = true;
-							var listingEntityClass = 'wolfnet_listing wolfnet_branded';
-						}
-
-						var listingEntity = $('<div>').addClass(listingEntityClass)
-								  					  .attr('id','wolfnet_listing_'+data[i].property_id);
-						container.find('.wolfnet_listings').append(listingEntity);
-
-						var link = $('<a>').attr('href',data[i].property_url);
-						listingEntity.append(link);
-
-						var listingImageSpan = $('<span>').addClass('wolfnet_listingImage');
-						var listingImgSrc = $('<img>').attr('src',data[i].thumbnail_url).appendTo(listingImageSpan);
-						link.append(listingImageSpan);
-
-						var price = $('<span>').addClass('wolfnet_price')
-										       .attr('itemprop','price')
-											   .text(priceFormatter(data[i].listing_price));
-						listingImageSpan.after(price);
-
-						var bedbath = $('<span>').addClass('wolfnet_bed_bath')
-												 .attr('title',data[i].bedrooms+' Bedrooms & '+data[i].bathroom+' Bathrooms')
-												 .text(data[i].bedrooms+'bd/'+data[i].bathroom+'ba');
-						price.after(bedbath);
-
-						var citystate = data[i].city + ', ' + data[i].state;
-						var fullAdress = data[i].display_address + ', ' + citystate;
-						var location = $('<span>').attr('title',fullAdress);
-						$('<span>').addClass('wolfnet_location')
-								   .attr('itemprop','locality')
-								   .text(citystate)
-								   .appendTo(location);
-						$('<span>').addClass('wolfnet_address')
-								   .text(data[i].display_address)
-								   .appendTo(location);
-						$('<span>').addClass('wolfnet_full_address')
-								   .attr('itemprop','street_address')
-								   .css('display','none')
-								   .text(fullAdress)
-								   .appendTo(location);
-						bedbath.after(location);
-
-						if (hasBranding) {
-							var branding = $('<span>').addClass('wolfnet_branding');
-
-							if ( brokerLogo != null ) {
-								var imageSpan = $('<span>')
-									.addClass('wolfnet_brokerLogo');
-								var image = $('<img>')
-									.attr('src',brokerLogo)
-									.appendTo(imageSpan);
-								imageSpan.appendTo(branding);
-							}
-
-							if ( brokerName != null ) {
-								$('<span>').addClass('wolfnet_brandingMessage')
-										   .text(brokerName)
-										   .appendTo(branding);
-							}
-
-							location.after(branding);
-						}
-					}//END: loop to rebuild listing grid dom
-
-					container.wolfnetListingGrid('reload');
-
+				if ( $container.hasClass('wolfnet_listingGrid') ) {
+					buildListingGrid.call( $container, data );
 				}
 				// Render Property List Items
-				else if ( container.hasClass('wolfnet_propertyList') ) {
-
-					//START:  rebuild property list dom (propertyList uses listingBrief.php)
-					//loop listings in data object and build new listing entity to append to dom
-					for (var i=0; i<data.length; i++) {
-
-						var listingEntity = $('<div>').addClass('wolfnet_listing')
-								  					  .attr('id','wolfnet_listing_'+data[i].property_id);
-						container.find('.wolfnet_listings').append(listingEntity);
-
-						var citystate = data[i].city + ', ' + data[i].state;
-						var fullAdress = data[i].display_address + ', ' + citystate;
-						var link = $('<a>').attr({'href':data[i].property_url,'title':fullAdress});
-						listingEntity.append(link);
-
-						var location = $('<span>').addClass('wolfnet_full_address')
-												 .text(fullAdress);
-						link.append(location);
-
-						var price = $('<span>').addClass('wolfnet_price')
-										       .attr('itemprop','price')
-											   .text(priceFormatter(data[i].listing_price));
-						location.after(price);
-
-						var streetAddress = $('<span>').attr('itemprop','street-address')
-													   .css('display','none')
-													   .text(fullAdress);
-						price.after(streetAddress);
-
-					}//END: rebuild property list dom
-
-					container.wolfnetPropertyList();
-
+				else if ( $container.hasClass('wolfnet_propertyList') ) {
+					buildListingGrid.call( $container, data );
 				}
 
 				// Update results count display
@@ -523,16 +414,171 @@ if ( typeof jQuery != 'undefined' ) {
 				}
 
 				// Update page information
-				container.find('.wolfnet_page_start').text(startrow);
-				container.find('.wolfnet_page_end').text(rowcountDisplay);
+				$container.find('.wolfnet_page_start').text(startrow);
+				$container.find('.wolfnet_page_end').text(rowcountDisplay);
 
 				// clear show # select's options' selected attributes and update
-				container.find('.wolfnet_page_items_select select').val( numrows );
+				$container.find('.wolfnet_page_items_select select').val( numrows );
 
 				// clear the sort option's selected attributes and update
-				container.find('.wolfnet_sortoptions select').val( sortBy );
+				$container.find('.wolfnet_sortoptions select').val( sortBy );
 
 				$(this).trigger('wolfnet.listingsRendered',[target]);
+
+			}
+
+
+			var buildListingGrid = function ( data )
+			{
+				var $container = $(this);
+				var $listings  = $container.find('.wolfnet_listings:first').clone();
+				var state      = $container.data('state');
+				var startrow   = state.startrow;
+				var numrows    = state.numrows;
+				var page       = state.page;
+				var totalRows  = state.total_rows;
+				var sortBy     = state.sort;
+
+				//START:  loop to rebuild listing grid dom (listingGrid uses listingSimple.php template)
+				for (var i=0; i<data.length; i++) {
+
+					var brokerLogo  = data[i].branding.brokerLogo  || null;
+					var brokerName  = data[i].branding.content || null;
+					var cityState   = data[i].city + ', ' + data[i].state;
+					var fullAddress = data[i].display_address + ', ' + cityState;
+					var hasBranding = ( brokerLogo == null && brokerName == null ) ? false : true ;
+
+					var listingEntity = $('<div>')
+						.addClass('wolfnet_listing')
+						.addClass( (hasBranding) ? 'wolfnet_branded' : '' )
+						.attr('id','wolfnet_listing_'+data[i].property_id)
+						.appendTo($listings);
+
+					var link = $('<a>')
+						.attr('href',data[i].property_url)
+						.appendTo(listingEntity);
+
+					var listingImageSpan = $('<span>')
+						.addClass('wolfnet_listingImage')
+						.appendTo(link);
+
+					var listingImgSrc = $('<img>')
+						.attr('src',data[i].thumbnail_url)
+						.appendTo(listingImageSpan);
+
+					var price = $('<span>')
+						.addClass('wolfnet_price')
+						.attr('itemprop','price')
+						.html( priceFormatter(data[i].listing_price) )
+						.appendTo(link);
+
+					var bedbath = $('<span>')
+						.addClass('wolfnet_bed_bath')
+						.attr('title',data[i].bedrooms+' Bedrooms & '+data[i].bathroom+' Bathrooms')
+						.html( data[i].bedrooms + 'bd/' + data[i].bathroom + 'ba' )
+						.appendTo(link);
+
+					var location = $('<span>')
+						.attr('title',fullAddress)
+						.append(
+							$('<span>').addClass('wolfnet_location')
+								.attr('itemprop','locality')
+								.html(cityState)
+						)
+						.append(
+							$('<span>').addClass('wolfnet_address')
+							.html(data[i].display_address)
+						)
+						.append(
+							$('<span>').addClass('wolfnet_full_address')
+								.attr('itemprop','street_address')
+								.css('display','none')
+								.html(fullAddress)
+						)
+						.appendTo(link);
+
+					if (hasBranding) {
+
+						var branding = $('<div>')
+							.addClass('wolfnet_branding')
+							.insertAfter(location);
+
+						if ( brokerLogo != null ) {
+
+							$('<span>').addClass('wolfnet_brokerLogo')
+								.append( $('<img>').attr('src',brokerLogo) )
+								.appendTo(branding);
+
+						}
+
+						if ( brokerName != null ) {
+
+							$('<span>').addClass('wolfnet_brandingMessage')
+								.html(brokerName)
+								.appendTo(branding);
+
+						}
+
+					}
+
+				}//END: loop to rebuild listing grid dom
+
+				$container.find('.wolfnet_listings:first').replaceWith( $listings );
+
+				$container.wolfnetListingGrid('reload');
+
+			}
+
+
+			var buildPropertyList = function ( data )
+			{
+				var $container = $(this);
+				var $listings  = $container.find('.wolfnet_listings:first').clone();
+				var state      = $container.data('state');
+				var startrow   = state.startrow;
+				var numrows    = state.numrows;
+				var page       = state.page;
+				var totalRows  = state.total_rows;
+				var sortBy     = state.sort;
+
+				//START:  rebuild property list dom (propertyList uses listingBrief.php)
+				//loop listings in data object and build new listing entity to append to dom
+				for ( var i=0; i<data.length; i++ ) {
+
+					var cityState   = data[i].city + ', ' + data[i].state;
+					var fullAddress = data[i].display_address + ', ' + cityState;
+
+					var listingEntity = $('<div>')
+						.addClass('wolfnet_listing')
+						.attr('id','wolfnet_listing_' + data[i].property_id)
+						.appendTo($listings);
+
+					var link = $('<a>')
+						.attr({'href':data[i].property_url,'title':fullAddress})
+						.appendTo(listingEntity);
+
+					var location = $('<span>')
+						.addClass('wolfnet_full_address')
+						.html(fullAddress)
+						.appendTo(link);
+
+					var price = $('<span>')
+						.addClass('wolfnet_price')
+						.attr('itemprop','price')
+						.html( priceFormatter(data[i].listing_price) )
+						.appendTo(location);
+
+					var streetAddress = $('<span>')
+						.attr('itemprop','street-address')
+						.css('display','none')
+						.html(fullAddress)
+						.appendTo(price);
+
+				}//END: rebuild property list DOM
+
+				$container.find('.wolfnet_listings:first').replaceWith( $listings );
+
+				$container.wolfnetPropertyList();
 
 			}
 
