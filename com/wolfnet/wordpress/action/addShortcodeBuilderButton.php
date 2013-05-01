@@ -70,7 +70,7 @@ extends com_greentiedev_wppf_action_action
 	public function addPluginJavaScript ( array $plugins )
 	{
 		$url = $this->getPluginUrl();
-		echo '<script type="text/javascript">var wordpressBaseUrl = "' . get_bloginfo('url') . '";</script>';
+		echo '<script type="text/javascript">var wordpressBaseUrl = "' . site_url() . '";</script>';
 		wp_enqueue_script(
 			'wolfnetshortcodebuilder',
 			$url . 'js/jquery.wolfnet_shortcode_builder.src.js',
