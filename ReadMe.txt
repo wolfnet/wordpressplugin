@@ -45,6 +45,9 @@ entered in the "WolfNet >> General Settings" page before any IDX data can be dis
 
 == Changelog ==
 
+= 1.3.8 =
+* Fixed issue with shortcode builder causing problems with multi-site wordpress installs.
+
 = 1.3.7 =
 * Fixed a bug in the "toolbar" JavaScript which caused HTML content to be escaped.
 * Restructured parts of the "toolbar" JavaScript for performance.
