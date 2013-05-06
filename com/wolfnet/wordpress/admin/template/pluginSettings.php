@@ -85,7 +85,7 @@
 		( function ( $ ) {
 
 			$( '#wolfnet_productKey' ).wolfnetValidateProductKey( {
-				rootUri: '<?php echo home_url(); ?>?pagename=wolfnet-admin-validate-key'
+				rootUri: '<?php echo site_url(); ?>?pagename=wolfnet-admin-validate-key'
 			} );
 
 		} )( jQuery );

@@ -90,7 +90,7 @@
 		( function ( $ ) {
 
 			$( '#savedsearches' ).wolfnetSearchManager( {
-				apiUrl    : '<?php echo bloginfo( 'url' ); ?>/?pagename=wolfnet-admin-searchmanager',
+				apiUrl    : '<?php echo site_url(); ?>/?pagename=wolfnet-admin-searchmanager',
 				loaderUri : '<?php echo $pluginUrl; ?>img/loader.gif',
 				saveForm  : $( '#save_search' )
 			} );

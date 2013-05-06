@@ -45,6 +45,9 @@ entered in the "WolfNet >> General Settings" page before any IDX data can be dis
 
 == Changelog ==
 
+= 1.3.9 =
+* Fixed a similar issue to that in 1.3.8 which was impacting the search manager and the key validation.
+
 = 1.3.8 =
 * Fixed issue with shortcode builder causing problems with multi-site wordpress installs.
 
