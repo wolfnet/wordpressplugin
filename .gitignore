@@ -5,3 +5,4 @@
 /js/*.min.js
 Desktop.ini
 *.sublime*
+.vagrant
