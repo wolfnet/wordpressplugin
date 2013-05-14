@@ -348,6 +348,7 @@ extends com_greentiedev_wppf_action_action
 		// Output the footer of the current theme and exit
 		$this->getEnqueueResourcesAction()->execute();
 		$this->statusSuccess();
+		$this->getWpHeader(); // Do not output the contents. This only needs to be included for script queue purposes.
 		echo $this->getWpFooter();
 		exit;
 	}
