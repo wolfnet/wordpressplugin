@@ -19,6 +19,9 @@
 			<!-- Defined in WPPF service factory -->
 			<ref bean="OptionManager" />
 		</property>
+		<property name="SettingsService">
+			<ref bean="SettingsService" />
+		</property>
 	</bean>
 
 	<bean id="ListingDAO" class="com_wolfnet_wordpress_listing_dao">
@@ -116,7 +119,7 @@
 		</property>
 	</bean>
 
-	<bean id="Sort" class="com_wolfnet_wordpress_sort_entity" />	
+	<bean id="Sort" class="com_wolfnet_wordpress_sort_entity" />
 
 	<bean id="DefaultWebServiceUrl" class="com_greentiedev_wppf_data_webServiceUrl">
 		<property name="Domain">
@@ -188,6 +191,9 @@
 		<property name="SettingsService">
 			<ref bean="SettingsService" />
 		</property>
+		<property name="ToolbarView">
+			<ref bean="ToolbarView" />
+		</property>
 	</bean>
 
 	<bean id="ListingGridOptionsView" class="com_wolfnet_wordpress_listing_listingGridOptionsView" singleton="false" />
@@ -202,6 +208,9 @@
 		<property name="SettingsService">
 			<ref bean="SettingsService" />
 		</property>
+		<property name="ToolbarView">
+			<ref bean="ToolbarView" />
+		</property>
 	</bean>
 
 	<bean id="QuickSearchOptionsView" class="com_wolfnet_wordpress_listing_quickSearchOptionsView" singleton="false" />
@@ -212,6 +221,7 @@
 		</property>
 	</bean>
 
+	<bean id="ToolbarView" class="com_wolfnet_wordpress_listing_toolbarView" singleton="false" />
 
 	<!-- Actions -->
 
@@ -282,6 +292,12 @@
 		</property>
 		<property name="SortService">
 			<ref bean="SortService" />
+		</property>
+		<property name="ListingGridView">
+			<ref bean="ListingGridView" />
+		</property>
+		<property name="PropertyListView">
+			<ref bean="PropertyListView" />
 		</property>
 	</bean>
 

@@ -37,37 +37,33 @@
 		</h2>
 	<?php } ?>
 
+	<?php if ($options['paginated']['value'] == 'true') { echo $toolbarTop; } ?>
+
 	<div class="wolfnet_listings">
 		<?php echo ( isset($listingContent) ) ? $listingContent : 'No Listings to Display.'; ?>
 	</div>
 
 	<div class="wolfnet_clearfix"></div>
 
-</div>
+	<?php if ($options['paginated']['value'] == 'true') { echo $toolbarBottom; } ?>
 
+</div>
 
 <script type="text/javascript">
 
-	if ( typeof jQuery != 'undefined' ) {
+	jQuery(function($){
 
-		jQuery( document ).ready( function () {
+		var instance = '#<?php echo $instanceId; ?>';
 
-			var instance = '#<?php echo $instanceId; ?>';
+		$(instance).wolfnetToolbar({
+			 numrows         : <?php echo (count($listings)>0) ? $listings[0]->numrows    : 0; ?>
+			,ownerType       : <?php echo "'" . $options['ownertype']['value'] . "'"; ?>
+			,criteria        : <?php echo (trim($criteria)!='') ? $criteria : '{}'; ?>
+			,max_results     : <?php echo (count($listings)>0) ? $listings[0]->maxresults : 0; ?>
+		});
 
-			jQuery( instance ).wolfnetToolbar({
-				usesPagination   : <?php echo ($options['paginated']['value'] == 'true') ? 'true' : 'false'; ?>
-				,numrows         : <?php echo (is_numeric($options['maxresults']['value'])) ? $options['maxresults']['value'] : 15; ?>
-				,ownerType       : '<?php echo $options['ownertype']['value']; ?>'
-				,total_rows      : <?php echo (count($listings) > 0 ) ? $listings[0]->getTotalResults() : 0; ?>
-				,criteria        : <?php echo (trim($criteria)!='') ? $criteria : '{}'; ?>
-				,max_results     : <?php echo ($max_results=='') ? '250' : $max_results; ?>
-				,showSortOptions : <?php echo ($options['sortoptions']['value'] == 'true') ? 'true' : 'false'; ?>
-			});
+		$(instance).wolfnetPropertyList();
 
-			jQuery( instance ).wolfnetPropertyList();
-
-		} );
-
-	}
+	});
 
 </script>

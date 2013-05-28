@@ -5,7 +5,7 @@
  *
  * @package       com.wolfnet.wordpress
  * @subpackage    listing
- * @title         quickSearchView.php
+ * @title         toolbarView.php
  * @extends       com_greentiedev_wppf_abstract_view
  * @implements    com_greentiedev_wppf_interface_iView
  * @contributors  AJ Michels (aj.michels@wolfnet.com)
@@ -26,9 +26,8 @@
  *                along with this program; if not, write to the Free Software
  *                Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- *
  */
-class com_wolfnet_wordpress_listing_quickSearchView
+class com_wolfnet_wordpress_listing_toolbarView
 extends com_greentiedev_wppf_abstract_view
 implements com_greentiedev_wppf_interface_iView
 {
@@ -40,18 +39,8 @@ implements com_greentiedev_wppf_interface_iView
 	 * This property holds the path to the HTML template file for this view.
 	 *
 	 * @type  string
-	 *
 	 */
 	public $template;
-
-
-	/**
-	 * This property holds a reference to the settings service.
-	 *
-	 * @type  com_wolfnet_wordpress_settings_service
-	 *
-	 */
-	private $settingsService;
 
 
 	/* CONSTRUCTOR METHOD *********************************************************************** */
@@ -61,67 +50,95 @@ implements com_greentiedev_wppf_interface_iView
 	 * for this view based on the view files location.
 	 *
 	 * @return  void
-	 *
 	 */
 	public function __construct ()
 	{
-		$this->log( 'Init com_wolfnet_wordpress_listing_filmStripView' );
-		$this->template = $this->formatPath( dirname( __FILE__ ) . '\template\quickSearchForm.php' );
+		$this->template = $this->formatPath( dirname( __FILE__ ) . '\template\toolbar.php' );
 	}
 
 
 	/* PUBLIC METHODS *************************************************************************** */
 
 	/**
-	 * This method overwrites the inherited render method and provides some additional functionality.
-	 * Specifically it extracts the listings data from the $data param and passes it to the
-	 * renderListings method. This separates the concerns of rendering the film strip from rendering
-	 * indevidual listings.
-	 *
 	 * @param   array  $data  Associative array of data to be injected into the template file.
 	 * @return  string
-	 *
 	 */
 	public function render ( $data = array() )
 	{
-		$data['instanceId'] = str_replace('.', '', uniqid( 'wolfnet_quickSearchForm_' ));
-		$data['formAction'] = $this->getSettingsService()->getSiteBaseUrl();
 
-		/* Register WordPress filters for each variable being used in the view. (except the rawData) */
-		foreach ( $data as $key => $item ) {
-			if ( strpos( $key, 'rawData' ) === false ) {
-				$data[$key] = apply_filters( 'wolfnet_quickSearchView_' . $key, $item );
+		$data['numrows']    = (count($data['listings'])>0) ? $data['listings'][0]->numrows    : 0;
+		$data['startrow']   = (count($data['listings'])>0) ? $data['listings'][0]->startrow   : 0;
+		$data['maxresults'] = (count($data['listings'])>0) ? $data['listings'][0]->maxresults : 0;
+		$data['lastitem']   = $data['startrow'] + $data['numrows'] - 1;
+
+		$data['options']['maxresults']['value'] = $data['maxresults'];
+
+		if ($data['lastitem']>$data['maxresults']) {
+			$data['lastitem'] = $data['maxresults'];
+		}
+
+		$data['options']['numrows'] = array(
+			'name'  => 'numrows',
+			'id'    => 'numrows',
+			'value' => $data['numrows']
+			);
+
+		$prevStart = $data['startrow'] - $data['numrows'];
+
+		if ( $prevStart < 1) {
+			$prevStart = $data['maxresults'] - $data['numrows'] + 1;
+		}
+
+		if ( $prevStart < 1 ) {
+			$prevStart = $data['startrow'];
+		}
+
+		$prevParams = array_merge($data['options'], array(
+			'startrow' => array(
+				'name'  => 'startrow',
+				'id'    => 'startrow',
+				'value' => $prevStart
+				)
+			));
+
+		$nextStart = $data['startrow'] + $data['numrows'];
+
+		if ($nextStart >= $data['maxresults']) {
+			$nextStart = 1;
+		}
+
+		$nextParams = array_merge($data['options'], array(
+			'startrow' => array(
+				'name'  => 'startrow',
+				'id'    => 'startrow',
+				'value' => $nextStart
+				)
+			));
+
+		$data['prevLink']  = $this->pageUrl(site_url(), $prevParams);
+		$data['nextLink']  = $this->pageUrl(site_url(), $nextParams);
+		$data['prevClass'] = ($data['startrow']<=1) ? 'wolfnet_disabled' : '';
+		$data['nextClass'] = ($data['lastitem']>=$data['maxresults']) ? 'wolfnet_disabled' : '';
+
+		return parent::render( $data );
+
+	}
+
+
+	/* PRIVATE METHODS ************************************************************************** */
+
+	function pageUrl ($script='', $params=array())
+	{
+		$url = '?pagename=wolfnet-listings';
+
+		foreach ( $params as $name => $param ) {
+			if ( trim($name) != '' ) {
+				$url .= '&' . $param['name'] . '=' . $param['value'];
 			}
 		}
 
-		return parent::render( $data );
-	}
+		return $url;
 
-
-	/* ACCESSOR METHODS ************************************************************************* */
-
-	/**
-	 * GETTER: This getter method is used to get the setttingsService property.
-	 *
-	 * @return  com_wolfnet_wordpress_settings_service.
-	 *
-	 */
-	public function getSettingsService ()
-	{
-		return $this->settingsService;
-	}
-
-
-	/**
-	 * SETTER: This setter method is used to set the setttingsService property.
-	 *
-	 * @param   com_wolfnet_wordpress_settings_service  $service
-	 * @return  void
-	 *
-	 */
-	public function setSettingsService ( com_wolfnet_wordpress_settings_service $service )
-	{
-		$this->settingsService = $service;
 	}
 
 

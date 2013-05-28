@@ -33,7 +33,7 @@
 ?>
 
 <div id="wolfnet_listing_<?php echo $id; ?>" class="wolfnet_listing<?php echo $listing_class; ?>" itemscope>
-	<a href="<?php echo $url; ?>">
+	<a href="<?php echo $url; ?>" rel="follow">
 		<span class="wolfnet_listingImage"><img src="<?php echo $image; ?>" /></span>
 		<span class="wolfnet_price" itemprop="price">$<?php echo $price; ?></span>
 		<span class="wolfnet_bed_bath" title="<?php echo $bedbath_full; ?>"><?php echo $bedbath; ?></span>

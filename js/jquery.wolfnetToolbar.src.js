@@ -11,7 +11,7 @@
 
 if ( typeof jQuery != 'undefined' ) {
 
-	( function ( $ ) {
+	(function ($) {
 
 
 		var priceFormatter = function ( number )
@@ -35,130 +35,86 @@ if ( typeof jQuery != 'undefined' ) {
 		$.fn.wolfnetToolbar = function ( options ) {
 
 			var defaultOptions = {
-				usesPagination  : false,
-				page            : 1,
-				startrow        : 1,
-				numrows         : 20,
-				sort            : '',
-				total_rows      : 250,
-				max_results     : 250,
-				criteria        : {},
-				showSortOptions : false
+				sort        : '',
+				max_results : 250,
+				criteria    : {}
 				};
-			var options = $.extend( defaultOptions, options );
-			var previewLimitCount;
-			var datakey = 'wolfnetToolbarData';
+			var options        = $.extend( defaultOptions, options );
+			var datakey        = 'wolfnet.toolbarData';
 
 
 			var getLastPageNum = function ( numrows, rowcount )
 			{
-				var maxrows;
-
-				if (rowcount < previewLimitCount) {
-					maxrows = rowcount;
-				}
-				else {
-					maxrows = previewLimitCount;
-				}
-
-				return Math.ceil( Number(maxrows) / Number(numrows) );
-
+				return Math.ceil( Number(rowcount) / Number(numrows) );
 			} // end method getLastPageNum
-
-
-			var renderToolbar = function ()
-			{
-
-				var options = $(this).data( datakey );
-				var state   = $(this).data('state');
-
-				// Create the toolbar container.
-				var $toolbar = $('<div>').addClass('wolfnet_toolbar');
-
-				// If pagination is enabled include the controls in the toolbar.
-				if ( options.usesPagination !== false && options.total_rows > options.numrows ) {
-					$toolbar.append( renderPaginationControls.call( this ) );
-					$toolbar.addClass('wolfnet_withPagination');
-				}
-
-				// if sorting options are enabled include the controls in the toolbar.
-				if ( options.showSortOptions === true ) {
-
-					// if there are are already pagination controls add this control to them instead of the toolbar.
-					if ( $toolbar.find('.wolfnet_page_info').length > 0 ) {
-						$toolbar.find('.wolfnet_page_info').append( renderSortControls.call( this ) );
-					}
-					else {
-						$toolbar.append( renderSortControls.call( this ) );
-					}
-
-					$toolbar.addClass('wolfnet_withSortOptions');
-
-				}
-
-				return $toolbar;
-
-			}
 
 
 			var renderPaginationControls = function ()
 			{
 
-				var $listingContainer = $(this);
-				var state   = $(this).data('state');
+				return $('<span>')
+					.addClass('wolfnet_page_items_select')
+					.append($('<select>')
+						.change(function (event){
+							$(this).trigger('wolfnet.itemsPerPage', [$(this).val(), this]);
+							event.preventDefault();
+							return false;
+						})
+						.append(loadPageOptions.call(this))
+					)
+					.append('per page');
 
-				// An array to hold the controls.
-				var controls = [];
+			}
 
-				// Create the "Previous" button/link.
-				var $nextBtn = $('<a title="Previous Page" href="javascript:;">')
-					.addClass('wolfnet_page_nav wolfnet_page_nav_prev')
-					.html('<span>Previous</span>')
-					.click( function ( event ) {
-						$listingContainer.trigger('wolfnet.prevPage', [this]);
-					} );
 
-				controls.push($nextBtn[0]);
+			var loadPageOptions = function ()
+			{
+				var $container = $(this);
+				// This method could easily be refactored to pull the data in statically rather than with Ajax.
 
-				// Create the page info section of the toolbar. item range and number of items per page.
-				var $pageInfo = $('<span>')
-					.addClass('wolfnet_page_info')
-					.append( function () {
-						return $('<span>')
-							.addClass('wolfnet_page_items')
-							.append( $('<span>').addClass('wolfnet_page_start').text(state.startrow) )
-							.append( '-' )
-							.append( $('<span>').addClass('wolfnet_page_end').text(state.numrows) )
-							.append( ' of ' )
-							.append( $('<span>').addClass('wolfnet_page_total').text(state.max_results) )
-					} )
-					.append( function () {
-						return $('<span>')
-							.addClass('wolfnet_page_items_select')
-							.append( function () {
-								var $select = $('<select>');
-								$select.change( function () {
-									$listingContainer.trigger('wolfnet.itemsPerPage', [$(this).val(), this] );
-								} );
-								$select.append( loadPageOptions.call( $listingContainer ) );
-								return $select;
-							} )
-							.append('per page');
-					} );
+				// Wait until the toolbars have been added to the DOM.
+				$container.bind("wolfnet.toolbarsRendered", function () {
 
-				controls.push($pageInfo[0]);
+					var $select = $container.find('.wolfnet_page_items_select select');
+					var state   = $container.data('state');
 
-				// Create the "Next" button/link.
-				var $prevBtn = $('<a title="Next Page" href="javascript:;">')
-					.addClass('wolfnet_page_nav wolfnet_page_nav_next')
-					.html('<span>Next</span>')
-					.click( function () {
-						$listingContainer.trigger('wolfnet.nextPage', [this]);
-					} );
+					$.ajax({
+						url      : '?pagename=wolfnet-get-showNumberOfListings-dropdown',
+						dataType : 'json'
+					})
+					.done(function (data){
 
-				controls.push($prevBtn[0]);
+						// Clear out any existing options.
+						$select.children().remove();
 
-				return controls;
+						// If the 'default' value is not in the data set we need to add it.
+						if ( $.inArray( state.numrows, data ) == -1 ) {
+							var newData = [];
+							var defaultUsed = false;
+							for ( var i=0; i<data.length; i++ ) {
+								if ( !defaultUsed && data[i] > state.numrows ) {
+									newData[newData.length] = state.numrows;
+									defaultUsed = true;
+								}
+								newData[newData.length] = data[i];
+							}
+							data = newData;
+						}
+
+						// Add an option to the select element for each item in the array.
+						for ( var key=0; key<data.length; key++ ) {
+							var $option = $('<option>', {value:data[key],text:data[key]} );
+							if ( data[key] == state.numrows ) {
+								$option.attr( 'selected', 'selected' );
+							}
+							$select.append( $option );
+						}
+
+					});
+
+				});
+
+				return '';
 
 			}
 
@@ -166,99 +122,47 @@ if ( typeof jQuery != 'undefined' ) {
 			var renderSortControls = function ()
 			{
 
-				var $listingContainer = $(this);
-
 				return $('<span>')
 					.addClass('wolfnet_sortoptions')
-					.append( function () {
-						var $select = $('<select>')
-						$select.change( function ( event ) {
-							$listingContainer.trigger('wolfnet.sortChange', [$(this).val(), this] );
-						} );
-						$select.append( loadSortOptions.call( $listingContainer ) );
-						return $select;
-					} );
-
-			}
-
-
-			var loadPageOptions = function ()
-			{
-				// This method could easily be refactored to pull the data in statically rather than with Ajax.
-
-				// Wait until the toolbars have been added to the DOM.
-				$(this).on("wolfnet.toolbarsRendered", function () {
-
-					var $select = $(this).find('.wolfnet_page_items_select select');
-					var state   = $(this).data('state');
-
-					$.ajax( {
-						url      : '?pagename=wolfnet-get-showNumberOfListings-dropdown',
-						dataType : 'json'
-					} )
-					.done( function ( data ) {
-
-							// Clear out any existing options.
-							$select.children().remove();
-
-							// If the 'default' value is not in the data set we need to add it.
-							if ( $.inArray( state.numrows ) == -1 ) {
-								var newData = [];
-								var defaultUsed = false;
-								for ( var i=0; i<data.length; i++ ) {
-									if ( !defaultUsed && data[i] > state.numrows ) {
-										newData[newData.length] = state.numrows;
-										defaultUsed = true;
-									}
-									newData[newData.length] = data[i];
-								}
-								data = newData;
-							}
-
-							// Add an option to the select element for each item in the array.
-							for ( var key=0; key<data.length; key++ ) {
-								var $option = $('<option>', {value:data[key],text:data[key]} );
-								if ( data[key] == state.numrows ) {
-									$option.attr( 'selected', 'selected' );
-								}
-								$select.append( $option );
-							}
-
-					} );
-
-				} );
-
-				return '';
+					.append($('<select>')
+						.change(function ( event ){
+							$(this).trigger('wolfnet.sortChange', [$(this).val(), this] );
+							event.preventDefault();
+							return false;
+						})
+						.append(loadSortOptions.call(this))
+					);
 
 			}
 
 
 			var loadSortOptions = function ()
 			{
+				var $container = $(this);
 				// This method could easily be refactored to pull the data in statically rather than with Ajax.
 
 				// Wait until the toolbars have been added to the DOM.
-				$(this).on("wolfnet.toolbarsRendered", function () {
+				$container.bind("wolfnet.toolbarsRendered", function () {
 
-					var $select = $(this).find('.wolfnet_sortoptions select');
-					var state   = $(this).data('state');
+					var $select = $container.find('.wolfnet_sortoptions select');
+					var state   = $container.data('state');
 
-					$.ajax( {
+					$.ajax({
 						url      : '?pagename=wolfnet-get-sortOptions-dropdown',
 						dataType : 'json'
-					} )
+					})
 					.done( function ( data ) {
 
-							// Clear out any existing options.
-							$select.children().remove();
+						// Clear out any existing options.
+						$select.children().remove();
 
-							for ( var key=0; key<data.length; key++ ) {
-								$select.append(
-									$('<option>', {value:data[key].value,text:data[key].label} )
-								);
-							}
+						for ( var key=0; key<data.length; key++ ) {
+							$select.append(
+								$('<option>', {value:data[key].value,text:data[key].label} )
+							);
+						}
 
-					} );
+					});
 
 				});
 
@@ -269,7 +173,7 @@ if ( typeof jQuery != 'undefined' ) {
 
 			var loadDataEventHandler = function ( event, target )
 			{
-				var $container = $( this );
+				var $container = $(this);
 				var state      = $container.data('state');
 
 				// If data is not already be refreshed attempt to do so.
@@ -277,12 +181,11 @@ if ( typeof jQuery != 'undefined' ) {
 					var options = $container.data(datakey);
 					var data    = $.extend( state, options.criteria );
 
-					state.startrow = ( Number(state.numrows) * (Number(state.page) - 1 ) ) + 1;
-
 					data.ownerType = options.ownerType;
+					delete data['pagename'];
 
 					// Make Ajax call to retrieve data.
-					$.ajax( {
+					$.ajax({
 						url      : '?pagename=wolfnet-listings-get',
 						dataType : 'json',
 						data     : data,
@@ -290,15 +193,15 @@ if ( typeof jQuery != 'undefined' ) {
 							state.refreshing = true;
 							$container.find('.wolfnet_listings').addClass('wolfnet_refreshing');
 						}
-					} )
-					.done( function ( data ) {
+					})
+					.done(function ( data ) {
 						// Notify the container that the data has been loaded and pass the data to any handlers.
 						$container.trigger( 'wolfnet.dataLoaded', [data,target] );
-					} )
-					.always( function () {
+					})
+					.always(function () {
 						state.refreshing = false;
 						$container.find('.wolfnet_listings').removeClass('wolfnet_refreshing');
-					} );
+					});
 
 				}
 
@@ -307,14 +210,21 @@ if ( typeof jQuery != 'undefined' ) {
 
 			var prevPageEventHandler = function ( event, target )
 			{
-				var state = $(this).data('state');
-				var prevPage = state.page - 1;
+				var state    = $(this).data('state');
+				var newStart = Number(state.startrow) - Number(state.numrows);
+
+				if ( newStart < 1) {
+					newStart = state.max_results - state.numrows + 1;
+				}
+
+				if ( newStart < 1 ) {
+					newStart = state.startrow;
+				}
 
 				// if there is a prev page update state data
-				if ( !state.refreshing && prevPage > 0 ) {
-					state.page = prevPage;
+				if ( !state.refreshing && newStart >= 1 ) {
+					state.startrow = newStart;
 					$(this).data( 'state', state );
-
 					// trigger a data refresh.
 					$(this).trigger('wolfnet.refreshData', target);
 				}
@@ -324,15 +234,17 @@ if ( typeof jQuery != 'undefined' ) {
 
 			var nextPageEventHandler = function ( event, target )
 			{
-				var state = $(this).data('state');
-				var lastPage = getLastPageNum( state.numrows, state.total_rows );
-				var nextPage = state.page + 1;
+				var state    = $(this).data('state');
+				var newStart = Number(state.startrow) + Number(state.numrows);
+
+				if (newStart >= state.max_results) {
+					newStart = 1;
+				}
 
 				// if there is a next page update state data
-				if ( !state.refreshing && nextPage <= lastPage ) {
-					state.page = nextPage;
+				if ( !state.refreshing && newStart <= state.max_results ) {
+					state.startrow = newStart;
 					$(this).data( 'state', state );
-
 					// trigger a data refresh.
 					$(this).trigger('wolfnet.refreshData', [target] );
 				}
@@ -345,11 +257,11 @@ if ( typeof jQuery != 'undefined' ) {
 				var state = $(this).data('state');
 
 				// if the value is acceptable update state data
-				if ( !state.refreshing && value != state.total_rows ) {
+				if ( !state.refreshing && value <= state.max_results ) {
 
-					state.numrows = value;
-					state.page = 1;
+					state.numrows  = Number(value);
 					state.startrow = 1;
+
 					$(this).data( 'state', state );
 
 					// update all related input controls
@@ -390,8 +302,6 @@ if ( typeof jQuery != 'undefined' ) {
 				var state      = $container.data('state');
 				var startrow   = state.startrow;
 				var numrows    = state.numrows;
-				var page       = state.page;
-				var totalRows  = state.total_rows;
 				var sortBy     = state.sort;
 
 				// Clear pre-existing items
@@ -404,14 +314,11 @@ if ( typeof jQuery != 'undefined' ) {
 				}
 				// Render Property List Items
 				else if ( $container.hasClass('wolfnet_propertyList') ) {
-					buildListingGrid.call( $container, data );
+					buildPropertyList.call( $container, data );
 				}
 
 				// Update results count display
 				var rowcountDisplay = (Number(startrow) - 1) + Number(numrows);
-				if (rowcountDisplay > previewLimitCount) {
-					rowcountDisplay = previewLimitCount;
-				}
 
 				// Update page information
 				$container.find('.wolfnet_page_start').text(startrow);
@@ -433,10 +340,7 @@ if ( typeof jQuery != 'undefined' ) {
 				var $container = $(this);
 				var $listings  = $container.find('.wolfnet_listings:first').clone();
 				var state      = $container.data('state');
-				var startrow   = state.startrow;
 				var numrows    = state.numrows;
-				var page       = state.page;
-				var totalRows  = state.total_rows;
 				var sortBy     = state.sort;
 
 				//START:  loop to rebuild listing grid dom (listingGrid uses listingSimple.php template)
@@ -535,10 +439,7 @@ if ( typeof jQuery != 'undefined' ) {
 				var $container = $(this);
 				var $listings  = $container.find('.wolfnet_listings:first').clone();
 				var state      = $container.data('state');
-				var startrow   = state.startrow;
 				var numrows    = state.numrows;
-				var page       = state.page;
-				var totalRows  = state.total_rows;
 				var sortBy     = state.sort;
 
 				//START:  rebuild property list dom (propertyList uses listingBrief.php)
@@ -566,13 +467,13 @@ if ( typeof jQuery != 'undefined' ) {
 						.addClass('wolfnet_price')
 						.attr('itemprop','price')
 						.html( priceFormatter(data[i].listing_price) )
-						.appendTo(location);
+						.appendTo(link);
 
 					var streetAddress = $('<span>')
 						.attr('itemprop','street-address')
 						.css('display','none')
 						.html(fullAddress)
-						.appendTo(price);
+						.appendTo(link);
 
 				}//END: rebuild property list DOM
 
@@ -586,95 +487,104 @@ if ( typeof jQuery != 'undefined' ) {
 			var listingsRenderedEventHandler = function ( event, target )
 			{
 				var $container = $(this);
-				var state = $container.data('state');
+				var state      = $container.data('state');
 
-				if ( state.page - 1 < 1 ) {
+				if ( state.startrow - state.numrows < 1) {
 					$container.find('a.wolfnet_page_nav_prev').addClass('wolfnet_disabled');
 				}
 				else {
 					$container.find('a.wolfnet_page_nav_prev').removeClass('wolfnet_disabled');
 				}
 
-				if ( state.page + 1 > getLastPageNum( state.numrows, state.total_rows ) ) {
+				if ( state.startrow + state.numrows > state.max_results ) {
 					$container.find('a.wolfnet_page_nav_next').addClass('wolfnet_disabled');
 				}
 				else {
 					$container.find('a.wolfnet_page_nav_next').removeClass('wolfnet_disabled');
 				}
 
-				// If the element that triggered the event was in the bottom toolbar scroll to the top of the page.
-				if ( target != undefined && $(target).closest('.wolfnet_toolbar')[0] == $(this).find('.wolfnet_toolbarBottom')[0] ) {
-					$('html,body').scrollTop( $(this).offset().top - 100 );
-				}
-
 			}
 
 
-			return this.each( function () {
+			return this.each(function () {
 
-				var $listingContainer = $( this );
+				var $listingContainer = $(this);
+				var $toolbar          = $listingContainer.find('.wolfnet_toolbar');
 
-				$listingContainer.data( datakey, options );
-
-				if ( options.total_rows > options.max_results ) {
-					previewLimitCount = options.max_results;
-				}
-				else {
-					previewLimitCount = options.total_rows;
-				}
+				$listingContainer.data(datakey, options);
 
 				var stateData = {
-					page        : options.page,
-					startrow    : options.startrow,
-					numrows     : options.numrows,
+					refreshing  : false,
 					sort        : options.sort,
 					ownerType   : options.ownerType,
-					total_rows  : options.total_rows,
-					max_results : previewLimitCount,
-					refreshing  : false
+					max_results : options.max_results,
+					numrows     : Number($toolbar.data('numrows')) || options.numrows,
+					startrow    : Number($toolbar.data('startrow')) || options.startrow
 					};
 
-				$listingContainer.data( 'state', stateData );
+				$listingContainer.data('state', stateData);
 
-				//only display toolbars if there are listings
-				if ( options.total_rows > 0 ) {
+				// Bind events on the container.
+				$listingContainer.bind('wolfnet.nextPage', nextPageEventHandler);
+				$listingContainer.bind('wolfnet.prevPage', prevPageEventHandler);
+				$listingContainer.bind('wolfnet.itemsPerPage', itemsPerPageEventHandler);
+				$listingContainer.bind('wolfnet.sortChange', sortChangeEventHandler);
+				$listingContainer.bind('wolfnet.refreshData', loadDataEventHandler);
+				$listingContainer.bind('wolfnet.dataLoaded', dataLoadedEventHandler);
+				$listingContainer.bind('wolfnet.listingsRendered', listingsRenderedEventHandler);
 
-					// Create events on the container.
-					$listingContainer.bind( 'wolfnet.nextPage', nextPageEventHandler );
-					$listingContainer.bind( 'wolfnet.prevPage', prevPageEventHandler );
-					$listingContainer.bind( 'wolfnet.itemsPerPage', itemsPerPageEventHandler );
-					$listingContainer.bind( 'wolfnet.sortChange', sortChangeEventHandler );
-					$listingContainer.bind( 'wolfnet.refreshData', loadDataEventHandler );
-					$listingContainer.bind( 'wolfnet.dataLoaded', dataLoadedEventHandler );
-					$listingContainer.bind( 'wolfnet.listingsRendered', listingsRenderedEventHandler );
+				// If the toolbar is to be used for pagination wire it up to make ajax requests.
+				if ($toolbar.is('.wolfnet_withPagination')) {
 
-					// If appropriate render and add the toolbar.
-					if ( options.usesPagination !== false || options.showSortOptions === true ) {
+					$toolbar.find('a.wolfnet_page_nav_prev').click(function(event){
+						$listingContainer.trigger('wolfnet.prevPage');
+						event.preventDefault();
+						return false;
+					});
 
-						var $toolbar = renderToolbar.call(this);
+					$toolbar.find('a.wolfnet_page_nav_next').click(function(event){
+						$listingContainer.trigger('wolfnet.nextPage');
+						event.preventDefault();
+						return false;
+					});
 
-						// Add a copy of the toolbar to the top of the container.
-						$listingContainer
-							.find('.wolfnet_listings:first')
-							.before( $toolbar.clone(true).addClass('wolfnet_toolbarTop') );
+					$toolbar.find('.wolfnet_page_items').append(renderPaginationControls.call($listingContainer[0]));
 
-						// Add a copy of the toolbar to the bottom of the container.
-						$listingContainer
-							.find('.wolfnet_listings:first')
-							.after( $toolbar.clone(true).addClass('wolfnet_toolbarBottom') );
+					$toolbar.filter('.wolfnet_toolbarBottom').find('a.wolfnet_page_nav').click(function(){
+						$('html,body').scrollTop( $(this).closest('.wolfnet_widget').offset().top - 100 );
+					});
 
-						// The toolbars are loaded so trigger some events.
-						$listingContainer.trigger('wolfnet.toolbarsRendered');
-						$listingContainer.trigger('wolfnet.listingsRendered');
-
-					}
+					$toolbar.filter('.wolfnet_toolbarBottom').find('.wolfnet_page_items_select select').change(function(){
+						$('html,body').scrollTop( $(this).closest('.wolfnet_widget').offset().top - 100 );
+					});
 
 				}
 
-			} );
+				// If the toolbar is to be used for sorting add the sorting control.
+				if ($toolbar.is('.wolfnet_withSortOptions')) {
+					var $sortControls = renderSortControls.call($listingContainer);
+					var $pageInfo     = $toolbar.find('.wolfnet_page_info');
+
+					if ($pageInfo.length != 0) {
+						$pageInfo.append($sortControls);
+					}
+					else {
+						$toolbar.append($sortControls);
+					}
+
+					$toolbar.filter('.wolfnet_toolbarBottom').find('.wolfnet_sortoptions select').change(function(){
+						$('html,body').scrollTop( $(this).closest('.wolfnet_widget').offset().top - 100 );
+					});
+
+				}
+
+				$listingContainer.trigger('wolfnet.toolbarsRendered');
+
+			});
 
 
 		} /*END: function $.fn.wolfnetToolbar*/
 
-	} )( jQuery ); /* END: jQuery IIFE */
+	})(jQuery); /* END: jQuery IIFE */
+
 } /* END: If jQuery Exists */

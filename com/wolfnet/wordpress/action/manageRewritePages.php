@@ -104,6 +104,7 @@ extends com_greentiedev_wppf_action_action
 	 */
 	private $enqueueResourcesAction;
 
+
 	/**
 	 * This property holds the sort service.
 	 *
@@ -111,6 +112,24 @@ extends com_greentiedev_wppf_action_action
 	 *
 	 */
 	private $sortService;
+
+
+	/**
+	 * This property holds an instance of the Listing Grid View object
+	 *
+	 * @type  com_greentiedev_wppf_interface_iView
+	 *
+	 */
+	private $listingGridView;
+
+
+	/**
+	 * This property holds an instance of the Property List View object
+	 *
+	 * @type  com_greentiedev_wppf_interface_iView
+	 *
+	 */
+	private $propertyListView;
 
 
 	/* PUBLIC METHODS *************************************************************************** */
@@ -219,6 +238,7 @@ extends com_greentiedev_wppf_action_action
 		$this->getListingGridOptionsView()->out( $data );
 
 		exit;
+
 	}
 
 
@@ -253,6 +273,7 @@ extends com_greentiedev_wppf_action_action
 		print( json_encode( $this->getSearchService()->getSearchCriteria( $_GET['ID'] ) ) );
 
 		exit;
+
 	}
 
 
@@ -273,6 +294,7 @@ extends com_greentiedev_wppf_action_action
 		print( json_encode( $data ) );
 
 		exit;
+
 	}
 
 
@@ -328,9 +350,12 @@ extends com_greentiedev_wppf_action_action
 		// Output the header of the current theme and exit
 		$this->getEnqueueResourcesAction()->execute();
 		$this->statusSuccess();
+
 		echo $this->getWpHeader();
 		echo $this->getWpFooter();
+
 		exit;
+
 	}
 
 
@@ -338,8 +363,11 @@ extends com_greentiedev_wppf_action_action
 	{
 		// Output the header of the current theme and exit
 		$this->statusSuccess();
+
 		echo $this->getWpHeader();
+
 		exit;
+
 	}
 
 
@@ -350,29 +378,90 @@ extends com_greentiedev_wppf_action_action
 		$this->statusSuccess();
 		$this->getWpHeader(); // Do not output the contents. This only needs to be included for script queue purposes.
 		echo $this->getWpFooter();
+
 		exit;
+
 	}
+
+
+	private function listings ()
+	{
+
+		$this->statusSuccess();
+
+		$defaultOptions = array(
+			'title'       => '',
+			'ownertype'   => 'all',
+			'paginated'   => false,
+			'sortoptions' => false,
+			'maxresults'  => 50,
+			'numrows'     => 25,
+			'startrow'    => 1
+			);
+
+		$options = $this->getAttributesData( $_GET, $defaultOptions );
+
+		$criteria = array();
+		foreach ( $_GET as $field => $value ) {
+			if ( !array_key_exists( $field, $options ) ) {
+				$criteria[strtolower($field)] = $value;
+			}
+		}
+
+		$listings = $this->getListingService()->getGridListings( $_GET, $_GET['ownertype'], $_GET['maxresults'] );
+
+		$data = array(
+			'listings' => $listings,
+			'options'  => $options,
+			'criteria' => json_encode($criteria)
+			);
+
+		echo $this->getWpHeader();
+
+		if (array_key_exists('format', $_REQUEST) && $_REQUEST['format'] == 'list') {
+			$this->getPropertyListView()->out( $data );
+		}
+		else {
+			$this->getListingGridView()->out( $data );
+		}
+
+		echo $this->getWpFooter();
+
+		exit;
+
+	}
+
 
 	private function get_sortOptions_dropdown ()
 	{
 		$sortOptions = $this->getSortService()->getSort();
 
 		$data = array();
+
 		foreach( $sortOptions as $sortOption ) {
 			$data[] = $sortOption->getMemento();
 		}
+
 		$this->statusSuccess();
+
 		echo json_encode( $data );
+
 		exit;
+
 	}
+
 
 	private function get_showNumberOfListings_dropdown ()
 	{
 		$data = array(5,10,15,20,25,30,35,40,45,50);
 		$this->statusSuccess();
+
 		echo json_encode( $data );
+
 		exit;
+
 	}
+
 
 	private function listings_get () {
 		$this->statusSuccess();
@@ -386,14 +475,18 @@ extends com_greentiedev_wppf_action_action
 		exit;
 	}
 
+
 	private function statusSuccess ()
 	{
 		global $wp_query;
+
 		if ($wp_query->is_404) {
 			$wp_query->is_404 = false;
 			$wp_query->is_archive = true;
 		}
+
 		status_header( 200 );
+
 	}
 
 
@@ -402,25 +495,32 @@ extends com_greentiedev_wppf_action_action
 		status_header( 404 );
 	}
 
+
 	private function statusNotAuthorized ()
 	{
 		global $wp_query;
+
 		if ($wp_query->is_404) {
 			$wp_query->is_404 = false;
 			$wp_query->is_archive = true;
 		}
+
 		status_header( 401 );
+
 	}
 
 
 	private function getWpHeader ()
 	{
 		$wntClass = 'wnt-wrapper';
+
 		ob_start();
+
 		get_header();
 		$header = ob_get_clean();
 		$htmlTags = array();
 		$hasHtmlTags = preg_match_all( "(<html([^\>]*)>)", $header, $htmlTags, PREG_PATTERN_ORDER );
+
 		if ( $hasHtmlTags > 0 ) {
 			foreach ( $htmlTags[0] as $tag ) {
 				$classRegex = "/(?<=class\=[\"|\'])([^\"|\']*)/";
@@ -437,7 +537,9 @@ extends com_greentiedev_wppf_action_action
 				$header = str_replace( $tag, $newTag, $header );
 			}
 		}
+
 		return $header;
+
 	}
 
 
@@ -446,7 +548,28 @@ extends com_greentiedev_wppf_action_action
 		ob_start();
 		get_footer();
 		$footer = ob_get_clean();
+
 		return $footer;
+
+	}
+
+
+	private function getAttributesData ( $values=null, $defaultValues=array() )
+	{
+		$attributes = array();
+
+		foreach ( $defaultValues as $attr => $value ) {
+
+			$attributes[$attr] = array( 'name'=>$attr, 'id'=>$attr, 'value'=>$value );
+
+			if ( $values != null && isset( $values[$attr] ) ) {
+				$attributes[$attr]['value'] = $values[$attr];
+			}
+
+		}
+
+		return $attributes;
+
 	}
 
 
@@ -649,5 +772,56 @@ extends com_greentiedev_wppf_action_action
 	{
 		$this->sortService = $sortService;
 	}
+
+
+	/**
+	 * GETTER:  This method is a getter for the listingGridView property.
+	 *
+	 * @return  com_greentiedev_wppf_interface_iView
+	 *
+	 */
+	public function getListingGridView ()
+	{
+		return $this->listingGridView;
+	}
+
+
+	/**
+	 * SETTER:  This method is a setter for the listingGridView property.
+	 *
+	 * @param   com_greentiedev_wppf_interface_iView  $service
+	 * @return  void
+	 *
+	 */
+	public function setListingGridView ( com_greentiedev_wppf_interface_iView $view )
+	{
+		$this->listingGridView = $view;
+	}
+
+
+	/**
+	 * GETTER:  This method is a getter for the listingGridView property.
+	 *
+	 * @return  com_greentiedev_wppf_interface_iView
+	 *
+	 */
+	public function getPropertyListView ()
+	{
+		return $this->propertyListView;
+	}
+
+
+	/**
+	 * SETTER:  This method is a setter for the listingGridView property.
+	 *
+	 * @param   com_greentiedev_wppf_interface_iView  $service
+	 * @return  void
+	 *
+	 */
+	public function setPropertyListView ( com_greentiedev_wppf_interface_iView $view )
+	{
+		$this->propertyListView = $view;
+	}
+
 
 }

@@ -49,7 +49,15 @@ implements com_greentiedev_wppf_interface_iView
 	 * @type  com_wolfnet_wordpress_settings_service
 	 *
 	 */
-	public $settingsService;	
+	public $settingsService;
+
+	/**
+	 * This property holds a reference to the toolbar view.
+	 *
+	 * @type  com_greentiedev_wppf_interface_iView
+	 *
+	 */
+	public $toolbarView;
 
 
 	/* PUBLIC METHODS *************************************************************************** */
@@ -71,10 +79,35 @@ implements com_greentiedev_wppf_interface_iView
 		}
 
 		$_REQUEST['wolfnet_includeDisclaimer'] = true; // For later use in the site footer.
-		$data['instanceId']	= uniqid( 'wolfnet_listings_' );
-		$data['max_results'] = $this->getSettingsService()->getSettings()->getMaxResults();
+
+		$data['instanceId']    = str_replace('.', '', uniqid( 'wolfnet_listings_' ));
+
+		$data['options']['format']['id'] = 'format';
+		$data['options']['format']['name'] = 'format';
+
+		$templateParts = explode(DIRECTORY_SEPARATOR, $this->getTemplate());
+
+		switch ($templateParts[count($templateParts)-1]) {
+
+			default:
+				$data['options']['format']['value'] = 'grid';
+				break;
+
+			case 'propertyList.php':
+				$data['options']['format']['value'] = 'list';
+				break;
+
+		}
+
+		$toolbarClass  = '';
+		$toolbarClass .= ($data['options']['paginated']['value']   == 'true') ? 'wolfnet_withPagination '  : '' ;
+		$toolbarClass .= ($data['options']['sortoptions']['value'] == 'true') ? 'wolfnet_withSortOptions ' : '' ;
+
+		$data['toolbarTop']    = $this->getToolbarView()->render(array_merge($data,array('toolbarClass'=>$toolbarClass . 'wolfnet_toolbarTop ')));
+		$data['toolbarBottom'] = $this->getToolbarView()->render(array_merge($data,array('toolbarClass'=>$toolbarClass . 'wolfnet_toolbarBottom ')));
 
 		return parent::render( $data );
+
 	}
 
 
@@ -172,5 +205,31 @@ implements com_greentiedev_wppf_interface_iView
 	{
 		$this->settingsService = $settingsService;
 	}
+
+
+	/**
+	 * GETTER: This method is a getter for the toolbarView property.
+	 *
+	 * @return  com_greentiedev_wppf_interface_iView
+	 *
+	 */
+	public function getToolbarView ()
+	{
+		return $this->toolbarView;
+	}
+
+
+	/**
+	 * SETTER: This method is a setter for the toolbarView property.
+	 *
+	 * @type    com_greentiedev_wppf_interface_iView  $view
+	 * @return  void
+	 *
+	 */
+	public function setToolbarView ( com_greentiedev_wppf_interface_iView $view )
+	{
+		$this->toolbarView = $view;
+	}
+
 
 }

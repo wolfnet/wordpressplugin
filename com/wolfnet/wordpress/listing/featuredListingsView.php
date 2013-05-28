@@ -86,7 +86,7 @@ implements com_greentiedev_wppf_interface_iView
 			$data['listingContent'] = $this->renderListings( $data['listings'] );
 		}
 
-		$data['instanceId'] = uniqid( 'wolfnet_featuredListing_' );
+		$data['instanceId'] = str_replace('.', '', uniqid( 'wolfnet_featuredListing_' ));
 
 		$data['autoPlay'] = 'false';
 		if ( $data['options']['autoplay']['value'] !== 'false' ) {
