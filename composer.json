@@ -1,0 +1,20 @@
+{
+    "name": "wolfnet/wordpressplugin",
+    "description": "A WordPress plugin which brings WolfNet IDX search solution data to WordPress based websites.",
+    "authors": [
+        {
+            "name": "WolfNet Technologies",
+            "email": "service@wolfnet.com"
+        },
+        {
+            "name": "AJ Michels",
+            "email": "ajmichels.web@gmail.com"
+        }
+    ],
+    "require": {
+        "twig/twig": "1.*"
+    },
+    "autoload": {
+        "psr-0": {"WNT": "lib/"}
+    }
+}
