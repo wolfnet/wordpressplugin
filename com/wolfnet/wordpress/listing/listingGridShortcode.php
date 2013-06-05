@@ -101,11 +101,6 @@ extends com_greentiedev_wppf_shortcode_shortcode
 			}
 		}
 
-		//Max of 50 results for this setting (requirement)
-		if ( $options['maxresults']['value'] > 50 ) {
-			$options['maxresults']['value'] = 50;
-		}
-
 		$gridListings = $this->getListingService()->getGridListings(
 			$criteria,
 			$options['ownertype']['value'],

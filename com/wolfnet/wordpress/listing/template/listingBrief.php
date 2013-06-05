@@ -32,19 +32,19 @@
 ?>
 
 <div id="wolfnet_listing_<?php echo $id; ?>" class="wolfnet_listing" itemscope>
-	<a href="<?php echo $url; ?>" title="<?php echo $address_full . ' - ' . $price; ?>">
+	<a href="<?php echo $url; ?>" title="<?php echo $address_full . ' - ' . $price; ?>" rel="follow">
 		<span class="wolfnet_full_address"><?php echo $address_full; ?></span>
 		<span class="wolfnet_price" itemprop="price">$<?php echo $price; ?></span>
 		<span itemprop="street-address" style="display:none;"><?php echo $address_full; ?></span>
 	</a>
 	<?php if ( array_key_exists( '-debug', $_REQUEST ) ) { ?>
-	<!-- RAW DATA ----------------------------------------------------------------------------------
-	property_id:      <?php echo $rawData['property_id']         . "\n"; ?>
-	property_url:     <?php echo $rawData['property_url']        . "\n"; ?>
-	listing_price:    <?php echo $rawData['listing_price']       . "\n"; ?>
-	display_address:  <?php echo $rawData['display_address']     . "\n"; ?>
-	city:             <?php echo $rawData['city']                . "\n"; ?>
-	state:            <?php echo $rawData['state']               . "\n"; ?>
-	-------------------------------------------------------------------------------------------- -->
+	<!-- RAW DATA - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	property_id:      <?php echo $rawData['property_id']     . "\n"; ?>
+	property_url:     <?php echo $rawData['property_url']    . "\n"; ?>
+	listing_price:    <?php echo $rawData['listing_price']   . "\n"; ?>
+	display_address:  <?php echo $rawData['display_address'] . "\n"; ?>
+	city:             <?php echo $rawData['city']            . "\n"; ?>
+	state:            <?php echo $rawData['state']           . "\n"; ?>
+	- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
 	<?php } ?>
 </div>

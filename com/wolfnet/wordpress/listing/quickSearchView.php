@@ -84,7 +84,7 @@ implements com_greentiedev_wppf_interface_iView
 	 */
 	public function render ( $data = array() )
 	{
-		$data['instanceId'] = uniqid( 'wolfnet_quickSearchForm_' );
+		$data['instanceId'] = str_replace('.', '', uniqid( 'wolfnet_quickSearchForm_' ));
 		$data['formAction'] = $this->getSettingsService()->getSiteBaseUrl();
 
 		/* Register WordPress filters for each variable being used in the view. (except the rawData) */

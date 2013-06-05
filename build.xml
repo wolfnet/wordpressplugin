@@ -1,41 +1,29 @@
-<project name="wolfnetWordPressPlugin" default="build" basedir=".">
+<project name="wolfnet-idx-for-wordpress" default="build" basedir=".">
 
 
 	<property name="majorVersion" value="1.3" />
-	<property name="minorVersion" value="10" />
+	<property name="minorVersion" value="11b7" />
 	<property name="version" value="${majorVersion}.${minorVersion}" />
 
-	<property file="build.properties" />
+	<property name="dir.ant"   value="${basedir}/.ant" />
+	<property name="dir.build" value="${basedir}/build" />
+	<property name="dir.dist"  value="${basedir}/dist" />
+	<property name="dir.js"    value="js" />
+	<property name="dir.css"   value="css" />
 
-	<property name="tool.yuicompressor" value="${basedir}/.ant/yuicompressor-2.4.5.jar"  />
-	<property name="tool.closure"       value="${basedir}/.ant/closure/compiler.jar" />
-	<property name="tool.ant-contrib"   value="${basedir}/.ant/ant-contrib/lib/ant-contrib.jar" />
-	<property name="tool.rhino"         value="${basedir}/.ant/rhino.jar" />
-	<property name="tool.less"          value="${basedir}/.ant/less-rhino-1.1.5.js" />
-	<property name="buildName"          value="wolfnet" />
-	<property name="buildDir"           value="../${buildName}" />
-	<property name="testDir"            value="../${buildName}Test" />
-	<property name="dir.js"             value="js" />
-	<property name="dir.css"            value="css" />
-	<property name="packageDir"         value="../" />
-	<property name="packageName"        value="${packageDir}${buildName}_${version}" />
+	<property name="tool.yuicompressor" value="${dir.ant}/yuicompressor-2.4.5.jar"  />
+	<property name="tool.closure"       value="${dir.ant}/closure/compiler.jar" />
+	<property name="tool.ant-contrib"   value="${dir.ant}/ant-contrib/lib/ant-contrib.jar" />
+	<property name="tool.rhino"         value="${dir.ant}/rhino.jar" />
+	<property name="tool.less"          value="${dir.ant}/less-rhino-1.1.5.js" />
 
-	<property name="absBase"            location="${basedir}" />
-	<property name="absBuild"           location="${buildDir}" />
+	<property name="dist.name"          value="${dir.dist}/${ant.project.name}_${version}" />
 
 
 	<!-- Define the Java Library for the AntContrib project -->
 	<taskdef resource="net/sf/antcontrib/antcontrib.properties">
 		<classpath>
 			<pathelement location="${tool.ant-contrib}" />
-		</classpath>
-	</taskdef>
-
-
-	<!-- Define the Java Library for the Closure Compiler -->
-	<taskdef name="jscomp" classname="com.google.javascript.jscomp.ant.CompileTask">
-		<classpath>
-			<pathelement location="${tool.closure}" />
 		</classpath>
 	</taskdef>
 
@@ -66,61 +54,42 @@
 	<target name="build" depends="minify">
 		<clean-for-build />
 
-		<echo>Creating Build Directory: ${buildDir}</echo>
-		<copy todir="${buildDir}">
+		<echo>Creating Build Directory: ${dir.build}</echo>
+		<copy todir="${dir.build}">
 			<fileset dir="${basedir}">
-				<exclude name=".build.properties" /> <!-- Template Properties Files (does get committed) -->
-				<exclude name="build.properties" /> <!-- Concrete Properties Files (does not get committed) -->
-				<exclude name="build.xml" /> <!-- This file -->
-				<exclude name="phpdoc.dist.xml" /> <!-- Config file for PHP Documentor -->
-				<exclude name="*.bat" /> <!-- Batch files used for building the project or performing othing tasks -->
-				<exclude name="LessCompilerOutput.txt" />
+				<!-- Excluded Directories -->
 				<exclude name=".ant/" />
+				<exclude name=".ant/" />
+				<exclude name=".vagrant/" />
+				<exclude name="build/" />
+				<exclude name="dist/" />
 				<exclude name="docs/" />
-				<exclude name="phpdoc*.xml" />
-				<exclude name="**/*.less" />
-				<exclude name="xml/*.xml" />
-				<exclude name=".ant/" />
+				<!-- Excluded Files -->
 				<exclude name=".gitconfig" />
-				<exclude name="**/*.tmp" />
+				<exclude name="build.xml" />
+				<exclude name="LessCompilerOutput.txt" />
+				<exclude name="vagrantfile" />
+				<!-- Excluded File Patterns -->
+				<exclude name="*.vagrant" />
 				<exclude name="*.sublime*" />
+				<exclude name="**/*.less" />
+				<exclude name="**/*.tmp" />
+				<exclude name="phpdoc*.xml" />
 			</fileset>
 		</copy>
 
 	</target>
 
 
-	<target name="test" depends="build">
-		<clean-for-test />
-		<copy todir="${testDir}">
-			<fileset dir="${buildDir}" />
-		</copy>
-	</target>
-
-
-	<target name="package" depends="build">
-		<clean-for-package />
-		<prep-for-package />
-		<zip destfile="${packageName}.zip" compress="true">
-			<zipfileset dir="${buildDir}" prefix="${buildName}" />
+	<target name="dist" depends="build">
+		<clean-for-dist />
+		<prep-for-dist />
+		<zip destfile="${dist.name}.zip" compress="true">
+			<zipfileset dir="${dir.build}" prefix="${ant.project.name}" />
 		</zip>
-		<zip destfile="${packageName}_src.zip" compress="true">
-			<zipfileset dir="${basedir}" prefix="${buildName}" />
+		<zip destfile="${dist.name}_src.zip" compress="true">
+			<zipfileset dir="${basedir}" prefix="${ant.project.name}" />
 		</zip>
-	</target>
-
-
-	<target name="package-build" depends="build">
-		<prep-for-package />
-	</target>
-
-
-	<target name="package-test" depends="build">
-		<clean-for-test />
-		<prep-for-package />
-		<copy todir="${testDir}">
-			<fileset dir="${buildDir}" />
-		</copy>
 	</target>
 
 
@@ -128,33 +97,26 @@
 
 	<macrodef name="clean-for-build">
 		<sequential>
-			<delete dir="${buildDir}" />
+			<delete dir="${dir.build}" />
 		</sequential>
 	</macrodef>
 
 
-	<macrodef name="clean-for-test">
+	<macrodef name="clean-for-dist">
 		<sequential>
-			<delete dir="${testDir}" />
+			<delete file="${dist.name}.zip" />
+			<delete file="${dist.name}_src.zip" />
 		</sequential>
 	</macrodef>
 
 
-	<macrodef name="clean-for-package">
-		<sequential>
-			<delete file="${packageName}.zip" />
-			<delete file="${packageName}_src.zip" />
-		</sequential>
-	</macrodef>
-
-
-	<macrodef name="prep-for-package">
+	<macrodef name="prep-for-dist">
 		<sequential>
 			<!-- Minify Source Code -->
 			<!-- Use min files instead of src files -->
 			<echo>Switch to Minified Files</echo>
 			<echo>Update Version Numbers</echo>
-			<replace dir="${buildDir}">
+			<replace dir="${dir.build}">
 				<include name="**/*.php" />
 				<include name="ReadMe.txt" />
 				<replacefilter token=".src.js"  value=".min.js" />
@@ -205,28 +167,6 @@
 				<arg line="4000" />
 				<arg line="-o" />
 				<mapper type="glob" from="*.src.css" to="${basedir}/*.min.css" />
-				<targetfile />
-			</apply>
-		</sequential>
-	</macrodef>
-
-
-	<macrodef name="min-js">
-		<!-- Minify JS Files -->
-		<sequential>
-			<echo>Minifiying JavaScript Files</echo>
-			<apply executable="java" parallel="false">
-				<fileset dir="${basedir}/">
-					<include name="${dir.js}/**/*.src.js" />
-					<exclude name="${dir.js}/**/*.min.js" />
-				</fileset>
-				<arg line="-jar" />
-				<arg path="${tool.yuicompressor}" />
-				<srcfile />
-				<arg line="--line-break" />
-				<arg line="4000" />
-				<arg line="-o" />
-				<mapper type="glob" from="*.src.js" to="${basedir}/*.min.js" />
 				<targetfile />
 			</apply>
 		</sequential>
