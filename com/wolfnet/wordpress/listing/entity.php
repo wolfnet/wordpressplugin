@@ -79,12 +79,19 @@ implements com_greentiedev_wppf_interface_iEntity
 	 */
 	private $city            = '';
 
+    /**
+     *
+     * @type  string
+     *
+     */
+    private $state           = '';
+
 	/**
 	 *
 	 * @type  string
 	 *
 	 */
-	private $state           = '';
+	private $zip_code        = '';
 
 	/**
 	 *
@@ -148,7 +155,8 @@ implements com_greentiedev_wppf_interface_iEntity
 		$this->agent_listing   = $data['agent_listing'];
 		$this->display_address = $data['display_address'];
 		$this->city            = $data['city'];
-		$this->state           = $data['state'];
+        $this->state           = $data['state'];
+		$this->zip_code        = $data['zip_code'];
 		$this->thumbnail_url   = $data['thumbnail_url'];
 		$this->photo_url       = $data['photo_url'];
 		$this->bathroom        = $data['bathroom'];
@@ -175,7 +183,8 @@ implements com_greentiedev_wppf_interface_iEntity
 			'agent_listing'   => $this->agent_listing,
 			'display_address' => $this->display_address,
 			'city'            => $this->city,
-			'state'           => $this->state,
+            'state'           => $this->state,
+			'zip_code'        => $this->zip_code,
 			'thumbnail_url'   => $this->thumbnail_url,
 			'photo_url'       => $this->photo_url,
 			'bathroom'        => $this->bathroom,
@@ -205,7 +214,8 @@ implements com_greentiedev_wppf_interface_iEntity
 		if ( $this->getCity() != '' && $this->getState() != '' ) {
 			$location .= ', ';
 		}
-		$location .= $this->getState();
+        $location .= $this->getState();
+		$location .= ' ' . $this->getZipCode();
 		return $location;
 
 	}
@@ -292,7 +302,8 @@ implements com_greentiedev_wppf_interface_iEntity
 			$address .= ', ';
 		}
 
-		$address .= $this->getState();
+        $address .= $this->getState();
+		$address .= ' ' . $this->getZipCode();
 
 		return $address;
 
@@ -379,15 +390,27 @@ implements com_greentiedev_wppf_interface_iEntity
 	}
 
 
+    /**
+     * GETTER: This method is a getter for the state property.
+     *
+     * @return  string
+     *
+     */
+    public function getState ()
+    {
+        return $this->state;
+    }
+
+
 	/**
-	 * GETTER: This method is a getter for the state property.
+	 * GETTER: This method is a getter for the zip_code property.
 	 *
 	 * @return  string
 	 *
 	 */
-	public function getState ()
+	public function getZipCode ()
 	{
-		return $this->state;
+		return $this->zip_code;
 	}
 
 
