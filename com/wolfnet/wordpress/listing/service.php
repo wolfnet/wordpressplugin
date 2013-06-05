@@ -70,6 +70,14 @@ implements com_greentiedev_wppf_interface_iService
 	 */
 	private $dataService;
 
+	/**
+	 * This property holds a reference to the WPPF Data Service instance within the plugin instance.
+	 *
+	 * @type  com_wolfnet_wordpress_settings_service
+	 *
+	 */
+	private $settingsService;
+
 
 	/**
 	 * This property holds a reference to the Web Service URL object which represents the URI which
@@ -138,10 +146,38 @@ implements com_greentiedev_wppf_interface_iService
 	 * @return  array    An array of listing objects (com_wolfnet_wordpress_listing_entity)
 	 *
 	 */
-	public function getGridListings ( $criteria, $owner_type, $maxResults )
+	public function getGridListings ( $criteria, $owner_type, $maxResults=25 )
 	{
+		if (!array_key_exists('numrows', $criteria)) {
+			$criteria['numrows'] = $maxResults;
+		}
+
+		if (!array_key_exists('startrow', $criteria)) {
+			$criteria['startrow'] = 1;
+		}
+
 		$this->setGridListingData( $criteria, $owner_type, $maxResults );
-		return $this->getDAO()->findAll();
+
+		$settings = $this->getSettingsService()->getSettings();
+
+		if ($settings->getMaxResults() != '') {
+			$maxResults = $settings->getMaxResults();
+		}
+		else {
+			$maxResults = 250;
+		}
+
+		$data = $this->getDAO()->findAll();
+
+		foreach ( $data as &$listing ) {
+			$totalListings = $listing->getTotalResults();
+			$listing->numrows    = $criteria['numrows'];
+			$listing->startrow   = $criteria['startrow'];
+			$listing->maxresults = ($totalListings<$maxResults) ? $totalListings : $maxResults;
+		}
+
+		return $data;
+
 	}
 
 
@@ -516,6 +552,31 @@ implements com_greentiedev_wppf_interface_iService
 	public function setDataService ( com_greentiedev_wppf_data_service $service )
 	{
 		$this->dataService = $service;
+	}
+
+
+	/**
+	 * GETTER: This method is a getter for the dataService property.
+	 *
+	 * @return  com_wolfnet_wordpress_settings_service
+	 *
+	 */
+	public function getSettingsService ()
+	{
+		return $this->settingsService;
+	}
+
+
+	/**
+	 * SETTER: This method is a setter for the dataService property.
+	 *
+	 * @param   com_wolfnet_wordpress_settings_service  $service
+	 * @return  void
+	 *
+	 */
+	public function setSettingsService ( com_wolfnet_wordpress_settings_service $service )
+	{
+		$this->settingsService = $service;
 	}
 
 

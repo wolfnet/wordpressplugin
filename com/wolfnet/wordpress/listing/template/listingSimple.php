@@ -33,17 +33,17 @@
 ?>
 
 <div id="wolfnet_listing_<?php echo $id; ?>" class="wolfnet_listing<?php echo $listing_class; ?>" itemscope>
-	<a href="<?php echo $url; ?>">
-		<span class="wolfnet_listingImage"><img src="<?php echo $image; ?>" /></span>
+	<a href="<?php echo $url; ?>" rel="follow">
+		<span class="wolfnet_listingImage"><img src="<?php echo $image; ?>" alt="Property for sale at <?php echo $address_full; ?>" /></span>
 		<span class="wolfnet_price" itemprop="price">$<?php echo $price; ?></span>
 		<span class="wolfnet_bed_bath" title="<?php echo $bedbath_full; ?>"><?php echo $bedbath; ?></span>
 		<span title="<?php echo $address_full; ?>">
-			<span class="wolfnet_location" itemprop="locality">
-				<?php echo $location; ?>
-			</span>
 			<span class="wolfnet_address">
 				<?php echo $address; ?>
 			</span>
+            <span class="wolfnet_location" itemprop="locality">
+                <?php echo $location; ?>
+            </span>
 			<span class="wolfnet_full_address" itemprop="street-address" style="display:none;">
 				<?php echo $address_full; ?>
 			</span>

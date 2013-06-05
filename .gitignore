@@ -1,7 +1,9 @@
-/build.properties
-/LessCompilerOutput.txt
-/css/*wolfnet*.css
-/css/*.min.css
-/js/*.min.js
+.vagrant/machines
+build
+dist
+LessCompilerOutput.txt
+css/*wolfnet*.css
+css/*.min.css
+js/*.min.js
 Desktop.ini
 *.sublime*

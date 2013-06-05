@@ -45,6 +45,10 @@ entered in the "WolfNet >> General Settings" page before any IDX data can be dis
 
 == Changelog ==
 
+= 1.3.11 =
+* Added SEO support for pagination. Pages can now be viewed even when JavaScript is unavailable/disabled.
+* Updated the order of address information and added postal code.
+
 = 1.3.10 =
 * Fixing minor bug causing scripts to be included more than once on search solutions.
 
