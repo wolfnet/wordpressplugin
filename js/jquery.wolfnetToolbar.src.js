@@ -32,6 +32,20 @@ if ( typeof jQuery != 'undefined' ) {
 		} // end method priceFormatter
 
 
+        String.prototype.wntTruncateString = function (length, sufix)
+        {
+            var sufix = sufix || '...';
+            var length = length - sufix.length;
+
+            if (this.length > length) {
+                return this.valueOf().substr(0, length) + sufix;
+            }
+
+            return this.valueOf()
+
+        }
+
+
 		$.fn.wolfnetToolbar = function ( options ) {
 
 			var defaultOptions = {
@@ -348,7 +362,7 @@ if ( typeof jQuery != 'undefined' ) {
 
 					var brokerLogo  = data[i].branding.brokerLogo  || null;
 					var brokerName  = data[i].branding.content || null;
-					var cityState   = data[i].city + ', ' + data[i].state;
+					var cityState   = data[i].city + ', ' + data[i].state + ' ' + data[i].zip_code;
 					var fullAddress = data[i].display_address + ', ' + cityState;
 					var hasBranding = ( brokerLogo == null && brokerName == null ) ? false : true ;
 
@@ -385,14 +399,14 @@ if ( typeof jQuery != 'undefined' ) {
 					var location = $('<span>')
 						.attr('title',fullAddress)
 						.append(
-							$('<span>').addClass('wolfnet_location')
-								.attr('itemprop','locality')
-								.html(cityState)
-						)
-						.append(
 							$('<span>').addClass('wolfnet_address')
-							.html(data[i].display_address)
+							.html(data[i].display_address.wntTruncateString(25))
 						)
+                        .append(
+                            $('<span>').addClass('wolfnet_location')
+                                .attr('itemprop','locality')
+                                .html(cityState.wntTruncateString(25))
+                        )
 						.append(
 							$('<span>').addClass('wolfnet_full_address')
 								.attr('itemprop','street_address')
@@ -446,7 +460,7 @@ if ( typeof jQuery != 'undefined' ) {
 				//loop listings in data object and build new listing entity to append to dom
 				for ( var i=0; i<data.length; i++ ) {
 
-					var cityState   = data[i].city + ', ' + data[i].state;
+					var cityState   = data[i].city + ', ' + data[i].state + ' ' + data[i].zip_code;
 					var fullAddress = data[i].display_address + ', ' + cityState;
 
 					var listingEntity = $('<div>')

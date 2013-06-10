@@ -45,6 +45,9 @@ entered in the "WolfNet >> General Settings" page before any IDX data can be dis
 
 == Changelog ==
 
+= 1.3.12 =
+* Fixed minor bug creating inconsistancy between initial widget output and paged results.
+
 = 1.3.11 =
 * Added SEO support for pagination. Pages can now be viewed even when JavaScript is unavailable/disabled.
 * Updated the order of address information and added postal code.
