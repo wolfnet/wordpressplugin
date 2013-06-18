@@ -79,38 +79,6 @@ extends com_greentiedev_wppf_action_action
 		}
 
 
-		if ( !post_type_exists('city') ) {
-			register_post_type('city', array(
-				'label'            => 'Areas',
-				'description'      => '',
-				'public'           => true,
-				'show_ui'          => true,
-				'show_in_menu'     => true,
-				'show_in_nav_menu' => false,
-				'capability_type'  => 'post',
-				'hierarchical'     => false,
-				'rewrite'          => array('slug' => ''),
-				'query_var'        => true,
-				'supports'         => array('title','editor','excerpt','trackbacks','custom-fields','comments','revisions','thumbnail','author','page-attributes',),
-				'labels'           => array (
-					'name'               => 'Areas',
-					'singular_name'      => 'Area',
-					'menu_name'          => 'Areas',
-					'add_new'            => 'Add Area',
-					'add_new_item'       => 'Add New Area',
-					'edit'               => 'Edit',
-					'edit_item'          => 'Edit Area',
-					'new_item'           => 'New Area',
-					'view'               => 'View Area',
-					'view_item'          => 'View Area',
-					'search_items'       => 'Search Areas',
-					'not_found'          => 'No Areas Found',
-					'not_found_in_trash' => 'No Areas Found in Trash',
-					'parent'             => 'Parent Area',
-				),
-			) );
-		}
-
 	}
 
 
