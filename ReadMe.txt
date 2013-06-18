@@ -45,6 +45,10 @@ entered in the "WolfNet >> General Settings" page before any IDX data can be dis
 
 == Changelog ==
 
+= 1.3.12 =
+* Removing custom cursor on featured listings as they are not supported well in IE.
+* Removing some code that was not intended for release.
+
 = 1.3.11 =
 * Added SEO support for pagination. Pages can now be viewed even when JavaScript is unavailable/disabled.
 * Updated the order of address information and added postal code.
