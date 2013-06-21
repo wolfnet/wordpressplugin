@@ -143,7 +143,10 @@ extends com_greentiedev_wppf_action_action
 	 */
 	public function execute ()
 	{
-		$pagename     = strtolower( get_query_var( 'pagename' ) );
+
+        $query        = (array_key_exists('wnt_init_query', $_REQUEST)) ? $_REQUEST['wnt_init_query'] : new stdClass();
+        $query        = (property_exists($query, 'query')) ? $query->query : array();
+        $pagename     = (array_key_exists('pagename', $query)) ? $query['pagename'] : '';
 		$adminPrefix  = 'wolfnet-admin-';
 		$publicPrefix = 'wolfnet-';
 		$isAdmin      = ( current_user_can( 'edit_pages' ) || current_user_can( 'edit_posts' ) );
