@@ -45,6 +45,10 @@ entered in the "WolfNet >> General Settings" page before any IDX data can be dis
 
 == Changelog ==
 
+= 1.3.14 =
+* Updates to resolve issues with Brandco theme architecture.
+* Updated to new version of WPPF which supports hook arguments.
+
 = 1.3.13 =
 * Removing custom cursor on featured listings as they are not supported well in IE.
 * Removing some code that was not intended for release.
