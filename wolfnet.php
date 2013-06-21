@@ -135,9 +135,10 @@ implements com_greentiedev_phpCommon_iSingleton
 	/* Register Actions with the Action Manager */
 	protected function actions ()
 	{
-		$this->am->register( $this->sf->getBean( 'RegisterRewriteRules' ),      array( 'init' ) );
-		$this->am->register( $this->sf->getBean( 'RegisterCustomPostTypes' ),   array( 'init' ) );
-		$this->am->register( $this->sf->getBean( 'AddShortcodeBuilderButton' ), array( 'admin_init' ) );
+        $this->am->register( $this->sf->getBean( 'RegisterRewriteRules' ),      array( 'init' ) );
+        $this->am->register( $this->sf->getBean( 'RegisterCustomPostTypes' ),   array( 'init' ) );
+        $this->am->register( $this->sf->getBean( 'PreGetPosts' ),               array( 'pre_get_posts' ) );
+        $this->am->register( $this->sf->getBean( 'AddShortcodeBuilderButton' ), array( 'admin_init' ) );
 		$this->am->register( $this->sf->getBean( 'EnqueueResources' ),          array( 'wp_enqueue_scripts' ) );
 		$this->am->register( $this->sf->getBean( 'CreateAdminPages' ),          array( 'admin_menu' ) );
 		$this->am->register( $this->sf->getBean( 'RegisterWidgets' ),           array( 'widgets_init' ) );
