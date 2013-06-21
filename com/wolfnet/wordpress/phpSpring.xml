@@ -303,6 +303,8 @@
 
 	<bean id="RegisterCustomPostTypes" class="com_wolfnet_wordpress_action_registerCustomPostTypes" />
 
+    <bean id="PreGetPosts" class="com_wolfnet_wordpress_action_preGetPosts" />
+
 
 	<!-- Shortcodes -->
 
