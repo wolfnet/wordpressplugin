@@ -1,5 +1,1 @@
-*.php eol=lf
-*.js eol=lf
-*.css eol=lf
-*.xml eol=lf
-*.html eol=lf
+* text=ef
