@@ -17,7 +17,7 @@ Vagrant.configure("2") do |config|
         latest.vm.provision :shell, :inline => "mv wordpress /var/www"
         latest.vm.provision :shell, :inline => "ln -s /vagrant/.vagrant/wp-config.php /var/www/wp-config.php"
 
-        latest.vm.provision :shell, :inline => "ln -s /vagrant/.vagrant/wp-htaccess /var/www/.htaccess"
+        latest.vm.provision :shell, :inline => "cp -f /vagrant/.vagrant/wp-htaccess /var/www/.htaccess"
 
         # Create a symbolic clink representing the project data.
         latest.vm.provision :shell, :inline => "ln -fs /vagrant /var/www/wp-content/plugins/vagrant"
@@ -38,7 +38,7 @@ Vagrant.configure("2") do |config|
         nightly.vm.provision :shell, :inline => "mv wordpress /var/www"
         nightly.vm.provision :shell, :inline => "ln -s /vagrant/.vagrant/wp-config.php /var/www/wp-config.php"
 
-        nightly.vm.provision :shell, :inline => "ln -s /vagrant/.vagrant/wp-htaccess /var/www/.htaccess"
+        nightly.vm.provision :shell, :inline => "cp -f /vagrant/.vagrant/wp-htaccess /var/www/.htaccess"
 
         # Create a symbolic clink representing the project data.
         nightly.vm.provision :shell, :inline => "ln -fs /vagrant /var/www/wp-content/plugins/vagrant"
@@ -59,7 +59,7 @@ Vagrant.configure("2") do |config|
         wp3_5_1.vm.provision :shell, :inline => "mv wordpress /var/www"
         wp3_5_1.vm.provision :shell, :inline => "ln -s /vagrant/.vagrant/wp-config.php /var/www/wp-config.php"
 
-        wp3_5_1.vm.provision :shell, :inline => "ln -s /vagrant/.vagrant/wp-htaccess /var/www/.htaccess"
+        wp3_5_1.vm.provision :shell, :inline => "cp -f /vagrant/.vagrant/wp-htaccess /var/www/.htaccess"
 
         # Create a symbolic clink representing the project data.
         wp3_5_1.vm.provision :shell, :inline => "ln -fs /vagrant /var/www/wp-content/plugins/vagrant"
@@ -81,7 +81,7 @@ Vagrant.configure("2") do |config|
         wp3_3.vm.provision :shell, :inline => "mv wordpress /var/www"
         wp3_3.vm.provision :shell, :inline => "ln -s /vagrant/.vagrant/wp-config.php /var/www/wp-config.php"
 
-        wp3_3.vm.provision :shell, :inline => "ln -s /vagrant/.vagrant/wp-htaccess /var/www/.htaccess"
+        wp3_3.vm.provision :shell, :inline => "cp -f /vagrant/.vagrant/wp-htaccess /var/www/.htaccess"
 
         # Create a symbolic clink representing the project data.
         wp3_3.vm.provision :shell, :inline => "ln -fs /vagrant /var/www/wp-content/plugins/vagrant"
@@ -103,7 +103,7 @@ Vagrant.configure("2") do |config|
         wpmu3_5_1.vm.provision :shell, :inline => "mv wordpress /var/www"
         wpmu3_5_1.vm.provision :shell, :inline => "ln -s /vagrant/.vagrant/wpmu-config.php /var/www/wp-config.php"
 
-        wpmu3_5_1.vm.provision :shell, :inline => "ln -s /vagrant/.vagrant/wpmu-htaccess /var/www/.htaccess"
+        wpmu3_5_1.vm.provision :shell, :inline => "cp -f /vagrant/.vagrant/wpmu-htaccess /var/www/.htaccess"
 
         # Create a symbolic clink representing the project data.
         wpmu3_5_1.vm.provision :shell, :inline => "ln -fs /vagrant /var/www/wp-content/plugins/vagrant"
