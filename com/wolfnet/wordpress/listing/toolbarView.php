@@ -115,8 +115,8 @@ implements com_greentiedev_wppf_interface_iView
 				)
 			));
 
-		$data['prevLink']  = $this->pageUrl(site_url(), $prevParams);
-		$data['nextLink']  = $this->pageUrl(site_url(), $nextParams);
+		$data['prevLink']  = $this->pageUrl(site_url('/'), $prevParams);
+		$data['nextLink']  = $this->pageUrl(site_url('/'), $nextParams);
 		$data['prevClass'] = ($data['startrow']<=1) ? 'wolfnet_disabled' : '';
 		$data['nextClass'] = ($data['lastitem']>=$data['maxresults']) ? 'wolfnet_disabled' : '';
 
@@ -129,7 +129,7 @@ implements com_greentiedev_wppf_interface_iView
 
 	function pageUrl ($script='', $params=array())
 	{
-		$url = '?pagename=wolfnet-listings';
+		$url = '/?pagename=wolfnet-listings';
 
 		foreach ( $params as $name => $param ) {
 			if ( trim($name) != '' ) {

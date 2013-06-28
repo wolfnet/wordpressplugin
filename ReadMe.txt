@@ -45,6 +45,9 @@ entered in the "WolfNet >> General Settings" page before any IDX data can be dis
 
 == Changelog ==
 
+= 1.3.15 =
+* Updating pagination URL to be relative to the root of the site rather than the current page.
+
 = 1.3.14 =
 * Updates to resolve issues with Brandco theme architecture.
 * Updated to new version of WPPF which supports hook arguments.
