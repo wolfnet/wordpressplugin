@@ -42,7 +42,6 @@ if ( typeof jQuery != 'undefined' ) {
 		var pluginName = 'wolfnetSearchManager';
 
 		var defaultOptions = {
-			apiUrl          : '',
 			apiGetSuffix    : '-get',
 			apiPostSuffix   : '-save',
 			apiDeleteSuffix : '-delete',
@@ -176,7 +175,6 @@ if ( typeof jQuery != 'undefined' ) {
 
 					var $this = $( this );
 					var data  = $this.data( pluginName );
-					var url   = data.option.apiUrl + data.option.apiPostSuffix;
 
 					if ( data.loading || data.saving || data.deleting ) {
 						alert( 'Cannot save, please wait until the data has updated.' );
@@ -184,10 +182,11 @@ if ( typeof jQuery != 'undefined' ) {
 					}
 
 					$.ajax( {
-						url: url,
+						url: wolfnet_ajax.ajaxurl,
 						dataType: 'json',
 						type: 'POST',
 						data: {
+                            action        : 'wolfnet_save_search',
 							post_title    : description,
 							custom_fields : criteria
 						},
@@ -217,7 +216,6 @@ if ( typeof jQuery != 'undefined' ) {
 
 					var $this = $( this );
 					var data  = $this.data( pluginName );
-					var url   = data.option.apiUrl + data.option.apiDeleteSuffix;
 
 					if ( data.loading || data.saving || data.deleting ) {
 						alert( 'Cannot delete, please wait until the data has updated.' );
@@ -225,10 +223,10 @@ if ( typeof jQuery != 'undefined' ) {
 					}
 
 					$.ajax( {
-						url: url,
+						url: wolfnet_ajax.ajaxurl,
 						dataType: 'json',
 						type: 'GET',
-						data: { ID : id },
+						data: { action:'wolfnet_delete_search', id:id },
 						beforeSend: function () {
 							data.loaderImage.show();
 							$this.data( pluginName, $.extend( data, { deleting:true } ) );
@@ -284,10 +282,10 @@ if ( typeof jQuery != 'undefined' ) {
 
 					var $this = $( this );
 					var data  = $this.data( pluginName );
-					var url   = data.option.apiUrl + data.option.apiGetSuffix;
 
 					$.ajax( {
-						url: url,
+						url: wolfnet_ajax.ajaxurl,
+                        data: { action:'wolfnet_saved_searches' },
 						dataType: 'json',
 						type: 'GET',
 						beforeSend: function () {

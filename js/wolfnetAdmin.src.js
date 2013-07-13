@@ -269,8 +269,8 @@ if ( typeof jQuery != 'undefined' ) {
 				var key      = $this.val();
 
 				$.ajax( {
-					url: options.rootUri,
-					data: { key:key },
+					url: wolfnet_ajax.ajaxurl,
+					data: { action:'wolfnet_validate_key', key:key },
 					dataType: 'json',
 					type: 'GET',
 					cache: false,

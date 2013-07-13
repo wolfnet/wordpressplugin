@@ -79,7 +79,8 @@ if ( typeof jQuery != 'undefined' ) {
 					var state   = $container.data('state');
 
 					$.ajax({
-						url      : '?pagename=wolfnet-get-showNumberOfListings-dropdown',
+						url      : wolfnet_ajax.ajaxurl,
+                        data     : { action:'wolfnet_listings_per_page' },
 						dataType : 'json'
 					})
 					.done(function (data){
@@ -148,7 +149,8 @@ if ( typeof jQuery != 'undefined' ) {
 					var state   = $container.data('state');
 
 					$.ajax({
-						url      : '?pagename=wolfnet-get-sortOptions-dropdown',
+						url      : wolfnet_ajax.ajaxurl,
+                        data     : { action:'wolfnet_sort_options' },
 						dataType : 'json'
 					})
 					.done( function ( data ) {
@@ -183,10 +185,11 @@ if ( typeof jQuery != 'undefined' ) {
 
 					data.ownerType = options.ownerType;
 					delete data['pagename'];
+                    data.action = 'wolfnet_get_listing';
 
 					// Make Ajax call to retrieve data.
 					$.ajax({
-						url      : '?pagename=wolfnet-listings-get',
+						url      : wolfnet_ajax.ajaxurl,
 						dataType : 'json',
 						data     : data,
 						beforeSend : function () {

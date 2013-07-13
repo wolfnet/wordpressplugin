@@ -78,12 +78,7 @@ define('WPLANG', '');
  * It is strongly recommended that plugin and theme developers use WP_DEBUG
  * in their development environments.
  */
-if (array_key_exists('-debug', $_REQUEST)) {
-    define('WP_DEBUG', true);
-}
-else {
-    define('WP_DEBUG', false);
-}
+define('WP_DEBUG', true);
 
 /* That's all, stop editing! Happy blogging. */
 
