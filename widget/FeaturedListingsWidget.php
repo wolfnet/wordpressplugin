@@ -19,9 +19,15 @@ class Wolfnet_FeaturedListingsWidget extends Wolfnet_AbstractWidget
         );
 
 
+    /**
+     * [widget description]
+     * @param  array  $args      An array of arguments for the widget.
+     * @param  array  $instance  Instance data for the active widget.
+     * @return void
+     */
     public function widget($args, $instance)
     {
-        $options = $this->getOptions($this->plugin->getFeaturedListingsDefaults(), $instance);
+        $options = $this->getOptions($instance);
 
         echo $this->plugin->featuredListings($options);
 
@@ -30,7 +36,7 @@ class Wolfnet_FeaturedListingsWidget extends Wolfnet_AbstractWidget
 
     public function form($instance)
     {
-        $options = $this->getOptions($this->plugin->getFeaturedListingsDefaults(), $instance);
+        $options = $this->getOptions($instance);
 
         echo $this->plugin->getFeaturedListingsOptionsForm($options);
 
@@ -44,16 +50,11 @@ class Wolfnet_FeaturedListingsWidget extends Wolfnet_AbstractWidget
     }
 
 
-    protected function getOptions($defaultOptions, $instance)
+    protected function getOptions($instance=null)
     {
-        $options = parent::getOptions($defaultOptions, $instance);
+        $options = $this->plugin->getFeaturedListingsOptions($instance);
 
-        $options['autoplay_false_wps']  = selected($options['autoplay'], 'false', false);
-        $options['autoplay_true_wps']   = selected($options['autoplay'], 'true', false);
-        $options['direction_left_wps']  = selected($options['direction'], 'left', false);
-        $options['direction_right_wps'] = selected($options['direction'], 'right', false);
-
-        return $options;
+        return parent::prepOptions($options);
 
     }
 

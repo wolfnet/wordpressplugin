@@ -11,13 +11,14 @@ class Wolfnet_QuickSearchWidget extends Wolfnet_AbstractWidget
     public $name = 'WolfNet Quick Search';
 
     public $options = array(
-        'description'  => 'Configure a quick search to include on your website.  When executed, the user is directed to matching properties within your WolfNet property search.'
+        'description'  => 'Configure a quick search to include on your website.  When executed,
+            the user is directed to matching properties within your WolfNet property search.'
         );
 
 
     public function widget($args, $instance)
     {
-        $options = $this->getOptions($this->plugin->getQuickSearchDefaults(), $instance);
+        $options = $this->getOptions($instance);
 
         echo $this->plugin->quickSearch($options);
 
@@ -26,7 +27,7 @@ class Wolfnet_QuickSearchWidget extends Wolfnet_AbstractWidget
 
     public function form($instance)
     {
-        $options = $this->getOptions($this->plugin->getQuickSearchDefaults(), $instance);
+        $options = $this->getOptions($instance);
 
         echo $this->plugin->getQuickSearchOptionsForm($options);
 
@@ -36,6 +37,15 @@ class Wolfnet_QuickSearchWidget extends Wolfnet_AbstractWidget
     public function update($new_instance, $old_instance)
     {
         return parent::update($this->plugin->getQuickSearchDefaults(), $new_instance, $old_instance);
+
+    }
+
+
+    protected function getOptions($instance=null)
+    {
+        $options = $this->plugin->getQuickSearchOptions($instance);
+
+        return parent::prepOptions($options);
 
     }
 

@@ -11,7 +11,9 @@ class Wolfnet_ListingGridWidget extends Wolfnet_AbstractWidget
     public $name = 'WolfNet Listing Grid';
 
     public $options = array(
-        'description' => 'Define criteria to display a grid of matching properties. The grid display includes an image, price, number of bedrooms, number of bathrooms, and address.',
+        'description' => 'Define criteria to display a grid of matching properties. The grid
+            display includes an image, price, number of bedrooms, number of bathrooms, and
+            address.'
         );
 
     public $controlOptions = array(
@@ -28,7 +30,7 @@ class Wolfnet_ListingGridWidget extends Wolfnet_AbstractWidget
 
     public function form($instance)
     {
-        $options = $this->getOptions($this->plugin->getListingGridDefaults(), $instance);
+        $options = $this->getOptions($instance);
 
         echo $this->plugin->getListingGridOptionsForm($options);
 
@@ -81,26 +83,18 @@ class Wolfnet_ListingGridWidget extends Wolfnet_AbstractWidget
     }
 
 
-    protected function getOptions(array $defaultOptions, $instance)
+    protected function getOptions($instance=null)
     {
-        $options = parent::getOptions($defaultOptions, $instance);
+        $options = $this->plugin->getListingGridOptions($instance);
 
-        $options['criteria']              = esc_attr($options['criteria']);
-        $options['mode_basic_wpc']        = checked($options['mode'], 'basic', false);
-        $options['mode_advanced_wpc']     = checked($options['mode'], 'advanced', false);
-        $options['paginated_false_wps']   = selected($options['paginated'], 'false', false);
-        $options['paginated_true_wps']    = selected($options['paginated'], 'true', false);
-        $options['sortoptions_false_wps'] = selected($options['sortoptions'], 'false', false);
-        $options['sortoptions_true_wps']  = selected($options['sortoptions'], 'true', false);
-
-        return $options;
+        return parent::prepOptions($options);
 
     }
 
 
     protected function collectData($args, $instance)
     {
-        $options = $this->getOptions($this->plugin->getListingGridDefaults(), $instance);
+        $options = $this->getOptions($instance);
         $criteriaArray = $this->convertCriteriaJsonToArray($options['criteria']);
         $data = array_merge($options, $criteriaArray);
 
