@@ -22,6 +22,7 @@ class wolfnet
     /*                 |_|                                                                        */
     /* ****************************************************************************************** */
 
+    private $version              = '{X.X.X}';
     private $optionGroup          = 'wolfnet';
     private $customPostTypeSearch = 'wolfnet_search';
     private $productKeyOptionKey  = 'wolfnet_productKey';
@@ -122,19 +123,6 @@ class wolfnet
                 ),
             'register_meta_box_cb' => array(&$this, 'cpSearchMetabox')
             ));
-
-        // Register Rewrite Rules
-        $rule    = '^wolfnet/content?';
-        $rewrite = 'index.php?pagename=wolfnet-content';
-        add_rewrite_rule($rule, $rewrite, 'top');
-
-        $rule    = '^wolfnet/content/header?';
-        $rewrite = 'index.php?pagename=wolfnet-content-header';
-        add_rewrite_rule($rule, $rewrite, 'top');
-
-        $rule    = '^wolfnet/content/footer?';
-        $rewrite = 'index.php?pagename=wolfnet-content-footer';
-        add_rewrite_rule($rule, $rewrite, 'top');
 
         // Register Shortcodes
         $shrtCodes = array(
@@ -1639,6 +1627,11 @@ class wolfnet
         $index = $this->transientIndex();
         $time = time();
         $data = (array_key_exists($key, $index)) ? get_transient($key) : false;
+
+        $url = $this->buildUrl($url, array(
+            'pluginVersion' => $this->version,
+            'phpVersion'    => phpversion();
+            ));
 
         if ($data === false || $time > $index[$key]) {
             $http = wp_remote_get($url);
