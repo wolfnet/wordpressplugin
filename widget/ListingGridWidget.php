@@ -32,7 +32,7 @@ class Wolfnet_ListingGridWidget extends Wolfnet_AbstractWidget
     {
         $options = $this->getOptions($instance);
 
-        echo $this->plugin->getListingGridOptionsForm($options);
+        echo $this->plugin->listingGridOptionsFormView($options);
 
     }
 

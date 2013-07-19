@@ -10,7 +10,9 @@
         </span>
         <?php if (property_exists($listing, 'branding') && ($listing->branding->brokerLogo != '' || $listing->branding->content != '')) { ?>
         <div class="wolfnet_branding">
-            <span class="wolfnet_brokerLogo"><img src="<?php echo $listing->branding->brokerLogo; ?>" /></span>
+            <?php if (trim($listing->branding->brokerLogo) !== '') { ?>
+                <span class="wolfnet_brokerLogo"><img src="<?php echo $listing->branding->brokerLogo; ?>" /></span>
+            <?php } ?>
             <span class="wolfnet_brandingMessage"><?php echo $listing->branding->content; ?></span>
         </div>
         <?php } ?>

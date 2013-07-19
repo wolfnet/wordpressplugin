@@ -20,7 +20,7 @@
 
     jQuery(function($){
 
-        var instance = '#<?php echo $instance_id; ?>';
+        var instance = <?php echo "'#" . $instance_id . "';"; ?>
 
         $(instance).wolfnetToolbar({
              numrows     : <?php echo $numrows; ?>
@@ -30,7 +30,11 @@
             ,baseUrl     : <?php echo "'" . $siteUrl . "'"; ?>
         });
 
+        <?php if (strpos($instance_id, 'wolfnet_listingGrid_') !== false) { ?>
         $(instance).wolfnetListingGrid();
+        <?php } elseif (strpos($instance_id, 'wolfnet_propertyList_') !== false) { ?>
+        $(instance).wolfnetPropertyList();
+        <?php } ?>
 
     });
 

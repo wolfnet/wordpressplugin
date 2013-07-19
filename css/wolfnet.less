@@ -33,655 +33,656 @@
 
 .wolfnet_widget
 {
-	margin: 1em auto 2em auto;
-
-	&.wolfnet_quickSearch
-	{
-		border:     1px solid #DDD;
-		padding:    8px;
-		position:   relative;
-		z-index:    10;
-		background: -moz-linear-gradient(top,  @gradientColor1 60%, @gradientColor2 100%); /* FF3.6+ */
-		background: -webkit-gradient(linear, left top, left bottom, color-stop(60%,@gradientColor1), color-stop(100%,@gradientColor2)); /* Chrome,Safari4+ */
-		background: -webkit-linear-gradient(top,  @gradientColor1 60%,@gradientColor2 100%); /* Chrome10+,Safari5.1+ */
-		background: -o-linear-gradient(top,  @gradientColor1 60%,@gradientColor2 100%); /* Opera 11.10+ */
-		background: -ms-linear-gradient(top,  @gradientColor1 60%,@gradientColor2 100%); /* IE10+ */
-		background: linear-gradient(to bottom,  @gradientColor1 60%,@gradientColor2 100%); /* W3C */
-		filter:     ~'progid:DXImageTransform.Microsoft.gradient(startColorstr="@{gradientColor1}",endColorstr="@{gradientColor2}",GradientType=0)'; /* IE6-9 */
-
-		.wolfnet_widgetTitle
-		{
-			font-size:   1.5em;
-			font-weight: bold;
-		}
-
-		.wolfnet_quickSearch_form
-		{
-
-			label
-			{
-				font-size:   1.1em;
-				font-weight: bold;
-				float:       left;
-			}
-
-			input,
-			select
-			{
-				font-size:             1em;
-				border:                1px solid #BABABA;
-				color:                 #000;
-				margin:                0 0 5px 0;
-				border-radius:         3px;
-				-moz-border-radius:    3px;
-				-webkit-border-radius: 3px;
-
-				&.hintText
-				{
-					color:     #888;
-				}
-
-			}
-
-			ul.wolfnet_searchType
-			{
-				margin:     0;
-				padding:    0 0 1.5em 0;
-				list-style: none;
-
-				li
-				{
-					float:       left;
-					margin: 0 1em 0 0;
-
-					.wolfnet_active
-					{
-
-						font-weight: bold;
-
-					}
-
-				}
-
-			}
-
-			.wolfnet_searchTypeField
-			{
-
-				input
-				{
-					height: 2em;
-					width:  97%;
-
-				}
-
-			}
-
-			.wolfnet_widgetPrice
-			{
-				margin-top: .3em;
-
-				div
-				{
-					float: right;
-					clear: right;
-				}
-
-			}
-
-			.wolfnet_widgetBeds,
-			.wolfnet_widgetBaths
-			{
-				margin-top: .3em;
-				clear:      both;
-				height:     2em;
-
-				select
-				{
-					float:  right;
-				}
-
-			}
-
-			.wolfnet_quickSearchFormButton
-			{
-				margin-top: .3em;
-				clear:      both;
-
-				button
-				{
-					font-size:      1.6em;
-					font-weight:    bold;
-					height:         100%;
-					margin-top:     .6em;
-					width:          100%;
-					margin:         0 auto;
-					vertical-align: middle;
-					text-align:     center;
-					line-height:    1em;
-				}
-
-			}
-
-		}
-
-		&.wolfnet_wWide
-		{
-
-			.wolfnet_quickSearch_form
-			{
-
-				.wolfnet_searchType,
-				.wolfnet_searchTypeField,
-				.wolfnet_widgetPrice,
-				.wolfnet_widgetBeds,
-				.wolfnet_widgetBaths,
-				.wolfnet_quickSearchFormButton
-				{
-					width:       auto;
-					line-height: 1.3em;
-				}
-
-				label
-				{
-					width:   auto;
-					display: inline;
-					float:   none;
-				}
-
-				.wolfnet_searchTypeField
-				{
-
-					input
-					{
-						width: 98.5%;
-					}
-
-				}
-
-				.wolfnet_widgetPrice,
-				.wolfnet_widgetBeds,
-				.wolfnet_widgetBaths
-				{
-					float:        none;
-					margin-right: 1em;
-					clear:        none;
-				}
-
-				.wolfnet_widgetPrice
-				{
-					width:      100%;
-					text-align: right;
-
-					div
-					{
-						display: inline;
-						float:   none;
-						clear:   none;
-
-						select
-						{
-							display:     inline;
-							margin-left: 1em;
-							float:       none;
-
-						}
-
-					}
-
-				}
-
-				.wolfnet_widgetBedBath
-				{
-					width:      100%;
-					text-align: right;
-
-					.wolfnet_widgetBeds,
-					.wolfnet_widgetBaths
-					{
-						display: inline;
-						float:   none;
-						clear:   none;
-						margin:  0 0 0 1em;
-
-						select
-						{
-							display:     inline;
-							margin-left: 1em;
-							float:       none;
-							clear:       none;
-
-						}
-
-					}
-
-				}
-
-				.wolfnet_quickSearchFormButton
-				{
-					height:     auto;
-					text-align: right;
-
-					button
-					{
-						font-size: 1.25em;
-						height:    auto;
-						width:     auto;
-						float:     none;
-					}
-
-				}
-
-			}
-
-		}
-
-	}
-
-	&.wolfnet_featuredListings,
-	&.wolfnet_listingGrid
-	{
-
-		.wolfnet_listing
-		{
-			width:      @propertyWidth;
-			float:      left;
-			margin:     0 auto 1em auto;
-			position:   relative;
-			text-align: left;
-			font-size:  .8em;
-			margin:     0 5px 0 5px;
-
-			a
-			{
-				color:           inherit;
-				text-decoration: none;
-			}
-
-			.wolfnet_detailsLink
-			{
-				display:block;
-			}
-
-			.wolfnet_listingImage
-			{
-				width:      100%;
-				height:     @imageHeight;
-				display:    block;
-				overflow:   hidden;
-				margin:     0;
-				text-align: center;
-				margin-bottom:    .5em;
-				border:           1px solid hsl(0, 0%, 87%);
-				background-color: #F5F5F5;
-				padding:          10px 0 10px 0;
-
-				img
-				{
-					height: @imageHeight;
-					box-shadow:   0 5px 10px hsla(0, 0%, 60%, 0.25);
-					border: 1px solid #EBEBEB;
-				}
-
-			}
-
-			.wolfnet_price
-			{
-				font-size: 1.2em;
-				font-weight: bold;
-				display:     block;
-			}
-
-			.wolfnet_location
-			{
-				display: block;
-			}
-
-			.wolfnet_bed_bath
-			{
-				display: block;
-				position: absolute;
-				top:      @imageHeight + 30px;
-				right:    0;
-			}
-
-			.wolfnet_branding
-			{
-				display: none;
-
-				.wolfnet_brokerLogo
-				{
-					display: block;
-
-					img
-					{
-						max-width: 97.5%;
-					}
-				}
-
-				.wolfnet_brandingMessage
-				{
-					display: block;
-				}
-
-			}
-
-		}
-
-	}
-
-	&.wolfnet_listingGrid,
-	&.wolfnet_propertyList
-	{
-
-		.wolfnet_toolbar
-		{
-			width:100%;
-			clear:both;
-			height:2em;
-
-			&.wolfnet_toolbarTop {
-				margin:2em 0 1.75em 0;
-			}
-
-			&.wolfnet_toolbarBottom {
-				margin:0 0 2em 0;
-				padding:1.75em 0 0 0;
-			}
-
-			/* If the toolbar has both pagination and sorting tools give it a little extra height. */
-			&.wolfnet_withPagination.wolfnet_withSortOptions {
-				height:3em;
-			}
-
-			.wolfnet_page_nav
-			{
-				display:inline-block;
-				width:20%;
-				white-space:nowrap;
-
-				&.wolfnet_page_nav_prev
-				{
-					float:left;
-					text-align:left;
-				}
-
-				&.wolfnet_page_nav_next
-				{
-					float:right;
-					text-align:right;
-				}
-
-				&.wolfnet_disabled
-				{
-					text-decoration:none;
-					opacity:0.5;
-					filter:alpha(opacity=50);
-					cursor: default;
-
-				}
-
-			}
-
-			.wolfnet_page_info
-			{
-				display:inline-block;
-				width:60%;
-				float:left;
-				text-align:center;
-
-				.wolfnet_page_items
-				{
-					white-space:nowrap;
-					display:inline-block;
-					padding-right:1em;
-
-					.wolfnet_page_start {}
-					.wolfnet_page_end {}
-					.wolfnet_page_total {}
-
-				}
-
-				.wolfnet_page_items_select
-				{
-					white-space:nowrap;
-					display:inline-block;
-					padding-right:1em;
-				}
-
-				.wolfnet_sortoptions
-				{
-					display:inline-block;
-				}
-
-			}
-
-		}
-
-	}
-
-	&.wolfnet_featuredListings
-	{
-		overflow:    hidden;
-		white-space: nowrap;
-		height:      140px;
-
-		.scrollingHotSpotLeft,
-		.scrollingHotSpotRight
-		{
-			/* The hotspots have a minimum width of 100 pixels and if there is room the will grow
-			and occupy 15% of the scrollable area (30% combined). Adjust it to your own taste. */
-			min-width:           75px;
-			width:               10%;
-			height:              100%;
-			background-image:    url('@{imagesDir}big_transparent.gif');
-			                     /* There is a big background image and it's used to solve some
-			                      * problems I experienced in Internet Explorer 6. */
-			background-repeat:   repeat;
-			background-position: center center;
-			position:            absolute;
-			z-index:             200;
-		}
-
-		.scrollingHotSpotLeftVisible,
-		.scrollingHotSpotRightVisible
-		{
-			background-color:  #fff;
-			background-repeat: no-repeat;
-			opacity:           0.35; /* Standard CSS3 opacity setting */
-			-moz-opacity:      0.35; /* Opacity for really old versions of Mozilla Firefox (0.9 or older) */
-			/* filter:            alpha('opacity = 35'); /* Opacity for Internet Explorer. */
-			zoom:              1; /* Trigger "hasLayout" in Internet Explorer 6 or older versions */
-		}
-
-
-		/* You can alter this CSS in order to give Smooth Div Scroll your own look'n'feel */
-		/* Invisible left hotspot */
-		.scrollingHotSpotLeft
-		{
-			left:   0;
-			/* The first url is for Firefox and other browsers, the second is for Internet Explorer */
-			cursor: url('@{imagesDir}cursor_arrow_left.png'),
-			        url('@{imagesDir}cursor_arrow_left.cur'),
-			        w-resize;
-		}
-
-		/* Visible left hotspot */
-		.scrollingHotSpotLeftVisible
-		{
-			background-image: url('@{imagesDir}arrow_left.gif');
-		}
-
-		/* Invisible right hotspot */
-		.scrollingHotSpotRight
-		{
-			right:  0;
-			cursor: url('@{imagesDir}cursor_arrow_right.png'),
-			        url('@{imagesDir}cursor_arrow_right.cur'),
-			        e-resize;
-		}
-
-		/* Visible right hotspot */
-		.scrollingHotSpotRightVisible
-		{
-			background-image:  url('@{imagesDir}arrow_right.gif');
-		}
-
-		/* The scroll wrapper is always the same width and height as the containing element (div).
-		   Overflow is hidden because you don't want to show all of the scrollable area.
-		*/
-		.scrollWrapper
-		{
-			position: relative;
-			overflow: hidden;
-			width:    100%;
-			height:   100%;
-
-			.scrollableArea
-			{
-				position: relative;
-				width:    auto;
-				height:   100%;
-			}
-
-		}
-
-	}
-
-	&.wolfnet_listingGrid
-	{
-		text-align: left;
-		margin:     0 auto 0 auto;
-
-		.wolfnet_listing
-		{
-			height:     @propertyHeight;
-			text-align: left;
-			position:   relative;
-
-			&.wolfnet_branded
-			{
-				height: @propertyHeightBranded;
-			}
-
-			.wolfnet_branding
-			{
-				display: block;
-				padding-top: 2em;
-
-				.wolfnet_brokerLogo
-				{
-					display: block;
-
-					img
-					{
-					}
-
-				}
-
-				.wolfnet_brandingMessage
-				{
-					display:block;
-				}
-			}
-
-		}
-
-	}
-
-	&.wolfnet_propertyList
-	{
-
-		.wolfnet_listing
-		{
-
-			.wolfnet_full_address
-			{
-				float: left;
-			}
-
-			.wolfnet_price
-			{
-				float: right;
-			}
-
-		}
-
-		.wolfnet_listing>a
-		{
-			display:block;
-			clear:both;
-		}
-
-	}
-
-	.wolfnet_marketDisclaimer
-	{
-		clear:      both;
-		margin-top: 2em;
-	}
+    margin: 1em auto 2em auto;
+
+    &.wolfnet_quickSearch
+    {
+        border:     1px solid #DDD;
+        padding:    8px;
+        position:   relative;
+        z-index:    10;
+        background: -moz-linear-gradient(top,  @gradientColor1 60%, @gradientColor2 100%); /* FF3.6+ */
+        background: -webkit-gradient(linear, left top, left bottom, color-stop(60%,@gradientColor1), color-stop(100%,@gradientColor2)); /* Chrome,Safari4+ */
+        background: -webkit-linear-gradient(top,  @gradientColor1 60%,@gradientColor2 100%); /* Chrome10+,Safari5.1+ */
+        background: -o-linear-gradient(top,  @gradientColor1 60%,@gradientColor2 100%); /* Opera 11.10+ */
+        background: -ms-linear-gradient(top,  @gradientColor1 60%,@gradientColor2 100%); /* IE10+ */
+        background: linear-gradient(to bottom,  @gradientColor1 60%,@gradientColor2 100%); /* W3C */
+        filter:     ~'progid:DXImageTransform.Microsoft.gradient(startColorstr="@{gradientColor1}",endColorstr="@{gradientColor2}",GradientType=0)'; /* IE6-9 */
+
+        .wolfnet_widgetTitle
+        {
+            font-size:   1.5em;
+            font-weight: bold;
+        }
+
+        .wolfnet_quickSearch_form
+        {
+
+            label
+            {
+                font-size:   1.1em;
+                font-weight: bold;
+                float:       left;
+            }
+
+            input,
+            select
+            {
+                font-size:             1em;
+                border:                1px solid #BABABA;
+                color:                 #000;
+                margin:                0 0 5px 0;
+                border-radius:         3px;
+                -moz-border-radius:    3px;
+                -webkit-border-radius: 3px;
+
+                &.hintText
+                {
+                    color:     #888;
+                }
+
+            }
+
+            ul.wolfnet_searchType
+            {
+                margin:     0;
+                padding:    0 0 1.5em 0;
+                list-style: none;
+
+                li
+                {
+                    float:       left;
+                    margin: 0 1em 0 0;
+
+                    .wolfnet_active
+                    {
+
+                        font-weight: bold;
+
+                    }
+
+                }
+
+            }
+
+            .wolfnet_searchTypeField
+            {
+
+                input
+                {
+                    height: 2em;
+                    width:  97%;
+
+                }
+
+            }
+
+            .wolfnet_widgetPrice
+            {
+                margin-top: .3em;
+
+                div
+                {
+                    float: right;
+                    clear: right;
+                }
+
+            }
+
+            .wolfnet_widgetBeds,
+            .wolfnet_widgetBaths
+            {
+                margin-top: .3em;
+                clear:      both;
+                height:     2em;
+
+                select
+                {
+                    float:  right;
+                }
+
+            }
+
+            .wolfnet_quickSearchFormButton
+            {
+                margin-top: .3em;
+                clear:      both;
+
+                button
+                {
+                    font-size:      1.6em;
+                    font-weight:    bold;
+                    height:         100%;
+                    margin-top:     .6em;
+                    width:          100%;
+                    margin:         0 auto;
+                    vertical-align: middle;
+                    text-align:     center;
+                    line-height:    1em;
+                }
+
+            }
+
+        }
+
+        &.wolfnet_wWide
+        {
+
+            .wolfnet_quickSearch_form
+            {
+
+                .wolfnet_searchType,
+                .wolfnet_searchTypeField,
+                .wolfnet_widgetPrice,
+                .wolfnet_widgetBeds,
+                .wolfnet_widgetBaths,
+                .wolfnet_quickSearchFormButton
+                {
+                    width:       auto;
+                    line-height: 1.3em;
+                }
+
+                label
+                {
+                    width:   auto;
+                    display: inline;
+                    float:   none;
+                }
+
+                .wolfnet_searchTypeField
+                {
+
+                    input
+                    {
+                        width: 98.5%;
+                    }
+
+                }
+
+                .wolfnet_widgetPrice,
+                .wolfnet_widgetBeds,
+                .wolfnet_widgetBaths
+                {
+                    float:        none;
+                    margin-right: 1em;
+                    clear:        none;
+                }
+
+                .wolfnet_widgetPrice
+                {
+                    width:      100%;
+                    text-align: right;
+
+                    div
+                    {
+                        display: inline;
+                        float:   none;
+                        clear:   none;
+
+                        select
+                        {
+                            display:     inline;
+                            margin-left: 1em;
+                            float:       none;
+
+                        }
+
+                    }
+
+                }
+
+                .wolfnet_widgetBedBath
+                {
+                    width:      100%;
+                    text-align: right;
+
+                    .wolfnet_widgetBeds,
+                    .wolfnet_widgetBaths
+                    {
+                        display: inline;
+                        float:   none;
+                        clear:   none;
+                        margin:  0 0 0 1em;
+
+                        select
+                        {
+                            display:     inline;
+                            margin-left: 1em;
+                            float:       none;
+                            clear:       none;
+
+                        }
+
+                    }
+
+                }
+
+                .wolfnet_quickSearchFormButton
+                {
+                    height:     auto;
+                    text-align: right;
+
+                    button
+                    {
+                        font-size: 1.25em;
+                        height:    auto;
+                        width:     auto;
+                        float:     none;
+                    }
+
+                }
+
+            }
+
+        }
+
+    }
+
+    &.wolfnet_featuredListings,
+    &.wolfnet_listingGrid
+    {
+
+        .wolfnet_listing
+        {
+            width:      @propertyWidth;
+            float:      left;
+            margin:     0 auto 1em auto;
+            position:   relative;
+            text-align: left;
+            font-size:  .8em;
+            margin:     0 5px 0 5px;
+
+            a
+            {
+                color:           inherit;
+                text-decoration: none;
+            }
+
+            .wolfnet_detailsLink
+            {
+                display:block;
+            }
+
+            .wolfnet_listingImage
+            {
+                width:      100%;
+                height:     @imageHeight;
+                display:    block;
+                overflow:   hidden;
+                margin:     0;
+                text-align: center;
+                margin-bottom:    .5em;
+                border:           1px solid hsl(0, 0%, 87%);
+                background-color: #F5F5F5;
+                padding:          10px 0 10px 0;
+
+                img
+                {
+                    height: @imageHeight;
+                    box-shadow:   0 5px 10px hsla(0, 0%, 60%, 0.25);
+                    border: 1px solid #EBEBEB;
+                }
+
+            }
+
+            .wolfnet_price
+            {
+                font-size: 1.2em;
+                font-weight: bold;
+                display:     block;
+            }
+
+            .wolfnet_location
+            {
+                display: block;
+            }
+
+            .wolfnet_bed_bath
+            {
+                display: block;
+                position: absolute;
+                top:      @imageHeight + 30px;
+                right:    0;
+            }
+
+            .wolfnet_branding
+            {
+                display: none;
+
+                .wolfnet_brokerLogo
+                {
+                    display: block;
+
+                    img
+                    {
+                        max-width: 97.5%;
+                    }
+                }
+
+                .wolfnet_brandingMessage
+                {
+                    display: block;
+                }
+
+            }
+
+        }
+
+    }
+
+    &.wolfnet_listingGrid,
+    &.wolfnet_propertyList
+    {
+
+        .wolfnet_toolbar
+        {
+            width:100%;
+            clear:both;
+            height:2em;
+
+            &.wolfnet_toolbarTop {
+                margin:2em 0 1.75em 0;
+            }
+
+            &.wolfnet_toolbarBottom {
+                margin:0 0 2em 0;
+                padding:1.75em 0 0 0;
+            }
+
+            &.wolfnet_withPagination {
+
+                .wolfnet_page_info
+                {
+                    width:60%;
+                }
+
+            }
+
+            /* If the toolbar has both pagination and sorting tools give it a little extra height. */
+            &.wolfnet_withPagination.wolfnet_withSortOptions {
+                height:3em;
+            }
+
+            .wolfnet_page_nav
+            {
+                display:inline-block;
+                width:20%;
+                white-space:nowrap;
+
+                &.wolfnet_page_nav_prev
+                {
+                    float:left;
+                    text-align:left;
+                }
+
+                &.wolfnet_page_nav_next
+                {
+                    float:right;
+                    text-align:right;
+                }
+
+                &.wolfnet_disabled
+                {
+                    text-decoration:none;
+                    opacity:0.5;
+                    filter:alpha(opacity=50);
+                    cursor: default;
+
+                }
+
+            }
+
+            .wolfnet_page_info
+            {
+                display:inline-block;
+                float:left;
+                text-align:center;
+
+                .wolfnet_page_items
+                {
+                    white-space:nowrap;
+                    display:inline-block;
+                    padding-right:1em;
+
+                    .wolfnet_page_start {}
+                    .wolfnet_page_end {}
+                    .wolfnet_page_total {}
+
+                }
+
+                .wolfnet_page_items_select
+                {
+                    white-space:nowrap;
+                    display:inline-block;
+                    padding-right:1em;
+                }
+
+                .wolfnet_sortoptions
+                {
+                    display:inline-block;
+                }
+
+            }
+
+        }
+
+    }
+
+    &.wolfnet_featuredListings
+    {
+        overflow:    hidden;
+        white-space: nowrap;
+        height:      140px;
+
+        .scrollingHotSpotLeft,
+        .scrollingHotSpotRight
+        {
+            /* The hotspots have a minimum width of 100 pixels and if there is room the will grow
+            and occupy 15% of the scrollable area (30% combined). Adjust it to your own taste. */
+            min-width:           75px;
+            width:               10%;
+            height:              100%;
+            background-image:    url('@{imagesDir}big_transparent.gif');
+                                 /* There is a big background image and it's used to solve some
+                                  * problems I experienced in Internet Explorer 6. */
+            background-repeat:   repeat;
+            background-position: center center;
+            position:            absolute;
+            z-index:             200;
+        }
+
+        .scrollingHotSpotLeftVisible,
+        .scrollingHotSpotRightVisible
+        {
+            background-color:  #fff;
+            background-repeat: no-repeat;
+            opacity:           0.35; /* Standard CSS3 opacity setting */
+            -moz-opacity:      0.35; /* Opacity for really old versions of Mozilla Firefox (0.9 or older) */
+            /* filter:            alpha('opacity = 35'); /* Opacity for Internet Explorer. */
+            zoom:              1; /* Trigger "hasLayout" in Internet Explorer 6 or older versions */
+        }
+
+
+        /* You can alter this CSS in order to give Smooth Div Scroll your own look'n'feel */
+        /* Invisible left hotspot */
+        .scrollingHotSpotLeft
+        {
+            left:   0;
+        }
+
+        /* Visible left hotspot */
+        .scrollingHotSpotLeftVisible
+        {
+            background-image: url('@{imagesDir}arrow_left.gif');
+        }
+
+        /* Invisible right hotspot */
+        .scrollingHotSpotRight
+        {
+            right:  0;
+        }
+
+        /* Visible right hotspot */
+        .scrollingHotSpotRightVisible
+        {
+            background-image:  url('@{imagesDir}arrow_right.gif');
+        }
+
+        /* The scroll wrapper is always the same width and height as the containing element (div).
+           Overflow is hidden because you don't want to show all of the scrollable area.
+        */
+        .scrollWrapper
+        {
+            position: relative;
+            overflow: hidden;
+            width:    100%;
+            height:   100%;
+
+            .scrollableArea
+            {
+                position: relative;
+                width:    auto;
+                height:   100%;
+            }
+
+        }
+
+    }
+
+    &.wolfnet_listingGrid
+    {
+        text-align: left;
+        margin:     0 auto 0 auto;
+
+        .wolfnet_listing
+        {
+            height:     @propertyHeight;
+            text-align: left;
+            position:   relative;
+
+            &.wolfnet_branded
+            {
+                height: @propertyHeightBranded;
+            }
+
+            .wolfnet_branding
+            {
+                display: block;
+                padding-top: 2em;
+
+                .wolfnet_brokerLogo
+                {
+                    display: block;
+
+                    img
+                    {
+                    }
+
+                }
+
+                .wolfnet_brandingMessage
+                {
+                    display:block;
+                }
+            }
+
+        }
+
+    }
+
+    &.wolfnet_propertyList
+    {
+
+        .wolfnet_listing
+        {
+
+            .wolfnet_full_address
+            {
+                float: left;
+            }
+
+            .wolfnet_price
+            {
+                float: right;
+            }
+
+        }
+
+        .wolfnet_listing>a
+        {
+            display:block;
+            clear:both;
+        }
+
+    }
+
+    .wolfnet_marketDisclaimer
+    {
+        clear:      both;
+        margin-top: 2em;
+    }
 
 }
 
 .wolfnet_moreInfo
 {
-	width:      100%;
-	height:     18px;
+    width:      100%;
+    height:     18px;
 
-	span
-	{
-		display: none;
-	}
+    span
+    {
+        display: none;
+    }
 
 }
 
 .wolfnet_moreInfoIcon
 {
-	display:        inline-block;
-	width:          18px;
-	height:         18px;
-	background:     url('@{imagesDir}info.png') no-repeat center;
-	vertical-align: top;
+    display:        inline-block;
+    width:          18px;
+    height:         18px;
+    background:     url('@{imagesDir}info.png') no-repeat center;
+    vertical-align: top;
 }
 
 #tooltip
 {
-	position:           absolute;
-	z-index:            3000;
-	border:             1px solid #D5D5D0;
-	background-color:   #FFFFD0;
-	padding:            10px;
-	-moz-border-radius: 5px;
-	border-radius:      5px;
-	box-shadow:         0 10px 30px #DDD;
-	min-width:          100px;
-	min-height:         100px;
+    position:           absolute;
+    z-index:            3000;
+    border:             1px solid #D5D5D0;
+    background-color:   #FFFFD0;
+    padding:            10px;
+    -moz-border-radius: 5px;
+    border-radius:      5px;
+    box-shadow:         0 10px 30px #DDD;
+    min-width:          100px;
+    min-height:         100px;
 
-	h3,
-	div
-	{
-		margin:     0;
-		font-style: italic;
-		width:      100%;
-	}
+    h3,
+    div
+    {
+        margin:     0;
+        font-style: italic;
+        width:      100%;
+    }
 
 }
 
 .wolfnet_clearfix:before,
 .wolfnet_clearfix:after
 {
-	content: "";
-	display: table;
+    content: "";
+    display: table;
 }
 
 .wolfnet_clearfix:after
 {
-	clear: both;
+    clear: both;
 }
 
 .wolfnet_clearfix
 {
-	/* *zoom: 1; */
-	float:none !important;
-	clear:both;
+    /* *zoom: 1; */
+    float:none !important;
+    clear:both;
 }

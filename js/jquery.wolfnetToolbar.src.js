@@ -180,10 +180,19 @@ if ( typeof jQuery != 'undefined' ) {
             // If data is not already be refreshed attempt to do so.
             if ( !state.refreshing ) {
                 var options = $container.data(datakey);
-                var data    = $.extend( state, options.criteria );
+                var data    = $.extend(options.criteria, state);
+
+                delete data.criteria;
+                delete data.ownertypes;
+                delete data.prices;
 
                 for (var i in data) {
-                    if (i.indexOf('_wpname') !== -1 || i.indexOf('_wpid') != -1) {
+                    var isNameField  = (i.indexOf('_wpname') !== -1);
+                    var isIdField    = (i.indexOf('_wpid') !== -1);
+                    var isCheckField = (i.indexOf('_wpc') !== -1);
+                    var isSelecField = (i.indexOf('_wps') !== -1);
+
+                    if (isNameField || isIdField || isCheckField || isSelecField) {
                         delete data[i];
                     }
                 }
@@ -515,7 +524,7 @@ if ( typeof jQuery != 'undefined' ) {
 
         var methods = {
 
-            init : function (){
+            init : function (options){
 
                 return this.each(function () {
 
@@ -530,7 +539,8 @@ if ( typeof jQuery != 'undefined' ) {
                         ownertype   : options.ownertype,
                         max_results : options.max_results,
                         numrows     : Number($toolbar.data('numrows')) || options.numrows,
-                        startrow    : Number($toolbar.data('startrow')) || options.startrow
+                        startrow    : Number($toolbar.data('startrow')) || options.startrow,
+                        criteria    : options.criteria
                         };
 
                     $listingContainer.data('state', stateData);
@@ -600,21 +610,14 @@ if ( typeof jQuery != 'undefined' ) {
 
         $.fn[pluginName] = function ( method )
         {
-
             if ( methods[method] ) {
-
                 return methods[method].apply( this, Array.prototype.slice.call( arguments, 1 ));
-
             }
             else if ( typeof method === 'object' || ! method ) {
-
                 return methods.init.apply( this, arguments );
-
             }
             else {
-
                 $.error( 'Method ' +  method + ' does not exist on jQuery.' + pluginName );
-
             }
 
         }
