@@ -538,7 +538,7 @@ class wolfnet
 
         wp_enqueue_script(
             'wolfnetshortcodebuilder',
-            $this->url . '/js/jquery.wolfnet_shortcode_builder.src.js',
+            $this->url . '/js/jquery.wolfnetShortcodeBuilder.src.js',
             array('jquery-ui-core', 'jquery-ui-widget', 'jquery-effects-core')
             );
 
@@ -547,7 +547,7 @@ class wolfnet
 
     public function sbMcePlugin(array $plugins)
     {
-        $plugins['wolfnetShortcodeBuilder'] = $this->url . '/js/tinymce.wolfnet_shortcode_builder.src.js';
+        $plugins['wolfnetShortcodeBuilder'] = $this->url . '/js/tinymce.wolfnetShortcodeBuilder.src.js';
 
         return $plugins;
 
@@ -1630,7 +1630,7 @@ class wolfnet
 
         $url = $this->buildUrl($url, array(
             'pluginVersion' => $this->version,
-            'phpVersion'    => phpversion();
+            'phpVersion'    => phpversion()
             ));
 
         if ($data === false || $time > $index[$key]) {

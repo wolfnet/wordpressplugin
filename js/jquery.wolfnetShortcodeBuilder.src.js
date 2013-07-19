@@ -1,7 +1,7 @@
 /**
  * This jQuery script defines the functionality of the WolfNet Shortcode Builder tinyMCE button.
  *
- * @title         jquery.wolfnet_shortcode_builder.src.js
+ * @title         jquery.wolfnetShortcodeBuilder.src.js
  * @contributors  AJ Michels (aj.michels@wolfnet.com)
  * @version       1.0
  * @copyright     Copyright (c) 2012, WolfNet Technologies, LLC

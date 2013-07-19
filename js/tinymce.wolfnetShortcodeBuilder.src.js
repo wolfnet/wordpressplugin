@@ -1,10 +1,10 @@
 /**
  * This script is responsible for creating a button in the tinyMCE editor used in the post and page
  * editor. Only the button is created with this script the functionality of the button is managed in
- * js/jquery.wolfnet_shortcode_builder.src.js
+ * js/jquery.wolfnetShortcodeBuilder.src.js
  *
  * @package       js
- * @title         tinymce.wolfnet_shortcode_builder.src.js
+ * @title         tinymce.wolfnetShortcodeBuilder.src.js
  * @contributors  AJ Michels (aj.michels@wolfnet.com)
  * @copyright     Copyright (c) 2012, WolfNet Technologies, LLC
  *
