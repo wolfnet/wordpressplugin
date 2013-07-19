@@ -24,9 +24,9 @@
 
  /* Make sure the 'trim' function is available in the String object. Fix for older versions of IE. */
 if ( typeof String.prototype.trim !== 'function' ) {
-	String.prototype.trim = function() {
-		return this.replace(/^\s+|\s+$/g, '');
-	}
+    String.prototype.trim = function() {
+        return this.replace(/^\s+|\s+$/g, '');
+    }
 }
 
 /**
@@ -34,295 +34,312 @@ if ( typeof String.prototype.trim !== 'function' ) {
  * code inside an immediately invoked function expression (IIFE) to avoid naming conflicts with the
  * $ variable.
  */
-if ( typeof jQuery != 'undefined' ) {
+jQuery(function($){
 
-	( function ( $ ) {
 
-		var pluginName     = 'wolfnetShortcodeBuilder';
-		var idPrefix       = 'wolfnetShortcodeBuilder_';
-		var baseTitle      = 'WolfNet Shortcode Builder';
-		var $builderDialog = null;
-		var tinyMCE        = null;
-		var $currentPage   = null;
-		var rootUri        = null;
-		var loaderUri      = null;
-		var $loader        = null;
-		var menuItems      = {
-			'feat' : { title:'Featured Listings', uri:'-options-featured',    shortcode:'wnt_featured' },
-			'grid' : { title:'Listing Grid',      uri:'-options-grid',        shortcode:'wnt_grid' },
-			'list' : { title:'Property List',     uri:'-options-list',        shortcode:'wnt_list' },
-			'srch' : { title:'Quick Search',      uri:'-options-quicksearch', shortcode:'wnt_search' }
-		};
+    var pluginName     = 'wolfnetShortcodeBuilder';
+    var idPrefix       = 'wolfnetShortcodeBuilder_';
+    var baseTitle      = 'WolfNet Shortcode Builder';
+    var $builderDialog = null;
+    var tinyMCE        = null;
+    var $currentPage   = null;
+    var $loader        = null;
+    var menuItems      = {
+        'feat' : {
+            title:'Featured Listings',
+            action:'wolfnet_scb_options_featured',
+            shortcode:'wnt_featured'
+            },
+        'grid' : {
+            title:'Listing Grid',
+            action:'wolfnet_scb_options_grid',
+            shortcode:'wnt_grid'
+            },
+        'list' : {
+            title:'Property List',
+            action:'wolfnet_scb_options_list',
+            shortcode:'wnt_list'
+            },
+        'srch' : {
+            title:'Quick Search',
+            action:'wolfnet_scb_options_quicksearch',
+            shortcode:'wnt_search'
+            }
+        };
 
-		var createBuilderDialog = function ()
-		{
-			if ( $builderDialog == null || !$builderDialog instanceof jQuery ) {
-				$builderDialog = $( '<div>' )
-				.dialog( {
-					modal    :true,
-					autoOpen :false,
-					height   : 450,
-					width    : 475,
-					title    : baseTitle,
-					close    : function () {
-						// When the dialog window is closed reset the page back to the menu.
-						openPage( 'menu' );
-						// Also reset all forms within the builder back to their defaults.
-						$builderDialog.find('form').trigger('reset');
-					}
-				} );
-				createMenuPage();
-				createLoader();
-			}
-		}
 
-		var createMenuPage = function ()
-		{
+    var createBuilderDialog = function ()
+    {
+        if ($builderDialog == null || !(typeof $builderDialog === 'jQuery')) {
+            $builderDialog = $('<div>')
+            .dialog({
+                modal    :true,
+                autoOpen :false,
+                height   : 450,
+                width    : 475,
+                title    : baseTitle,
+                close    : function () {
+                    // When the dialog window is closed reset the page back to the menu.
+                    openPage('menu');
+                    // Also reset all forms within the builder back to their defaults.
+                    $builderDialog.find('form').trigger('reset');
+                }
+            });
+            createMenuPage();
+            createLoader();
+        }
+    }
 
-			var menuString = '';
 
-			for ( var id in menuItems ) {
-				menuString += '<button class="button" style="display:block;width:75%;margin: 0px auto 10px auto;" ';
-				menuString += 'wolfnet:id="' + id + '"';
-				menuString += '>';
-				menuString += menuItems[id].title;
-				menuString += '</button>';
-			}
+    var createMenuPage = function ()
+    {
 
-			$currentPage = $('<div id="' + idPrefix + 'menu"/>')
-				.append( menuString )
-				.appendTo( $builderDialog );
+        var menuString = '';
 
-			$('<button id="' + idPrefix + 'back" class="button">Back</button>')
-				.prependTo( $builderDialog )
-				.hide()
-				.click( function () {
-					openPage( 'menu' );
-				} );
+        for (var id in menuItems) {
+            menuString += '<button class="button" style="display:block;width:75%;margin: 0px auto 10px auto;" ';
+            menuString += 'wolfnet:id="' + id + '"';
+            menuString += '>';
+            menuString += menuItems[id].title;
+            menuString += '</button>';
+        }
 
-			$currentPage.find('button').click( function () {
-					var $button = $( this );
-					var pageId  = $button.attr( 'wolfnet:id' );
-					openPage( pageId );
-				} );
+        $currentPage = $('<div id="' + idPrefix + 'menu"/>')
+            .append(menuString)
+            .appendTo($builderDialog);
 
-		}
+        $('<button id="' + idPrefix + 'back" class="button">Back</button>')
+            .prependTo($builderDialog)
+            .hide()
+            .click(function(){
+                openPage('menu');
+            });
 
-		var createLoader = function ()
-		{
-			$loader = $( '<div id="' + idPrefix + 'loader" />')
-				.hide()
-				.appendTo( $builderDialog )
-				.css( {
-					position:'absolute',
-					top:0,
-					left:0,
-					width:'100%',
-					height:'100%',
-					backgroundColor:'white',
-					opacity : 0.5
-				} );
+        $currentPage.find('button').click(function(){
+            var $button = $(this);
+            var pageId  = $button.attr('wolfnet:id');
+            openPage(pageId);
+        });
 
-			$( '<img src="' + loaderUri + '" />')
-				.appendTo( $loader )
-				.css( {
-					display: 'block',
-					position: 'absolute',
-					left: '49%',
-					top: '49%'
-				} );
+    }
 
-		}
 
-		var openPage = function ( pageId )
-		{
-			// If page doesn't exist create it.
-			if ( $builderDialog.find( 'div#' + idPrefix + pageId ).length == 0 ) {
-				createPage( pageId );
-			}
+    var createLoader = function ()
+    {
+        $loader = $('<div id="' + idPrefix + 'loader" />')
+            .hide()
+            .appendTo($builderDialog)
+            .css({
+                position:'absolute',
+                top:0,
+                left:0,
+                width:'100%',
+                height:'100%',
+                backgroundColor:'white',
+                opacity : 0.5
+            });
 
-			// Hide current page and display requested page.
-			$currentPage.hide();
+        $('<img src="' + wolfnet_ajax.loaderimg + '" />')
+            .appendTo($loader)
+            .css({
+                display  : 'block',
+                position : 'absolute',
+                left     : '49%',
+                top      : '49%'
+            });
 
-			if ( pageId != 'menu' ) {
-				$builderDialog.find( 'button#' + idPrefix + 'back' ).show();
-				$builderDialog.dialog( { title:baseTitle + ' - ' + menuItems[pageId].title } );
-			}
-			else {
-				$builderDialog.find( 'button#' + idPrefix + 'back' ).hide();
-				$builderDialog.dialog( { title:baseTitle } );
-			}
+    }
 
-			// Get the requested page, set it as the current page, and show it.
-			$currentPage = $builderDialog.find('div#' + idPrefix + pageId ).show();
 
-			$currentPage.find('.modeField input').trigger('ready');
+    var openPage = function ( pageId )
+    {
+        // If page doesn't exist create it.
+        if ($builderDialog.find('div#' + idPrefix + pageId).length == 0) {
+            createPage(pageId);
+        }
 
-		}
+        // Hide current page and display requested page.
+        $currentPage.hide();
 
-		var createPage = function ( pageId )
-		{
-			var $page = $('<div id="' + idPrefix + pageId + '"/>').appendTo($builderDialog).hide();
+        if (pageId != 'menu') {
+            $builderDialog.find('button#' + idPrefix + 'back').show();
+            $builderDialog.dialog({title:baseTitle + ' - ' + menuItems[pageId].title});
+        }
+        else {
+            $builderDialog.find('button#' + idPrefix + 'back').hide();
+            $builderDialog.dialog({title:baseTitle});
+        }
 
-			$.ajax( {
-				url : rootUri + menuItems[pageId].uri,
-				success: function (data) {
-					var $form = $('<form />')
-					.attr( 'wolfnet:sc', menuItems[pageId].shortcode )
-					.append( data )
-					.append( $('<button type="submit" class="button button-primary" style="position:absolute;bottom:15px;right:15px;">Insert</button>') )
-					.submit( function ( event ) {
-						event.preventDefault();
-						insertShortCode.call( $form );
-						return false;
-					} )
-					.appendTo( $page );
-					wolfnet.initMoreInfo( $form.find( '.wolfnet_moreInfo' ) );
-					switch ( pageId ) {
-						case 'grid':
-						case 'list':
-							$form.wolfnetListingGridControls();
-							break;
-						case 'feat':
-							$form.wolfnetFeaturedListingsControls();
-							break;
-					}
-				},
-				beforeSend : function () {
-					$loader.show();
-				},
-				complete : function () {
-					$loader.hide();
-				}
-			} );
+        // Get the requested page, set it as the current page, and show it.
+        $currentPage = $builderDialog.find('div#' + idPrefix + pageId ).show();
 
-		}
+        $currentPage.find('.modeField input').trigger('ready');
 
-		var insertShortCode = function ()
-		{
-			buildShortcode.call( this, function ( shortcode ) {
-				if ( tinyMCE != null ) {
-					tinyMCE.execCommand( 'mceInsertContent', false, shortcode );
-				}
-				$builderDialog.dialog( 'close' );
-			} )
-		}
+    }
 
-		var buildShortcode = function ( callback )
-		{
-			var attrs    = {};
-			var code     = '[' + this.attr('wolfnet:sc') + ' /]';
-			var exclAttr = ['mode','savedsearch','criteria'];
-			var $advMode = this.find( 'input[type="radio"][name="mode"][value="advanced"]:first:checked' );
-			var $savSrch = this.find( 'select[name="savedsearch"]:first' );
 
-			this.find( 'input, select' ).each( function () {
+    var createPage = function ( pageId )
+    {
+        var $page = $('<div id="' + idPrefix + pageId + '"/>').appendTo($builderDialog).hide();
 
-				if ( this.name != '' && $.inArray( this.name, exclAttr ) == -1 ) {
+        $.ajax( {
+            url : ajaxurl,
+            data : {action:menuItems[pageId].action},
+            success: function (data) {
+                var $form = $('<form />')
+                .attr( 'wolfnet:sc', menuItems[pageId].shortcode )
+                .append(data)
+                .append($('<button type="submit" class="button button-primary" style="position:absolute;bottom:15px;right:15px;">Insert</button>'))
+                .submit(function(event) {
+                    event.preventDefault();
+                    insertShortCode.call($form);
+                    return false;
+                })
+                .appendTo($page);
+                wolfnet.initMoreInfo($form.find('.wolfnet_moreInfo'));
+                switch (pageId) {
+                    case 'grid':
+                    case 'list':
+                        $form.wolfnetListingGridControls();
+                        break;
+                    case 'feat':
+                        $form.wolfnetFeaturedListingsControls();
+                        break;
+                }
+            },
+            beforeSend : function () {
+                $loader.show();
+            },
+            complete : function () {
+                $loader.hide();
+            }
+        });
 
-					switch ( this.type ) {
+    }
 
-						default:
-							if ( this.value.trim() != '' ) {
-								attrs[this.name] = this.value.trim();
-							}
-							break;
 
-						case 'checkbox':
-						case 'radio':
-							if ( this.checked == true ) {
-								attrs[this.name] = this.value;
-							}
-							break;
+    var insertShortCode = function ()
+    {
+        buildShortcode.call(this, function (shortcode) {
+            if (tinyMCE != null) {
+                tinyMCE.execCommand('mceInsertContent', false, shortcode);
+            }
+            $builderDialog.dialog('close');
+        });
+    }
 
-					}
 
-				}
+    var buildShortcode = function (callback)
+    {
+        var attrs    = {};
+        var code     = '[' + this.attr('wolfnet:sc') + ' /]';
+        var exclAttr = ['mode','savedsearch','criteria'];
+        var $advMode = this.find( 'input[type="radio"][name="mode"][value="advanced"]:first:checked' );
+        var $savSrch = this.find( 'select[name="savedsearch"]:first' );
 
-			} );
+        this.find('input, select').each(function(){
 
-			if ( $advMode.length != 0 && $savSrch.length != 0 ) {
+            if (this.name != '' && $.inArray(this.name, exclAttr) == -1) {
 
-				delete attrs.zipcode;
-				delete attrs.city;
-				delete attrs.minprice;
-				delete attrs.maxprice;
+                switch (this.type) {
 
-				$.ajax( {
-					url: rootUri + '-saved-search',
-					type: 'GET',
-					dataType: 'json',
-					data: { ID: $savSrch.val() },
-					success: function ( data ) {
-						for ( var field in data ) {
-							attrs[field] = data[field];
-						}
-						buildShortcodeString( attrs, code, callback );
-					},
-					beforeSend : function () {
-						$loader.show();
-					},
-					complete: function () {
-						$loader.hide();
-					}
-				} );
+                    default:
+                        if (this.value.trim() != '') {
+                            attrs[this.name] = this.value.trim();
+                        }
+                        break;
 
-			}
-			else {
-				buildShortcodeString( attrs, code, callback );
-			}
+                    case 'checkbox':
+                    case 'radio':
+                        if (this.checked == true) {
+                            attrs[this.name] = this.value;
+                        }
+                        break;
 
-		};
+                }
 
-		var buildShortcodeString = function ( attrs, code, callback )
-		{
-			for ( var attr in attrs ) {
-				code = code.replace( '/]', ' ' + attr + '="' + attrs[attr] + '" /]' );
-			}
+            }
 
-			callback( code );
+        });
 
-		};
+        if ($advMode.length != 0 && $savSrch.length != 0) {
 
-		var methods = {
+            delete attrs.zipcode;
+            delete attrs.city;
+            delete attrs.minprice;
+            delete attrs.maxprice;
 
-			init : function ( options )
-			{
-				var options = options||{};
-				rootUri     = options.rootUri||null;
-				loaderUri   = options.loaderUri||null;
-				createBuilderDialog();
-			},
+            $.ajax( {
+                url: ajaxurl,
+                type: 'GET',
+                dataType: 'json',
+                data: {action:'wolfnet_scb_savedsearch', id:$savSrch.val()},
+                success: function (data) {
+                    for (var field in data) {
+                        attrs[field] = data[field];
+                    }
+                    buildShortcodeString(attrs, code, callback);
+                },
+                beforeSend : function () {
+                    $loader.show();
+                },
+                complete: function () {
+                    $loader.hide();
+                }
+            });
 
-			open : function ( editor )
-			{
-				$builderDialog.dialog( 'open' );
-				tinyMCE = editor||window.tineyMCE||null;
-			}
+        }
+        else {
+            buildShortcodeString(attrs, code, callback);
+        }
 
-		};
+    };
 
-		$.fn[pluginName] = function ( method )
-		{
 
-			if ( methods[method] ) {
+    var buildShortcodeString = function (attrs, code, callback)
+    {
+        for (var attr in attrs) {
+            code = code.replace('/]', ' ' + attr + '="' + attrs[attr] + '" /]');
+        }
 
-				return methods[method].apply( this, Array.prototype.slice.call( arguments, 1 ));
+        callback(code);
 
-			}
-			else if ( typeof method === 'object' || ! method ) {
+    };
 
-				return methods.init.apply( this, arguments );
 
-			}
-			else {
+    var methods = {
 
-				$.error( 'Method ' +  method + ' does not exist in jQuery.' + pluginName );
+        init : function (options)
+        {
+            var options = options||{};
+            loaderUri   = options.loaderUri||null;
+            createBuilderDialog();
+        },
 
-			}
+        open : function (editor)
+        {
+            $builderDialog.dialog('open');
+            tinyMCE = editor||window.tineyMCE||null;
+        }
 
-		};
+    };
 
-	} )( jQuery );
 
-}
+    $.fn[pluginName] = function (method)
+    {
+        if (methods[method]) {
+            return methods[method].apply(this, Array.prototype.slice.call(arguments, 1));
+        }
+        else if (typeof method === 'object' || ! method) {
+            return methods.init.apply(this, arguments);
+        }
+        else {
+            $.error('Method ' +  method + ' does not exist in jQuery.' + pluginName);
+        }
+    };
+
+
+    $(document).wolfnetShortcodeBuilder();
+
+
+});

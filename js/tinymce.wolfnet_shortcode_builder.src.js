@@ -24,43 +24,34 @@
  *
  */
 
-if ( typeof tinymce != 'undefined' && typeof jQuery != 'undefined' ) {
+jQuery(function($){
 
-	( function ( $ ) {
+    tinyMCE.create('tinymce.plugins.wolfnetShortcodeBuilder', {
 
-		tinyMCE.create( 'tinymce.plugins.wolfnetShortcodeBuilder', {
+        init : function(editor, url)
+        {
+            var wolfnetPluginUrl = url.substring(0, url.length - 2);
 
-			init : function( editor, url )
-			{
+            $(document).wolfnetShortcodeBuilder();
 
-				var wolfnetPluginUrl = url.substring( 0, url.length - 2 );
+            editor.addButton('wolfnetShortcodeBuilderButton', {
 
-				$(document).wolfnetShortcodeBuilder( {
-					rootUri   : wordpressBaseUrl + '/index.php?pagename=wolfnet-admin-shortcodebuilder',
-					loaderUri : wolfnetPluginUrl + 'img/loader.gif'
-				} );
+                title   : 'WolfNet Shortcode Builder',
 
-				editor.addButton( 'wolfnetShortcodeBuilderButton', {
+                /* since the URL automatically include the js directory we need to strip it off
+                 * to get to the img directory. */
+                image   : wolfnet_ajax.buildericon,
 
-					title   : 'WolfNet Shortcode Builder',
+                onclick : function ()
+                {
+                    $(document).wolfnetShortcodeBuilder('open', editor);
+                }
 
-					/* since the URL automatically include the js directory we need to strip it off
-					 * to get to the img directory. */
-					image   : wolfnetPluginUrl + 'img/wp_wolfnet_nav.png',
+            });
 
-					onclick : function ()
-					{
-						$(document).wolfnetShortcodeBuilder( 'open', editor );
-					}
+        }
+    });
 
-				} );
+    tinymce.PluginManager.add('wolfnetShortcodeBuilder', tinymce.plugins.wolfnetShortcodeBuilder);
 
-			}
-
-		} );
-
-		tinymce.PluginManager.add( 'wolfnetShortcodeBuilder', tinymce.plugins.wolfnetShortcodeBuilder );
-
-	} )( jQuery );
-
-}
+});

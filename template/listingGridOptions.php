@@ -115,7 +115,7 @@
         </tr>
 
         <tr>
-            <td><label>Sort Options</label></td>
+            <td><label>Sort Options:</label></td>
             <td>
                 <select id="<?php echo $sortoptions_wpid; ?>" name="<?php echo $sortoptions_wpname; ?>" >
                     <option value="false" <?php echo $sortoptions_false_wps; ?>>Disabled</option>

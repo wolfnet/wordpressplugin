@@ -10,7 +10,7 @@
         </tr>
 
         <tr>
-            <td><label for="<?php echo $autoplay_wpid; ?>">Scroll Control</label></td>
+            <td><label for="<?php echo $autoplay_wpid; ?>">Scroll Control:</label></td>
             <td>
                 <select id="<?php echo $autoplay_wpid; ?>" name="<?php echo $autoplay_wpname; ?>"
                     class="wolfnet_featuredListingsOptions_autoPlayField">

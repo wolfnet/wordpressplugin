@@ -1,4 +1,4 @@
-<div class="wolfnet_quickSearchOptions">
+<div id="<?php echo $instance_id; ?>" class="wolfnet_quickSearchOptions">
 
     <table class="form-table">
         <tr>

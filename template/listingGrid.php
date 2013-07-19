@@ -4,13 +4,13 @@
         <h2 class="widget-title"><?php echo $title; ?></h2>
     <?php } ?>
 
-    <?php if ($paginated) { echo $toolbarTop; } ?>
+    <?php if ($paginated || $sortoptions) { echo $toolbarTop; } ?>
 
     <div class="wolfnet_listings">
         <?php echo ( isset($listingsHtml) ) ? $listingsHtml : 'No Listings to Display.'; ?>
     </div>
 
-    <?php if ($paginated) { echo $toolbarBottom; } ?>
+    <?php if ($paginated || $sortoptions) { echo $toolbarBottom; } ?>
 
 </div>
 
@@ -24,7 +24,7 @@
 
         $(instance).wolfnetToolbar({
              numrows     : <?php echo $numrows; ?>
-            ,ownerType   : <?php echo "'" . $ownertype . "'"; ?>
+            ,ownertype   : <?php echo "'" . $ownertype . "'"; ?>
             ,criteria    : <?php echo (trim($criteria)!='') ? $criteria : '{}'; ?>
             ,max_results : <?php echo $maxresults; ?>
             ,baseUrl     : <?php echo "'" . $siteUrl . "'"; ?>

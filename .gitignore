@@ -9,3 +9,4 @@ Desktop.ini
 *.sublime*
 
 /vendor/
+.vagrant/temp/*
