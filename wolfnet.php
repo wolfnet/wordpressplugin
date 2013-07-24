@@ -41,7 +41,7 @@ class wolfnet
     public function __construct()
     {
 
-        $this->url = plugins_url(dirname(__FILE__));
+        $this->url = plugin_dir_url(__FILE__);
 
         // Clear cache if url param exists.
         if (array_key_exists('-wolfnet-cache', $_REQUEST)) {
@@ -176,7 +176,7 @@ class wolfnet
 
         wp_enqueue_script(
             'tooltipjs',
-            $this->url . '/js/jquery.tooltip.src.js',
+            $this->url . 'js/jquery.tooltip.src.js',
             array('jquery'),
             null,
             true
@@ -184,7 +184,7 @@ class wolfnet
 
         wp_enqueue_script(
             'imagesloadedjs',
-            $this->url . '/js/jquery.imagesloaded.src.js',
+            $this->url . 'js/jquery.imagesloaded.src.js',
             array('jquery'),
             null,
             true
@@ -192,7 +192,7 @@ class wolfnet
 
         wp_enqueue_script(
             'mousewheeljs',
-            $this->url . '/js/jquery.mousewheel.src.js',
+            $this->url . 'js/jquery.mousewheel.src.js',
             array('jquery'),
             null,
             true
@@ -200,7 +200,7 @@ class wolfnet
 
         wp_enqueue_script(
             'smoothdivscrolljs',
-            $this->url . '/js/jquery.smoothDivScroll-1.2.src.js',
+            $this->url . 'js/jquery.smoothDivScroll-1.2.src.js',
             array('mousewheeljs','jquery-ui-core','jquery-ui-widget','jquery-effects-core'),
             null,
             true
@@ -208,7 +208,7 @@ class wolfnet
 
         wp_enqueue_script(
             'wolfnetscrollingitemsjs',
-            $this->url . '/js/jquery.wolfnetScrollingItems.src.js',
+            $this->url . 'js/jquery.wolfnetScrollingItems.src.js',
             array('smoothdivscrolljs'),
             null,
             true
@@ -216,7 +216,7 @@ class wolfnet
 
         wp_enqueue_script(
             'wolfnetquicksearchjs',
-            $this->url . '/js/jquery.wolfnetQuickSearch.src.js',
+            $this->url . 'js/jquery.wolfnetQuickSearch.src.js',
             array('jquery'),
             null,
             true
@@ -224,7 +224,7 @@ class wolfnet
 
         wp_enqueue_script(
             'wolfnetlistinggridjs',
-            $this->url . '/js/jquery.wolfnetListingGrid.src.js',
+            $this->url . 'js/jquery.wolfnetListingGrid.src.js',
             array('jquery','tooltipjs','imagesloadedjs'),
             null,
             true
@@ -232,7 +232,7 @@ class wolfnet
 
         wp_enqueue_script(
             'wolfnettoolbarjs',
-            $this->url . '/js/jquery.wolfnetToolbar.src.js',
+            $this->url . 'js/jquery.wolfnetToolbar.src.js',
             array('jquery' ),
             null,
             true
@@ -240,7 +240,7 @@ class wolfnet
 
         wp_enqueue_script(
             'wolfnetpropertylistjs',
-            $this->url . '/js/jquery.wolfnetPropertyList.src.js',
+            $this->url . 'js/jquery.wolfnetPropertyList.src.js',
             array('jquery'),
             null,
             true
@@ -248,7 +248,7 @@ class wolfnet
 
         wp_enqueue_script(
             'wolfnetjs',
-            $this->url . '/js/wolfnet.src.js',
+            $this->url . 'js/wolfnet.src.js',
             array('jquery','tooltipjs'),
             null,
             true
@@ -259,7 +259,7 @@ class wolfnet
         // CSS
         wp_enqueue_style(
             'wolfnetcss',
-            $this->url . '/css/wolfnet.src.css',
+            $this->url . 'css/wolfnet.src.css',
             array(),
             false,
             'screen'
@@ -337,7 +337,7 @@ class wolfnet
             array(
                 'title' => 'WolfNet',
                 'key'   => 'wolfnet_plugin_settings',
-                'icon'  => $this->url . '/img/wp_wolfnet_nav.png',
+                'icon'  => $this->url . 'img/wp_wolfnet_nav.png',
                 ),
             array(
                 'title' => 'General Settings',
@@ -391,19 +391,19 @@ class wolfnet
         // JavaScript
         wp_enqueue_script(
             'tooltipjs',
-            $this->url . '/js/jquery.tooltip.src.js',
+            $this->url . 'js/jquery.tooltip.src.js',
             array('jquery')
             );
 
         wp_enqueue_script(
             'wolfnetjs',
-            $this->url . '/js/wolfnet.src.js',
+            $this->url . 'js/wolfnet.src.js',
             array('jquery','tooltipjs')
             );
 
         wp_enqueue_script(
             'wolfnetadminjs',
-            $this->url . '/js/wolfnetAdmin.src.js',
+            $this->url . 'js/wolfnetAdmin.src.js',
             array('jquery','jquery-ui-dialog','jquery-ui-tabs')
             );
 
@@ -421,7 +421,7 @@ class wolfnet
 
         wp_enqueue_style(
             'wolfnetadmincss',
-            $this->url . '/css/wolfnetAdmin.src.css',
+            $this->url . 'css/wolfnetAdmin.src.css',
             array(),
             false,
             'screen'
@@ -538,7 +538,7 @@ class wolfnet
 
         wp_enqueue_script(
             'wolfnetshortcodebuilder',
-            $this->url . '/js/jquery.wolfnetShortcodeBuilder.src.js',
+            $this->url . 'js/jquery.wolfnetShortcodeBuilder.src.js',
             array('jquery-ui-core', 'jquery-ui-widget', 'jquery-effects-core')
             );
 
@@ -547,7 +547,7 @@ class wolfnet
 
     public function sbMcePlugin(array $plugins)
     {
-        $plugins['wolfnetShortcodeBuilder'] = $this->url . '/js/tinymce.wolfnetShortcodeBuilder.src.js';
+        $plugins['wolfnetShortcodeBuilder'] = $this->url . 'js/tinymce.wolfnetShortcodeBuilder.src.js';
 
         return $plugins;
 
@@ -602,7 +602,7 @@ class wolfnet
 
     public function amSupportPage()
     {
-        $imgdir = $this->url . '/img/';
+        $imgdir = $this->url . 'img/';
         include 'template/adminSupport.php';
 
     }
@@ -1993,7 +1993,7 @@ class wolfnet
             array(
                 'ajaxurl'     => admin_url('admin-ajax.php'),
                 'loaderimg'   => admin_url('/images/wpspin_light.gif'),
-                'buildericon' => $this->url . '/img/wp_wolfnet_nav.png',
+                'buildericon' => $this->url . 'img/wp_wolfnet_nav.png',
                 )
             );
 
