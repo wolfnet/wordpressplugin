@@ -60,7 +60,6 @@
         ( function ( $ ) {
 
             $( '#savedsearches' ).wolfnetSearchManager( {
-                loaderUri : '<?php echo $this->url; ?>/img/loader.gif',
                 saveForm  : $( '#save_search' )
             } );
 

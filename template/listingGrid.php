@@ -4,13 +4,13 @@
         <h2 class="widget-title"><?php echo $title; ?></h2>
     <?php } ?>
 
-    <?php if ($paginated || $sortoptions) { echo $toolbarTop; } ?>
+    <?php echo $toolbarTop; ?>
 
     <div class="wolfnet_listings">
-        <?php echo ( isset($listingsHtml) ) ? $listingsHtml : 'No Listings to Display.'; ?>
+        <?php echo (isset($listingsHtml)) ? $listingsHtml : 'No Listings to Display.'; ?>
     </div>
 
-    <?php if ($paginated || $sortoptions) { echo $toolbarBottom; } ?>
+    <?php echo $toolbarBottom; ?>
 
 </div>
 
@@ -19,22 +19,17 @@
 <script type="text/javascript">
 
     jQuery(function($){
-
         var instance = <?php echo "'#" . $instance_id . "';"; ?>
 
         $(instance).wolfnetToolbar({
-             numrows     : <?php echo $numrows; ?>
-            ,ownertype   : <?php echo "'" . $ownertype . "'"; ?>
-            ,criteria    : <?php echo (trim($criteria)!='') ? $criteria : '{}'; ?>
-            ,max_results : <?php echo $maxresults; ?>
-            ,baseUrl     : <?php echo "'" . $siteUrl . "'"; ?>
+             numrows     : <?php echo $numrows . "\n"; ?>
+            ,ownertype   : <?php echo "'" . $ownertype . "'" . "\n"; ?>
+            ,criteria    : <?php echo ((trim($criteria)!='') ? $criteria : '{}')  . "\n"; ?>
+            ,max_results : <?php echo $maxresults . "\n"; ?>
+            ,baseUrl     : <?php echo "'" . $siteUrl . "'" . "\n"; ?>
         });
-
-        <?php if (strpos($instance_id, 'wolfnet_listingGrid_') !== false) { ?>
-        $(instance).wolfnetListingGrid();
-        <?php } elseif (strpos($instance_id, 'wolfnet_propertyList_') !== false) { ?>
-        $(instance).wolfnetPropertyList();
-        <?php } ?>
+        $(instance).filter('.wolfnet_listingGrid').wolfnetListingGrid();
+        $(instance).filter('.wolfnet_propertyList').wolfnetPropertyList();
 
     });
 

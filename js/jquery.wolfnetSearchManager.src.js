@@ -45,7 +45,6 @@ if ( typeof jQuery != 'undefined' ) {
 			apiGetSuffix    : '-get',
 			apiPostSuffix   : '-save',
 			apiDeleteSuffix : '-delete',
-			loaderUri       : 'img/loader.gif',
 			loaderClass     : 'wolfnet_loaderImage',
 			refreshedEvent  : 'wolfnetDataRefreshed',
 			savedEvent      : 'wolfnetSearchSaved',
@@ -253,7 +252,6 @@ if ( typeof jQuery != 'undefined' ) {
 
 					var $this        = $( this );
 					var data         = $this.data( pluginName );
-					var loaderUri    = data.option.loaderUri;
 					var loaderClass  = data.option.loaderClass;
 
 					data.loaderImage = $this.find( 'div.' + loaderClass + ':first' );
@@ -262,7 +260,7 @@ if ( typeof jQuery != 'undefined' ) {
 					if ( data.loaderImage.length == 0 ) {
 
 						data.loaderImage = $( '<div/>' );
-						data.loaderImage.append( $( '<img src="' + loaderUri + '" />' ) );
+						data.loaderImage.append( $( '<img src="' + wolfnet_ajax.loaderimg + '" />' ) );
 						data.loaderImage.addClass( loaderClass );
 						data.loaderImage.hide();
 						data.loaderImage.appendTo( $this );

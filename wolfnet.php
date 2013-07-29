@@ -3,7 +3,8 @@
 /**
  * Plugin Name:  WolfNet IDX for WordPress
  * Plugin URI:   http://wordpress.wolfnet.com
- * Description:  The WolfNet IDX for WordPress plugin provides IDX search solution integration with any WordPress website.
+ * Description:  The WolfNet IDX for WordPress plugin provides IDX search solution integration with
+ *               any WordPress website.
  * Version:      {X.X.X}
  * Author:       WolfNet Technologies, LLC.
  * Author URI:   http://www.wolfnet.com
@@ -27,6 +28,9 @@ class wolfnet
     private $customPostTypeSearch = 'wolfnet_search';
     private $productKeyOptionKey  = 'wolfnet_productKey';
     private $transientIndexKey    = 'wolfnet_transients';
+    private $cacheFlag            = '-wolfnet-cache';
+    private $preHookPrefix        = 'wolfnet_pre_';
+    private $postHookPrefix       = 'wolfnet_post_';
 
 
     /* Constructor Method *********************************************************************** */
@@ -41,41 +45,34 @@ class wolfnet
     public function __construct()
     {
 
+        $this->dir = dirname(__FILE__);
         $this->url = plugin_dir_url(__FILE__);
 
         // Clear cache if url param exists.
-        if (array_key_exists('-wolfnet-cache', $_REQUEST)) {
+        if (array_key_exists($this->cacheFlag, $_REQUEST) && $_REQUEST[$this->cacheFlag] == 'clear') {
             $this->clearTransients();
         }
 
         // Register actions.
-        $actions = array(
-            'init'                  => 'init',
-            'wp_enqueue_scripts'    => 'scripts',
-            'widgets_init'          => 'widgetInit',
-            'admin_init'            => 'adminInit',
-            'admin_menu'            => 'adminMenu',
-            'admin_enqueue_scripts' => 'adminScripts',
-            'wp_footer'             => 'footer',
-            'template_redirect'     => 'templateRedirect',
-            );
-
-        foreach ($actions as $action => $method) {
-            do_action('wolfnet_pre_' . $method);
-            add_action($action, array(&$this, $method));
-            do_action('wolfnet_post_' . $method);
-        }
+        $this->addAction(array(
+            array('init',                  'init'),
+            array('wp_enqueue_scripts',    'scripts'),
+            array('wp_enqueue_scripts',    'styles'),
+            array('admin_menu',            'adminMenu'),
+            array('admin_init',            'adminInit'),
+            array('admin_enqueue_scripts', 'adminScripts'),
+            array('admin_enqueue_scripts', 'adminStyles'),
+            array('widgets_init',          'widgetInit'),
+            array('wp_footer',             'footer'),
+            array('template_redirect',     'templateRedirect'),
+            ));
 
         // Register filters.
-        $filters = array(
-            'do_parse_request' => 'doParseRequest',
-            );
-
-        foreach ($filters as $filter => $method) {
-            do_action('wolfnet_pre_' . $method);
-            add_filter($filter, array(&$this, $method));
-            do_action('wolfnet_post_' . $method);
-        }
+        $this->addFilter(array(
+            array('do_parse_request',     'doParseRequest'),
+            array('mce_external_plugins', 'sbMcePlugin'),
+            array('mce_buttons',          'sbButton'),
+            ));
 
     }
 
@@ -100,186 +97,70 @@ class wolfnet
     {
 
         // Register Custom Post Types
-        register_post_type($this->customPostTypeSearch, array(
-            'public'    => false,
-            'show_ui'   => false,
-            'query_var' => 'wolfnet_search',
-            'rewrite'   => array(
-                'slug'       => 'wolfnet/search',
-                'with_front' => false
-                ),
-            'supports'  => array('title'),
-            'labels'    => array(
-                'name'               => 'Saved Searches',
-                'singular_name'      => 'Saved Search',
-                'add_new'            => 'Add Search',
-                'add_new_item'       => 'Add Search',
-                'edit_item'          => 'View Saved Search',
-                'new_item'           => 'New Saved Search',
-                'view_item'          => 'View Saved Searches',
-                'search_items'       => 'Find Saved Searches',
-                'not_found'          => 'No Saved Searches',
-                'not_found_in_trash' => 'No Saved Searches In Trash'
-                ),
-            'register_meta_box_cb' => array(&$this, 'cpSearchMetabox')
-            ));
+        $this->registerCustomPostType();
 
         // Register Shortcodes
-        $shrtCodes = array(
-            'WolfNetFeaturedListings'   => 'scFeaturedListings',
-            'woflnetfeaturedlistings'   => 'scFeaturedListings',
-            'WOFLNETFEATUREDLISTINGS'   => 'scFeaturedListings',
-            'wnt_featured'              => 'scFeaturedListings',
-            'WolfNetListingGrid'        => 'scListingGrid',
-            'wolfnetlistinggrid'        => 'scListingGrid',
-            'WOLFNETLISTINGGRID'        => 'scListingGrid',
-            'wnt_grid'                  => 'scListingGrid',
-            'WolfNetPropertyList'       => 'scPropertyList',
-            'wolfnetpropertylist'       => 'scPropertyList',
-            'WOLFNETPROPERTYLIST'       => 'scPropertyList',
-            'wnt_list'                  => 'scPropertyList',
-            'WolfNetListingQuickSearch' => 'scQuickSearch',
-            'wolfnetlistingquicksearch' => 'scQuickSearch',
-            'WOLFNETLISTINGQUICKSEARCH' => 'scQuickSearch',
-            'wnt_search'                => 'scQuickSearch',
-            'WolfNetQuickSearch'        => 'scQuickSearch',
-            'wolfnetquicksearch'        => 'scQuickSearch',
-            'WOLFNETQUICKSEARCH'        => 'scQuickSearch',
-            );
-
-        foreach ($shrtCodes as $code => $method) {
-            add_shortcode($code, array(&$this, $method));
-        }
+        $this->registerShortCodes();
 
         // Register Ajax Actions
-        $ajxActions = array(
-            'wolfnet_content'           => 'remoteContent',
-            'wolfnet_content_header'    => 'remoteContentHeader',
-            'wolfnet_content_footer'    => 'remoteContentFooter',
-            'wolfnet_listings'          => 'remoteListings',
-            'wolfnet_sort_options'      => 'remoteSortOptions',
-            'wolfnet_listings_per_page' => 'remoteListingsPerPage',
-            'wolfnet_get_listings'      => 'remoteListingsGet',
-            );
+        $this->registerAjaxActions();
 
-        foreach ($ajxActions as $action => $method) {
-            add_action('wp_ajax_nopriv_' . $action, array(&$this, $method));
-        }
+        // Register Scripts
+        $this->registerScripts();
+
+        // Register CSS
+        $this->registerStyles();
 
     }
 
 
     public function scripts()
     {
+
         // JavaScript
-        wp_enqueue_script('jquery');
-
-        wp_enqueue_script(
-            'tooltipjs',
-            $this->url . 'js/jquery.tooltip.src.js',
-            array('jquery'),
-            null,
-            true
+        $scripts = array(
+            'smooth-div-scroll',
+            'wolfnet-scrolling-items',
+            'wolfnet-quick-search',
+            'wolfnet-listing-grid',
+            'wolfnet-toolbar',
+            'wolfnet-property-list',
             );
 
-        wp_enqueue_script(
-            'imagesloadedjs',
-            $this->url . 'js/jquery.imagesloaded.src.js',
-            array('jquery'),
-            null,
-            true
-            );
+        foreach ($scripts as $script) {
+            wp_enqueue_script($script);
+        }
 
-        wp_enqueue_script(
-            'mousewheeljs',
-            $this->url . 'js/jquery.mousewheel.src.js',
-            array('jquery'),
-            null,
-            true
-            );
+    }
 
-        wp_enqueue_script(
-            'smoothdivscrolljs',
-            $this->url . 'js/jquery.smoothDivScroll-1.2.src.js',
-            array('mousewheeljs','jquery-ui-core','jquery-ui-widget','jquery-effects-core'),
-            null,
-            true
-            );
 
-        wp_enqueue_script(
-            'wolfnetscrollingitemsjs',
-            $this->url . 'js/jquery.wolfnetScrollingItems.src.js',
-            array('smoothdivscrolljs'),
-            null,
-            true
-            );
-
-        wp_enqueue_script(
-            'wolfnetquicksearchjs',
-            $this->url . 'js/jquery.wolfnetQuickSearch.src.js',
-            array('jquery'),
-            null,
-            true
-            );
-
-        wp_enqueue_script(
-            'wolfnetlistinggridjs',
-            $this->url . 'js/jquery.wolfnetListingGrid.src.js',
-            array('jquery','tooltipjs','imagesloadedjs'),
-            null,
-            true
-            );
-
-        wp_enqueue_script(
-            'wolfnettoolbarjs',
-            $this->url . 'js/jquery.wolfnetToolbar.src.js',
-            array('jquery' ),
-            null,
-            true
-            );
-
-        wp_enqueue_script(
-            'wolfnetpropertylistjs',
-            $this->url . 'js/jquery.wolfnetPropertyList.src.js',
-            array('jquery'),
-            null,
-            true
-            );
-
-        wp_enqueue_script(
-            'wolfnetjs',
-            $this->url . 'js/wolfnet.src.js',
-            array('jquery','tooltipjs'),
-            null,
-            true
-            );
-
-        $this->localizedScript();
+    public function styles()
+    {
 
         // CSS
-        wp_enqueue_style(
-            'wolfnetcss',
-            $this->url . 'css/wolfnet.src.css',
-            array(),
-            false,
-            'screen'
+        $styles = array(
+            'wolfnet',
             );
+
+        foreach ($styles as $style) {
+            wp_enqueue_style($style);
+        }
 
     }
 
 
     public function widgetInit()
     {
-        require_once dirname(__FILE__) . '/widget/FeaturedListingsWidget.php';
+        require_once $this->dir . '/widget/FeaturedListingsWidget.php';
         register_widget('Wolfnet_FeaturedListingsWidget');
 
-        require_once dirname(__FILE__) . '/widget/ListingGridWidget.php';
+        require_once $this->dir . '/widget/ListingGridWidget.php';
         register_widget('Wolfnet_ListingGridWidget');
 
-        require_once dirname(__FILE__) . '/widget/PropertyListWidget.php';
+        require_once $this->dir . '/widget/PropertyListWidget.php';
         register_widget('Wolfnet_PropertyListWidget');
 
-        require_once dirname(__FILE__) . '/widget/QuickSearchWidget.php';
+        require_once $this->dir . '/widget/QuickSearchWidget.php';
         register_widget('Wolfnet_QuickSearchWidget');
 
     }
@@ -294,37 +175,10 @@ class wolfnet
         // Register Shortcode Builder Button
         $canEditPosts = current_user_can('edit_posts');
         $canEditPages = current_user_can('edit_pages');
-        $richEditing = get_user_option('rich_editing');
-
-        if (($canEditPosts || $canEditPages) && $richEditing == 'true') {
-            add_action('admin_enqueue_scripts', array(&$this, 'sbScripts'));
-            add_filter('mce_external_plugins', array(&$this, 'sbMcePlugin'));
-            add_filter('mce_buttons', array(&$this, 'sbButton'));
-        }
+        $richEditing  = get_user_option('rich_editing');
 
         // Register Ajax Actions
-        $ajxActions = array(
-            'wolfnet_validate_key'            => 'remoteValidateProductKey',
-            'wolfnet_saved_searches'          => 'remoteGetSavedSearchs',
-            'wolfnet_save_search'             => 'remoteSaveSearch',
-            'wolfnet_delete_search'           => 'remoteDeleteSearch',
-            'wolfnet_scb_options_featured'    => 'remoteShortcodeBuilderOptionsFeatured',
-            'wolfnet_scb_options_grid'        => 'remoteShortcodeBuilderOptionsGrid',
-            'wolfnet_scb_options_list'        => 'remoteShortcodeBuilderOptionsList',
-            'wolfnet_scb_options_quicksearch' => 'remoteShortcodeBuilderOptionsQuickSearch',
-            'wolfnet_scb_savedsearch'         => 'remoteShortcodeBuilderSavedSearch',
-            'wolfnet_content'                 => 'remoteContent',
-            'wolfnet_content_header'          => 'remoteContentHeader',
-            'wolfnet_content_footer'          => 'remoteContentFooter',
-            'wolfnet_listings'                => 'remoteListings',
-            'wolfnet_sort_options'            => 'remoteSortOptions',
-            'wolfnet_listings_per_page'       => 'remoteListingsPerPage',
-            'wolfnet_get_listings'            => 'remoteListingsGet',
-            );
-
-        foreach ($ajxActions as $action => $method) {
-            add_action('wp_ajax_' . $action, array(&$this, $method));
-        }
+        $this->registerAdminAjaxActions();
 
     }
 
@@ -384,48 +238,32 @@ class wolfnet
 
     public function adminScripts()
     {
-        global $wp_scripts;
-
-        $jquery_ui = $wp_scripts->query('jquery-ui-core');
 
         // JavaScript
-        wp_enqueue_script(
-            'tooltipjs',
-            $this->url . 'js/jquery.tooltip.src.js',
-            array('jquery')
+        $scripts = array(
+            'wolfnet-admin',
+            'wolfnet-shortcode-builder',
             );
 
-        wp_enqueue_script(
-            'wolfnetjs',
-            $this->url . 'js/wolfnet.src.js',
-            array('jquery','tooltipjs')
-            );
+        foreach ($scripts as $script) {
+            wp_enqueue_script($script);
+        }
 
-        wp_enqueue_script(
-            'wolfnetadminjs',
-            $this->url . 'js/wolfnetAdmin.src.js',
-            array('jquery','jquery-ui-dialog','jquery-ui-tabs')
-            );
+    }
 
-        wp_enqueue_script('jquery-ui-datepicker');
 
-        $this->localizedScript();
+    public function adminStyles()
+    {
 
         // CSS
-        wp_enqueue_style(
-            'jquery-ui-css',
-            'http://ajax.googleapis.com/ajax/libs/jqueryui/'
-                . $jquery_ui->ver
-                . '/themes/smoothness/jquery-ui.css'
+        $styles = array(
+            'jquery-ui',
+            'wolfnet-admin',
             );
 
-        wp_enqueue_style(
-            'wolfnetadmincss',
-            $this->url . 'css/wolfnetAdmin.src.css',
-            array(),
-            false,
-            'screen'
-            );
+        foreach ($styles as $style) {
+            wp_enqueue_style($style);
+        }
 
     }
 
@@ -532,18 +370,6 @@ class wolfnet
     /* __) | | (_) |   |_ (_ (_) (_| (/_   |_) |_| | | (_| (/_ |                                  */
     /*                                                                                            */
     /* ****************************************************************************************** */
-
-    public function sbScripts()
-    {
-
-        wp_enqueue_script(
-            'wolfnetshortcodebuilder',
-            $this->url . 'js/jquery.wolfnetShortcodeBuilder.src.js',
-            array('jquery-ui-core', 'jquery-ui-widget', 'jquery-effects-core')
-            );
-
-    }
-
 
     public function sbMcePlugin(array $plugins)
     {
@@ -671,7 +497,9 @@ class wolfnet
     public function remoteValidateProductKey()
     {
         $productKey = (array_key_exists('key', $_REQUEST)) ? $_REQUEST['key'] : '';
+
         echo ($this->productKeyIsValid($productKey)) ? 'true' : 'false';
+
         die;
 
     }
@@ -726,6 +554,7 @@ class wolfnet
     public function remoteShortcodeBuilderOptionsFeatured ()
     {
         $args = $this->getFeaturedListingsOptions();
+
         echo $this->featuredListingsOptionsFormView($args);
 
         die;
@@ -736,6 +565,7 @@ class wolfnet
     public function remoteShortcodeBuilderOptionsGrid ()
     {
         $args = $this->getListingGridOptions();
+
         echo $this->listingGridOptionsFormView($args);
 
         die;
@@ -756,6 +586,7 @@ class wolfnet
     public function remoteShortcodeBuilderOptionsQuickSearch ()
     {
         $args = $this->getQuickSearchOptions();
+
         echo $this->quickSearchOptionsFormView($args);
 
         die;
@@ -766,6 +597,7 @@ class wolfnet
     public function remoteShortcodeBuilderSavedSearch ()
     {
         $id = (array_key_exists('id', $_REQUEST)) ? $_REQUEST['id'] : 0;
+
         echo json_encode($this->getSavedSearch($id));
 
         die;
@@ -795,6 +627,7 @@ class wolfnet
     public function remoteContentFooter ()
     {
         $this->getWpHeader();
+
         echo $this->getWpFooter();
 
         die;
@@ -840,6 +673,7 @@ class wolfnet
     public function remoteListingsGet()
     {
         $args = $this->getListingGridOptions($_REQUEST);
+
         echo json_encode($this->getListings($args));
 
         die;
@@ -858,9 +692,9 @@ class wolfnet
 
     public function getFeaturedListings(array $criteria=array())
     {
-        $criteria['numrows'] = $criteria['maxresults'];
+        $criteria['numrows']     = $criteria['maxresults'];
         $criteria['max_results'] = $criteria['maxresults'];
-        $criteria['owner_type'] = $criteria['ownertype'];
+        $criteria['owner_type']  = $criteria['ownertype'];
 
         $productKey = $this->getProductKey();
         $url = 'http://services.mlsfinder.com/v1/propertyBar/' . $productKey . '.json';
@@ -896,8 +730,7 @@ class wolfnet
         $options['autoplay_true_wps']   = selected($options['autoplay'], 'true', false);
         $options['direction_left_wps']  = selected($options['direction'], 'left', false);
         $options['direction_right_wps'] = selected($options['direction'], 'right', false);
-
-        $options['ownertypes'] = $this->getOwnerTypes();
+        $options['ownertypes']          = $this->getOwnerTypes();
 
         return $options;
 
@@ -966,15 +799,13 @@ class wolfnet
 
         $data = $this->getApiData($url, 900);
 
+        $absMaxResults = $this->getMaxResults();
+        $absMaxResults = ($data->total_rows < $absMaxResults) ? $data->total_rows : $absMaxResults;
+
         foreach ($data->listings as &$listing) {
             $listing->numrows    = $criteria['numrows'];
             $listing->startrow   = $criteria['startrow'];
-            if ($data->total_rows < $criteria['max_results']) {
-                $listing->maxresults = $data->total_rows;
-            }
-            else {
-                $listing->maxresults = $criteria['max_results'];
-            }
+            $listing->maxresults = $absMaxResults;
         }
 
         return $data->listings;
@@ -1014,10 +845,9 @@ class wolfnet
         $options['paginated_true_wps']    = selected($options['paginated'], 'true', false);
         $options['sortoptions_false_wps'] = selected($options['sortoptions'], 'false', false);
         $options['sortoptions_true_wps']  = selected($options['sortoptions'], 'true', false);
-
-        $options['ownertypes'] = $this->getOwnerTypes();
-        $options['prices'] = $this->getPrices();
-        $options['savedsearches'] = $this->getSavedSearches();
+        $options['ownertypes']            = $this->getOwnerTypes();
+        $options['prices']                = $this->getPrices();
+        $options['savedsearches']         = $this->getSavedSearches();
 
         return $options;
 
@@ -1053,19 +883,23 @@ class wolfnet
         $_REQUEST['wolfnet_includeDisclaimer'] = true;
 
         $vars = array(
-            'instance_id'  => str_replace('.', '', uniqid('wolfnet_listingGrid_')),
-            'listings'     => $listingsData,
-            'listingsHtml' => $listingsHtml,
-            'siteUrl'      => site_url(),
-            'criteria'     => json_encode($criteria),
-            'class'        => 'wolfnet_listingGrid',
-            'maxresults'   => $this->getMaxResults()
+            'instance_id'   => str_replace('.', '', uniqid('wolfnet_listingGrid_')),
+            'listings'      => $listingsData,
+            'listingsHtml'  => $listingsHtml,
+            'siteUrl'       => site_url(),
+            'criteria'      => json_encode($criteria),
+            'class'         => 'wolfnet_listingGrid',
+            'toolbarTop'    => '',
+            'toolbarBottom' => '',
+            'maxresults'    => ((count($listingsData) > 0) ? $listingsData[0]->maxresults : 0),
             );
 
         $vars = $this->convertDataType(array_merge($criteria, $vars));
 
-        $vars['toolbarTop'] = $this->getToolbar($vars, 'wolfnet_toolbarTop ');
-        $vars['toolbarBottom'] = $this->getToolbar($vars, 'wolfnet_toolbarBottom ');
+        if ($vars['paginated'] || $vars['sortoptions']) {
+            $vars['toolbarTop']    = $this->getToolbar($vars, 'wolfnet_toolbarTop ');
+            $vars['toolbarBottom'] = $this->getToolbar($vars, 'wolfnet_toolbarBottom ');
+        }
 
         return $this->listingGridView($vars);
 
@@ -1124,19 +958,23 @@ class wolfnet
         $_REQUEST['wolfnet_includeDisclaimer'] = true;
 
         $vars = array(
-            'instance_id'  => str_replace('.', '', uniqid('wolfnet_propertyList_')),
-            'listings'     => $listingsData,
-            'listingsHtml' => $listingsHtml,
-            'siteUrl'      => site_url(),
-            'criteria'     => json_encode($criteria),
-            'class'        => 'wolfnet_propertyList',
-            'maxresults'   => $this->getMaxResults()
+            'instance_id'   => str_replace('.', '', uniqid('wolfnet_propertyList_')),
+            'listings'      => $listingsData,
+            'listingsHtml'  => $listingsHtml,
+            'siteUrl'       => site_url(),
+            'criteria'      => json_encode($criteria),
+            'class'         => 'wolfnet_propertyList',
+            'toolbarTop'    => '',
+            'toolbarBottom' => '',
+            'maxresults'    => ((count($listingsData) > 0) ? $listingsData[0]->maxresults : 0),
             );
 
         $vars = $this->convertDataType(array_merge($criteria, $vars));
 
-        $vars['toolbarTop'] = $this->getToolbar($vars, 'wolfnet_toolbarTop');
-        $vars['toolbarBottom'] = $this->getToolbar($vars, 'wolfnet_toolbarBottom');
+        if ($vars['paginated'] || $vars['sortoptions']) {
+            $vars['toolbarTop']    = $this->getToolbar($vars, 'wolfnet_toolbarTop ');
+            $vars['toolbarBottom'] = $this->getToolbar($vars, 'wolfnet_toolbarBottom ');
+        }
 
         return $this->propertyListView($vars);
 
@@ -1459,7 +1297,9 @@ class wolfnet
             if (substr($baseUrl, strlen($baseUrl) - 1) != '/') {
                 $baseUrl .= '/';
             }
+
             $baseUrl .= 'index.cfm';
+
         }
 
         $url = $baseUrl
@@ -1575,12 +1415,15 @@ class wolfnet
             $valid = true;
             $valid = (array_search($key, $restrictedParams) !== false) ? false : $valid;
             $valid = (!is_string($value) && !is_numeric($value) && !is_bool($value)) ? false : $valid;
+
             foreach ($restrictedSuffix as $suffix) {
                 $valid = (substr($key, strlen($suffix)*-1) == $suffix) ? false : $valid;
             }
+
             if ($valid) {
                 $url .= '&' . $key . '=' . urlencode($value);
             }
+
         }
 
         return $url;
@@ -1634,7 +1477,7 @@ class wolfnet
             ));
 
         if ($data === false || $time > $index[$key]) {
-            $http = wp_remote_get($url);
+            $http = wp_remote_get($url, array('timeout'=>180));
 
             if (!is_object($data)) {
                 $data = new stdClass();
@@ -1699,6 +1542,7 @@ class wolfnet
         // Get transient index data.
         else {
             $data = get_transient($key);
+
             if ($data === false) {
                 $data = $this->transientIndex(array());
             }
@@ -1726,47 +1570,60 @@ class wolfnet
     private function augmentListingData(&$listing)
     {
         setlocale(LC_MONETARY, 'en_US');
+
         if (is_numeric($listing->listing_price)) {
             $listing->listing_price = money_format('%.0n', $listing->listing_price);
         }
 
         $listing->location = $listing->city;
+
         if ( $listing->city != '' && $listing->state != '' ) {
             $listing->location .= ', ';
         }
+
         $listing->location .= $listing->state;
         $listing->location .= ' ' . $listing->zip_code;
 
         $listing->bedsbaths = '';
+
         if (is_numeric($listing->bedrooms)) {
             $listing->bedsbaths .= $listing->bedrooms . 'bd';
         }
+
         if (is_numeric($listing->bedrooms) && is_numeric($listing->bathroom)) {
             $listing->bedsbaths .= '/';
         }
+
         if (is_numeric($listing->bathroom)) {
             $listing->bedsbaths .= $listing->bathroom . 'ba';
         }
 
         $listing->bedsbaths_full = '';
+
         if ( is_numeric( $listing->bedrooms ) ) {
             $listing->bedsbaths_full .= $listing->bedrooms . ' Bed Rooms';
         }
+
         if ( is_numeric( $listing->bedrooms ) && is_numeric( $listing->bathroom ) ) {
             $listing->bedsbaths_full .= ' & ';
         }
+
         if ( is_numeric( $listing->bathroom ) ) {
             $listing->bedsbaths_full .= $listing->bathroom . ' Bath Rooms';
         }
 
         $listing->address = $listing->display_address;
+
         if ($listing->city != '' && $listing->address != '') {
             $listing->address .= ', ';
         }
+
         $listing->address .= $listing->city;
+
         if ($listing->state != '' && $listing->address != '') {
             $listing->address .= ', ';
         }
+
         $listing->address .= ' ' . $listing->state;
         $listing->address .= ' ' . $listing->zip_code;
 
@@ -1834,9 +1691,8 @@ class wolfnet
     private function getMaxResults()
     {
         $productKey = $this->getProductKey();
-        $url  = 'http://services.mlsfinder.com/v1/setting/' . $productKey . '.json';
-        $url .= '?setting=site_text';
-
+        $url  = 'http://services.mlsfinder.com/v1/setting/' . $productKey . '.json'
+              . '?setting=site_text';
         $data = $this->getApiData($url, 86400)->site_text;
         $maxResults = (property_exists($data, 'Max Results')) ? $data->{'Max Results'} : '';
 
@@ -1848,9 +1704,8 @@ class wolfnet
     private function getPricesFromApi()
     {
         $productKey = $this->getProductKey();
-        $url  = 'http://services.mlsfinder.com/v1/setting/' . $productKey . '.json';
-        $url .= '?setting=site_text';
-
+        $url  = 'http://services.mlsfinder.com/v1/setting/' . $productKey . '.json'
+              . '?setting=site_text';
         $data = $this->getApiData($url, 86400);
         $data = (property_exists($data, 'site_text')) ? $data->site_text : new stdClass();
         $prices = (property_exists($data, 'Price Range Values')) ? $data->{'Price Range Values'} : '';
@@ -1876,6 +1731,7 @@ class wolfnet
                 $classRegex = "/(?<=class\=[\"|\'])([^\"|\']*)/";
                 $currentClassArray=array();
                 $hasClassAttr = preg_match( $classRegex, $tag, $currentClassArray );
+
                 if ( $hasClassAttr > 0) {
                     $currentClasses = ( $hasClassAttr > 0 ) ? $currentClassArray[0] : "";
                     $newTag = preg_replace( $classRegex, $currentClasses . ' ' . $wntClass, $tag );
@@ -1883,7 +1739,9 @@ class wolfnet
                 else {
                     $newTag = str_replace( '>', ' class="' . $wntClass . '">', $tag );
                 }
+
                 $header = str_replace( $tag, $newTag, $header );
+
             }
         }
 
@@ -1934,8 +1792,7 @@ class wolfnet
     private function getPrices()
     {
         $values = $this->getPricesFromApi();
-
-        $data = array();
+        $data   = array();
 
         setlocale(LC_MONETARY, 'en_US');
 
@@ -1954,8 +1811,7 @@ class wolfnet
     private function getBeds ()
     {
         $values = array(1,2,3,4,5,6,7);
-
-        $data = array();
+        $data   = array();
 
         foreach ($values as $value) {
             $data[] = array('value'=>$value, 'label'=>$value);
@@ -1984,18 +1840,271 @@ class wolfnet
     }
 
 
-    private function localizedScript()
+    private function localizedScriptData()
     {
-
-        wp_localize_script(
-            'wolfnetjs',
-            'wolfnet_ajax',
-            array(
-                'ajaxurl'     => admin_url('admin-ajax.php'),
-                'loaderimg'   => admin_url('/images/wpspin_light.gif'),
-                'buildericon' => $this->url . 'img/wp_wolfnet_nav.png',
-                )
+        return array(
+            'ajaxurl'     => admin_url('admin-ajax.php'),
+            'loaderimg'   => admin_url('/images/wpspin_light.gif'),
+            'buildericon' => $this->url . 'img/wp_wolfnet_nav.png',
             );
+
+    }
+
+
+    private function addAction($action, $callable=null)
+    {
+        if (is_array($action)) {
+            foreach ($action as $act) {
+                $this->addAction($act[0], $act[1]);
+            }
+        }
+        else {
+            if (is_callable($callable)) {
+                add_action($action, $callable);
+            }
+            else if (is_string($callable) && method_exists($this, $callable)) {
+                do_action($this->preHookPrefix . $callable);
+                add_action($action, array(&$this, $callable));
+                do_action($this->postHookPrefix . $callable);
+            }
+        }
+
+        return $this;
+
+    }
+
+
+    private function addFilter($filter, $callable=null)
+    {
+        if (is_array($filter)) {
+            foreach ($filter as $flt) {
+                $this->addFilter($flt[0], $flt[1]);
+            }
+        }
+        else {
+            if (is_callable($callable)) {
+                add_filter($filter, $callable);
+            }
+            else if (is_string($callable) && method_exists($this, $callable)) {
+                do_action($this->preHookPrefix . $callable);
+                add_filter($filter, array(&$this, $callable));
+                do_action($this->postHookPrefix . $callable);
+            }
+        }
+
+        return $this;
+
+    }
+
+
+    private function registerCustomPostType()
+    {
+        register_post_type($this->customPostTypeSearch, array(
+            'public'    => false,
+            'show_ui'   => false,
+            'query_var' => 'wolfnet_search',
+            'rewrite'   => array(
+                'slug'       => 'wolfnet/search',
+                'with_front' => false
+                ),
+            'supports'  => array('title'),
+            'labels'    => array(
+                'name'               => 'Saved Searches',
+                'singular_name'      => 'Saved Search',
+                'add_new'            => 'Add Search',
+                'add_new_item'       => 'Add Search',
+                'edit_item'          => 'View Saved Search',
+                'new_item'           => 'New Saved Search',
+                'view_item'          => 'View Saved Searches',
+                'search_items'       => 'Find Saved Searches',
+                'not_found'          => 'No Saved Searches',
+                'not_found_in_trash' => 'No Saved Searches In Trash'
+                ),
+            'register_meta_box_cb' => array(&$this, 'cpSearchMetabox')
+            ));
+
+    }
+
+
+    private function registerShortCodes()
+    {
+        $shrtCodes = array(
+            'WolfNetFeaturedListings'   => 'scFeaturedListings',
+            'woflnetfeaturedlistings'   => 'scFeaturedListings',
+            'WOFLNETFEATUREDLISTINGS'   => 'scFeaturedListings',
+            'wnt_featured'              => 'scFeaturedListings',
+            'WolfNetListingGrid'        => 'scListingGrid',
+            'wolfnetlistinggrid'        => 'scListingGrid',
+            'WOLFNETLISTINGGRID'        => 'scListingGrid',
+            'wnt_grid'                  => 'scListingGrid',
+            'WolfNetPropertyList'       => 'scPropertyList',
+            'wolfnetpropertylist'       => 'scPropertyList',
+            'WOLFNETPROPERTYLIST'       => 'scPropertyList',
+            'wnt_list'                  => 'scPropertyList',
+            'WolfNetListingQuickSearch' => 'scQuickSearch',
+            'wolfnetlistingquicksearch' => 'scQuickSearch',
+            'WOLFNETLISTINGQUICKSEARCH' => 'scQuickSearch',
+            'wnt_search'                => 'scQuickSearch',
+            'WolfNetQuickSearch'        => 'scQuickSearch',
+            'wolfnetquicksearch'        => 'scQuickSearch',
+            'WOLFNETQUICKSEARCH'        => 'scQuickSearch',
+            );
+
+        foreach ($shrtCodes as $code => $method) {
+            add_shortcode($code, array(&$this, $method));
+        }
+    }
+
+
+    private function registerScripts()
+    {
+        $scripts = array(
+            'tooltipjs' => array(
+                $this->url . 'js/jquery.tooltip.src.js',
+                array('jquery'),
+                ),
+            'imagesloadedjs' => array(
+                $this->url . 'js/jquery.imagesloaded.src.js',
+                array('jquery'),
+                ),
+            'mousewheeljs' => array(
+                $this->url . 'js/jquery.mousewheel.src.js',
+                array('jquery'),
+                ),
+            'smooth-div-scroll' => array(
+                $this->url . 'js/jquery.smoothDivScroll-1.2.src.js',
+                array('mousewheeljs', 'jquery-ui-core', 'jquery-ui-widget', 'jquery-effects-core'),
+                ),
+            'wolfnet' => array(
+                $this->url . 'js/wolfnet.src.js',
+                array('jquery', 'tooltipjs'),
+                ),
+            'wolfnet-admin' => array(
+                $this->url . 'js/wolfnetAdmin.src.js',
+                array('jquery-ui-dialog', 'jquery-ui-tabs', 'jquery-ui-datepicker', 'wolfnet'),
+                ),
+            'wolfnet-scrolling-items' => array(
+                $this->url . 'js/jquery.wolfnetScrollingItems.src.js',
+                array('smooth-div-scroll', 'wolfnet'),
+                ),
+            'wolfnet-quick-search' => array(
+                $this->url . 'js/jquery.wolfnetQuickSearch.src.js',
+                array('jquery', 'wolfnet'),
+                ),
+            'wolfnet-listing-grid' => array(
+                $this->url . 'js/jquery.wolfnetListingGrid.src.js',
+                array('jquery', 'tooltipjs', 'imagesloadedjs', 'wolfnet'),
+                ),
+            'wolfnet-toolbar' => array(
+                $this->url . 'js/jquery.wolfnetToolbar.src.js',
+                array('jquery', 'wolfnet'),
+                ),
+            'wolfnet-property-list' => array(
+                $this->url . 'js/jquery.wolfnetPropertyList.src.js',
+                array('jquery', 'wolfnet'),
+                ),
+            'wolfnet-shortcode-builder' => array(
+                $this->url . 'js/jquery.wolfnetShortcodeBuilder.src.js',
+                array('jquery-ui-widget', 'jquery-effects-core', 'wolfnet-admin'),
+                ),
+            );
+
+        foreach ($scripts as $script => $data) {
+            $params   = array($script);
+            if (is_array($data) && count($data) > 0) {
+                $params[] = $data[0];
+                $params[] = (count($data) > 1) ? $data[1] : array();
+                $params[] = (count($data) > 2) ? $data[2] : $this->version;
+                $params[] = (count($data) > 3) ? $data[3] : false;
+
+                call_user_func_array('wp_register_script', $params);
+
+                if ($script == 'wolfnet') {
+                    wp_localize_script('wolfnet', 'wolfnet_ajax', $this->localizedScriptData());
+                }
+
+            }
+
+        }
+
+    }
+
+
+    private function registerStyles()
+    {
+        global $wp_scripts;
+        $jquery_ui = $wp_scripts->query('jquery-ui-core');
+
+        $styles = array(
+            'wolfnet' => array(
+                $this->url . 'css/wolfnet.src.css'
+                ),
+            'wolfnet-admin' => array(
+                $this->url . 'css/wolfnetAdmin.src.css',
+                ),
+            'jquery-ui' => array(
+                'http://ajax.googleapis.com/ajax/libs/jqueryui/' . $jquery_ui->ver
+                    . '/themes/smoothness/jquery-ui.css'
+                ),
+            );
+
+        foreach ($styles as $style => $data) {
+            $params   = array($style);
+            $params[] = $data[0];
+            $params[] = (count($data) > 1) ? $data[1] : array();
+            $params[] = (count($data) > 2) ? $data[2] : $this->version;
+            $params[] = (count($data) > 3) ? $data[3] : 'screen';
+
+            call_user_func_array('wp_register_style', $params);
+
+        }
+
+    }
+
+
+    private function registerAjaxActions()
+    {
+        $ajxActions = array(
+            'wolfnet_content'           => 'remoteContent',
+            'wolfnet_content_header'    => 'remoteContentHeader',
+            'wolfnet_content_footer'    => 'remoteContentFooter',
+            'wolfnet_listings'          => 'remoteListings',
+            'wolfnet_sort_options'      => 'remoteSortOptions',
+            'wolfnet_listings_per_page' => 'remoteListingsPerPage',
+            'wolfnet_get_listings'      => 'remoteListingsGet',
+            );
+
+        foreach ($ajxActions as $action => $method) {
+            $this->addAction('wp_ajax_nopriv_' . $action, array(&$this, $method));
+        }
+
+    }
+
+
+    private function registerAdminAjaxActions()
+    {
+        $ajxActions = array(
+            'wolfnet_validate_key'            => 'remoteValidateProductKey',
+            'wolfnet_saved_searches'          => 'remoteGetSavedSearchs',
+            'wolfnet_save_search'             => 'remoteSaveSearch',
+            'wolfnet_delete_search'           => 'remoteDeleteSearch',
+            'wolfnet_scb_options_featured'    => 'remoteShortcodeBuilderOptionsFeatured',
+            'wolfnet_scb_options_grid'        => 'remoteShortcodeBuilderOptionsGrid',
+            'wolfnet_scb_options_list'        => 'remoteShortcodeBuilderOptionsList',
+            'wolfnet_scb_options_quicksearch' => 'remoteShortcodeBuilderOptionsQuickSearch',
+            'wolfnet_scb_savedsearch'         => 'remoteShortcodeBuilderSavedSearch',
+            'wolfnet_content'                 => 'remoteContent',
+            'wolfnet_content_header'          => 'remoteContentHeader',
+            'wolfnet_content_footer'          => 'remoteContentFooter',
+            'wolfnet_listings'                => 'remoteListings',
+            'wolfnet_sort_options'            => 'remoteSortOptions',
+            'wolfnet_listings_per_page'       => 'remoteListingsPerPage',
+            'wolfnet_get_listings'            => 'remoteListingsGet',
+            );
+
+        foreach ($ajxActions as $action => $method) {
+            $this->addAction('wp_ajax_' . $action, array(&$this, $method));
+        }
 
     }
 

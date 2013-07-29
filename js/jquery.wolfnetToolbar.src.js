@@ -599,6 +599,9 @@ if ( typeof jQuery != 'undefined' ) {
 
                     }
 
+                    var loadingMask = $('<div class="wolfnet_loadingMask"></div>')
+                        .appendTo($listingContainer);
+
                     $listingContainer.trigger('wolfnet.toolbarsRendered');
 
                 });

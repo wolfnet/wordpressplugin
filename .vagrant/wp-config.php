@@ -79,6 +79,9 @@ define('WPLANG', '');
  * in their development environments.
  */
 define('WP_DEBUG', true);
+define('WP_DEBUG_DISPLAY', true);
+define('SCRIPT_DEBUG', true);
+define('SAVEQUERIES', true);
 
 /* That's all, stop editing! Happy blogging. */
 
