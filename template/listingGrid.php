@@ -22,11 +22,11 @@
         var instance = <?php echo "'#" . $instance_id . "';"; ?>
 
         $(instance).wolfnetToolbar({
-             numrows     : <?php echo $numrows . "\n"; ?>
-            ,ownertype   : <?php echo "'" . $ownertype . "'" . "\n"; ?>
-            ,criteria    : <?php echo ((trim($criteria)!='') ? $criteria : '{}')  . "\n"; ?>
-            ,max_results : <?php echo $maxresults . "\n"; ?>
-            ,baseUrl     : <?php echo "'" . $siteUrl . "'" . "\n"; ?>
+             numrows          : <?php echo $numrows . "\n"; ?>
+            ,criteria         : <?php echo ((trim($criteria)!='') ? $criteria : '{}')  . "\n"; ?>
+            ,maxResults       : <?php echo $maxresults . "\n"; ?>
+            ,itemsPerPageData : <?php echo json_encode($itemsPerPage) . "\n"; ?>
+            ,sortOptionsData  : <?php echo json_encode($sortOptions) . "\n"; ?>
         });
         $(instance).filter('.wolfnet_listingGrid').wolfnetListingGrid();
         $(instance).filter('.wolfnet_propertyList').wolfnetPropertyList();

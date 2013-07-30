@@ -648,28 +648,6 @@ class wolfnet
     }
 
 
-    public function remoteSortOptions()
-    {
-        $sortOptions = $this->getSortOptions();
-
-        echo json_encode($sortOptions);
-
-        die;
-
-    }
-
-
-    public function remoteListingsPerPage()
-    {
-        $itemsPerPage = $this->getItemsPerPage();
-
-        echo json_encode($itemsPerPage);
-
-        die;
-
-    }
-
-
     public function remoteListingsGet()
     {
         $args = $this->getListingGridOptions($_REQUEST);
@@ -888,7 +866,7 @@ class wolfnet
             'listingsHtml'  => $listingsHtml,
             'siteUrl'       => site_url(),
             'criteria'      => json_encode($criteria),
-            'class'         => 'wolfnet_listingGrid',
+            'class'         => 'wolfnet_listingGrid ',
             'toolbarTop'    => '',
             'toolbarBottom' => '',
             'maxresults'    => ((count($listingsData) > 0) ? $listingsData[0]->maxresults : 0),
@@ -899,6 +877,14 @@ class wolfnet
         if ($vars['paginated'] || $vars['sortoptions']) {
             $vars['toolbarTop']    = $this->getToolbar($vars, 'wolfnet_toolbarTop ');
             $vars['toolbarBottom'] = $this->getToolbar($vars, 'wolfnet_toolbarBottom ');
+        }
+
+        if ($vars['paginated']) {
+            $vars['class'] .= 'wolfnet_withPagination ';
+        }
+
+        if ($vars['sortoptions']) {
+            $vars['class'] .= 'wolfnet_withSortOptions ';
         }
 
         return $this->listingGridView($vars);
@@ -963,7 +949,7 @@ class wolfnet
             'listingsHtml'  => $listingsHtml,
             'siteUrl'       => site_url(),
             'criteria'      => json_encode($criteria),
-            'class'         => 'wolfnet_propertyList',
+            'class'         => 'wolfnet_propertyList ',
             'toolbarTop'    => '',
             'toolbarBottom' => '',
             'maxresults'    => ((count($listingsData) > 0) ? $listingsData[0]->maxresults : 0),
@@ -974,6 +960,14 @@ class wolfnet
         if ($vars['paginated'] || $vars['sortoptions']) {
             $vars['toolbarTop']    = $this->getToolbar($vars, 'wolfnet_toolbarTop ');
             $vars['toolbarBottom'] = $this->getToolbar($vars, 'wolfnet_toolbarBottom ');
+        }
+
+        if ($vars['paginated']) {
+            $vars['class'] .= 'wolfnet_withPagination ';
+        }
+
+        if ($vars['sortoptions']) {
+            $vars['class'] .= 'wolfnet_withSortOptions ';
         }
 
         return $this->propertyListView($vars);
@@ -1194,6 +1188,9 @@ class wolfnet
 
     public function propertyListView(array $args=array())
     {
+        $args['itemsPerPage'] = $this->getItemsPerPage();
+        $args['sortOptions'] = $this->getSortOptions();
+
         foreach ($args as $key => $item) {
             $args[$key] = apply_filters('wolfnet_propertyListView_' . $key, $item);
         }
@@ -1208,6 +1205,9 @@ class wolfnet
 
     public function listingGridView(array $args=array())
     {
+        $args['itemsPerPage'] = $this->getItemsPerPage();
+        $args['sortOptions'] = $this->getSortOptions();
+
         foreach ($args as $key => $item) {
             $args[$key] = apply_filters('wolfnet_listingGridView_' . $key, $item);
         }
@@ -1641,14 +1641,6 @@ class wolfnet
             'action'       => 'wolfnet_listings'
             ));
 
-        if ($data['paginated']) {
-            $args['toolbarClass'] .= 'wolfnet_withPagination ';
-        }
-
-        if ($data['sortoptions']) {
-            $args['toolbarClass'] .= 'wolfnet_withSortOptions ';
-        }
-
         $args['nextClass'] = ($args['lastitem']>=$args['maxresults']) ? 'wolfnet_disabled' : '';
 
         if ($args['lastitem'] > $args['maxresults']) {
@@ -2069,8 +2061,6 @@ class wolfnet
             'wolfnet_content_header'    => 'remoteContentHeader',
             'wolfnet_content_footer'    => 'remoteContentFooter',
             'wolfnet_listings'          => 'remoteListings',
-            'wolfnet_sort_options'      => 'remoteSortOptions',
-            'wolfnet_listings_per_page' => 'remoteListingsPerPage',
             'wolfnet_get_listings'      => 'remoteListingsGet',
             );
 
@@ -2097,8 +2087,6 @@ class wolfnet
             'wolfnet_content_header'          => 'remoteContentHeader',
             'wolfnet_content_footer'          => 'remoteContentFooter',
             'wolfnet_listings'                => 'remoteListings',
-            'wolfnet_sort_options'            => 'remoteSortOptions',
-            'wolfnet_listings_per_page'       => 'remoteListingsPerPage',
             'wolfnet_get_listings'            => 'remoteListingsGet',
             );
 

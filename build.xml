@@ -2,7 +2,7 @@
 
 
 	<property name="majorVersion" value="1.3" />
-	<property name="minorVersion" value="16a2" />
+	<property name="minorVersion" value="16a4" />
 	<property name="version" value="${majorVersion}.${minorVersion}" />
 
 	<property name="dir.ant"   value="${basedir}/.ant" />
