@@ -88,7 +88,7 @@
 			<zipfileset dir="${dir.build}" prefix="${ant.project.name}" />
 		</zip>
 		<zip destfile="${dist.name}_src.zip" compress="true">
-			<zipfileset dir="${basedir}" prefix="${ant.project.name}" />
+			<zipfileset dir="${basedir}" prefix="${ant.project.name}" excludes="dist/*,.vagrant/temp/*,.vagrant/machines/*" />
 		</zip>
 	</target>
 
