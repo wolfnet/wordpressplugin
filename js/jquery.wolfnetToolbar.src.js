@@ -331,6 +331,9 @@ if ( typeof String.prototype.wolfnetPriceFormat !== 'function' ) {
 
                 delete opts.criteria;
                 delete state.criteria;
+                delete state.prices;
+                delete state.ownertypes;
+                delete state.savedsearches;
 
                 for (var i in state) {
                     var isNameField  = (i.indexOf('_wpname') !== -1);
