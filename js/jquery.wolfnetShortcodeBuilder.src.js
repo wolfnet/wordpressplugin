@@ -83,7 +83,8 @@ jQuery(function($){
                     openPage('menu');
                     // Also reset all forms within the builder back to their defaults.
                     $builderDialog.find('form').trigger('reset');
-                }
+                },
+                dialogClass: 'wolfnet_dialog'
             });
             createMenuPage();
             createLoader();

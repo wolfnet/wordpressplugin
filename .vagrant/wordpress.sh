@@ -2,6 +2,8 @@
 
 runfile=".runonce.wordpress.vagrant"
 tempdir="/vagrant/.vagrant/temp"
+# wpVersion="3.5.2"
+wpVersion="3.6"
 
 if [ ! -f "${runfile}" ]; then
 
@@ -9,14 +11,14 @@ if [ ! -f "${runfile}" ]; then
         mkdir -p "${tempdir}"
     fi
 
-    if [ ! -f "${tempdir}/wordpress-3.5.2.tar.gz" ]; then
+    if [ ! -f "${tempdir}/wordpress-${wpVersion}.tar.gz" ]; then
         echo "Downloading wordpress code ..."
-        wget -qO "${tempdir}/wordpress-3.5.2.tar.gz" http://wordpress.org/wordpress-3.5.2.tar.gz
+        wget -qO "${tempdir}/wordpress-${wpVersion}.tar.gz" "http://wordpress.org/wordpress-${wpVersion}.tar.gz"
     fi
 
     echo "Installing wordpress ..."
     rm -rf /var/www/*
-    tar -xzf "${tempdir}/wordpress-3.5.2.tar.gz" -C /var/www --strip-components 1
+    tar -xzf "${tempdir}/wordpress-${wpVersion}.tar.gz" -C /var/www --strip-components 1
 
     echo "Configure wordpress ..."
     rm -f /var/www/wp-config.php
