@@ -1569,10 +1569,8 @@ class wolfnet
 
     private function augmentListingData(&$listing)
     {
-        setlocale(LC_MONETARY, 'en_US');
-
         if (is_numeric($listing->listing_price)) {
-            $listing->listing_price = money_format('%.0n', $listing->listing_price);
+            $listing->listing_price = '$' . number_format($listing->listing_price);
         }
 
         $listing->location = $listing->city;
@@ -1786,12 +1784,10 @@ class wolfnet
         $values = $this->getPricesFromApi();
         $data   = array();
 
-        setlocale(LC_MONETARY, 'en_US');
-
         foreach ($values as $value) {
             $data[] = array(
                 'value' => trim($value),
-                'label' => (is_numeric($value)) ? money_format('%.0n', trim($value)) : $value
+                'label' => (is_numeric($value)) ? '$' . number_format(trim($value)) : $value
                 );
         }
 
