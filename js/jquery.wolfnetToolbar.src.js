@@ -30,7 +30,7 @@ if ( typeof String.prototype.wolfnetPriceFormat !== 'function' ) {
     var sortClass  = 'wolfnet_sortoptions';
 
     var defaultOptions = {
-        sort             : '',
+        sort             : 'price_desc',
         maxResults       : 250,
         criteria         : {},
         itemsPerPageData : [5,10,15,20,25,30,35,40,45,50],
@@ -122,22 +122,32 @@ if ( typeof String.prototype.wolfnetPriceFormat !== 'function' ) {
             var $bedBath = $('<span>')
                 .addClass('wolfnet_bed_bath')
                 .attr('title', data[i].bedrooms + ' Bedrooms & ' + data[i].bathroom + ' Bathrooms')
-                .html(data[i].bedrooms + 'bd/' + data[i].bathroom + 'ba')
                 .appendTo($link);
+
+                if (data[i].bedrooms != '' && data[i].bedrooms != 'n/a') {
+                    $bedBath.append(data[i].bedrooms + 'bd');
+                }
+
+                if (data[i].bathroom != '' && data[i].bathroom != 'n/a') {
+                    if ($bedBath.text() != '') {
+                        $bedBath.append('/');
+                    }
+                    $bedBath.append(data[i].bathroom + 'ba');
+                }
 
             var $locationContainer = $('<span>')
                 .attr('title', fullAddress)
                 .appendTo($link);
 
+            var $address = $('<span>')
+                .addClass('wolfnet_address')
+                .html(data[i].display_address)
+                .appendTo($locationContainer);
+
             var $location = $('<span>')
                 .addClass('wolfnet_location')
                 .attr('itemprop', 'locality')
                 .html(cityState)
-                .appendTo($locationContainer);
-
-            var $address = $('<span>')
-                .addClass('wolfnet_address')
-                .html(data[i].display_address)
                 .appendTo($locationContainer);
 
             var $fullAddress = $('<span>')
@@ -261,7 +271,7 @@ if ( typeof String.prototype.wolfnetPriceFormat !== 'function' ) {
             for (var i=0,l=options.sortOptionsData.length; i<l; i++) {
                 var sort = options.sortOptionsData[i];
 
-                $('<option>').attr('value', sort.value).text(sort.label).appendTo($select);
+                $('<option>').text(sort.label).attr('value', sort.value).appendTo($select);
 
             }
 
@@ -272,7 +282,7 @@ if ( typeof String.prototype.wolfnetPriceFormat !== 'function' ) {
         }
 
         $container.find('span.' + sortClass + ' select').each(function(){
-            $(this).val(Number(state.sort));
+            $(this).val(state.sort);
         });
 
     };
@@ -327,7 +337,7 @@ if ( typeof String.prototype.wolfnetPriceFormat !== 'function' ) {
             return this.each(function() {
                 var $container = $(this);
                 var opts = $.extend(true, {}, defaultOptions, options);
-                var state = $.extend(true, {}, opts.criteria, {page:1});
+                var state = $.extend(true, {}, opts.criteria, opts, {page:1});
 
                 delete opts.criteria;
                 delete state.criteria;
