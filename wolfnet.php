@@ -116,6 +116,7 @@ class wolfnet
 
     public function scripts()
     {
+        do_action($this->preHookPrefix . 'enqueueResources'); // Legacy hook
 
         // JavaScript
         $scripts = array(
@@ -146,11 +147,15 @@ class wolfnet
             wp_enqueue_style($style);
         }
 
+        do_action($this->postHookPrefix . 'enqueueResources'); // Legacy hook
+
     }
 
 
     public function widgetInit()
     {
+        do_action($this->preHookPrefix . 'registerWidgets'); // Legacy hook
+
         require_once $this->dir . '/widget/FeaturedListingsWidget.php';
         register_widget('Wolfnet_FeaturedListingsWidget');
 
@@ -162,6 +167,8 @@ class wolfnet
 
         require_once $this->dir . '/widget/QuickSearchWidget.php';
         register_widget('Wolfnet_QuickSearchWidget');
+
+        do_action($this->postHookPrefix . 'registerWidgets'); // Legacy hook
 
     }
 
@@ -186,6 +193,8 @@ class wolfnet
     public function adminMenu()
     {
         $lvl = 'administrator';
+
+        do_action($this->preHookPrefix . 'createAdminPages'); // Legacy hook
 
         $pgs = array(
             array(
@@ -233,11 +242,14 @@ class wolfnet
 
         }
 
+        do_action($this->postHookPrefix . 'createAdminPages'); // Legacy hook
+
     }
 
 
     public function adminScripts()
     {
+        do_action($this->preHookPrefix . 'enqueueAdminResources');
 
         // JavaScript
         $scripts = array(
@@ -265,11 +277,15 @@ class wolfnet
             wp_enqueue_style($style);
         }
 
+        do_action($this->postHookPrefix . 'enqueueAdminResources');
+
     }
 
 
     public function footer()
     {
+        do_action($this->preHookPrefix . 'footerDisclaimer'); // Legacy hook
+
         /* If it has been established that we need to output the market disclaimer do so now in the
          * site footer, otherwise do nothing. */
         if (array_key_exists('wolfnet_includeDisclaimer', $_REQUEST)) {
@@ -277,6 +293,8 @@ class wolfnet
             echo $this->getMarketDisclaimer();
             echo '</div>';
         }
+
+        do_action($this->postHookPrefix . 'footerDisclaimer'); // Legacy hook
 
     }
 
@@ -286,6 +304,8 @@ class wolfnet
         $pagename = (array_key_exists('pagename', $_REQUEST)) ? $_REQUEST['pagename'] : '';
         $pagename = str_replace('-', '_', $pagename);
         $prefix   = 'wolfnet_';
+
+        do_action($this->preHookPrefix . 'manageRewritePages'); // Legacy hook
 
         if (substr($pagename, 0, strlen($prefix)) == $prefix) {
 
@@ -315,6 +335,8 @@ class wolfnet
             }
 
         }
+
+        do_action($this->postHookPrefix . 'manageRewritePages'); // Legacy hook
 
     }
 
@@ -382,7 +404,12 @@ class wolfnet
 
     public function sbButton(array $buttons)
     {
+
+        do_action($this->preHookPrefix . 'addShortcodeBuilderButton'); // Legacy hook
+
         array_push($buttons, '|', 'wolfnetShortcodeBuilderButton');
+
+        do_action($this->postHookPrefix . 'addShortcodeBuilderButton'); // Legacy hook
 
         return $buttons;
 
@@ -1887,6 +1914,8 @@ class wolfnet
 
     private function registerCustomPostType()
     {
+        do_action($this->preHookPrefix . 'registerCustomPostTypes'); // Legacy hook
+
         register_post_type($this->customPostTypeSearch, array(
             'public'    => false,
             'show_ui'   => false,
@@ -1910,6 +1939,8 @@ class wolfnet
                 ),
             'register_meta_box_cb' => array(&$this, 'cpSearchMetabox')
             ));
+
+        do_action($this->postHookPrefix . 'registerCustomPostTypes'); // Legacy hook
 
     }
 
