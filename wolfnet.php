@@ -23,13 +23,60 @@ class wolfnet
     /*                 |_|                                                                        */
     /* ****************************************************************************************** */
 
+    /**
+     * This property holds the current version number of the plugin. The value is actually generated
+     * as part of the Ant build process that is run when the plugin is packaged for distribution.
+     * @var string
+     */
     private $version              = '{X.X.X}';
+
+    /**
+     * This property is used to set the option group for the plugin which creates a namespaced
+     * collection of variables which are used in saving widget settings.
+     * @var string
+     */
     private $optionGroup          = 'wolfnet';
+
+    /**
+     * This property is used to define the 'search' custom type which is how "Search Manager"
+     * searches are saved.
+     * @var string
+     */
     private $customPostTypeSearch = 'wolfnet_search';
+
+    /**
+     * This property is a unique idenitfier that is used to define a plugin option which saves the
+     * product key used by the plugin to retreive data from the WolfNet API.
+     * @var string
+     */
     private $productKeyOptionKey  = 'wolfnet_productKey';
+
+    /**
+     * This property is a unique identifier for a value in the WordPress Transient API where
+     * references to other transient values are stored.
+     * @var string
+     */
     private $transientIndexKey    = 'wolfnet_transients';
+
+    /**
+     * This property difines a the request parameter which is used to determine if the values which
+     * are cached in the Transient API should be cleared.
+     * @var string
+     */
     private $cacheFlag            = '-wolfnet-cache';
+
+    /**
+     * This property is used to prefix custom hooks which are defined in the plugin. Specifically
+     * this prefix is used for hooks which are executed before a certain portion of code.
+     * @var string
+     */
     private $preHookPrefix        = 'wolfnet_pre_';
+
+    /**
+     * This property is used to prefix custom hooks which are defined in the plugin. Specifically
+     * this prefix is used for hooks which are executed after a certain portion of code.
+     * @var string
+     */
     private $postHookPrefix       = 'wolfnet_post_';
 
 
@@ -42,6 +89,11 @@ class wolfnet
     /*                                                                                            */
     /* ****************************************************************************************** */
 
+    /**
+     * This constructor method prepares the plugin for use, defining properties and registering
+     * hooks to be used during the WordPress request cycle.
+     * @return void
+     */
     public function __construct()
     {
 
@@ -93,6 +145,11 @@ class wolfnet
     /*                                                                                            */
     /* ****************************************************************************************** */
 
+    /**
+     * This method is a callback for the 'init' hook. Any processes which must be run before the
+     * request continues that are not run as part of the constructor method are run in this method.
+     * @return void
+     */
     public function init()
     {
 
@@ -114,6 +171,12 @@ class wolfnet
     }
 
 
+    /**
+     * This method is a callback for the 'wp_enqueue_scripts' hook. Any JavaScript files (and their
+     * dependacies) which are needed by the plugin for public interfaces are registered in this
+     * method.
+     * @return void
+     */
     public function scripts()
     {
         do_action($this->preHookPrefix . 'enqueueResources'); // Legacy hook
@@ -135,6 +198,11 @@ class wolfnet
     }
 
 
+    /**
+     * This method is a callback for the 'wp_enqueue_scripts' hook. Any CSS files which are needed
+     * by the plugin for public areas are registered in this method.
+     * @return void
+     */
     public function styles()
     {
 
@@ -152,6 +220,11 @@ class wolfnet
     }
 
 
+    /**
+     * This method is a callback for the 'widgets_init' hook. All widgets for the plugin are
+     * registered in this method.
+     * @return void
+     */
     public function widgetInit()
     {
         do_action($this->preHookPrefix . 'registerWidgets'); // Legacy hook
@@ -173,6 +246,12 @@ class wolfnet
     }
 
 
+    /**
+     * This method is a callback for the 'admin_init' hook. Any processes which are unique to the
+     * admin interface of WordPress and have not been run as either part of the constructor method
+     * or the 'init' hook are run in this method.
+     * @return void
+     */
     public function adminInit()
     {
 
@@ -190,6 +269,11 @@ class wolfnet
     }
 
 
+    /**
+     * This method is a callback for the 'admin_menu' hook. This method is used to create any admin
+     * menu pages for the plugin.
+     * @return void
+     */
     public function adminMenu()
     {
         $lvl = 'administrator';
@@ -247,6 +331,12 @@ class wolfnet
     }
 
 
+    /**
+     * This method is a callback for the 'admin_enqueue_scripts' hook. Any JavaScript files (and
+     * their dependacies) which are needed by the plugin for admin interfaces are registered in this
+     * method.
+     * @return void
+     */
     public function adminScripts()
     {
         do_action($this->preHookPrefix . 'enqueueAdminResources');
@@ -264,6 +354,11 @@ class wolfnet
     }
 
 
+    /**
+     * This method is a callback for the 'admin_enqueue_scripts' hook. Any CSS files which are
+     * needed by the plugin for areas areas are registered in this method.
+     * @return void
+     */
     public function adminStyles()
     {
 
@@ -282,6 +377,11 @@ class wolfnet
     }
 
 
+    /**
+     * This method is a callback for the 'wp_footer' hook. Currently this method is used to display
+     * market disclaimer information if necessary for the request.
+     * @return void
+     */
     public function footer()
     {
         do_action($this->preHookPrefix . 'footerDisclaimer'); // Legacy hook
@@ -299,6 +399,12 @@ class wolfnet
     }
 
 
+    /**
+     * This method is a callback for the 'template_redirect' hook. This method intercepts the
+     * WordPress request cycle when specific URI are requested. Specifically this method exposes
+     * URIs for getting header and footer HTML for the site.
+     * @return void
+     */
     public function templateRedirect()
     {
         $pagename = (array_key_exists('pagename', $_REQUEST)) ? $_REQUEST['pagename'] : '';
@@ -341,6 +447,12 @@ class wolfnet
     }
 
 
+    /**
+     * This method is a callback for the 'do_parse_request' filter. This method checks for a
+     * specific pagename prefix and if it is present the WordPress should not parse the request.
+     * @param Boolean $req
+     * @return void
+     */
     public function doParseRequest($req)
     {
         $pagename = (array_key_exists('pagename', $_REQUEST)) ? $_REQUEST['pagename'] : '';
