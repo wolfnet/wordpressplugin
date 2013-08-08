@@ -59,6 +59,13 @@ class wolfnet
     private $transientIndexKey    = 'wolfnet_transients';
 
     /**
+     * The maximum amount of time a wolfnet value should be stored in the as a transient object.
+     * Currently set to 1 week.
+     * @var integer
+     */
+    private $transientMaxExpiration = 604800;
+
+    /**
      * This property difines a the request parameter which is used to determine if the values which
      * are cached in the Transient API should be cleared.
      * @var string
@@ -1632,7 +1639,7 @@ class wolfnet
             elseif (is_wp_error($http) || $http['response']['code'] >= 400) {
                 $data->error->message = 'A connection error occurred!';
                 $index[$key] = $time;
-                set_transient($key, $data, 0);
+                set_transient($key, $data, $this->transientMaxExpiration);
             }
             else {
                 $tmp = json_decode($http['body']);
@@ -1650,7 +1657,7 @@ class wolfnet
                 }
 
                 $index[$key] = $time + $cacheFor;
-                set_transient($key, $data, 0);
+                set_transient($key, $data, $this->transientMaxExpiration);
 
             }
 
@@ -1676,7 +1683,7 @@ class wolfnet
 
         // Set transient index data.
         if ($data !== null && is_array($data)) {
-            set_transient($key, $data, 0);
+            set_transient($key, $data, $this->transientMaxExpiration);
         }
         // Get transient index data.
         else {
@@ -1690,6 +1697,13 @@ class wolfnet
 
         return $data;
 
+    }
+
+
+    private function deleteTransientIndex()
+    {
+        $this->clearTransients();
+        delete_transient($this->transientIndexKey);
     }
 
 
