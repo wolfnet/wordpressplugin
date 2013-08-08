@@ -2084,6 +2084,7 @@ class wolfnet
         foreach ($shrtCodes as $code => $method) {
             add_shortcode($code, array(&$this, $method));
         }
+
     }
 
 
