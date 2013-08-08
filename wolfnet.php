@@ -113,6 +113,7 @@ class wolfnet
         }
 
         register_activation_hook(__FILE__, array($this, 'activate'));
+        register_deactivation_hook(__FILE__, array($this, 'activate'));
 
         // Register actions.
         $this->addAction(array(
@@ -167,6 +168,14 @@ class wolfnet
         }
 
         delete_transient($key);
+
+    }
+
+
+    public function deactivate()
+    {
+        // Clear out all transient data as it is purely for caching and performance.
+        $this->deleteTransientIndex();
 
     }
 
