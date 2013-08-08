@@ -7,3 +7,6 @@ css/*.min.css
 js/*.min.js
 Desktop.ini
 *.sublime*
+
+/vendor/
+.vagrant/temp/*

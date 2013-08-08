@@ -1,9 +1,0 @@
-[submodule "com/greentiedev/phpCommon"]
-	path = com/greentiedev/phpCommon
-	url = git://github.com/wolfnet/phpCommon.git
-[submodule "com/greentiedev/wppf"]
-	path = com/greentiedev/wppf
-	url = git://github.com/wolfnet/wppf.git
-[submodule "com/greentiedev/phpSpring"]
-	path = com/greentiedev/phpSpring
-	url = git://github.com/wolfnet/phpSpring.git

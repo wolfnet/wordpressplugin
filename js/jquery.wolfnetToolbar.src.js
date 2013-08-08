@@ -1,604 +1,502 @@
+if ( typeof String.prototype.wolfnetPriceFormat !== 'function' ) {
+    String.prototype.wolfnetPriceFormat = function() {
+        var number = this.valueOf();
+        var dollars = number.split('.')[0];
+        var dollars = dollars
+            .split('')
+            .reverse()
+            .join('')
+            .replace(/(\d{3}(?!$))/g, '$1,')
+            .split('')
+            .reverse()
+            .join('');
 
-/**
- * Plugin for pagination tools and results toolbar.
- * Results toolbar contains:
- * 		-Sort dropdown
- *  	-Results count display (i.e. "Results 1-XX of XXXX")
- *		-Show XX per page dropdown
- *
- * Pagination tools contains Previous/Next (only if enabled via admin)
- */
+        return '$' + dollars;
+    }
+}
 
-if ( typeof jQuery != 'undefined' ) {
+(function($){
 
-	(function ($) {
+    var plugin = 'wolfnetToolbar';
 
+    var stateKey = plugin + '.state';
+    var optionsKey = plugin + '.options';
 
-		var priceFormatter = function ( number )
-		{
-			var number = number.toString();
-			var dollars = number.split('.')[0];
-			var dollars = dollars
-				.split('')
-				.reverse()
-				.join('')
-				.replace(/(\d{3}(?!$))/g, '$1,')
-				.split('')
-				.reverse()
-				.join('');
+    var UPDATED = 'wolfnet.updated';
 
-			return '$' + dollars;
+    var nextClass  = 'a.wolfnet_page_nav_next';
+    var prevClass  = 'a.wolfnet_page_nav_prev';
+    var itemsClass = 'wolfnet_page_items_select';
+    var sortClass  = 'wolfnet_sortoptions';
 
-		} // end method priceFormatter
+    var defaultOptions = {
+        sort             : 'price_desc',
+        maxResults       : 250,
+        criteria         : {},
+        itemsPerPageData : [5,10,15,20,25,30,35,40,45,50],
+        sortOptionsData  : [
+            {value:'price_desc', label:'Descending by Price'},
+            {value:'price', label:'Ascending by Price'}
+            ]
+        };
 
+    var renderPropertyList = function(data)
+    {
+        var data = ($.isArray(data)) ? data : [];
+        var $container = this;
+        var $listings = $('<div>').addClass('wolfnet_listings');
 
-        String.prototype.wntTruncateString = function (length, sufix)
-        {
-            var sufix = sufix || '...';
-            var length = length - sufix.length;
+        for (var i=0, l=data.length; i<l; i++) {
+            var cityState   = data[i].city + ', ' + data[i].state;
+            var fullAddress = data[i].display_address + ', ' + cityState;
 
-            if (this.length > length) {
-                return this.valueOf().substr(0, length) + sufix;
-            }
+            var $listing = $('<div>')
+                .attr('id', 'wolfnet_listing_' + data[i].property_id)
+                .addClass('wolfnet_listing')
+                .appendTo($listings);
 
-            return this.valueOf()
+            var $link = $('<a>')
+                .attr({'href':data[i].property_url, 'title':fullAddress})
+                .appendTo($listing);
+
+            var $location = $('<span>')
+                .addClass('wolfnet_full_address')
+                .html(fullAddress)
+                .appendTo($link);
+
+            var $price = $('<span>')
+                .addClass('wolfnet_price')
+                .attr('itemprop', 'price')
+                .html(data[i].listing_price.toString().wolfnetPriceFormat())
+                .appendTo($link);
+
+            var $streetAddress = $('<span>')
+                .attr('itemprop', 'street-address')
+                .css('display', 'none')
+                .html(fullAddress)
+                .appendTo($link);
 
         }
 
+        $container.find('.wolfnet_listings').replaceWith($listings);
+
+    }
+
+    var renderListingGrid = function(data)
+    {
+        var data = ($.isArray(data)) ? data : [];
+        var $container = this;
+        var $listings = $('<div>').addClass('wolfnet_listings');
+
+        for (var i=0, l=data.length; i<l; i++) {
+            var brokerLogo  = data[i].branding.brokerLogo  || null;
+            var brokerName  = data[i].branding.content || null;
+            var cityState   = data[i].city + ', ' + data[i].state;
+            var fullAddress = data[i].display_address + ', ' + cityState;
+            var hasBranding = (brokerLogo == null && brokerName == null) ? false : true ;
 
-		$.fn.wolfnetToolbar = function ( options ) {
-
-			var defaultOptions = {
-				sort        : '',
-				max_results : 250,
-				criteria    : {}
-				};
-			var options        = $.extend( defaultOptions, options );
-			var datakey        = 'wolfnet.toolbarData';
-
-
-			var getLastPageNum = function ( numrows, rowcount )
-			{
-				return Math.ceil( Number(rowcount) / Number(numrows) );
-			} // end method getLastPageNum
+            var $listing = $('<div>')
+                .addClass('wolfnet_listing')
+                .addClass( (hasBranding) ? 'wolfnet_branded' : '' )
+                .attr('id', 'wolfnet_listing_' + data[i].property_id)
+                .appendTo($listings);
+
+            var $link = $('<a>')
+                .attr('href',data[i].property_url)
+                .appendTo($listing);
+
+            var $imageContainer = $('<span>')
+                .addClass('wolfnet_listingImage')
+                .appendTo($link);
+
+            var $image = $('<img>')
+                .attr('src',data[i].thumbnail_url)
+                .appendTo($imageContainer);
+
+            var $price = $('<span>')
+                .addClass('wolfnet_price')
+                .attr('itemprop', 'price')
+                .html(data[i].listing_price.toString().wolfnetPriceFormat())
+                .appendTo($link);
+
+            var $bedBath = $('<span>')
+                .addClass('wolfnet_bed_bath')
+                .attr('title', data[i].bedrooms + ' Bedrooms & ' + data[i].bathroom + ' Bathrooms')
+                .appendTo($link);
+
+                if (data[i].bedrooms != '' && data[i].bedrooms != 'n/a') {
+                    $bedBath.append(data[i].bedrooms + 'bd');
+                }
+
+                if (data[i].bathroom != '' && data[i].bathroom != 'n/a') {
+                    if ($bedBath.text() != '') {
+                        $bedBath.append('/');
+                    }
+                    $bedBath.append(data[i].bathroom + 'ba');
+                }
+
+            var $locationContainer = $('<span>')
+                .attr('title', fullAddress)
+                .appendTo($link);
+
+            var $address = $('<span>')
+                .addClass('wolfnet_address')
+                .html(data[i].display_address)
+                .appendTo($locationContainer);
+
+            var $location = $('<span>')
+                .addClass('wolfnet_location')
+                .attr('itemprop', 'locality')
+                .html(cityState)
+                .appendTo($locationContainer);
 
-
-			var renderPaginationControls = function ()
-			{
-
-				return $('<span>')
-					.addClass('wolfnet_page_items_select')
-					.append($('<select>')
-						.change(function (event){
-							$(this).trigger('wolfnet.itemsPerPage', [$(this).val(), this]);
-							event.preventDefault();
-							return false;
-						})
-						.append(loadPageOptions.call(this))
-					)
-					.append('per page');
-
-			}
-
+            var $fullAddress = $('<span>')
+                .addClass('wolfnet_full_address')
+                .attr('itemprop', 'street_address')
+                .css('display', 'none')
+                .html(fullAddress)
+                .appendTo($locationContainer);
+
+            if (hasBranding) {
+
+                var $brandingContainer = $('<div>')
+                    .addClass('wolfnet_branding')
+                    .insertAfter($locationContainer);
+
+                if (brokerLogo != null) {
+
+                    var $brokerLogo = $('<span>')
+                        .addClass('wolfnet_brokerLogo')
+                        .append($('<img>').attr('src',brokerLogo))
+                        .appendTo($brandingContainer);
+
+                }
+
+                if (brokerName != null) {
+
+                    var $brokerName = $('<span>')
+                        .addClass('wolfnet_brandingMessage')
+                        .html(brokerName)
+                        .appendTo($brandingContainer);
+
+                }
 
-			var loadPageOptions = function ()
-			{
-				var $container = $(this);
-				// This method could easily be refactored to pull the data in statically rather than with Ajax.
+            }
 
-				// Wait until the toolbars have been added to the DOM.
-				$container.bind("wolfnet.toolbarsRendered", function () {
+        }
 
-					var $select = $container.find('.wolfnet_page_items_select select');
-					var state   = $container.data('state');
+        $container.find('.wolfnet_listings').replaceWith($listings);
 
-					$.ajax({
-						url      : '?pagename=wolfnet-get-showNumberOfListings-dropdown',
-						dataType : 'json'
-					})
-					.done(function (data){
+    }
 
-						// Clear out any existing options.
-						$select.children().remove();
+    // Take the data returned from an Ajax request and use it to render listings.
+    var renderListings = function(data)
+    {
+        var $container = this;
 
-						// If the 'default' value is not in the data set we need to add it.
-						if ( $.inArray( state.numrows, data ) == -1 ) {
-							var newData = [];
-							var defaultUsed = false;
-							for ( var i=0; i<data.length; i++ ) {
-								if ( !defaultUsed && data[i] > state.numrows ) {
-									newData[newData.length] = state.numrows;
-									defaultUsed = true;
-								}
-								newData[newData.length] = data[i];
-							}
-							data = newData;
-						}
-
-						// Add an option to the select element for each item in the array.
-						for ( var key=0; key<data.length; key++ ) {
-							var $option = $('<option>', {value:data[key],text:data[key]} );
-							if ( data[key] == state.numrows ) {
-								$option.attr( 'selected', 'selected' );
-							}
-							$select.append( $option );
-						}
-
-					});
-
-				});
-
-				return '';
-
-			}
-
-
-			var renderSortControls = function ()
-			{
-
-				return $('<span>')
-					.addClass('wolfnet_sortoptions')
-					.append($('<select>')
-						.change(function ( event ){
-							$(this).trigger('wolfnet.sortChange', [$(this).val(), this] );
-							event.preventDefault();
-							return false;
-						})
-						.append(loadSortOptions.call(this))
-					);
+        if ($container.is('.wolfnet_propertyList') || $container.is('.wolfnet_listingGrid')) {
+            $container.find('.wolfnet_listings').children().remove();
+        }
 
-			}
+        if ($container.is('.wolfnet_propertyList')) {
+            renderPropertyList.call($container, data);
+        }
+        else if ($container.is('.wolfnet_listingGrid')) {
+            renderListingGrid.call($container, data);
+        }
 
+        $container.trigger(UPDATED);
 
-			var loadSortOptions = function ()
-			{
-				var $container = $(this);
-				// This method could easily be refactored to pull the data in statically rather than with Ajax.
+    };
 
-				// Wait until the toolbars have been added to the DOM.
-				$container.bind("wolfnet.toolbarsRendered", function () {
+    // Determine if page tools should be rendered and do so if they do.
+    var renderItemsPerPageTool = function()
+    {
+        var $container = $(this);
+        var $itemsDropDown = $container.find('span.' + itemsClass);
+        var state = $container.data(stateKey);
+        var options = $container.data(optionsKey);
 
-					var $select = $container.find('.wolfnet_sortoptions select');
-					var state   = $container.data('state');
+        // If there is no dropdown and there should be, create one.
+        if ($itemsDropDown.length == 0 && $container.is('.wolfnet_withPagination')) {
+            var $select = $('<select>');
 
-					$.ajax({
-						url      : '?pagename=wolfnet-get-sortOptions-dropdown',
-						dataType : 'json'
-					})
-					.done( function ( data ) {
+            // Register change event handler to trigger an update when the tool is changed.
+            $select.change(function(){
+                state.numrows = $(this).val();
+                $container.data(stateKey, state);
+                $container.find('span.' + itemsClass + ' select').val(state.numrows);
+                methods.update.call($container);
+            });
 
-						// Clear out any existing options.
-						$select.children().remove();
+            for (var i=0,l=options.itemsPerPageData.length; i<l; i++) {
+                var items = options.itemsPerPageData[i];
 
-						for ( var key=0; key<data.length; key++ ) {
-							$select.append(
-								$('<option>', {value:data[key].value,text:data[key].label} )
-							);
-						}
+                $('<option>').attr('value', items).text(items).appendTo($select);
 
-					});
+            }
 
-				});
+            $itemsDropDown = $('<span>').addClass(itemsClass);
+            $itemsDropDown.append($select).append('per page');
+            $itemsDropDown.appendTo($container.find('.wolfnet_toolbar .wolfnet_page_items'));
 
-				return '';
+        }
 
-			}
+        $container.find('span.' + itemsClass + ' select').each(function(){
+            $(this).val(Number(state.numrows));
+        });
 
+    };
 
-			var loadDataEventHandler = function ( event, target )
-			{
-				var $container = $(this);
-				var state      = $container.data('state');
+    // Determine if sort tools should be rendered and do so if they do.
+    var renderSortOptionsTool = function()
+    {
+        var $container = $(this);
+        var $sortDropDown = $container.find('span.' + sortClass + ' select');
+        var state = $container.data(stateKey);
+        var options = $container.data(optionsKey);
 
-				// If data is not already be refreshed attempt to do so.
-				if ( !state.refreshing ) {
-					var options = $container.data(datakey);
-					var data    = $.extend( state, options.criteria );
+        // If there is no dropdown and there should be, create one.
+        if ($sortDropDown.length == 0 && $container.is('.wolfnet_withSortOptions')) {
+            var $select = $('<select>');
 
-					data.ownerType = options.ownerType;
-					delete data['pagename'];
+            // Register change event handler to trigger an update when the tool is changed.
+            $select.change(function(){
+                state.sort = $(this).val();
+                $container.data(stateKey, state);
+                $container.find('span.' + sortClass + ' select').val(state.sort);
+                methods.update.call($container);
+            });
 
-					// Make Ajax call to retrieve data.
-					$.ajax({
-						url      : '?pagename=wolfnet-listings-get',
-						dataType : 'json',
-						data     : data,
-						beforeSend : function () {
-							state.refreshing = true;
-							$container.find('.wolfnet_listings').addClass('wolfnet_refreshing');
-						}
-					})
-					.done(function ( data ) {
-						// Notify the container that the data has been loaded and pass the data to any handlers.
-						$container.trigger( 'wolfnet.dataLoaded', [data,target] );
-					})
-					.always(function () {
-						state.refreshing = false;
-						$container.find('.wolfnet_listings').removeClass('wolfnet_refreshing');
-					});
+            for (var i=0,l=options.sortOptionsData.length; i<l; i++) {
+                var sort = options.sortOptionsData[i];
 
-				}
+                $('<option>').text(sort.label).attr('value', sort.value).appendTo($select);
 
-			}
+            }
 
+            $sortDropDown = $('<span>').addClass(sortClass);
+            $sortDropDown.append($select);
+            $sortDropDown.appendTo($container.find('.wolfnet_toolbar .wolfnet_page_info'));
 
-			var prevPageEventHandler = function ( event, target )
-			{
-				var state    = $(this).data('state');
-				var newStart = Number(state.startrow) - Number(state.numrows);
+        }
 
-				if ( newStart < 1) {
-					newStart = state.max_results - state.numrows + 1;
-				}
+        $container.find('span.' + sortClass + ' select').each(function(){
+            $(this).val(state.sort);
+        });
 
-				if ( newStart < 1 ) {
-					newStart = state.startrow;
-				}
+    };
 
-				// if there is a prev page update state data
-				if ( !state.refreshing && newStart >= 1 ) {
-					state.startrow = newStart;
-					$(this).data( 'state', state );
-					// trigger a data refresh.
-					$(this).trigger('wolfnet.refreshData', target);
-				}
+    var updateEvent = function(event)
+    {
+        var $container = $(this);
+        var $nextBtn = $container.find(nextClass);
+        var $prevBtn = $container.find(prevClass);
+        var state = $container.data(stateKey);
+        var options = $container.data(optionsKey);
+        var maxPage = Math.ceil(options.maxResults / state.numrows);
 
-			}
+        if (state.page <= 1) {
+            $prevBtn.addClass('wolfnet_disabled');
+        }
+        else {
+            $prevBtn.removeClass('wolfnet_disabled');
+        }
 
+        if (state.page >= maxPage) {
+            $nextBtn.addClass('wolfnet_disabled');
+        }
+        else {
+            $nextBtn.removeClass('wolfnet_disabled');
+        }
 
-			var nextPageEventHandler = function ( event, target )
-			{
-				var state    = $(this).data('state');
-				var newStart = Number(state.startrow) + Number(state.numrows);
+        // Update results count display
+        var rowcountDisplay = (Number(state.startrow) - 1) + Number(state.numrows);
 
-				if (newStart >= state.max_results) {
-					newStart = 1;
-				}
+        if (Number(options.maxResults) < rowcountDisplay) {
+            rowcountDisplay = Number(options.maxResults);
+        }
+
+        // Update page information
+        $container.find('.wolfnet_page_start').text(state.startrow);
+        $container.find('.wolfnet_page_end').text(rowcountDisplay);
+
+        $('html,body').scrollTop($container.closest('.wolfnet_widget').offset().top - 100);
+
+        $container.removeClass('wolfnet_refreshing');
+
+        return true;
+
+    };
+
+    var methods = {
+
+        // Initialize the plugin.  All of this code runs once per page request.
+        init : function(options)
+        {
+            return this.each(function() {
+                var $container = $(this);
+                var opts = $.extend(true, {}, defaultOptions, options);
+                var state = $.extend(true, {}, opts.criteria, opts, {page:1});
+
+                delete opts.criteria;
+                delete state.criteria;
+                delete state.prices;
+                delete state.ownertypes;
+                delete state.savedsearches;
+
+                for (var i in state) {
+                    var isNameField  = (i.indexOf('_wpname') !== -1);
+                    var isIdField    = (i.indexOf('_wpid') !== -1);
+                    var isCheckField = (i.indexOf('_wpc') !== -1);
+                    var isSelecField = (i.indexOf('_wps') !== -1);
+
+                    if (isNameField || isIdField || isCheckField || isSelecField) {
+                        delete state[i];
+                    }
 
-				// if there is a next page update state data
-				if ( !state.refreshing && newStart <= state.max_results ) {
-					state.startrow = newStart;
-					$(this).data( 'state', state );
-					// trigger a data refresh.
-					$(this).trigger('wolfnet.refreshData', [target] );
-				}
+                }
 
-			}
+                state.maxresults = opts.maxResults;
 
+                if ($.inArray(Number(state.numrows), opts.itemsPerPageData) === -1) {
+                    opts.itemsPerPageData.push(Number(state.numrows));
+                }
+                opts.itemsPerPageData.sort(function(a,b){
+                    return a - b;
+                });
+
+                $container.data(optionsKey, opts);
+                $container.data(stateKey, state);
+
+                renderItemsPerPageTool.call($container);
+                renderSortOptionsTool.call($container);
+
+                $container.click(function(event){
+                    var $target = $(event.target);
+
+                    if ($target.is(nextClass) || $target.parent().is(nextClass)) {
+                        event.preventDefault();
+                        methods.next.call($container);
+                        return false;
+                    }
+                    else if ($target.is(prevClass) || $target.parent().is(prevClass)) {
+                        event.preventDefault();
+                        methods.prev.call($container);
+                        return false;
+                    }
 
-			var itemsPerPageEventHandler = function ( event, value, target )
-			{
-				var state = $(this).data('state');
-
-				// if the value is acceptable update state data
-				if ( !state.refreshing && value <= state.max_results ) {
-
-					state.numrows  = Number(value);
-					state.startrow = 1;
-
-					$(this).data( 'state', state );
-
-					// update all related input controls
-					$(this).find('.wolfnet_page_items_select select').val(value);
-
-					// trigger a data refresh.
-					$(this).trigger('wolfnet.refreshData', [target]);
-
-				}
-
-			}
-
-
-			var sortChangeEventHandler = function ( event, value, target )
-			{
-				var state = $(this).data('state');
-
-				// if the value is acceptable update state data
-				if ( !state.refreshing && value != state.sort ) {
-
-					state.sort = value;
-					$(this).data( 'state', state );
-
-					// update all related input controls
-					$(this).find('.wolfnet_sortoptions select').val(value);
-
-					// trigger a data refresh.
-					$(this).trigger('wolfnet.refreshData', [target]);
-
-				}
-
-			}
-
-
-			var dataLoadedEventHandler = function ( event, data, target )
-			{
-				var $container = $(this);
-				var state      = $container.data('state');
-				var startrow   = state.startrow;
-				var numrows    = state.numrows;
-				var sortBy     = state.sort;
-
-				// Clear pre-existing items
-				$container.find('.wolfnet_listing').remove();
-				$container.find('.wolfnet_clearfix').remove();
-
-				// Render Listing Grid Items
-				if ( $container.hasClass('wolfnet_listingGrid') ) {
-					buildListingGrid.call( $container, data );
-				}
-				// Render Property List Items
-				else if ( $container.hasClass('wolfnet_propertyList') ) {
-					buildPropertyList.call( $container, data );
-				}
-
-				// Update results count display
-				var rowcountDisplay = (Number(startrow) - 1) + Number(numrows);
-
-				// Update page information
-				$container.find('.wolfnet_page_start').text(startrow);
-				$container.find('.wolfnet_page_end').text(rowcountDisplay);
-
-				// clear show # select's options' selected attributes and update
-				$container.find('.wolfnet_page_items_select select').val( numrows );
-
-				// clear the sort option's selected attributes and update
-				$container.find('.wolfnet_sortoptions select').val( sortBy );
-
-				$(this).trigger('wolfnet.listingsRendered',[target]);
-
-			}
-
-
-			var buildListingGrid = function ( data )
-			{
-				var $container = $(this);
-				var $listings  = $container.find('.wolfnet_listings:first').clone();
-				var state      = $container.data('state');
-				var numrows    = state.numrows;
-				var sortBy     = state.sort;
-
-				//START:  loop to rebuild listing grid dom (listingGrid uses listingSimple.php template)
-				for (var i=0; i<data.length; i++) {
-
-					var brokerLogo  = data[i].branding.brokerLogo  || null;
-					var brokerName  = data[i].branding.content || null;
-					var cityState   = data[i].city + ', ' + data[i].state + ' ' + data[i].zip_code;
-					var fullAddress = data[i].display_address + ', ' + cityState;
-					var hasBranding = ( brokerLogo == null && brokerName == null ) ? false : true ;
-
-					var listingEntity = $('<div>')
-						.addClass('wolfnet_listing')
-						.addClass( (hasBranding) ? 'wolfnet_branded' : '' )
-						.attr('id','wolfnet_listing_'+data[i].property_id)
-						.appendTo($listings);
-
-					var link = $('<a>')
-						.attr('href',data[i].property_url)
-						.appendTo(listingEntity);
-
-					var listingImageSpan = $('<span>')
-						.addClass('wolfnet_listingImage')
-						.appendTo(link);
-
-					var listingImgSrc = $('<img>')
-						.attr('src',data[i].thumbnail_url)
-						.appendTo(listingImageSpan);
-
-					var price = $('<span>')
-						.addClass('wolfnet_price')
-						.attr('itemprop','price')
-						.html( priceFormatter(data[i].listing_price) )
-						.appendTo(link);
-
-					var bedbath = $('<span>')
-						.addClass('wolfnet_bed_bath')
-						.attr('title',data[i].bedrooms+' Bedrooms & '+data[i].bathroom+' Bathrooms')
-						.html( data[i].bedrooms + 'bd/' + data[i].bathroom + 'ba' )
-						.appendTo(link);
-
-					var location = $('<span>')
-						.attr('title',fullAddress)
-						.append(
-							$('<span>').addClass('wolfnet_address')
-							.html(data[i].display_address.wntTruncateString(25))
-						)
-                        .append(
-                            $('<span>').addClass('wolfnet_location')
-                                .attr('itemprop','locality')
-                                .html(cityState.wntTruncateString(25))
-                        )
-						.append(
-							$('<span>').addClass('wolfnet_full_address')
-								.attr('itemprop','street_address')
-								.css('display','none')
-								.html(fullAddress)
-						)
-						.appendTo(link);
-
-					if (hasBranding) {
-
-						var branding = $('<div>')
-							.addClass('wolfnet_branding')
-							.insertAfter(location);
-
-						if ( brokerLogo != null ) {
-
-							$('<span>').addClass('wolfnet_brokerLogo')
-								.append( $('<img>').attr('src',brokerLogo) )
-								.appendTo(branding);
-
-						}
-
-						if ( brokerName != null ) {
-
-							$('<span>').addClass('wolfnet_brandingMessage')
-								.html(brokerName)
-								.appendTo(branding);
-
-						}
-
-					}
-
-				}//END: loop to rebuild listing grid dom
-
-				$container.find('.wolfnet_listings:first').replaceWith( $listings );
-
-				$container.wolfnetListingGrid('reload');
-
-			}
-
-
-			var buildPropertyList = function ( data )
-			{
-				var $container = $(this);
-				var $listings  = $container.find('.wolfnet_listings:first').clone();
-				var state      = $container.data('state');
-				var numrows    = state.numrows;
-				var sortBy     = state.sort;
-
-				//START:  rebuild property list dom (propertyList uses listingBrief.php)
-				//loop listings in data object and build new listing entity to append to dom
-				for ( var i=0; i<data.length; i++ ) {
-
-					var cityState   = data[i].city + ', ' + data[i].state + ' ' + data[i].zip_code;
-					var fullAddress = data[i].display_address + ', ' + cityState;
-
-					var listingEntity = $('<div>')
-						.addClass('wolfnet_listing')
-						.attr('id','wolfnet_listing_' + data[i].property_id)
-						.appendTo($listings);
-
-					var link = $('<a>')
-						.attr({'href':data[i].property_url,'title':fullAddress})
-						.appendTo(listingEntity);
-
-					var location = $('<span>')
-						.addClass('wolfnet_full_address')
-						.html(fullAddress)
-						.appendTo(link);
-
-					var price = $('<span>')
-						.addClass('wolfnet_price')
-						.attr('itemprop','price')
-						.html( priceFormatter(data[i].listing_price) )
-						.appendTo(link);
-
-					var streetAddress = $('<span>')
-						.attr('itemprop','street-address')
-						.css('display','none')
-						.html(fullAddress)
-						.appendTo(link);
-
-				}//END: rebuild property list DOM
-
-				$container.find('.wolfnet_listings:first').replaceWith( $listings );
-
-				$container.wolfnetPropertyList();
-
-			}
-
-
-			var listingsRenderedEventHandler = function ( event, target )
-			{
-				var $container = $(this);
-				var state      = $container.data('state');
-
-				if ( state.startrow - state.numrows < 1) {
-					$container.find('a.wolfnet_page_nav_prev').addClass('wolfnet_disabled');
-				}
-				else {
-					$container.find('a.wolfnet_page_nav_prev').removeClass('wolfnet_disabled');
-				}
-
-				if ( state.startrow + state.numrows > state.max_results ) {
-					$container.find('a.wolfnet_page_nav_next').addClass('wolfnet_disabled');
-				}
-				else {
-					$container.find('a.wolfnet_page_nav_next').removeClass('wolfnet_disabled');
-				}
-
-			}
-
-
-			return this.each(function () {
-
-				var $listingContainer = $(this);
-				var $toolbar          = $listingContainer.find('.wolfnet_toolbar');
-
-				$listingContainer.data(datakey, options);
-
-				var stateData = {
-					refreshing  : false,
-					sort        : options.sort,
-					ownerType   : options.ownerType,
-					max_results : options.max_results,
-					numrows     : Number($toolbar.data('numrows')) || options.numrows,
-					startrow    : Number($toolbar.data('startrow')) || options.startrow
-					};
-
-				$listingContainer.data('state', stateData);
-
-				// Bind events on the container.
-				$listingContainer.bind('wolfnet.nextPage', nextPageEventHandler);
-				$listingContainer.bind('wolfnet.prevPage', prevPageEventHandler);
-				$listingContainer.bind('wolfnet.itemsPerPage', itemsPerPageEventHandler);
-				$listingContainer.bind('wolfnet.sortChange', sortChangeEventHandler);
-				$listingContainer.bind('wolfnet.refreshData', loadDataEventHandler);
-				$listingContainer.bind('wolfnet.dataLoaded', dataLoadedEventHandler);
-				$listingContainer.bind('wolfnet.listingsRendered', listingsRenderedEventHandler);
-
-				// If the toolbar is to be used for pagination wire it up to make ajax requests.
-				if ($toolbar.is('.wolfnet_withPagination')) {
-
-					$toolbar.find('a.wolfnet_page_nav_prev').click(function(event){
-						$listingContainer.trigger('wolfnet.prevPage');
-						event.preventDefault();
-						return false;
-					});
-
-					$toolbar.find('a.wolfnet_page_nav_next').click(function(event){
-						$listingContainer.trigger('wolfnet.nextPage');
-						event.preventDefault();
-						return false;
-					});
-
-					$toolbar.find('.wolfnet_page_items').append(renderPaginationControls.call($listingContainer[0]));
-
-					$toolbar.filter('.wolfnet_toolbarBottom').find('a.wolfnet_page_nav').click(function(){
-						$('html,body').scrollTop( $(this).closest('.wolfnet_widget').offset().top - 100 );
-					});
-
-					$toolbar.filter('.wolfnet_toolbarBottom').find('.wolfnet_page_items_select select').change(function(){
-						$('html,body').scrollTop( $(this).closest('.wolfnet_widget').offset().top - 100 );
-					});
-
-				}
-
-				// If the toolbar is to be used for sorting add the sorting control.
-				if ($toolbar.is('.wolfnet_withSortOptions')) {
-					var $sortControls = renderSortControls.call($listingContainer);
-					var $pageInfo     = $toolbar.find('.wolfnet_page_info');
-
-					if ($pageInfo.length != 0) {
-						$pageInfo.append($sortControls);
-					}
-					else {
-						$toolbar.append($sortControls);
-					}
-
-					$toolbar.filter('.wolfnet_toolbarBottom').find('.wolfnet_sortoptions select').change(function(){
-						$('html,body').scrollTop( $(this).closest('.wolfnet_widget').offset().top - 100 );
-					});
-
-				}
-
-				$listingContainer.trigger('wolfnet.toolbarsRendered');
-
-			});
-
-
-		} /*END: function $.fn.wolfnetToolbar*/
-
-	})(jQuery); /* END: jQuery IIFE */
-
-} /* END: If jQuery Exists */
+                    return true;
+
+                });
+
+                $container.on(UPDATED, updateEvent);
+
+            });
+
+        },
+
+        // Perform Ajax request using the state data then update the listings content
+        update : function()
+        {
+            return this.each(function() {
+                var $container = $(this);
+                var state = $container.data(stateKey);
+
+                // perform ajax request
+                $.ajax({
+                    url : wolfnet_ajax.ajaxurl,
+                    dataType : 'json',
+                    data : $.extend(state, {action:'wolfnet_get_listings'}),
+                    beforeSend: function(xhr){
+                        $container.addClass('wolfnet_refreshing');
+                    }
+                })
+                // success: update listings
+                .done(function(data, textStatus, xhr){
+                    renderListings.call($container, data);
+                })
+                // failure: indicate failure to user
+                .fail(function(xhr, textStatus){
+                    $container.removeClass('wolfnet_refreshing');
+                })
+                .always(function(){
+                });
+
+            });
+
+        },
+
+        // Update state data with new page and then call the update method to retrieve new data.
+        next : function()
+        {
+            return this.each(function() {
+                var $container = $(this);
+                var state = $container.data(stateKey);
+                var newPage = state.page + 1;
+
+                methods.page.call($container, newPage);
+
+            });
+
+        },
+
+        // Update state data with new page and then call the update method to retrieve new data.
+        prev : function()
+        {
+            return this.each(function() {
+                var $container = $(this);
+                var state = $container.data(stateKey);
+                var newPage = state.page - 1;
+
+                methods.page.call($container, newPage);
+
+            });
+
+        },
+
+        // Update the state data to a specific page number.
+        page : function(page)
+        {
+            return this.each(function() {
+                var $container = $(this);
+                var options = $container.data(optionsKey);
+                var state = $container.data(stateKey);
+                var maxPage = Math.ceil(options.maxResults / Number(state.numrows));
+                var newPage = page;
+
+                // Ensure that only valid pages can be requested.
+                if (newPage < 1) {
+                    newPage = maxPage;
+                }
+                else if (newPage > maxPage) {
+                    newPage = 1;
+                }
+                var newStartRow = ((newPage - 1) * Number(state.numrows)) + 1;
+
+                // update the current page.
+                $container.data(stateKey, $.extend(state, {page:newPage, startrow:newStartRow}));
+
+                methods.update.call($container);
+
+            });
+
+        }
+
+    };
+
+    $.fn[plugin] = function(method)
+    {
+        if (methods[method]) {
+            return methods[method].apply(this, Array.prototype.slice.call(arguments, 1));
+        }
+        else if (typeof method === 'object' || ! method) {
+            return methods.init.apply(this, arguments);
+        }
+        else {
+            $.error('Method ' +  method + ' does not exist on jQuery.' + pluginName);
+        }
+
+    };
+
+})(jQuery);
