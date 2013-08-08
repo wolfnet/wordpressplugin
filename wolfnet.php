@@ -112,6 +112,8 @@ class wolfnet
             $this->clearTransients();
         }
 
+        register_activation_hook(__FILE__, array($this, 'activate'));
+
         // Register actions.
         $this->addAction(array(
             array('init',                  'init'),
@@ -151,6 +153,23 @@ class wolfnet
     /* | | (_) (_) |< _>                                                                          */
     /*                                                                                            */
     /* ****************************************************************************************** */
+
+    public function activate()
+    {
+        // Check for legacy transient data and remove it if it exists.
+        $key = 'wppf_cache_metadata';
+        $metaData = get_transient($key);
+
+        if (is_array($metaData)) {
+            foreach ($metaData as $key => $data) {
+                delete_transient($key);
+            }
+        }
+
+        delete_transient($key);
+
+    }
+
 
     /**
      * This method is a callback for the 'init' hook. Any processes which must be run before the
