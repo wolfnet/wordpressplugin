@@ -113,7 +113,7 @@ class wolfnet
         }
 
         register_activation_hook(__FILE__, array($this, 'activate'));
-        register_deactivation_hook(__FILE__, array($this, 'activate'));
+        register_deactivation_hook(__FILE__, array($this, 'deactivate'));
 
         // Register actions.
         $this->addAction(array(
@@ -158,8 +158,8 @@ class wolfnet
     public function activate()
     {
         // Check for legacy transient data and remove it if it exists.
-        $key = 'wppf_cache_metadata';
-        $metaData = get_transient($key);
+        $indexkey = 'wppf_cache_metadata';
+        $metaData = get_transient($indexkey);
 
         if (is_array($metaData)) {
             foreach ($metaData as $key => $data) {
@@ -167,7 +167,7 @@ class wolfnet
             }
         }
 
-        delete_transient($key);
+        delete_transient($indexkey);
 
     }
 
