@@ -45,6 +45,11 @@ entered in the "WolfNet >> General Settings" page before any IDX data can be dis
 
 == Changelog ==
 
+= 1.3.17 =
+* Added maximum transient expiration date to prevent unnecessarily stale data from congesting the database.
+* Added an activation hook which removes legacy transient data from older plugin versions.
+* Added a deactivation hook which removes transient data to clean the database if the plugin is disabled.
+
 = 1.3.16 =
 * Major rearchitechure of the plugin code.
     * Removed third-party PHP libraries and Framework code.

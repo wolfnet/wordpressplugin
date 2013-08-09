@@ -59,6 +59,13 @@ class wolfnet
     private $transientIndexKey    = 'wolfnet_transients';
 
     /**
+     * The maximum amount of time a wolfnet value should be stored in the as a transient object.
+     * Currently set to 1 week.
+     * @var integer
+     */
+    private $transientMaxExpiration = 604800;
+
+    /**
      * This property difines a the request parameter which is used to determine if the values which
      * are cached in the Transient API should be cleared.
      * @var string
@@ -105,6 +112,9 @@ class wolfnet
             $this->clearTransients();
         }
 
+        register_activation_hook(__FILE__, array($this, 'activate'));
+        register_deactivation_hook(__FILE__, array($this, 'deactivate'));
+
         // Register actions.
         $this->addAction(array(
             array('init',                  'init'),
@@ -144,6 +154,31 @@ class wolfnet
     /* | | (_) (_) |< _>                                                                          */
     /*                                                                                            */
     /* ****************************************************************************************** */
+
+    public function activate()
+    {
+        // Check for legacy transient data and remove it if it exists.
+        $indexkey = 'wppf_cache_metadata';
+        $metaData = get_transient($indexkey);
+
+        if (is_array($metaData)) {
+            foreach ($metaData as $key => $data) {
+                delete_transient($key);
+            }
+        }
+
+        delete_transient($indexkey);
+
+    }
+
+
+    public function deactivate()
+    {
+        // Clear out all transient data as it is purely for caching and performance.
+        $this->deleteTransientIndex();
+
+    }
+
 
     /**
      * This method is a callback for the 'init' hook. Any processes which must be run before the
@@ -1632,7 +1667,7 @@ class wolfnet
             elseif (is_wp_error($http) || $http['response']['code'] >= 400) {
                 $data->error->message = 'A connection error occurred!';
                 $index[$key] = $time;
-                set_transient($key, $data, 0);
+                set_transient($key, $data, $this->transientMaxExpiration);
             }
             else {
                 $tmp = json_decode($http['body']);
@@ -1650,7 +1685,7 @@ class wolfnet
                 }
 
                 $index[$key] = $time + $cacheFor;
-                set_transient($key, $data, 0);
+                set_transient($key, $data, $this->transientMaxExpiration);
 
             }
 
@@ -1676,7 +1711,7 @@ class wolfnet
 
         // Set transient index data.
         if ($data !== null && is_array($data)) {
-            set_transient($key, $data, 0);
+            set_transient($key, $data, $this->transientMaxExpiration);
         }
         // Get transient index data.
         else {
@@ -1690,6 +1725,13 @@ class wolfnet
 
         return $data;
 
+    }
+
+
+    private function deleteTransientIndex()
+    {
+        $this->clearTransients();
+        delete_transient($this->transientIndexKey);
     }
 
 
