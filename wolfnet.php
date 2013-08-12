@@ -494,6 +494,9 @@ class wolfnet
         $pagename = str_replace('-', '_', $pagename);
         $prefix   = 'wolfnet_';
 
+        global $wp;
+        $wp->query_vars = array();
+
         return (substr($pagename, 0, strlen($prefix)) === $prefix) ? false : $req;
 
     }
