@@ -24,7 +24,7 @@
                     <?php $foundOne = false; ?>
                     <option value="">-- Saved Search --</option>
                     <?php foreach ($savedsearches as $ss) { ?>
-                        <?php $foundOne = ($savedsearch == $ss->ID); ?>
+                        <?php $foundOne = ($savedsearch == $ss->ID) ? true : $foundOne; ?>
                         <option value="<?php echo $ss->ID; ?>" <?php selected($savedsearch, $ss->ID) ?>>
                             <?php echo $ss->post_title; ?>
                         </option>
