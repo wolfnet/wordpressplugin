@@ -45,13 +45,17 @@ entered in the "WolfNet >> General Settings" page before any IDX data can be dis
 
 == Changelog ==
 
+= 1.3.18 =
+* Fixing bug with generated header and footer files using legacy URL structure.
+* Fixing issue with widget option forms
+
 = 1.3.17 =
 * Added maximum transient expiration date to prevent unnecessarily stale data from congesting the database.
 * Added an activation hook which removes legacy transient data from older plugin versions.
 * Added a deactivation hook which removes transient data to clean the database if the plugin is disabled.
 
 = 1.3.16 =
-* Major rearchitechure of the plugin code.
+* Major re-architecture of the plugin code.
     * Removed third-party PHP libraries and Framework code.
     * Consolidated most code into wolfnet.php file.
 * Updated Ajax requests to use built in WordPress Ajax hooks.
@@ -62,7 +66,7 @@ entered in the "WolfNet >> General Settings" page before any IDX data can be dis
 * Updating pagination URL to be relative to the root of the site rather than the current page.
 
 = 1.3.14 =
-* Updates to resolve issues with Brandco theme architecture.
+* Updates to resolve issues with BrandCo theme architecture.
 * Updated to new version of WPPF which supports hook arguments.
 
 = 1.3.13 =
@@ -70,7 +74,7 @@ entered in the "WolfNet >> General Settings" page before any IDX data can be dis
 * Removing some code that was not intended for release.
 
 = 1.3.12 =
-* Fixed minor bug creating inconsistancy between initial widget output and paged results.
+* Fixed minor bug creating inconsistency between initial widget output and paged results.
 
 = 1.3.11 =
 * Added SEO support for pagination. Pages can now be viewed even when JavaScript is unavailable/disabled.
@@ -83,7 +87,7 @@ entered in the "WolfNet >> General Settings" page before any IDX data can be dis
 * Fixed a similar issue to that in 1.3.8 which was impacting the search manager and the key validation.
 
 = 1.3.8 =
-* Fixed issue with shortcode builder causing problems with multi-site wordpress installs.
+* Fixed issue with shortcode builder causing problems with multi-site WordPress installs.
 
 = 1.3.7 =
 * Fixed a bug in the "toolbar" JavaScript which caused HTML content to be escaped.

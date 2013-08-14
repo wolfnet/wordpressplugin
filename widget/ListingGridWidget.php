@@ -94,9 +94,12 @@ class Wolfnet_ListingGridWidget extends Wolfnet_AbstractWidget
 
     protected function collectData($args, $instance)
     {
-        $options = $this->getOptions($instance);
-        $criteriaArray = $this->convertCriteriaJsonToArray($options['criteria']);
-        $data = array_merge($options, $criteriaArray);
+        $data = $this->getOptions($instance);
+
+        if ($data['mode'] == 'advanced') {
+            $criteriaArray = $this->convertCriteriaJsonToArray($data['criteria']);
+            $data = array_merge($data, $criteriaArray);
+        }
 
         return $data;
 

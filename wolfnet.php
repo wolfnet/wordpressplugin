@@ -494,6 +494,9 @@ class wolfnet
         $pagename = str_replace('-', '_', $pagename);
         $prefix   = 'wolfnet_';
 
+        global $wp;
+        $wp->query_vars = array();
+
         return (substr($pagename, 0, strlen($prefix)) === $prefix) ? false : $req;
 
     }
@@ -990,7 +993,6 @@ class wolfnet
     {
         $options = $this->getOptions($this->getListingGridDefaults(), $instance);
 
-        $options['criteria']              = esc_attr($options['criteria']);
         $options['mode_basic_wpc']        = checked($options['mode'], 'basic', false);
         $options['mode_advanced_wpc']     = checked($options['mode'], 'advanced', false);
         $options['paginated_false_wps']   = selected($options['paginated'], 'false', false);
@@ -1289,6 +1291,8 @@ class wolfnet
 
         $args = array_merge($defaultArgs, $args);
 
+        $args['criteria'] = esc_attr($args['criteria']);
+
         return $this->parseTemplate('template/listingGridOptions.php', $args);
 
     }
@@ -1299,6 +1303,8 @@ class wolfnet
         $args = array_merge($args, array(
             'instance_id' => str_replace('.', '', uniqid('wolfnet_propertyList_'))
             ));
+
+        $args['criteria'] = esc_attr($args['criteria']);
 
         return $this->getListingGridOptions($args);
 
