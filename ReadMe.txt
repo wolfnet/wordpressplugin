@@ -45,6 +45,10 @@ entered in the "WolfNet >> General Settings" page before any IDX data can be dis
 
 == Changelog ==
 
+= 1.3.18 =
+* Fixing bug with generated header and footer files using legacy URL structure.
+* Fixing issue with widget option forms
+
 = 1.3.17 =
 * Added maximum transient expiration date to prevent unnecessarily stale data from congesting the database.
 * Added an activation hook which removes legacy transient data from older plugin versions.
