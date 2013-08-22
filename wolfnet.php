@@ -1194,12 +1194,23 @@ class wolfnet
 
     public function getSavedSearches($count=-1)
     {
-        $dataArgs = array(
-            'numberposts' => $count,
-            'post_type' => $this->customPostTypeSearch
-            );
+        // Cache the data in the request scope so that we only have to query for it once per request.
+        $cacheKey = 'wntSavedSearches';
+        $data = (array_key_exists($cacheKey, $_REQUEST)) ? $_REQUEST[$cacheKey] : null;
 
-        return get_posts($dataArgs);
+        if ($data==null) {
+
+            $dataArgs = array(
+                'numberposts' => $count,
+                'post_type' => $this->customPostTypeSearch
+                );
+
+            $_REQUEST[$cacheKey] = get_posts($dataArgs);
+            $data = $_REQUEST[$cacheKey];
+
+        }
+
+        return $data;
 
     }
 
