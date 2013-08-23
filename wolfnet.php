@@ -1664,7 +1664,8 @@ class wolfnet
 
         $url = $this->buildUrl($url, array(
             'pluginVersion' => $this->version,
-            'phpVersion'    => phpversion()
+            'phpVersion'    => phpversion(),
+            'wpVersion'     => $wp_version,
             ));
 
         if ($data === false || $time > $index[$key]) {
