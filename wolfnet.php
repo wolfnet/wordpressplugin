@@ -1511,7 +1511,7 @@ class wolfnet
 
         foreach ($_GET as $param => $paramValue) {
             if (!array_search($param, $resParams)) {
-                $paramValue = urlencode($paramValue);
+                $paramValue = urlencode(htmlspecialchars_decode($paramValue));
                 $url .= "&{$param}={$paramValue}";
             }
         }
@@ -1612,7 +1612,7 @@ class wolfnet
             }
 
             if ($valid) {
-                $url .= '&' . $key . '=' . urlencode($value);
+                $url .= '&' . $key . '=' . urlencode(htmlspecialchars_decode($value));
             }
 
         }
@@ -1657,6 +1657,7 @@ class wolfnet
 
     private function getApiData($url, $cacheFor=900)
     {
+        global $wp_version;
         $key = 'wolfnet_' . md5($url);
         $index = $this->transientIndex();
         $time = time();
