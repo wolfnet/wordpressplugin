@@ -2307,8 +2307,8 @@ class wolfnet
     function html_entity_decode_numeric($string, $quote_style=ENT_COMPAT, $charset='utf-8')
     {
         $string = html_entity_decode($string, $quote_style, $charset);
-        $string = preg_replace_callback('~&#x([0-9a-fA-F]+);~i', array($this, 'chr_utf8_callback'), $string);
-        $string = preg_replace('~&#([0-9]+);~e', 'chr_utf8("\\1")', $string);
+        $string = preg_replace_callback('~&#x([0-9a-fA-F]+);~i', array($this, 'chr_utf8_hex_callback'), $string);
+        $string = preg_replace_callback('~&#([0-9]+);~i', array($this, 'chr_utf8_nonhex_callback'), $string);
 
         return $string;
 
@@ -2318,9 +2318,16 @@ class wolfnet
     /**
      * Callback helper
      */
-    public function chr_utf8_callback($matches)
+    public function chr_utf8_hex_callback($matches)
     {
-        return chr_utf8(hexdec($matches[1]));
+        return $this->chr_utf8(hexdec($matches[1]));
+
+    }
+
+
+    public function chr_utf8_nonhex_callback($matches)
+    {
+        return $this->chr_utf8($matches[1]);
 
     }
 
