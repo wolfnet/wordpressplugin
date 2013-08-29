@@ -1,197 +1,257 @@
 <project name="wolfnet-idx-for-wordpress" default="build" basedir=".">
 
 
-	<property name="majorVersion" value="1.3" />
-	<property name="minorVersion" value="18" />
-	<property name="version" value="${majorVersion}.${minorVersion}" />
+    <property name="majorVersion" value="1.3" />
+    <property name="minorVersion" value="18" />
+    <property name="version" value="${majorVersion}.${minorVersion}" />
 
-	<property name="dir.ant"   value="${basedir}/.ant" />
-	<property name="dir.build" value="${basedir}/build" />
-	<property name="dir.dist"  value="${basedir}/dist" />
-	<property name="dir.js"    value="js" />
-	<property name="dir.css"   value="css" />
+    <property name="dir.ant"   value="${basedir}/.ant" />
+    <property name="dir.build" value="${basedir}/build" />
+    <property name="dir.dist"  value="${basedir}/dist" />
+    <property name="dir.js"    value="js" />
+    <property name="dir.css"   value="css" />
 
-	<property name="tool.yuicompressor" value="${dir.ant}/yuicompressor-2.4.5.jar"  />
-	<property name="tool.closure"       value="${dir.ant}/closure/compiler.jar" />
-	<property name="tool.ant-contrib"   value="${dir.ant}/ant-contrib/lib/ant-contrib.jar" />
-	<property name="tool.rhino"         value="${dir.ant}/rhino.jar" />
-	<property name="tool.less"          value="${dir.ant}/less-rhino-1.1.5.js" />
+    <property name="tool.yuicompressor" value="${dir.ant}/yuicompressor-2.4.5.jar"  />
+    <property name="tool.closure"       value="${dir.ant}/closure/compiler.jar" />
+    <property name="tool.ant-contrib"   value="${dir.ant}/ant-contrib/lib/ant-contrib.jar" />
+    <property name="tool.rhino"         value="${dir.ant}/rhino.jar" />
+    <property name="tool.less"          value="${dir.ant}/less-rhino-1.1.5.js" />
 
-	<property name="dist.name"          value="${dir.dist}/${ant.project.name}_${version}" />
+    <property name="dist.name"          value="${dir.dist}/${ant.project.name}" />
 
-
-	<!-- Define the Java Library for the AntContrib project -->
-	<taskdef resource="net/sf/antcontrib/antcontrib.properties">
-		<classpath>
-			<pathelement location="${tool.ant-contrib}" />
-		</classpath>
-	</taskdef>
+    <available file=".git" type="dir" property="git.present"/>
 
 
-	<target name="compile" depends="compile-less">
-	</target>
+    <!-- Define the Java Library for the AntContrib project -->
+    <taskdef resource="net/sf/antcontrib/antcontrib.properties">
+        <classpath>
+            <pathelement location="${tool.ant-contrib}" />
+        </classpath>
+    </taskdef>
 
 
-	<target name="compile-less">
-		<compile-less />
-	</target>
+    <target name="compile" depends="compile-less">
+    </target>
 
 
-	<target name="minify" depends="minify-css,minify-javascript">
-	</target>
+    <target name="compile-less">
+        <compile-less />
+    </target>
 
 
-	<target name="minify-css" depends="compile-less">
-		<min-css />
-	</target>
+    <target name="minify" depends="minify-css,minify-javascript">
+    </target>
 
 
-	<target name="minify-javascript">
-		<min-js-closure />
-	</target>
+    <target name="minify-css" depends="compile-less">
+        <min-css />
+    </target>
 
 
-	<target name="build" depends="minify">
-		<clean-for-build />
-
-		<echo>Creating Build Directory: ${dir.build}</echo>
-		<copy todir="${dir.build}">
-			<fileset dir="${basedir}">
-				<!-- Excluded Directories -->
-				<exclude name=".ant/" />
-				<exclude name=".ant/" />
-				<exclude name=".vagrant/" />
-				<exclude name="build/" />
-				<exclude name="dist/" />
-				<exclude name="docs/" />
-				<!-- Excluded Files -->
-				<exclude name=".gitconfig" />
-				<exclude name="build.xml" />
-				<exclude name="LessCompilerOutput.txt" />
-				<exclude name="Vagrantfile" />
-				<!-- Excluded File Patterns -->
-				<exclude name="*.vagrant" />
-				<exclude name="*.sublime*" />
-				<exclude name="**/*.less" />
-				<exclude name="**/*.tmp" />
-				<exclude name="phpdoc*.xml" />
-			</fileset>
-		</copy>
-
-	</target>
+    <target name="minify-javascript">
+        <min-js-closure />
+    </target>
 
 
-	<target name="dist" depends="build">
-		<clean-for-dist />
-		<prep-for-dist />
-		<zip destfile="${dist.name}.zip" compress="true">
-			<zipfileset dir="${dir.build}" prefix="${ant.project.name}" />
-		</zip>
-		<zip destfile="${dist.name}_src.zip" compress="true">
-			<zipfileset dir="${basedir}" prefix="${ant.project.name}" excludes="dist/*,.vagrant/temp/*,.vagrant/machines/*" />
-		</zip>
-	</target>
+    <target name="build" depends="minify,git-revision">
+        <clean-for-build />
+
+        <echo>Creating Build Directory: ${dir.build}</echo>
+        <copy todir="${dir.build}">
+            <fileset dir="${basedir}">
+                <!-- Excluded Directories -->
+                <exclude name=".ant/" />
+                <exclude name=".ant/" />
+                <exclude name=".vagrant/" />
+                <exclude name="build/" />
+                <exclude name="dist/" />
+                <exclude name="docs/" />
+                <!-- Excluded Files -->
+                <exclude name=".gitconfig" />
+                <exclude name="build.xml" />
+                <exclude name="LessCompilerOutput.txt" />
+                <exclude name="Vagrantfile" />
+                <!-- Excluded File Patterns -->
+                <exclude name="*.vagrant" />
+                <exclude name="*.sublime*" />
+                <exclude name="**/*.less" />
+                <exclude name="**/*.tmp" />
+                <exclude name="phpdoc*.xml" />
+            </fileset>
+        </copy>
+
+    </target>
 
 
-	<!-- MACROS -->
-
-	<macrodef name="clean-for-build">
-		<sequential>
-			<delete dir="${dir.build}" />
-		</sequential>
-	</macrodef>
-
-
-	<macrodef name="clean-for-dist">
-		<sequential>
-			<delete file="${dist.name}.zip" />
-			<delete file="${dist.name}_src.zip" />
-		</sequential>
-	</macrodef>
+    <target name="dist" depends="build">
+        <clean-for-dist />
+        <prep-for-dist />
+        <zip destfile="${dist.name}_${version}.zip" compress="true">
+            <zipfileset dir="${dir.build}" prefix="${ant.project.name}" />
+        </zip>
+        <zip destfile="${dist.name}_${version}_src.zip" compress="true">
+            <zipfileset dir="${basedir}" prefix="${ant.project.name}" excludes="dist/*,.vagrant/temp/*,.vagrant/machines/*" />
+        </zip>
+    </target>
 
 
-	<macrodef name="prep-for-dist">
-		<sequential>
-			<!-- Minify Source Code -->
-			<!-- Use min files instead of src files -->
-			<echo>Switch to Minified Files</echo>
-			<echo>Update Version Numbers</echo>
-			<replace dir="${dir.build}">
-				<include name="**/*.php" />
-				<include name="ReadMe.txt" />
-				<replacefilter token=".src.js"  value=".min.js" />
-				<replacefilter token=".src.css" value=".min.css" />
-				<replacefilter token="{majorVersion}" value="${majorVersion}" />
-				<replacefilter token="{minorVersion}" value="${minorVersion}" />
-				<replacefilter token="{X.X.X}" value="${version}" />
-				<replacefilter token="{X.X.X}" value="${version}" />
-			</replace>
-		</sequential>
-	</macrodef>
+    <target name="test-dist" depends="build">
+        <clean-for-test-dist />
+        <prep-for-test-dist />
+        <zip destfile="${dist.name}_${git.revision}.zip" compress="true">
+            <zipfileset dir="${dir.build}" prefix="${ant.project.name}" />
+        </zip>
+        <zip destfile="${dist.name}_${git.revision}_src.zip" compress="true">
+            <zipfileset dir="${basedir}" prefix="${ant.project.name}" excludes="dist/*,.vagrant/temp/*,.vagrant/machines/*" />
+        </zip>
+    </target>
 
 
-	<macrodef name="compile-less">
-		<sequential>
-			<!-- Compile Less Files -->
-			<echo>Compiling Less Files</echo>
-			<apply executable="java" parallel="false" output="${basedir}/LessCompilerOutput.txt" append="true" failonerror="true">
-				<fileset dir="${basedir}/" >
-					<include name="${dir.css}/**/*.less" />
-					<exclude name="${dir.css}/**/*.inc.less" />
-				</fileset>
-				<arg line="-jar" />
-				<arg path="${tool.rhino}" />
-				<arg path="${tool.less}" />
-				<srcfile />
-				<mapper type="glob" from="*.less" to="${basedir}/*.src.css" />
-				<targetfile />
-				<arg line="-o"/>
-			</apply>
-		</sequential>
-	</macrodef>
+    <target name="git-revision" description="Store git revision in ${repository.version}" if="git.present">
+        <exec executable="git" outputproperty="git.revision" failifexecutionfails="false" errorproperty="">
+            <arg value="describe"/>
+            <arg value="--tags"/>
+            <arg value="--always"/>
+            <arg value="HEAD"/>
+        </exec>
+        <condition property="repository.version" value="${git.revision}" else="unknown">
+            <and>
+                <isset property="git.revision"/>
+                <length string="${git.revision}" trim="yes" length="0" when="greater"/>
+            </and>
+        </condition>
+        <echo>Git Revision: ${git.revision}</echo>
+    </target>
 
 
-	<macrodef name="min-css">
-		<!-- Minify CSS Files -->
-		<sequential>
-			<echo>Minifiying CSS Files</echo>
-			<apply executable="java" parallel="false">
-				<fileset dir="${basedir}/" >
-					<include name="${dir.css}/**/*.src.css" />
-					<exclude name="${dir.css}/**/*.min.css" />
-				</fileset>
-				<arg line="-jar" />
-				<arg path="${tool.yuicompressor}" />
-				<srcfile />
-				<arg line="--line-break" />
-				<arg line="4000" />
-				<arg line="-o" />
-				<mapper type="glob" from="*.src.css" to="${basedir}/*.min.css" />
-				<targetfile />
-			</apply>
-		</sequential>
-	</macrodef>
+    <!-- MACROS -->
+
+    <macrodef name="clean-for-build">
+        <sequential>
+            <delete dir="${dir.build}" />
+        </sequential>
+    </macrodef>
 
 
-	<macrodef name="min-js-closure">
-		<!-- Minify JS Files -->
-		<sequential>
-			<echo>Minifiying JavaScript Files</echo>
-			<apply executable="java" parallel="false">
-				<fileset dir="${basedir}/">
-					<include name="${dir.js}/**/*.src.js" />
-					<exclude name="${dir.js}/**/*.min.js" />
-				</fileset>
-				<arg line="-jar" />
-				<arg path="${tool.closure}" />
-				<arg line="--js" />
-				<srcfile />
-				<arg line="--js_output_file" />
-				<mapper type="glob" from="*.src.js" to="${basedir}/*.min.js" />
-				<targetfile />
-			</apply>
-		</sequential>
-	</macrodef>
+    <macrodef name="clean-for-dist">
+        <sequential>
+            <delete file="${dist.name}_${version}.zip" />
+            <delete file="${dist.name}_${version}_src.zip" />
+        </sequential>
+    </macrodef>
+
+
+    <macrodef name="clean-for-test-dist">
+        <sequential>
+            <delete file="${dist.name}_${git.revision}.zip" />
+            <delete file="${dist.name}_${git.revision}_src.zip" />
+        </sequential>
+    </macrodef>
+
+
+    <macrodef name="prep-for-dist">
+        <sequential>
+            <!-- Minify Source Code -->
+            <!-- Use min files instead of src files -->
+            <echo>Switch to Minified Files</echo>
+            <echo>Update Version Numbers</echo>
+            <replace dir="${dir.build}">
+                <include name="**/*.php" />
+                <include name="ReadMe.txt" />
+                <replacefilter token=".src.js"  value=".min.js" />
+                <replacefilter token=".src.css" value=".min.css" />
+                <replacefilter token="{majorVersion}" value="${majorVersion}" />
+                <replacefilter token="{minorVersion}" value="${minorVersion}" />
+                <replacefilter token="{X.X.X}" value="${version}" />
+                <replacefilter token="{X.X.X}" value="${version}" />
+            </replace>
+        </sequential>
+    </macrodef>
+
+
+    <macrodef name="prep-for-test-dist">
+        <sequential>
+            <!-- Minify Source Code -->
+            <!-- Use min files instead of src files -->
+            <echo>Switch to Minified Files</echo>
+            <echo>Update Version Numbers</echo>
+            <replace dir="${dir.build}">
+                <include name="**/*.php" />
+                <include name="ReadMe.txt" />
+                <exclude name="build.xml" />
+                <replacefilter token=".src.js"  value=".min.js" />
+                <replacefilter token=".src.css" value=".min.css" />
+                <replacefilter token="{majorVersion}" value="${majorVersion}" />
+                <replacefilter token="{minorVersion}" value="${minorVersion}" />
+                <replacefilter token="{X.X.X}" value="${git.revision}" />
+                <replacefilter token="{X.X.X}" value="${git.revision}" />
+            </replace>
+        </sequential>
+    </macrodef>
+
+
+    <macrodef name="compile-less">
+        <sequential>
+            <!-- Compile Less Files -->
+            <echo>Compiling Less Files</echo>
+            <apply executable="java" parallel="false" output="${basedir}/LessCompilerOutput.txt" append="true" failonerror="true">
+                <fileset dir="${basedir}/" >
+                    <include name="${dir.css}/**/*.less" />
+                    <exclude name="${dir.css}/**/*.inc.less" />
+                </fileset>
+                <arg line="-jar" />
+                <arg path="${tool.rhino}" />
+                <arg path="${tool.less}" />
+                <srcfile />
+                <mapper type="glob" from="*.less" to="${basedir}/*.src.css" />
+                <targetfile />
+                <arg line="-o"/>
+            </apply>
+        </sequential>
+    </macrodef>
+
+
+    <macrodef name="min-css">
+        <!-- Minify CSS Files -->
+        <sequential>
+            <echo>Minifiying CSS Files</echo>
+            <apply executable="java" parallel="false">
+                <fileset dir="${basedir}/" >
+                    <include name="${dir.css}/**/*.src.css" />
+                    <exclude name="${dir.css}/**/*.min.css" />
+                </fileset>
+                <arg line="-jar" />
+                <arg path="${tool.yuicompressor}" />
+                <srcfile />
+                <arg line="--line-break" />
+                <arg line="4000" />
+                <arg line="-o" />
+                <mapper type="glob" from="*.src.css" to="${basedir}/*.min.css" />
+                <targetfile />
+            </apply>
+        </sequential>
+    </macrodef>
+
+
+    <macrodef name="min-js-closure">
+        <!-- Minify JS Files -->
+        <sequential>
+            <echo>Minifiying JavaScript Files</echo>
+            <apply executable="java" parallel="false">
+                <fileset dir="${basedir}/">
+                    <include name="${dir.js}/**/*.src.js" />
+                    <exclude name="${dir.js}/**/*.min.js" />
+                </fileset>
+                <arg line="-jar" />
+                <arg path="${tool.closure}" />
+                <arg line="--js" />
+                <srcfile />
+                <arg line="--js_output_file" />
+                <mapper type="glob" from="*.src.js" to="${basedir}/*.min.js" />
+                <targetfile />
+            </apply>
+        </sequential>
+    </macrodef>
 
 
 </project>
