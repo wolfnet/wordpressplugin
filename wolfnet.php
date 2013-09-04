@@ -52,6 +52,18 @@ class wolfnet
     private $productKeyOptionKey  = 'wolfnet_productKey';
 
     /**
+     * This property contains the public CSS as defined in the Edit CSS page.
+     * @var string
+     */
+    private $publicCssOptionKey = "wolfnet_publicCss";
+
+    /**
+     * This property contains the admin CSS as defined in the Edit CSS page.
+     * @var string
+     */
+    private $adminCssOptionKey = "wolfnet_adminCss";
+
+    /**
      * This property is a unique identifier for a value in the WordPress Transient API where
      * references to other transient values are stored.
      * @var string
@@ -292,6 +304,8 @@ class wolfnet
 
         // Register Options
         register_setting($this->optionGroup, $this->productKeyOptionKey);
+        register_setting($this->optionGroup, $this->publicCssOptionKey);
+        register_setting($this->optionGroup, $this->adminCssOptionKey);
 
         // Register Shortcode Builder Button
         $canEditPosts = current_user_can('edit_posts');
@@ -326,6 +340,11 @@ class wolfnet
                 'key'   => 'wolfnet_plugin_settings',
                 'cb'    => array(&$this, 'amSettingsPage')
                 ),
+            array(
+                'title' => 'Edit CSS',
+                'key'   => 'wolfnet_plugin_css',
+                'cb'    => array(&$this, 'amEditCssPage')
+            ),
             array(
                 'title' => 'Search Manager',
                 'key'   => 'wolfnet_plugin_search_manager',
@@ -579,6 +598,14 @@ class wolfnet
         $productKey = $this->getProductKey();
         include 'template/adminSettings.php';
 
+    }
+
+
+    public function amEditCssPage() {
+        ob_start(); settings_fields($this->optionGroup); $formHeader = ob_get_clean();
+        $publicCss = $this->getPublicCss();
+        $adminCss = $this->getAdminCss();
+        include 'template/adminEditCss.php';
     }
 
 
@@ -1639,8 +1666,17 @@ class wolfnet
 
     private function getProductKey()
     {
-        return get_option($this->productKeyOptionKey);
+        return get_option(trim($this->productKeyOptionKey));
+    }
 
+
+    private function getPublicCss() {
+        return get_option(trim($this->publicCssOptionKey));
+    }
+
+
+    private function getAdminCss() {
+        return get_option($this->adminCssOptionKey);
     }
 
 
