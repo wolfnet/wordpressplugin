@@ -70,7 +70,7 @@
                 <exclude name=".gitconfig" />
                 <exclude name="build.xml" />
                 <exclude name="LessCompilerOutput.txt" />
-                <exclude name="Vagrantfile" />
+                <exclude name="vagrantfile" />
                 <!-- Excluded File Patterns -->
                 <exclude name="*.vagrant" />
                 <exclude name="*.sublime*" />
