@@ -66,7 +66,7 @@ class wolfnet
     private $transientMaxExpiration = 604800;
 
     /**
-     * This property difines a the request parameter which is used to determine if the values which
+     * This property defines a the request parameter which is used to determine if the values which
      * are cached in the Transient API should be cleared.
      * @var string
      */
@@ -1194,12 +1194,23 @@ class wolfnet
 
     public function getSavedSearches($count=-1)
     {
-        $dataArgs = array(
-            'numberposts' => $count,
-            'post_type' => $this->customPostTypeSearch
-            );
+        // Cache the data in the request scope so that we only have to query for it once per request.
+        $cacheKey = 'wntSavedSearches';
+        $data = (array_key_exists($cacheKey, $_REQUEST)) ? $_REQUEST[$cacheKey] : null;
 
-        return get_posts($dataArgs);
+        if ($data==null) {
+
+            $dataArgs = array(
+                'numberposts' => $count,
+                'post_type' => $this->customPostTypeSearch
+                );
+
+            $_REQUEST[$cacheKey] = get_posts($dataArgs);
+            $data = $_REQUEST[$cacheKey];
+
+        }
+
+        return $data;
 
     }
 
@@ -1500,7 +1511,7 @@ class wolfnet
 
         foreach ($_GET as $param => $paramValue) {
             if (!array_search($param, $resParams)) {
-                $paramValue = urlencode($paramValue);
+                $paramValue = urlencode($this->html_entity_decode_numeric($paramValue));
                 $url .= "&{$param}={$paramValue}";
             }
         }
@@ -1601,7 +1612,7 @@ class wolfnet
             }
 
             if ($valid) {
-                $url .= '&' . $key . '=' . urlencode($value);
+                $url .= '&' . $key . '=' . urlencode($this->html_entity_decode_numeric($value));
             }
 
         }
@@ -1646,6 +1657,7 @@ class wolfnet
 
     private function getApiData($url, $cacheFor=900)
     {
+        global $wp_version;
         $key = 'wolfnet_' . md5($url);
         $index = $this->transientIndex();
         $time = time();
@@ -1653,7 +1665,8 @@ class wolfnet
 
         $url = $this->buildUrl($url, array(
             'pluginVersion' => $this->version,
-            'phpVersion'    => phpversion()
+            'phpVersion'    => phpversion(),
+            'wpVersion'     => $wp_version,
             ));
 
         if ($data === false || $time > $index[$key]) {
@@ -2281,6 +2294,69 @@ class wolfnet
         foreach ($ajxActions as $action => $method) {
             $this->addAction('wp_ajax_' . $action, array(&$this, $method));
         }
+
+    }
+
+
+    /**
+    * Decodes all HTML entities, including numeric and hexadecimal ones.
+    *
+    * @param mixed $string
+    * @return string decoded HTML
+    */
+    function html_entity_decode_numeric($string, $quote_style=ENT_COMPAT, $charset='utf-8')
+    {
+        $string = html_entity_decode($string, $quote_style, $charset);
+        $string = preg_replace_callback('~&#x([0-9a-fA-F]+);~i', array($this, 'chr_utf8_hex_callback'), $string);
+        $string = preg_replace_callback('~&#([0-9]+);~i', array($this, 'chr_utf8_nonhex_callback'), $string);
+
+        return $string;
+
+    }
+
+
+    /**
+     * Callback helper
+     */
+    public function chr_utf8_hex_callback($matches)
+    {
+        return $this->chr_utf8(hexdec($matches[1]));
+
+    }
+
+
+    public function chr_utf8_nonhex_callback($matches)
+    {
+        return $this->chr_utf8($matches[1]);
+
+    }
+
+
+    /**
+    * Multi-byte chr(): Will turn a numeric argument into a UTF-8 string.
+    *
+    * @param mixed $num
+    * @return string
+    */
+    private function chr_utf8($num)
+    {
+        if ($num < 128) {
+            return chr($num);
+        }
+
+        if ($num < 2048) {
+            return chr(($num >> 6) + 192) . chr(($num & 63) + 128);
+        }
+
+        if ($num < 65536) {
+            return chr(($num >> 12) + 224) . chr((($num >> 6) & 63) + 128) . chr(($num & 63) + 128);
+        }
+
+        if ($num < 2097152) {
+            return chr(($num >> 18) + 240) . chr((($num >> 12) & 63) + 128) . chr((($num >> 6) & 63) + 128) . chr(($num & 63) + 128);
+        }
+
+        return '';
 
     }
 
