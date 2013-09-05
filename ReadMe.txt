@@ -45,6 +45,12 @@ entered in the "WolfNet >> General Settings" page before any IDX data can be dis
 
 == Changelog ==
 
+= 1.3.19 =
+* Fixing issue with grid columns when paginating.
+* Fixing bug with special characters in search parameters.
+* Adding WordPress version number to all API request URLs. This is for user metrics data.
+* Performance improvement with widget page in the admin. Now caching saveSearches query in Request scope so that it is only requested once per page request.
+
 = 1.3.18 =
 * Fixing bug with generated header and footer files using legacy URL structure.
 * Fixing issue with widget option forms
