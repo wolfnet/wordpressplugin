@@ -66,7 +66,7 @@ class wolfnet
     private $transientMaxExpiration = 604800;
 
     /**
-     * This property difines a the request parameter which is used to determine if the values which
+     * This property defines a the request parameter which is used to determine if the values which
      * are cached in the Transient API should be cleared.
      * @var string
      */
