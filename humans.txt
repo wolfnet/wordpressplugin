@@ -2,12 +2,11 @@
 
     Developer: AJ Michels
     Website: ajmichels.com
-    Contact: ajmichels.web@gmail.com
     Twitter: @ajmichels
-    From: Oakdale, MN, USA
+    Location: Oakdale, MN, USA
 
     Developer: Andrew Baumgart
-    From: Minnesota, USA
+    Location: Minnesota, USA
 
 
 /* THANKS */
@@ -19,6 +18,14 @@
     Vagrant: vagrantup.com
 
     Less CSS: lesscss.org
+
+    jQuery SmoothDivScroll by: Thomas Kahn
+
+    jQuery Tooltip by: Jörn Zaefferer
+
+    jQuery imagesLoaded by: Paul Irish
+
+    jQuery MouseWheel by: Brandon Aaron (brandonaaron.net)
 
 
 /* SITE */
