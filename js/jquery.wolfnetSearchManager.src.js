@@ -3,9 +3,7 @@
  * saver form such as the one in the Search Manager.
  *
  * @title         jquery.wolfnetSearchManager.src.js
- * @contributors  AJ Michels (aj.michels@wolfnet.com)
- * @version       1.0
- * @copyright     Copyright (c) 2012, WolfNet Technologies, LLC
+ * @copyright     Copyright (c) 2012, 2013, WolfNet Technologies, LLC
  *
  *                This program is free software; you can redistribute it and/or
  *                modify it under the terms of the GNU General Public License

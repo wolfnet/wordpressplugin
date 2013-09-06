@@ -1,0 +1,29 @@
+/* TEAM */
+
+    Developer: AJ Michels
+    Website: ajmichels.com
+    Contact: ajmichels.web@gmail.com
+    Twitter: @ajmichels
+    From: Oakdale, MN, USA
+
+    Developer: Andrew Baumgart
+    From: Minnesota, USA
+
+
+/* THANKS */
+
+    Sublime Text: sublimetext.com
+
+    jQuery: jquery.com
+
+    Vagrant: vagrantup.com
+
+    Less CSS: lesscss.org
+
+
+/* SITE */
+
+    Language: English
+    Standards: HTML5
+    Components: jQuery
+    Software: Ant, Less CSS, Vagrant, Sublime Text, Git

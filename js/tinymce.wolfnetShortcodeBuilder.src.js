@@ -3,10 +3,8 @@
  * editor. Only the button is created with this script the functionality of the button is managed in
  * js/jquery.wolfnetShortcodeBuilder.src.js
  *
- * @package       js
  * @title         tinymce.wolfnetShortcodeBuilder.src.js
- * @contributors  AJ Michels (aj.michels@wolfnet.com)
- * @copyright     Copyright (c) 2012, WolfNet Technologies, LLC
+ * @copyright     Copyright (c) 2012, 2013, WolfNet Technologies, LLC
  *
  *                This program is free software; you can redistribute it and/or
  *                modify it under the terms of the GNU General Public License
