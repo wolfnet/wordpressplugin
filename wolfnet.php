@@ -140,6 +140,7 @@ class wolfnet
             array('wp_footer',             'footer'),
             array('template_redirect',     'templateRedirect'),
             array('admin_print_styles',    'adminPrintStyles',  1000),
+            array('wp_enqueue_scripts',    'publicStyles',      1000),
             ));
 
         // Register filters.
@@ -258,9 +259,6 @@ class wolfnet
         $styles = array(
             'wolfnet',
             );
-        if(strlen($this->getPublicCss())) {
-            array_push($styles, 'wolfnet-custom');
-        }
 
         foreach ($styles as $style) {
             wp_enqueue_style($style);
@@ -268,6 +266,27 @@ class wolfnet
 
         do_action($this->postHookPrefix . 'enqueueResources'); // Legacy hook
 
+    }
+
+
+    /**
+     * This method is a callback for the 'wp_enqueue_scripts' hook. This will load CSS files
+     * which are needed for the plugin after all the other CSS includes in the even that we
+     * need to override styles.
+     * @return void
+     */
+    public function publicStyles() {
+        if(strlen($this->getPublicCss())) {
+            $styles = array(
+                'wolfnet-custom',
+            );
+
+            foreach ($styles as $style) {
+                wp_enqueue_style($style);
+            }
+
+            do_action($this->postHookPrefix . 'enqueueResources'); // Legacy hook
+        }
     }
 
 
@@ -2112,7 +2131,6 @@ class wolfnet
             }
         }
         else {
-            var_dump($priority);
             if (is_callable($callable)) {
                 add_action($action, $callable, $priority);
             }
