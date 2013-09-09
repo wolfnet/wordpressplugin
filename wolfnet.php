@@ -139,6 +139,7 @@ class wolfnet
             array('widgets_init',          'widgetInit'),
             array('wp_footer',             'footer'),
             array('template_redirect',     'templateRedirect'),
+            array('admin_print_styles',    'adminPrintStyles',  1000),
             ));
 
         // Register filters.
@@ -257,6 +258,9 @@ class wolfnet
         $styles = array(
             'wolfnet',
             );
+        if(strlen($this->getPublicCss())) {
+            array_push($styles, 'wolfnet-custom');
+        }
 
         foreach ($styles as $style) {
             wp_enqueue_style($style);
@@ -518,6 +522,16 @@ class wolfnet
 
         return (substr($pagename, 0, strlen($prefix)) === $prefix) ? false : $req;
 
+    }
+
+
+    /**
+     * This method is used in the context of admin_print_styles to output custom CSS.
+     * @return void
+     */
+    public function adminPrintStyles() {
+        $adminCss = $this->getAdminCss();
+        echo '<style>' . $adminCss . '</style>';
     }
 
 
@@ -860,6 +874,17 @@ class wolfnet
 
         die;
 
+    }
+
+
+    public function remotePublicCss() {
+        $publicCss = $this->getPublicCss();
+
+        if(strlen($publicCss) > 0) {
+            echo $publicCss;
+        }
+
+        die;
     }
 
 
@@ -2062,20 +2087,25 @@ class wolfnet
     }
 
 
-    private function addAction($action, $callable=null)
+    private function addAction($action, $callable=null, $priority=null)
     {
         if (is_array($action)) {
             foreach ($action as $act) {
-                $this->addAction($act[0], $act[1]);
+                if(count($act) == 2) {
+                    $this->addAction($act[0], $act[1]);
+                } else {
+                    $this->addAction($act[0], $act[1], $act[2]);
+                }
             }
         }
         else {
+            var_dump($priority);
             if (is_callable($callable)) {
-                add_action($action, $callable);
+                add_action($action, $callable, $priority);
             }
             else if (is_string($callable) && method_exists($this, $callable)) {
                 do_action($this->preHookPrefix . $callable);
-                add_action($action, array(&$this, $callable));
+                add_action($action, array(&$this, $callable), $priority);
                 do_action($this->postHookPrefix . $callable);
             }
         }
@@ -2258,6 +2288,9 @@ class wolfnet
             'wolfnet-admin' => array(
                 $this->url . 'css/wolfnetAdmin.src.css',
                 ),
+            'wolfnet-custom' => array(
+                admin_url('admin-ajax.php') . '?action=wolfnet_css',
+                ),
             'jquery-ui' => array(
                 'http://ajax.googleapis.com/ajax/libs/jqueryui/' . $jquery_ui->ver
                     . '/themes/smoothness/jquery-ui.css'
@@ -2286,6 +2319,7 @@ class wolfnet
             'wolfnet_content_footer'    => 'remoteContentFooter',
             'wolfnet_listings'          => 'remoteListings',
             'wolfnet_get_listings'      => 'remoteListingsGet',
+            'wolfnet_css'               => 'remotePublicCss',
             );
 
         foreach ($ajxActions as $action => $method) {
@@ -2312,6 +2346,7 @@ class wolfnet
             'wolfnet_content_footer'          => 'remoteContentFooter',
             'wolfnet_listings'                => 'remoteListings',
             'wolfnet_get_listings'            => 'remoteListingsGet',
+            'wolfnet_css'                     => 'remotePublicCss'
             );
 
         foreach ($ajxActions as $action => $method) {

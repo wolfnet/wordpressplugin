@@ -1,6 +1,5 @@
 <style>
 .wolfnet_cssBox {
-	position: absolute;
 	width: 500px;
 	height: 600px;
 }
@@ -29,22 +28,24 @@
 
             	<tr>
             		<td>
-            			<div id="wolfnet_adminCss" class="wolfnet_cssBox">
+            			<?php /* <div id="wolfnet_adminCss" class="wolfnet_cssBox">
             				<?php echo $adminCss; ?>
-            			</div>
+            			</div> */ ?>
+            			<textarea id="wolfnet_adminCss" name="wolfnet_adminCss" class="wolfnet_cssBox"><?php echo $adminCss; ?></textarea>
             		</td>
             		<td>
-            			<div id="wolfnet_publicCss" class="wolfnet_cssBox">
+            			<?php /* <div id="wolfnet_publicCss" class="wolfnet_cssBox">
             				<?php echo $publicCss; ?>
-            			</div>
+            			</div> */ ?>
+            			<textarea id="wolfnet_publicCss" name="wolfnet_publicCss" class="wolfnet_cssBox"><?php echo $publicCss; ?></textarea>
             		</td>
             	</tr>
 
-            	<tr valign="top" colspan="2">
-                    <td class="submit">
-                        <input type="submit" class="button-primary" value="<?php _e('Save Changes') ?>" />
-                    </td>
-                </tr>
+            	<tr>
+            		<td colspan="2" class="submit">
+            			<input type="submit" class="button-primary" value="<?php _e('Save Changes') ?>" />
+            		</td>
+            	</tr>
 
             </table>
 
@@ -54,6 +55,7 @@
 
 </div>
 
+<?php /*
 <script src="<?php echo $this->url; ?>/js/ace/ace-1.1.01.js" type="text/javascript" charset="utf-8"></script>
 <script>
 	ace.config.set("basePath", "<?php echo $this->url; ?>js/ace");
@@ -66,3 +68,4 @@
 	publicCss.setTheme("ace/theme/monokai");
 	publicCss.getSession().setMode("ace/mode/css");
 </script>
+*/ ?>
