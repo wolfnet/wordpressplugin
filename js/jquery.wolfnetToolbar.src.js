@@ -323,6 +323,10 @@ if ( typeof String.prototype.wolfnetPriceFormat !== 'function' ) {
 
         $('html,body').scrollTop($container.closest('.wolfnet_widget').offset().top - 100);
 
+        if ($container.is('.wolfnet_listingGrid') && $container.wolfnetListingGrid) {
+            $container.wolfnetListingGrid("resizeWidth");
+        }
+
         $container.removeClass('wolfnet_refreshing');
 
         return true;
