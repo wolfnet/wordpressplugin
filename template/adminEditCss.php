@@ -1,10 +1,3 @@
-<style>
-.wolfnet_cssBox {
-	width: 500px;
-	height: 600px;
-}
-</style>
-
 <div class="wrap">
 
     <div id="icon-options-wolfnet" class="icon32"><br></div>
@@ -55,8 +48,7 @@
 
 </div>
 
-<?php /*
-<script src="<?php echo $this->url; ?>/js/ace/ace-1.1.01.js" type="text/javascript" charset="utf-8"></script>
+<?php /* <script src="<?php echo $this->url; ?>/js/ace/ace-1.1.01.js" type="text/javascript" charset="utf-8"></script>
 <script>
 	ace.config.set("basePath", "<?php echo $this->url; ?>js/ace");
 
@@ -67,5 +59,4 @@
 	var publicCss = ace.edit("wolfnet_publicCss");
 	publicCss.setTheme("ace/theme/monokai");
 	publicCss.getSession().setMode("ace/mode/css");
-</script>
-*/ ?>
+</script> */ ?>

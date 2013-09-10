@@ -897,6 +897,7 @@ class wolfnet
 
 
     public function remotePublicCss() {
+        header('Content-type: text/css');
         $publicCss = $this->getPublicCss();
 
         if(strlen($publicCss) > 0) {
