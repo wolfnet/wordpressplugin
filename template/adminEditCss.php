@@ -15,8 +15,8 @@
             <table class="form-table">
 
             	<tr>
-            		<th scope="col"><label for="wolfnet_adminCss">Admin CSS</label></th>
-            		<th scope="col"><label for="wolfnet_publicCss">Public CSS</label></th>
+            		<th scope="col"><label for="wolfnetCss_adminCss">Admin CSS</label></th>
+            		<th scope="col"><label for="wolfnetCss_publicCss">Public CSS</label></th>
             	</tr>
 
             	<tr>
@@ -24,13 +24,13 @@
             			<?php /* <div id="wolfnet_adminCss" class="wolfnet_cssBox">
             				<?php echo $adminCss; ?>
             			</div> */ ?>
-            			<textarea id="wolfnet_adminCss" name="wolfnet_adminCss" class="wolfnet_cssBox"><?php echo $adminCss; ?></textarea>
+            			<textarea id="wolfnetCss_adminCss" name="wolfnetCss_adminCss" class="wolfnet_cssBox"><?php echo $adminCss; ?></textarea>
             		</td>
             		<td>
             			<?php /* <div id="wolfnet_publicCss" class="wolfnet_cssBox">
             				<?php echo $publicCss; ?>
             			</div> */ ?>
-            			<textarea id="wolfnet_publicCss" name="wolfnet_publicCss" class="wolfnet_cssBox"><?php echo $publicCss; ?></textarea>
+            			<textarea id="wolfnetCss_publicCss" name="wolfnetCss_publicCss" class="wolfnet_cssBox"><?php echo $publicCss; ?></textarea>
             		</td>
             	</tr>
 

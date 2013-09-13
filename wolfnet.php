@@ -38,6 +38,13 @@ class wolfnet
     private $optionGroup          = 'wolfnet';
 
     /**
+     * This property is used to set the option group for the Edit Css page. It creates a namespaced
+     * collection of variables which are used in saving page settings.
+     * @var string
+     */
+    private $CssOptionGroup          = 'wolfnetCss';
+
+    /**
      * This property is used to define the 'search' custom type which is how "Search Manager"
      * searches are saved.
      * @var string
@@ -55,13 +62,13 @@ class wolfnet
      * This property contains the public CSS as defined in the Edit CSS page.
      * @var string
      */
-    private $publicCssOptionKey = "wolfnet_publicCss";
+    private $publicCssOptionKey = "wolfnetCss_publicCss";
 
     /**
      * This property contains the admin CSS as defined in the Edit CSS page.
      * @var string
      */
-    private $adminCssOptionKey = "wolfnet_adminCss";
+    private $adminCssOptionKey = "wolfnetCss_adminCss";
 
     /**
      * This property is a unique identifier for a value in the WordPress Transient API where
@@ -327,8 +334,8 @@ class wolfnet
 
         // Register Options
         register_setting($this->optionGroup, $this->productKeyOptionKey);
-        register_setting($this->optionGroup, $this->publicCssOptionKey);
-        register_setting($this->optionGroup, $this->adminCssOptionKey);
+        register_setting($this->CssOptionGroup, $this->publicCssOptionKey);
+        register_setting($this->CssOptionGroup, $this->adminCssOptionKey);
 
         // Register Shortcode Builder Button
         $canEditPosts = current_user_can('edit_posts');
@@ -635,7 +642,7 @@ class wolfnet
 
 
     public function amEditCssPage() {
-        ob_start(); settings_fields($this->optionGroup); $formHeader = ob_get_clean();
+        ob_start(); settings_fields($this->CssOptionGroup); $formHeader = ob_get_clean();
         $publicCss = $this->getPublicCss();
         $adminCss = $this->getAdminCss();
         include 'template/adminEditCss.php';
