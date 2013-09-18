@@ -24,12 +24,14 @@
             			<?php /* <div id="wolfnet_adminCss" class="wolfnet_cssBox">
             				<?php echo $adminCss; ?>
             			</div> */ ?>
+                        <p class="wolfnet_note">This CSS will affect your Wordpress admin (the pages you are looking at now).</p>
             			<textarea id="wolfnetCss_adminCss" name="wolfnetCss_adminCss" class="wolfnet_cssBox"><?php echo $adminCss; ?></textarea>
             		</td>
             		<td>
             			<?php /* <div id="wolfnet_publicCss" class="wolfnet_cssBox">
             				<?php echo $publicCss; ?>
             			</div> */ ?>
+                        <p class="wolfnet_note">This CSS will affect the public-facing pages of your web site.</p>
             			<textarea id="wolfnetCss_publicCss" name="wolfnetCss_publicCss" class="wolfnet_cssBox"><?php echo $publicCss; ?></textarea>
             		</td>
             	</tr>
