@@ -427,11 +427,18 @@ if ( typeof String.prototype.wolfnetPriceFormat !== 'function' ) {
                 var $container = $(this);
                 var state = $container.data(stateKey);
 
+                var getData = function() {
+                    var data = $.extend(state, {});
+                    delete data.itemsPerPageData;
+                    delete data.sortOptionsData;
+                    return $.extend(state, {action:'wolfnet_get_listings'});
+                };
+
                 // perform ajax request
                 $.ajax({
                     url : wolfnet_ajax.ajaxurl,
-                    dataType : 'json',
-                    data : $.extend(state, {action:'wolfnet_get_listings'}),
+                    dataType : 'jsonp',
+                    data : getData(),
                     beforeSend: function(xhr){
                         $container.addClass('wolfnet_refreshing');
                     }

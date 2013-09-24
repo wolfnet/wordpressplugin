@@ -845,9 +845,19 @@ class wolfnet
 
     public function remoteListingsGet()
     {
+        $callback = (array_key_exists('callback', $_REQUEST)) ? $_REQUEST['callback'] : false;
         $args = $this->getListingGridOptions($_REQUEST);
 
+        if ($callback) {
+            header('Content-Type: application/javascript');
+        }
+        else {
+            header('Content-Type: application/json');
+        }
+
+        echo $callback ? $callback . '(' : '';
         echo json_encode($this->getListings($args));
+        echo $callback ? ');' : '';
 
         die;
 
@@ -1616,7 +1626,7 @@ class wolfnet
         }
 
         $restrictedParams = array('criteria','toolbarTop','toolbarBottom','listingsHtml','prevLink',
-            'nextLink','prevClass','nextClass','toolbarClass','instance_id','siteUrl','class');
+            'nextLink','prevClass','nextClass','toolbarClass','instance_id','siteUrl','class','_');
 
         $restrictedSuffix = array('_wpid', '_wpname', '_wps', '_wpc');
 
