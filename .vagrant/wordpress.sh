@@ -3,7 +3,7 @@
 runfile=".runonce.wordpress.vagrant"
 tempdir="/vagrant/.vagrant/temp"
 # wpVersion="3.5.2"
-wpVersion="3.6"
+wpVersion="3.6.1"
 
 if [ ! -f "${runfile}" ]; then
 
@@ -32,6 +32,9 @@ if [ ! -f "${runfile}" ]; then
     echo "Configure mysql ..."
     cat /vagrant/.vagrant/wp-prep.sql | mysql -u root
     cat /vagrant/.vagrant/wp3.5.1-setup.sql | mysql -u root
+
+    echo "Updating file ownership ..."
+    chown -R www-data:www-data /var/www
 
     echo "Start apache ..."
     service apache2 start
