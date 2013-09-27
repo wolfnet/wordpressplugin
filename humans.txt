@@ -8,6 +8,10 @@
     Developer: Andrew Baumgart
     Location: Minnesota, USA
 
+    Developer: Michael Pidde
+    Website: michaelpidde.com
+    Location: Minnesota, USA
+
 
 /* THANKS */
 
