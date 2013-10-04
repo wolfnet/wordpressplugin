@@ -379,7 +379,7 @@ class wolfnet
 
         $pgs = array(
             array(
-                'title' => 'WolfNet',
+                'title' => 'WolfNet <span class="wolfnet_sup">&reg;</span>',
                 'key'   => 'wolfnet_plugin_settings',
                 'icon'  => $this->url . 'img/wp_wolfnet_nav.png',
                 ),
