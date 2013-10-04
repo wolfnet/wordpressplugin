@@ -2,7 +2,7 @@
 
     <div id="icon-options-wolfnet" class="icon32"><br></div>
 
-    <h2>WolfNet - Edit CSS</h2>
+    <h2>WolfNet <sup>&reg;</sup> - Edit CSS</h2>
 
     <p>This is a high-level tool that should only be used by a web developer or designer who is familiar with CSS.</p>
 
