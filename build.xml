@@ -1,8 +1,8 @@
 <project name="wolfnet-idx-for-wordpress" default="build" basedir=".">
 
 
-    <property name="majorVersion" value="1.3" />
-    <property name="minorVersion" value="19" />
+    <property name="majorVersion" value="1.4" />
+    <property name="minorVersion" value="0" />
     <property name="version" value="${majorVersion}.${minorVersion}" />
 
     <property name="dir.ant"   value="${basedir}/.ant" />
@@ -98,10 +98,10 @@
     <target name="test-dist" depends="build">
         <clean-for-test-dist />
         <prep-for-test-dist />
-        <zip destfile="${dist.name}_${git.revision}.zip" compress="true">
+        <zip destfile="${dist.name}_${version}_${git.revision}.zip" compress="true">
             <zipfileset dir="${dir.build}" prefix="${ant.project.name}" />
         </zip>
-        <zip destfile="${dist.name}_${git.revision}_src.zip" compress="true">
+        <zip destfile="${dist.name}_${version}_${git.revision}_src.zip" compress="true">
             <zipfileset dir="${basedir}" prefix="${ant.project.name}" excludes="dist/*,.vagrant/temp/*,.vagrant/machines/*" />
         </zip>
     </target>
@@ -109,9 +109,7 @@
 
     <target name="git-revision" description="Store git revision in ${repository.version}" if="git.present">
         <exec executable="git" outputproperty="git.revision" failifexecutionfails="false" errorproperty="">
-            <arg value="describe"/>
-            <arg value="--tags"/>
-            <arg value="--always"/>
+            <arg value="rev-parse"/>
             <arg value="HEAD"/>
         </exec>
         <condition property="repository.version" value="${git.revision}" else="unknown">
