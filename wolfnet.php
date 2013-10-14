@@ -1649,7 +1649,7 @@ class wolfnet
                 $this->searchManagerJSessionId($http['cookies']['WntJSessionId']['value']);
             }
 
-            return $this->removeJqueryFromHTML($http['body']);
+            return $http['body'];
 
         }
         else {
