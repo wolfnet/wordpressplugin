@@ -49,7 +49,9 @@ class Wolfnet_FeaturedListingsWidget extends Wolfnet_AbstractWidget
     {
         $options = $this->getOptions($instance);
 
+        echo $args['before_widget'];
         echo $this->plugin->featuredListings($options);
+        echo $args['after_widget'];
 
     }
 

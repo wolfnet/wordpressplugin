@@ -40,7 +40,9 @@ class Wolfnet_QuickSearchWidget extends Wolfnet_AbstractWidget
     {
         $options = $this->getOptions($instance);
 
+        echo $args['before_widget'];
         echo $this->plugin->quickSearch($options);
+        echo $args['after_widget'];
 
     }
 

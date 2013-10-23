@@ -43,7 +43,9 @@ class Wolfnet_ListingGridWidget extends Wolfnet_AbstractWidget
 
     public function widget($args, $instance)
     {
+        echo $args['before_widget'];
         echo $this->plugin->listingGrid($this->collectData($args, $instance));
+        echo $args['after_widget'];
 
     }
 
