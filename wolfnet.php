@@ -1731,11 +1731,8 @@ class wolfnet
 
     private function parseTemplate($template, array $vars=array())
     {
+        extract($vars, EXTR_OVERWRITE);
         ob_start();
-
-        foreach ($vars as $key => $value) {
-            ${$key} = $value;
-        }
 
         include $template;
 
