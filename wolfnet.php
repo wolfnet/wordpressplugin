@@ -1590,6 +1590,8 @@ class wolfnet
     {
         global $wp_version;
         $baseUrl = $this->getBaseUrl();
+        $searchMode = 'form';
+        $maptracksEnabled = $this->getMaptracksEnabled();
 
         if (!strstr($baseUrl, 'index.cfm')) {
             if (substr($baseUrl, strlen($baseUrl) - 1) != '/') {
@@ -1600,9 +1602,16 @@ class wolfnet
 
         }
 
+   
+        // Default Search Manager to map search if client has Maptracks enabled     
+        if ($maptracksEnabled = "Y") {
+            $searchMode = 'map';
+        }
+
+     
         $url = $baseUrl
              . ((!strstr($baseUrl, '?')) ? '?' : '')
-             . '&action=wpshortcodebuilder&search_mode=form'
+             . '&action=wpshortcodebuilder&search_mode=' . $searchMode
              . '&cfid=' . $this->searchManagerCfId()
              . '&cftoken=' . $this->searchManagerCfToken()
              . '&jsessionid=' . $this->searchManagerJSessionId();
@@ -2014,6 +2023,19 @@ class wolfnet
         $prices = (property_exists($data, 'Price Range Values')) ? $data->{'Price Range Values'} : '';
 
         return explode(',', $prices);
+
+    }
+
+
+    private function getMaptracksEnabled()
+    {
+        $productKey = $this->getProductKey();
+        $url  = 'http://services.mlsfinder.com/v1/setting/' . $productKey . '.json'
+              . '?setting=maptracks_enabled';
+        $data = $this->getApiData($url, 86400)->maptracks_enabled;
+        $maptracksEnabled = (property_exists($data, 'maptracks_enabled')) ? $data->{'maptracks_enabled'} : '';
+
+        return $maptracksEnabled;
 
     }
 
