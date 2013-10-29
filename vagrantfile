@@ -5,8 +5,22 @@ Vagrant.configure("2") do |config|
 
     config.vm.box = "precise32"
     config.vm.box_url = "http://files.vagrantup.com/precise32.box"
-    config.vm.network :private_network, ip: "192.168.50.3"
     config.vm.provision :shell, :path => ".vagrant/bootstrap.sh"
-    config.vm.provision :shell, :path => ".vagrant/wordpress.sh"
+
+    config.vm.define "wp351" do |wp351|
+        wp351.vm.network :private_network, ip: "192.168.50.3"
+        wp351.vm.provision :shell, :path => ".vagrant/wordpress.sh", :args => "3.5.1"
+    end
+
+    config.vm.define "wp36" do |wp36|
+        wp36.vm.network :private_network, ip: "192.168.50.31"
+        wp36.vm.provision :shell, :path => ".vagrant/wordpress.sh", :args => "3.6"
+    end
+
+    config.vm.define "wp37" do |wp37|
+        wp37.vm.network :private_network, ip: "192.168.50.32"
+        wp37.vm.provision :shell, :path => ".vagrant/wordpress.sh", :args => "3.7"
+    end
+
 
 end

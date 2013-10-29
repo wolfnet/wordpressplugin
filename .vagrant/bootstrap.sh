@@ -14,6 +14,7 @@ if [ ! -f "${runfile}" ]; then
     echo "Downloading required software ..."
     apt-get -qq update > /dev/null 2> /dev/null
     apt-get -qq -y -o dir::cache::archives="${tempdir}" install \
+        curl \
         apache2 \
         php5 \
         php5-mysql \
