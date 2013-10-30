@@ -66,7 +66,7 @@ jQuery(function($){
         };
 
 
-    var createBuilderDialog = function ()
+    var createBuilderDialog = function (options)
     {
         if ($builderDialog == null || !(typeof $builderDialog === 'jQuery')) {
             $builderDialog = $('<div>')
@@ -82,7 +82,7 @@ jQuery(function($){
                     // Also reset all forms within the builder back to their defaults.
                     $builderDialog.find('form').trigger('reset');
                 },
-                dialogClass: 'wolfnet_dialog'
+                dialogClass: (options.useDialogClass=='true') ? 'wolfnet_dialog' : ''
             });
             createMenuPage();
             createLoader();
@@ -310,9 +310,10 @@ jQuery(function($){
 
         init : function (options)
         {
-            var options = options||{};
-            loaderUri   = options.loaderUri||null;
-            createBuilderDialog();
+            var opt = {useDialogClass:true};
+            $.extend(opt, options||{});
+            loaderUri = opt.loaderUri||null;
+            createBuilderDialog(opt);
         },
 
         open : function (editor)
@@ -338,7 +339,7 @@ jQuery(function($){
     };
 
 
-    $(document).wolfnetShortcodeBuilder();
+    $(document).wolfnetShortcodeBuilder({useDialogClass:wolfnet_ajax.useDialogClass||'true'});
 
 
 });
