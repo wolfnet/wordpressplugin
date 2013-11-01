@@ -1082,6 +1082,7 @@ class wolfnet
             'title'       => '',
             'criteria'    => '',
             'ownertype'   => 'all',
+            'maptype'     => 'disabled',
             'paginated'   => false,
             'sortoptions' => false,
             'maxresults'  => 50,
@@ -1107,6 +1108,7 @@ class wolfnet
         $options['sortoptions_false_wps'] = selected($options['sortoptions'], 'false', false);
         $options['sortoptions_true_wps']  = selected($options['sortoptions'], 'true', false);
         $options['ownertypes']            = $this->getOwnerTypes();
+        $options['maptypes']              = $this->getMapTypes();
         $options['prices']                = $this->getPrices();
         $options['savedsearches']         = $this->getSavedSearches();
 
@@ -1601,14 +1603,12 @@ class wolfnet
             $baseUrl .= 'index.cfm';
 
         }
-
    
         // Default Search Manager to map search if client has Maptracks enabled     
         if ($maptracksEnabled = "Y") {
             $searchMode = 'map';
         }
 
-     
         $url = $baseUrl
              . ((!strstr($baseUrl, '?')) ? '?' : '')
              . '&action=wpshortcodebuilder&search_mode=' . $searchMode
@@ -2111,6 +2111,17 @@ class wolfnet
             array('value'=>'broker',       'label'=>'Broker Only')
             );
 
+    }
+
+
+    private function getMapTypes ()
+    {
+        return array(
+            array('value'=>'disabled', 'label'=>'No'),
+            array('value'=>'above',    'label'=>'Above Listings'),
+            array('value'=>'below',    'label'=>'Below Listings'),
+            array('value'=>'map_only', 'label'=>'Map Only')
+            );
     }
 
 
