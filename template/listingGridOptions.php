@@ -164,18 +164,20 @@
             </td>
         </tr>
 
-        <tr>
-            <td><label>Include Map:</label></td>
-            <td>
-                <select id="<?php echo $maptype_wpid; ?>" name="<?php echo $maptype_wpname; ?>">
-                    <?php foreach ($maptypes as $mt) { ?>
-                        <option value="<?php echo $mt['value']; ?>" <?php selected($maptypes, $mt['value']); ?>>
-                            <?php echo $mt['label']; ?>
-                        </option>
-                    <?php } ?>
-                </select>
-            </td>
-        </tr>        
+        <?php if ($mapEnabled = "Y") { ?>
+            <tr>
+                <td><label>Include Map:</label></td>
+                <td>
+                    <select id="<?php echo $maptype_wpid; ?>" name="<?php echo $maptype_wpname; ?>">
+                        <?php foreach ($maptypes as $mt) { ?>
+                            <option value="<?php echo $mt['value']; ?>" <?php selected($maptypes, $mt['value']); ?>>
+                                <?php echo $mt['label']; ?>
+                            </option>
+                        <?php } ?>
+                    </select>
+                </td>
+            </tr>
+        <?php } ?>
 
     </table>
 

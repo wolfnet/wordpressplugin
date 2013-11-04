@@ -1108,9 +1108,11 @@ class wolfnet
         $options['sortoptions_false_wps'] = selected($options['sortoptions'], 'false', false);
         $options['sortoptions_true_wps']  = selected($options['sortoptions'], 'true', false);
         $options['ownertypes']            = $this->getOwnerTypes();
-        $options['maptypes']              = $this->getMapTypes();
         $options['prices']                = $this->getPrices();
         $options['savedsearches']         = $this->getSavedSearches();
+        $options['mapEnabled']            = $this->getMaptracksEnabled();
+        $options['maptypes']              = $this->getMapTypes();
+
 
         return $options;
 
