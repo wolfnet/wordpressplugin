@@ -28,13 +28,25 @@
         <h2 class="widget-title"><?php echo $title; ?></h2>
     <?php } ?>
 
-    <?php echo $toolbarTop; ?>
+    <?php if ($mapType == 'above' || $mapType == 'map_only') {
+        echo $map;
+    } ?>
 
-    <div class="wolfnet_listings">
-        <?php echo (isset($listingsHtml)) ? $listingsHtml : 'No Listings to Display.'; ?>
-    </div>
+    <?php if ($mapType != 'map_only') { ?>
+    
+        <?php echo $toolbarTop; ?>
+    
+        <div class="wolfnet_listings">
+            <?php echo (isset($listingsHtml)) ? $listingsHtml : 'No Listings to Display.'; ?>
+        </div>
+    
+        <?php echo $toolbarBottom; ?>
 
-    <?php echo $toolbarBottom; ?>
+    <?php } ?>
+
+    <?php if ($mapType == 'below') {
+        echo $map;
+    } ?>
 
 </div>
 

@@ -263,6 +263,7 @@ class wolfnet
             'wolfnet-listing-grid',
             'wolfnet-toolbar',
             'wolfnet-property-list',
+            'wolfnet-map'
             );
 
         foreach ($scripts as $script) {
@@ -1154,12 +1155,22 @@ class wolfnet
             'siteUrl'       => site_url(),
             'criteria'      => json_encode($criteria),
             'class'         => 'wolfnet_listingGrid ',
+            'map'           => '',
+            'mapType'       => '',
             'toolbarTop'    => '',
             'toolbarBottom' => '',
             'maxresults'    => ((count($listingsData) > 0) ? $listingsData[0]->maxresults : 0),
             );
 
         $vars = $this->convertDataType(array_merge($criteria, $vars));
+
+        if ($vars['maptype'] != "disabled") {
+            $vars['map']     = $this->getMap();
+            $vars['mapType'] = $vars['maptype']; 
+        }
+        else {
+            $vars['mapType'] = $vars['maptype'];
+        }
 
         if ($vars['paginated'] || $vars['sortoptions']) {
             $vars['toolbarTop']    = $this->getToolbar($vars, 'wolfnet_toolbarTop ');
@@ -1237,12 +1248,22 @@ class wolfnet
             'siteUrl'       => site_url(),
             'criteria'      => json_encode($criteria),
             'class'         => 'wolfnet_propertyList ',
+            'map'           => '',
+            'mapType'       => '',
             'toolbarTop'    => '',
             'toolbarBottom' => '',
             'maxresults'    => ((count($listingsData) > 0) ? $listingsData[0]->maxresults : 0),
             );
 
         $vars = $this->convertDataType(array_merge($criteria, $vars));
+
+        if ($vars['maptype'] != "disabled") {
+            $vars['map']     = $this->getMap();
+            $vars['mapType'] = $vars['maptype']; 
+        }
+        else {
+            $vars['mapType'] = $vars['maptype'];
+        }
 
         if ($vars['paginated'] || $vars['sortoptions']) {
             $vars['toolbarTop']    = $this->getToolbar($vars, 'wolfnet_toolbarTop ');
@@ -1532,6 +1553,17 @@ class wolfnet
         echo $this->parseTemplate('template/quickSearch.php', $args);
 
         return apply_filters('wolfnet_quickSearchView', ob_get_clean());
+
+    }
+
+
+    public function mapView()
+    {
+
+        ob_start();
+        echo $this->parseTemplate('template/map.php');
+
+        return apply_filters('wolfnet_mapView', ob_get_clean());
 
     }
 
@@ -1949,6 +1981,12 @@ class wolfnet
         $listing->address .= ' ' . $listing->state;
         $listing->address .= ' ' . $listing->zip_code;
 
+    }
+
+
+    private function getMap() 
+    {
+        return $this->mapView();
     }
 
 
