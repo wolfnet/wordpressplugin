@@ -1561,8 +1561,9 @@ class wolfnet
     {
 
         ob_start();
-        echo $this->parseTemplate('template/map.php');
-
+        $args = $this->getMapParameters();
+        echo $this->parseTemplate('template/map.php', $args);
+        
         return apply_filters('wolfnet_mapView', ob_get_clean());
 
     }
@@ -1988,6 +1989,19 @@ class wolfnet
     {
         return $this->mapView();
     }
+
+
+    private function getMapParameters() 
+    {
+        $productKey = $this->getProductKey();
+
+        $url = 'http://services.mlsfinder.com/v1/setting/' . $productKey . '.json'
+             . '?setting=maptracks_map_provider';
+        $data = $this->getApiData($url, 86400)->maptracks_map_provider;
+        $args['mapProvider'] = $data;
+
+        return $args;
+    }    
 
 
     private function getToolbar($data, $class)
