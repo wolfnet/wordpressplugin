@@ -27,7 +27,6 @@
 if ($mapProvider == 'MapQuest') { 
 
 	$mapClient = 'mapquest'; ?>
-
 	<script type="text/javascript">
 		Key = 'mjtd%7Clu612007nq%2C20%3Do5-50zah';
 		STATSERVER=HYBSERVER=MAPSERVER='tile21.mqcdn.com,tile22.mqcdn.com,tile23.mqcdn.com,tile24.mqcdn.com'.split(',');
@@ -50,47 +49,32 @@ if ($mapProvider == 'MapQuest') {
 else {
 
 	$mapClient = 'bing'; ?>
-
 	<script type="text/javascript" src="http://ecn.dev.virtualearth.net/mapcontrol/mapcontrol.ashx?v=6.2"></script>
 	<script type="text/javascript" src="http://ecn.dev.virtualearth.net/mapcontrol/v6.3/js/atlascompat.js"></script>
 
 <?php }
 
+	$class = 'wolfnet_wntMainMap';
 	$mapName = 'search';
 	$centerLat = '39.715622999999994';
 	$centerLng = '-104.94033299999997';
 	$zoomLevel = '6';
 	$provider = $mapClient;
 	$view = 'map';
-	$isMoveable = false;
-	$showScales = false;
-	$showZoom = false;
-	$showView = true;
-	$hasMiniMap = false;
-	$hasHouseView = false;
-	$hasStreetView = false;
-	$hasNavControl = false;
-	$hasPanControl = false;
-	$hasLoading = false;
-	$hasExpandedZoom = false;
-	$showPoi = false;
-	$poiIcon = '';
-	$poiLat = '';
-	$poiLng = '';
-	$id = '';
-	$class = 'wntMainMap';
-	$fitToRect = false;
-	$brLat = '';
-	$brLng = '';
-	$tlLat = '';
-	$tlLng = '';
+	$isMoveable = 'false';
+	$showScales = 'false';
+	$showZoom = 'false';
+	$showView = 'false';
+	$hasMiniMap = 'false';
+	$hasHouseView = 'false';
+	$hasStreetView = 'false';
+	$fitToRect = 'false';
 	$mapViewType = 'map';
 	$mapDragType = 'move';
 	$allowMouseWheel = 'false';
 
 ?>
 
-RENDER MAP.
 <div class="wolfnet_map">	
 	<div 
 		class="<?php echo $class; ?>"
@@ -116,7 +100,6 @@ RENDER MAP.
 </div>
 
 <script type="text/javascript">
-	//initialize php vars needed in script
 	var provider = '<?php echo $mapClient; ?>';
 </script>
 <script type="text/javascript" src="<?php echo $this->url; ?>/js/wolfnetMap.src.js"></script>
