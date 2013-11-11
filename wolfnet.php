@@ -263,7 +263,8 @@ class wolfnet
             'wolfnet-listing-grid',
             'wolfnet-toolbar',
             'wolfnet-property-list',
-            'wolfnet-map'
+            'wolfnet-maptracks',
+            'wolfnet-houseovers'
             );
 
         foreach ($scripts as $script) {
@@ -1563,7 +1564,7 @@ class wolfnet
         ob_start();
         $args = $this->getMapParameters();
         echo $this->parseTemplate('template/map.php', $args);
-        
+
         return apply_filters('wolfnet_mapView', ob_get_clean());
 
     }

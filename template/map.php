@@ -27,6 +27,7 @@
 if ($mapProvider == 'MapQuest') { 
 
 	$mapClient = 'mapquest'; ?>
+
 	<script type="text/javascript">
 		Key = 'mjtd%7Clu612007nq%2C20%3Do5-50zah';
 		STATSERVER=HYBSERVER=MAPSERVER='tile21.mqcdn.com,tile22.mqcdn.com,tile23.mqcdn.com,tile24.mqcdn.com'.split(',');
@@ -49,57 +50,42 @@ if ($mapProvider == 'MapQuest') {
 else {
 
 	$mapClient = 'bing'; ?>
+
 	<script type="text/javascript" src="http://ecn.dev.virtualearth.net/mapcontrol/mapcontrol.ashx?v=6.2"></script>
 	<script type="text/javascript" src="http://ecn.dev.virtualearth.net/mapcontrol/v6.3/js/atlascompat.js"></script>
 
 <?php }
 
-	$class = 'wolfnet_wntMainMap';
-	$mapName = 'search';
 	$centerLat = '39.715622999999994';
 	$centerLng = '-104.94033299999997';
 	$zoomLevel = '6';
 	$provider = $mapClient;
-	$view = 'map';
-	$isMoveable = 'false';
-	$showScales = 'false';
-	$showZoom = 'false';
-	$showView = 'false';
-	$hasMiniMap = 'false';
-	$hasHouseView = 'false';
-	$hasStreetView = 'false';
-	$fitToRect = 'false';
-	$mapViewType = 'map';
-	$mapDragType = 'move';
-	$allowMouseWheel = 'false';
-
 ?>
 
-<div class="wolfnet_map">	
-	<div 
-		class="<?php echo $class; ?>"
-		data-wnt-map
-		data-wnt-map-name="<?php echo $mapName; ?>"
-		data-wnt-map-hasMiniMap="<?php echo $mapName; ?>"
-		data-wnt-map-centerLat="<?php echo $centerLat; ?>"
-		data-wnt-map-centerLng="<?php echo $centerLng; ?>"
-		data-wnt-map-mapZoomLevel="<?php echo $zoomLevel; ?>"
-		data-wnt-map-provider="<?php echo $provider; ?>"
-		data-wnt-map-view="<?php echo $view; ?>"
-		data-wnt-map-hasHouseView="<?php echo $hasHouseView; ?>"
-		data-wnt-map-hasStreetView="<?php echo $hasStreetView; ?>"
-		data-wnt-map-isMoveable="<?php echo $isMoveable; ?>"
-		data-wnt-map-showScales="<?php echo $showScales; ?>"
-		data-wnt-map-showZoom="<?php echo $showZoom; ?>"
-		data-wnt-map-showView="<?php echo $showView; ?>"
-		data-wnt-map-mapViewType="<?php echo $mapViewType; ?>"
-		data-wnt-map-mapDragType="<?php echo $mapDragType; ?>"
-		data-wnt-map-allowMouseWheel="<?php echo $allowMouseWheel; ?>"
-	>
-	</div>
+<div 
+	class="wolfnet_wntMainMap"
+	data-wnt-map
+	data-wnt-map-name="search"
+	data-wnt-map-hasMiniMap="false"
+	data-wnt-map-centerLat="<?php echo $centerLat; ?>"
+	data-wnt-map-centerLng="<?php echo $centerLng; ?>"
+	data-wnt-map-mapZoomLevel="<?php echo $zoomLevel; ?>"
+	data-wnt-map-provider="<?php echo $provider; ?>"
+	data-wnt-map-view="map"
+	data-wnt-map-hasHouseView="false"
+	data-wnt-map-hasStreetView="false"
+	data-wnt-map-isMoveable="false"
+	data-wnt-map-showScales="false"
+	data-wnt-map-showZoom="false"
+	data-wnt-map-showView="false"
+	data-wnt-map-mapViewType="map"
+	data-wnt-map-mapDragType="move"
+	data-wnt-map-allowMouseWheel="false" >
 </div>
 
 <script type="text/javascript">
 	var provider = '<?php echo $mapClient; ?>';
 </script>
-<script type="text/javascript" src="<?php echo $this->url; ?>/js/wolfnetMap.src.js"></script>
+
+<script type="text/javascript" src="<?php echo $this->url; ?>/js/wolfnetMaptracks.src.js"></script>
+<script type="text/javascript" src="<?php echo $this->url; ?>/js/wolfnetHouseovers.src.js"></script>
