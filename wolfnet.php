@@ -1995,12 +1995,27 @@ class wolfnet
     {
         $productKey = $this->getProductKey();
 
+        $args['listingsData'] = $listingsData;
+
         $url = 'http://services.mlsfinder.com/v1/setting/' . $productKey . '.json'
              . '?setting=maptracks_map_provider';
-        $data = $this->getApiData($url, 86400);
+        $data = $this->getApiData($url, 86400)->maptracks_map_provider;
+        $args['maptracks_map_provider'] = $data;
 
-        $args['mapProvider'] = $data;
-        $args['listingsData'] = $listingsData;
+        $url = 'http://services.mlsfinder.com/v1/setting/' . $productKey . '.json'
+             . '?setting=map_start_lat';
+        $data = $this->getApiData($url, 86400)->map_start_lat;
+        $args['map_start_lat'] = $data;
+
+        $url = 'http://services.mlsfinder.com/v1/setting/' . $productKey . '.json'
+             . '?setting=map_start_lng';
+        $data = $this->getApiData($url, 86400)->map_start_lng;
+        $args['map_start_lng'] = $data;
+
+        $url = 'http://services.mlsfinder.com/v1/setting/' . $productKey . '.json'
+             . '?setting=map_start_scale';
+        $data = $this->getApiData($url, 86400)->map_start_scale;
+        $args['map_start_scale'] = $data;
 
         return $args;
     }    
@@ -2061,7 +2076,7 @@ class wolfnet
         $productKey = $this->getProductKey();
         $url  = 'http://services.mlsfinder.com/v1/setting/' . $productKey . '.json'
               . '?setting=site_text';
-        $data = $this->getApiData($url, 86400);
+        $data = $this->getApiData($url, 86400)->site_text;
         $maxResults = (property_exists($data, 'Max Results')) ? $data->{'Max Results'} : '';
 
         return (is_numeric($maxResults)) ? $maxResults : 250;
@@ -2088,7 +2103,7 @@ class wolfnet
         $productKey = $this->getProductKey();
         $url  = 'http://services.mlsfinder.com/v1/setting/' . $productKey . '.json'
               . '?setting=maptracks_enabled';
-        $data = $this->getApiData($url, 86400);
+        $data = $this->getApiData($url, 86400)->maptracks_enabled;
         $maptracksEnabled = (property_exists($data, 'maptracks_enabled')) ? $data->{'maptracks_enabled'} : '';
 
         return $maptracksEnabled;

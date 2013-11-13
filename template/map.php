@@ -24,7 +24,7 @@
 
 <?php
 
-if ($mapProvider == 'MapQuest') { 
+if ($maptracks_map_provider == 'MapQuest') { 
 
 	$mapClient = 'mapquest'; ?>
 
@@ -55,10 +55,12 @@ else {
 	<script type="text/javascript" src="http://ecn.dev.virtualearth.net/mapcontrol/v6.3/js/atlascompat.js"></script>
 
 <?php }
-	$centerLat = '39.715622999999994';
-	$centerLng = '-104.94033299999997';
-	$zoomLevel = '6';
-	$provider = $mapClient;
+
+$centerLat = $map_start_lat;
+$centerLng = $map_start_lng;
+$zoomLevel = $map_start_scale;
+$provider  = $mapClient;
+
 ?>
 
 <div class="wolfnet_wntMainMap"
@@ -89,7 +91,7 @@ else {
 <script type="text/javascript" src="<?php echo $this->url; ?>/js/wolfnetMaptracks.src.js"></script>
 
 <?php
-
+/*
 	$houseoverHtml  = '<table class="wntHOTable"><tbody><tr>';
 
 	foreach ($listingsData as $key) {
@@ -99,6 +101,7 @@ else {
 	$houseoverHtml .= '</tr></tbody></table>';
 
 	exit;
+*/	
 ?>
 
 <!--<script type="text/javascript" src="<?php echo $this->url; ?>/js/wolfnetHouseovers.src.js"></script>-->
