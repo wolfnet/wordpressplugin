@@ -2232,10 +2232,13 @@ class wolfnet
 
     private function localizedScriptData()
     {
+        global $wp_version;
+
         return array(
-            'ajaxurl'     => admin_url('admin-ajax.php'),
-            'loaderimg'   => admin_url('/images/wpspin_light.gif'),
-            'buildericon' => $this->url . 'img/wp_wolfnet_nav.png',
+            'ajaxurl'        => admin_url('admin-ajax.php'),
+            'loaderimg'      => admin_url('/images/wpspin_light.gif'),
+            'buildericon'    => $this->url . 'img/wp_wolfnet_nav.png',
+            'useDialogClass' => (version_compare($wp_version, '3.6')>0) ? "true" : "false",
             );
 
     }

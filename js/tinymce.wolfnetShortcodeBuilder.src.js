@@ -30,7 +30,7 @@ jQuery(function($){
         {
             var wolfnetPluginUrl = url.substring(0, url.length - 2);
 
-            $(document).wolfnetShortcodeBuilder();
+            // $(document).wolfnetShortcodeBuilder();
 
             editor.addButton('wolfnetShortcodeBuilderButton', {
 
