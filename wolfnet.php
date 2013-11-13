@@ -1166,7 +1166,7 @@ class wolfnet
         $vars = $this->convertDataType(array_merge($criteria, $vars));
 
         if ($vars['maptype'] != "disabled") {
-            $vars['map']     = $this->getMap();
+            $vars['map']     = $this->getMap($listingsData);
             $vars['mapType'] = $vars['maptype']; 
         }
         else {
@@ -1259,7 +1259,7 @@ class wolfnet
         $vars = $this->convertDataType(array_merge($criteria, $vars));
 
         if ($vars['maptype'] != "disabled") {
-            $vars['map']     = $this->getMap();
+            $vars['map']     = $this->getMap($listingsData);
             $vars['mapType'] = $vars['maptype']; 
         }
         else {
@@ -1558,11 +1558,10 @@ class wolfnet
     }
 
 
-    public function mapView()
+    public function mapView($listingsData)
     {
-
         ob_start();
-        $args = $this->getMapParameters();
+        $args = $this->getMapParameters($listingsData);        
         echo $this->parseTemplate('template/map.php', $args);
 
         return apply_filters('wolfnet_mapView', ob_get_clean());
@@ -1986,20 +1985,22 @@ class wolfnet
     }
 
 
-    private function getMap() 
-    {
-        return $this->mapView();
+    private function getMap($listingsData) 
+    {      
+        return $this->mapView($listingsData);
     }
 
 
-    private function getMapParameters() 
+    private function getMapParameters($listingsData)
     {
         $productKey = $this->getProductKey();
 
         $url = 'http://services.mlsfinder.com/v1/setting/' . $productKey . '.json'
              . '?setting=maptracks_map_provider';
-        $data = $this->getApiData($url, 86400)->maptracks_map_provider;
+        $data = $this->getApiData($url, 86400);
+
         $args['mapProvider'] = $data;
+        $args['listingsData'] = $listingsData;
 
         return $args;
     }    
@@ -2060,7 +2061,7 @@ class wolfnet
         $productKey = $this->getProductKey();
         $url  = 'http://services.mlsfinder.com/v1/setting/' . $productKey . '.json'
               . '?setting=site_text';
-        $data = $this->getApiData($url, 86400)->site_text;
+        $data = $this->getApiData($url, 86400);
         $maxResults = (property_exists($data, 'Max Results')) ? $data->{'Max Results'} : '';
 
         return (is_numeric($maxResults)) ? $maxResults : 250;
@@ -2087,7 +2088,7 @@ class wolfnet
         $productKey = $this->getProductKey();
         $url  = 'http://services.mlsfinder.com/v1/setting/' . $productKey . '.json'
               . '?setting=maptracks_enabled';
-        $data = $this->getApiData($url, 86400)->maptracks_enabled;
+        $data = $this->getApiData($url, 86400);
         $maptracksEnabled = (property_exists($data, 'maptracks_enabled')) ? $data->{'maptracks_enabled'} : '';
 
         return $maptracksEnabled;

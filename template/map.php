@@ -55,37 +55,50 @@ else {
 	<script type="text/javascript" src="http://ecn.dev.virtualearth.net/mapcontrol/v6.3/js/atlascompat.js"></script>
 
 <?php }
-
 	$centerLat = '39.715622999999994';
 	$centerLng = '-104.94033299999997';
 	$zoomLevel = '6';
 	$provider = $mapClient;
 ?>
 
-<div 
-	class="wolfnet_wntMainMap"
-	data-wnt-map
-	data-wnt-map-name="search"
-	data-wnt-map-hasMiniMap="false"
-	data-wnt-map-centerLat="<?php echo $centerLat; ?>"
-	data-wnt-map-centerLng="<?php echo $centerLng; ?>"
-	data-wnt-map-mapZoomLevel="<?php echo $zoomLevel; ?>"
-	data-wnt-map-provider="<?php echo $provider; ?>"
-	data-wnt-map-view="map"
-	data-wnt-map-hasHouseView="false"
-	data-wnt-map-hasStreetView="false"
-	data-wnt-map-isMoveable="false"
-	data-wnt-map-showScales="false"
-	data-wnt-map-showZoom="false"
-	data-wnt-map-showView="false"
-	data-wnt-map-mapViewType="map"
-	data-wnt-map-mapDragType="move"
-	data-wnt-map-allowMouseWheel="false" >
+<div class="wolfnet_wntMainMap"
+	 data-wnt-map
+	 data-wnt-map-name="search"
+	 data-wnt-map-hasMiniMap="false"
+	 data-wnt-map-centerLat="<?php echo $centerLat; ?>"
+	 data-wnt-map-centerLng="<?php echo $centerLng; ?>"
+	 data-wnt-map-mapZoomLevel="<?php echo $zoomLevel; ?>"
+	 data-wnt-map-provider="<?php echo $provider; ?>"
+	 data-wnt-map-view="map"
+	 data-wnt-map-hasHouseView="false"
+	 data-wnt-map-hasStreetView="false"
+	 data-wnt-map-isMoveable="false"
+	 data-wnt-map-showScales="false"
+	 data-wnt-map-showZoom="false"
+	 data-wnt-map-showView="false"
+	 data-wnt-map-mapViewType="map"
+	 data-wnt-map-mapDragType="move"
+	 data-wnt-map-allowMouseWheel="false" >
 </div>
 
 <script type="text/javascript">
 	var provider = '<?php echo $mapClient; ?>';
+	var listingsData = '<?php echo $listingsData; ?>';
 </script>
 
 <script type="text/javascript" src="<?php echo $this->url; ?>/js/wolfnetMaptracks.src.js"></script>
-<script type="text/javascript" src="<?php echo $this->url; ?>/js/wolfnetHouseovers.src.js"></script>
+
+<?php
+
+	$houseoverHtml  = '<table class="wntHOTable"><tbody><tr>';
+
+	foreach ($listingsData as $key) {
+
+	}
+
+	$houseoverHtml .= '</tr></tbody></table>';
+
+	exit;
+?>
+
+<!--<script type="text/javascript" src="<?php echo $this->url; ?>/js/wolfnetHouseovers.src.js"></script>-->
