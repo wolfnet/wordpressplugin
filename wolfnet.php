@@ -1926,6 +1926,7 @@ class wolfnet
 
     private function augmentListingData(&$listing)
     {
+
         if (is_numeric($listing->listing_price)) {
             $listing->listing_price = '$' . number_format($listing->listing_price);
         }
@@ -2104,7 +2105,7 @@ class wolfnet
         $url  = 'http://services.mlsfinder.com/v1/setting/' . $productKey . '.json'
               . '?setting=maptracks_enabled';
         $data = $this->getApiData($url, 86400)->maptracks_enabled;
-        $maptracksEnabled = (property_exists($data, 'maptracks_enabled')) ? $data->{'maptracks_enabled'} : '';
+        $maptracksEnabled = $data->{'maptracks_enabled'};
 
         return $maptracksEnabled;
 

@@ -83,25 +83,55 @@ $provider  = $mapClient;
 	 data-wnt-map-allowMouseWheel="false" >
 </div>
 
+<?php
+
+//loop listings and build houseover
+foreach ($listingsData as $listing) {
+
+	?>
+	<div data-property-id="<?php echo $listing->property_id; ?>" class="wntHOItem">
+		<TABLE class="wntHOTable">
+			<TBODY>
+			<TR>
+				<TD class="wntHOImgCol" valign="top" style="vertical-align:top;">
+					<div class='wntHOImg'>
+						<img src='<?php echo $listing->thumbnail_url; ?>'>
+					</div>
+					<div class='wntHOBroker'>
+						<img class="wntHOBrokerLogo" src="<?php echo $listing->branding->brokerLogo; ?>" alt="Broker Reciprocity">
+					</div>
+				</TD>
+
+				<TD valign="top" style="vertical-align:top;">
+					<div class='wntHOContentContainer'>
+						<span class='wntHOContentBold' style="float:right; margin-right:20px!important; margin-right:0px;">
+							<b>MLS#: <?php echo $listing->property_id; ?></b>
+						</span>
+						<span class='wntHOContentBold' style="float:right; margin-right:20px!important; margin-right:0px;">
+							<?php echo $listing->listing_price; ?>
+						</span>
+						<span class='wntHOContentBold' style="float:right; margin-right:20px!important; margin-right:0px;">
+							<?php echo $listing->display_address; ?>
+						</span>
+						<span class='wntHOContentBold' style="float:right; margin-right:20px!important; margin-right:0px;">
+							<?php echo $listing->city; ?>, <?php echo $listing->state; ?>
+						</span>				
+						<span class='wntHOContent'>
+							<?php echo $listing->bedsbaths; ?>
+						</span>			
+					</div>
+				</TD>
+
+			</TR>
+		</TABLE>
+	<div>
+
+<?php }
+?>
+
 <script type="text/javascript">
 	var provider = '<?php echo $mapClient; ?>';
 	var listingsData = '<?php echo $listingsData; ?>';
 </script>
-
 <script type="text/javascript" src="<?php echo $this->url; ?>/js/wolfnetMaptracks.src.js"></script>
-
-<?php
-/*
-	$houseoverHtml  = '<table class="wntHOTable"><tbody><tr>';
-
-	foreach ($listingsData as $key) {
-
-	}
-
-	$houseoverHtml .= '</tr></tbody></table>';
-
-	exit;
-*/	
-?>
-
 <!--<script type="text/javascript" src="<?php echo $this->url; ?>/js/wolfnetHouseovers.src.js"></script>-->
