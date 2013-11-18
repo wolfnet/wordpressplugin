@@ -1651,8 +1651,9 @@ class wolfnet
         $sessionData = $this->sessionData();
 
         if (is_array($cookies)) {
-            $oldCookieData = (array_key_exists($sessionKey, $sessionData) && is_array($sessionData[$sessionKey]))
-                ? $sessionData[$sessionKey] : array();
+            $exists = array_key_exists($sessionKey, $sessionData);
+            $isArray = ($exists) ? is_array($sessionData[$sessionKey]) : false;
+            $oldCookieData = ($exists && $isArray) ? $sessionData[$sessionKey] : array();
             $sessionData[$sessionKey] = array_merge($oldCookieData, $cookies);
             $this->sessionData($sessionData);
         }
