@@ -124,6 +124,12 @@ class wolfnet
     private $postHookPrefix       = 'wolfnet_post_';
 
 
+    private $requestSessionKey    = 'wntSessionKey';
+
+
+    private $sessionLength        = 3600; // one hour
+
+
     /* Constructor Method *********************************************************************** */
     /*   ____                _                   _                                                */
     /*  / ___|___  _ __  ___| |_ _ __ _   _  ___| |_ ___  _ __                                    */
@@ -362,6 +368,8 @@ class wolfnet
 
         // Register Ajax Actions
         $this->registerAdminAjaxActions();
+
+        $this->startSession();
 
     }
 
@@ -675,10 +683,6 @@ class wolfnet
         }
         else {
             ob_start();
-            echo '<script type="text/javascript">';
-            echo 'var wntcfid = "' . $this->searchManagerCfId() . '";';
-            echo 'var wntcftoken = "' . $this->searchManagerCfToken() . '";';
-            echo '</script>';
             echo $this->searchManagerHtml();
             $searchForm = ob_get_clean();
             include 'template/adminSearchManager.php';
@@ -1602,10 +1606,7 @@ class wolfnet
 
         $url = $baseUrl
              . ((!strstr($baseUrl, '?')) ? '?' : '')
-             . '&action=wpshortcodebuilder&search_mode=form'
-             . '&cfid=' . $this->searchManagerCfId()
-             . '&cftoken=' . $this->searchManagerCfToken()
-             . '&jsessionid=' . $this->searchManagerJSessionId();
+             . '&action=wpshortcodebuilder&search_mode=form';
 
         $resParams = array(
             'page',
@@ -1624,30 +1625,15 @@ class wolfnet
         }
 
         $reqHeaders = array(
-            'cookies'    => array(
-                'WntCfId' => new WP_Http_Cookie($this->searchManagerCfId()),
-                'WntCfToken' => new WP_Http_Cookie($this->searchManagerCfToken()),
-                'WntJSessionId' => new WP_Http_Cookie($this->searchManagerJSessionId())
-                ),
+            'cookies'    => $this->searchManagerCookies(),
             'timeout'    => 180,
-            'user-agent' => 'WordPress/' . $wp_version
+            'user-agent' => 'WordPress/' . $wp_version,
             );
 
         $http = wp_remote_get($url, $reqHeaders);
 
         if (!is_wp_error($http) && $http['response']['code'] == '200') {
-
-            if (array_key_exists('WntCfId', $http['cookies'])) {
-                $this->searchManagerCfId($http['cookies']['WntCfId']['value']);
-            }
-
-            if (array_key_exists('WntCfToken', $http['cookies'])) {
-                $this->searchManagerCfToken($http['cookies']['WntCfToken']['value']);
-            }
-
-            if (array_key_exists('WntJSessionId', $http['cookies'])) {
-                $this->searchManagerJSessionId($http['cookies']['WntJSessionId']['value']);
-            }
+            $this->searchManagerCookies($http['cookies']);
 
             return $this->removeJqueryFromHTML($http['body']);
 
@@ -1659,34 +1645,23 @@ class wolfnet
     }
 
 
-    private function searchManagerCfId($value=null)
+    private function searchManagerCookies($cookies=null)
     {
-        return $this->cookie('WntCfId', $value);
+        $sessionKey = 'wntSearchManagerData';
+        $sessionData = $this->sessionData();
 
-    }
-
-
-    private function searchManagerCfToken($value=null)
-    {
-        return $this->cookie('WntCfToken', $value);
-
-    }
-
-
-    private function searchManagerJSessionId($value=null)
-    {
-        return $this->cookie('WntJSessionId', $value);
-
-    }
-
-
-    private function cookie($key, $value=null)
-    {
-        if ($value != null) {
-            $_COOKIE[$key] = $value;
+        if (is_array($cookies)) {
+            $oldCookieData = $sessionData[$sessionKey];
+            $sessionData[$sessionKey] = array_merge($oldCookieData, $cookies);
+            $this->sessionData($sessionData);
         }
 
-        return (array_key_exists($key, $_COOKIE)) ? $_COOKIE[$key] : '';
+        if (array_key_exists($sessionKey, $sessionData)) {
+            return $sessionData[$sessionKey];
+        }
+        else {
+            return array();
+        }
 
     }
 
@@ -2482,6 +2457,46 @@ class wolfnet
         }
 
         return '';
+
+    }
+
+
+    private function startSession()
+    {
+        $wntSessionCookieKey = 'wntSessionKey';
+
+        if (!array_key_exists($wntSessionCookieKey, $_COOKIE)) {
+            $sessionKey = uniqid('wolfnet_session_');
+        }
+        else {
+            $sessionKey = $_COOKIE[$wntSessionCookieKey];
+        }
+
+        $_REQUEST[$this->requestSessionKey] = $sessionKey;
+
+        // Renew the session every time we use it.
+        setcookie($wntSessionCookieKey, $sessionKey, time() + $this->sessionLength);
+        $this->sessionData($this->sessionData());
+
+    }
+
+
+    private function sessionData($data=null)
+    {
+        if (!array_key_exists($this->requestSessionKey, $_REQUEST)) {
+            die('WNT session has not been initialized using startSession.');
+        }
+
+        $sessionKey = $_REQUEST[$this->requestSessionKey];
+
+        if ($data !== null) {
+            set_transient($sessionKey, $data, $this->sessionLength);
+        }
+        else {
+            $data = get_transient($sessionKey);
+        }
+
+        return ($data !== false) ? $data : array();
 
     }
 
