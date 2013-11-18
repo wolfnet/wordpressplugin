@@ -2718,7 +2718,6 @@
             return this.each(function() {
 
                 //add poi from map object
-                
             });
 
         }

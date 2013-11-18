@@ -264,7 +264,6 @@ class wolfnet
             'wolfnet-toolbar',
             'wolfnet-property-list',
             'wolfnet-maptracks',
-            'wolfnet-houseovers'
             );
 
         foreach ($scripts as $script) {
@@ -1996,7 +1995,7 @@ class wolfnet
     {
         $productKey = $this->getProductKey();
 
-        $args['listingsData'] = $listingsData;
+        $args['houseoverData'] = $this->getHouseoverData($listingsData);
 
         $url = 'http://services.mlsfinder.com/v1/setting/' . $productKey . '.json'
              . '?setting=maptracks_map_provider';
@@ -2020,6 +2019,73 @@ class wolfnet
 
         return $args;
     }    
+
+
+    private function getHouseoverData($listingsData)
+    {
+
+        $houseoverData = array();
+
+        foreach ($listingsData as $listing) {
+        
+            $concatHouseover  = '<div class="wolfnet_wntHouseOverWrapper">';
+            $concatHouseover .= '<div data-property-id="';
+            $concatHouseover .= $listing->property_id;
+            $concatHouseover .= '" class="wolfnet_wntHOItem">';
+            $concatHouseover .= '<table class="wolfnet_wntHOTable">';
+            $concatHouseover .= '<tbody>';
+            $concatHouseover .= '<tr>';
+            $concatHouseover .= '<td class="wntHOImgCol" valign="top" style="vertical-align:top;">';
+            $concatHouseover .= '<div class="wolfnet_wntHOImg">';
+            $concatHouseover .= '<img src="';
+            $concatHouseover .= $listing->thumbnail_url;
+            $concatHouseover .= '"">';
+            $concatHouseover .= '</div>';
+            $concatHouseover .= '<div class="wolfnet_wntHOBroker">';
+            $concatHouseover .= '<img class="wolfnet_wntHOBrokerLogo" src="';
+            $concatHouseover .= $listing->branding->brokerLogo;
+            $concatHouseover .= '" alt="Broker Reciprocity">';
+            $concatHouseover .= '</div>';
+            $concatHouseover .= '</td>';
+            $concatHouseover .= '<td valign="top" style="vertical-align:top;">';
+            $concatHouseover .= '<div class="wolfnet_wntHOContentContainer">';
+            $concatHouseover .= '<span class="wolfnet_wntHOContentBold" style="float:right; margin-right:20px!important; margin-right:0px;">';
+            $concatHouseover .= '<b>MLS#: ';
+            $concatHouseover .= $listing->property_id;
+            $concatHouseover .= '</b>';
+            $concatHouseover .= '</span>';
+            $concatHouseover .= '<span class="wolfnet_wntHOContentBold" style="float:right; margin-right:20px!important; margin-right:0px;">';
+            $concatHouseover .= $listing->listing_price;
+            $concatHouseover .= '</span>';
+            $concatHouseover .= '<span class="wolfnet_wntHOContentBold" style="float:right; margin-right:20px!important; margin-right:0px;">';
+            $concatHouseover .= $listing->display_address;
+            $concatHouseover .= '</span>';
+            $concatHouseover .= '<span class="wolfnet_wntHOContentBold" style="float:right; margin-right:20px!important; margin-right:0px;">';
+            $concatHouseover .= $listing->city;
+            $concatHouseover .= ', ';
+            $concatHouseover .= $listing->state;
+            $concatHouseover .= '</span>';
+            $concatHouseover .= '<span class="wolfnet_wntHOContentBold">';
+            $concatHouseover .= $listing->bedsbaths;
+            $concatHouseover .= '</span>';
+            $concatHouseover .= '</div>';
+            $concatHouseover .= '</td>';
+            $concatHouseover .= '</tr>';
+            $concatHouseover .= '</tbody>';
+            $concatHouseover .= '</table>';
+            $concatHouseover .= '</div>';
+            $concatHouseover .= '</div>';
+        
+            array_push($houseoverData, array(
+                'lat' => $listing->lat,
+                'lng' => $listing->lng,
+                'content' => $concatHouseover,
+                ));
+        }  
+
+        return $houseoverData;      
+
+    }
 
 
     private function getToolbar($data, $class)
@@ -2425,6 +2491,10 @@ class wolfnet
                 $this->url . 'js/jquery.wolfnetShortcodeBuilder.src.js',
                 array('jquery-ui-widget', 'jquery-effects-core', 'wolfnet-admin'),
                 ),
+            'wolfnet-maptracks' => array(
+                $this->url . 'js/jquery.wolfnetMaptracks.src.js',
+                array('jquery'),
+                ),                           
             );
 
         foreach ($scripts as $script => $data) {
