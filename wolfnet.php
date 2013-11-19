@@ -151,7 +151,9 @@ class wolfnet
         $this->url = plugin_dir_url(__FILE__);
 
         // Clear cache if url param exists.
-        if (array_key_exists($this->cacheFlag, $_REQUEST) && $_REQUEST[$this->cacheFlag] == 'clear') {
+        $cacheParamExists = array_key_exists($this->cacheFlag, $_REQUEST);
+        $cacheParamClear = ($cacheParamExists) ? ($_REQUEST[$this->cacheFlag] == 'clear') : false;
+        if ($cacheParamExists && $cacheParamClear) {
             $this->clearTransients();
         }
 
@@ -1991,9 +1993,9 @@ class wolfnet
               . '?setting=site_text';
         $data = $this->getApiData($url, 86400);
         $data = (property_exists($data, 'site_text')) ? $data->site_text : new stdClass();
-        $prices = (property_exists($data, 'Price Range Values')) ? $data->{'Price Range Values'} : '';
+        $prcs = (property_exists($data, 'Price Range Values')) ? $data->{'Price Range Values'} : '';
 
-        return explode(',', $prices);
+        return explode(',', $prcs);
 
     }
 
@@ -2406,11 +2408,14 @@ class wolfnet
     * @param mixed $string
     * @return string decoded HTML
     */
-    function html_entity_decode_numeric($string, $quote_style=ENT_COMPAT, $charset='utf-8')
+    public function html_entity_decode_numeric($string, $quote_style=ENT_COMPAT, $charset='utf-8')
     {
+        $hexCallback = array(&$this, 'chr_utf8_hex_callback');
+        $nonHexCallback = array(&$this, 'chr_utf8_nonhex_callback');
+
         $string = html_entity_decode($string, $quote_style, $charset);
-        $string = preg_replace_callback('~&#x([0-9a-fA-F]+);~i', array($this, 'chr_utf8_hex_callback'), $string);
-        $string = preg_replace_callback('~&#([0-9]+);~i', array($this, 'chr_utf8_nonhex_callback'), $string);
+        $string = preg_replace_callback('~&#x([0-9a-fA-F]+);~i', $hexCallback, $string);
+        $string = preg_replace_callback('~&#([0-9]+);~i', $nonHexCallback, $string);
 
         return $string;
 
