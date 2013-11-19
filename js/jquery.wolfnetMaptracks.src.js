@@ -2702,11 +2702,13 @@
                 var houseoverData = options.houseoverData || [];
 
                 for (var i in houseoverData) {
-                    methods.addHouseOver.call($(this), [
+      
+                    methods.addHouseOver.call( $(this), [
                         houseoverData[i].lat,
                         houseoverData[i].lng,
                         houseoverData[i].content,
-                        options.houseoverIcon
+                        options.houseoverIcon,
+                        options.mapId
                         ]);
                 }
 
@@ -2714,11 +2716,19 @@
 
         },
 
-        addHouseOver : function(lat, lng, content, houseIcon) {
-
+        addHouseOver : function(args) {
+        //addHouseOver : function(lat, lng, content, houseIcon) {
             return this.each(function() {
+
+                //initialize vars from arg collection
+                var lat       = args[0];
+                var lng       = args[1];
+                var content   = args[2];
+                var houseIcon = args[3];
+                var mapId     = args[4];
+ 
                 //get map object
-                var instanceMap = $('.wolfnet_wntMainMap').data();
+                var instanceMap = $('#' + mapId).data();
  
                 //build map icon
                 var houseoverIcon = instanceMap.map.mapIcon(houseIcon,30,30);
@@ -2726,8 +2736,7 @@
                 //add houseover
                 var houseover = instanceMap.map.poi(lat, lng, houseoverIcon, content, 123);
                 instanceMap.map.addPoi(houseover);
-            })
-;
+            });
         }
 
     }

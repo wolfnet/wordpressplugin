@@ -2029,8 +2029,11 @@ class wolfnet
         $houseoverData = array();
 
         foreach ($listingsData as $listing) {
-        
-            $concatHouseover  = '<div class="wolfnet_wntHouseOverWrapper">';
+
+            $concatHouseover  = '<a style="display:block" href="';
+            $concatHouseover .= $listing->property_url;
+            $concatHouseover .= '">';
+            $concatHouseover .= '<div class="wolfnet_wntHouseOverWrapper">';
             $concatHouseover .= '<div data-property-id="';
             $concatHouseover .= $listing->property_id;
             $concatHouseover .= '" class="wolfnet_wntHOItem">';
@@ -2043,41 +2046,38 @@ class wolfnet
             $concatHouseover .= $listing->thumbnail_url;
             $concatHouseover .= '"">';
             $concatHouseover .= '</div>';
-            $concatHouseover .= '<div class="wolfnet_wntHOBroker">';
+            $concatHouseover .= '<div class="wolfnet_wntHOBroker" style="text-align: center">';
             $concatHouseover .= '<img class="wolfnet_wntHOBrokerLogo" src="';
             $concatHouseover .= $listing->branding->brokerLogo;
             $concatHouseover .= '" alt="Broker Reciprocity">';
             $concatHouseover .= '</div>';
-            $concatHouseover .= '</td>';
+            $concatHouseover .= '</td>';            
             $concatHouseover .= '<td valign="top" style="vertical-align:top;">';
             $concatHouseover .= '<div class="wolfnet_wntHOContentContainer">';
-            $concatHouseover .= '<span class="wolfnet_wntHOContentBold" style="float:right; margin-right:20px!important; margin-right:0px;">';
-            $concatHouseover .= '<b>MLS#: ';
-            $concatHouseover .= $listing->property_id;
-            $concatHouseover .= '</b>';
-            $concatHouseover .= '</span>';
-            $concatHouseover .= '<span class="wolfnet_wntHOContentBold" style="float:right; margin-right:20px!important; margin-right:0px;">';
+            $concatHouseover .= '<div style="text-align:left;font-weight:bold">';
             $concatHouseover .= $listing->listing_price;
-            $concatHouseover .= '</span>';
-            $concatHouseover .= '<span class="wolfnet_wntHOContentBold" style="float:right; margin-right:20px!important; margin-right:0px;">';
-            $concatHouseover .= $listing->display_address;
-            $concatHouseover .= '</span>';
-            $concatHouseover .= '<span class="wolfnet_wntHOContentBold" style="float:right; margin-right:20px!important; margin-right:0px;">';
-            $concatHouseover .= $listing->city;
-            $concatHouseover .= ', ';
-            $concatHouseover .= $listing->state;
-            $concatHouseover .= '</span>';
-            $concatHouseover .= '<span class="wolfnet_wntHOContentBold">';
-            $concatHouseover .= $listing->bedsbaths;
-            $concatHouseover .= '</span>';
             $concatHouseover .= '</div>';
-            $concatHouseover .= '</td>';
+            $concatHouseover .= '<div style="text-align:left;">';
+            $concatHouseover .= $listing->display_address;
+            $concatHouseover .= '</div>';
+            $concatHouseover .= '<div style="text-align:left;">';
+            $concatHouseover .= $listing->city . ', ' . $listing->state;
+            $concatHouseover .= '</div>';            
+            $concatHouseover .= '<div style="text-align:left;">';
+            $concatHouseover .= $listing->bedsbaths;
+            $concatHouseover .= '</div>';  
+            $concatHouseover .= '<div style="text-align:left;padding-top:20px;">';
+            $concatHouseover .= $listing->branding->content;
+            $concatHouseover .= '</div>'; 
+            $concatHouseover .= '</div>';
+            $concatHouseover .= '</td>';            
             $concatHouseover .= '</tr>';
             $concatHouseover .= '</tbody>';
             $concatHouseover .= '</table>';
             $concatHouseover .= '</div>';
             $concatHouseover .= '</div>';
-        
+            $concatHouseover .= '</a>';
+
             array_push($houseoverData, array(
                 'lat' => $listing->lat,
                 'lng' => $listing->lng,

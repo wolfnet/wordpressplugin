@@ -95,7 +95,8 @@ $elemId = uniqid('wntMapTrack');
 
         $('#' + elemId).wolfnetMapTracks({
         	houseoverData : <?php echo json_encode($houseoverData); ?>,
-        	houseoverIcon : '<?php echo $houseoverIcon; ?>'
+        	houseoverIcon : '<?php echo $houseoverIcon; ?>',
+        	mapId         : '<?php echo $elemId; ?>'
     	});
 
     });
