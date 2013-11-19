@@ -46,21 +46,21 @@ class wolfnet
      * as part of the Ant build process that is run when the plugin is packaged for distribution.
      * @var string
      */
-    private $version              = '{X.X.X}';
+    private $version = '{X.X.X}';
 
     /**
      * This property is used to set the option group for the plugin which creates a namespaced
      * collection of variables which are used in saving widget settings.
      * @var string
      */
-    private $optionGroup          = 'wolfnet';
+    private $optionGroup = 'wolfnet';
 
     /**
      * This property is used to set the option group for the Edit Css page. It creates a namespaced
      * collection of variables which are used in saving page settings.
      * @var string
      */
-    private $CssOptionGroup          = 'wolfnetCss';
+    private $CssOptionGroup = 'wolfnetCss';
 
     /**
      * This property is used to define the 'search' custom type which is how "Search Manager"
@@ -74,7 +74,7 @@ class wolfnet
      * product key used by the plugin to retreive data from the WolfNet API.
      * @var string
      */
-    private $productKeyOptionKey  = 'wolfnet_productKey';
+    private $productKeyOptionKey = 'wolfnet_productKey';
 
     /**
      * This property contains the public CSS as defined in the Edit CSS page.
@@ -93,7 +93,7 @@ class wolfnet
      * references to other transient values are stored.
      * @var string
      */
-    private $transientIndexKey    = 'wolfnet_transients';
+    private $transientIndexKey = 'wolfnet_transients';
 
     /**
      * The maximum amount of time a wolfnet value should be stored in the as a transient object.
@@ -107,21 +107,21 @@ class wolfnet
      * are cached in the Transient API should be cleared.
      * @var string
      */
-    private $cacheFlag            = '-wolfnet-cache';
+    private $cacheFlag = '-wolfnet-cache';
 
     /**
      * This property is used to prefix custom hooks which are defined in the plugin. Specifically
      * this prefix is used for hooks which are executed before a certain portion of code.
      * @var string
      */
-    private $preHookPrefix        = 'wolfnet_pre_';
+    private $preHookPrefix = 'wolfnet_pre_';
 
     /**
      * This property is used to prefix custom hooks which are defined in the plugin. Specifically
      * this prefix is used for hooks which are executed after a certain portion of code.
      * @var string
      */
-    private $postHookPrefix       = 'wolfnet_post_';
+    private $postHookPrefix = 'wolfnet_post_';
 
 
     private $requestSessionKey    = 'wntSessionKey';
@@ -2455,7 +2455,8 @@ class wolfnet
         }
 
         if ($num < 2097152) {
-            return chr(($num >> 18) + 240) . chr((($num >> 12) & 63) + 128) . chr((($num >> 6) & 63) + 128) . chr(($num & 63) + 128);
+            return chr(($num >> 18) + 240) . chr((($num >> 12) & 63) + 128)
+                . chr((($num >> 6) & 63) + 128) . chr(($num & 63) + 128);
         }
 
         return '';
