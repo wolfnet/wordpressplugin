@@ -1665,12 +1665,31 @@ class wolfnet
             $exists = array_key_exists($sessionKey, $sessionData);
             $isArray = ($exists) ? is_array($sessionData[$sessionKey]) : false;
             $oldCookieData = ($exists && $isArray) ? $sessionData[$sessionKey] : array();
-            $sessionData[$sessionKey] = array_merge($oldCookieData, $cookies);
+            $newCookieData = array();
+
+            foreach ($cookies as $key => $cookie) {
+                if ($cookie instanceof WP_Http_Cookie) {
+                    $newCookieData[$cookie->name] = $cookie->value;
+                }
+                else {
+                    $newCookieData[$key] = $cookie;
+                }
+            }
+
+            $sessionData[$sessionKey] = array_merge($oldCookieData, $newCookieData);
             $this->sessionData($sessionData);
+
         }
 
         if (array_key_exists($sessionKey, $sessionData)) {
-            return $sessionData[$sessionKey];
+            $data = array();
+
+            foreach ($sessionData[$sessionKey] as $name => $value) {
+                $data[$name] = $value;
+            }
+
+            return $data;
+
         }
         else {
             return array();
