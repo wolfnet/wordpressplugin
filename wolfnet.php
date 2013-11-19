@@ -124,10 +124,19 @@ class wolfnet
     private $postHookPrefix = 'wolfnet_post_';
 
 
-    private $requestSessionKey    = 'wntSessionKey';
+    /**
+     * This property is used as a request scope key for storing the unique session key value for the
+     * current user.
+     * @var string
+     */
+    private $requestSessionKey = 'wntSessionKey';
 
 
-    private $sessionLength        = 3600; // one hour
+    /**
+     * This property is used to determine how long a WNT session should last.
+     * @var integer
+     */
+    private $sessionLength = 3600; // one hour
 
 
     /* Constructor Method *********************************************************************** */
