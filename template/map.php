@@ -61,9 +61,13 @@ $centerLng = $map_start_lng;
 $zoomLevel = $map_start_scale;
 $elemId = uniqid('wntMapTrack');
 
+//var_dump($houseoverIcon);
+//exit;
+
 ?>
 
-<div id="<?php echo $elemId; ?>" class="wolfnet_wntMainMap"
+<div id="<?php echo $elemId; ?>" 
+	 class="wolfnet_wntMainMap"
 	 data-wnt-map
 	 data-wnt-map-name="search"
 	 data-wnt-map-hasMiniMap="false"
@@ -87,10 +91,11 @@ $elemId = uniqid('wntMapTrack');
 <script type="text/javascript">
     
     jQuery(function($){
-		var elemId        = '<?php echo $elemId; ?>';
+		var elemId = '<?php echo $elemId; ?>';
 
         $('#' + elemId).wolfnetMapTracks({
-        	houseoverData : <?php echo json_encode($houseoverData); ?>
+        	houseoverData : <?php echo json_encode($houseoverData); ?>,
+        	houseoverIcon : '<?php echo $houseoverIcon; ?>'
     	});
 
     });

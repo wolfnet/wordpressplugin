@@ -2017,6 +2017,8 @@ class wolfnet
         $data = $this->getApiData($url, 86400)->map_start_scale;
         $args['map_start_scale'] = $data;
 
+        $args['houseoverIcon'] = $this->url . 'img/houseover.png';
+
         return $args;
     }    
 

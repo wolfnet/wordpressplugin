@@ -2706,6 +2706,7 @@
                         houseoverData[i].lat,
                         houseoverData[i].lng,
                         houseoverData[i].content,
+                        options.houseoverIcon
                         ]);
                 }
 
@@ -2713,13 +2714,20 @@
 
         },
 
-        addHouseOver : function(lat, lng, content) {
+        addHouseOver : function(lat, lng, content, houseIcon) {
 
             return this.each(function() {
+                //get map object
+                var instanceMap = $('.wolfnet_wntMainMap').data();
+ 
+                //build map icon
+                var houseoverIcon = instanceMap.map.mapIcon(houseIcon,30,30);
 
-                //add poi from map object
-            });
-
+                //add houseover
+                var houseover = instanceMap.map.poi(lat, lng, houseoverIcon, content, 123);
+                instanceMap.map.addPoi(houseover);
+            })
+;
         }
 
     }
