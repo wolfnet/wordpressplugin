@@ -25,45 +25,16 @@
 <?php
 
 if ($maptracks_map_provider == 'MapQuest') { 
-
-	$mapClient = 'mapquest'; ?>
-
-	<script type="text/javascript">
-		Key = 'mjtd%7Clu612007nq%2C20%3Do5-50zah';
-		STATSERVER=HYBSERVER=MAPSERVER='tile21.mqcdn.com,tile22.mqcdn.com,tile23.mqcdn.com,tile24.mqcdn.com'.split(',');
-		COVSERVER='coverage.mqcdn.com';
-		RESSERVER='tile21.mqcdn.com';
-		LOGSERVER='btilelog.beta.mapquest.com';
-		STATICSERVER='btileprint.access.mapquest.com';
-		TRAFFSERVER='btraffic.access.mapquest.com';
-		GASSERVER='gasdata.web.mapquest.com';
-		MQPLATFORMSERVER='http://platform.beta.mapquest.com';
-		MQROUTEURL=MQPLATFORMSERVER+'/directions/v1';
-		MQLONGURL=MQPLATFORMSERVER+'/longurl/v1';
-		MQLOGURL=MQPLATFORMSERVER+'/logger/v1';
-		function $pv() {};
-	</script>
-	<script src="//www.mapquestapi.com/sdk/js/v7.0.s/mqa.toolkit.js?key=Gmjtd%7Clu6znua2n9%2C7l%3Do5-la70q"></script>
-
-<?php }	
-
+	$mapClient = 'mapquest';
+}	
 else {
-
-	$mapClient = 'bing'; ?>
-
-	<script type="text/javascript" src="http://ecn.dev.virtualearth.net/mapcontrol/mapcontrol.ashx?v=6.2"></script>
-	<script type="text/javascript" src="http://ecn.dev.virtualearth.net/mapcontrol/v6.3/js/atlascompat.js"></script>
-
-<?php }
+	$mapClient = 'bing';
+}
 
 $centerLat = $map_start_lat;
 $centerLng = $map_start_lng;
 $zoomLevel = $map_start_scale;
 $elemId = uniqid('wntMapTrack');
-
-//var_dump($houseoverIcon);
-//exit;
-
 ?>
 
 <div id="<?php echo $elemId; ?>" 
