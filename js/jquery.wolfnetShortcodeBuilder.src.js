@@ -58,6 +58,11 @@ jQuery(function($){
             action:'wolfnet_scb_options_list',
             shortcode:'wnt_list'
             },
+        'summ' : {
+            title:'Results Summary',
+            action:'wolfnet_scb_results_summary',
+            shortcode:'wnt_results'
+            },            
         'srch' : {
             title:'Quick Search',
             action:'wolfnet_scb_options_quicksearch',

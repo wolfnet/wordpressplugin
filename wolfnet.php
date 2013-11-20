@@ -336,6 +336,9 @@ class wolfnet
         require_once $this->dir . '/widget/PropertyListWidget.php';
         register_widget('Wolfnet_PropertyListWidget');
 
+        require_once $this->dir . '/widget/ResultsSummaryWidget.php';
+        register_widget('Wolfnet_ResultsSummaryWidget');        
+
         require_once $this->dir . '/widget/QuickSearchWidget.php';
         register_widget('Wolfnet_QuickSearchWidget');
 
@@ -741,6 +744,17 @@ class wolfnet
     }
 
 
+    public function scResultsSummary($attrs, $content='')
+    {
+        $defaultAttributes = $this->getResultsSummaryDefaults();
+
+        $criteria = array_merge($defaultAttributes, (is_array($attrs)) ? $attrs : array());
+
+        return $this->resultsSummary($criteria);
+
+    }    
+
+
     public function scQuickSearch($attrs, $content='')
     {
         $defaultAttributes = $this->getQuickSearchDefaults();
@@ -846,6 +860,16 @@ class wolfnet
         die;
 
     }
+
+
+    public function remoteShortcodeBuilderOptionsResultsSummary ()
+    {
+        $args = $this->getResultsSummaryOptions();
+        $this->remoteShortcodeBuilderOptionsGrid($args);
+
+        die;
+
+    }    
 
 
     public function remoteShortcodeBuilderOptionsQuickSearch ()
@@ -1203,6 +1227,7 @@ class wolfnet
             'paginated'   => false,
             'sortoptions' => false,
             'maxresults'  => 50,
+            'maptype'     => 'disabled'
             );
 
     }
@@ -1283,6 +1308,98 @@ class wolfnet
         return $this->propertyListView($vars);
 
     }
+
+
+    /* Results Summary ************************************************************************** */
+
+    public function getResultsSummaryDefaults() {
+
+        return array(
+            'title'       => '',
+            'ownertype'   => 'all',
+            'paginated'   => false,
+            'sortoptions' => false,
+            'maxresults'  => 50,
+            'maptype'     => 'disabled'
+            );
+
+    }
+
+
+    public function getResultsSummaryOptions($instance=null) {
+
+        return $this->getListingGridOptions($instance);
+
+    }
+
+
+    public function resultsSummary(array $criteria) {
+
+        if (!array_key_exists('numrows', $criteria)) {
+            $criteria['numrows'] = $criteria['maxresults'];
+        }
+
+        if (!array_key_exists('startrow', $criteria)) {
+            $criteria['startrow'] = 1;
+        }
+
+        $listingsData = $this->getListings($criteria);
+
+        $listingsHtml = '';
+
+        foreach ($listingsData as &$listing) {
+
+            $this->augmentListingData($listing);
+
+            $vars = array(
+                'listing' => $listing
+                );
+
+            $listingsHtml .= $this->listingBriefView($vars);
+
+        }
+
+        $_REQUEST['wolfnet_includeDisclaimer'] = true;
+
+        $vars = array(
+            'instance_id'   => str_replace('.', '', uniqid('wolfnet_resultsSummary_')),
+            'listings'      => $listingsData,
+            'listingsHtml'  => $listingsHtml,
+            'siteUrl'       => site_url(),
+            'criteria'      => json_encode($criteria),
+            'class'         => 'wolfnet_propertyList ',
+            'map'           => '',
+            'mapType'       => '',
+            'toolbarTop'    => '',
+            'toolbarBottom' => '',
+            'maxresults'    => ((count($listingsData) > 0) ? $listingsData[0]->maxresults : 0),
+            );
+
+        $vars = $this->convertDataType(array_merge($criteria, $vars));
+
+        if ($vars['maptype'] != "disabled") {
+            $vars['map']     = $this->getMap($listingsData);
+            $vars['mapType'] = $vars['maptype']; 
+        }
+        else {
+            $vars['mapType'] = $vars['maptype'];
+        }
+
+        if ($vars['paginated'] || $vars['sortoptions']) {
+            $vars['toolbarTop']    = $this->getToolbar($vars, 'wolfnet_toolbarTop ');
+            $vars['toolbarBottom'] = $this->getToolbar($vars, 'wolfnet_toolbarBottom ');
+        }
+
+        if ($vars['paginated']) {
+            $vars['class'] .= 'wolfnet_withPagination ';
+        }
+
+        if ($vars['sortoptions']) {
+            $vars['class'] .= 'wolfnet_withSortOptions ';
+        }
+
+        return $this->resultsSummaryView($vars);        
+    }    
 
 
     /* Quick Search ***************************************************************************** */
@@ -1456,6 +1573,19 @@ class wolfnet
     }
 
 
+    public function resultsSummaryOptionsFormView(array $args=array())
+    {
+        $args = array_merge($args, array(
+            'instance_id' => str_replace('.', '', uniqid('wolfnet_resultsSummary_'))
+            ));
+
+        $args['criteria'] = esc_attr($args['criteria']);
+
+        return $this->getListingGridOptions($args);
+
+    }    
+
+
     public function quickSearchOptionsFormView(array $args=array())
     {
         $defaultArgs = array(
@@ -1526,6 +1656,23 @@ class wolfnet
         return apply_filters('wolfnet_propertyListView', ob_get_clean());
 
     }
+
+
+    public function resultsSummaryView(array $args=array())
+    {
+        $args['itemsPerPage'] = $this->getItemsPerPage();
+        $args['sortOptions'] = $this->getSortOptions();
+
+        foreach ($args as $key => $item) {
+            $args[$key] = apply_filters('wolfnet_resultsSummaryView_' . $key, $item);
+        }
+
+        ob_start();
+        echo $this->parseTemplate('template/resultsSummary.php', $args);
+
+        return apply_filters('wolfnet_resultsSummaryView', ob_get_clean());
+
+    }    
 
 
     public function listingGridView(array $args=array())
@@ -2428,6 +2575,10 @@ class wolfnet
             'wolfnetpropertylist'       => 'scPropertyList',
             'WOLFNETPROPERTYLIST'       => 'scPropertyList',
             'wnt_list'                  => 'scPropertyList',
+            'WolfNetResultsSummary'     => 'scResultsSummary',
+            'wolfnetresultssummary'     => 'scResultsSummary',
+            'WOLFNETRESULTSSUMMARY'     => 'scResultsSummary',
+            'wnt_results'               => 'scResultsSummary',
             'WolfNetListingQuickSearch' => 'scQuickSearch',
             'wolfnetlistingquicksearch' => 'scQuickSearch',
             'WOLFNETLISTINGQUICKSEARCH' => 'scQuickSearch',
@@ -2598,6 +2749,7 @@ class wolfnet
             'wolfnet_scb_options_featured'    => 'remoteShortcodeBuilderOptionsFeatured',
             'wolfnet_scb_options_grid'        => 'remoteShortcodeBuilderOptionsGrid',
             'wolfnet_scb_options_list'        => 'remoteShortcodeBuilderOptionsList',
+            'wolfnet_scb_results_summary'     => 'remoteShortcodeBuilderOptionsResultsSummary',
             'wolfnet_scb_options_quicksearch' => 'remoteShortcodeBuilderOptionsQuickSearch',
             'wolfnet_scb_savedsearch'         => 'remoteShortcodeBuilderSavedSearch',
             'wolfnet_content'                 => 'remoteContent',
