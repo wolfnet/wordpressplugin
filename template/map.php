@@ -23,7 +23,6 @@
 ?>
 
 <?php
-
 if ($maptracks_map_provider == 'MapQuest') { 
 	$mapClient = 'mapquest';
 }	
@@ -34,10 +33,24 @@ else {
 $centerLat = $map_start_lat;
 $centerLng = $map_start_lng;
 $zoomLevel = $map_start_scale;
-$elemId = uniqid('wntMapTrack');
+$mapId     = uniqid('wntMapTrack');
+$hideMapId = uniqid('hideMap');
+$showMapId = uniqid('showMap');
+$mapIcon   = $this->url . 'img/showmap.gif'
 ?>
 
-<div id="<?php echo $elemId; ?>" 
+<div id="<?php echo $hideMapId; ?>" >
+	<a href="javascript:void(0)" onclick="wolfnet.hideMap('<?php echo $mapId; ?>','<?php echo $hideMapId; ?>','<?php echo $showMapId; ?>');">
+		<img src="<?php echo $mapIcon; ?>">Hide Map
+	</a>
+</div>
+<div id="<?php echo $showMapId; ?>" style="display:none;">
+	<a href="javascript:void(0)" onclick="wolfnet.showMap('<?php echo $mapId; ?>','<?php echo $hideMapId; ?>','<?php echo $showMapId; ?>');">
+		<img src="<?php echo $mapIcon; ?>">Show Map
+	</a>
+</div>
+
+<div id="<?php echo $mapId; ?>" 
 	 class="wolfnet_wntMainMap"
 	 data-wnt-map
 	 data-wnt-map-name="search"
@@ -62,14 +75,13 @@ $elemId = uniqid('wntMapTrack');
 <script type="text/javascript">
     
     jQuery(function($){
-		var elemId = '<?php echo $elemId; ?>';
+		var mapId = '<?php echo $mapId; ?>';
 
-        $('#' + elemId).wolfnetMapTracks({
+        $('#' + mapId).wolfnetMapTracks({
         	houseoverData : <?php echo json_encode($houseoverData); ?>,
         	houseoverIcon : '<?php echo $houseoverIcon; ?>',
-        	mapId         : '<?php echo $elemId; ?>'
+        	mapId         : '<?php echo $mapId; ?>'
     	});
-
     });
 
 </script>

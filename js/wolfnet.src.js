@@ -64,6 +64,27 @@ wolfnet.initMoreInfo = function (  $moreInfoItems )
 
 }
 
+wolfnet.hideMap = function (mapId,hideMapId,showMapId)
+{
+
+	( function ( $ ) {
+		$("#" + mapId).hide();
+		$("#" + hideMapId).hide();
+		$("#" + showMapId).show();
+	} )( jQuery );
+}
+
+wolfnet.showMap = function (mapId,hideMapId,showMapId)
+{
+
+	( function ( $ ) {
+		$("#" + mapId).show();
+		$("#" + hideMapId).show();
+		$("#" + showMapId).hide();
+	} )( jQuery );
+}
+
+
 if ( typeof jQuery != 'undefined' ) {
 
 	( function ( $ ) {
