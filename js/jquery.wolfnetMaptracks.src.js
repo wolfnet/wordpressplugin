@@ -2727,13 +2727,8 @@
                 var houseIcon = args[3];
                 var mapId     = args[4];
  
-                //get map object
                 var instanceMap = $('#' + mapId).data();
- 
-                //build map icon
                 var houseoverIcon = instanceMap.map.mapIcon(houseIcon,30,30);
-
-                //add houseover
                 var houseover = instanceMap.map.poi(lat, lng, houseoverIcon, content, 123);
                 instanceMap.map.addPoi(houseover);
             });

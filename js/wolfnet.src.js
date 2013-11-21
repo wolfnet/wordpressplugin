@@ -64,6 +64,7 @@ wolfnet.initMoreInfo = function (  $moreInfoItems )
 
 }
 
+
 wolfnet.hideMap = function (mapId,hideMapId,showMapId)
 {
 
@@ -73,6 +74,7 @@ wolfnet.hideMap = function (mapId,hideMapId,showMapId)
 		$("#" + showMapId).show();
 	} )( jQuery );
 }
+
 
 wolfnet.showMap = function (mapId,hideMapId,showMapId)
 {

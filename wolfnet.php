@@ -263,6 +263,7 @@ class wolfnet
             'wolfnet-listing-grid',
             'wolfnet-toolbar',
             'wolfnet-property-list',
+            'wolfnet-results-summary',
             'wolfnet-maptracks',
             'mapquest-api-config',
             'mapquest-api'
@@ -1355,7 +1356,7 @@ class wolfnet
                 'listing' => $listing
                 );
 
-            $listingsHtml .= $this->listingBriefView($vars);
+            $listingsHtml .= $this->listingResultsView($vars);
 
         }
 
@@ -1367,7 +1368,7 @@ class wolfnet
             'listingsHtml'  => $listingsHtml,
             'siteUrl'       => site_url(),
             'criteria'      => json_encode($criteria),
-            'class'         => 'wolfnet_propertyList ',
+            'class'         => 'wolfnet_resultsSummary ',
             'map'           => '',
             'mapType'       => '',
             'toolbarTop'    => '',
@@ -1625,6 +1626,20 @@ class wolfnet
         return apply_filters('wolfnet_listingBriefView', ob_get_clean());
 
     }
+
+
+    public function listingResultsView(array $args=array())
+    {
+        foreach ($args as $key => $item) {
+            $args[$key] = apply_filters('wolfnet_listingResultsView_' . $key, $item);
+        }
+
+        ob_start();
+        echo $this->parseTemplate('template/resultsListing.php', $args);
+
+        return apply_filters('wolfnet_listingResultsView', ob_get_clean());
+
+    }    
 
 
     public function featuredListingView(array $args=array())
@@ -2642,6 +2657,10 @@ class wolfnet
                 $this->url . 'js/jquery.wolfnetPropertyList.src.js',
                 array('jquery', 'wolfnet'),
                 ),
+            'wolfnet-results-summary' => array(
+                $this->url . 'js/jquery.wolfnetResultsSummary.src.js',
+                array('jquery', 'wolfnet'),
+                ),            
             'wolfnet-shortcode-builder' => array(
                 $this->url . 'js/jquery.wolfnetShortcodeBuilder.src.js',
                 array('jquery-ui-widget', 'jquery-effects-core', 'wolfnet-admin'),
