@@ -139,6 +139,10 @@ class wolfnet
     private $sessionLength = 3600; // one hour
 
 
+
+    private $smHttp = null;
+
+
     /* Constructor Method *********************************************************************** */
     /*   ____                _                   _                                                */
     /*  / ___|___  _ __  ___| |_ _ __ _   _  ___| |_ ___  _ __                                    */
@@ -380,7 +384,13 @@ class wolfnet
         // Register Ajax Actions
         $this->registerAdminAjaxActions();
 
-        $this->startSession();
+        /* If we are serving up the search manager page we need to get the search manager HTML from
+         * the MLSFinder server now so that we can set cookies. */
+        $pageKeyExists = array_key_exists('page', $_REQUEST);
+        $pageIsSM = ($pageKeyExists) ? ($_REQUEST['page']=='wolfnet_plugin_search_manager') : false;
+        if ($pageKeyExists && $pageIsSM) {
+            $this->smHttp = $this->searchManagerHtml();
+        }
 
     }
 
@@ -693,9 +703,7 @@ class wolfnet
             return;
         }
         else {
-            ob_start();
-            echo $this->searchManagerHtml();
-            $searchForm = ob_get_clean();
+            $searchForm = ($this->smHttp !== null) ? $this->smHttp['body'] : '';
             include 'template/adminSearchManager.php';
 
         }
@@ -1643,14 +1651,29 @@ class wolfnet
 
         $http = wp_remote_get($url, $reqHeaders);
 
-        if (!is_wp_error($http) && $http['response']['code'] == '200') {
-            $this->searchManagerCookies($http['cookies']);
+        if (!is_wp_error($http)) {
 
-            return $this->removeJqueryFromHTML($http['body']);
+            $http['request'] = array(
+                'url' => $url,
+                'headers' => $reqHeaders,
+                );
+
+            if ($http['response']['code'] == '200') {
+                $this->searchManagerCookies($http['cookies']);
+                $http['body'] = $this->removeJqueryFromHTML($http['body']);
+
+                return $http;
+
+            }
+            else {
+                $http['body'] = '';
+                return $http;
+            }
 
         }
         else {
-            return '';
+            return array('body' => '');
+
         }
 
     }
@@ -1658,42 +1681,44 @@ class wolfnet
 
     private function searchManagerCookies($cookies=null)
     {
-        $sessionKey = 'wntSearchManagerData';
-        $sessionData = $this->sessionData();
-
         if (is_array($cookies)) {
-            $exists = array_key_exists($sessionKey, $sessionData);
-            $isArray = ($exists) ? is_array($sessionData[$sessionKey]) : false;
-            $oldCookieData = ($exists && $isArray) ? $sessionData[$sessionKey] : array();
-            $newCookieData = array();
 
-            foreach ($cookies as $key => $cookie) {
-                if ($cookie instanceof WP_Http_Cookie) {
-                    $newCookieData[$cookie->name] = $cookie->value;
+            foreach ($cookies as $name => $value) {
+                if ($value instanceof WP_Http_Cookie) {
+                    $cookieArgs = array(
+                        $value->name,
+                        $value->value,
+                        ($value->expires !== null && is_numeric($value->expires)) ? $value->expires : 0,
+                        );
+
+                    if ($value->path !== null) {
+                        array_push($cookieArgs, $value->path);
+
+                        if ($value->domain !== null) {
+                            array_push($cookieArgs, $value->domain);
+                        }
+
+                    }
+
+                    call_user_func_array('setcookie', $cookieArgs);
+
                 }
                 else {
-                    $newCookieData[$key] = $cookie;
+                    setcookie($name, $value);
                 }
             }
 
-            $sessionData[$sessionKey] = array_merge($oldCookieData, $newCookieData);
-            $this->sessionData($sessionData);
-
         }
 
-        if (array_key_exists($sessionKey, $sessionData)) {
-            $data = array();
-
-            foreach ($sessionData[$sessionKey] as $name => $value) {
-                $data[$name] = $value;
-            }
-
-            return $data;
-
+        $cookies = array();
+        foreach ($_COOKIE as $name => $value) {
+            $cookie = new WP_Http_Cookie($name);
+            $cookie->name = $name;
+            $cookie->value = $value;
+            array_push($cookies, $cookie);
         }
-        else {
-            return array();
-        }
+
+        return $cookies;
 
     }
 
@@ -2493,46 +2518,6 @@ class wolfnet
         }
 
         return '';
-
-    }
-
-
-    private function startSession()
-    {
-        $wntSessionCookieKey = 'wntSessionKey';
-
-        if (!array_key_exists($wntSessionCookieKey, $_COOKIE)) {
-            $sessionKey = uniqid('wolfnet_session_');
-        }
-        else {
-            $sessionKey = $_COOKIE[$wntSessionCookieKey];
-        }
-
-        $_REQUEST[$this->requestSessionKey] = $sessionKey;
-
-        // Renew the session every time we use it.
-        setcookie($wntSessionCookieKey, $sessionKey, time() + $this->sessionLength);
-        $this->sessionData($this->sessionData());
-
-    }
-
-
-    private function sessionData($data=null)
-    {
-        if (!array_key_exists($this->requestSessionKey, $_REQUEST)) {
-            die('WNT session has not been initialized using startSession.');
-        }
-
-        $sessionKey = $_REQUEST[$this->requestSessionKey];
-
-        if ($data !== null) {
-            set_transient($sessionKey, $data, $this->sessionLength);
-        }
-        else {
-            $data = get_transient($sessionKey);
-        }
-
-        return ($data !== false) ? $data : array();
 
     }
 
