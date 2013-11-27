@@ -263,7 +263,6 @@ class wolfnet
             'wolfnet-listing-grid',
             'wolfnet-toolbar',
             'wolfnet-property-list',
-            'wolfnet-results-summary',
             'wolfnet-maptracks',
             'mapquest-api-config',
             'mapquest-api'
@@ -2486,9 +2485,9 @@ class wolfnet
             'ajaxurl'        => admin_url('admin-ajax.php'),
             'loaderimg'      => admin_url('/images/wpspin_light.gif'),
             'buildericon'    => $this->url . 'img/wp_wolfnet_nav.png',
+            'houseoverIcon'    => $this->url . 'img/houseover.png',
             'useDialogClass' => (version_compare($wp_version, '3.6')>0) ? "true" : "false",
             );
-
     }
 
 
@@ -2656,11 +2655,7 @@ class wolfnet
             'wolfnet-property-list' => array(
                 $this->url . 'js/jquery.wolfnetPropertyList.src.js',
                 array('jquery', 'wolfnet'),
-                ),
-            'wolfnet-results-summary' => array(
-                $this->url . 'js/jquery.wolfnetResultsSummary.src.js',
-                array('jquery', 'wolfnet'),
-                ),            
+                ),          
             'wolfnet-shortcode-builder' => array(
                 $this->url . 'js/jquery.wolfnetShortcodeBuilder.src.js',
                 array('jquery-ui-widget', 'jquery-effects-core', 'wolfnet-admin'),

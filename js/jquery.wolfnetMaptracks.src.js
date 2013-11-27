@@ -2712,6 +2712,8 @@
                         ]);
                 }
 
+                var builtMap = $('#' + options.mapId).data('map');
+                builtMap.bestFit();
             });
 
         },
@@ -2727,10 +2729,10 @@
                 var houseIcon = args[3];
                 var mapId     = args[4];
  
-                var instanceMap = $('#' + mapId).data();
-                var houseoverIcon = instanceMap.map.mapIcon(houseIcon,30,30);
-                var houseover = instanceMap.map.poi(lat, lng, houseoverIcon, content, 123);
-                instanceMap.map.addPoi(houseover);
+                var componentMap = $('#' + mapId).data('map');
+                var houseoverIcon = componentMap.mapIcon(houseIcon,30,30);
+                var houseover = componentMap.poi(lat, lng, houseoverIcon, content, 123);
+                componentMap.addPoi(houseover);
             });
         }
 

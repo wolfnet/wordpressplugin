@@ -209,6 +209,26 @@ if ( typeof String.prototype.wolfnetPriceFormat !== 'function' ) {
 
     }
 
+
+    var populateMap = function(data)
+    {
+        var data = ($.isArray(data)) ? data : [];
+        var $container = this;
+        var componentMap = $container.find('.wolfnet_wntMainMap').data('map');
+        var houseIcon = wolfnet_ajax.houseoverIcon;
+
+        componentMap.removeAllShapes();
+
+        for (var i=0, l=data.length; i<l; i++) {
+            var houseoverIcon = componentMap.mapIcon(houseIcon,30,30);
+            var houseover = componentMap.poi(data[i].lat, data[i].lng, houseoverIcon, content, 123);
+            componentMap.addPoi(houseover);
+        }  
+
+        componentMap.bestFit();        
+    }
+
+
     // Take the data returned from an Ajax request and use it to render listings.
     var renderListings = function(data)
     {
@@ -223,6 +243,10 @@ if ( typeof String.prototype.wolfnetPriceFormat !== 'function' ) {
         }
         else if ($container.is('.wolfnet_listingGrid')) {
             renderListingGrid.call($container, data);
+        }
+
+        if ($container.find('.wolfnet_wntMainMap').length > 0) {
+            populateMap.call($container, data);
         }
 
         $container.trigger(UPDATED);
