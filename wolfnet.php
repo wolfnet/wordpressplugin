@@ -46,21 +46,21 @@ class wolfnet
      * as part of the Ant build process that is run when the plugin is packaged for distribution.
      * @var string
      */
-    private $version              = '{X.X.X}';
+    private $version = '{X.X.X}';
 
     /**
      * This property is used to set the option group for the plugin which creates a namespaced
      * collection of variables which are used in saving widget settings.
      * @var string
      */
-    private $optionGroup          = 'wolfnet';
+    private $optionGroup = 'wolfnet';
 
     /**
      * This property is used to set the option group for the Edit Css page. It creates a namespaced
      * collection of variables which are used in saving page settings.
      * @var string
      */
-    private $CssOptionGroup          = 'wolfnetCss';
+    private $CssOptionGroup = 'wolfnetCss';
 
     /**
      * This property is used to define the 'search' custom type which is how "Search Manager"
@@ -74,7 +74,7 @@ class wolfnet
      * product key used by the plugin to retreive data from the WolfNet API.
      * @var string
      */
-    private $productKeyOptionKey  = 'wolfnet_productKey';
+    private $productKeyOptionKey = 'wolfnet_productKey';
 
     /**
      * This property contains the public CSS as defined in the Edit CSS page.
@@ -93,7 +93,7 @@ class wolfnet
      * references to other transient values are stored.
      * @var string
      */
-    private $transientIndexKey    = 'wolfnet_transients';
+    private $transientIndexKey = 'wolfnet_transients';
 
     /**
      * The maximum amount of time a wolfnet value should be stored in the as a transient object.
@@ -107,21 +107,40 @@ class wolfnet
      * are cached in the Transient API should be cleared.
      * @var string
      */
-    private $cacheFlag            = '-wolfnet-cache';
+    private $cacheFlag = '-wolfnet-cache';
 
     /**
      * This property is used to prefix custom hooks which are defined in the plugin. Specifically
      * this prefix is used for hooks which are executed before a certain portion of code.
      * @var string
      */
-    private $preHookPrefix        = 'wolfnet_pre_';
+    private $preHookPrefix = 'wolfnet_pre_';
 
     /**
      * This property is used to prefix custom hooks which are defined in the plugin. Specifically
      * this prefix is used for hooks which are executed after a certain portion of code.
      * @var string
      */
-    private $postHookPrefix       = 'wolfnet_post_';
+    private $postHookPrefix = 'wolfnet_post_';
+
+
+    /**
+     * This property is used as a request scope key for storing the unique session key value for the
+     * current user.
+     * @var string
+     */
+    private $requestSessionKey = 'wntSessionKey';
+
+
+    /**
+     * This property is used to determine how long a WNT session should last.
+     * @var integer
+     */
+    private $sessionLength = 3600; // one hour
+
+
+
+    private $smHttp = null;
 
 
     /* Constructor Method *********************************************************************** */
@@ -145,7 +164,9 @@ class wolfnet
         $this->url = plugin_dir_url(__FILE__);
 
         // Clear cache if url param exists.
-        if (array_key_exists($this->cacheFlag, $_REQUEST) && $_REQUEST[$this->cacheFlag] == 'clear') {
+        $cacheParamExists = array_key_exists($this->cacheFlag, $_REQUEST);
+        $cacheParamClear = ($cacheParamExists) ? ($_REQUEST[$this->cacheFlag] == 'clear') : false;
+        if ($cacheParamExists && $cacheParamClear) {
             $this->clearTransients();
         }
 
@@ -362,6 +383,14 @@ class wolfnet
 
         // Register Ajax Actions
         $this->registerAdminAjaxActions();
+
+        /* If we are serving up the search manager page we need to get the search manager HTML from
+         * the MLSFinder server now so that we can set cookies. */
+        $pageKeyExists = array_key_exists('page', $_REQUEST);
+        $pageIsSM = ($pageKeyExists) ? ($_REQUEST['page']=='wolfnet_plugin_search_manager') : false;
+        if ($pageKeyExists && $pageIsSM) {
+            $this->smHttp = $this->searchManagerHtml();
+        }
 
     }
 
@@ -674,13 +703,7 @@ class wolfnet
             return;
         }
         else {
-            ob_start();
-            echo '<script type="text/javascript">';
-            echo 'var wntcfid = "' . $this->searchManagerCfId() . '";';
-            echo 'var wntcftoken = "' . $this->searchManagerCfToken() . '";';
-            echo '</script>';
-            echo $this->searchManagerHtml();
-            $searchForm = ob_get_clean();
+            $searchForm = ($this->smHttp !== null) ? $this->smHttp['body'] : '';
             include 'template/adminSearchManager.php';
 
         }
@@ -1602,10 +1625,7 @@ class wolfnet
 
         $url = $baseUrl
              . ((!strstr($baseUrl, '?')) ? '?' : '')
-             . '&action=wpshortcodebuilder&search_mode=form'
-             . '&cfid=' . $this->searchManagerCfId()
-             . '&cftoken=' . $this->searchManagerCfToken()
-             . '&jsessionid=' . $this->searchManagerJSessionId();
+             . '&action=wpshortcodebuilder&search_mode=form';
 
         $resParams = array(
             'page',
@@ -1624,69 +1644,81 @@ class wolfnet
         }
 
         $reqHeaders = array(
-            'cookies'    => array(
-                'WntCfId' => new WP_Http_Cookie($this->searchManagerCfId()),
-                'WntCfToken' => new WP_Http_Cookie($this->searchManagerCfToken()),
-                'WntJSessionId' => new WP_Http_Cookie($this->searchManagerJSessionId())
-                ),
+            'cookies'    => $this->searchManagerCookies(),
             'timeout'    => 180,
-            'user-agent' => 'WordPress/' . $wp_version
+            'user-agent' => 'WordPress/' . $wp_version,
             );
 
         $http = wp_remote_get($url, $reqHeaders);
 
-        if (!is_wp_error($http) && $http['response']['code'] == '200') {
+        if (!is_wp_error($http)) {
 
-            if (array_key_exists('WntCfId', $http['cookies'])) {
-                $this->searchManagerCfId($http['cookies']['WntCfId']['value']);
+            $http['request'] = array(
+                'url' => $url,
+                'headers' => $reqHeaders,
+                );
+
+            if ($http['response']['code'] == '200') {
+                $this->searchManagerCookies($http['cookies']);
+                $http['body'] = $this->removeJqueryFromHTML($http['body']);
+
+                return $http;
+
             }
-
-            if (array_key_exists('WntCfToken', $http['cookies'])) {
-                $this->searchManagerCfToken($http['cookies']['WntCfToken']['value']);
+            else {
+                $http['body'] = '';
+                return $http;
             }
-
-            if (array_key_exists('WntJSessionId', $http['cookies'])) {
-                $this->searchManagerJSessionId($http['cookies']['WntJSessionId']['value']);
-            }
-
-            return $this->removeJqueryFromHTML($http['body']);
 
         }
         else {
-            return '';
+            return array('body' => '');
+
         }
 
     }
 
 
-    private function searchManagerCfId($value=null)
+    private function searchManagerCookies($cookies=null)
     {
-        return $this->cookie('WntCfId', $value);
+        if (is_array($cookies)) {
 
-    }
+            foreach ($cookies as $name => $value) {
+                if ($value instanceof WP_Http_Cookie) {
+                    $cookieArgs = array(
+                        $value->name,
+                        $value->value,
+                        ($value->expires !== null && is_numeric($value->expires)) ? $value->expires : 0,
+                        );
 
+                    if ($value->path !== null) {
+                        array_push($cookieArgs, $value->path);
 
-    private function searchManagerCfToken($value=null)
-    {
-        return $this->cookie('WntCfToken', $value);
+                        if ($value->domain !== null) {
+                            array_push($cookieArgs, $value->domain);
+                        }
 
-    }
+                    }
 
+                    call_user_func_array('setcookie', $cookieArgs);
 
-    private function searchManagerJSessionId($value=null)
-    {
-        return $this->cookie('WntJSessionId', $value);
+                }
+                else {
+                    setcookie($name, $value);
+                }
+            }
 
-    }
-
-
-    private function cookie($key, $value=null)
-    {
-        if ($value != null) {
-            $_COOKIE[$key] = $value;
         }
 
-        return (array_key_exists($key, $_COOKIE)) ? $_COOKIE[$key] : '';
+        $cookies = array();
+        foreach ($_COOKIE as $name => $value) {
+            $cookie = new WP_Http_Cookie($name);
+            $cookie->name = $name;
+            $cookie->value = $value;
+            array_push($cookies, $cookie);
+        }
+
+        return $cookies;
 
     }
 
@@ -2014,9 +2046,9 @@ class wolfnet
               . '?setting=site_text';
         $data = $this->getApiData($url, 86400);
         $data = (property_exists($data, 'site_text')) ? $data->site_text : new stdClass();
-        $prices = (property_exists($data, 'Price Range Values')) ? $data->{'Price Range Values'} : '';
+        $prcs = (property_exists($data, 'Price Range Values')) ? $data->{'Price Range Values'} : '';
 
-        return explode(',', $prices);
+        return explode(',', $prcs);
 
     }
 
@@ -2429,11 +2461,14 @@ class wolfnet
     * @param mixed $string
     * @return string decoded HTML
     */
-    function html_entity_decode_numeric($string, $quote_style=ENT_COMPAT, $charset='utf-8')
+    public function html_entity_decode_numeric($string, $quote_style=ENT_COMPAT, $charset='utf-8')
     {
+        $hexCallback = array(&$this, 'chr_utf8_hex_callback');
+        $nonHexCallback = array(&$this, 'chr_utf8_nonhex_callback');
+
         $string = html_entity_decode($string, $quote_style, $charset);
-        $string = preg_replace_callback('~&#x([0-9a-fA-F]+);~i', array($this, 'chr_utf8_hex_callback'), $string);
-        $string = preg_replace_callback('~&#([0-9]+);~i', array($this, 'chr_utf8_nonhex_callback'), $string);
+        $string = preg_replace_callback('~&#x([0-9a-fA-F]+);~i', $hexCallback, $string);
+        $string = preg_replace_callback('~&#([0-9]+);~i', $nonHexCallback, $string);
 
         return $string;
 
@@ -2478,7 +2513,8 @@ class wolfnet
         }
 
         if ($num < 2097152) {
-            return chr(($num >> 18) + 240) . chr((($num >> 12) & 63) + 128) . chr((($num >> 6) & 63) + 128) . chr(($num & 63) + 128);
+            return chr(($num >> 18) + 240) . chr((($num >> 12) & 63) + 128)
+                . chr((($num >> 6) & 63) + 128) . chr(($num & 63) + 128);
         }
 
         return '';
