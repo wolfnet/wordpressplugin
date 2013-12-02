@@ -45,6 +45,9 @@ entered in the "WolfNet >> General Settings" page before any IDX data can be dis
 
 == Changelog ==
 
+= 1.4.1 =
+* Fixing session management bug causing issues with Search Manager.
+
 = 1.4.0 =
 * Adding CSS Editor page.
 * Implementing jsonp for pagination so that pagniated components can be displayed as part of header/footer content wrapping search solution on mlsfinder servers.
