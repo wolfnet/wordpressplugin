@@ -46,7 +46,7 @@ $mapIcon   = $this->url . 'img/showmap.gif'
 </div>
 <div id="<?php echo $showMapId; ?>" style="display:none;">
 	<a href="javascript:void(0)" onclick="wolfnet.showMap('<?php echo $mapId; ?>','<?php echo $hideMapId; ?>','<?php echo $showMapId; ?>');">
-		<img src="<?php echo $mapIcon; ?>">Show Map
+		<img src="<?php echo $mapIcon; ?>">Show these properties on a map
 	</a>
 </div>
 
