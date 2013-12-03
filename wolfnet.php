@@ -1800,9 +1800,9 @@ class wolfnet
             $baseUrl .= 'index.cfm';
 
         }
-   
-        // Default Search Manager to map search if client has Maptracks enabled     
-        if ($maptracksEnabled = "Y") {
+
+        // change map type default to map search if client has Maptracks enabled        
+        if ($maptracksEnabled == 'Y') {
             $searchMode = 'map';
         }
 
@@ -2333,12 +2333,11 @@ class wolfnet
     private function getMaptracksEnabled()
     {
         $productKey = $this->getProductKey();
-        $url  = 'http://services.mlsfinder.com/v1/setting/' . $productKey . '.json'
+        $url  = 'http://services.mlsfinder.com/v1/setting/' . $productKey 
               . '?setting=maptracks_enabled';
         $data = $this->getApiData($url, 86400)->maptracks_enabled;
-        $maptracksEnabled = $data->{'maptracks_enabled'};
 
-        return $maptracksEnabled;
+        return $data;
 
     }
 

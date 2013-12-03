@@ -2719,10 +2719,7 @@
         },
 
         addHouseOver : function(args) {
-        //addHouseOver : function(lat, lng, content, houseIcon) {
             return this.each(function() {
-
-                //initialize vars from arg collection
                 var lat       = args[0];
                 var lng       = args[1];
                 var content   = args[2];
