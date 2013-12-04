@@ -92,8 +92,8 @@ wolfnet.hideListings = function (collapseId,hideId,showId)
 
 	( function ( $ ) {
 		$("#" + collapseId).hide();
-		$("#" + hideId).hide();
 		$("#" + showId).show();
+		$("#" + hideId).hide();
 	} )( jQuery );
 }
 

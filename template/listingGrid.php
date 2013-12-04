@@ -73,4 +73,14 @@
 
     });
 
+    var mapType = '<?php echo "$mapType"; ?>' 
+    if (mapType == 'map_only') {
+
+        var collapseListingsId = '<?php echo $collapseListingsId; ?>';
+        var hideId             = '<?php echo $hideListingsId; ?>';
+        var showId             = '<?php echo $showListingsId; ?>';
+
+        wolfnet.hideListings(collapseListingsId,hideId,showId);
+    }
+
 </script>
