@@ -87,6 +87,28 @@ wolfnet.showMap = function (mapId,hideMapId,showMapId)
 }
 
 
+wolfnet.hideListings = function (collapseId,hideId,showId)
+{
+
+	( function ( $ ) {
+		$("#" + collapseId).hide();
+		$("#" + hideId).hide();
+		$("#" + showId).show();
+	} )( jQuery );
+}
+
+
+wolfnet.showListings = function (collapseId,hideId,showId)
+{
+
+	( function ( $ ) {
+		$("#" + collapseId).show();
+		$("#" + hideId).show();
+		$("#" + showId).hide();
+	} )( jQuery );
+}
+
+
 if ( typeof jQuery != 'undefined' ) {
 
 	( function ( $ ) {

@@ -32,8 +32,12 @@
         echo $map;
     } ?>
 
-    <?php if ($mapType != 'map_only') { ?>
-    
+    <?php if ($mapType != 'disabled') {
+        echo $hideListingsTools;
+    } ?>
+
+    <div id="<?php echo $collapseListingsId; ?>" >
+
         <?php echo $toolbarTop; ?>
     
         <div class="wolfnet_listings">
@@ -42,7 +46,7 @@
     
         <?php echo $toolbarBottom; ?>
 
-    <?php } ?>
+    </div>
 
     <?php if ($mapType == 'below') {
         echo $map;

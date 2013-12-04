@@ -1175,28 +1175,34 @@ class wolfnet
         $_REQUEST['wolfnet_includeDisclaimer'] = true;
 
         $vars = array(
-            'instance_id'   => str_replace('.', '', uniqid('wolfnet_listingGrid_')),
-            'listings'      => $listingsData,
-            'listingsHtml'  => $listingsHtml,
-            'siteUrl'       => site_url(),
-            'criteria'      => json_encode($criteria),
-            'class'         => 'wolfnet_listingGrid ',
-            'map'           => '',
-            'mapType'       => '',
-            'toolbarTop'    => '',
-            'toolbarBottom' => '',
-            'maxresults'    => ((count($listingsData) > 0) ? $listingsData[0]->maxresults : 0),
+            'instance_id'        => str_replace('.', '', uniqid('wolfnet_listingGrid_')),
+            'listings'           => $listingsData,
+            'listingsHtml'       => $listingsHtml,
+            'siteUrl'            => site_url(),
+            'criteria'           => json_encode($criteria),
+            'class'              => 'wolfnet_listingGrid ',
+            'map'                => '',
+            'mapType'            => '',
+            'hideListingsTools'  => '',
+            'hideListingsId'     => uniqid('hideListings'),
+            'showListingsId'     => uniqid('showListings'),
+            'collapseListingsId' => uniqid('collapseListings'),
+            'toolbarTop'         => '',
+            'toolbarBottom'      => '',
+            'maxresults'         => ((count($listingsData) > 0) ? $listingsData[0]->maxresults : 0),
             );
+
 
         $vars = $this->convertDataType(array_merge($criteria, $vars));
 
         if ($vars['maptype'] != "disabled") {
             $vars['map']     = $this->getMap($listingsData);
+            $vars['hideListingsTools'] = $this->getHideListingTools($vars['hideListingsId'],$vars['showListingsId'],$vars['collapseListingsId']);
             $vars['mapType'] = $vars['maptype']; 
         }
         else {
             $vars['mapType'] = $vars['maptype'];
-        }
+        }        
 
         if ($vars['paginated'] || $vars['sortoptions']) {
             $vars['toolbarTop']    = $this->getToolbar($vars, 'wolfnet_toolbarTop ');
@@ -1269,28 +1275,33 @@ class wolfnet
         $_REQUEST['wolfnet_includeDisclaimer'] = true;
 
         $vars = array(
-            'instance_id'   => str_replace('.', '', uniqid('wolfnet_propertyList_')),
-            'listings'      => $listingsData,
-            'listingsHtml'  => $listingsHtml,
-            'siteUrl'       => site_url(),
-            'criteria'      => json_encode($criteria),
-            'class'         => 'wolfnet_propertyList ',
-            'map'           => '',
-            'mapType'       => '',
-            'toolbarTop'    => '',
-            'toolbarBottom' => '',
-            'maxresults'    => ((count($listingsData) > 0) ? $listingsData[0]->maxresults : 0),
+            'instance_id'        => str_replace('.', '', uniqid('wolfnet_propertyList_')),
+            'listings'           => $listingsData,
+            'listingsHtml'       => $listingsHtml,
+            'siteUrl'            => site_url(),
+            'criteria'           => json_encode($criteria),
+            'class'              => 'wolfnet_propertyList ',
+            'map'                => '',
+            'mapType'            => '',
+            'hideListingsTools'  => '',
+            'hideListingsId'     => uniqid('hideListings'),
+            'showListingsId'     => uniqid('showListings'),
+            'collapseListingsId' => uniqid('collapseListings'),
+            'toolbarTop'         => '',
+            'toolbarBottom'      => '',
+            'maxresults'         => ((count($listingsData) > 0) ? $listingsData[0]->maxresults : 0),
             );
 
         $vars = $this->convertDataType(array_merge($criteria, $vars));
 
         if ($vars['maptype'] != "disabled") {
             $vars['map']     = $this->getMap($listingsData);
+            $vars['hideListingsTools'] = $this->getHideListingTools($vars['hideListingsId'],$vars['showListingsId'],$vars['collapseListingsId']);
             $vars['mapType'] = $vars['maptype']; 
         }
         else {
             $vars['mapType'] = $vars['maptype'];
-        }
+        }          
 
         if ($vars['paginated'] || $vars['sortoptions']) {
             $vars['toolbarTop']    = $this->getToolbar($vars, 'wolfnet_toolbarTop ');
@@ -1362,28 +1373,33 @@ class wolfnet
         $_REQUEST['wolfnet_includeDisclaimer'] = true;
 
         $vars = array(
-            'instance_id'   => str_replace('.', '', uniqid('wolfnet_resultsSummary_')),
-            'listings'      => $listingsData,
-            'listingsHtml'  => $listingsHtml,
-            'siteUrl'       => site_url(),
-            'criteria'      => json_encode($criteria),
-            'class'         => 'wolfnet_resultsSummary ',
-            'map'           => '',
-            'mapType'       => '',
-            'toolbarTop'    => '',
-            'toolbarBottom' => '',
-            'maxresults'    => ((count($listingsData) > 0) ? $listingsData[0]->maxresults : 0),
+            'instance_id'        => str_replace('.', '', uniqid('wolfnet_resultsSummary_')),
+            'listings'           => $listingsData,
+            'listingsHtml'       => $listingsHtml,
+            'siteUrl'            => site_url(),
+            'criteria'           => json_encode($criteria),
+            'class'              => 'wolfnet_resultsSummary ',
+            'map'                => '',
+            'mapType'            => '',
+            'hideListingsTools'  => '',
+            'hideListingsId'     => uniqid('hideListings'),
+            'showListingsId'     => uniqid('showListings'),
+            'collapseListingsId' => uniqid('collapseListings'),       
+            'toolbarTop'         => '',
+            'toolbarBottom'      => '',
+            'maxresults'         => ((count($listingsData) > 0) ? $listingsData[0]->maxresults : 0),
             );
 
         $vars = $this->convertDataType(array_merge($criteria, $vars));
 
         if ($vars['maptype'] != "disabled") {
             $vars['map']     = $this->getMap($listingsData);
+            $vars['hideListingsTools'] = $this->getHideListingTools($vars['hideListingsId'],$vars['showListingsId'],$vars['collapseListingsId']);
             $vars['mapType'] = $vars['maptype']; 
         }
         else {
             $vars['mapType'] = $vars['maptype'];
-        }
+        }          
 
         if ($vars['paginated'] || $vars['sortoptions']) {
             $vars['toolbarTop']    = $this->getToolbar($vars, 'wolfnet_toolbarTop ');
@@ -1728,6 +1744,20 @@ class wolfnet
 
         return apply_filters('wolfnet_mapView', ob_get_clean());
 
+    }
+
+
+    public function hideListingsToolsView($hideId,$showId,$collapseId)
+    {
+        ob_start(); 
+
+        $args['hideId'] = $hideId;
+        $args['showId'] = $showId;
+        $args['collapseId'] = $collapseId;
+
+        echo $this->parseTemplate('template/hideListingsTools.php', $args);
+
+        return apply_filters('wolfnet_hideListingsTools', ob_get_clean());
     }
 
 
@@ -2151,6 +2181,12 @@ class wolfnet
     private function getMap($listingsData) 
     {      
         return $this->mapView($listingsData);
+    }
+
+
+    private function getHideListingTools($hideId,$showId,$collapseId)
+    {
+        return $this->hideListingsToolsView($hideId,$showId,$collapseId);
     }
 
 
