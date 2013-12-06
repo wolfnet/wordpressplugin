@@ -1819,7 +1819,6 @@ class wolfnet
     {
         global $wp_version;
         $baseUrl = $this->getBaseUrl();
-        $searchMode = 'form';
         $maptracksEnabled = $this->getMaptracksEnabled();
 
         if (!strstr($baseUrl, 'index.cfm')) {
@@ -1831,14 +1830,13 @@ class wolfnet
 
         }
 
-        // change map type default to map search if client has Maptracks enabled        
-        if ($maptracksEnabled == 'Y') {
-            $searchMode = 'map';
+        if (!array_key_exists('search_mode', $_GET)) {
+            $_GET['search_mode'] = ($maptracksEnabled) ? 'map' : 'form';
         }
 
         $url = $baseUrl
              . ((!strstr($baseUrl, '?')) ? '?' : '')
-             . '&action=wpshortcodebuilder&search_mode=' . $searchMode
+             . '&action=wpshortcodebuilder'
              . '&cfid=' . $this->searchManagerCfId()
              . '&cftoken=' . $this->searchManagerCfToken()
              . '&jsessionid=' . $this->searchManagerJSessionId();
@@ -1848,8 +1846,7 @@ class wolfnet
             'action',
             'market_guid',
             'reinit',
-            'show_header_footer',
-            'search_mode'
+            'show_header_footer'
             );
 
         foreach ($_GET as $param => $paramValue) {
@@ -2371,7 +2368,9 @@ class wolfnet
         $productKey = $this->getProductKey();
         $url  = 'http://services.mlsfinder.com/v1/setting/' . $productKey 
               . '?setting=maptracks_enabled';
-        $data = $this->getApiData($url, 86400)->maptracks_enabled;
+        //$data = $this->getApiData($url, 0)->maptracks_enabled;
+        $data = $this->getApiData($url, 86400);
+        $data = (property_exists($data, 'maptracks_enabled')) ? ($data->maptracks_enabled == 'Y') : false;
 
         return $data;
 
