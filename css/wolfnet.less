@@ -480,14 +480,15 @@
 
         .wolfnet_listing
         {
-            width:      450px;
-            text-align: center;
-            margin:     0 auto 1em auto;
-            position:   relative;
-            text-align: left;
-            font-size:  .8em;
-            margin:     0 5px 0 5px;        
-
+            width:          100%;
+            text-align:     center;
+            margin:         0 auto 1em auto;
+            position:       relative;
+            text-align:     left;
+            font-size:      .8em;
+            margin:         0 5px 0 5px; 
+            clear:          both;     
+            padding-bottom: 20px;
             a
             {
                 color:           inherit;
@@ -501,7 +502,7 @@
 
             .wolfnet_listingImage
             {
-                width:      100%;
+                width:      160px;
                 height:     auto;
                 display:    block;
                 overflow:   hidden;
@@ -511,6 +512,7 @@
                 border:           1px solid hsl(0, 0%, 87%);
                 background-color: #F5F5F5;
                 padding:          10px 0 10px 0;
+                float:  left;
 
                 img
                 {
@@ -519,6 +521,11 @@
                     border: 1px solid #EBEBEB;
                 }
 
+            }
+
+            .wolfnet_data
+            {
+                padding-left: 175px;
             }
 
             .wolfnet_price
@@ -543,7 +550,6 @@
 
             .wolfnet_branding
             {
-                display: none;
 
                 .wolfnet_brokerLogo
                 {

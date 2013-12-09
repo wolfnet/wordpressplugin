@@ -164,7 +164,7 @@
             </td>
         </tr>
 
-        <?php if ($mapEnabled == 'Y') { ?>
+        <?php if ($mapEnabled) { ?>
             <tr>
                 <td><label>Include Map:</label></td>
                 <td>

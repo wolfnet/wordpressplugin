@@ -23,27 +23,21 @@
 ?>
 
 <div id="wolfnet_listing_<?php echo $listing->property_id; ?>" class="wolfnet_listing" itemscope>
-    <table>
-        <tr>
-            <td>
-                <a href="<?php echo $listing->property_url; ?>" rel="follow">
-                    <span class="wolfnet_listingImage"><img src="<?php echo $listing->photo_url; ?>" alt="Property for sale at <?php echo $listing->address; ?>" /></span>
-                </a>
-            </td>
-            <td>
-                <span class="wolfnet_price" itemprop="price"><?php echo $listing->listing_price; ?></span>
-                <span class="wolfnet_address"><?php echo $listing->display_address; ?></span>
-                <span class="wolfnet_location"><?php echo $listing->location; ?></span>    
-                <span class="wolfnet_bedsbath"><?php echo $listing->bedsbaths; ?></span>    
-                <?php if (property_exists($listing, 'branding') && ($listing->branding->brokerLogo != '' || $listing->branding->content != '')) { ?>
-                <div span="wolfnet_branding">
-                    <?php if (trim($listing->branding->brokerLogo) !== '') { ?>
-                        <span class="wolfnet_brokerLogo"><img src="<?php echo $listing->branding->brokerLogo; ?>" /></span>
-                    <?php } ?>
-                    <span class="wolfnet_brandingMessage"><?php echo $listing->branding->content; ?></span>
-                </div>
+    <a href="<?php echo $listing->property_url; ?>" rel="follow">
+        <span class="wolfnet_listingImage">
+            <img src="<?php echo $listing->photo_url; ?>" alt="Property for sale at <?php echo $listing->address; ?>" />
+        </span>
+        <div class="wolfnet_data">
+            <span class="wolfnet_price" itemprop="price"><?php echo $listing->listing_price; ?></span>
+            <span class="wolfnet_address"><?php echo $listing->display_address; ?></span>
+            <span class="wolfnet_location"><?php echo $listing->location; ?></span>    
+            <span class="wolfnet_bedsbath"><?php echo $listing->bedsbaths; ?></span>    
+            <div class="wolfnet_branding">
+                <?php if (trim($listing->branding->brokerLogo) !== '') { ?>
+                    <span class="wolfnet_brokerLogo"><img src="<?php echo $listing->branding->brokerLogo; ?>" /></span>
                 <?php } ?>
-            </td>
-        </tr>
-    </table>
+                <span class="wolfnet_brandingMessage"><?php echo $listing->branding->content; ?></span>
+            </div>
+        </div>        
+    </a>
 </div>
