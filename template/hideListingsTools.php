@@ -22,12 +22,12 @@
 
 ?>
 
-<div id="<?php echo $hideId; ?>" >
+<div id="<?php echo $hideId; ?>" class="showHideLink">
 	<a href="javascript:void(0)" onclick="wolfnet.hideListings('<?php echo $collapseId; ?>','<?php echo $hideId; ?>','<?php echo $showId; ?>');">
 		Hide Listings
 	</a>
 </div>
-<div id="<?php echo $showId; ?>" style="display:none;">
+<div id="<?php echo $showId; ?>" class="showHideLink" style="display:none;">
 	<a href="javascript:void(0)" onclick="wolfnet.showListings('<?php echo $collapseId; ?>','<?php echo $hideId; ?>','<?php echo $showId; ?>');">
 		Show these listings
 	</a>

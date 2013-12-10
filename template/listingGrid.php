@@ -28,11 +28,11 @@
         <h2 class="widget-title"><?php echo $title; ?></h2>
     <?php } ?>
 
-    <?php if ($mapType == 'above' || $mapType == 'map_only') {
+    <?php if (($mapType == 'above' || $mapType == 'map_only') && $mapEnabled) {
         echo $map;
     } ?>
 
-    <?php if ($mapType != 'disabled') {
+    <?php if ($mapType != 'disabled' && $mapEnabled) {
         echo $hideListingsTools;
     } ?>
 
@@ -48,7 +48,7 @@
 
     </div>
 
-    <?php if ($mapType == 'below') {
+    <?php if ($mapType == 'below' && $mapEnabled) {
         echo $map;
     } ?>
 
