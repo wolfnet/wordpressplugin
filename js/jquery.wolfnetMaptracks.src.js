@@ -2702,7 +2702,6 @@
                 var houseoverData = options.houseoverData || [];
 
                 for (var i in houseoverData) {
-      
                     methods.addHouseOver.call( $(this), [
                         houseoverData[i].lat,
                         houseoverData[i].lng,
@@ -2725,10 +2724,10 @@
                 var content   = args[2];
                 var houseIcon = args[3];
                 var mapId     = args[4];
- 
+
                 var componentMap = $('#' + mapId).data('map');
                 var houseoverIcon = componentMap.mapIcon(houseIcon,30,30);
-                var houseover = componentMap.poi(lat, lng, houseoverIcon, content, 123);
+                var houseover = componentMap.poi(lat, lng, houseoverIcon, content);
                 componentMap.addPoi(houseover);
             });
         }

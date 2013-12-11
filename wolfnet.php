@@ -2261,7 +2261,7 @@ class wolfnet
 
         foreach ($listingsData as $listing) {
 
-            $concatHouseover  = '<a style="display:block" href="';
+            $concatHouseover  = '<a style="display:block" rel="follow" href="';
             $concatHouseover .= $listing->property_url;
             $concatHouseover .= '">';
             $concatHouseover .= '<div class="wolfnet_wntHouseOverWrapper">';
