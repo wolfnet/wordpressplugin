@@ -41,19 +41,19 @@ $mapIcon   = $this->url . 'img/showmap.gif'
 
 <div id="<?php echo $hideMapId; ?>" >
 	<a href="javascript:void(0)" onclick="wolfnet.hideMap('<?php echo $mapId; ?>','<?php echo $hideMapId; ?>','<?php echo $showMapId; ?>');">
-		<img src="<?php echo $mapIcon; ?>">Hide Map
+		<img src="<?php echo $mapIcon; ?>">&nbsp;Hide Map
 	</a>
 </div>
 <div id="<?php echo $showMapId; ?>" style="display:none;">
 	<a href="javascript:void(0)" onclick="wolfnet.showMap('<?php echo $mapId; ?>','<?php echo $hideMapId; ?>','<?php echo $showMapId; ?>');">
-		<img src="<?php echo $mapIcon; ?>">Show these properties on a map
+		<img src="<?php echo $mapIcon; ?>">&nbsp;Show these properties on a map
 	</a>
 </div>
 
 <div id="<?php echo $mapId; ?>" 
 	 class="wolfnet_wntMainMap"
 	 data-wnt-map
-	 data-wnt-map-name="search"
+	 data-wnt-map-name="pluginMap"
 	 data-wnt-map-hasMiniMap="false"
 	 data-wnt-map-centerLat="<?php echo $centerLat; ?>"
 	 data-wnt-map-centerLng="<?php echo $centerLng; ?>"

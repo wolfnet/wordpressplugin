@@ -1221,8 +1221,11 @@ class wolfnet
 
         if ($vars['maptype'] != "disabled") {
             $vars['map']     = $this->getMap($listingsData);
-            $vars['hideListingsTools'] = $this->getHideListingTools($vars['hideListingsId'],$vars['showListingsId'],$vars['collapseListingsId']);
-            $vars['mapType'] = $vars['maptype']; 
+            $vars['mapType'] = $vars['maptype'];         
+            $vars['hideListingsTools'] = $this->getHideListingTools($vars['hideListingsId']
+                                                                   ,$vars['showListingsId']
+                                                                   ,$vars['collapseListingsId']
+                                                                   ,$vars['instance_id']);
         }
         else {
             $vars['mapType'] = $vars['maptype'];
@@ -1321,7 +1324,10 @@ class wolfnet
 
         if ($vars['maptype'] != "disabled") {
             $vars['map']     = $this->getMap($listingsData);
-            $vars['hideListingsTools'] = $this->getHideListingTools($vars['hideListingsId'],$vars['showListingsId'],$vars['collapseListingsId']);
+            $vars['hideListingsTools'] = $this->getHideListingTools($vars['hideListingsId']
+                                                                   ,$vars['showListingsId']
+                                                                   ,$vars['collapseListingsId']
+                                                                   ,$vars['instance_id']);
             $vars['mapType'] = $vars['maptype']; 
         }
         else {
@@ -1420,7 +1426,10 @@ class wolfnet
 
         if ($vars['maptype'] != "disabled") {
             $vars['map']     = $this->getMap($listingsData);
-            $vars['hideListingsTools'] = $this->getHideListingTools($vars['hideListingsId'],$vars['showListingsId'],$vars['collapseListingsId']);
+            $vars['hideListingsTools'] = $this->getHideListingTools($vars['hideListingsId']
+                                                                   ,$vars['showListingsId']
+                                                                   ,$vars['collapseListingsId']
+                                                                   ,$vars['instance_id']);
             $vars['mapType'] = $vars['maptype']; 
         }
         else {
@@ -1773,13 +1782,14 @@ class wolfnet
     }
 
 
-    public function hideListingsToolsView($hideId,$showId,$collapseId)
+    public function hideListingsToolsView($hideId,$showId,$collapseId,$instance_id)
     {
         ob_start(); 
 
         $args['hideId'] = $hideId;
         $args['showId'] = $showId;
         $args['collapseId'] = $collapseId;
+        $args['instance_id'] = $instance_id;
 
         echo $this->parseTemplate('template/hideListingsTools.php', $args);
 
@@ -2216,9 +2226,9 @@ class wolfnet
     }
 
 
-    private function getHideListingTools($hideId,$showId,$collapseId)
-    {
-        return $this->hideListingsToolsView($hideId,$showId,$collapseId);
+    private function getHideListingTools($hideId,$showId,$collapseId,$instance_id)
+    {         
+        return $this->hideListingsToolsView($hideId,$showId,$collapseId,$instance_id);
     }
 
 

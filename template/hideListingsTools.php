@@ -23,12 +23,14 @@
 ?>
 
 <div id="<?php echo $hideId; ?>" class="showHideLink">
-	<a href="javascript:void(0)" onclick="wolfnet.hideListings('<?php echo $collapseId; ?>','<?php echo $hideId; ?>','<?php echo $showId; ?>');">
+	<a href="javascript:void(0)" 
+	   onclick="wolfnet.hideListings('<?php echo $collapseId; ?>','<?php echo $hideId; ?>','<?php echo $showId; ?>','<?php echo $instance_id; ?>');">
 		Hide Listings
 	</a>
 </div>
 <div id="<?php echo $showId; ?>" class="showHideLink" style="display:none;">
-	<a href="javascript:void(0)" onclick="wolfnet.showListings('<?php echo $collapseId; ?>','<?php echo $hideId; ?>','<?php echo $showId; ?>');">
+	<a href="javascript:void(0)" 
+	   onclick="wolfnet.showListings('<?php echo $collapseId; ?>','<?php echo $hideId; ?>','<?php echo $showId; ?>','<?php echo $instance_id; ?>');">
 		Show these listings
 	</a>
 </div>

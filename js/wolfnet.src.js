@@ -98,13 +98,18 @@ wolfnet.hideListings = function (collapseId,hideId,showId)
 }
 
 
-wolfnet.showListings = function (collapseId,hideId,showId)
+wolfnet.showListings = function (collapseId,hideId,showId,instanceId)
 {
 
 	( function ( $ ) {
 		$("#" + collapseId).show();
 		$("#" + hideId).show();
 		$("#" + showId).hide();
+
+		if (instanceId.indexOf("listingGrid") != -1) {
+			$('#' + instanceId).wolfnetListingGrid('reload');
+		}
+
 	} )( jQuery );
 }
 
