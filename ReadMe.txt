@@ -45,6 +45,9 @@ entered in the "WolfNet >> General Settings" page before any IDX data can be dis
 
 == Changelog ==
 
+= 1.4.2 =
+* Fixing minor bug impacting sites running specific plugins.
+
 = 1.4.1 =
 * Fixing session management bug causing issues with Search Manager.
 
