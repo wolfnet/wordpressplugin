@@ -2199,7 +2199,7 @@ class wolfnet
             }
         }
         else {
-            if (is_callable($callable)) {
+            if (is_callable($callable) && is_array($callable)) {
                 add_action($action, $callable, $priority);
             }
             else if (is_string($callable) && method_exists($this, $callable)) {
