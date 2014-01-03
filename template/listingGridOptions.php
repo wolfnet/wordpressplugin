@@ -32,12 +32,31 @@
             <td><label>Title:</label></td>
             <td><input id="<?php echo $title_wpid; ?>" name="<?php echo $title_wpname; ?>" value="<?php echo $title; ?>" type="text" /></td>
         </tr>
-
+              
         <tr class="modeField">
             <td><label>Mode:</label></td>
             <td>
-                <input id="<?php echo $mode_wpid; ?>" name="<?php echo $mode_wpname; ?>" value="basic" type="radio" <?php echo $mode_basic_wpc; ?> /> Basic <br/>
-                <input id="<?php echo $mode_wpid; ?>" name="<?php echo $mode_wpname; ?>" value="advanced" type="radio" <?php echo $mode_advanced_wpc; ?> /> Advanced
+                <input id="<?php echo $mode_wpid; ?>" name="<?php echo $mode_wpname; ?>" value="basic" type="radio" checked="checked" /> Basic <br/>
+                <input id="<?php echo $mode_wpid; ?>" name="<?php echo $mode_wpname; ?>" value="advanced" type="radio" /> Advanced
+            </td>
+        </tr>
+
+        <tr>
+            <td><label>Include Map:</label></td>
+            <td>
+                <select id="<?php echo $maptype_wpid; ?>" name="<?php echo $maptype_wpname; ?>" <?php if (!$mapEnabled) { ?>disabled<?php } ?> >
+                    <?php foreach ($maptypes as $mt) { ?>
+                        <option value="<?php echo $mt['value']; ?>" <?php selected($maptypes, $mt['value']); ?>>
+                            <?php echo $mt['label']; ?>
+                        </option>
+                    <?php } ?>
+                </select>
+                <?php if (!$mapEnabled) { ?>
+                <p>
+                    <span style="color:#FF0000;font-weight:bold;">*</span> 
+                    <span style="font-style:italic;font-size:0.75em;">Map option is unavailable at this time. To enable this feature, please contact WolfNet sales for more information (612) 342-0088.</span>
+                </p>
+                <?php } ?>
             </td>
         </tr>
 
@@ -163,21 +182,6 @@
                 </span>
             </td>
         </tr>
-
-        <?php if ($mapEnabled) { ?>
-            <tr>
-                <td><label>Include Map:</label></td>
-                <td>
-                    <select id="<?php echo $maptype_wpid; ?>" name="<?php echo $maptype_wpname; ?>">
-                        <?php foreach ($maptypes as $mt) { ?>
-                            <option value="<?php echo $mt['value']; ?>" <?php selected($maptypes, $mt['value']); ?>>
-                                <?php echo $mt['label']; ?>
-                            </option>
-                        <?php } ?>
-                    </select>
-                </td>
-            </tr>
-        <?php } ?>
 
     </table>
 
