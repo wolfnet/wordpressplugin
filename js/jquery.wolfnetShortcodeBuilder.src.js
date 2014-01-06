@@ -58,7 +58,7 @@ jQuery(function($){
             action:'wolfnet_scb_options_list',
             shortcode:'wnt_list'
             },
-        /*  Removing until requirements for this component are further fleshed out
+        /*  Removing until requirements for this component are better fleshed out
         'summ' : {
             title:'Results Summary',
             action:'wolfnet_scb_results_summary',
@@ -80,8 +80,8 @@ jQuery(function($){
             .dialog({
                 modal    :true,
                 autoOpen :false,
-                height   : 450,
-                width    : 475,
+                height   : 550,
+                width    : 600,
                 title    : baseTitle,
                 close    : function () {
                     // When the dialog window is closed reset the page back to the menu.
