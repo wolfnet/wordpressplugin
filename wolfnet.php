@@ -2236,35 +2236,22 @@ class wolfnet
     {
         $productKey = $this->getProductKey();
 
-        $args['houseoverData'] = $this->getHouseoverData($listingsData);
-
         $url = 'http://services.mlsfinder.com/v1/setting/' . $productKey . '.json'
-             . '?setting=maptracks_map_provider';
-        $data = $this->getApiData($url, 86400)->maptracks_map_provider;
-        $args['maptracks_map_provider'] = $data;
+             . '?setting=getallsettings';
+        $data = $this->getApiData($url, 86400);
 
-        $url = 'http://services.mlsfinder.com/v1/setting/' . $productKey . '.json'
-             . '?setting=map_start_lat';
-        $data = $this->getApiData($url, 86400)->map_start_lat;
-        $args['map_start_lat'] = $data;
-
-        $url = 'http://services.mlsfinder.com/v1/setting/' . $productKey . '.json'
-             . '?setting=map_start_lng';
-        $data = $this->getApiData($url, 86400)->map_start_lng;
-        $args['map_start_lng'] = $data;
-
-        $url = 'http://services.mlsfinder.com/v1/setting/' . $productKey . '.json'
-             . '?setting=map_start_scale';
-        $data = $this->getApiData($url, 86400)->map_start_scale;
-        $args['map_start_scale'] = $data;
-
+        $args['maptracks_map_provider'] = $data->settings->MAPTRACKS_MAP_PROVIDER;
+        $args['map_start_lat'] = $data->settings->MAP_START_LAT;
+        $args['map_start_lng'] = $data->settings->MAP_START_LNG;
+        $args['map_start_scale'] = $data->settings->MAP_START_SCALE;
         $args['houseoverIcon'] = $this->url . 'img/houseover.png';
+        $args['houseoverData'] = $this->getHouseoverData($listingsData,$data->settings->SHOWBROKERIMAGEHO);
 
         return $args;
     }    
 
 
-    private function getHouseoverData($listingsData)
+    private function getHouseoverData($listingsData,$showBrokerImage)
     {
 
         $houseoverData = array();
@@ -2286,12 +2273,16 @@ class wolfnet
             $concatHouseover .= '<img src="';
             $concatHouseover .= $listing->thumbnail_url;
             $concatHouseover .= '"">';
-            $concatHouseover .= '</div>';
-            $concatHouseover .= '<div class="wolfnet_wntHOBroker" style="text-align: center">';
-            $concatHouseover .= '<img class="wolfnet_wntHOBrokerLogo" src="';
-            $concatHouseover .= $listing->branding->brokerLogo;
-            $concatHouseover .= '" alt="Broker Reciprocity">';
-            $concatHouseover .= '</div>';
+            $concatHouseover .= '</div>';            
+
+            if ($showBrokerImage) {
+                $concatHouseover .= '<div class="wolfnet_wntHOBroker" style="text-align: center">';
+                $concatHouseover .= '<img class="wolfnet_wntHOBrokerLogo" src="';
+                $concatHouseover .= $listing->branding->brokerLogo;
+                $concatHouseover .= '" alt="Broker Reciprocity">';
+                $concatHouseover .= '</div>';
+            }
+
             $concatHouseover .= '</td>';            
             $concatHouseover .= '<td valign="top" style="vertical-align:top;">';
             $concatHouseover .= '<div class="wolfnet_wntHOContentContainer">';
