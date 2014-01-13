@@ -36,6 +36,8 @@
         <input name="action" type="hidden" value="newsearchsession" />
         <input name="submit" type="hidden" value="Search" />
 
+        <input type="hidden" name="search_source" value="wp_plugin">
+        
         <ul class="wolfnet_searchType">
             <li><a href="javascript:;" wolfnet:search_type="opentxt"><span>Location</span></a></li>
             <li><a href="javascript:;" wolfnet:search_type="mlsnum"><span>Listing Number</span></a></li>
