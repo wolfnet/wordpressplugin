@@ -2272,9 +2272,8 @@ class wolfnet
             $concatHouseover .= '<div class="wolfnet_wntHOImg">';
             $concatHouseover .= '<img src="';
             $concatHouseover .= $listing->thumbnail_url;
-            $concatHouseover .= '"">';
+            $concatHouseover .= '" style="height:95px;width:auto">';
             $concatHouseover .= '</div>';            
-
             if ($showBrokerImage) {
                 $concatHouseover .= '<div class="wolfnet_wntHOBroker" style="text-align: center">';
                 $concatHouseover .= '<img class="wolfnet_wntHOBrokerLogo" src="';
@@ -2282,7 +2281,6 @@ class wolfnet
                 $concatHouseover .= '" alt="Broker Reciprocity">';
                 $concatHouseover .= '</div>';
             }
-
             $concatHouseover .= '</td>';            
             $concatHouseover .= '<td valign="top" style="vertical-align:top;">';
             $concatHouseover .= '<div class="wolfnet_wntHOContentContainer">';

@@ -41,12 +41,12 @@ $mapIcon   = $this->url . 'img/showmap.gif'
 
 <div id="<?php echo $hideMapId; ?>" >
 	<a href="javascript:void(0)" onclick="wolfnet.hideMap('<?php echo $mapId; ?>','<?php echo $hideMapId; ?>','<?php echo $showMapId; ?>');">
-		<img src="<?php echo $mapIcon; ?>">&nbsp;Hide Map
+		<img src="<?php echo $mapIcon; ?>" style="padding-right:10px;">Hide Map
 	</a>
 </div>
 <div id="<?php echo $showMapId; ?>" style="display:none;">
 	<a href="javascript:void(0)" onclick="wolfnet.showMap('<?php echo $mapId; ?>','<?php echo $hideMapId; ?>','<?php echo $showMapId; ?>');">
-		<img src="<?php echo $mapIcon; ?>">&nbsp;Show these properties on a map
+		<img src="<?php echo $mapIcon; ?>" style="padding-right:10px;">Show these properties on a map
 	</a>
 </div>
 

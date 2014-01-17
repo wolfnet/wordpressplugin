@@ -80,7 +80,7 @@ jQuery(function($){
             .dialog({
                 modal    :true,
                 autoOpen :false,
-                height   : 550,
+                height   : 600,
                 width    : 600,
                 title    : baseTitle,
                 close    : function () {
