@@ -2110,7 +2110,7 @@
         };
 
 
-        this.poi = function (lat, lng, icon, content, propertyId) {
+        this.poi = function (lat, lng, icon, content, propertyId, propertyUrl) {
             var _mapquestPoi = null;
             var _bingPoi     = null;
             var _mouseIsOver = false;
@@ -2148,9 +2148,10 @@
                         _mapquestPoi.rolloverContent = lastRolloverContent;
                     }
                 });
+
                 if ((propertyId !== undefined) && (propertyId != null)) {
                     MQA.EventManager.addListener(_mapquestPoi, "click", function (e) {
-                        map.houseOverClick(propertyId);
+                        map.houseOverClick(propertyId,propertyUrl);
                     });
                 }
                 return _mapquestPoi;
@@ -2211,14 +2212,15 @@
                 $bindingFields.mapDragType.val(controlData.mapDragType);
                 $bindingFields.allowMouseWheel.val(controlData.allowMouseWheel);
 
-                persistRequest = $.ajax({
-                    type: "POST",
-                    url: baseURL + "gateway.cfm?action=persistMapControl",
-                    data: controlData
-                });
+                //persistRequest = $.ajax({
+                //    type: "POST",
+                //    url: baseURL + "gateway.cfm?action=persistMapControl",
+                //    data: controlData
+                //});
 
                 mapTrack();
             }
+           
         };
 
         // Track map usage
@@ -2256,8 +2258,10 @@
             $(mapNode).trigger("dragEnd");
         };
 
-        this.houseOverClick = function (propertyId) {
-            $(window).trigger('houseOverClick', [propertyId]);
+        this.houseOverClick = function (propertyId,propertyUrl) {
+            //alert(propertyUrl);
+            window.location.href = propertyUrl;
+            //$(window).trigger('houseOverClick', [propertyId]);
         };
 
 
@@ -2705,6 +2709,8 @@
                     methods.addHouseOver.call( $(this), [
                         houseoverData[i].lat,
                         houseoverData[i].lng,
+                        houseoverData[i].propertyId,
+                        houseoverData[i].propertyUrl,
                         houseoverData[i].content,
                         options.houseoverIcon,
                         options.mapId
@@ -2719,15 +2725,17 @@
 
         addHouseOver : function(args) {
             return this.each(function() {
-                var lat       = args[0];
-                var lng       = args[1];
-                var content   = args[2];
-                var houseIcon = args[3];
-                var mapId     = args[4];
+                var lat         = args[0];
+                var lng         = args[1];
+                var propertyId  = args[2];
+                var propertyUrl = args[3]
+                var content     = args[4];
+                var houseIcon   = args[5];
+                var mapId       = args[6];
 
                 var componentMap = $('#' + mapId).data('map');
                 var houseoverIcon = componentMap.mapIcon(houseIcon,30,30);
-                var houseover = componentMap.poi(lat, lng, houseoverIcon, content);
+                var houseover = componentMap.poi(lat, lng, houseoverIcon, content, propertyId, propertyUrl);
                 componentMap.addPoi(houseover);
             });
         }

@@ -2258,46 +2258,33 @@ class wolfnet
 
         foreach ($listingsData as $listing) {
 
-            $concatHouseover  = '<a style="display:block" rel="follow" href="';
-            $concatHouseover .= $listing->property_url;
-            $concatHouseover .= '">';
+            $concatHouseover  = '<a style="display:block" rel="follow" href="' . $listing->property_url . '">';
             $concatHouseover .= '<div class="wolfnet_wntHouseOverWrapper">';
-            $concatHouseover .= '<div data-property-id="';
-            $concatHouseover .= $listing->property_id;
-            $concatHouseover .= '" class="wolfnet_wntHOItem">';
+            $concatHouseover .= '<div data-property-id="' . $listing->property_id . '" class="wntHOItem">';
             $concatHouseover .= '<table class="wolfnet_wntHOTable">';
             $concatHouseover .= '<tbody>';
             $concatHouseover .= '<tr>';
             $concatHouseover .= '<td class="wntHOImgCol" valign="top" style="vertical-align:top;">';
             $concatHouseover .= '<div class="wolfnet_wntHOImg">';
-            $concatHouseover .= '<img src="';
-            $concatHouseover .= $listing->thumbnail_url;
-            $concatHouseover .= '" style="height:95px;width:auto">';
+            $concatHouseover .= '<img src="' . $listing->thumbnail_url . '" style="height:95px;width:auto">';
             $concatHouseover .= '</div>';            
             if ($showBrokerImage) {
                 $concatHouseover .= '<div class="wolfnet_wntHOBroker" style="text-align: center">';
-                $concatHouseover .= '<img class="wolfnet_wntHOBrokerLogo" src="';
-                $concatHouseover .= $listing->branding->brokerLogo;
-                $concatHouseover .= '" alt="Broker Reciprocity">';
+                $concatHouseover .= '<img class="wolfnet_wntHOBrokerLogo" src="' . $listing->branding->brokerLogo . '" alt="Broker Reciprocity">';
                 $concatHouseover .= '</div>';
             }
             $concatHouseover .= '</td>';            
             $concatHouseover .= '<td valign="top" style="vertical-align:top;">';
             $concatHouseover .= '<div class="wolfnet_wntHOContentContainer">';
-            $concatHouseover .= '<div style="text-align:left;font-weight:bold">';
-            $concatHouseover .= $listing->listing_price;
+            $concatHouseover .= '<div style="text-align:left;font-weight:bold">' . $listing->listing_price;
             $concatHouseover .= '</div>';
-            $concatHouseover .= '<div style="text-align:left;">';
-            $concatHouseover .= $listing->display_address;
+            $concatHouseover .= '<div style="text-align:left;">' . $listing->display_address;
             $concatHouseover .= '</div>';
-            $concatHouseover .= '<div style="text-align:left;">';
-            $concatHouseover .= $listing->city . ', ' . $listing->state;
+            $concatHouseover .= '<div style="text-align:left;">' . $listing->city . ', ' . $listing->state;
             $concatHouseover .= '</div>';            
-            $concatHouseover .= '<div style="text-align:left;">';
-            $concatHouseover .= $listing->bedsbaths;
+            $concatHouseover .= '<div style="text-align:left;">' . $listing->bedsbaths;
             $concatHouseover .= '</div>';  
-            $concatHouseover .= '<div style="text-align:left;padding-top:20px;">';
-            $concatHouseover .= $listing->branding->content;
+            $concatHouseover .= '<div style="text-align:left;padding-top:20px;">' . $listing->branding->content;
             $concatHouseover .= '</div>'; 
             $concatHouseover .= '</div>';
             $concatHouseover .= '</td>';            
@@ -2309,9 +2296,11 @@ class wolfnet
             $concatHouseover .= '</a>';
 
             array_push($houseoverData, array(
-                'lat' => $listing->lat,
-                'lng' => $listing->lng,
-                'content' => $concatHouseover,
+                'lat'        => $listing->lat,
+                'lng'        => $listing->lng,
+                'content'    => $concatHouseover,
+                'propertyId' => $listing->property_id,
+                'propertyUrl'=> $listing->property_url
                 ));
         }  
 
