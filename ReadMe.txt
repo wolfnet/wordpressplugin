@@ -45,6 +45,10 @@ entered in the "WolfNet >> General Settings" page before any IDX data can be dis
 
 == Changelog ==
 
+= 1.5.0 =
+* Introducing maps for Listing Grid and Property List components.
+* Adding an option to city searches for exact or like search behavior to Listing Grid and Property List components.
+
 = 1.4.2 =
 * Fixing minor bug impacting sites running specific plugins.
 
