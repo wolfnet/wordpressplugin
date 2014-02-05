@@ -1096,6 +1096,7 @@ class wolfnet
             'minprice'   => 'min_price',
             'maxprice'   => 'max_price',
             'zipcode'    => 'zip_code',
+            'exactcity'  => 'exact_city',
             );
 
         foreach ($keyConversion as $key => $value) {
@@ -1140,6 +1141,7 @@ class wolfnet
             'savedsearch' => '',
             'zipcode'     => '',
             'city'        => '',
+            'exactcity'   => 0,
             'minprice'    => '',
             'maxprice'    => '',
             );
