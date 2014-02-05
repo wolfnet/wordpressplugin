@@ -1866,9 +1866,12 @@ class wolfnet
 
         }
 
+        /* commenting out map mode in search manager until we better figure out session constraints..
         if (!array_key_exists('search_mode', $_GET)) {
-            $_GET['search_mode'] = ($maptracksEnabled) ? 'map' : 'form';
-        }
+            $_GET['search_mode'] = ($maptracksEnabled) ? 'map' : 'form';            
+        } */
+
+        $_GET['search_mode'] = 'form';
 
         $url = $baseUrl
              . ((!strstr($baseUrl, '?')) ? '?' : '')
