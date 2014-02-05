@@ -64,6 +64,56 @@ wolfnet.initMoreInfo = function (  $moreInfoItems )
 
 }
 
+
+wolfnet.hideMap = function (mapId,hideMapId,showMapId)
+{
+
+	( function ( $ ) {
+		$("#" + mapId).hide();
+		$("#" + hideMapId).hide();
+		$("#" + showMapId).show();
+	} )( jQuery );
+}
+
+
+wolfnet.showMap = function (mapId,hideMapId,showMapId)
+{
+
+	( function ( $ ) {
+		$("#" + mapId).show();
+		$("#" + hideMapId).show();
+		$("#" + showMapId).hide();
+	} )( jQuery );
+}
+
+
+wolfnet.hideListings = function (collapseId,hideId,showId)
+{
+
+	( function ( $ ) {
+		$("#" + collapseId).hide();
+		$("#" + showId).show();
+		$("#" + hideId).hide();
+	} )( jQuery );
+}
+
+
+wolfnet.showListings = function (collapseId,hideId,showId,instanceId)
+{
+
+	( function ( $ ) {
+		$("#" + collapseId).show();
+		$("#" + hideId).show();
+		$("#" + showId).hide();
+
+		if (instanceId.indexOf("listingGrid") != -1) {
+			$('#' + instanceId).wolfnetListingGrid('reload');
+		}
+
+	} )( jQuery );
+}
+
+
 if ( typeof jQuery != 'undefined' ) {
 
 	( function ( $ ) {

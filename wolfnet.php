@@ -284,6 +284,9 @@ class wolfnet
             'wolfnet-listing-grid',
             'wolfnet-toolbar',
             'wolfnet-property-list',
+            'wolfnet-maptracks',
+            'mapquest-api-config',
+            'mapquest-api'
             );
 
         foreach ($scripts as $script) {
@@ -353,6 +356,9 @@ class wolfnet
 
         require_once $this->dir . '/widget/PropertyListWidget.php';
         register_widget('Wolfnet_PropertyListWidget');
+
+        require_once $this->dir . '/widget/ResultsSummaryWidget.php';
+        register_widget('Wolfnet_ResultsSummaryWidget');        
 
         require_once $this->dir . '/widget/QuickSearchWidget.php';
         register_widget('Wolfnet_QuickSearchWidget');
@@ -761,6 +767,17 @@ class wolfnet
     }
 
 
+    public function scResultsSummary($attrs, $content='')
+    {
+        $defaultAttributes = $this->getResultsSummaryDefaults();
+
+        $criteria = array_merge($defaultAttributes, (is_array($attrs)) ? $attrs : array());
+
+        return $this->resultsSummary($criteria);
+
+    }    
+
+
     public function scQuickSearch($attrs, $content='')
     {
         $defaultAttributes = $this->getQuickSearchDefaults();
@@ -866,6 +883,16 @@ class wolfnet
         die;
 
     }
+
+
+    public function remoteShortcodeBuilderOptionsResultsSummary ()
+    {
+        $args = $this->getResultsSummaryOptions();
+        $this->remoteShortcodeBuilderOptionsGrid($args);
+
+        die;
+
+    }    
 
 
     public function remoteShortcodeBuilderOptionsQuickSearch ()
@@ -1105,6 +1132,7 @@ class wolfnet
             'title'       => '',
             'criteria'    => '',
             'ownertype'   => 'all',
+            'maptype'     => 'disabled',
             'paginated'   => false,
             'sortoptions' => false,
             'maxresults'  => 50,
@@ -1132,6 +1160,9 @@ class wolfnet
         $options['ownertypes']            = $this->getOwnerTypes();
         $options['prices']                = $this->getPrices();
         $options['savedsearches']         = $this->getSavedSearches();
+        $options['mapEnabled']            = $this->getMaptracksEnabled();
+        $options['maptypes']              = $this->getMapTypes();
+
 
         return $options;
 
@@ -1167,18 +1198,38 @@ class wolfnet
         $_REQUEST['wolfnet_includeDisclaimer'] = true;
 
         $vars = array(
-            'instance_id'   => str_replace('.', '', uniqid('wolfnet_listingGrid_')),
-            'listings'      => $listingsData,
-            'listingsHtml'  => $listingsHtml,
-            'siteUrl'       => site_url(),
-            'criteria'      => json_encode($criteria),
-            'class'         => 'wolfnet_listingGrid ',
-            'toolbarTop'    => '',
-            'toolbarBottom' => '',
-            'maxresults'    => ((count($listingsData) > 0) ? $listingsData[0]->maxresults : 0),
+            'instance_id'        => str_replace('.', '', uniqid('wolfnet_listingGrid_')),
+            'listings'           => $listingsData,
+            'listingsHtml'       => $listingsHtml,
+            'siteUrl'            => site_url(),
+            'criteria'           => json_encode($criteria),
+            'class'              => 'wolfnet_listingGrid ',
+            'mapEnabled'         => $this->getMaptracksEnabled(),
+            'map'                => '',
+            'mapType'            => '',
+            'hideListingsTools'  => '',
+            'hideListingsId'     => uniqid('hideListings'),
+            'showListingsId'     => uniqid('showListings'),
+            'collapseListingsId' => uniqid('collapseListings'),
+            'toolbarTop'         => '',
+            'toolbarBottom'      => '',
+            'maxresults'         => ((count($listingsData) > 0) ? $listingsData[0]->maxresults : 0),
             );
 
+
         $vars = $this->convertDataType(array_merge($criteria, $vars));
+
+        if ($vars['maptype'] != "disabled") {
+            $vars['map']     = $this->getMap($listingsData);
+            $vars['mapType'] = $vars['maptype'];         
+            $vars['hideListingsTools'] = $this->getHideListingTools($vars['hideListingsId']
+                                                                   ,$vars['showListingsId']
+                                                                   ,$vars['collapseListingsId']
+                                                                   ,$vars['instance_id']);
+        }
+        else {
+            $vars['mapType'] = $vars['maptype'];
+        }        
 
         if ($vars['paginated'] || $vars['sortoptions']) {
             $vars['toolbarTop']    = $this->getToolbar($vars, 'wolfnet_toolbarTop ');
@@ -1209,6 +1260,7 @@ class wolfnet
             'paginated'   => false,
             'sortoptions' => false,
             'maxresults'  => 50,
+            'maptype'     => 'disabled'
             );
 
     }
@@ -1250,18 +1302,37 @@ class wolfnet
         $_REQUEST['wolfnet_includeDisclaimer'] = true;
 
         $vars = array(
-            'instance_id'   => str_replace('.', '', uniqid('wolfnet_propertyList_')),
-            'listings'      => $listingsData,
-            'listingsHtml'  => $listingsHtml,
-            'siteUrl'       => site_url(),
-            'criteria'      => json_encode($criteria),
-            'class'         => 'wolfnet_propertyList ',
-            'toolbarTop'    => '',
-            'toolbarBottom' => '',
-            'maxresults'    => ((count($listingsData) > 0) ? $listingsData[0]->maxresults : 0),
+            'instance_id'        => str_replace('.', '', uniqid('wolfnet_propertyList_')),
+            'listings'           => $listingsData,
+            'listingsHtml'       => $listingsHtml,
+            'siteUrl'            => site_url(),
+            'criteria'           => json_encode($criteria),
+            'class'              => 'wolfnet_propertyList ',
+            'mapEnabled'         => $this->getMaptracksEnabled(),
+            'map'                => '',
+            'mapType'            => '',
+            'hideListingsTools'  => '',
+            'hideListingsId'     => uniqid('hideListings'),
+            'showListingsId'     => uniqid('showListings'),
+            'collapseListingsId' => uniqid('collapseListings'),
+            'toolbarTop'         => '',
+            'toolbarBottom'      => '',
+            'maxresults'         => ((count($listingsData) > 0) ? $listingsData[0]->maxresults : 0),
             );
 
         $vars = $this->convertDataType(array_merge($criteria, $vars));
+
+        if ($vars['maptype'] != "disabled") {
+            $vars['map']     = $this->getMap($listingsData);
+            $vars['hideListingsTools'] = $this->getHideListingTools($vars['hideListingsId']
+                                                                   ,$vars['showListingsId']
+                                                                   ,$vars['collapseListingsId']
+                                                                   ,$vars['instance_id']);
+            $vars['mapType'] = $vars['maptype']; 
+        }
+        else {
+            $vars['mapType'] = $vars['maptype'];
+        }          
 
         if ($vars['paginated'] || $vars['sortoptions']) {
             $vars['toolbarTop']    = $this->getToolbar($vars, 'wolfnet_toolbarTop ');
@@ -1279,6 +1350,107 @@ class wolfnet
         return $this->propertyListView($vars);
 
     }
+
+
+    /* Results Summary ************************************************************************** */
+
+    public function getResultsSummaryDefaults() {
+
+        return array(
+            'title'       => '',
+            'ownertype'   => 'all',
+            'paginated'   => false,
+            'sortoptions' => false,
+            'maxresults'  => 50,
+            'maptype'     => 'disabled'
+            );
+
+    }
+
+
+    public function getResultsSummaryOptions($instance=null) {
+
+        return $this->getListingGridOptions($instance);
+
+    }
+
+
+    public function resultsSummary(array $criteria) {
+
+        if (!array_key_exists('numrows', $criteria)) {
+            $criteria['numrows'] = $criteria['maxresults'];
+        }
+
+        if (!array_key_exists('startrow', $criteria)) {
+            $criteria['startrow'] = 1;
+        }
+
+        $listingsData = $this->getListings($criteria);
+
+        $listingsHtml = '';
+
+        foreach ($listingsData as &$listing) {
+
+            $this->augmentListingData($listing);
+
+            $vars = array(
+                'listing' => $listing
+                );
+
+            $listingsHtml .= $this->listingResultsView($vars);
+
+        }
+
+        $_REQUEST['wolfnet_includeDisclaimer'] = true;
+
+        $vars = array(
+            'instance_id'        => str_replace('.', '', uniqid('wolfnet_resultsSummary_')),
+            'listings'           => $listingsData,
+            'listingsHtml'       => $listingsHtml,
+            'siteUrl'            => site_url(),
+            'criteria'           => json_encode($criteria),
+            'class'              => 'wolfnet_resultsSummary ',
+            'mapEnabled'         => $this->getMaptracksEnabled(),
+            'map'                => '',
+            'mapType'            => '',
+            'hideListingsTools'  => '',
+            'hideListingsId'     => uniqid('hideListings'),
+            'showListingsId'     => uniqid('showListings'),
+            'collapseListingsId' => uniqid('collapseListings'),       
+            'toolbarTop'         => '',
+            'toolbarBottom'      => '',
+            'maxresults'         => ((count($listingsData) > 0) ? $listingsData[0]->maxresults : 0),
+            );
+
+        $vars = $this->convertDataType(array_merge($criteria, $vars));
+
+        if ($vars['maptype'] != "disabled") {
+            $vars['map']     = $this->getMap($listingsData);
+            $vars['hideListingsTools'] = $this->getHideListingTools($vars['hideListingsId']
+                                                                   ,$vars['showListingsId']
+                                                                   ,$vars['collapseListingsId']
+                                                                   ,$vars['instance_id']);
+            $vars['mapType'] = $vars['maptype']; 
+        }
+        else {
+            $vars['mapType'] = $vars['maptype'];
+        }          
+
+        if ($vars['paginated'] || $vars['sortoptions']) {
+            $vars['toolbarTop']    = $this->getToolbar($vars, 'wolfnet_toolbarTop ');
+            $vars['toolbarBottom'] = $this->getToolbar($vars, 'wolfnet_toolbarBottom ');
+        }
+
+        if ($vars['paginated']) {
+            $vars['class'] .= 'wolfnet_withPagination ';
+        }
+
+        if ($vars['sortoptions']) {
+            $vars['class'] .= 'wolfnet_withSortOptions ';
+        }
+
+        return $this->resultsSummaryView($vars);        
+    }    
 
 
     /* Quick Search ***************************************************************************** */
@@ -1452,6 +1624,19 @@ class wolfnet
     }
 
 
+    public function resultsSummaryOptionsFormView(array $args=array())
+    {
+        $args = array_merge($args, array(
+            'instance_id' => str_replace('.', '', uniqid('wolfnet_resultsSummary_'))
+            ));
+
+        $args['criteria'] = esc_attr($args['criteria']);
+
+        return $this->getListingGridOptions($args);
+
+    }    
+
+
     public function quickSearchOptionsFormView(array $args=array())
     {
         $defaultArgs = array(
@@ -1493,6 +1678,20 @@ class wolfnet
     }
 
 
+    public function listingResultsView(array $args=array())
+    {
+        foreach ($args as $key => $item) {
+            $args[$key] = apply_filters('wolfnet_listingResultsView_' . $key, $item);
+        }
+
+        ob_start();
+        echo $this->parseTemplate('template/resultsListing.php', $args);
+
+        return apply_filters('wolfnet_listingResultsView', ob_get_clean());
+
+    }    
+
+
     public function featuredListingView(array $args=array())
     {
         foreach ($args as $key => $item) {
@@ -1524,6 +1723,23 @@ class wolfnet
     }
 
 
+    public function resultsSummaryView(array $args=array())
+    {
+        $args['itemsPerPage'] = $this->getItemsPerPage();
+        $args['sortOptions'] = $this->getSortOptions();
+
+        foreach ($args as $key => $item) {
+            $args[$key] = apply_filters('wolfnet_resultsSummaryView_' . $key, $item);
+        }
+
+        ob_start();
+        echo $this->parseTemplate('template/resultsSummary.php', $args);
+
+        return apply_filters('wolfnet_resultsSummaryView', ob_get_clean());
+
+    }    
+
+
     public function listingGridView(array $args=array())
     {
         $args['itemsPerPage'] = $this->getItemsPerPage();
@@ -1552,6 +1768,32 @@ class wolfnet
 
         return apply_filters('wolfnet_quickSearchView', ob_get_clean());
 
+    }
+
+
+    public function mapView($listingsData)
+    {
+        ob_start();
+        $args = $this->getMapParameters($listingsData);        
+        echo $this->parseTemplate('template/map.php', $args);
+
+        return apply_filters('wolfnet_mapView', ob_get_clean());
+
+    }
+
+
+    public function hideListingsToolsView($hideId,$showId,$collapseId,$instance_id)
+    {
+        ob_start(); 
+
+        $args['hideId'] = $hideId;
+        $args['showId'] = $showId;
+        $args['collapseId'] = $collapseId;
+        $args['instance_id'] = $instance_id;
+
+        echo $this->parseTemplate('template/hideListingsTools.php', $args);
+
+        return apply_filters('wolfnet_hideListingsTools', ob_get_clean());
     }
 
 
@@ -1613,6 +1855,7 @@ class wolfnet
     {
         global $wp_version;
         $baseUrl = $this->getBaseUrl();
+        $maptracksEnabled = $this->getMaptracksEnabled();
 
         if (!strstr($baseUrl, 'index.cfm')) {
             if (substr($baseUrl, strlen($baseUrl) - 1) != '/') {
@@ -1623,17 +1866,23 @@ class wolfnet
 
         }
 
+        /* commenting out map mode in search manager until we better figure out session constraints..
+        if (!array_key_exists('search_mode', $_GET)) {
+            $_GET['search_mode'] = ($maptracksEnabled) ? 'map' : 'form';            
+        } */
+
+        $_GET['search_mode'] = 'form';
+
         $url = $baseUrl
              . ((!strstr($baseUrl, '?')) ? '?' : '')
-             . '&action=wpshortcodebuilder&search_mode=form';
+             . '&action=wpshortcodebuilder';
 
         $resParams = array(
             'page',
             'action',
             'market_guid',
             'reinit',
-            'show_header_footer',
-            'search_mode'
+            'show_header_footer'
             );
 
         foreach ($_GET as $param => $paramValue) {
@@ -1914,6 +2163,7 @@ class wolfnet
 
     private function augmentListingData(&$listing)
     {
+
         if (is_numeric($listing->listing_price)) {
             $listing->listing_price = '$' . number_format($listing->listing_price);
         }
@@ -1969,6 +2219,95 @@ class wolfnet
 
         $listing->address .= ' ' . $listing->state;
         $listing->address .= ' ' . $listing->zip_code;
+
+    }
+
+
+    private function getMap($listingsData) 
+    {      
+        return $this->mapView($listingsData);
+    }
+
+
+    private function getHideListingTools($hideId,$showId,$collapseId,$instance_id)
+    {         
+        return $this->hideListingsToolsView($hideId,$showId,$collapseId,$instance_id);
+    }
+
+
+    private function getMapParameters($listingsData)
+    {
+        $productKey = $this->getProductKey();
+
+        $url = 'http://services.mlsfinder.com/v1/setting/' . $productKey . '.json'
+             . '?setting=getallsettings';
+        $data = $this->getApiData($url, 86400);
+
+        $args['maptracks_map_provider'] = $data->settings->MAPTRACKS_MAP_PROVIDER;
+        $args['map_start_lat'] = $data->settings->MAP_START_LAT;
+        $args['map_start_lng'] = $data->settings->MAP_START_LNG;
+        $args['map_start_scale'] = $data->settings->MAP_START_SCALE;
+        $args['houseoverIcon'] = $this->url . 'img/houseover.png';
+        $args['houseoverData'] = $this->getHouseoverData($listingsData,$data->settings->SHOWBROKERIMAGEHO);
+
+        return $args;
+    }    
+
+
+    private function getHouseoverData($listingsData,$showBrokerImage)
+    {
+
+        $houseoverData = array();
+
+        foreach ($listingsData as $listing) {
+
+            $concatHouseover  = '<a style="display:block" rel="follow" href="' . $listing->property_url . '">';
+            $concatHouseover .= '<div class="wolfnet_wntHouseOverWrapper">';
+            $concatHouseover .= '<div data-property-id="' . $listing->property_id . '" class="wntHOItem">';
+            $concatHouseover .= '<table class="wolfnet_wntHOTable">';
+            $concatHouseover .= '<tbody>';
+            $concatHouseover .= '<tr>';
+            $concatHouseover .= '<td class="wntHOImgCol" valign="top" style="vertical-align:top;">';
+            $concatHouseover .= '<div class="wolfnet_wntHOImg">';
+            $concatHouseover .= '<img src="' . $listing->thumbnail_url . '" style="height:95px;width:auto">';
+            $concatHouseover .= '</div>';            
+            if ($showBrokerImage) {
+                $concatHouseover .= '<div class="wolfnet_wntHOBroker" style="text-align: center">';
+                $concatHouseover .= '<img class="wolfnet_wntHOBrokerLogo" src="' . $listing->branding->brokerLogo . '" alt="Broker Reciprocity">';
+                $concatHouseover .= '</div>';
+            }
+            $concatHouseover .= '</td>';            
+            $concatHouseover .= '<td valign="top" style="vertical-align:top;">';
+            $concatHouseover .= '<div class="wolfnet_wntHOContentContainer">';
+            $concatHouseover .= '<div style="text-align:left;font-weight:bold">' . $listing->listing_price;
+            $concatHouseover .= '</div>';
+            $concatHouseover .= '<div style="text-align:left;">' . $listing->display_address;
+            $concatHouseover .= '</div>';
+            $concatHouseover .= '<div style="text-align:left;">' . $listing->city . ', ' . $listing->state;
+            $concatHouseover .= '</div>';            
+            $concatHouseover .= '<div style="text-align:left;">' . $listing->bedsbaths;
+            $concatHouseover .= '</div>';  
+            $concatHouseover .= '<div style="text-align:left;padding-top:20px;">' . $listing->branding->content;
+            $concatHouseover .= '</div>'; 
+            $concatHouseover .= '</div>';
+            $concatHouseover .= '</td>';            
+            $concatHouseover .= '</tr>';
+            $concatHouseover .= '</tbody>';
+            $concatHouseover .= '</table>';
+            $concatHouseover .= '</div>';
+            $concatHouseover .= '</div>';
+            $concatHouseover .= '</a>';
+
+            array_push($houseoverData, array(
+                'lat'        => $listing->lat,
+                'lng'        => $listing->lng,
+                'content'    => $concatHouseover,
+                'propertyId' => $listing->property_id,
+                'propertyUrl'=> $listing->property_url
+                ));
+        }  
+
+        return $houseoverData;      
 
     }
 
@@ -2050,6 +2389,19 @@ class wolfnet
     }
 
 
+    private function getMaptracksEnabled()
+    {
+        $productKey = $this->getProductKey();
+        $url  = 'http://services.mlsfinder.com/v1/setting/' . $productKey 
+              . '?setting=maptracks_enabled';
+        $data = $this->getApiData($url, 86400);
+        $data = (property_exists($data, 'maptracks_enabled')) ? ($data->maptracks_enabled == 'Y') : false;
+
+        return $data;
+
+    }
+
+
     private function getWpHeader ()
     {
         $wntClass = 'wnt-wrapper';
@@ -2124,6 +2476,17 @@ class wolfnet
     }
 
 
+    private function getMapTypes ()
+    {
+        return array(
+            array('value'=>'disabled', 'label'=>'No'),
+            array('value'=>'above',    'label'=>'Above Listings'),
+            array('value'=>'below',    'label'=>'Below Listings'),
+            array('value'=>'map_only', 'label'=>'Map Only')
+            );
+    }
+
+
     private function getPrices()
     {
         $values = $this->getPricesFromApi();
@@ -2181,9 +2544,9 @@ class wolfnet
             'ajaxurl'        => admin_url('admin-ajax.php'),
             'loaderimg'      => admin_url('/images/wpspin_light.gif'),
             'buildericon'    => $this->url . 'img/wp_wolfnet_nav.png',
+            'houseoverIcon'    => $this->url . 'img/houseover.png',
             'useDialogClass' => (version_compare($wp_version, '3.6')>0) ? "true" : "false",
             );
-
     }
 
 
@@ -2285,6 +2648,10 @@ class wolfnet
             'wolfnetpropertylist'       => 'scPropertyList',
             'WOLFNETPROPERTYLIST'       => 'scPropertyList',
             'wnt_list'                  => 'scPropertyList',
+            'WolfNetResultsSummary'     => 'scResultsSummary',
+            'wolfnetresultssummary'     => 'scResultsSummary',
+            'WOLFNETRESULTSSUMMARY'     => 'scResultsSummary',
+            'wnt_results'               => 'scResultsSummary',
             'WolfNetListingQuickSearch' => 'scQuickSearch',
             'wolfnetlistingquicksearch' => 'scQuickSearch',
             'WOLFNETLISTINGQUICKSEARCH' => 'scQuickSearch',
@@ -2347,11 +2714,28 @@ class wolfnet
             'wolfnet-property-list' => array(
                 $this->url . 'js/jquery.wolfnetPropertyList.src.js',
                 array('jquery', 'wolfnet'),
-                ),
+                ),          
             'wolfnet-shortcode-builder' => array(
                 $this->url . 'js/jquery.wolfnetShortcodeBuilder.src.js',
                 array('jquery-ui-widget', 'jquery-effects-core', 'wolfnet-admin'),
                 ),
+            'mapquest-api-config' => array(
+                '//www.mapquestapi.com/sdk/js/v7.0.s/mqa.toolkit.js?key=Gmjtd%7Clu6znua2n9%2C7l%3Do5-la70q'
+                ),
+            'mapquest-api' => array(
+                '//www.mapquestapi.com/sdk/js/v7.0.s/mqa.toolkit.js?key=Gmjtd%7Clu6znua2n9%2C7l%3Do5-la70q',
+                array('mapquest-api-config'),
+                ),
+            'bing-mapcontrol' => array(
+                'http://ecn.dev.virtualearth.net/mapcontrol/mapcontrol.ashx?v=6.2'
+                ),
+            'bing-atlascompat' => array(
+                'http://ecn.dev.virtualearth.net/mapcontrol/v6.3/js/atlascompat.js'
+                ),            
+            'wolfnet-maptracks' => array(
+                $this->url . 'js/jquery.wolfnetMaptracks.src.js',
+                array('jquery',  'mapquest-api-config', 'mapquest-api','bing-mapcontrol','bing-atlascompat'),
+                )
             );
 
         foreach ($scripts as $script => $data) {
@@ -2438,6 +2822,7 @@ class wolfnet
             'wolfnet_scb_options_featured'    => 'remoteShortcodeBuilderOptionsFeatured',
             'wolfnet_scb_options_grid'        => 'remoteShortcodeBuilderOptionsGrid',
             'wolfnet_scb_options_list'        => 'remoteShortcodeBuilderOptionsList',
+            'wolfnet_scb_results_summary'     => 'remoteShortcodeBuilderOptionsResultsSummary',
             'wolfnet_scb_options_quicksearch' => 'remoteShortcodeBuilderOptionsQuickSearch',
             'wolfnet_scb_savedsearch'         => 'remoteShortcodeBuilderSavedSearch',
             'wolfnet_content'                 => 'remoteContent',

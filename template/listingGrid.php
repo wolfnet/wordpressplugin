@@ -28,13 +28,29 @@
         <h2 class="widget-title"><?php echo $title; ?></h2>
     <?php } ?>
 
-    <?php echo $toolbarTop; ?>
+    <?php if (($mapType == 'above' || $mapType == 'map_only') && $mapEnabled) {
+        echo $map;
+    } ?>
 
-    <div class="wolfnet_listings">
-        <?php echo (isset($listingsHtml)) ? $listingsHtml : 'No Listings to Display.'; ?>
+    <?php if ($mapType != 'disabled' && $mapEnabled) {
+        echo $hideListingsTools;
+    } ?>
+
+    <div id="<?php echo $collapseListingsId; ?>" >
+
+        <?php echo $toolbarTop; ?>
+    
+        <div class="wolfnet_listings">
+            <?php echo (isset($listingsHtml)) ? $listingsHtml : 'No Listings to Display.'; ?>
+        </div>
+    
+        <?php echo $toolbarBottom; ?>
+
     </div>
 
-    <?php echo $toolbarBottom; ?>
+    <?php if ($mapType == 'below' && $mapEnabled) {
+        echo $map;
+    } ?>
 
 </div>
 
@@ -56,5 +72,15 @@
         $(instance).filter('.wolfnet_propertyList').wolfnetPropertyList();
 
     });
+
+    var mapType = '<?php echo "$mapType"; ?>' 
+    if (mapType == 'map_only') {
+
+        var collapseListingsId = '<?php echo $collapseListingsId; ?>';
+        var hideId             = '<?php echo $hideListingsId; ?>';
+        var showId             = '<?php echo $showListingsId; ?>';
+
+        wolfnet.hideListings(collapseListingsId,hideId,showId);
+    }
 
 </script>

@@ -371,10 +371,80 @@
         }
 
     }
-
+	
     &.wolfnet_listingGrid,
-    &.wolfnet_propertyList
+    &.wolfnet_propertyList,
+	&.wolfnet_resultsSummary
     {
+        .mqa-display img 
+        {
+            max-width:none !important;
+        }
+        .wolfnet_wntMainMap 
+        {
+            height:480px;
+            position:relative;
+        }
+        .wntHOItem 
+        {
+            cursor:pointer;
+            min-height:115px;
+            width:100%;
+        }
+        .wolfnet_wntHOTable 
+        {
+            padding:0px;
+            width:auto;
+        }
+        .wolfnet_wntHOImg 
+        {
+            position:relative;
+            top:0px;
+            left:0px;
+        }
+        .wolfnet_wntHOBroker 
+        {
+            position:relative;
+            width:110px;
+            margin-bottom:5px!important;
+            color:##888888;
+        }
+        .wolfnet_wntHOBrokerLogo 
+        {
+            max-width:100px;
+            height:auto;
+        }
+        .wolfnet_wntHOContentContainer 
+        {
+            position:relative;
+            min-width:200px;
+            line-height:1.2;
+            top: 0px;
+        }
+        .wolfnet_wntHOContentBold 
+        {
+            display:block;
+            white-space:nowrap;
+            font-weight:bold!important;
+        }
+        .wolfnet_wntHOContentBold 
+        {
+            display:block;
+            white-space:nowrap;
+        }
+        .wolfnet_wntHouseOverWrapper 
+        {
+            position:relative;
+            max-height:170px;
+            min-height:150px;
+            width:auto;
+            overflow-x:hidden;
+            overflow-y:auto;
+        }
+        .showHideLink
+        {
+            padding-top: 25px;
+        }
 
         .wolfnet_toolbar
         {
@@ -473,6 +543,107 @@
         }
 
     }
+
+    &.wolfnet_resultsSummary
+    {
+
+        .wolfnet_listing
+        {
+            width:          100%;
+            text-align:     center;
+            margin:         0 auto 1em auto;
+            position:       relative;
+            text-align:     left;
+            font-size:      .8em;
+            margin:         0 5px 0 5px; 
+            clear:          both;     
+            padding-bottom: 20px;
+            a
+            {
+                color:           inherit;
+                text-decoration: none;
+            }
+
+            .wolfnet_detailsLink
+            {
+                display:block;
+            }
+
+            .wolfnet_listingImage
+            {
+                width:      160px;
+                height:     auto;
+                display:    block;
+                overflow:   hidden;
+                margin:     0;
+                text-align: center;
+                margin-bottom:    .5em;
+                border:           1px solid hsl(0, 0%, 87%);
+                background-color: #F5F5F5;
+                padding:          10px 0 10px 0;
+                float:  left;
+
+                img
+                {
+                    height: @imageHeight;
+                    box-shadow:   0 5px 10px hsla(0, 0%, 60%, 0.25);
+                    border: 1px solid #EBEBEB;
+                }
+
+            }
+
+            .wolfnet_data
+            {
+                padding-left: 175px;
+            }
+
+            .wolfnet_price
+            {
+                font-size: 1.2em;
+                font-weight: bold;
+                display:     block;
+            }
+
+            .wolfnet_location
+            {
+                display: block;
+            }
+
+            .wolfnet_bed_bath
+            {
+                display: block;
+                position: absolute;
+                top:      @imageHeight + 30px;
+                right:    0;
+            }
+
+            .wolfnet_branding
+            {
+
+                .wolfnet_brokerLogo
+                {
+                    display: block;
+
+                    img
+                    {
+                        max-width: 50px;
+                        height: auto;
+                        border: 0;
+                        border-radius: 0;
+                        box-shadow: none;
+                    }
+                }
+
+                .wolfnet_brandingMessage
+                {
+                    display: block;
+                }
+
+            }
+
+        }
+
+    }   
 
     &.wolfnet_featuredListings
     {
@@ -692,3 +863,4 @@
     float:none !important;
     clear:both;
 }
+
