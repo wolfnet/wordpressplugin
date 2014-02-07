@@ -2271,7 +2271,7 @@ class wolfnet
             $concatHouseover .= '<tr>';
             $concatHouseover .= '<td class="wntHOImgCol" valign="top" style="vertical-align:top;">';
             $concatHouseover .= '<div class="wolfnet_wntHOImg">';
-            $concatHouseover .= '<img src="' . $listing->thumbnail_url . '" style="height:95px;width:auto">';
+            $concatHouseover .= '<img src="' . $listing->thumbnail_url . '" style="max-height:100px;width:auto">';
             $concatHouseover .= '</div>';            
             if ($showBrokerImage) {
                 $concatHouseover .= '<div class="wolfnet_wntHOBroker" style="text-align: center">';
