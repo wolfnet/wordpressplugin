@@ -1,4 +1,4 @@
-	<script type="text/javascript">
+
 		Key = 'mjtd%7Clu612007nq%2C20%3Do5-50zah';
 		STATSERVER=HYBSERVER=MAPSERVER='tile21.mqcdn.com,tile22.mqcdn.com,tile23.mqcdn.com,tile24.mqcdn.com'.split(',');
 		COVSERVER='coverage.mqcdn.com';
@@ -12,4 +12,3 @@
 		MQLONGURL=MQPLATFORMSERVER+'/longurl/v1';
 		MQLOGURL=MQPLATFORMSERVER+'/logger/v1';
 		function $pv() {};
-	</script>
