@@ -35,7 +35,9 @@
         <?php if (property_exists($listing, 'branding') && ($listing->branding->brokerLogo != '' || $listing->branding->content != '')) { ?>
         <div class="wolfnet_branding">
             <?php if (trim($listing->branding->brokerLogo) !== '') { ?>
-                <span class="wolfnet_brokerLogo"><img src="<?php echo $listing->branding->brokerLogo; ?>" /></span>
+                <span class="wolfnet_brokerLogo<?php echo ($listing->branding->branding_type=='idx') ? ' wolfnet_idxLogo' : ''; ?>">
+                    <img src="<?php echo $listing->branding->brokerLogo; ?>" />
+                </span>
             <?php } ?>
             <span class="wolfnet_brandingMessage"><?php echo $listing->branding->content; ?></span>
         </div>
