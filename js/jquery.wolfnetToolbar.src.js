@@ -110,6 +110,7 @@ if ( typeof String.prototype.wolfnetPriceFormat !== 'function' ) {
 
         for (var i=0, l=data.length; i<l; i++) {
             var brokerLogo  = data[i].branding.brokerLogo  || null;
+            var brandingType  = data[i].branding.branding_type || '';
             var brokerName  = data[i].branding.content || null;
             var cityState   = data[i].city + ', ' + data[i].state;
             var fullAddress = data[i].display_address + ', ' + cityState;
@@ -189,6 +190,10 @@ if ( typeof String.prototype.wolfnetPriceFormat !== 'function' ) {
                         .addClass('wolfnet_brokerLogo')
                         .append($('<img>').attr('src',brokerLogo))
                         .appendTo($brandingContainer);
+
+                    if (brandingType == 'idx') {
+                        $brokerLogo.addClass('wolfnet_idxLogo');
+                    }
 
                 }
 
