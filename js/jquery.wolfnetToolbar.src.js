@@ -235,7 +235,7 @@ if ( typeof String.prototype.wolfnetPriceFormat !== 'function' ) {
 
     //replicating building of html dom in wolfnet.php, function: getHouseoverHtml
     var getHouseoverHtml = function(listing)
-    {          
+    {
         var concatHouseover = '';
         var bed_bath = getBedBath(listing.bathroom,listing.bedrooms);
 
@@ -270,9 +270,9 @@ if ( typeof String.prototype.wolfnetPriceFormat !== 'function' ) {
             var houseoverIcon = componentMap.mapIcon(houseIcon,30,30);
             var houseover = componentMap.poi(data[i].lat, data[i].lng, houseoverIcon, houseoverHtml, data[i].property_id, data[i].property_url);
             componentMap.addPoi(houseover);
-        }  
+        }
 
-        componentMap.bestFit();        
+        componentMap.bestFit();
     }
 
 
