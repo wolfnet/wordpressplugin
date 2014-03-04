@@ -28,7 +28,7 @@
 
     <h2>WolfNet <sup>&reg;</sup> - General Settings</h2>
 
-    <form method="post" action="options.php">
+    <form method="post" id="wolfnetSettings" action="options.php">
 
         <?php echo $formHeader; ?>
 
@@ -39,10 +39,10 @@
             <legend><h3>General Settings</h3></legend>
 
             <table class="form-table" style="width:760px">
-                <?php for($i=1; $i<=count($productKey); $i++): ?>
                 <tr valign="top">
                     <td>
                         <table class="key-table" id="wolfnet_keys">
+                            <?php for($i=1; $i<=count($productKey); $i++): ?>
                             <tr>
                                 <th scope="row"><label for="wolfnet_productKey_<?php echo $i; ?>">Product Key</label></th>
                                 <th scope="row">Market Name</th>
@@ -51,18 +51,18 @@
                             <tr>
                                 <td>
                                     <input id="wolfnet_productKey_<?php echo $i; ?>" name="wolfnet_productKey_<?php echo $i; ?>" type="text"
-                                        value="<?php echo $productKey[$i]->key; ?>" size="50" />
+                                        value="<?php echo $productKey[$i-1]->key; ?>" class="wolfnet_productKey" size="50" />
                                 </td>
                                 <td></td>
                                 <td>
                                     <input id="wolfnet_keyLabel_<?php echo $i; ?>" name="wolfnet_keyLabel_<?php echo $i; ?>" type="text" 
-                                        value="<?php echo $productKey[$i]->label; ?>" size="30" />
+                                        value="<?php echo $productKey[$i-1]->label; ?>" size="30" />
                                 </td>
                             </tr>
+                            <?php endfor; ?>
                         </table>
                     </td>
                 </tr>
-                <?php endfor; ?>
 
                 <tr>
                     <td>
@@ -106,13 +106,35 @@
 
         ( function ( $ ) {
 
-            $( '#wolfnet_productKey' ).wolfnetValidateProductKey( {
+            $( '.wolfnet_productKey' ).wolfnetValidateProductKey( {
                 rootUri: '<?php echo site_url(); ?>?pagename=wolfnet-admin-validate-key'
             } );
+
+
+            $( '#wolfnetSettings' ).submit( function() {
+                /* We need to collect the keys and associated labels from the form into a JSON string,
+                then put that into a form variable to retain backwards compatibility. */
+                var json = [];
+                var keyCount = parseInt($('#wolfnet_keyCount').val());
+                for(var i=1; i<=keyCount; i++) {
+                    if($('#wolfnet_productKey_' + i).val() != '') {
+                        json.push({
+                            "key" : $('#wolfnet_productKey_' + i).val(),
+                            "label" : $('#wolfnet_keyLabel_' + i).val()
+                        });
+                    }
+                }
+                var input = $('<input />').attr('name', 'wolfnet_productKey')
+                    .attr('type', 'hidden')
+                    .attr('value', JSON.stringify(json));
+                $('#wolfnetSettings').append(input);
+            } );
+
 
             $( '#wolfnet_addKey' ).click( function() {
                 wolfnetInsertKeyRow();
             } );
+
 
             var wolfnetInsertKeyRow = function ()
             {
@@ -140,6 +162,7 @@
                         .attr('type', 'text')
                         .attr('value', '')
                         .attr('size', '50')
+                        .attr('class', 'wolfnet_productKey')
                     )
                 );
                 valueRow.append(cell.clone().html(''));
