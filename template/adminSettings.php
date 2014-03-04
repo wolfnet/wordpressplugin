@@ -32,18 +32,47 @@
 
         <?php echo $formHeader; ?>
 
+        <input type="hidden" id="wolfnet_keyCount" value="<?php echo count($productKey); ?>" />
+
         <fieldset>
 
             <legend><h3>General Settings</h3></legend>
 
-            <table class="form-table">
+            <table class="form-table" style="width:760px">
+                <?php for($i=1; $i<=count($productKey); $i++): ?>
+                <tr valign="top">
+                    <td>
+                        <table class="key-table" id="wolfnet_keys">
+                            <tr>
+                                <th scope="row"><label for="wolfnet_productKey_<?php echo $i; ?>">Product Key</label></th>
+                                <th scope="row">Market Name</th>
+                                <th scope="row"><label for="wolfnet_keyLabel_<?php echo $i; ?>">Label<label></th>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <input id="wolfnet_productKey_<?php echo $i; ?>" name="wolfnet_productKey_<?php echo $i; ?>" type="text"
+                                        value="<?php echo $productKey[$i]->key; ?>" size="50" />
+                                </td>
+                                <td></td>
+                                <td>
+                                    <input id="wolfnet_keyLabel_<?php echo $i; ?>" name="wolfnet_keyLabel_<?php echo $i; ?>" type="text" 
+                                        value="<?php echo $productKey[$i]->label; ?>" size="30" />
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <?php endfor; ?>
+
+                <tr>
+                    <td>
+                        <input type="button" id="wolfnet_addKey" value="<?php _e('Add Product Key'); ?>" />
+                    </td>
+                </tr>
 
                 <tr valign="top">
-                    <th scope="row"><label for="wolfnet_productKey">Product Key</label></th>
                     <td>
-                        <input id="wolfnet_productKey" name="wolfnet_productKey" type="text"
-                            value="<?php echo $productKey; ?>" size="50" />
-                        <p class="description" style="width:400px;">
+                        <p class="description">
                             Enter your unique product key for the WolfNet WordPress plugin. The
                             product key is required to connect your WordPress site to your WolfNet
                             property search. WolfNet Plugin features will not be available until the
@@ -58,7 +87,6 @@
                 </tr>
 
                 <tr valign="top">
-                    <th scope="row">&nbsp;</th>
                     <td class="submit">
                         <input type="submit" class="button-primary" value="<?php _e('Save Changes') ?>" />
                     </td>
@@ -81,6 +109,54 @@
             $( '#wolfnet_productKey' ).wolfnetValidateProductKey( {
                 rootUri: '<?php echo site_url(); ?>?pagename=wolfnet-admin-validate-key'
             } );
+
+            $( '#wolfnet_addKey' ).click( function() {
+                wolfnetInsertKeyRow();
+            } );
+
+            var wolfnetInsertKeyRow = function ()
+            {
+
+                var nextIteration = parseInt($('#wolfnet_keyCount').val()) + 1;
+
+                // Row 1
+                var row = $('<tr />');
+                var headCell = $('<th />').attr('scope', 'row');
+                var headRow = row.clone().append(headCell.clone().html(
+                        $('<label />').attr('for', 'wolfnet_productKey_' + nextIteration).html('Product Key')
+                    )
+                );
+                headRow.append(headCell.clone().html('Market Name'));
+                headRow.append(headCell.clone().html(
+                        $('<label />').attr('for', 'wolfnet_keyLabel_' + nextIteration).html('Label')
+                    )
+                );
+
+                // Row 2
+                var cell = $('<td />');
+                var valueRow = row.clone().append(cell.clone().html(
+                        $('<input />').attr('id', 'wolfnet_productKey_' + nextIteration)
+                        .attr('name', 'wolfnet_productKey_' + nextIteration)
+                        .attr('type', 'text')
+                        .attr('value', '')
+                        .attr('size', '50')
+                    )
+                );
+                valueRow.append(cell.clone().html(''));
+                valueRow.append(cell.clone().html(
+                        $('<input />').attr('id', 'wolfnet_keyLabel_' + nextIteration)
+                        .attr('name', 'wolfnet_keyLabel_' + nextIteration)
+                        .attr('type', 'text')
+                        .attr('value', '')
+                        .attr('size', '30')
+                    )
+                );
+
+                $('#wolfnet_keys').append(headRow).append(valueRow);
+
+                $('#wolfnet_keyCount').val(nextIteration);
+
+            }
 
         } )( jQuery );
 

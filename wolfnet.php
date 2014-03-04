@@ -688,7 +688,7 @@ class wolfnet
     public function amSettingsPage()
     {
         ob_start(); settings_fields($this->optionGroup); $formHeader = ob_get_clean();
-        $productKey = $this->getProductKey();
+        $productKey = json_decode($this->getProductKey());
         include 'template/adminSettings.php';
 
     }
@@ -2037,16 +2037,44 @@ class wolfnet
 
     private function getProductKey()
     {
-        return get_option(trim($this->productKeyOptionKey));
+        $key = get_option(trim($this->productKeyOptionKey));
+        if(!$this->isJsonEncoded($key)) {
+            $key = $this->setJsonProductKey($key);
+        }
+        return $key;
     }
 
 
-    private function getPublicCss() {
+    private function setJsonProductKey($keyString) {
+        // This takes the old style single key string and returns a JSON formatted key array
+        $keyArray = array(
+            array(
+                "key" => $keyString,
+                "label" => "API Key"
+            )
+        );
+        return json_encode($keyArray);
+    }
+
+
+    private function isJsonEncoded($str) 
+    {
+        if(is_array(json_decode($str)) || is_object(json_decode($str))) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+
+    private function getPublicCss() 
+    {
         return get_option(trim($this->publicCssOptionKey));
     }
 
 
-    private function getAdminCss() {
+    private function getAdminCss() 
+    {
         return get_option($this->adminCssOptionKey);
     }
 
