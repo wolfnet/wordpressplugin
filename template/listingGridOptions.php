@@ -195,8 +195,8 @@
 <script type="text/javascript">
 
     jQuery(function($){
-        $('#<?php echo $instance_id; ?>').wolfnetListingGridControls();
-        wolfnet.initMoreInfo( $( '#<?php echo $instance_id; ?> .wolfnet_moreInfo' ) );
+        $('.wolfnet_listingGridOptions').wolfnetListingGridControls();
+        wolfnet.initMoreInfo( $( '.wolfnet_listingGridOptions .wolfnet_moreInfo' ) );
     });
 
 </script>
