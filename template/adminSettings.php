@@ -54,7 +54,7 @@
                                     <input id="wolfnet_productKey_<?php echo $i; ?>" name="wolfnet_productKey_<?php echo $i; ?>" type="text"
                                         value="<?php echo $productKey[$i-1]->key; ?>" class="wolfnet_productKey" size="50" />
                                 </td>
-                                <td></td>
+                                <td><?php echo strtoupper($this->getMarketName($productKey[$i-1]->key)); ?></td>
                                 <td>
                                     <input id="wolfnet_keyLabel_<?php echo $i; ?>" name="wolfnet_keyLabel_<?php echo $i; ?>" type="text" 
                                         value="<?php echo $productKey[$i-1]->label; ?>" size="30" />

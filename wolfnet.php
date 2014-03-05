@@ -2566,6 +2566,13 @@ class wolfnet
     }
 
 
+    private function getMarketName($apiKey)
+    {
+        $url = "http://services.mlsfinder.com/v1/setting/" . $apiKey . ".json?setting=DATASOURCE";
+        return $this->getApiData($url, 0)->datasource;
+    }
+
+
     private function localizedScriptData()
     {
         global $wp_version;
