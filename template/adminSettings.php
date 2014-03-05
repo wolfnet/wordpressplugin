@@ -38,17 +38,18 @@
 
             <legend><h3>General Settings</h3></legend>
 
-            <table class="form-table" style="width:760px">
+            <table class="form-table" style="width:800px">
                 <tr valign="top">
                     <td>
                         <table class="key-table" id="wolfnet_keys">
                             <?php for($i=1; $i<=count($productKey); $i++): ?>
-                            <tr>
+                            <tr class="row<?php echo $i; ?>">
                                 <th scope="row"><label for="wolfnet_productKey_<?php echo $i; ?>">Product Key</label></th>
                                 <th scope="row">Market Name</th>
                                 <th scope="row"><label for="wolfnet_keyLabel_<?php echo $i; ?>">Label<label></th>
+                                <th scope="row"></th>
                             </tr>
-                            <tr>
+                            <tr class="row<?php echo $i; ?>">
                                 <td>
                                     <input id="wolfnet_productKey_<?php echo $i; ?>" name="wolfnet_productKey_<?php echo $i; ?>" type="text"
                                         value="<?php echo $productKey[$i-1]->key; ?>" class="wolfnet_productKey" size="50" />
@@ -57,6 +58,12 @@
                                 <td>
                                     <input id="wolfnet_keyLabel_<?php echo $i; ?>" name="wolfnet_keyLabel_<?php echo $i; ?>" type="text" 
                                         value="<?php echo $productKey[$i-1]->label; ?>" size="30" />
+                                </td>
+                                <td>
+                                    <?php if($i != 1): ?>
+                                        <input type="button" wnt-key="<?php echo $i; ?>" class="wolfnet_deleteKey"
+                                        value="<?php _e('Delete'); ?>" />
+                                    <?php endif; ?>
                                 </td>
                             </tr>
                             <?php endfor; ?>
@@ -131,9 +138,21 @@
             } );
 
 
+            $( '.wolfnet_deleteKey' ).click( function(button) {
+                wolfnetDeleteKeyRow(button);
+            } );
+
+
             $( '#wolfnet_addKey' ).click( function() {
                 wolfnetInsertKeyRow();
             } );
+
+
+            var wolfnetDeleteKeyRow = function (button) {
+                var key = $(button.srcElement).attr('wnt-key');
+                $('.row' + key).remove();
+                $('#wolfnet_keyCount').val(parseInt($('#wolfnet_keyCount').val()) - 1);
+            }
 
 
             var wolfnetInsertKeyRow = function ()
@@ -142,7 +161,7 @@
                 var nextIteration = parseInt($('#wolfnet_keyCount').val()) + 1;
 
                 // Row 1
-                var row = $('<tr />');
+                var row = $('<tr />').attr('class', 'row' + nextIteration);
                 var headCell = $('<th />').attr('scope', 'row');
                 var headRow = row.clone().append(headCell.clone().html(
                         $('<label />').attr('for', 'wolfnet_productKey_' + nextIteration).html('Product Key')
@@ -153,6 +172,7 @@
                         $('<label />').attr('for', 'wolfnet_keyLabel_' + nextIteration).html('Label')
                     )
                 );
+                headRow.append(headCell.clone());
 
                 // Row 2
                 var cell = $('<td />');
@@ -174,6 +194,16 @@
                         .attr('size', '30')
                     )
                 );
+                valueRow.append(cell.clone().html(
+                        $('<input />').attr('class', 'wolfnet_deleteKey')
+                        .attr('wnt-key', nextIteration)
+                        .attr('type', 'button')
+                        .attr('value', 'Delete')
+                        .click(function(button) {
+                            wolfnetDeleteKeyRow(button);
+                        })
+                    )
+                )
 
                 $('#wolfnet_keys').append(headRow).append(valueRow);
 
