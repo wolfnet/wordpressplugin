@@ -981,13 +981,24 @@ class wolfnet
     }
 
 
-    public function remotePublicCss() {
+    public function remotePublicCss() 
+    {
         header('Content-type: text/css');
         $publicCss = $this->getPublicCss();
 
         if(strlen($publicCss) > 0) {
             echo $publicCss;
         }
+
+        die;
+    }
+
+
+    public function remotePriceRange() 
+    {
+        $productKey = $_REQUEST["productkey"];
+        $prices = $this->getPrices($productKey);
+        echo json_encode($prices);
 
         die;
     }
@@ -1106,13 +1117,15 @@ class wolfnet
             unset($criteria[$key]);
         }
 
-        $productKey = $this->getProductKey();
+        // This is now coming from the shortcode
+        $productKey = $criteria['productkey'];
+
         $url = 'http://services.mlsfinder.com/v1/propertyGrid/' . $productKey . '.json';
         $url = $this->buildUrl($url, $criteria);
 
         $data = $this->getApiData($url, 900);
 
-        $absMaxResults = $this->getMaxResults();
+        $absMaxResults = $this->getMaxResults($productKey);
         $absMaxResults = ($data->total_rows < $absMaxResults) ? $data->total_rows : $absMaxResults;
 
         foreach ($data->listings as &$listing) {
@@ -1144,6 +1157,7 @@ class wolfnet
             'exactcity'   => 0,
             'minprice'    => '',
             'maxprice'    => '',
+            'productkey'  => '',
             );
 
     }
@@ -1153,6 +1167,10 @@ class wolfnet
     {
         $options = $this->getOptions($this->getListingGridDefaults(), $instance);
 
+        // Get first api key to pre-populate prices with market values
+        $productKey = json_decode($this->getProductKey());
+        $productKey = $productKey[0]->key;
+
         $options['mode_basic_wpc']        = checked($options['mode'], 'basic', false);
         $options['mode_advanced_wpc']     = checked($options['mode'], 'advanced', false);
         $options['paginated_false_wps']   = selected($options['paginated'], 'false', false);
@@ -1160,7 +1178,7 @@ class wolfnet
         $options['sortoptions_false_wps'] = selected($options['sortoptions'], 'false', false);
         $options['sortoptions_true_wps']  = selected($options['sortoptions'], 'true', false);
         $options['ownertypes']            = $this->getOwnerTypes();
-        $options['prices']                = $this->getPrices();
+        $options['prices']                = $this->getPrices($productKey);
         $options['savedsearches']         = $this->getSavedSearches();
         $options['mapEnabled']            = $this->getMaptracksEnabled();
         $options['maptypes']              = $this->getMapTypes();
@@ -1215,7 +1233,7 @@ class wolfnet
             'collapseListingsId' => uniqid('collapseListings'),
             'toolbarTop'         => '',
             'toolbarBottom'      => '',
-            'maxresults'         => ((count($listingsData) > 0) ? $listingsData[0]->maxresults : 0),
+            'maxresults'         => ((count($listingsData) > 0) ? $listingsData[0]->maxresults : 0)
             );
 
 
@@ -1601,7 +1619,8 @@ class wolfnet
     public function listingGridOptionsFormView(array $args=array())
     {
         $defaultArgs = array(
-            'instance_id'      => str_replace('.', '', uniqid('wolfnet_listingGrid_'))
+            'instance_id'      => str_replace('.', '', uniqid('wolfnet_listingGrid_')),
+            'markets'          => json_decode($this->getProductKey())
             );
 
         $args = array_merge($defaultArgs, $args);
@@ -2392,9 +2411,8 @@ class wolfnet
     }
 
 
-    private function getMaxResults()
+    private function getMaxResults($productKey)
     {
-        $productKey = $this->getProductKey();
         $url  = 'http://services.mlsfinder.com/v1/setting/' . $productKey . '.json'
               . '?setting=site_text';
         $data = $this->getApiData($url, 86400)->site_text;
@@ -2405,9 +2423,8 @@ class wolfnet
     }
 
 
-    private function getPricesFromApi()
+    private function getPricesFromApi($productKey)
     {
-        $productKey = $this->getProductKey();
         $url  = 'http://services.mlsfinder.com/v1/setting/' . $productKey . '.json'
               . '?setting=site_text';
         $data = $this->getApiData($url, 86400);
@@ -2517,9 +2534,9 @@ class wolfnet
     }
 
 
-    private function getPrices()
+    private function getPrices($productKey)
     {
-        $values = $this->getPricesFromApi();
+        $values = $this->getPricesFromApi($productKey);
         $data   = array();
 
         foreach ($values as $value) {
@@ -2569,7 +2586,7 @@ class wolfnet
     private function getMarketName($apiKey)
     {
         $url = "http://services.mlsfinder.com/v1/setting/" . $apiKey . ".json?setting=DATASOURCE";
-        return $this->getApiData($url, 0)->datasource;
+        return $this->getApiData($url, 1000)->datasource;
     }
 
 
@@ -2867,7 +2884,8 @@ class wolfnet
             'wolfnet_content_footer'          => 'remoteContentFooter',
             'wolfnet_listings'                => 'remoteListings',
             'wolfnet_get_listings'            => 'remoteListingsGet',
-            'wolfnet_css'                     => 'remotePublicCss'
+            'wolfnet_css'                     => 'remotePublicCss',
+            'wolfnet_price_range'             => 'remotePriceRange',
             );
 
         foreach ($ajxActions as $action => $method) {

@@ -34,6 +34,17 @@
             <td><input id="<?php echo $title_wpid; ?>" name="<?php echo $title_wpname; ?>" 
                        value="<?php echo $title; ?>" type="text" /></td>
         </tr>
+
+        <tr>
+            <td><label>Market:</label></td>
+            <td>
+                <select id="<?php echo $productkey_wpid; ?>" name="<?php echo $productkey_wpname; ?>">
+                    <?php for($i=0; $i<=count($markets)-1; $i++): ?>
+                    <option value="<?php echo $markets[$i]->key; ?>"><?php echo $markets[$i]->label; ?></option>
+                    <?php endfor; ?>
+                </select>
+            </td>
+        </tr>
               
         <tr class="modeField">
             <td><label>Mode:</label></td>
@@ -88,7 +99,7 @@
         <tr class="basic-option">
             <td><label>Price:</label></td>
             <td>
-                <select id="<?php echo $minprice_wpid; ?>" name="<?php echo $minprice_wpname; ?>">
+                <select id="<?php echo $minprice_wpid; ?>" class="pricerange" name="<?php echo $minprice_wpname; ?>">
                     <option value="">Min. Price</option>
                     <?php foreach ($prices as $price) { ?>
                         <option value="<?php echo $price['value']; ?>" <?php selected($minprice, $price['value']); ?>>
@@ -97,7 +108,7 @@
                     <?php } ?>
                 </select>
                 <span>to</span>
-                <select id="<?php echo $maxprice_wpid; ?>" name="<?php echo $maxprice_wpname; ?>">
+                <select id="<?php echo $maxprice_wpid; ?>" class="pricerange" name="<?php echo $maxprice_wpname; ?>">
                     <option value="">Max. Price</option>
                     <?php foreach ( $prices as $price ) { ?>
                         <option value="<?php echo $price['value']; ?>" <?php selected($maxprice, $price['value']); ?>>
@@ -197,6 +208,10 @@
     jQuery(function($){
         $('#<?php echo $instance_id; ?>').wolfnetListingGridControls();
         wolfnet.initMoreInfo( $( '#<?php echo $instance_id; ?> .wolfnet_moreInfo' ) );
+
+        $('#productkey').change(function() {
+            $('#productkey').wolfnetUpdateListingGridControls();
+        });
     });
 
 </script>

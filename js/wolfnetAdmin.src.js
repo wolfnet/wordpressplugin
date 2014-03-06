@@ -238,6 +238,48 @@ if ( typeof jQuery != 'undefined' ) {
 
 		}
 
+		$.fn.wolfnetUpdateListingGridControls = function ()
+		{
+
+			$.ajax( {
+				url: wolfnet_ajax.ajaxurl,
+				data: { action:'wolfnet_price_range', productkey:$('#productkey').val() },
+				dataType: 'json',
+				type: 'GET',
+				cache: false,
+				timeout: 2500,
+				statusCode: {
+					404: function () {
+						commFailure();
+					}
+				},
+				success: function ( data ) {
+					var options = buildPriceDropdownOptions(data);
+					$('.pricerange').html('');
+					$('#maxprice').append($('<option />').html('Max. Price'));
+					$('#minprice').append($('<option />').html('Min. Price'));
+					$(options).each(function() {
+						$('.pricerange').append(this);
+					});
+				},
+				error: function () {
+					$this.trigger( options.invalidEvent );
+				}
+			} );
+
+			var buildPriceDropdownOptions = function(data) 
+			{
+				var options = [];
+				$(data).each(function() {
+					options.push(
+						$('<option />').attr('value', this.value).html(this.label)
+					);
+				});
+				return options;
+			}
+
+		}
+
 		$.fn.wolfnetValidateProductKey = function ( clientOptions )
 		{
 
