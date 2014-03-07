@@ -95,6 +95,8 @@ if ( typeof jQuery != 'undefined' ) {
 
 						if ( typeof WNTWP != 'undefined' ) {
 							var criteria = WNTWP.returnSearchParams();
+							// This gets set separately since the above function deals with search solutions params only.
+							criteria.productkey = $('#productkey').val();
 						}
 						else {
 							var criteria = {};
@@ -281,7 +283,7 @@ if ( typeof jQuery != 'undefined' ) {
 
 					$.ajax( {
 						url: wolfnet_ajax.ajaxurl,
-                        data: { action:'wolfnet_saved_searches' },
+                        data: { action:'wolfnet_saved_searches', productkey: $('#productkey').val() },
 						dataType: 'json',
 						type: 'GET',
 						beforeSend: function () {

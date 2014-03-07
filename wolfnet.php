@@ -815,7 +815,8 @@ class wolfnet
 
     public function remoteGetSavedSearchs()
     {
-        echo json_encode($this->getSavedSearches());
+        $productKey = (array_key_exists('productkey', $_REQUEST)) ? $_REQUEST['productkey'] : null;
+        echo json_encode($this->getSavedSearches(-1, $productKey));
 
         die;
 
@@ -841,9 +842,11 @@ class wolfnet
                 add_post_meta($post_id, $field, $value, true);
             }
 
+            $productKey = $_REQUEST['custom_fields']['productkey'];
+
         }
 
-        $this->remoteGetSavedSearchs();
+        $this->remoteGetSavedSearchs($productKey);
 
     }
 
@@ -1183,10 +1186,9 @@ class wolfnet
         $options['sortoptions_true_wps']  = selected($options['sortoptions'], 'true', false);
         $options['ownertypes']            = $this->getOwnerTypes();
         $options['prices']                = $this->getPrices($productKey);
-        $options['savedsearches']         = $this->getSavedSearches();
+        $options['savedsearches']         = $this->getSavedSearches(-1, $productKey);
         $options['mapEnabled']            = $this->getMaptracksEnabled();
         $options['maptypes']              = $this->getMapTypes();
-
 
         return $options;
 
@@ -1518,18 +1520,29 @@ class wolfnet
 
     /* Misc. Data ******************************************************************************* */
 
-    public function getSavedSearches($count=-1)
+    public function getSavedSearches($count=-1, $productKey=null)
     {
         // Cache the data in the request scope so that we only have to query for it once per request.
         $cacheKey = 'wntSavedSearches';
-        $data = (array_key_exists($cacheKey, $_REQUEST)) ? $_REQUEST[$cacheKey] : null;
+        //$data = (array_key_exists($cacheKey, $_REQUEST)) ? $_REQUEST[$cacheKey] : null;
+        $data = null;
+        if($productKey === null) {
+            $productKey = $this->getDefaultProductKey();
+        }
 
         if ($data==null) {
 
             $dataArgs = array(
                 'numberposts' => $count,
-                'post_type' => $this->customPostTypeSearch
-                );
+                'post_type' => $this->customPostTypeSearch,
+                'post_status' => 'publish',
+                'meta_query' => array(
+                    array(
+                        'key' => 'productkey',
+                        'value' => $productKey,
+                    )
+                )
+            );
 
             $_REQUEST[$cacheKey] = get_posts($dataArgs);
             $data = $_REQUEST[$cacheKey];

@@ -25,6 +25,7 @@
  * code inside an immediately invoked function expression (IIFE) to avoid naming conflicts with the $
  * variable.
  */
+
 if ( typeof jQuery != 'undefined' ) {
 
 	( function ( $ ) {
@@ -73,7 +74,7 @@ if ( typeof jQuery != 'undefined' ) {
 					return false;
 				} );
 
-				updateModalHeight = function () {
+				var updateModalHeight = function () {
 					var windowHeight = $( window ).height();
 					var windowWidth  = $( window ).width();
 					$thumbnailModal.dialog( { height:( windowHeight * .8 ), width:( windowWidth * .8 ) } );
