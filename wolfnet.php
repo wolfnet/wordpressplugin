@@ -394,8 +394,12 @@ class wolfnet
          * the MLSFinder server now so that we can set cookies. */
         $pageKeyExists = array_key_exists('page', $_REQUEST);
         $pageIsSM = ($pageKeyExists) ? ($_REQUEST['page']=='wolfnet_plugin_search_manager') : false;
+        $productKey = $_REQUEST["productkey"];
+        if(!$this->productKeyIsValid($productKey)) {
+            $productKey = null;
+        }
         if ($pageKeyExists && $pageIsSM) {
-            $this->smHttp = $this->searchManagerHtml();
+            $this->smHttp = $this->searchManagerHtml($productKey);
         }
 
     }
@@ -704,12 +708,14 @@ class wolfnet
 
     public function amSearchManagerPage()
     {
-        if (!$this->productKeyIsValid()) {
+        if (!$this->productKeyIsValid($this->getDefaultProductKey())) {
             include 'template/invalidProductKey.php';
             return;
         }
         else {
             $searchForm = ($this->smHttp !== null) ? $this->smHttp['body'] : '';
+            $markets = json_decode($this->getProductKey());
+            $selectedKey = ($this->productKeyIsValid($_REQUEST["productkey"])) ? $_REQUEST["productkey"] : '';
             include 'template/adminSearchManager.php';
 
         }
@@ -1167,9 +1173,7 @@ class wolfnet
     {
         $options = $this->getOptions($this->getListingGridDefaults(), $instance);
 
-        // Get first api key to pre-populate prices with market values
-        $productKey = json_decode($this->getProductKey());
-        $productKey = $productKey[0]->key;
+        $productKey = $this->getDefaultProductKey();
 
         $options['mode_basic_wpc']        = checked($options['mode'], 'basic', false);
         $options['mode_advanced_wpc']     = checked($options['mode'], 'advanced', false);
@@ -1872,10 +1876,10 @@ class wolfnet
     }
 
 
-    private function searchManagerHtml()
+    private function searchManagerHtml($productKey=null)
     {
         global $wp_version;
-        $baseUrl = $this->getBaseUrl();
+        $baseUrl = $this->getBaseUrl($productKey);
         $maptracksEnabled = $this->getMaptracksEnabled();
 
         if (!strstr($baseUrl, 'index.cfm')) {
@@ -2061,6 +2065,12 @@ class wolfnet
             $key = $this->setJsonProductKey($key);
         }
         return $key;
+    }
+
+
+    private function getDefaultProductKey() {
+        $productKey = json_decode($this->getProductKey());
+        return $productKey[0]->key;
     }
 
 
@@ -2572,9 +2582,12 @@ class wolfnet
     }
 
 
-    private function getBaseUrl()
+    private function getBaseUrl($productKey=null)
     {
-        $productKey = $this->getProductKey();
+        if($productKey === null) {
+            $productKey = $this->getDefaultProductKey();
+        }
+
         $url  = 'http://services.mlsfinder.com/v1/setting/' . $productKey . '.json';
         $url .= '?setting=SITE_BASE_URL';
 
