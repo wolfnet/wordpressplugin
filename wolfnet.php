@@ -1524,8 +1524,7 @@ class wolfnet
     {
         // Cache the data in the request scope so that we only have to query for it once per request.
         $cacheKey = 'wntSavedSearches';
-        //$data = (array_key_exists($cacheKey, $_REQUEST)) ? $_REQUEST[$cacheKey] : null;
-        $data = null;
+        $data = (array_key_exists($cacheKey, $_REQUEST)) ? $_REQUEST[$cacheKey] : null;
         if($productKey === null) {
             $productKey = $this->getDefaultProductKey();
         }
