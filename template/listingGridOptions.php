@@ -209,8 +209,8 @@
         $('#<?php echo $instance_id; ?>').wolfnetListingGridControls();
         wolfnet.initMoreInfo( $( '#<?php echo $instance_id; ?> .wolfnet_moreInfo' ) );
 
-        $('.productkey').change(function() {
-            $('.productkey').wolfnetUpdateShortcodeControls($(this).closest('div'));
+        $('#<?php echo $instance_id; ?>').find('.productkey').change(function() {
+            $(this).wolfnetUpdateShortcodeControls($(this).closest('form'));
         });
     });
 

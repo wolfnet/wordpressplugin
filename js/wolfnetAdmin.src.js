@@ -244,7 +244,7 @@ if ( typeof jQuery != 'undefined' ) {
 
 			$.ajax( {
 				url: wolfnet_ajax.ajaxurl,
-				data: { action:'wolfnet_price_range', productkey:$('#productkey').val() },
+				data: { action:'wolfnet_price_range', productkey:$(container).find('#productkey').val() },
 				dataType: 'json',
 				type: 'GET',
 				cache: false,
@@ -256,21 +256,21 @@ if ( typeof jQuery != 'undefined' ) {
 				},
 				success: function ( data ) {
 					var options = buildPriceDropdownOptions(data);
-					$(container).find('#pricerange').html('');
+					$(container).find('.pricerange').html('');
 					$(container).find('#maxprice').append($('<option />').html('Max. Price'));
 					$(container).find('#minprice').append($('<option />').html('Min. Price'));
 					$(options).each(function() {
 						$(container).find('.pricerange').append(this);
 					});
 				},
-				error: function () {
-					$this.trigger( options.invalidEvent );
+				error: function ( error ) {
+					console.log(error);
 				}
 			} );
 
 			$.ajax( {
 				url: wolfnet_ajax.ajaxurl,
-				data: { action:'wolfnet_saved_searches', productkey:$('#productkey').val() },
+				data: { action:'wolfnet_saved_searches', productkey:$(container).find('#productkey').val() },
 				dataType: 'json',
 				type: 'GET',
 				cache: false,
@@ -288,8 +288,8 @@ if ( typeof jQuery != 'undefined' ) {
 						$(container).find('#savedsearch').append(this);
 					});
 				},
-				error: function () {
-					$this.trigger( options.invalidEvent );
+				error: function ( error ) {
+					console.log(error);
 				}
 			} );
 
