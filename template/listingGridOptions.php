@@ -38,7 +38,7 @@
         <tr>
             <td><label>Market:</label></td>
             <td>
-                <select id="<?php echo $productkey_wpid; ?>" name="<?php echo $productkey_wpname; ?>">
+                <select id="<?php echo $productkey_wpid; ?>" class="productkey" name="<?php echo $productkey_wpname; ?>">
                     <?php for($i=0; $i<=count($markets)-1; $i++): ?>
                     <option value="<?php echo $markets[$i]->key; ?>"><?php echo $markets[$i]->label; ?></option>
                     <?php endfor; ?>
@@ -76,7 +76,7 @@
         <tr class="advanced-option savedSearchField">
             <td><label>Saved Search:</label></td>
             <td>
-                <select id="<?php echo $savedsearch_wpid; ?>" name="<?php echo $savedsearch_wpname; ?>" style="width:200px;">
+                <select id="<?php echo $savedsearch_wpid; ?>" class="savedsearch" name="<?php echo $savedsearch_wpname; ?>" style="width:200px;">
                     <?php $foundOne = false; ?>
                     <option value="">-- Saved Search --</option>
                     <?php foreach ($savedsearches as $ss) { ?>
@@ -99,7 +99,7 @@
         <tr class="basic-option">
             <td><label>Price:</label></td>
             <td>
-                <select id="<?php echo $minprice_wpid; ?>" class="pricerange" name="<?php echo $minprice_wpname; ?>">
+                <select id="<?php echo $minprice_wpid; ?>" class="pricerange minprice" name="<?php echo $minprice_wpname; ?>">
                     <option value="">Min. Price</option>
                     <?php foreach ($prices as $price) { ?>
                         <option value="<?php echo $price['value']; ?>" <?php selected($minprice, $price['value']); ?>>
@@ -108,7 +108,7 @@
                     <?php } ?>
                 </select>
                 <span>to</span>
-                <select id="<?php echo $maxprice_wpid; ?>" class="pricerange" name="<?php echo $maxprice_wpname; ?>">
+                <select id="<?php echo $maxprice_wpid; ?>" class="pricerange maxprice" name="<?php echo $maxprice_wpname; ?>">
                     <option value="">Max. Price</option>
                     <?php foreach ( $prices as $price ) { ?>
                         <option value="<?php echo $price['value']; ?>" <?php selected($maxprice, $price['value']); ?>>
@@ -209,8 +209,8 @@
         $('#<?php echo $instance_id; ?>').wolfnetListingGridControls();
         wolfnet.initMoreInfo( $( '#<?php echo $instance_id; ?> .wolfnet_moreInfo' ) );
 
-        $('#productkey').change(function() {
-            $('#productkey').wolfnetUpdateListingGridControls();
+        $('.productkey').change(function() {
+            $('.productkey').wolfnetUpdateShortcodeControls($(this).closest('div'));
         });
     });
 
