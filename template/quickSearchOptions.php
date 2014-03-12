@@ -24,11 +24,28 @@
 
 <div id="<?php echo $instance_id; ?>" class="wolfnet_quickSearchOptions">
 
+	<?php if(count($markets) == 1): ?>
+	<input type="hidden" id="<?php echo $productkey_wpid; ?>" name="<?php echo $productkey_wpid; ?>" value="<?php echo $markets[0]->key; ?>" />
+	<?php endif; ?>
+
     <table class="form-table">
         <tr>
             <td><label>Title:</label></td>
             <td><input id="<?php echo $title_wpid; ?>" name="<?php echo $title_wpname; ?>" value="<?php echo $title; ?>" type="text" /></td>
         </tr>
+        <?php if(count($markets) > 1): ?>
+        <tr>
+        	<td><label>Market:</label></td>
+        	<td>
+        		<select id="<?php echo $productkey_wpid; ?>" name="<?php echo $productkey_wpid; ?>">
+	                <?php for($i=0; $i<=count($markets)-1; $i++): ?>
+	                <option value="<?php echo $markets[$i]->key; ?>"
+	                    <?php if($markets[$i]->key == $selectedKey) echo ' selected="selected"'?>><?php echo $markets[$i]->label; ?></option>
+	                <?php endfor; ?>
+	            </select>
+        	</td>
+        </tr>
+    	<?php endif; ?>
     </table>
 
 </div>

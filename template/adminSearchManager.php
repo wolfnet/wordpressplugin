@@ -52,6 +52,7 @@
 
     </div>
 
+    <?php if(count($markets) > 1): ?>
     <div class="style_box">
         <div class="style_box_header">Market</div>
         <div class="style_box_content">
@@ -65,6 +66,9 @@
             <input type="button" id="changeMarket" value="Apply" /></p>
         </div>
     </div>
+    <?php else: ?>
+    <input type="hidden" id="productkey" name="productkey" value="<?php echo $markets[0]->key; ?>" />
+    <?php endif; ?>
 
     <div id="searchmanager">
     <?php echo $searchForm; ?>
@@ -103,9 +107,11 @@
                 saveForm  : $( '#save_search' )
             } );
 
+            <?php if(count($markets) > 1): ?>
             $( '#changeMarket' ).click(function() {
                 document.location.href = "admin.php?page=wolfnet_plugin_search_manager&productkey=" + $('#productkey').val();
             });
+            <?php endif; ?>
 
         } )( jQuery );
 

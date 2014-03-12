@@ -813,9 +813,11 @@ class wolfnet
     }
 
 
-    public function remoteGetSavedSearchs()
+    public function remoteGetSavedSearchs($productKey=null)
     {
-        $productKey = (array_key_exists('productkey', $_REQUEST)) ? $_REQUEST['productkey'] : null;
+        if($productKey == null) {
+            $productKey = (array_key_exists('productkey', $_REQUEST)) ? $_REQUEST['productkey'] : null;
+        }
         echo json_encode($this->getSavedSearches(-1, $productKey));
 
         die;
@@ -1494,7 +1496,8 @@ class wolfnet
     {
 
         return array(
-            'title' => 'QuickSearch'
+            'title' => 'QuickSearch',
+            'productkey' => ''
             );
 
     }
@@ -1514,7 +1517,7 @@ class wolfnet
         $vars = array(
             'instance_id'  => str_replace('.', '', uniqid('wolfnet_quickSearch_')),
             'siteUrl'      => site_url(),
-            'prices'       => $this->getPrices(),
+            'prices'       => $this->getPrices($criteria['productkey']),
             'beds'         => $this->getBeds(),
             'baths'        => $this->getBaths(),
             'formAction'   => $this->getBaseUrl()
@@ -1645,7 +1648,8 @@ class wolfnet
     {
         $defaultArgs = array(
             'instance_id'      => str_replace('.', '', uniqid('wolfnet_listingGrid_')),
-            'markets'          => json_decode($this->getProductKey())
+            'markets'          => json_decode($this->getProductKey()),
+            'productkey'       => ''
             );
 
         $args = array_merge($defaultArgs, $args);
@@ -1686,7 +1690,8 @@ class wolfnet
     public function quickSearchOptionsFormView(array $args=array())
     {
         $defaultArgs = array(
-            'instance_id' => str_replace('.', '', uniqid('wolfnet_quickSearch_'))
+            'instance_id' => str_replace('.', '', uniqid('wolfnet_quickSearch_')),
+            'markets'     => json_decode($this->getProductKey())
             );
 
         $args = array_merge($defaultArgs, $args);

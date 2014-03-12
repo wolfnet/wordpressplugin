@@ -225,7 +225,7 @@ if ( typeof jQuery != 'undefined' ) {
 						url: wolfnet_ajax.ajaxurl,
 						dataType: 'json',
 						type: 'GET',
-						data: { action:'wolfnet_delete_search', id:id },
+						data: { action:'wolfnet_delete_search', id:id, productkey:$('#productkey').val() },
 						beforeSend: function () {
 							data.loaderImage.show();
 							$this.data( pluginName, $.extend( data, { deleting:true } ) );

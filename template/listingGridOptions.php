@@ -27,6 +27,10 @@
     <input id="<?php echo $criteria_wpid; ?>" name="<?php echo $criteria_wpname; ?>" 
            value="<?php echo $criteria; ?>" type="hidden" />
 
+    <?php if(count($markets) == 1): ?>
+    <input type="hidden" id="<?php echo $productkey_wpid; ?>" name="<?php echo $productkey_wpid; ?>" value="<?php echo $markets[0]->key; ?>" />
+    <?php endif; ?>
+
     <table class="form-table">
 
         <tr>
@@ -35,6 +39,7 @@
                        value="<?php echo $title; ?>" type="text" /></td>
         </tr>
 
+        <?php if(count($markets) > 1): ?>
         <tr>
             <td><label>Market:</label></td>
             <td>
@@ -45,6 +50,7 @@
                 </select>
             </td>
         </tr>
+        <?php endif; ?>
               
         <tr class="modeField">
             <td><label>Mode:</label></td>
