@@ -418,6 +418,34 @@ if ( typeof jQuery != 'undefined' ) {
 				var $wrapper = $this.parent();
 				$wrapper.addClass( options.validClass );
 				$wrapper.removeClass( options.invalidClass );
+
+				// Update market name
+				$.ajax( {
+					url: wolfnet_ajax.ajaxurl,
+					data: { action:'wolfnet_market_name', productkey:$(this).val() },
+					dataType: 'json',
+					type: 'GET',
+					cache: false,
+					timeout: 2500,
+					statusCode: {
+						404: function () {
+							commFailure();
+						}
+					},
+					success: function ( data ) {
+						$marketContainer = $wrapper.closest('tr').find('.wolfnet_keyMarket');
+						$marketLabel = $wrapper.closest('tr').find('.wolfnet_keyLabel');
+						if($marketContainer.html() == '') {
+							$marketContainer.html(data);
+						}
+						if($marketLabel.val() == '') {
+							$marketLabel.val(data);
+						}
+					},
+					error: function () {
+						$this.trigger( options.invalidEvent );
+					}
+				} );
 			}
 
 			var onInvalidEvent = function ()

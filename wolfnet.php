@@ -1013,6 +1013,15 @@ class wolfnet
     }
 
 
+    public function remoteGetMarketName() 
+    {
+        $productKey = $_REQUEST["productkey"];
+        echo json_encode(strtoupper($this->getMarketName($productKey)));
+
+        die;
+    }
+
+
     /* Data ************************************************************************************* */
     /*  _                                                                                         */
     /* | \  _. _|_  _.                                                                            */
@@ -2091,7 +2100,7 @@ class wolfnet
         $keyArray = array(
             array(
                 "key" => $keyString,
-                "label" => "API Key"
+                "label" => ""
             )
         );
         return json_encode($keyArray);
@@ -2911,6 +2920,7 @@ class wolfnet
             'wolfnet_get_listings'            => 'remoteListingsGet',
             'wolfnet_css'                     => 'remotePublicCss',
             'wolfnet_price_range'             => 'remotePriceRange',
+            'wolfnet_market_name'             => 'remoteGetMarketName',
             );
 
         foreach ($ajxActions as $action => $method) {

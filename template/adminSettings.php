@@ -54,9 +54,9 @@
                                     <input id="wolfnet_productKey_<?php echo $i; ?>" name="wolfnet_productKey_<?php echo $i; ?>" type="text"
                                         value="<?php echo $productKey[$i-1]->key; ?>" class="wolfnet_productKey" size="50" />
                                 </td>
-                                <td><?php echo strtoupper($this->getMarketName($productKey[$i-1]->key)); ?></td>
+                                <td><span class="wolfnet_keyMarket"><?php echo strtoupper($this->getMarketName($productKey[$i-1]->key)); ?></span></td>
                                 <td>
-                                    <input id="wolfnet_keyLabel_<?php echo $i; ?>" name="wolfnet_keyLabel_<?php echo $i; ?>" type="text" 
+                                    <input id="wolfnet_keyLabel_<?php echo $i; ?>" class="wolfnet_keyLabel" name="wolfnet_keyLabel_<?php echo $i; ?>" type="text" 
                                         value="<?php echo $productKey[$i-1]->label; ?>" size="30" />
                                 </td>
                                 <td>
@@ -178,17 +178,18 @@
                 var cell = $('<td />');
                 var valueRow = row.clone().append(cell.clone().html(
                         $('<input />').attr('id', 'wolfnet_productKey_' + nextIteration)
+                        .attr('class', 'wolfnet_productKey')
                         .attr('name', 'wolfnet_productKey_' + nextIteration)
                         .attr('type', 'text')
                         .attr('value', '')
                         .attr('size', '50')
-                        .attr('class', 'wolfnet_productKey')
                     )
                 );
-                valueRow.append(cell.clone().html(''));
+                valueRow.append(cell.clone().html($('<span/>').attr('class', 'wolfnet_keyMarket')));
                 valueRow.append(cell.clone().html(
                         $('<input />').attr('id', 'wolfnet_keyLabel_' + nextIteration)
                         .attr('name', 'wolfnet_keyLabel_' + nextIteration)
+                        .attr('class', 'wolfnet_keyLabel')
                         .attr('type', 'text')
                         .attr('value', '')
                         .attr('size', '30')
@@ -208,6 +209,10 @@
                 $('#wolfnet_keys').append(headRow).append(valueRow);
 
                 $('#wolfnet_keyCount').val(nextIteration);
+
+                $('#wolfnet_productKey_' + nextIteration).wolfnetValidateProductKey( {
+                    rootUri: '<?php echo site_url(); ?>?pagename=wolfnet-admin-validate-key'
+                } )
 
             }
 
