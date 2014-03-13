@@ -122,15 +122,14 @@
                 /* We need to collect the keys and associated labels from the form into a JSON string,
                 then put that into a form variable to retain backwards compatibility. */
                 var json = [];
-                var keyCount = parseInt($('#wolfnet_keyCount').val());
-                for(var i=1; i<=keyCount; i++) {
-                    if($('#wolfnet_productKey_' + i).val() != '') {
+                $('.wolfnet_productKey').each(function() {
+                    if($(this).val() != '') {
                         json.push({
-                            "key" : $('#wolfnet_productKey_' + i).val(),
-                            "label" : $('#wolfnet_keyLabel_' + i).val()
+                            "key" : $(this).val(),
+                            "label" : $(this).closest('tr').find('.wolfnet_keyLabel').val()
                         });
                     }
-                }
+                });
                 var input = $('<input />').attr('name', 'wolfnet_productKey')
                     .attr('type', 'hidden')
                     .attr('value', JSON.stringify(json));
@@ -139,82 +138,13 @@
 
 
             $( '.wolfnet_deleteKey' ).click( function(button) {
-                wolfnetDeleteKeyRow(button);
+                $.fn.wolfnetDeleteKeyRow(button);
             } );
 
 
             $( '#wolfnet_addKey' ).click( function() {
-                wolfnetInsertKeyRow();
+                $.fn.wolfnetInsertKeyRow();
             } );
-
-
-            var wolfnetDeleteKeyRow = function (button) {
-                var key = $(button.srcElement).attr('wnt-key');
-                $('.row' + key).remove();
-                $('#wolfnet_keyCount').val(parseInt($('#wolfnet_keyCount').val()) - 1);
-            }
-
-
-            var wolfnetInsertKeyRow = function ()
-            {
-
-                var nextIteration = parseInt($('#wolfnet_keyCount').val()) + 1;
-
-                // Row 1
-                var row = $('<tr />').attr('class', 'row' + nextIteration);
-                var headCell = $('<th />').attr('scope', 'row');
-                var headRow = row.clone().append(headCell.clone().html(
-                        $('<label />').attr('for', 'wolfnet_productKey_' + nextIteration).html('Product Key')
-                    )
-                );
-                headRow.append(headCell.clone().html('Market Name'));
-                headRow.append(headCell.clone().html(
-                        $('<label />').attr('for', 'wolfnet_keyLabel_' + nextIteration).html('Label')
-                    )
-                );
-                headRow.append(headCell.clone());
-
-                // Row 2
-                var cell = $('<td />');
-                var valueRow = row.clone().append(cell.clone().html(
-                        $('<input />').attr('id', 'wolfnet_productKey_' + nextIteration)
-                        .attr('class', 'wolfnet_productKey')
-                        .attr('name', 'wolfnet_productKey_' + nextIteration)
-                        .attr('type', 'text')
-                        .attr('value', '')
-                        .attr('size', '50')
-                    )
-                );
-                valueRow.append(cell.clone().html($('<span/>').attr('class', 'wolfnet_keyMarket')));
-                valueRow.append(cell.clone().html(
-                        $('<input />').attr('id', 'wolfnet_keyLabel_' + nextIteration)
-                        .attr('name', 'wolfnet_keyLabel_' + nextIteration)
-                        .attr('class', 'wolfnet_keyLabel')
-                        .attr('type', 'text')
-                        .attr('value', '')
-                        .attr('size', '30')
-                    )
-                );
-                valueRow.append(cell.clone().html(
-                        $('<input />').attr('class', 'wolfnet_deleteKey')
-                        .attr('wnt-key', nextIteration)
-                        .attr('type', 'button')
-                        .attr('value', 'Delete')
-                        .click(function(button) {
-                            wolfnetDeleteKeyRow(button);
-                        })
-                    )
-                )
-
-                $('#wolfnet_keys').append(headRow).append(valueRow);
-
-                $('#wolfnet_keyCount').val(nextIteration);
-
-                $('#wolfnet_productKey_' + nextIteration).wolfnetValidateProductKey( {
-                    rootUri: '<?php echo site_url(); ?>?pagename=wolfnet-admin-validate-key'
-                } )
-
-            }
 
         } )( jQuery );
 

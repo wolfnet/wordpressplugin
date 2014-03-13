@@ -496,6 +496,74 @@ if ( typeof jQuery != 'undefined' ) {
 
 		}
 
+
+		$.fn.wolfnetDeleteKeyRow = function (button) {
+            var key = $(button.srcElement).attr('wnt-key');
+            $('.row' + key).remove();
+        }
+
+
+        $.fn.wolfnetInsertKeyRow = function ()
+        {
+
+            var nextIteration = parseInt($('#wolfnet_keyCount').val()) + 1;
+
+            // Row 1
+            var row = $('<tr />').attr('class', 'row' + nextIteration);
+            var headCell = $('<th />').attr('scope', 'row');
+            var headRow = row.clone().append(headCell.clone().html(
+                    $('<label />').attr('for', 'wolfnet_productKey_' + nextIteration).html('Product Key')
+                )
+            );
+            headRow.append(headCell.clone().html('Market Name'));
+            headRow.append(headCell.clone().html(
+                    $('<label />').attr('for', 'wolfnet_keyLabel_' + nextIteration).html('Label')
+                )
+            );
+            headRow.append(headCell.clone());
+
+            // Row 2
+            var cell = $('<td />');
+            var valueRow = row.clone().append(cell.clone().html(
+                    $('<input />').attr('id', 'wolfnet_productKey_' + nextIteration)
+                    .attr('class', 'wolfnet_productKey')
+                    .attr('name', 'wolfnet_productKey_' + nextIteration)
+                    .attr('type', 'text')
+                    .attr('value', '')
+                    .attr('size', '50')
+                )
+            );
+            valueRow.append(cell.clone().html($('<span/>').attr('class', 'wolfnet_keyMarket')));
+            valueRow.append(cell.clone().html(
+                    $('<input />').attr('id', 'wolfnet_keyLabel_' + nextIteration)
+                    .attr('name', 'wolfnet_keyLabel_' + nextIteration)
+                    .attr('class', 'wolfnet_keyLabel')
+                    .attr('type', 'text')
+                    .attr('value', '')
+                    .attr('size', '30')
+                )
+            );
+            valueRow.append(cell.clone().html(
+                    $('<input />').attr('class', 'wolfnet_deleteKey')
+                    .attr('wnt-key', nextIteration)
+                    .attr('type', 'button')
+                    .attr('value', 'Delete')
+                    .click(function(button) {
+                        $.fn.wolfnetDeleteKeyRow(button);
+                    })
+                )
+            )
+
+            $('#wolfnet_keys').append(headRow).append(valueRow);
+
+            $('#wolfnet_keyCount').val(nextIteration);
+
+            $('#wolfnet_productKey_' + nextIteration).wolfnetValidateProductKey( {
+                rootUri: '<?php echo site_url(); ?>?pagename=wolfnet-admin-validate-key'
+            } );
+
+        }
+
 	} )( jQuery ); /* END: jQuery IIFE */
 
 } /* END: If jQuery Exists */
