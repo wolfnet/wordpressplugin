@@ -322,7 +322,8 @@ class wolfnet
      * need to override styles.
      * @return void
      */
-    public function publicStyles() {
+    public function publicStyles()
+    {
         if(strlen($this->getPublicCss())) {
             $styles = array(
                 'wolfnet-custom',
@@ -334,6 +335,7 @@ class wolfnet
 
             do_action($this->postHookPrefix . 'enqueueResources'); // Legacy hook
         }
+
     }
 
 
