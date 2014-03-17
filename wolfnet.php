@@ -123,14 +123,12 @@ class wolfnet
      */
     private $postHookPrefix = 'wolfnet_post_';
 
-
     /**
      * This property is used as a request scope key for storing the unique session key value for the
      * current user.
      * @var string
      */
     private $requestSessionKey = 'wntSessionKey';
-
 
     /**
      * This property is used to determine how long a WNT session should last.
@@ -358,7 +356,7 @@ class wolfnet
         register_widget('Wolfnet_PropertyListWidget');
 
         require_once $this->dir . '/widget/ResultsSummaryWidget.php';
-        register_widget('Wolfnet_ResultsSummaryWidget');        
+        register_widget('Wolfnet_ResultsSummaryWidget');
 
         require_once $this->dir . '/widget/QuickSearchWidget.php';
         register_widget('Wolfnet_QuickSearchWidget');
@@ -608,9 +606,11 @@ class wolfnet
      * This method is used in the context of admin_print_styles to output custom CSS.
      * @return void
      */
-    public function adminPrintStyles() {
+    public function adminPrintStyles()
+    {
         $adminCss = $this->getAdminCss();
         echo '<style>' . $adminCss . '</style>';
+
     }
 
 
@@ -694,11 +694,14 @@ class wolfnet
     }
 
 
-    public function amEditCssPage() {
+    public function amEditCssPage()
+    {
         ob_start(); settings_fields($this->CssOptionGroup); $formHeader = ob_get_clean();
         $publicCss = $this->getPublicCss();
         $adminCss = $this->getAdminCss();
+
         include 'template/adminEditCss.php';
+
     }
 
 
@@ -775,7 +778,7 @@ class wolfnet
 
         return $this->resultsSummary($criteria);
 
-    }    
+    }
 
 
     public function scQuickSearch($attrs, $content='')
@@ -892,7 +895,7 @@ class wolfnet
 
         die;
 
-    }    
+    }
 
 
     public function remoteShortcodeBuilderOptionsQuickSearch ()
@@ -981,7 +984,8 @@ class wolfnet
     }
 
 
-    public function remotePublicCss() {
+    public function remotePublicCss()
+    {
         header('Content-type: text/css');
         $publicCss = $this->getPublicCss();
 
@@ -990,6 +994,7 @@ class wolfnet
         }
 
         die;
+
     }
 
 
@@ -1223,7 +1228,7 @@ class wolfnet
 
         if ($vars['maptype'] != "disabled") {
             $vars['map']     = $this->getMap($listingsData);
-            $vars['mapType'] = $vars['maptype'];         
+            $vars['mapType'] = $vars['maptype'];
             $vars['hideListingsTools'] = $this->getHideListingTools($vars['hideListingsId']
                                                                    ,$vars['showListingsId']
                                                                    ,$vars['collapseListingsId']
@@ -1231,7 +1236,7 @@ class wolfnet
         }
         else {
             $vars['mapType'] = $vars['maptype'];
-        }        
+        }
 
         if ($vars['paginated'] || $vars['sortoptions']) {
             $vars['toolbarTop']    = $this->getToolbar($vars, 'wolfnet_toolbarTop ');
@@ -1330,11 +1335,11 @@ class wolfnet
                                                                    ,$vars['showListingsId']
                                                                    ,$vars['collapseListingsId']
                                                                    ,$vars['instance_id']);
-            $vars['mapType'] = $vars['maptype']; 
+            $vars['mapType'] = $vars['maptype'];
         }
         else {
             $vars['mapType'] = $vars['maptype'];
-        }          
+        }
 
         if ($vars['paginated'] || $vars['sortoptions']) {
             $vars['toolbarTop']    = $this->getToolbar($vars, 'wolfnet_toolbarTop ');
@@ -1356,7 +1361,8 @@ class wolfnet
 
     /* Results Summary ************************************************************************** */
 
-    public function getResultsSummaryDefaults() {
+    public function getResultsSummaryDefaults()
+    {
 
         return array(
             'title'       => '',
@@ -1370,14 +1376,16 @@ class wolfnet
     }
 
 
-    public function getResultsSummaryOptions($instance=null) {
+    public function getResultsSummaryOptions($instance=null)
+    {
 
         return $this->getListingGridOptions($instance);
 
     }
 
 
-    public function resultsSummary(array $criteria) {
+    public function resultsSummary(array $criteria)
+    {
 
         if (!array_key_exists('numrows', $criteria)) {
             $criteria['numrows'] = $criteria['maxresults'];
@@ -1418,7 +1426,7 @@ class wolfnet
             'hideListingsTools'  => '',
             'hideListingsId'     => uniqid('hideListings'),
             'showListingsId'     => uniqid('showListings'),
-            'collapseListingsId' => uniqid('collapseListings'),       
+            'collapseListingsId' => uniqid('collapseListings'),
             'toolbarTop'         => '',
             'toolbarBottom'      => '',
             'maxresults'         => ((count($listingsData) > 0) ? $listingsData[0]->maxresults : 0),
@@ -1432,11 +1440,11 @@ class wolfnet
                                                                    ,$vars['showListingsId']
                                                                    ,$vars['collapseListingsId']
                                                                    ,$vars['instance_id']);
-            $vars['mapType'] = $vars['maptype']; 
+            $vars['mapType'] = $vars['maptype'];
         }
         else {
             $vars['mapType'] = $vars['maptype'];
-        }          
+        }
 
         if ($vars['paginated'] || $vars['sortoptions']) {
             $vars['toolbarTop']    = $this->getToolbar($vars, 'wolfnet_toolbarTop ');
@@ -1451,8 +1459,9 @@ class wolfnet
             $vars['class'] .= 'wolfnet_withSortOptions ';
         }
 
-        return $this->resultsSummaryView($vars);        
-    }    
+        return $this->resultsSummaryView($vars);
+
+    }
 
 
     /* Quick Search ***************************************************************************** */
@@ -1636,7 +1645,7 @@ class wolfnet
 
         return $this->getListingGridOptions($args);
 
-    }    
+    }
 
 
     public function quickSearchOptionsFormView(array $args=array())
@@ -1691,7 +1700,7 @@ class wolfnet
 
         return apply_filters('wolfnet_listingResultsView', ob_get_clean());
 
-    }    
+    }
 
 
     public function featuredListingView(array $args=array())
@@ -1739,7 +1748,7 @@ class wolfnet
 
         return apply_filters('wolfnet_resultsSummaryView', ob_get_clean());
 
-    }    
+    }
 
 
     public function listingGridView(array $args=array())
@@ -1776,7 +1785,7 @@ class wolfnet
     public function mapView($listingsData)
     {
         ob_start();
-        $args = $this->getMapParameters($listingsData);        
+        $args = $this->getMapParameters($listingsData);
         echo $this->parseTemplate('template/map.php', $args);
 
         return apply_filters('wolfnet_mapView', ob_get_clean());
@@ -1786,7 +1795,7 @@ class wolfnet
 
     public function hideListingsToolsView($hideId,$showId,$collapseId,$instance_id)
     {
-        ob_start(); 
+        ob_start();
 
         $args['hideId'] = $hideId;
         $args['showId'] = $showId;
@@ -1796,6 +1805,7 @@ class wolfnet
         echo $this->parseTemplate('template/hideListingsTools.php', $args);
 
         return apply_filters('wolfnet_hideListingsTools', ob_get_clean());
+
     }
 
 
@@ -1870,7 +1880,7 @@ class wolfnet
 
         /* commenting out map mode in search manager until we better figure out session constraints..
         if (!array_key_exists('search_mode', $_GET)) {
-            $_GET['search_mode'] = ($maptracksEnabled) ? 'map' : 'form';            
+            $_GET['search_mode'] = ($maptracksEnabled) ? 'map' : 'form';
         } */
 
         $_GET['search_mode'] = 'form';
@@ -2038,16 +2048,21 @@ class wolfnet
     private function getProductKey()
     {
         return get_option(trim($this->productKeyOptionKey));
+
     }
 
 
-    private function getPublicCss() {
+    private function getPublicCss()
+    {
         return get_option(trim($this->publicCssOptionKey));
+
     }
 
 
-    private function getAdminCss() {
+    private function getAdminCss()
+    {
         return get_option($this->adminCssOptionKey);
+
     }
 
 
@@ -2147,6 +2162,7 @@ class wolfnet
     {
         $this->clearTransients();
         delete_transient($this->transientIndexKey);
+
     }
 
 
@@ -2225,15 +2241,17 @@ class wolfnet
     }
 
 
-    private function getMap($listingsData) 
-    {      
+    private function getMap($listingsData)
+    {
         return $this->mapView($listingsData);
+
     }
 
 
     private function getHideListingTools($hideId,$showId,$collapseId,$instance_id)
-    {         
+    {
         return $this->hideListingsToolsView($hideId,$showId,$collapseId,$instance_id);
+
     }
 
 
@@ -2253,7 +2271,8 @@ class wolfnet
         $args['houseoverData'] = $this->getHouseoverData($listingsData,$data->settings->SHOWBROKERIMAGEHO);
 
         return $args;
-    }    
+
+    }
 
 
     private function getHouseoverData($listingsData,$showBrokerImage)
@@ -2272,13 +2291,13 @@ class wolfnet
             $concatHouseover .= '<td class="wntHOImgCol" valign="top" style="vertical-align:top;">';
             $concatHouseover .= '<div class="wolfnet_wntHOImg">';
             $concatHouseover .= '<img src="' . $listing->thumbnail_url . '" style="max-height:100px;width:auto">';
-            $concatHouseover .= '</div>';            
+            $concatHouseover .= '</div>';
             if ($showBrokerImage) {
                 $concatHouseover .= '<div class="wolfnet_wntHOBroker" style="text-align: center">';
                 $concatHouseover .= '<img class="wolfnet_wntHOBrokerLogo" src="' . $listing->branding->brokerLogo . '" alt="Broker Reciprocity">';
                 $concatHouseover .= '</div>';
             }
-            $concatHouseover .= '</td>';            
+            $concatHouseover .= '</td>';
             $concatHouseover .= '<td valign="top" style="vertical-align:top;">';
             $concatHouseover .= '<div class="wolfnet_wntHOContentContainer">';
             $concatHouseover .= '<div style="text-align:left;font-weight:bold">' . $listing->listing_price;
@@ -2286,13 +2305,13 @@ class wolfnet
             $concatHouseover .= '<div style="text-align:left;">' . $listing->display_address;
             $concatHouseover .= '</div>';
             $concatHouseover .= '<div style="text-align:left;">' . $listing->city . ', ' . $listing->state;
-            $concatHouseover .= '</div>';            
-            $concatHouseover .= '<div style="text-align:left;">' . $listing->bedsbaths;
-            $concatHouseover .= '</div>';  
-            $concatHouseover .= '<div style="text-align:left;padding-top:20px;">' . $listing->branding->content;
-            $concatHouseover .= '</div>'; 
             $concatHouseover .= '</div>';
-            $concatHouseover .= '</td>';            
+            $concatHouseover .= '<div style="text-align:left;">' . $listing->bedsbaths;
+            $concatHouseover .= '</div>';
+            $concatHouseover .= '<div style="text-align:left;padding-top:20px;">' . $listing->branding->content;
+            $concatHouseover .= '</div>';
+            $concatHouseover .= '</div>';
+            $concatHouseover .= '</td>';
             $concatHouseover .= '</tr>';
             $concatHouseover .= '</tbody>';
             $concatHouseover .= '</table>';
@@ -2307,9 +2326,9 @@ class wolfnet
                 'propertyId' => $listing->property_id,
                 'propertyUrl'=> $listing->property_url
                 ));
-        }  
+        }
 
-        return $houseoverData;      
+        return $houseoverData;
 
     }
 
@@ -2394,7 +2413,7 @@ class wolfnet
     private function getMaptracksEnabled()
     {
         $productKey = $this->getProductKey();
-        $url  = 'http://services.mlsfinder.com/v1/setting/' . $productKey 
+        $url  = 'http://services.mlsfinder.com/v1/setting/' . $productKey
               . '?setting=maptracks_enabled';
         $data = $this->getApiData($url, 86400);
         $data = (property_exists($data, 'maptracks_enabled')) ? ($data->maptracks_enabled == 'Y') : false;
@@ -2486,6 +2505,7 @@ class wolfnet
             array('value'=>'below',    'label'=>'Below Listings'),
             array('value'=>'map_only', 'label'=>'Map Only')
             );
+
     }
 
 
@@ -2549,6 +2569,7 @@ class wolfnet
             'houseoverIcon'    => $this->url . 'img/houseover.png',
             'useDialogClass' => (version_compare($wp_version, '3.6')>0) ? "true" : "false",
             );
+
     }
 
 
@@ -2716,7 +2737,7 @@ class wolfnet
             'wolfnet-property-list' => array(
                 $this->url . 'js/jquery.wolfnetPropertyList.src.js',
                 array('jquery', 'wolfnet'),
-                ),          
+                ),
             'wolfnet-shortcode-builder' => array(
                 $this->url . 'js/jquery.wolfnetShortcodeBuilder.src.js',
                 array('jquery-ui-widget', 'jquery-effects-core', 'wolfnet-admin'),
@@ -2733,7 +2754,7 @@ class wolfnet
                 ),
             'bing-atlascompat' => array(
                 'http://ecn.dev.virtualearth.net/mapcontrol/v6.3/js/atlascompat.js'
-                ),            
+                ),
             'wolfnet-maptracks' => array(
                 $this->url . 'js/jquery.wolfnetMaptracks.src.js',
                 array('jquery',  'mapquest-api-config', 'mapquest-api','bing-mapcontrol','bing-atlascompat'),
