@@ -525,13 +525,16 @@ class wolfnet
      */
     public function footer()
     {
+
+        var_dump($_REQUEST['productkey']);
         do_action($this->preHookPrefix . 'footerDisclaimer'); // Legacy hook
 
         /* If it has been established that we need to output the market disclaimer do so now in the
          * site footer, otherwise do nothing. */
-        if (array_key_exists('wolfnet_includeDisclaimer', $_REQUEST)) {
+        if (array_key_exists('wolfnet_includeDisclaimer', $_REQUEST) && 
+            array_key_exists('productkey', $_REQUEST)) {
             echo '<div class="wolfnet_marketDisclaimer">';
-            echo $this->getMarketDisclaimer();
+            echo $this->getMarketDisclaimer($_REQUEST['productkey']);
             echo '</div>';
         }
 
@@ -1024,6 +1027,15 @@ class wolfnet
     }
 
 
+    public function remoteMapEnabled()
+    {
+        $productKey = $_REQUEST["productkey"];
+        echo json_encode($this->getMaptracksEnabled($productKey));
+
+        die;
+    }
+
+
     /* Data ************************************************************************************* */
     /*  _                                                                                         */
     /* | \  _. _|_  _.                                                                            */
@@ -1039,7 +1051,7 @@ class wolfnet
         $criteria['max_results'] = $criteria['maxresults'];
         $criteria['owner_type']  = $criteria['ownertype'];
 
-        $productKey = $this->getProductKey();
+        $productKey = json_decode($this->getProductKey());
         $url = 'http://services.mlsfinder.com/v1/propertyBar/' . $productKey . '.json';
         $url = $this->buildUrl($url, $criteria);
 
@@ -1198,7 +1210,7 @@ class wolfnet
         $options['ownertypes']            = $this->getOwnerTypes();
         $options['prices']                = $this->getPrices($productKey);
         $options['savedsearches']         = $this->getSavedSearches(-1, $productKey);
-        $options['mapEnabled']            = $this->getMaptracksEnabled();
+        $options['mapEnabled']            = $this->getMaptracksEnabled($productKey);
         $options['maptypes']              = $this->getMapTypes();
 
         return $options;
@@ -1233,6 +1245,7 @@ class wolfnet
         }
 
         $_REQUEST['wolfnet_includeDisclaimer'] = true;
+        $_REQUEST['productkey'] = $criteria['productkey'];
 
         $vars = array(
             'instance_id'        => str_replace('.', '', uniqid('wolfnet_listingGrid_')),
@@ -1241,7 +1254,7 @@ class wolfnet
             'siteUrl'            => site_url(),
             'criteria'           => json_encode($criteria),
             'class'              => 'wolfnet_listingGrid ',
-            'mapEnabled'         => $this->getMaptracksEnabled(),
+            'mapEnabled'         => $this->getMaptracksEnabled($criteria["productkey"]),
             'map'                => '',
             'mapType'            => '',
             'hideListingsTools'  => '',
@@ -1257,7 +1270,7 @@ class wolfnet
         $vars = $this->convertDataType(array_merge($criteria, $vars));
 
         if ($vars['maptype'] != "disabled") {
-            $vars['map']     = $this->getMap($listingsData);
+            $vars['map']     = $this->getMap($listingsData, $criteria["productkey"]);
             $vars['mapType'] = $vars['maptype'];         
             $vars['hideListingsTools'] = $this->getHideListingTools($vars['hideListingsId']
                                                                    ,$vars['showListingsId']
@@ -1337,6 +1350,7 @@ class wolfnet
         }
 
         $_REQUEST['wolfnet_includeDisclaimer'] = true;
+        $_REQUEST['productkey'] = $criteria['productkey'];
 
         $vars = array(
             'instance_id'        => str_replace('.', '', uniqid('wolfnet_propertyList_')),
@@ -1345,7 +1359,7 @@ class wolfnet
             'siteUrl'            => site_url(),
             'criteria'           => json_encode($criteria),
             'class'              => 'wolfnet_propertyList ',
-            'mapEnabled'         => $this->getMaptracksEnabled(),
+            'mapEnabled'         => $this->getMaptracksEnabled($criteria["productkey"]),
             'map'                => '',
             'mapType'            => '',
             'hideListingsTools'  => '',
@@ -1360,7 +1374,7 @@ class wolfnet
         $vars = $this->convertDataType(array_merge($criteria, $vars));
 
         if ($vars['maptype'] != "disabled") {
-            $vars['map']     = $this->getMap($listingsData);
+            $vars['map']     = $this->getMap($listingsData, $criteria["productkey"]);
             $vars['hideListingsTools'] = $this->getHideListingTools($vars['hideListingsId']
                                                                    ,$vars['showListingsId']
                                                                    ,$vars['collapseListingsId']
@@ -1439,6 +1453,7 @@ class wolfnet
         }
 
         $_REQUEST['wolfnet_includeDisclaimer'] = true;
+        $_REQUEST['productkey'] = $criteria['productkey'];
 
         $vars = array(
             'instance_id'        => str_replace('.', '', uniqid('wolfnet_resultsSummary_')),
@@ -1447,7 +1462,7 @@ class wolfnet
             'siteUrl'            => site_url(),
             'criteria'           => json_encode($criteria),
             'class'              => 'wolfnet_resultsSummary ',
-            'mapEnabled'         => $this->getMaptracksEnabled(),
+            'mapEnabled'         => $this->getMaptracksEnabled($criteria["productkey"]),
             'map'                => '',
             'mapType'            => '',
             'hideListingsTools'  => '',
@@ -1462,7 +1477,7 @@ class wolfnet
         $vars = $this->convertDataType(array_merge($criteria, $vars));
 
         if ($vars['maptype'] != "disabled") {
-            $vars['map']     = $this->getMap($listingsData);
+            $vars['map']     = $this->getMap($listingsData, $criteria["productkey"]);
             $vars['hideListingsTools'] = $this->getHideListingTools($vars['hideListingsId']
                                                                    ,$vars['showListingsId']
                                                                    ,$vars['collapseListingsId']
@@ -1537,7 +1552,7 @@ class wolfnet
         // Cache the data in the request scope so that we only have to query for it once per request.
         $cacheKey = 'wntSavedSearches';
         $data = (array_key_exists($cacheKey, $_REQUEST)) ? $_REQUEST[$cacheKey] : null;
-        if($productKey === null) {
+        if($productKey == null) {
             $productKey = $this->getDefaultProductKey();
         }
 
@@ -1822,10 +1837,10 @@ class wolfnet
     }
 
 
-    public function mapView($listingsData)
+    public function mapView($listingsData, $productKey=null)
     {
         ob_start();
-        $args = $this->getMapParameters($listingsData);        
+        $args = $this->getMapParameters($listingsData, $productKey);        
         echo $this->parseTemplate('template/map.php', $args);
 
         return apply_filters('wolfnet_mapView', ob_get_clean());
@@ -1879,7 +1894,7 @@ class wolfnet
             $productKey = $key;
         }
         else {
-            $productKey = $this->getProductKey();
+            $productKey = json_decode($this->getDefaultProductKey());
         }
 
         $url = 'http://services.mlsfinder.com/v1/validateKey/' . $productKey . '.json';
@@ -1906,7 +1921,7 @@ class wolfnet
     {
         global $wp_version;
         $baseUrl = $this->getBaseUrl($productKey);
-        $maptracksEnabled = $this->getMaptracksEnabled();
+        $maptracksEnabled = $this->getMaptracksEnabled($productKey);
 
         if (!strstr($baseUrl, 'index.cfm')) {
             if (substr($baseUrl, strlen($baseUrl) - 1) != '/') {
@@ -2073,9 +2088,11 @@ class wolfnet
     }
 
 
-    private function getMarketDisclaimer()
+    private function getMarketDisclaimer($productKey=null)
     {
-        $productKey = $this->getProductKey();
+        if($productKey == null) {
+            $productKey = $this->getDefaultProductKey();
+        }
         $url = 'http://services.mlsfinder.com/v1/marketDisclaimer/' . $productKey . '.json';
         $url = $this->buildUrl($url, array('type'=>'search_results'));
 
@@ -2308,9 +2325,9 @@ class wolfnet
     }
 
 
-    private function getMap($listingsData) 
+    private function getMap($listingsData, $productKey=null) 
     {      
-        return $this->mapView($listingsData);
+        return $this->mapView($listingsData, $productKey);
     }
 
 
@@ -2320,9 +2337,11 @@ class wolfnet
     }
 
 
-    private function getMapParameters($listingsData)
+    private function getMapParameters($listingsData, $productkey=null)
     {
-        $productKey = $this->getProductKey();
+        if($productKey == null) {
+            $productKey = $this->getDefaultProductKey();
+        }
 
         $url = 'http://services.mlsfinder.com/v1/setting/' . $productKey . '.json'
              . '?setting=getallsettings';
@@ -2472,9 +2491,11 @@ class wolfnet
     }
 
 
-    private function getMaptracksEnabled()
+    private function getMaptracksEnabled($productKey=null)
     {
-        $productKey = $this->getProductKey();
+        if($productKey == null) {
+            $productKey = json_decode($this->getDefaultProductKey());
+        }
         $url  = 'http://services.mlsfinder.com/v1/setting/' . $productKey 
               . '?setting=maptracks_enabled';
         $data = $this->getApiData($url, 86400);
@@ -2533,7 +2554,7 @@ class wolfnet
 
     private function getSortOptions()
     {
-        $productKey = $this->getProductKey();
+        $productKey = json_decode($this->getProductKey());
         $url  = 'http://services.mlsfinder.com/v1/sortOptions/' . $productKey . '.json';
 
         return $this->getApiData($url, 86400)->sort_options;
@@ -2610,7 +2631,7 @@ class wolfnet
 
     private function getBaseUrl($productKey=null)
     {
-        if($productKey === null) {
+        if($productKey == null) {
             $productKey = $this->getDefaultProductKey();
         }
 
@@ -2926,6 +2947,7 @@ class wolfnet
             'wolfnet_css'                     => 'remotePublicCss',
             'wolfnet_price_range'             => 'remotePriceRange',
             'wolfnet_market_name'             => 'remoteGetMarketName',
+            'wolfnet_map_enabled'             => 'remoteMapEnabled',
             );
 
         foreach ($ajxActions as $action => $method) {

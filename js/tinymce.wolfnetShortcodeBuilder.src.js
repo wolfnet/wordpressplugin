@@ -52,4 +52,110 @@ jQuery(function($){
 
     tinymce.PluginManager.add('wolfnetShortcodeBuilder', tinymce.plugins.wolfnetShortcodeBuilder);
 
+    $.fn.wolfnetUpdateShortcodeControls = function (container)
+    {
+
+        var productkey = $(container).find('#productkey').val();
+
+        $.ajax( {
+            url: wolfnet_ajax.ajaxurl,
+            data: { action:'wolfnet_price_range', productkey:productkey },
+            dataType: 'json',
+            type: 'GET',
+            cache: false,
+            timeout: 2500,
+            statusCode: {
+                404: function () {
+                    commFailure();
+                }
+            },
+            success: function ( data ) {
+                var options = buildPriceDropdownOptions(data);
+                $(container).find('.pricerange').html('');
+                $(container).find('#maxprice').append($('<option />').html('Max. Price'));
+                $(container).find('#minprice').append($('<option />').html('Min. Price'));
+                $(options).each(function() {
+                    $(container).find('.pricerange').append(this);
+                });
+            },
+            error: function ( error ) {
+                console.log(error);
+            }
+        } );
+
+        $.ajax( {
+            url: wolfnet_ajax.ajaxurl,
+            data: { action:'wolfnet_saved_searches', productkey:productkey },
+            dataType: 'json',
+            type: 'GET',
+            cache: false,
+            timeout: 2500,
+            statusCode: {
+                404: function () {
+                    commFailure();
+                }
+            },
+            success: function ( data ) {
+                var options = buildSavedSearchDropdownOptions(data);
+                $(container).find('#savedsearch').html('');
+                $(container).find('#savedsearch').append($('<option />').html('-- Saved Search --'));
+                $(options).each(function() {
+                    $(container).find('#savedsearch').append(this);
+                });
+            },
+            error: function ( error ) {
+                console.log(error);
+            }
+        } );
+
+        $.ajax( {
+            url: wolfnet_ajax.ajaxurl,
+            data: { action:'wolfnet_map_enabled', productkey:productkey },
+            dataType: 'json',
+            type: 'GET',
+            cache: false,
+            timeout: 2500,
+            statusCode: {
+                404: function () {
+                    commFailure();
+                }
+            },
+            success: function ( data ) {
+                if(data == true) {
+                    $('#mapDisabled').css('display', 'none');
+                    $('#maptype').removeAttr('disabled');
+                } else {
+                    $('#mapDisabled').css('display', 'block');
+                    $('#maptype').attr('disabled', 'true');
+                }
+            },
+            error: function ( error ) {
+                console.log(error);
+            }
+        } );
+
+        var buildPriceDropdownOptions = function(data) 
+        {
+            var options = [];
+            $(data).each(function() {
+                options.push(
+                    $('<option />').attr('value', this.value).html(this.label)
+                );
+            });
+            return options;
+        }
+
+        var buildSavedSearchDropdownOptions = function(data)
+        {
+            var options = [];
+            $(data).each(function() {
+                options.push(
+                    $('<option />').attr('value', this.ID).html(this.post_title)
+                );
+            });
+            return options;
+        }
+
+    }
+
 });

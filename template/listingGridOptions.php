@@ -70,12 +70,11 @@
                         </option>
                     <?php } ?>
                 </select>
-                <?php if (!$mapEnabled) { ?>
-                <p>
+                
+                <p id="mapDisabled" style="display:<?php echo ($mapEnabled ? 'none' : 'block'); ?>">
                     <span style="color:#FF0000;font-weight:bold;">*</span> 
                     <span style="font-style:italic;font-size:0.75em;">Map option is unavailable at this time. To enable this feature, please contact WolfNet sales for more information (612) 342-0088.</span>
                 </p>
-                <?php } ?>
             </td>
         </tr>
 
