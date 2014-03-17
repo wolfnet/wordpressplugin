@@ -136,8 +136,6 @@ class wolfnet
      */
     private $sessionLength = 3600; // one hour
 
-
-
     private $smHttp = null;
 
 
