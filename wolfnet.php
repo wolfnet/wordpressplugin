@@ -525,8 +525,6 @@ class wolfnet
      */
     public function footer()
     {
-
-        var_dump($_REQUEST['productkey']);
         do_action($this->preHookPrefix . 'footerDisclaimer'); // Legacy hook
 
         /* If it has been established that we need to output the market disclaimer do so now in the
@@ -1051,7 +1049,8 @@ class wolfnet
         $criteria['max_results'] = $criteria['maxresults'];
         $criteria['owner_type']  = $criteria['ownertype'];
 
-        $productKey = json_decode($this->getProductKey());
+        $productKey = $criteria['productkey'];
+
         $url = 'http://services.mlsfinder.com/v1/propertyBar/' . $productKey . '.json';
         $url = $this->buildUrl($url, $criteria);
 
@@ -1072,6 +1071,7 @@ class wolfnet
             'maxresults' => 50,
             'numrows'    => 50,
             'startrow'   => 1,
+            'productkey' => '',
             );
 
     }
@@ -1115,6 +1115,9 @@ class wolfnet
 
         }
 
+        $_REQUEST['wolfnet_includeDisclaimer'] = true;
+        $_REQUEST['productkey'] = $criteria['productkey'];
+
         $vars = array(
             'instance_id'  => str_replace('.', '', uniqid('wolfnet_featuredListing_')),
             'listingsHtml' => $listingsHtml,
@@ -1149,7 +1152,6 @@ class wolfnet
             unset($criteria[$key]);
         }
 
-        // This is now coming from the shortcode
         $productKey = $criteria['productkey'];
 
         $url = 'http://services.mlsfinder.com/v1/propertyGrid/' . $productKey . '.json';
@@ -1649,7 +1651,8 @@ class wolfnet
     public function featuredListingsOptionsFormView(array $args=array())
     {
         $defaultArgs = array(
-            'instance_id'     => str_replace('.', '', uniqid('wolfnet_featuredListing_'))
+            'instance_id'     => str_replace('.', '', uniqid('wolfnet_featuredListing_')),
+            'markets'         => json_decode($this->getProductKey()),
             );
 
         $args = array_merge($defaultArgs, $args);
@@ -1774,8 +1777,11 @@ class wolfnet
 
     public function propertyListView(array $args=array())
     {
+        if(!array_key_exists('productkey', $args)) {
+            $args['productkey'] = $this->getDefaultProductKey();
+        }
         $args['itemsPerPage'] = $this->getItemsPerPage();
-        $args['sortOptions'] = $this->getSortOptions();
+        $args['sortOptions'] = $this->getSortOptions($args['productkey']);
 
         foreach ($args as $key => $item) {
             $args[$key] = apply_filters('wolfnet_propertyListView_' . $key, $item);
@@ -1791,8 +1797,11 @@ class wolfnet
 
     public function resultsSummaryView(array $args=array())
     {
+        if(!array_key_exists('productkey', $args)) {
+            $args['productkey'] = $this->getDefaultProductKey();
+        }
         $args['itemsPerPage'] = $this->getItemsPerPage();
-        $args['sortOptions'] = $this->getSortOptions();
+        $args['sortOptions'] = $this->getSortOptions($args['productkey']);
 
         foreach ($args as $key => $item) {
             $args[$key] = apply_filters('wolfnet_resultsSummaryView_' . $key, $item);
@@ -1808,8 +1817,11 @@ class wolfnet
 
     public function listingGridView(array $args=array())
     {
+        if(!array_key_exists('productkey', $args)) {
+            $args['productkey'] = $this->getDefaultProductKey();
+        }
         $args['itemsPerPage'] = $this->getItemsPerPage();
-        $args['sortOptions'] = $this->getSortOptions();
+        $args['sortOptions'] = $this->getSortOptions($args['productkey']);
 
         foreach ($args as $key => $item) {
             $args[$key] = apply_filters('wolfnet_listingGridView_' . $key, $item);
@@ -2552,9 +2564,11 @@ class wolfnet
     }
 
 
-    private function getSortOptions()
+    private function getSortOptions($productKey=null)
     {
-        $productKey = json_decode($this->getProductKey());
+        if($productKey == null) {
+            $productKey = $this->getDefaultProductKey();
+        }
         $url  = 'http://services.mlsfinder.com/v1/sortOptions/' . $productKey . '.json';
 
         return $this->getApiData($url, 86400)->sort_options;
