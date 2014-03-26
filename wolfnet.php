@@ -1096,6 +1096,10 @@ class wolfnet
     public function featuredListings(array $criteria)
     {
 
+        if(!$this->isSavedKey($criteria['productkey'])) {
+            return false;
+        }
+
         if (!array_key_exists('startrow', $criteria)) {
             $criteria['startrow'] = 1;
         }
@@ -1229,6 +1233,10 @@ class wolfnet
 
     public function listingGrid(array $criteria)
     {
+        if(!$this->isSavedKey($criteria['productkey'])) {
+            return false;
+        }
+
         if (!array_key_exists('numrows', $criteria)) {
             $criteria['numrows'] = $criteria['maxresults'];
         }
@@ -1340,6 +1348,10 @@ class wolfnet
 
     public function propertyList(array $criteria)
     {
+        if(!$this->isSavedKey($criteria['productkey'])) {
+            return false;
+        }
+
         if (!array_key_exists('numrows', $criteria)) {
             $criteria['numrows'] = $criteria['maxresults'];
         }
@@ -1447,7 +1459,11 @@ class wolfnet
     }
 
 
-    public function resultsSummary(array $criteria) {
+    public function resultsSummary(array $criteria) 
+    {
+        if(!$this->isSavedKey($criteria['productkey'])) {
+            return false;
+        }
 
         if (!array_key_exists('numrows', $criteria)) {
             $criteria['numrows'] = $criteria['maxresults'];
@@ -1951,6 +1967,19 @@ class wolfnet
 
         return $valid;
 
+    }
+
+
+    private function isSavedKey($find) {
+        $keyList = json_decode($this->getProductKey());
+
+        foreach($keyList as $key) {
+            if($key->key == $find) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
 
