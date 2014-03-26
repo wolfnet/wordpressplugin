@@ -72,8 +72,8 @@ jQuery(function($){
             success: function ( data ) {
                 var options = buildPriceDropdownOptions(data);
                 $(container).find('.pricerange').html('');
-                $(container).find('#maxprice').append($('<option />').html('Max. Price'));
-                $(container).find('#minprice').append($('<option />').html('Min. Price'));
+                $(container).find('#maxprice').append($('<option />').attr('value', '').html('Max. Price'));
+                $(container).find('#minprice').append($('<option />').attr('value', '').html('Min. Price'));
                 $(options).each(function() {
                     $(container).find('.pricerange').append(this);
                 });

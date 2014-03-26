@@ -159,7 +159,6 @@ class wolfnet
      */
     public function __construct()
     {
-
         $this->dir = dirname(__FILE__);
         $this->url = plugin_dir_url(__FILE__);
 
@@ -530,9 +529,11 @@ class wolfnet
         /* If it has been established that we need to output the market disclaimer do so now in the
          * site footer, otherwise do nothing. */
         if (array_key_exists('wolfnet_includeDisclaimer', $_REQUEST) && 
-            array_key_exists('productkey', $_REQUEST)) {
+            array_key_exists('keyList', $_REQUEST)) {
             echo '<div class="wolfnet_marketDisclaimer">';
-            echo $this->getMarketDisclaimer($_REQUEST['productkey']);
+            foreach($_REQUEST['keyList'] as $key) {
+                echo $this->getMarketDisclaimer($key);
+            }
             echo '</div>';
         }
 
@@ -1118,6 +1119,12 @@ class wolfnet
         $_REQUEST['wolfnet_includeDisclaimer'] = true;
         $_REQUEST['productkey'] = $criteria['productkey'];
 
+        // Keep a running array of product keys so we can output all necessary disclaimers
+        if(!array_key_exists('keyList', $_REQUEST)) {
+            $_REQUEST['keyList'] = array();
+        }
+        array_push($_REQUEST['keyList'], $criteria['productkey']);
+
         $vars = array(
             'instance_id'  => str_replace('.', '', uniqid('wolfnet_featuredListing_')),
             'listingsHtml' => $listingsHtml,
@@ -1249,6 +1256,12 @@ class wolfnet
         $_REQUEST['wolfnet_includeDisclaimer'] = true;
         $_REQUEST['productkey'] = $criteria['productkey'];
 
+        // Keep a running array of product keys so we can output all necessary disclaimers
+        if(!array_key_exists('keyList', $_REQUEST)) {
+            $_REQUEST['keyList'] = array();
+        }
+        array_push($_REQUEST['keyList'], $criteria['productkey']);
+
         $vars = array(
             'instance_id'        => str_replace('.', '', uniqid('wolfnet_listingGrid_')),
             'listings'           => $listingsData,
@@ -1354,6 +1367,12 @@ class wolfnet
         $_REQUEST['wolfnet_includeDisclaimer'] = true;
         $_REQUEST['productkey'] = $criteria['productkey'];
 
+        // Keep a running array of product keys so we can output all necessary disclaimers
+        if(!array_key_exists('keyList', $_REQUEST)) {
+            $_REQUEST['keyList'] = array();
+        }
+        array_push($_REQUEST['keyList'], $criteria['productkey']);
+
         $vars = array(
             'instance_id'        => str_replace('.', '', uniqid('wolfnet_propertyList_')),
             'listings'           => $listingsData,
@@ -1457,6 +1476,12 @@ class wolfnet
         $_REQUEST['wolfnet_includeDisclaimer'] = true;
         $_REQUEST['productkey'] = $criteria['productkey'];
 
+        // Keep a running array of product keys so we can output all necessary disclaimers
+        if(!array_key_exists('keyList', $_REQUEST)) {
+            $_REQUEST['keyList'] = array();
+        }
+        array_push($_REQUEST['keyList'], $criteria['productkey']);
+
         $vars = array(
             'instance_id'        => str_replace('.', '', uniqid('wolfnet_resultsSummary_')),
             'listings'           => $listingsData,
@@ -1537,7 +1562,7 @@ class wolfnet
             'prices'       => $this->getPrices($criteria['productkey']),
             'beds'         => $this->getBeds(),
             'baths'        => $this->getBaths(),
-            'formAction'   => $this->getBaseUrl()
+            'formAction'   => $this->getBaseUrl($criteria['productkey'])
             );
 
         $args = $this->convertDataType(array_merge($criteria, $vars));
