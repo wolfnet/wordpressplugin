@@ -110,6 +110,7 @@ if ( typeof String.prototype.wolfnetPriceFormat !== 'function' ) {
 
         for (var i=0, l=data.length; i<l; i++) {
             var brokerLogo  = data[i].branding.brokerLogo  || null;
+            var brandingType  = data[i].branding.branding_type || '';
             var brokerName  = data[i].branding.content || null;
             var cityState   = data[i].city + ', ' + data[i].state;
             var fullAddress = data[i].display_address + ', ' + cityState;
@@ -190,6 +191,10 @@ if ( typeof String.prototype.wolfnetPriceFormat !== 'function' ) {
                         .append($('<img>').attr('src',brokerLogo))
                         .appendTo($brandingContainer);
 
+                    if (brandingType == 'idx') {
+                        $brokerLogo.addClass('wolfnet_idxLogo');
+                    }
+
                 }
 
                 if (brokerName != null) {
@@ -230,7 +235,7 @@ if ( typeof String.prototype.wolfnetPriceFormat !== 'function' ) {
 
     //replicating building of html dom in wolfnet.php, function: getHouseoverHtml
     var getHouseoverHtml = function(listing)
-    {          
+    {
         var concatHouseover = '';
         var bed_bath = getBedBath(listing.bathroom,listing.bedrooms);
 
@@ -265,9 +270,9 @@ if ( typeof String.prototype.wolfnetPriceFormat !== 'function' ) {
             var houseoverIcon = componentMap.mapIcon(houseIcon,30,30);
             var houseover = componentMap.poi(data[i].lat, data[i].lng, houseoverIcon, houseoverHtml, data[i].property_id, data[i].property_url);
             componentMap.addPoi(houseover);
-        }  
+        }
 
-        componentMap.bestFit();        
+        componentMap.bestFit();
     }
 
 
