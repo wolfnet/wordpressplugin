@@ -1099,6 +1099,10 @@ class wolfnet
 
     public function featuredListings(array $criteria)
     {
+        // Maintain backwards compatibility if there is no keyid in the shortcode.
+        if(!array_key_exists('keyid', $criteria) || $criteria['keyid'] == '') {
+            $criteria['keyid'] = 1;
+        }
 
         if(!$this->isSavedKey($this->getProductKeyById($criteria['keyid']))) {
             return false;
@@ -1125,7 +1129,7 @@ class wolfnet
         }
 
         $_REQUEST['wolfnet_includeDisclaimer'] = true;
-        $_REQUEST['productkey'] = $this->getProductKeyById($criteria['productkey']);
+        $_REQUEST['productkey'] = $this->getProductKeyById($criteria['keyid']);
 
         // Keep a running array of product keys so we can output all necessary disclaimers
         if(!array_key_exists('keyList', $_REQUEST)) {
@@ -1235,6 +1239,11 @@ class wolfnet
 
     public function listingGrid(array $criteria)
     {
+        // Maintain backwards compatibility if there is no keyid in the shortcode.
+        if(!array_key_exists('keyid', $criteria) || $criteria['keyid'] == '') {
+            $criteria['keyid'] = 1;
+        }
+
         if(!$this->isSavedKey($this->getProductKeyById($criteria['keyid']))) {
             return false;
         }
@@ -1350,6 +1359,11 @@ class wolfnet
 
     public function propertyList(array $criteria)
     {
+        // Maintain backwards compatibility if there is no keyid in the shortcode.
+        if(!array_key_exists('keyid', $criteria) || $criteria['keyid'] == '') {
+            $criteria['keyid'] = 1;
+        }
+
         if(!$this->isSavedKey($this->getProductKeyById($criteria['keyid']))) {
             return false;
         }
@@ -1463,6 +1477,11 @@ class wolfnet
 
     public function resultsSummary(array $criteria) 
     {
+        // Maintain backwards compatibility if there is no keyid in the shortcode.
+        if(!array_key_exists('keyid', $criteria) || $criteria['keyid'] == '') {
+            $criteria['keyid'] = 1;
+        }
+        
         if(!$this->isSavedKey($criteria['productkey'])) {
             return false;
         }
