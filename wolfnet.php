@@ -818,7 +818,7 @@ class wolfnet
     }
 
 
-    public function remoteGetSavedSearchs($keyid=null)
+    public function remoteGetSavedSearches($keyid=null)
     {
         if($keyid == null) {
             $keyid = (array_key_exists('keyid', $_REQUEST)) ? $_REQUEST['keyid'] : '1';
@@ -854,7 +854,7 @@ class wolfnet
 
         }
 
-        $this->remoteGetSavedSearchs($productKey);
+        $this->remoteGetSavedSearches($productKey);
 
     }
 
@@ -865,7 +865,7 @@ class wolfnet
             wp_delete_post($_REQUEST['id'], true);
         }
 
-        $this->remoteGetSavedSearchs();
+        $this->remoteGetSavedSearches();
 
     }
 
@@ -1135,7 +1135,9 @@ class wolfnet
         if(!array_key_exists('keyList', $_REQUEST)) {
             $_REQUEST['keyList'] = array();
         }
-        array_push($_REQUEST['keyList'], $_REQUEST['productkey']);
+        if(!in_array($_REQUEST['productkey'], $_REQUEST['keyList'])) {
+            array_push($_REQUEST['keyList'], $_REQUEST['productkey']);
+        }
 
         $vars = array(
             'instance_id'  => str_replace('.', '', uniqid('wolfnet_featuredListing_')),
@@ -1279,7 +1281,9 @@ class wolfnet
         if(!array_key_exists('keyList', $_REQUEST)) {
             $_REQUEST['keyList'] = array();
         }
-        array_push($_REQUEST['keyList'], $_REQUEST['productkey']);
+        if(!in_array($_REQUEST['productkey'], $_REQUEST['keyList'])) {
+            array_push($_REQUEST['keyList'], $_REQUEST['productkey']);
+        }
 
         $vars = array(
             'instance_id'        => str_replace('.', '', uniqid('wolfnet_listingGrid_')),
@@ -1399,7 +1403,9 @@ class wolfnet
         if(!array_key_exists('keyList', $_REQUEST)) {
             $_REQUEST['keyList'] = array();
         }
-        array_push($_REQUEST['keyList'], $_REQUEST['productkey']);
+        if(!in_array($_REQUEST['productkey'], $_REQUEST['keyList'])) {
+            array_push($_REQUEST['keyList'], $_REQUEST['productkey']);
+        }
 
         $vars = array(
             'instance_id'        => str_replace('.', '', uniqid('wolfnet_propertyList_')),
@@ -1517,7 +1523,9 @@ class wolfnet
         if(!array_key_exists('keyList', $_REQUEST)) {
             $_REQUEST['keyList'] = array();
         }
-        array_push($_REQUEST['keyList'], $criteria['productkey']);
+        if(!in_array($_REQUEST['productkey'], $_REQUEST['keyList'])) {
+            array_push($_REQUEST['keyList'], $_REQUEST['productkey']);
+        }
 
         $vars = array(
             'instance_id'        => str_replace('.', '', uniqid('wolfnet_resultsSummary_')),
@@ -1635,8 +1643,28 @@ class wolfnet
                 )
             );
 
-            $_REQUEST[$cacheKey] = get_posts($dataArgs);
-            $data = $_REQUEST[$cacheKey];
+            $data = get_posts($dataArgs);
+
+            if(count($data) == 0 && $keyid == 1) {
+                /* 
+                 * This is for backwards compatibility - get posts without keyid meta query.
+                 * We will loop through these custom posts and add the keyid meta key.
+                 * Only do this on a keyid of 1 since that would be the default key back when we only allowed one.
+                 */
+                $dataArgs = array(
+                    'numberposts' => $count,
+                    'post_type' => $this->customPostTypeSearch,
+                    'post_status' => 'publish',
+                );
+
+                $data = get_posts($dataArgs);
+
+                foreach($data as $post) {
+                    add_post_meta($post->ID, 'keyid', 1);
+                }
+            }
+
+            $_REQUEST[$cacheKey] = $data;
 
         }
 
@@ -3038,7 +3066,7 @@ class wolfnet
     {
         $ajxActions = array(
             'wolfnet_validate_key'            => 'remoteValidateProductKey',
-            'wolfnet_saved_searches'          => 'remoteGetSavedSearchs',
+            'wolfnet_saved_searches'          => 'remoteGetSavedSearches',
             'wolfnet_save_search'             => 'remoteSaveSearch',
             'wolfnet_delete_search'           => 'remoteDeleteSearch',
             'wolfnet_scb_options_featured'    => 'remoteShortcodeBuilderOptionsFeatured',
