@@ -37,10 +37,10 @@
         <tr>
         	<td><label>Market:</label></td>
         	<td>
-        		<select id="<?php echo $productkey_wpid; ?>" name="<?php echo $productkey_wpid; ?>">
+        		<select id="<?php echo $keyid_wpid; ?>" name="<?php echo $keyid_wpid; ?>">
 	                <?php for($i=0; $i<=count($markets)-1; $i++): ?>
-	                <option value="<?php echo $markets[$i]->key; ?>"
-	                    <?php if($markets[$i]->key == $selectedKey) echo ' selected="selected"'?>><?php echo $markets[$i]->label; ?></option>
+	                <option value="<?php echo $markets[$i]->id; ?>"
+	                    <?php if($markets[$i]->id == $selectedKey) echo ' selected="selected"'?>><?php echo $markets[$i]->label; ?></option>
 	                <?php endfor; ?>
 	            </select>
         	</td>

@@ -122,12 +122,15 @@
                 /* We need to collect the keys and associated labels from the form into a JSON string,
                 then put that into a form variable to retain backwards compatibility. */
                 var json = [];
+                var itr = 1;
                 $('.wolfnet_productKey').each(function() {
                     if($(this).val() != '') {
                         json.push({
+                            "id" : itr,
                             "key" : $(this).val(),
                             "label" : $(this).closest('tr').find('.wolfnet_keyLabel').val()
                         });
+                        itr++;
                     }
                 });
                 var input = $('<input />').attr('name', 'wolfnet_productKey')

@@ -96,7 +96,7 @@ if ( typeof jQuery != 'undefined' ) {
 						if ( typeof WNTWP != 'undefined' ) {
 							var criteria = WNTWP.returnSearchParams();
 							// This gets set separately since the above function deals with search solutions params only.
-							criteria.productkey = $('#productkey').val();
+							criteria.keyid = $('#keyid').val();
 						}
 						else {
 							var criteria = {};
@@ -225,7 +225,7 @@ if ( typeof jQuery != 'undefined' ) {
 						url: wolfnet_ajax.ajaxurl,
 						dataType: 'json',
 						type: 'GET',
-						data: { action:'wolfnet_delete_search', id:id, productkey:$('#productkey').val() },
+						data: { action:'wolfnet_delete_search', id:id, keyid:$('#keyid').val() },
 						beforeSend: function () {
 							data.loaderImage.show();
 							$this.data( pluginName, $.extend( data, { deleting:true } ) );
@@ -283,7 +283,7 @@ if ( typeof jQuery != 'undefined' ) {
 
 					$.ajax( {
 						url: wolfnet_ajax.ajaxurl,
-                        data: { action:'wolfnet_saved_searches', productkey: $('#productkey').val() },
+                        data: { action:'wolfnet_saved_searches', keyid: $('#keyid').val() },
 						dataType: 'json',
 						type: 'GET',
 						beforeSend: function () {

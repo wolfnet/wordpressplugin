@@ -57,17 +57,17 @@
         <div class="style_box_header">Market</div>
         <div class="style_box_content">
             Select the market that you'd like to use to create searches and click Apply.
-            <p><select id="productkey" name="productkey">
+            <p><select id="keyid" name="keyid">
                 <?php for($i=0; $i<=count($markets)-1; $i++): ?>
-                <option value="<?php echo $markets[$i]->key; ?>"
-                    <?php if($markets[$i]->key == $selectedKey) echo ' selected="selected"'?>><?php echo $markets[$i]->label; ?></option>
+                <option value="<?php echo $markets[$i]->id; ?>"
+                    <?php if($markets[$i]->id == $selectedKey) echo ' selected="selected"'?>><?php echo $markets[$i]->label; ?></option>
                 <?php endfor; ?>
             </select>
             <input type="button" id="changeMarket" value="Apply" /></p>
         </div>
     </div>
     <?php else: ?>
-    <input type="hidden" id="productkey" name="productkey" value="<?php echo $markets[0]->key; ?>" />
+    <input type="hidden" id="keyid" name="keyid" value="<?php echo $markets[0]->id; ?>" />
     <?php endif; ?>
 
     <div id="searchmanager">
@@ -109,7 +109,7 @@
 
             <?php if(count($markets) > 1): ?>
             $( '#changeMarket' ).click(function() {
-                document.location.href = "admin.php?page=wolfnet_plugin_search_manager&productkey=" + $('#productkey').val();
+                document.location.href = "admin.php?page=wolfnet_plugin_search_manager&keyid=" + $('#keyid').val();
             });
             <?php endif; ?>
 

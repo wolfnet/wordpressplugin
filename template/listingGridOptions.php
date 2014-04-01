@@ -28,7 +28,7 @@
            value="<?php echo $criteria; ?>" type="hidden" />
 
     <?php if(count($markets) == 1): ?>
-    <input type="hidden" id="<?php echo $productkey_wpid; ?>" name="<?php echo $productkey_wpid; ?>" value="<?php echo $markets[0]->key; ?>" />
+    <input type="hidden" id="<?php echo $keyid_wpid; ?>" name="<?php echo $keyid_wpid; ?>" value="1" />
     <?php endif; ?>
 
     <table class="form-table">
@@ -43,9 +43,9 @@
         <tr>
             <td><label>Market:</label></td>
             <td>
-                <select id="<?php echo $productkey_wpid; ?>" class="productkey" name="<?php echo $productkey_wpname; ?>">
+                <select id="<?php echo $keyid_wpid; ?>" class="keyid" name="<?php echo $keyid_wpname; ?>">
                     <?php for($i=0; $i<=count($markets)-1; $i++): ?>
-                    <option value="<?php echo $markets[$i]->key; ?>"><?php echo $markets[$i]->label; ?></option>
+                    <option value="<?php echo $markets[$i]->id; ?>"><?php echo $markets[$i]->label; ?></option>
                     <?php endfor; ?>
                 </select>
             </td>
@@ -214,7 +214,7 @@
         $('#<?php echo $instance_id; ?>').wolfnetListingGridControls();
         wolfnet.initMoreInfo( $( '#<?php echo $instance_id; ?> .wolfnet_moreInfo' ) );
 
-        $('#<?php echo $instance_id; ?>').find('.productkey').change(function() {
+        $('#<?php echo $instance_id; ?>').find('.keyid').change(function() {
             $(this).wolfnetUpdateShortcodeControls($(this).closest('form'));
         });
     });

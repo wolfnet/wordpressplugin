@@ -55,11 +55,11 @@ jQuery(function($){
     $.fn.wolfnetUpdateShortcodeControls = function (container)
     {
 
-        var productkey = $(container).find('#productkey').val();
+        var keyid = $(container).find('#keyid').val();
 
         $.ajax( {
             url: wolfnet_ajax.ajaxurl,
-            data: { action:'wolfnet_price_range', productkey:productkey },
+            data: { action:'wolfnet_price_range', keyid:keyid },
             dataType: 'json',
             type: 'GET',
             cache: false,
@@ -85,7 +85,7 @@ jQuery(function($){
 
         $.ajax( {
             url: wolfnet_ajax.ajaxurl,
-            data: { action:'wolfnet_saved_searches', productkey:productkey },
+            data: { action:'wolfnet_saved_searches', keyid:keyid },
             dataType: 'json',
             type: 'GET',
             cache: false,
@@ -110,7 +110,7 @@ jQuery(function($){
 
         $.ajax( {
             url: wolfnet_ajax.ajaxurl,
-            data: { action:'wolfnet_map_enabled', productkey:productkey },
+            data: { action:'wolfnet_map_enabled', keyid:keyid },
             dataType: 'json',
             type: 'GET',
             cache: false,
@@ -122,11 +122,11 @@ jQuery(function($){
             },
             success: function ( data ) {
                 if(data == true) {
-                    $('#mapDisabled').css('display', 'none');
-                    $('#maptype').removeAttr('disabled');
+                    $(container).find('#mapDisabled').css('display', 'none');
+                    $(container).find('#maptype').removeAttr('disabled');
                 } else {
-                    $('#mapDisabled').css('display', 'block');
-                    $('#maptype').attr('disabled', 'true');
+                    $(container).find('#mapDisabled').css('display', 'block');
+                    $(container).find('#maptype').attr('disabled', 'true');
                 }
             },
             error: function ( error ) {

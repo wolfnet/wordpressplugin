@@ -139,8 +139,9 @@ class wolfnet
     private $sessionLength = 3600; // one hour
 
 
-
     private $smHttp = null;
+
+    private $serviceUrl = 'http://services.mlsfinder.com/v1';
 
 
     /* Constructor Method *********************************************************************** */
@@ -194,7 +195,6 @@ class wolfnet
             array('mce_external_plugins', 'sbMcePlugin'),
             array('mce_buttons',          'sbButton'),
             ));
-
     }
 
 
@@ -261,7 +261,6 @@ class wolfnet
 
         // Register CSS
         $this->registerStyles();
-
     }
 
 
@@ -393,7 +392,8 @@ class wolfnet
          * the MLSFinder server now so that we can set cookies. */
         $pageKeyExists = array_key_exists('page', $_REQUEST);
         $pageIsSM = ($pageKeyExists) ? ($_REQUEST['page']=='wolfnet_plugin_search_manager') : false;
-        $productKey = $_REQUEST["productkey"];
+        $key = (array_key_exists("keyid", $_REQUEST)) ? $_REQUEST["keyid"] : "1";
+        $productKey = $this->getProductKeyById($key);
         if(!$this->productKeyIsValid($productKey)) {
             $productKey = null;
         }
@@ -710,14 +710,17 @@ class wolfnet
 
     public function amSearchManagerPage()
     {
-        if (!$this->productKeyIsValid($this->getDefaultProductKey())) {
+        $key = (array_key_exists("keyid", $_REQUEST)) ? $_REQUEST["keyid"] : "1";
+        $productkey = $this->getProductKeyById($key);
+
+        if (!$this->productKeyIsValid($productkey)) {
             include 'template/invalidProductKey.php';
             return;
         }
         else {
             $searchForm = ($this->smHttp !== null) ? $this->smHttp['body'] : '';
             $markets = json_decode($this->getProductKey());
-            $selectedKey = ($this->productKeyIsValid($_REQUEST["productkey"])) ? $_REQUEST["productkey"] : '';
+            $selectedKey = $key;
             include 'template/adminSearchManager.php';
 
         }
@@ -815,12 +818,12 @@ class wolfnet
     }
 
 
-    public function remoteGetSavedSearchs($productKey=null)
+    public function remoteGetSavedSearchs($keyid=null)
     {
-        if($productKey == null) {
-            $productKey = (array_key_exists('productkey', $_REQUEST)) ? $_REQUEST['productkey'] : null;
+        if($keyid == null) {
+            $keyid = (array_key_exists('keyid', $_REQUEST)) ? $_REQUEST['keyid'] : '1';
         }
-        echo json_encode($this->getSavedSearches(-1, $productKey));
+        echo json_encode($this->getSavedSearches(-1, $keyid));
 
         die;
 
@@ -846,7 +849,8 @@ class wolfnet
                 add_post_meta($post_id, $field, $value, true);
             }
 
-            $productKey = $_REQUEST['custom_fields']['productkey'];
+            $key = $_REQUEST['custom_fields']['keyid'];
+            $productKey = $this->getProductKeyById($key);
 
         }
 
@@ -1009,7 +1013,7 @@ class wolfnet
 
     public function remotePriceRange() 
     {
-        $productKey = $_REQUEST["productkey"];
+        $productKey = $this->getProductKeyById($_REQUEST["keyid"]);
         $prices = $this->getPrices($productKey);
         echo json_encode($prices);
 
@@ -1028,7 +1032,7 @@ class wolfnet
 
     public function remoteMapEnabled()
     {
-        $productKey = $_REQUEST["productkey"];
+        $productKey = $this->getProductKeyById($_REQUEST["keyid"]);
         echo json_encode($this->getMaptracksEnabled($productKey));
 
         die;
@@ -1050,9 +1054,9 @@ class wolfnet
         $criteria['max_results'] = $criteria['maxresults'];
         $criteria['owner_type']  = $criteria['ownertype'];
 
-        $productKey = $criteria['productkey'];
+        $productKey = $this->getProductKeyById($criteria['keyid']);
 
-        $url = 'http://services.mlsfinder.com/v1/propertyBar/' . $productKey . '.json';
+        $url = $this->serviceUrl . '/propertyBar/' . $productKey . '.json';
         $url = $this->buildUrl($url, $criteria);
 
         return $this->getApiData($url, 900)->listings;
@@ -1072,7 +1076,7 @@ class wolfnet
             'maxresults' => 50,
             'numrows'    => 50,
             'startrow'   => 1,
-            'productkey' => '',
+            'keyid' => '',
             );
 
     }
@@ -1096,7 +1100,7 @@ class wolfnet
     public function featuredListings(array $criteria)
     {
 
-        if(!$this->isSavedKey($criteria['productkey'])) {
+        if(!$this->isSavedKey($this->getProductKeyById($criteria['keyid']))) {
             return false;
         }
 
@@ -1121,13 +1125,13 @@ class wolfnet
         }
 
         $_REQUEST['wolfnet_includeDisclaimer'] = true;
-        $_REQUEST['productkey'] = $criteria['productkey'];
+        $_REQUEST['productkey'] = $this->getProductKeyById($criteria['productkey']);
 
         // Keep a running array of product keys so we can output all necessary disclaimers
         if(!array_key_exists('keyList', $_REQUEST)) {
             $_REQUEST['keyList'] = array();
         }
-        array_push($_REQUEST['keyList'], $criteria['productkey']);
+        array_push($_REQUEST['keyList'], $_REQUEST['productkey']);
 
         $vars = array(
             'instance_id'  => str_replace('.', '', uniqid('wolfnet_featuredListing_')),
@@ -1163,9 +1167,9 @@ class wolfnet
             unset($criteria[$key]);
         }
 
-        $productKey = $criteria['productkey'];
+        $productKey = $this->getProductKeyById($criteria['keyid']);
 
-        $url = 'http://services.mlsfinder.com/v1/propertyGrid/' . $productKey . '.json';
+        $url = $this->serviceUrl . '/propertyGrid/' . $productKey . '.json';
         $url = $this->buildUrl($url, $criteria);
 
         $data = $this->getApiData($url, 900);
@@ -1202,7 +1206,7 @@ class wolfnet
             'exactcity'   => 0,
             'minprice'    => '',
             'maxprice'    => '',
-            'productkey'  => '',
+            'keyid'       => '',
             );
 
     }
@@ -1212,8 +1216,6 @@ class wolfnet
     {
         $options = $this->getOptions($this->getListingGridDefaults(), $instance);
 
-        $productKey = $this->getDefaultProductKey();
-
         $options['mode_basic_wpc']        = checked($options['mode'], 'basic', false);
         $options['mode_advanced_wpc']     = checked($options['mode'], 'advanced', false);
         $options['paginated_false_wps']   = selected($options['paginated'], 'false', false);
@@ -1221,8 +1223,8 @@ class wolfnet
         $options['sortoptions_false_wps'] = selected($options['sortoptions'], 'false', false);
         $options['sortoptions_true_wps']  = selected($options['sortoptions'], 'true', false);
         $options['ownertypes']            = $this->getOwnerTypes();
-        $options['prices']                = $this->getPrices($productKey);
-        $options['savedsearches']         = $this->getSavedSearches(-1, $productKey);
+        $options['prices']                = $this->getPrices($this->getProductKeyById(1));
+        $options['savedsearches']         = $this->getSavedSearches(-1, 1);
         $options['mapEnabled']            = $this->getMaptracksEnabled($productKey);
         $options['maptypes']              = $this->getMapTypes();
 
@@ -1233,7 +1235,7 @@ class wolfnet
 
     public function listingGrid(array $criteria)
     {
-        if(!$this->isSavedKey($criteria['productkey'])) {
+        if(!$this->isSavedKey($this->getProductKeyById($criteria['keyid']))) {
             return false;
         }
 
@@ -1262,13 +1264,13 @@ class wolfnet
         }
 
         $_REQUEST['wolfnet_includeDisclaimer'] = true;
-        $_REQUEST['productkey'] = $criteria['productkey'];
+        $_REQUEST['productkey'] = $this->getProductKeyById($criteria['keyid']);
 
         // Keep a running array of product keys so we can output all necessary disclaimers
         if(!array_key_exists('keyList', $_REQUEST)) {
             $_REQUEST['keyList'] = array();
         }
-        array_push($_REQUEST['keyList'], $criteria['productkey']);
+        array_push($_REQUEST['keyList'], $_REQUEST['productkey']);
 
         $vars = array(
             'instance_id'        => str_replace('.', '', uniqid('wolfnet_listingGrid_')),
@@ -1277,7 +1279,7 @@ class wolfnet
             'siteUrl'            => site_url(),
             'criteria'           => json_encode($criteria),
             'class'              => 'wolfnet_listingGrid ',
-            'mapEnabled'         => $this->getMaptracksEnabled($criteria["productkey"]),
+            'mapEnabled'         => $this->getMaptracksEnabled($_REQUEST['productkey']),
             'map'                => '',
             'mapType'            => '',
             'hideListingsTools'  => '',
@@ -1293,7 +1295,7 @@ class wolfnet
         $vars = $this->convertDataType(array_merge($criteria, $vars));
 
         if ($vars['maptype'] != "disabled") {
-            $vars['map']     = $this->getMap($listingsData, $criteria["productkey"]);
+            $vars['map']     = $this->getMap($listingsData, $_REQUEST['productkey']);
             $vars['mapType'] = $vars['maptype'];         
             $vars['hideListingsTools'] = $this->getHideListingTools($vars['hideListingsId']
                                                                    ,$vars['showListingsId']
@@ -1348,7 +1350,7 @@ class wolfnet
 
     public function propertyList(array $criteria)
     {
-        if(!$this->isSavedKey($criteria['productkey'])) {
+        if(!$this->isSavedKey($this->getProductKeyById($criteria['keyid']))) {
             return false;
         }
 
@@ -1377,13 +1379,13 @@ class wolfnet
         }
 
         $_REQUEST['wolfnet_includeDisclaimer'] = true;
-        $_REQUEST['productkey'] = $criteria['productkey'];
+        $_REQUEST['productkey'] = $this->getProductKeyById($criteria['keyid']);
 
         // Keep a running array of product keys so we can output all necessary disclaimers
         if(!array_key_exists('keyList', $_REQUEST)) {
             $_REQUEST['keyList'] = array();
         }
-        array_push($_REQUEST['keyList'], $criteria['productkey']);
+        array_push($_REQUEST['keyList'], $_REQUEST['productkey']);
 
         $vars = array(
             'instance_id'        => str_replace('.', '', uniqid('wolfnet_propertyList_')),
@@ -1392,7 +1394,7 @@ class wolfnet
             'siteUrl'            => site_url(),
             'criteria'           => json_encode($criteria),
             'class'              => 'wolfnet_propertyList ',
-            'mapEnabled'         => $this->getMaptracksEnabled($criteria["productkey"]),
+            'mapEnabled'         => $this->getMaptracksEnabled($_REQUEST['productkey']),
             'map'                => '',
             'mapType'            => '',
             'hideListingsTools'  => '',
@@ -1407,7 +1409,7 @@ class wolfnet
         $vars = $this->convertDataType(array_merge($criteria, $vars));
 
         if ($vars['maptype'] != "disabled") {
-            $vars['map']     = $this->getMap($listingsData, $criteria["productkey"]);
+            $vars['map']     = $this->getMap($listingsData, $_REQUEST['productkey']);
             $vars['hideListingsTools'] = $this->getHideListingTools($vars['hideListingsId']
                                                                    ,$vars['showListingsId']
                                                                    ,$vars['collapseListingsId']
@@ -1555,7 +1557,7 @@ class wolfnet
 
         return array(
             'title' => 'QuickSearch',
-            'productkey' => ''
+            'keyid' => ''
             );
 
     }
@@ -1572,13 +1574,14 @@ class wolfnet
 
     public function quickSearch(array $criteria)
     {
+        $productKey = $this->getProductKeyById($criteria["keyid"]);
         $vars = array(
             'instance_id'  => str_replace('.', '', uniqid('wolfnet_quickSearch_')),
             'siteUrl'      => site_url(),
-            'prices'       => $this->getPrices($criteria['productkey']),
+            'prices'       => $this->getPrices($productKey),
             'beds'         => $this->getBeds(),
             'baths'        => $this->getBaths(),
-            'formAction'   => $this->getBaseUrl($criteria['productkey'])
+            'formAction'   => $this->getBaseUrl($productKey)
             );
 
         $args = $this->convertDataType(array_merge($criteria, $vars));
@@ -1590,13 +1593,13 @@ class wolfnet
 
     /* Misc. Data ******************************************************************************* */
 
-    public function getSavedSearches($count=-1, $productKey=null)
+    public function getSavedSearches($count=-1, $keyid=null)
     {
         // Cache the data in the request scope so that we only have to query for it once per request.
         $cacheKey = 'wntSavedSearches';
         $data = (array_key_exists($cacheKey, $_REQUEST)) ? $_REQUEST[$cacheKey] : null;
-        if($productKey == null) {
-            $productKey = $this->getDefaultProductKey();
+        if($keyid == null) {
+            $keyid = "1";
         }
 
         if ($data==null) {
@@ -1607,8 +1610,8 @@ class wolfnet
                 'post_status' => 'publish',
                 'meta_query' => array(
                     array(
-                        'key' => 'productkey',
-                        'value' => $productKey,
+                        'key' => 'keyid',
+                        'value' => $keyid,
                     )
                 )
             );
@@ -1708,7 +1711,7 @@ class wolfnet
         $defaultArgs = array(
             'instance_id'      => str_replace('.', '', uniqid('wolfnet_listingGrid_')),
             'markets'          => json_decode($this->getProductKey()),
-            'productkey'       => ''
+            'keyid'            => ''
             );
 
         $args = array_merge($defaultArgs, $args);
@@ -1818,8 +1821,10 @@ class wolfnet
 
     public function propertyListView(array $args=array())
     {
-        if(!array_key_exists('productkey', $args)) {
+        if(!array_key_exists('keyid', $args)) {
             $args['productkey'] = $this->getDefaultProductKey();
+        } else {
+            $args['productkey'] = $this->getProductKeyById($args["keyid"]);
         }
         $args['itemsPerPage'] = $this->getItemsPerPage();
         $args['sortOptions'] = $this->getSortOptions($args['productkey']);
@@ -1838,8 +1843,10 @@ class wolfnet
 
     public function resultsSummaryView(array $args=array())
     {
-        if(!array_key_exists('productkey', $args)) {
+        if(!array_key_exists('keyid', $args)) {
             $args['productkey'] = $this->getDefaultProductKey();
+        } else {
+            $args['productkey'] = $this->getProductKeyById($args["keyid"]);
         }
         $args['itemsPerPage'] = $this->getItemsPerPage();
         $args['sortOptions'] = $this->getSortOptions($args['productkey']);
@@ -1858,8 +1865,11 @@ class wolfnet
 
     public function listingGridView(array $args=array())
     {
-        if(!array_key_exists('productkey', $args)) {
+
+        if(!array_key_exists('keyid', $args)) {
             $args['productkey'] = $this->getDefaultProductKey();
+        } else {
+            $args['productkey'] = $this->getProductKeyById($args["keyid"]);
         }
         $args['itemsPerPage'] = $this->getItemsPerPage();
         $args['sortOptions'] = $this->getSortOptions($args['productkey']);
@@ -1950,7 +1960,7 @@ class wolfnet
             $productKey = json_decode($this->getDefaultProductKey());
         }
 
-        $url = 'http://services.mlsfinder.com/v1/validateKey/' . $productKey . '.json';
+        $url = $this->serviceUrl . '/validateKey/' . $productKey . '.json';
 
         $http = wp_remote_get($url, array('timeout'=>180));
 
@@ -2159,7 +2169,7 @@ class wolfnet
         if($productKey == null) {
             $productKey = $this->getDefaultProductKey();
         }
-        $url = 'http://services.mlsfinder.com/v1/marketDisclaimer/' . $productKey . '.json';
+        $url = $this->serviceUrl . '/marketDisclaimer/' . $productKey . '.json';
         $url = $this->buildUrl($url, array('type'=>'search_results'));
 
         return $this->getApiData($url, 86400)->disclaimer;
@@ -2177,6 +2187,16 @@ class wolfnet
     }
 
 
+    private function getProductKeyById($id) {
+        $keyList = json_decode($this->getProductKey());
+        foreach($keyList as $key) {
+            if($key->id == $id) {
+                return $key->key;
+            }
+        }
+    }
+
+
     private function getDefaultProductKey() {
         $productKey = json_decode($this->getProductKey());
         return $productKey[0]->key;
@@ -2187,6 +2207,7 @@ class wolfnet
         // This takes the old style single key string and returns a JSON formatted key array
         $keyArray = array(
             array(
+                "id" => "1",
                 "key" => $keyString,
                 "label" => ""
             )
@@ -2409,7 +2430,7 @@ class wolfnet
             $productKey = $this->getDefaultProductKey();
         }
 
-        $url = 'http://services.mlsfinder.com/v1/setting/' . $productKey . '.json'
+        $url = $this->serviceUrl . '/setting/' . $productKey . '.json'
              . '?setting=getallsettings';
         $data = $this->getApiData($url, 86400);
 
@@ -2534,7 +2555,7 @@ class wolfnet
 
     private function getMaxResults($productKey)
     {
-        $url  = 'http://services.mlsfinder.com/v1/setting/' . $productKey . '.json'
+        $url  = $this->serviceUrl . '/setting/' . $productKey . '.json'
               . '?setting=site_text';
         $data = $this->getApiData($url, 86400)->site_text;
         $maxResults = (property_exists($data, 'Max Results')) ? $data->{'Max Results'} : '';
@@ -2546,7 +2567,7 @@ class wolfnet
 
     private function getPricesFromApi($productKey)
     {
-        $url  = 'http://services.mlsfinder.com/v1/setting/' . $productKey . '.json'
+        $url  = $this->serviceUrl . '/setting/' . $productKey . '.json'
               . '?setting=site_text';
         $data = $this->getApiData($url, 86400);
         $data = (property_exists($data, 'site_text')) ? $data->site_text : new stdClass();
@@ -2562,7 +2583,7 @@ class wolfnet
         if($productKey == null) {
             $productKey = json_decode($this->getDefaultProductKey());
         }
-        $url  = 'http://services.mlsfinder.com/v1/setting/' . $productKey 
+        $url  = $this->serviceUrl . '/setting/' . $productKey 
               . '?setting=maptracks_enabled';
         $data = $this->getApiData($url, 86400);
         $data = (property_exists($data, 'maptracks_enabled')) ? ($data->maptracks_enabled == 'Y') : false;
@@ -2623,7 +2644,7 @@ class wolfnet
         if($productKey == null) {
             $productKey = $this->getDefaultProductKey();
         }
-        $url  = 'http://services.mlsfinder.com/v1/sortOptions/' . $productKey . '.json';
+        $url  = $this->serviceUrl . '/sortOptions/' . $productKey . '.json';
 
         return $this->getApiData($url, 86400)->sort_options;
 
@@ -2703,7 +2724,7 @@ class wolfnet
             $productKey = $this->getDefaultProductKey();
         }
 
-        $url  = 'http://services.mlsfinder.com/v1/setting/' . $productKey . '.json';
+        $url  = $this->serviceUrl . '/setting/' . $productKey . '.json';
         $url .= '?setting=SITE_BASE_URL';
 
         return $this->getApiData($url, 86400)->site_base_url;
@@ -2713,7 +2734,7 @@ class wolfnet
 
     private function getMarketName($apiKey)
     {
-        $url = "http://services.mlsfinder.com/v1/setting/" . $apiKey . ".json?setting=DATASOURCE";
+        $url = $this->serviceUrl . "/setting/" . $apiKey . ".json?setting=DATASOURCE";
         return $this->getApiData($url, 1000)->datasource;
     }
 
