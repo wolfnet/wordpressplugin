@@ -850,11 +850,10 @@ class wolfnet
             }
 
             $key = $_REQUEST['custom_fields']['keyid'];
-            $productKey = $this->getProductKeyById($key);
 
         }
 
-        $this->remoteGetSavedSearches($productKey);
+        $this->remoteGetSavedSearches($key);
 
     }
 
