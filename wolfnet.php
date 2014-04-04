@@ -1230,7 +1230,7 @@ class wolfnet
         $options['ownertypes']            = $this->getOwnerTypes();
         $options['prices']                = $this->getPrices($this->getProductKeyById(1));
         $options['savedsearches']         = $this->getSavedSearches(-1, 1);
-        $options['mapEnabled']            = $this->getMaptracksEnabled($productKey);
+        $options['mapEnabled']            = $this->getMaptracksEnabled($this->getProductKeyById(1));
         $options['maptypes']              = $this->getMapTypes();
 
         return $options;
