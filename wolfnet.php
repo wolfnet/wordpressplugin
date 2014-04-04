@@ -2470,7 +2470,7 @@ class wolfnet
     }
 
 
-    private function getMapParameters($listingsData, $productkey=null)
+    private function getMapParameters($listingsData, $productKey=null)
     {
         if($productKey == null) {
             $productKey = $this->getDefaultProductKey();
