@@ -24,7 +24,6 @@
 
 <div id="<?php echo $instance_id; ?>" class="wolfnet_widget wolfnet_quickSearch">
 
-
     <?php if (trim($title) != '') { ?>
         <h2 class="wolfnet_widgetTitle"><?php echo $title; ?></h2>
     <?php } ?>
@@ -37,6 +36,20 @@
         <input name="submit" type="hidden" value="Search" />
 
         <input type="hidden" name="search_source" value="wp_plugin">
+
+        <?php 
+            if(count($keyids) > 1) {
+                foreach($markets as $market) {
+                    foreach($keyids as $key) {
+                        if($market->id == $key) {
+                            echo '<div class="wolfnet_market"><input type="radio" name="market" value="' . $key . '"> ' . $market->label . '</div>';
+                        }
+                    }
+                }
+
+                echo '<div class="wolfnet_clearfix"></div>';
+            } 
+        ?>
         
         <ul class="wolfnet_searchType">
             <li><a href="javascript:;" wolfnet:search_type="opentxt"><span>Location</span></a></li>
@@ -114,6 +127,18 @@
 
     jQuery(function($){
         $('#<?php echo $instance_id; ?>').wolfnetQuickSearch();
+
+        <?php if(count($keyids) > 1): ?>
+        // Disable fields until market is selected.
+        if(!$("[name=market]").is(':checked')) {
+            $.fn.toggleQuickSearchFields(true);
+        }
+        <?php endif; ?>
+
+        $("[name=market]").click(function() {
+            $.fn.toggleQuickSearchFields(false);
+            $.fn.rebuildQuickSearchOptions($(this).val());
+        });
     });
 
 </script>

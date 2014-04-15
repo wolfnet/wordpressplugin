@@ -1038,6 +1038,14 @@ class wolfnet
     }
 
 
+    public function remoteGetBaseUrl() {
+        $productKey = $this->getProductKeyById($_REQUEST["keyid"]);
+        echo json_encode($this->getBaseUrl($productKey));
+
+        die;
+    }
+
+
     /* Data ************************************************************************************* */
     /*  _                                                                                         */
     /* | \  _. _|_  _.                                                                            */
@@ -1600,10 +1608,23 @@ class wolfnet
 
     public function quickSearch(array $criteria)
     {
-        $productKey = $this->getProductKeyById($criteria["keyid"]);
+        $productKey = $this->getDefaultProductKey();
+
+        if(array_key_exists("keyids", $criteria)) {
+            $keyids = explode(",", $criteria["keyids"]);
+        } else {
+            $keyids[0] = 1;
+        }
+
+        if(count($keyids) == 1) {
+            $productKey = $this->getProductKeyById($keyids[0]);
+        }
+
         $vars = array(
             'instance_id'  => str_replace('.', '', uniqid('wolfnet_quickSearch_')),
             'siteUrl'      => site_url(),
+            'keyids'       => $keyids,
+            'markets'      => json_decode($this->getProductKey()),
             'prices'       => $this->getPrices($productKey),
             'beds'         => $this->getBeds(),
             'baths'        => $this->getBaths(),
@@ -1797,9 +1818,15 @@ class wolfnet
 
     public function quickSearchOptionsFormView(array $args=array())
     {
+        $markets = json_decode($this->getProductKey());
+        $keyids = array();
+        foreach($markets as $market) {
+            array_push($keyids, $market->id);
+        }
         $defaultArgs = array(
             'instance_id' => str_replace('.', '', uniqid('wolfnet_quickSearch_')),
-            'markets'     => json_decode($this->getProductKey())
+            'markets'     => $markets,
+            'keyids'      => $keyids
             );
 
         $args = array_merge($defaultArgs, $args);
@@ -3083,6 +3110,7 @@ class wolfnet
             'wolfnet_price_range'             => 'remotePriceRange',
             'wolfnet_market_name'             => 'remoteGetMarketName',
             'wolfnet_map_enabled'             => 'remoteMapEnabled',
+            'wolfnet_base_url'                => 'remoteGetBaseUrl',
             );
 
         foreach ($ajxActions as $action => $method) {

@@ -24,9 +24,9 @@
 
 <div id="<?php echo $instance_id; ?>" class="wolfnet_quickSearchOptions">
 
-	<?php if(count($markets) == 1): ?>
-	<input type="hidden" id="<?php echo $productkey_wpid; ?>" name="<?php echo $productkey_wpid; ?>" value="<?php echo $markets[0]->key; ?>" />
-	<?php endif; ?>
+    <?php if(count($markets) > 1): ?>
+	<input type="hidden" id="keyids" name="keyids" value="<?php echo $markets[0]->id; ?>" />
+    <?php endif; ?>
 
     <table class="form-table">
         <tr>
@@ -37,15 +37,52 @@
         <tr>
         	<td><label>Market:</label></td>
         	<td>
-        		<select id="<?php echo $keyid_wpid; ?>" name="<?php echo $keyid_wpid; ?>">
-	                <?php for($i=0; $i<=count($markets)-1; $i++): ?>
-	                <option value="<?php echo $markets[$i]->id; ?>"
-	                    <?php if($markets[$i]->id == $selectedKey) echo ' selected="selected"'?>><?php echo $markets[$i]->label; ?></option>
-	                <?php endfor; ?>
-	            </select>
+                <table>
+                    <tr>
+                        <td>
+                            <input type="checkbox" id="all" value="all"> All
+                        </td>
+                    </td>
+                    <?php for($i=0; $i<=count($markets)-1; $i++): ?>
+                    <tr>
+                        <td>
+        	                <input type="checkbox" class="productkey" value="<?php echo $markets[$i]->id; ?>"
+        	                    <?php if($markets[$i]->id == $selectedKey) echo ' selected="selected"'?>> <?php echo $markets[$i]->label; ?>
+                        </td>
+                    </tr>
+                    <?php endfor; ?>
+                </table>
         	</td>
         </tr>
     	<?php endif; ?>
     </table>
 
 </div>
+
+<script type="text/javascript">
+
+    jQuery(function($){
+        $("button[type=submit]").click(function() {
+        <?php if(count($markets) > 1): ?>
+            var productkeys = $(".productkey:checked");
+            if(productkeys.length == 0 && !$("#all").is(":checked")) {
+                alert("Please select a market for your quick search.");
+                return false;
+            } else {
+                if($("#all").is(":checked")) {
+                    // Use all key IDs.
+                    $("#keyids").val('<?php echo implode(",", $keyids); ?>');
+                } else {
+                    // Get selected key IDs.
+                    var idArray = [];
+                    $(productkeys).each(function() {
+                        idArray.push($(this).val());
+                    });
+                    $("#keyids").val(idArray.join(","));
+                }
+            }
+        <?php endif; ?>
+        });
+    });
+
+</script>
