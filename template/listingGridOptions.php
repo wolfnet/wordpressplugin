@@ -28,7 +28,7 @@
            value="<?php echo $criteria; ?>" type="hidden" />
 
     <?php if(count($markets) == 1): ?>
-    <input type="hidden" id="<?php echo $keyid_wpid; ?>" name="<?php echo $keyid_wpid; ?>" value="1" />
+    <input type="hidden" id="<?php echo $keyid_wpid; ?>" name="<?php echo $keyid_wpid; ?>" class="keyid" value="1" />
     <?php endif; ?>
 
     <table class="form-table">
@@ -43,9 +43,9 @@
         <tr>
             <td><label>Market:</label></td>
             <td>
-                <select id="<?php echo $keyid_wpid; ?>" class="keyid" name="<?php echo $keyid_wpname; ?>">
+                <select id="<?php echo $keyid_wpid; ?>" class="keyid" name="<?php echo $keyid_wpname; ?>" class="keyid">
                     <?php for($i=0; $i<=count($markets)-1; $i++): ?>
-                    <option value="<?php echo $markets[$i]->id; ?>"><?php echo $markets[$i]->label; ?></option>
+                    <option value="<?php echo $markets[$i]->id; ?>" <?php if($markets[$i]->id == $keyid) echo 'selected="selected"'; ?>><?php echo $markets[$i]->label; ?></option>
                     <?php endfor; ?>
                 </select>
             </td>
@@ -63,7 +63,7 @@
         <tr>
             <td><label>Include Map:</label></td>
             <td>
-                <select id="<?php echo $maptype_wpid; ?>" name="<?php echo $maptype_wpname; ?>" <?php if (!$mapEnabled) { ?>disabled<?php } ?> >
+                <select id="<?php echo $maptype_wpid; ?>" name="<?php echo $maptype_wpname; ?>" class="maptype" <?php if (!$mapEnabled) { ?>disabled<?php } ?> >
                     <?php foreach ($maptypes as $mt) { ?>
                         <option value="<?php echo $mt['value']; ?>" <?php selected($maptypes, $mt['value']); ?>>
                             <?php echo $mt['label']; ?>
@@ -71,7 +71,7 @@
                     <?php } ?>
                 </select>
                 
-                <p id="mapDisabled" style="display:<?php echo ($mapEnabled ? 'none' : 'block'); ?>">
+                <p id="mapDisabled" class="mapDisabled" style="display:<?php echo ($mapEnabled ? 'none' : 'block'); ?>">
                     <span style="color:#FF0000;font-weight:bold;">*</span> 
                     <span style="font-style:italic;font-size:0.75em;">Map option is unavailable at this time. To enable this feature, please contact WolfNet sales for more information (612) 342-0088.</span>
                 </p>

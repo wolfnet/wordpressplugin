@@ -1229,6 +1229,12 @@ class wolfnet
     {
         $options = $this->getOptions($this->getListingGridDefaults(), $instance);
 
+        if(array_key_exists('keyid', $options)) {
+            $keyid = $options['keyid'];
+        } else {
+            $keyid = 1;
+        }
+
         $options['mode_basic_wpc']        = checked($options['mode'], 'basic', false);
         $options['mode_advanced_wpc']     = checked($options['mode'], 'advanced', false);
         $options['paginated_false_wps']   = selected($options['paginated'], 'false', false);
@@ -1236,9 +1242,9 @@ class wolfnet
         $options['sortoptions_false_wps'] = selected($options['sortoptions'], 'false', false);
         $options['sortoptions_true_wps']  = selected($options['sortoptions'], 'true', false);
         $options['ownertypes']            = $this->getOwnerTypes();
-        $options['prices']                = $this->getPrices($this->getProductKeyById(1));
-        $options['savedsearches']         = $this->getSavedSearches(-1, 1);
-        $options['mapEnabled']            = $this->getMaptracksEnabled($this->getProductKeyById(1));
+        $options['prices']                = $this->getPrices($this->getProductKeyById($keyid));
+        $options['savedsearches']         = $this->getSavedSearches(-1, $keyid);
+        $options['mapEnabled']            = $this->getMaptracksEnabled($this->getProductKeyById($keyid));
         $options['maptypes']              = $this->getMapTypes();
 
         return $options;
