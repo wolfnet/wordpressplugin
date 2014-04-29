@@ -218,7 +218,7 @@ if ( typeof jQuery != 'undefined' ) {
 		}; /* END: function $.fn.wolfnetQuickSearch */
 
 		$.fn.toggleQuickSearchFields = function(state) {
-			var fieldNames = ['open_text', 'min_price', 'max_price', 'min_bedrooms', 'min_bathrooms'];
+			var fieldNames = ['open_text', 'min_price', 'max_price', 'min_bedrooms', 'min_bathrooms', 'search'];
 			for(var element in fieldNames) {
 				$('[name=' + fieldNames[element] + ']').prop('disabled', state);
 			}
