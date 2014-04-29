@@ -209,11 +209,16 @@ if ( typeof jQuery != 'undefined' ) {
 				var $form   = $( this );
 				var $fields = $form.find( 'tr.basic-option,tr.advanced-option' );
 				var $mode   = $form.find( '.modeField input' );
+				var $key    = $form.find( '.keyid' );
 
 				$fields.hide();
 
 				$mode.each( function () {
 					this.$fields = $fields;
+				} );
+
+				$key.change( function() {
+					$(this).wolfnetUpdateShortcodeControls($form);
 				} );
 
 				$mode.click( eventHandler );

@@ -1229,7 +1229,7 @@ class wolfnet
     {
         $options = $this->getOptions($this->getListingGridDefaults(), $instance);
 
-        if(array_key_exists('keyid', $options)) {
+        if(array_key_exists('keyid', $options) && $options['keyid'] != '') {
             $keyid = $options['keyid'];
         } else {
             $keyid = 1;

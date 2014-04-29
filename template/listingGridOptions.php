@@ -211,12 +211,8 @@
 <script type="text/javascript">
 
     jQuery(function($){
-        $('#<?php echo $instance_id; ?>').wolfnetListingGridControls();
-        wolfnet.initMoreInfo( $( '#<?php echo $instance_id; ?> .wolfnet_moreInfo' ) );
-
-        $('#<?php echo $instance_id; ?>').find('.keyid').change(function() {
-            $(this).wolfnetUpdateShortcodeControls($(this).closest('form'));
-        });
+        $('.wolfnet_listingGridOptions').wolfnetListingGridControls();
+        wolfnet.initMoreInfo( $( '.wolfnet_listingGridOptions .wolfnet_moreInfo' ) );
     });
 
 </script>
