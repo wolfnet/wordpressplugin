@@ -2296,7 +2296,7 @@ class wolfnet
                 $concatHouseover .= '</div>';
                 if ($showBrokerImage) {
                     $concatHouseover .= '<div class="wolfnet_wntHOBroker" style="text-align: center">';
-                    $concatHouseover .= '<img class="wolfnet_wntHOBrokerLogo" src="' . $listing->branding->brokerLogo . '" alt="Broker Reciprocity">';
+                    $concatHouseover .= '<img src="' . $listing->branding->brokerLogo . '" style="max-height:50px;width:auto" alt="Broker Reciprocity">';
                     $concatHouseover .= '</div>';
                 }
                 $concatHouseover .= '</td>';
