@@ -2345,7 +2345,7 @@ class wolfnet
                 $concatHouseover .= '</div>';
                 $concatHouseover .= '</div>';
                 $concatHouseover .= '</a>';
-    
+
                 array_push($houseoverData, array(
                     'lat'        => $listing->lat,
                     'lng'        => $listing->lng,
@@ -2355,7 +2355,7 @@ class wolfnet
                     ));
 
             }
-        }  
+        }
 
         return $houseoverData;
 
