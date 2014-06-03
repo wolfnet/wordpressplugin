@@ -25,6 +25,8 @@ free at 1-866-WOLFNET, or via email at service@wolfnet.com. You may also find us
 There are no special instructions for installing the plugin, however a valid product key must be
 entered in the "WolfNet >> General Settings" page before any IDX data can be displayed.
 
+[Downloading & Activating Your WolfNet WordPress Plugin](https://www.youtube.com/watch?v=hp9ojJdstQM&list=UUWqJ_1djHKa_Uxg_bZ4HiTw)
+
 = WordPress.org Installation =
 1. From the your WordPress websites admin section go to the Plugins page.
 1. Click "Add New"
@@ -38,6 +40,10 @@ entered in the "WolfNet >> General Settings" page before any IDX data can be dis
 
 
 == Frequently Asked Questions ==
+
+[WolfNet WordPress Plugin Basic Display Options](https://www.youtube.com/watch?v=tOLJDhCvgzQ&list=UUWqJ_1djHKa_Uxg_bZ4HiTw)
+
+[WolfNet WordPress Plugin Advanced Display Options](https://www.youtube.com/watch?v=oAoljC6_yF8&list=UUWqJ_1djHKa_Uxg_bZ4HiTw)
 
 
 == Screenshots ==
