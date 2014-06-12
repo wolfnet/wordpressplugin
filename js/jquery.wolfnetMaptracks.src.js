@@ -198,22 +198,6 @@
                 showMouseControls = false;
             }
 
-            $("[data-wnt-controlContainer=][data-wnt-map-name=" + mapName + "]").each(function () {
-                $(this).data("controlContainer", map.controlContainer(this, {}));
-            });
-
-            $("[data-wnt-nav=][data-wnt-map-name=" + mapName + "]").each(function () {
-                if (showView) {
-                    // Remove built-in control
-                    if (mapControls.view != undefined) {
-                        mapquestMap.removeControl(mapControls.view);
-                    }
-                    // Add custom control
-                    mapControls.view = map.navMapControl(this, {});
-                    $(this).data("nav", mapControls.view);
-                }
-            });
-
             if (showMouseControls) {
                 $("[data-wnt-mouseControlContainer=][data-wnt-map-name=" + mapName + "]").each(function () {
                     $(this).data("mouseControlContainer", map.mouseControlContainer(this, {}));
@@ -223,20 +207,6 @@
                     $(this).data("mouseControl", map.mouseControl(this, {}));
                 });
             }
-
-            $("[data-wnt-pan=][data-wnt-map-name=" + mapName + "]").each(function () {
-                if (showZoom) {
-                    // Remove built-in control
-                    if (mapControls.zoom != undefined) {
-                        mapquestMap.removeControl(mapControls.zoom);
-                    }
-                    // Add custom control
-                    mapControls.zoom = map.panZoomMapControl(this, {
-                        expandedZoom: $(this).attr("data-wnt-pan-expandedzoom") === "true"
-                    });
-                    $(this).data("pan", mapControls.zoom);
-                }
-            });
 
             $("[data-wnt-poi][data-wnt-map-name=" + mapName + "]").each(function () {
                 var poi = this;
@@ -2632,9 +2602,6 @@
                 map.setDragZoom(false);
             }
         }
-        $("[data-wnt-resetMap=]").click(function () {
-            map.reset();
-        });
 
         // Track map usage
         $(map).bind("moveEnd zoomEnd", mapTrack);
