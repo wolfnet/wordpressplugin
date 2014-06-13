@@ -281,7 +281,6 @@ class wolfnet
             'wolfnet-toolbar',
             'wolfnet-property-list',
             'wolfnet-maptracks',
-            'mapquest-api-config',
             'mapquest-api'
             );
 
@@ -2068,21 +2067,33 @@ class wolfnet
 
     private function getApiData($url, $cacheFor=900)
     {
+        // Retrieve the WordPress version variable from the global scope for later use.
         global $wp_version;
+        // Generate a key for caching based on a hash of the $url being requested.
         $key = 'wolfnet_' . md5($url);
+        // Retrieve an index of all transient objects currently in use.
         $index = $this->transientIndex();
+        // Create a time stamp of the current time.
         $time = time();
+        // Attempt to retrieve a transient (cached) version of the data being requested.
         $data = (array_key_exists($key, $index)) ? get_transient($key) : false;
 
+        // Add some extra values to the URL for metrics purposes.
         $url = $this->buildUrl($url, array(
             'pluginVersion' => $this->version,
             'phpVersion'    => phpversion(),
             'wpVersion'     => $wp_version,
             ));
 
+        // If there was no matching data in the transient database or the time has expired we need
+        // to attempt to retrieve fresh data form the API.
         if ($data === false || $time > $index[$key]) {
+
+            // Perform an HTTP request to the API.
             $http = wp_remote_get($url, array('timeout'=>180));
 
+            // If we didn't get any data from the transient database we need to generate an object
+            // to populate with data from the API response.
             if (!is_object($data)) {
                 $data = new stdClass();
                 $data->error = new stdClass();
@@ -2091,29 +2102,40 @@ class wolfnet
                 $data->url = $url;
             }
 
+            // The API responded with a server error so capture that for later use
             if (!is_wp_error($http) && $http['response']['code'] >= 500) {
                 $data->error->message = 'A remote server error occurred!';
             }
+            // The API responded with a bad request error capture for later use
             elseif (is_wp_error($http) || $http['response']['code'] >= 400) {
                 $data->error->message = 'A connection error occurred!';
                 $index[$key] = $time;
+                // We will cache this response since it may be a valid response such as the client's
+                // API key has expired.
                 set_transient($key, $data, $this->transientMaxExpiration);
             }
             else {
+                // The API response should be formated as JSON so we will deserialize it into a PHP
+                // standard object.
                 $tmp = json_decode($http['body']);
 
+                // If an error occurred while deserializing the JSON string (or what should have been
+                // one), generate an error message which can be used later.
                 if ($tmp === false) {
                     $data->error->message = 'An error occurred while attempting '
                         . 'to decode the body as Json.';
                 }
+                // The response was valid and decoded so we will use it as the data for this request.
                 else {
                     $data = $tmp;
                 }
 
+                // If there is a data object we want to capture what URL the data came from.
                 if (is_object($data)) {
                     $data->url = $url;
                 }
 
+                // Save the data to the transient database so we don't have to call the API again right away.
                 $index[$key] = $time + $cacheFor;
                 set_transient($key, $data, $this->transientMaxExpiration);
 
@@ -2124,10 +2146,12 @@ class wolfnet
         $errorExists = property_exists($data, 'error');
         $statusExists = ($errorExists) ? property_exists($data->error, 'status') : false;
 
+        // If any errors occurred during this process output them to make debugging easier.
         if ($errorExists && $statusExists && $data->error->status) {
             print('<!-- WNT Plugin Error: ' . $data->error->message . ' -->');
         }
 
+        // Save a "lookup" value in our transient database index to make future retrieval easier.
         $this->transientIndex($index);
 
         return $data;
@@ -2296,7 +2320,7 @@ class wolfnet
                 $concatHouseover .= '</div>';
                 if ($showBrokerImage) {
                     $concatHouseover .= '<div class="wolfnet_wntHOBroker" style="text-align: center">';
-                    $concatHouseover .= '<img class="wolfnet_wntHOBrokerLogo" src="' . $listing->branding->brokerLogo . '" alt="Broker Reciprocity">';
+                    $concatHouseover .= '<img src="' . $listing->branding->brokerLogo . '" style="max-height:50px;width:auto" alt="Broker Reciprocity">';
                     $concatHouseover .= '</div>';
                 }
                 $concatHouseover .= '</td>';
@@ -2320,7 +2344,7 @@ class wolfnet
                 $concatHouseover .= '</div>';
                 $concatHouseover .= '</div>';
                 $concatHouseover .= '</a>';
-    
+
                 array_push($houseoverData, array(
                     'lat'        => $listing->lat,
                     'lng'        => $listing->lng,
@@ -2330,7 +2354,7 @@ class wolfnet
                     ));
 
             }
-        }  
+        }
 
         return $houseoverData;
 
@@ -2746,22 +2770,12 @@ class wolfnet
                 $this->url . 'js/jquery.wolfnetShortcodeBuilder.src.js',
                 array('jquery-ui-widget', 'jquery-effects-core', 'wolfnet-admin'),
                 ),
-            'mapquest-api-config' => array(
-                '//www.mapquestapi.com/sdk/js/v7.0.s/mqa.toolkit.js?key=Gmjtd%7Clu6znua2n9%2C7l%3Do5-la70q'
-                ),
             'mapquest-api' => array(
                 '//www.mapquestapi.com/sdk/js/v7.0.s/mqa.toolkit.js?key=Gmjtd%7Clu6znua2n9%2C7l%3Do5-la70q',
-                array('mapquest-api-config'),
-                ),
-            'bing-mapcontrol' => array(
-                'http://ecn.dev.virtualearth.net/mapcontrol/mapcontrol.ashx?v=6.2'
-                ),
-            'bing-atlascompat' => array(
-                'http://ecn.dev.virtualearth.net/mapcontrol/v6.3/js/atlascompat.js'
                 ),
             'wolfnet-maptracks' => array(
                 $this->url . 'js/jquery.wolfnetMaptracks.src.js',
-                array('jquery',  'mapquest-api-config', 'mapquest-api','bing-mapcontrol','bing-atlascompat'),
+                array('jquery', 'mapquest-api'),
                 )
             );
 

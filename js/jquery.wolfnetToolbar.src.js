@@ -244,7 +244,7 @@ if ( typeof String.prototype.wolfnetPriceFormat !== 'function' ) {
         concatHouseover += '" class="wntHOItem"><table class="wolfnet_wntHOTable"><tbody><tr>';
         concatHouseover += '<td class="wntHOImgCol" valign="top" style="vertical-align:top;"><div class="wolfnet_wntHOImg">';
         concatHouseover += '<img src="' + listing.thumbnail_url + '" style="max-height:100px;width:auto"></div><div class="wolfnet_wntHOBroker" style="text-align: center">';
-        concatHouseover += '<img class="wolfnet_wntHOBrokerLogo" src="' + listing.branding.brokerLogo + '" alt="Broker Reciprocity">';
+        concatHouseover += '<img class="wolfnet_wntHOBrokerLogo" src="' + listing.branding.brokerLogo + '" style="max-height:50px;width:auto" alt="Broker Reciprocity">';
         concatHouseover += '</div></td><td valign="top" style="vertical-align:top;"><div class="wolfnet_wntHOContentContainer">';
         concatHouseover += '<div style="text-align:left;font-weight:bold">' + listing.listing_price.toString().wolfnetPriceFormat() + '</div>';
         concatHouseover += '<div style="text-align:left;">' + listing.display_address + '</div><div style="text-align:left;">';

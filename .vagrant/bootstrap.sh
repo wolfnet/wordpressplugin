@@ -15,6 +15,7 @@ if [ ! -f "${runfile}" ]; then
     apt-get -qq update > /dev/null 2> /dev/null
     apt-get -qq -y -o dir::cache::archives="${tempdir}" install \
         curl \
+        git \
         apache2 \
         php5 \
         php5-mysql \
@@ -34,6 +35,11 @@ if [ ! -f "${runfile}" ]; then
 
     echo "Start apache ..."
     service apache2 start > /dev/null 2> /dev/null
+
+    echo "Installing phpUnit ..."
+    wget -q https://phar.phpunit.de/phpunit.phar > /dev/null
+    chmod +x phpunit.phar
+    mv phpunit.phar /usr/local/bin/phpunit
 
     touch "${runfile}"
 
