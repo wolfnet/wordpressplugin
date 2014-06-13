@@ -281,7 +281,6 @@ class wolfnet
             'wolfnet-toolbar',
             'wolfnet-property-list',
             'wolfnet-maptracks',
-            'mapquest-api-config',
             'mapquest-api'
             );
 
@@ -2771,22 +2770,12 @@ class wolfnet
                 $this->url . 'js/jquery.wolfnetShortcodeBuilder.src.js',
                 array('jquery-ui-widget', 'jquery-effects-core', 'wolfnet-admin'),
                 ),
-            'mapquest-api-config' => array(
-                '//www.mapquestapi.com/sdk/js/v7.0.s/mqa.toolkit.js?key=Gmjtd%7Clu6znua2n9%2C7l%3Do5-la70q'
-                ),
             'mapquest-api' => array(
                 '//www.mapquestapi.com/sdk/js/v7.0.s/mqa.toolkit.js?key=Gmjtd%7Clu6znua2n9%2C7l%3Do5-la70q',
-                array('mapquest-api-config'),
-                ),
-            'bing-mapcontrol' => array(
-                'http://ecn.dev.virtualearth.net/mapcontrol/mapcontrol.ashx?v=6.2'
-                ),
-            'bing-atlascompat' => array(
-                'http://ecn.dev.virtualearth.net/mapcontrol/v6.3/js/atlascompat.js'
                 ),
             'wolfnet-maptracks' => array(
                 $this->url . 'js/jquery.wolfnetMaptracks.src.js',
-                array('jquery',  'mapquest-api-config', 'mapquest-api','bing-mapcontrol','bing-atlascompat'),
+                array('jquery', 'mapquest-api'),
                 )
             );
 
