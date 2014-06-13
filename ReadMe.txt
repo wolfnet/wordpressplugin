@@ -2,7 +2,7 @@
 Author:             WolfNet Technologies, LLC
 Contributors:       wolfnettech, ajmichels, asbaumgart, michaelpidde
 Tags:               idx, mls, homes
-Requires at least:  3.3.0
+Requires at least:  3.5.1
 Tested up to:       3.9
 Stable tag:         {X.X.X}
 License:            GPLv2 or later
@@ -29,14 +29,14 @@ entered in the "WolfNet >> General Settings" page before any IDX data can be dis
 
 = WordPress.org Installation =
 1. From the your WordPress websites admin section go to the Plugins page.
-1. Click "Add New"
-1. Search for "WolfNet".
-1. Click "Install Now" under the "WolfNet IDX for WordPress" plugin.
-1. Click "Activate Plugin"
+2. Click "Add New"
+3. Search for "WolfNet".
+4. Click "Install Now" under the "WolfNet IDX for WordPress" plugin.
+5. Click "Activate Plugin"
 
 = Manual Installation =
 1. Place the 'wolfnet' folder in your '/wp-content/plugins/' directory.
-1. Activate "WolfNet IDX for WordPress" from the "Plugins" page in the admin.
+2. Activate "WolfNet IDX for WordPress" from the "Plugins" page in the admin.
 
 
 == Frequently Asked Questions ==
@@ -50,6 +50,14 @@ entered in the "WolfNet >> General Settings" page before any IDX data can be dis
 
 
 == Changelog ==
+
+= 1.5.2 =
+* Maintenance
+* MLS logo sizing on maps
+
+= 1.5.1 =
+* Maintenance
+* Branding logo sizing
 
 = 1.5.0 =
 * Introducing maps for Listing Grid and Property List components.
