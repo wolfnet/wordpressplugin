@@ -55,8 +55,8 @@
         <tr class="modeField">
             <td><label>Mode:</label></td>
             <td>
-                <input id="<?php echo $mode_wpid; ?>" name="<?php echo $mode_wpname; ?>" value="basic" type="radio" checked="checked" /> Basic <br/>
-                <input id="<?php echo $mode_wpid; ?>" name="<?php echo $mode_wpname; ?>" value="advanced" type="radio" /> Advanced
+                <input id="<?php echo $mode_wpid; ?>" name="<?php echo $mode_wpname; ?>" value="basic" type="radio" <?php echo $mode_basic_wpc ? 'checked="checked"' : '' ?> /> Basic <br/>
+                <input id="<?php echo $mode_wpid; ?>" name="<?php echo $mode_wpname; ?>" value="advanced" type="radio" <?php echo $mode_advanced_wpc ? 'checked="checked"' : '' ?> /> Advanced
             </td>
         </tr>
 
@@ -73,8 +73,13 @@
                 
                 <p id="mapDisabled" class="mapDisabled" style="display:<?php echo ($mapEnabled ? 'none' : 'block'); ?>">
                     <span style="color:#FF0000;font-weight:bold;">*</span> 
+
+                <?php if (!$mapEnabled) { ?>
+                <p>
+                    <span style="color:#FF0000;font-weight:bold;">*</span>
                     <span style="font-style:italic;font-size:0.75em;">Map option is unavailable at this time. To enable this feature, please contact WolfNet sales for more information (612) 342-0088.</span>
                 </p>
+		<?php } ?>
             </td>
         </tr>
 

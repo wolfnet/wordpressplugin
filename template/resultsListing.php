@@ -30,14 +30,16 @@
         <div class="wolfnet_data">
             <span class="wolfnet_price" itemprop="price"><?php echo $listing->listing_price; ?></span>
             <span class="wolfnet_address"><?php echo $listing->display_address; ?></span>
-            <span class="wolfnet_location"><?php echo $listing->location; ?></span>    
-            <span class="wolfnet_bedsbath"><?php echo $listing->bedsbaths; ?></span>    
+            <span class="wolfnet_location"><?php echo $listing->location; ?></span>
+            <span class="wolfnet_bedsbath"><?php echo $listing->bedsbaths; ?></span>
             <div class="wolfnet_branding">
                 <?php if (trim($listing->branding->brokerLogo) !== '') { ?>
-                    <span class="wolfnet_brokerLogo"><img src="<?php echo $listing->branding->brokerLogo; ?>" /></span>
+                    <span class="wolfnet_brokerLogo<?php echo ($listing->branding->branding_type=='idx') ? ' wolfnet_idxLogo' : ''; ?>">
+                        <img src="<?php echo $listing->branding->brokerLogo; ?>" />
+                    </span>
                 <?php } ?>
                 <span class="wolfnet_brandingMessage"><?php echo $listing->branding->content; ?></span>
             </div>
-        </div>        
+        </div>
     </a>
 </div>

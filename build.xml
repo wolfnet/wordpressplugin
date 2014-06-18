@@ -2,7 +2,7 @@
 
 
     <property name="majorVersion" value="1.5" />
-    <property name="minorVersion" value="0" />
+    <property name="minorVersion" value="1" />
     <property name="version" value="${majorVersion}.${minorVersion}" />
 
     <property name="dir.ant"   value="${basedir}/.ant" />
@@ -66,6 +66,8 @@
                 <exclude name="build/" />
                 <exclude name="dist/" />
                 <exclude name="docs/" />
+                <exclude name="tests/" />
+                <exclude name="phpunit.xml" />
                 <!-- Excluded Files -->
                 <exclude name=".gitconfig" />
                 <exclude name="build.xml" />

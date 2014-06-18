@@ -110,6 +110,7 @@ if ( typeof String.prototype.wolfnetPriceFormat !== 'function' ) {
 
         for (var i=0, l=data.length; i<l; i++) {
             var brokerLogo  = data[i].branding.brokerLogo  || null;
+            var brandingType  = data[i].branding.branding_type || '';
             var brokerName  = data[i].branding.content || null;
             var cityState   = data[i].city + ', ' + data[i].state;
             var fullAddress = data[i].display_address + ', ' + cityState;
@@ -190,6 +191,10 @@ if ( typeof String.prototype.wolfnetPriceFormat !== 'function' ) {
                         .append($('<img>').attr('src',brokerLogo))
                         .appendTo($brandingContainer);
 
+                    if (brandingType == 'idx') {
+                        $brokerLogo.addClass('wolfnet_idxLogo');
+                    }
+
                 }
 
                 if (brokerName != null) {
@@ -230,7 +235,7 @@ if ( typeof String.prototype.wolfnetPriceFormat !== 'function' ) {
 
     //replicating building of html dom in wolfnet.php, function: getHouseoverHtml
     var getHouseoverHtml = function(listing)
-    {          
+    {
         var concatHouseover = '';
         var bed_bath = getBedBath(listing.bathroom,listing.bedrooms);
 
@@ -239,7 +244,7 @@ if ( typeof String.prototype.wolfnetPriceFormat !== 'function' ) {
         concatHouseover += '" class="wntHOItem"><table class="wolfnet_wntHOTable"><tbody><tr>';
         concatHouseover += '<td class="wntHOImgCol" valign="top" style="vertical-align:top;"><div class="wolfnet_wntHOImg">';
         concatHouseover += '<img src="' + listing.thumbnail_url + '" style="max-height:100px;width:auto"></div><div class="wolfnet_wntHOBroker" style="text-align: center">';
-        concatHouseover += '<img class="wolfnet_wntHOBrokerLogo" src="' + listing.branding.brokerLogo + '" alt="Broker Reciprocity">';
+        concatHouseover += '<img class="wolfnet_wntHOBrokerLogo" src="' + listing.branding.brokerLogo + '" style="max-height:50px;width:auto" alt="Broker Reciprocity">';
         concatHouseover += '</div></td><td valign="top" style="vertical-align:top;"><div class="wolfnet_wntHOContentContainer">';
         concatHouseover += '<div style="text-align:left;font-weight:bold">' + listing.listing_price.toString().wolfnetPriceFormat() + '</div>';
         concatHouseover += '<div style="text-align:left;">' + listing.display_address + '</div><div style="text-align:left;">';
@@ -265,9 +270,9 @@ if ( typeof String.prototype.wolfnetPriceFormat !== 'function' ) {
             var houseoverIcon = componentMap.mapIcon(houseIcon,30,30);
             var houseover = componentMap.poi(data[i].lat, data[i].lng, houseoverIcon, houseoverHtml, data[i].property_id, data[i].property_url);
             componentMap.addPoi(houseover);
-        }  
+        }
 
-        componentMap.bestFit();        
+        componentMap.bestFit();
     }
 
 
