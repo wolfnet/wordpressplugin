@@ -28,7 +28,7 @@
  *                Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-class wolfnet
+class Wolfnet
 {
 
 
@@ -114,7 +114,7 @@ class wolfnet
      * this prefix is used for hooks which are executed before a certain portion of code.
      * @var string
      */
-    private $preHookPrefix = 'wolfnet_pre_';
+    protected $preHookPrefix = 'wolfnet_pre_';
 
     /**
      * This property is used to prefix custom hooks which are defined in the plugin. Specifically
@@ -161,6 +161,13 @@ class wolfnet
         $this->dir = dirname(__FILE__);
         $this->url = plugin_dir_url(__FILE__);
 
+        // Set the Autoloader Method
+        spl_autoload_register(array( $this, 'autoload'));
+
+        if (is_admin()) {
+            $admin = new Admin;
+        }
+
         // Clear cache if url param exists.
         $cacheParamExists = array_key_exists($this->cacheFlag, $_REQUEST);
         $cacheParamClear = ($cacheParamExists) ? ($_REQUEST[$this->cacheFlag] == 'clear') : false;
@@ -176,22 +183,15 @@ class wolfnet
             array('init',                  'init'),
             array('wp_enqueue_scripts',    'scripts'),
             array('wp_enqueue_scripts',    'styles'),
-            array('admin_menu',            'adminMenu'),
-            array('admin_init',            'adminInit'),
-            array('admin_enqueue_scripts', 'adminScripts'),
-            array('admin_enqueue_scripts', 'adminStyles'),
             array('widgets_init',          'widgetInit'),
             array('wp_footer',             'footer'),
             array('template_redirect',     'templateRedirect'),
-            array('admin_print_styles',    'adminPrintStyles',  1000),
             array('wp_enqueue_scripts',    'publicStyles',      1000),
             ));
 
         // Register filters.
         $this->addFilter(array(
             array('do_parse_request',     'doParseRequest'),
-            array('mce_external_plugins', 'sbMcePlugin'),
-            array('mce_buttons',          'sbButton'),
             ));
     }
 
@@ -364,158 +364,11 @@ class wolfnet
     }
 
 
-    /**
-     * This method is a callback for the 'admin_init' hook. Any processes which are unique to the
-     * admin interface of WordPress and have not been run as either part of the constructor method
-     * or the 'init' hook are run in this method.
-     * @return void
-     */
-    public function adminInit()
-    {
-
-        // Register Options
-        register_setting($this->optionGroup, $this->productKeyOptionKey);
-        register_setting($this->CssOptionGroup, $this->publicCssOptionKey);
-        register_setting($this->CssOptionGroup, $this->adminCssOptionKey);
-
-        // Register Shortcode Builder Button
-        $canEditPosts = current_user_can('edit_posts');
-        $canEditPages = current_user_can('edit_pages');
-        $richEditing  = get_user_option('rich_editing');
-
-        // Register Ajax Actions
-        $this->registerAdminAjaxActions();
-
-        /* If we are serving up the search manager page we need to get the search manager HTML from
-         * the MLSFinder server now so that we can set cookies. */
-        $pageKeyExists = array_key_exists('page', $_REQUEST);
-        $pageIsSM = ($pageKeyExists) ? ($_REQUEST['page']=='wolfnet_plugin_search_manager') : false;
-        $key = (array_key_exists("keyid", $_REQUEST)) ? $_REQUEST["keyid"] : "1";
-        $productKey = $this->getProductKeyById($key);
-        if(!$this->productKeyIsValid($productKey)) {
-            $productKey = null;
-        }
-        if ($pageKeyExists && $pageIsSM) {
-            $this->smHttp = $this->searchManagerHtml($productKey);
-        }
-
-    }
+    
 
 
-    /**
-     * This method is a callback for the 'admin_menu' hook. This method is used to create any admin
-     * menu pages for the plugin.
-     * @return void
-     */
-    public function adminMenu()
-    {
-        $lvl = 'administrator';
 
-        do_action($this->preHookPrefix . 'createAdminPages'); // Legacy hook
-
-        $pgs = array(
-            array(
-                'title' => 'WolfNet <span class="wolfnet_sup">&reg;</span>',
-                'key'   => 'wolfnet_plugin_settings',
-                'icon'  => $this->url . 'img/wp_wolfnet_nav.png',
-                ),
-            array(
-                'title' => 'General Settings',
-                'key'   => 'wolfnet_plugin_settings',
-                'cb'    => array(&$this, 'amSettingsPage')
-                ),
-            array(
-                'title' => 'Edit CSS',
-                'key'   => 'wolfnet_plugin_css',
-                'cb'    => array(&$this, 'amEditCssPage')
-            ),
-            array(
-                'title' => 'Search Manager',
-                'key'   => 'wolfnet_plugin_search_manager',
-                'cb'    => array(&$this, 'amSearchManagerPage')
-                ),
-            array(
-                'title' => 'Support',
-                'key'   => 'wolfnet_plugin_support',
-                'cb'    => array(&$this, 'amSupportPage')
-                ),
-            );
-
-        add_menu_page(
-            $pgs[0]['title'],
-            $pgs[0]['title'],
-            $lvl,
-            $pgs[0]['key'],
-            null,
-            $pgs[0]['icon']
-            );
-
-        $l = count($pgs);
-        for ($i=1; $i<$l; $i++) {
-
-            add_submenu_page(
-                $pgs[0]['key'],
-                $pgs[$i]['title'],
-                $pgs[$i]['title'],
-                $lvl,
-                $pgs[$i]['key'],
-                $pgs[$i]['cb']
-                );
-
-        }
-
-        do_action($this->postHookPrefix . 'createAdminPages'); // Legacy hook
-
-    }
-
-
-    /**
-     * This method is a callback for the 'admin_enqueue_scripts' hook. Any JavaScript files (and
-     * their dependacies) which are needed by the plugin for admin interfaces are registered in this
-     * method.
-     * @return void
-     */
-    public function adminScripts()
-    {
-        do_action($this->preHookPrefix . 'enqueueAdminResources');
-
-        // JavaScript
-        $scripts = array(
-            'wolfnet-admin',
-            'wolfnet-shortcode-builder',
-            );
-
-        foreach ($scripts as $script) {
-            wp_enqueue_script($script);
-        }
-
-    }
-
-
-    /**
-     * This method is a callback for the 'admin_enqueue_scripts' hook. Any CSS files which are
-     * needed by the plugin for areas areas are registered in this method.
-     * @return void
-     */
-    public function adminStyles()
-    {
-
-        // CSS
-        $styles = array(
-            'jquery-ui',
-            'wolfnet-admin',
-            );
-
-        foreach ($styles as $style) {
-            wp_enqueue_style($style);
-        }
-
-        do_action($this->postHookPrefix . 'enqueueAdminResources');
-
-    }
-
-
-    /**
+     /**
      * This method is a callback for the 'wp_footer' hook. Currently this method is used to display
      * market disclaimer information if necessary for the request.
      * @return void
@@ -604,18 +457,6 @@ class wolfnet
         $wp->query_vars = array();
 
         return (substr($pagename, 0, strlen($prefix)) === $prefix) ? false : $req;
-
-    }
-
-
-    /**
-     * This method is used in the context of admin_print_styles to output custom CSS.
-     * @return void
-     */
-    public function adminPrintStyles()
-    {
-        $adminCss = $this->getAdminCss();
-        echo '<style>' . $adminCss . '</style>';
 
     }
 
@@ -2027,6 +1868,68 @@ class wolfnet
     }
 
 
+    /* PROTECTED METHODS ************************************************************************ */
+    /*  ____            _            _           _   __  __      _   _               _            */
+    /* |  _ \ _ __ ___ | |_ ___  ___| |_ ___  __| | |  \/  | ___| |_| |__   ___   __| |___        */
+    /* | |_) | '__/ _ \| __/ _ \/ __| __/ _ \/ _` | | |\/| |/ _ \ __| '_ \ / _ \ / _` / __|       */
+    /* |  __/| | | (_) | ||  __/ (__| ||  __/ (_| | | |  | |  __/ |_| | | | (_) | (_| \__ \       */
+    /* |_|   |_|  \___/ \__\___|\___|\__\___|\__,_| |_|  |_|\___|\__|_| |_|\___/ \__,_|___/       */
+    /*                                                                                            */
+    /* ****************************************************************************************** */                                                                               
+
+    
+    protected function addAction($action, $callable=null, $priority=null)
+    {
+        if (is_array($action)) {
+            foreach ($action as $act) {
+                if(count($act) == 2) {
+                    $this->addAction($act[0], $act[1]);
+                } else {
+                    $this->addAction($act[0], $act[1], $act[2]);
+                }
+            }
+        }
+        else {
+            if (is_callable($callable) && is_array($callable)) {
+                add_action($action, $callable, $priority);
+            }
+            else if (is_string($callable) && method_exists($this, $callable)) {
+                do_action($this->preHookPrefix . $callable);
+                add_action($action, array(&$this, $callable), $priority);
+                do_action($this->postHookPrefix . $callable);
+            }
+        }
+
+        return $this;
+
+    }
+
+
+    protected function addFilter($filter, $callable=null)
+    {
+        if (is_array($filter)) {
+            foreach ($filter as $flt) {
+                $this->addFilter($flt[0], $flt[1]);
+            }
+        }
+        else {
+            if (is_callable($callable)) {
+                add_filter($filter, $callable);
+            }
+            else if (is_string($callable) && method_exists($this, $callable)) {
+                do_action($this->preHookPrefix . $callable);
+                add_filter($filter, array(&$this, $callable));
+                do_action($this->postHookPrefix . $callable);
+            }
+        }
+
+        return $this;
+
+    }
+     
+
+
+    
     /* PRIVATE METHODS ************************************************************************** */
     /*  ____       _            _         __  __      _   _               _                       */
     /* |  _ \ _ __(_)_   ____ _| |_ ___  |  \/  | ___| |_| |__   ___   __| |___                   */
@@ -2036,7 +1939,27 @@ class wolfnet
     /*                                                                                            */
     /* ****************************************************************************************** */
 
-    private function productKeyIsValid($key=null)
+    /**
+     * This method is used to load additional classes as needed. defined in the construct by 
+     * spl_autoload_register().
+     * @param  string $class The name of the class to load. same as the name of the file in the 
+     * classes directory
+     * @return bool success?
+     */
+    private function autoload($class)
+    {
+        $filename = $class . '.php';
+        $file = $this->dir . '/classes/' . $filename;
+        if (!file_exists($file))
+        {
+            //  echo "could not fined $file.<br>";
+            return false;
+        }
+        include $file;
+        return true;
+    }
+
+    protected function productKeyIsValid($key=null)
     {
         $valid = false;
 
@@ -2274,7 +2197,7 @@ class wolfnet
     }
 
 
-    private function getProductKeyById($id) {
+    protected function getProductKeyById($id) {
         $keyList = json_decode($this->getProductKey());
         foreach($keyList as $key) {
             if($key->id == $id) {
@@ -2290,7 +2213,7 @@ class wolfnet
     }
 
 
-    private function setJsonProductKey($keyString) {
+    protected function setJsonProductKey($keyString) {
         // This takes the old style single key string and returns a JSON formatted key array
         $keyArray = array(
             array(
@@ -2316,13 +2239,6 @@ class wolfnet
     private function getPublicCss() 
     {
         return get_option(trim($this->publicCssOptionKey));
-
-    }
-
-
-    private function getAdminCss() 
-    {
-        return get_option($this->adminCssOptionKey);
 
     }
 
@@ -2895,57 +2811,6 @@ class wolfnet
 
     }
 
-
-    private function addAction($action, $callable=null, $priority=null)
-    {
-        if (is_array($action)) {
-            foreach ($action as $act) {
-                if(count($act) == 2) {
-                    $this->addAction($act[0], $act[1]);
-                } else {
-                    $this->addAction($act[0], $act[1], $act[2]);
-                }
-            }
-        }
-        else {
-            if (is_callable($callable) && is_array($callable)) {
-                add_action($action, $callable, $priority);
-            }
-            else if (is_string($callable) && method_exists($this, $callable)) {
-                do_action($this->preHookPrefix . $callable);
-                add_action($action, array(&$this, $callable), $priority);
-                do_action($this->postHookPrefix . $callable);
-            }
-        }
-
-        return $this;
-
-    }
-
-
-    private function addFilter($filter, $callable=null)
-    {
-        if (is_array($filter)) {
-            foreach ($filter as $flt) {
-                $this->addFilter($flt[0], $flt[1]);
-            }
-        }
-        else {
-            if (is_callable($callable)) {
-                add_filter($filter, $callable);
-            }
-            else if (is_string($callable) && method_exists($this, $callable)) {
-                do_action($this->preHookPrefix . $callable);
-                add_filter($filter, array(&$this, $callable));
-                do_action($this->postHookPrefix . $callable);
-            }
-        }
-
-        return $this;
-
-    }
-
-
     private function registerCustomPostType()
     {
         do_action($this->preHookPrefix . 'registerCustomPostTypes'); // Legacy hook
@@ -3148,7 +3013,7 @@ class wolfnet
     }
 
 
-    private function registerAdminAjaxActions()
+    protected function registerAdminAjaxActions()
     {
         $ajxActions = array(
             'wolfnet_validate_key'            => 'remoteValidateProductKey',
@@ -3250,4 +3115,4 @@ class wolfnet
 }
 
 
-$GLOBALS['wolfnet'] = new wolfnet();
+$GLOBALS['wolfnet'] = new Wolfnet();
