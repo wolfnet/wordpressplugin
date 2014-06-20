@@ -46,68 +46,68 @@ class Wolfnet
      * as part of the Ant build process that is run when the plugin is packaged for distribution.
      * @var string
      */
-    private $version = '{X.X.X}';
+    protected $version = '{X.X.X}';
 
     /**
      * This property is used to set the option group for the plugin which creates a namespaced
      * collection of variables which are used in saving widget settings.
      * @var string
      */
-    private $optionGroup = 'wolfnet';
+    protected $optionGroup = 'wolfnet';
 
     /**
      * This property is used to set the option group for the Edit Css page. It creates a namespaced
      * collection of variables which are used in saving page settings.
      * @var string
      */
-    private $CssOptionGroup = 'wolfnetCss';
+    protected $CssOptionGroup = 'wolfnetCss';
 
     /**
      * This property is used to define the 'search' custom type which is how "Search Manager"
      * searches are saved.
      * @var string
      */
-    private $customPostTypeSearch = 'wolfnet_search';
+    protected $customPostTypeSearch = 'wolfnet_search';
 
     /**
      * This property is a unique idenitfier that is used to define a plugin option which saves the
      * product key used by the plugin to retreive data from the WolfNet API.
      * @var string
      */
-    private $productKeyOptionKey = 'wolfnet_productKey';
+    protected $productKeyOptionKey = 'wolfnet_productKey';
 
     /**
      * This property contains the public CSS as defined in the Edit CSS page.
      * @var string
      */
-    private $publicCssOptionKey = "wolfnetCss_publicCss";
+    protected $publicCssOptionKey = "wolfnetCss_publicCss";
 
     /**
      * This property contains the admin CSS as defined in the Edit CSS page.
      * @var string
      */
-    private $adminCssOptionKey = "wolfnetCss_adminCss";
+    protected $adminCssOptionKey = "wolfnetCss_adminCss";
 
     /**
      * This property is a unique identifier for a value in the WordPress Transient API where
      * references to other transient values are stored.
      * @var string
      */
-    private $transientIndexKey = 'wolfnet_transients';
+    protected $transientIndexKey = 'wolfnet_transients';
 
     /**
      * The maximum amount of time a wolfnet value should be stored in the as a transient object.
      * Currently set to 1 week.
      * @var integer
      */
-    private $transientMaxExpiration = 604800;
+    protected $transientMaxExpiration = 604800;
 
     /**
      * This property defines a the request parameter which is used to determine if the values which
      * are cached in the Transient API should be cleared.
      * @var string
      */
-    private $cacheFlag = '-wolfnet-cache';
+    protected $cacheFlag = '-wolfnet-cache';
 
     /**
      * This property is used to prefix custom hooks which are defined in the plugin. Specifically
@@ -121,7 +121,7 @@ class Wolfnet
      * this prefix is used for hooks which are executed after a certain portion of code.
      * @var string
      */
-    private $postHookPrefix = 'wolfnet_post_';
+    protected $postHookPrefix = 'wolfnet_post_';
 
 
     /**
@@ -129,18 +129,22 @@ class Wolfnet
      * current user.
      * @var string
      */
-    private $requestSessionKey = 'wntSessionKey';
+    protected $requestSessionKey = 'wntSessionKey';
 
     /**
      * This property is used to determine how long a WNT session should last.
      * @var integer
      */
-    private $sessionLength = 3600; // one hour
+    protected $sessionLength = 3600; // one hour
 
-    private $smHttp = null;
+    protected $smHttp = null;
 
-    private $serviceUrl = 'http://services.mlsfinder.com/v1';
+    protected $serviceUrl = 'http://services.mlsfinder.com/v1';
 
+  
+    protected $url;
+
+    protected $pluginFile = __FILE__;
 
     /* Constructor Method *********************************************************************** */
     /*   ____                _                   _                                                */
@@ -159,7 +163,8 @@ class Wolfnet
     public function __construct()
     {
         $this->dir = dirname(__FILE__);
-        $this->url = plugin_dir_url(__FILE__);
+        //$this->url = plugin_dir_url(__FILE__);
+        $this->setUrl();
 
         // Set the Autoloader Method
         spl_autoload_register(array( $this, 'autoload'));
@@ -168,15 +173,7 @@ class Wolfnet
             $admin = new Admin;
         }
 
-        // Clear cache if url param exists.
-        $cacheParamExists = array_key_exists($this->cacheFlag, $_REQUEST);
-        $cacheParamClear = ($cacheParamExists) ? ($_REQUEST[$this->cacheFlag] == 'clear') : false;
-        if ($cacheParamExists && $cacheParamClear) {
-            $this->clearTransients();
-        }
 
-        register_activation_hook(__FILE__, array($this, 'activate'));
-        register_deactivation_hook(__FILE__, array($this, 'deactivate'));
 
         // Register actions.
         $this->addAction(array(
@@ -212,29 +209,7 @@ class Wolfnet
     /*                                                                                            */
     /* ****************************************************************************************** */
 
-    public function activate()
-    {
-        // Check for legacy transient data and remove it if it exists.
-        $indexkey = 'wppf_cache_metadata';
-        $metaData = get_transient($indexkey);
 
-        if (is_array($metaData)) {
-            foreach ($metaData as $key => $data) {
-                delete_transient($key);
-            }
-        }
-
-        delete_transient($indexkey);
-
-    }
-
-
-    public function deactivate()
-    {
-        // Clear out all transient data as it is purely for caching and performance.
-        $this->deleteTransientIndex();
-
-    }
 
 
     /**
@@ -1877,6 +1852,11 @@ class Wolfnet
     /*                                                                                            */
     /* ****************************************************************************************** */                                                                               
 
+
+    protected function setUrl()
+    {
+        $this->url = plugin_dir_url(__FILE__);
+    }
     
     protected function addAction($action, $callable=null, $priority=null)
     {
@@ -1926,8 +1906,29 @@ class Wolfnet
         return $this;
 
     }
-     
 
+
+    protected function transientIndex($data=null)
+    {
+        $key = $this->transientIndexKey;
+
+        // Set transient index data.
+        if ($data !== null && is_array($data)) {
+            set_transient($key, $data, $this->transientMaxExpiration);
+        }
+        // Get transient index data.
+        else {
+            $data = get_transient($key);
+
+            if ($data === false) {
+                $data = $this->transientIndex(array());
+            }
+
+        }
+
+        return $data;
+
+    }
 
     
     /* PRIVATE METHODS ************************************************************************** */
@@ -2335,51 +2336,6 @@ class Wolfnet
         return $data;
 
     }
-
-
-    private function transientIndex($data=null)
-    {
-        $key = $this->transientIndexKey;
-
-        // Set transient index data.
-        if ($data !== null && is_array($data)) {
-            set_transient($key, $data, $this->transientMaxExpiration);
-        }
-        // Get transient index data.
-        else {
-            $data = get_transient($key);
-
-            if ($data === false) {
-                $data = $this->transientIndex(array());
-            }
-
-        }
-
-        return $data;
-
-    }
-
-
-    private function deleteTransientIndex()
-    {
-        $this->clearTransients();
-        delete_transient($this->transientIndexKey);
-
-    }
-
-
-    private function clearTransients()
-    {
-        $index = $this->transientIndex();
-
-        foreach ($index as $key => $value) {
-            delete_transient($key);
-        }
-
-        $this->transientIndex(array());
-
-    }
-
 
     private function augmentListingData(&$listing)
     {

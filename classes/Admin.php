@@ -7,6 +7,22 @@ class Admin extends Wolfnet
 {
     public function __construct()
     {
+        // sets url
+        $this->setUrl(); 
+
+
+        register_activation_hook( $this->pluginFile, array($this, 'activate' ));
+        register_deactivation_hook( $this->pluginFile, array($this, 'deactivate' ));
+       
+        //error_log($this->pluginFile);
+        
+        // Clear cache if url param exists.
+        $cacheParamExists = array_key_exists($this->cacheFlag, $_REQUEST);
+        $cacheParamClear = ($cacheParamExists) ? ($_REQUEST[$this->cacheFlag] == 'clear') : false;
+        if ($cacheParamExists && $cacheParamClear) {
+            $this->clearTransients();
+        }
+
         // Register admin only actions.
         $this->addAction(array(
             array('admin_menu',            'adminMenu'),
@@ -22,6 +38,54 @@ class Admin extends Wolfnet
             array('mce_buttons',          'sbButton'),
             ));
 
+
+    }
+
+
+    public function activate()
+    {
+        error_log("activating");
+        // Check for legacy transient data and remove it if it exists.
+        $indexkey = 'wppf_cache_metadata';
+        $metaData = get_transient($indexkey);
+
+        if (is_array($metaData)) {
+            foreach ($metaData as $key => $data) {
+                delete_transient($key);
+            }
+        }
+
+        delete_transient($indexkey);
+
+    }
+
+
+    public function deactivate()
+    {
+        error_log("deactivating");
+        // Clear out all transient data as it is purely for caching and performance.
+        $this->deleteTransientIndex();
+
+    }
+
+    private function deleteTransientIndex()
+    {
+        error_log("deleteTransientIndexing");
+        $this->clearTransients();
+        delete_transient($this->transientIndexKey);
+
+    }
+
+
+    private function clearTransients()
+    {
+        $index = $this->transientIndex();
+
+        foreach ($index as $key => $value) {
+            delete_transient($key);
+        }
+
+        $this->transientIndex(array());
 
     }
 
@@ -118,11 +182,19 @@ class Admin extends Wolfnet
 
         do_action($this->preHookPrefix . 'createAdminPages'); // Legacy hook
 
+        // echo " URL: ". $this->url;
+        //error_log ("Admin  adminMenu tom: ". $this->tom );
+        
+        // error_log ("Admin  adminMenu testUrl(): ". $this->testUrl() );
+        
+        // error_log ("Admin  adminMenu url: ". $this->url );
+        
+       
         $pgs = array(
             array(
                 'title' => 'WolfNet <span class="wolfnet_sup">&reg;</span>',
                 'key'   => 'wolfnet_plugin_settings',
-                'icon'  => $this->url . 'img/wp_wolfnet_nav.png',
+                'icon'  => $this->url . '/img/wp_wolfnet_nav.png',
                 ),
             array(
                 'title' => 'General Settings',
