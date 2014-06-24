@@ -3,12 +3,29 @@
 /**
  * This class us used when the user is logged in as the admin user
  */
-class Admin extends Wolfnet
+class Wolfnet_Admin extends Wolfnet
 {
-    public function __construct()
+
+    /**
+     * This property defines a the request parameter which is used to determine if the values which
+     * are cached in the Transient API should be cleared.
+     * @var string
+     */
+    protected $cacheFlag = '-wolfnet-cache';
+
+    /**
+     * prepare the class for use.
+     * @param Object $Wolfnet Pass in an instance or the Wolnet class 
+     *
+     */
+    public function __construct($Wolfnet)
     {
         // sets url
         $this->setUrl(); 
+
+        $this->Wolfnet = $Wolfnet;
+
+        $this->Api = $Wolfnet->Api;
 
 
         register_activation_hook( $this->pluginFile, array($this, 'activate' ));
@@ -72,20 +89,20 @@ class Admin extends Wolfnet
     {
         error_log("deleteTransientIndexing");
         $this->clearTransients();
-        delete_transient($this->transientIndexKey);
+        delete_transient($this->Wolfnet->Api->transientIndexKey);
 
     }
 
 
     private function clearTransients()
     {
-        $index = $this->transientIndex();
+        $index = $this->Wolfnet->Api->transientIndex();
 
         foreach ($index as $key => $value) {
             delete_transient($key);
         }
 
-        $this->transientIndex(array());
+        $this->Wolfnet->Api->transientIndex(array());
 
     }
 
@@ -162,7 +179,7 @@ class Admin extends Wolfnet
         $pageIsSM = ($pageKeyExists) ? ($_REQUEST['page']=='wolfnet_plugin_search_manager') : false;
         $key = (array_key_exists("keyid", $_REQUEST)) ? $_REQUEST["keyid"] : "1";
         $productKey = $this->getProductKeyById($key);
-        if(!$this->productKeyIsValid($productKey)) {
+        if(!$this->Wolfnet->Api->productKeyIsValid($productKey)) {
             $productKey = null;
         }
         if ($pageKeyExists && $pageIsSM) {
@@ -257,7 +274,7 @@ class Admin extends Wolfnet
     }
 
 
-    private function getAdminCss() 
+    public function getAdminCss() 
     {
         return get_option($this->adminCssOptionKey);
 
