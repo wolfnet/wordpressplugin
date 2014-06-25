@@ -15,23 +15,22 @@ class Wolfnet_Admin extends Wolfnet
 
     /**
      * prepare the class for use.
-     * @param Object $Wolfnet Pass in an instance or the Wolnet class 
+     * @param Object $wolfnet Pass in an instance or the Wolnet class 
      *
      */
-    public function __construct($Wolfnet)
+    public function __construct($wolfnet)
     {
         // sets url
         $this->setUrl(); 
 
-        $this->Wolfnet = $Wolfnet;
+        $this->wolfnet = $wolfnet;
 
-        $this->Api = $Wolfnet->Api;
+        $this->api = $wolfnet->api;
 
 
         register_activation_hook( $this->pluginFile, array($this, 'activate' ));
         register_deactivation_hook( $this->pluginFile, array($this, 'deactivate' ));
-       
-        //error_log($this->pluginFile);
+
         
         // Clear cache if url param exists.
         $cacheParamExists = array_key_exists($this->cacheFlag, $_REQUEST);
@@ -89,20 +88,20 @@ class Wolfnet_Admin extends Wolfnet
     {
         error_log("deleteTransientIndexing");
         $this->clearTransients();
-        delete_transient($this->Wolfnet->Api->transientIndexKey);
+        delete_transient($this->wolfnet->api->transientIndexKey);
 
     }
 
 
     private function clearTransients()
     {
-        $index = $this->Wolfnet->Api->transientIndex();
+        $index = $this->wolfnet->api->transientIndex();
 
         foreach ($index as $key => $value) {
             delete_transient($key);
         }
 
-        $this->Wolfnet->Api->transientIndex(array());
+        $this->wolfnet->api->transientIndex(array());
 
     }
 
@@ -179,7 +178,7 @@ class Wolfnet_Admin extends Wolfnet
         $pageIsSM = ($pageKeyExists) ? ($_REQUEST['page']=='wolfnet_plugin_search_manager') : false;
         $key = (array_key_exists("keyid", $_REQUEST)) ? $_REQUEST["keyid"] : "1";
         $productKey = $this->getProductKeyById($key);
-        if(!$this->Wolfnet->Api->productKeyIsValid($productKey)) {
+        if(!$this->wolfnet->api->productKeyIsValid($productKey)) {
             $productKey = null;
         }
         if ($pageKeyExists && $pageIsSM) {

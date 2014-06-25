@@ -41,15 +41,18 @@ class Wolfnet_Api
 
     private $url;
 
-    function __construct($Wolfnet)
+    /**
+     * This class expects an instance of the the main Wolfnet plugin class to be injected
+     * @param Object $wolfnet an instance of the Wolfnet class
+     */
+    function __construct($wolfnet)
     {
-        $this->version = $Wolfnet->version;
-        $this->url = $Wolfnet->url;
 
-        // Good Idea?
-        $this->Wolfnet = $Wolfnet;
+        $this->wolfnet = $wolfnet;
 
     }
+
+
     /* Featured Listings ************************************************************************ */
 
     public function getFeaturedListings(array $criteria=array())
@@ -58,7 +61,7 @@ class Wolfnet_Api
         $criteria['max_results'] = $criteria['maxresults'];
         $criteria['owner_type']  = $criteria['ownertype'];
 
-        $productKey = $this->Wolfnet->getProductKeyById($criteria['keyid']);
+        $productKey = $this->wolfnet->getProductKeyById($criteria['keyid']);
 
         $url = $this->serviceUrl . '/propertyBar/' . $productKey . '.json';
         $url = $this->buildUrl($url, $criteria);
@@ -66,6 +69,7 @@ class Wolfnet_Api
         return $this->getApiData($url, 900)->listings;
 
     }
+
 
     public function getListings(array $criteria=array())
     {
@@ -85,7 +89,7 @@ class Wolfnet_Api
             unset($criteria[$key]);
         }
 
-        $productKey = $this->Wolfnet->getProductKeyById($criteria['keyid']);
+        $productKey = $this->wolfnet->getProductKeyById($criteria['keyid']);
 
         $url = $this->serviceUrl . '/propertyGrid/' . $productKey . '.json';
         $url = $this->buildUrl($url, $criteria);
@@ -104,76 +108,6 @@ class Wolfnet_Api
         return $data->listings;
 
     }
-
-
-    // public function convertDataType($value)
-    // {
-    //     if (is_array($value)) {
-    //         foreach ($value as $key => $val) {
-    //             $value[$key] = $this->convertDataType($val);
-    //         }
-    //     }
-    //     else if (is_string($value) && ($value==='true' || $value==='false')) {
-    //         return ($value==='true') ? true : false;
-    //     }
-    //     else if (is_string($value) && @$int = (integer) $value) {
-    //         return $int;
-    //     }
-    //     else if (is_string($value) && @$float = (float) $value) {
-    //         return $float;
-    //     }
-
-    //     return $value;
-
-    // }
-
-
-    // private function getDefaultProductKey() {
-    //     $productKey = json_decode($this->getProductKey());
-    //     return $productKey[0]->key;
-    // }
-
-
-    // protected function setJsonProductKey($keyString) {
-    //     // This takes the old style single key string and returns a JSON formatted key array
-    //     $keyArray = array(
-    //         array(
-    //             "id" => "1",
-    //             "key" => $keyString,
-    //             "label" => ""
-    //         )
-    //     );
-    //     return json_encode($keyArray);
-    // }
-
-
-    // private function isJsonEncoded($str) 
-    // {
-    //     if(is_array(json_decode($str)) || is_object(json_decode($str))) {
-    //         return true;
-    //     } else {
-    //         return false;
-    //     }
-    // }
-    
-    // private function getProductKey()
-    // {
-    //     $key = get_option(trim($this->productKeyOptionKey));
-    //     if(!$this->isJsonEncoded($key)) {
-    //         $key = $this->setJsonProductKey($key);
-    //     }
-    //     return $key;
-    // }
-
-
-    // protected function getProductKeyById($id) {
-    //     $keyList = json_decode($this->getProductKey());
-    //     foreach($keyList as $key) {
-    //         if($key->id == $id) {
-    //             return $key->key;
-    //         }
-    //     }
-    // }
 
 
     private function buildUrl($url='', array $params=array())
@@ -222,7 +156,7 @@ class Wolfnet_Api
 
         // Add some extra values to the URL for metrics purposes.
         $url = $this->buildUrl($url, array(
-            'pluginVersion' => $this->version,
+            'pluginVersion' => $this->wolfnet->version,
             'phpVersion'    => phpversion(),
             'wpVersion'     => $wp_version,
             ));
@@ -337,7 +271,7 @@ class Wolfnet_Api
         $args['map_start_lat'] = $data->settings->MAP_START_LAT;
         $args['map_start_lng'] = $data->settings->MAP_START_LNG;
         $args['map_start_scale'] = $data->settings->MAP_START_SCALE;
-        $args['houseoverIcon'] = $this->url . 'img/houseover.png';
+        $args['houseoverIcon'] = $this->wolfnet->url . 'img/houseover.png';
         $args['houseoverData'] = $this->getHouseoverData($listingsData,$data->settings->SHOWBROKERIMAGEHO);
 
         return $args;
@@ -345,7 +279,8 @@ class Wolfnet_Api
     }
     
 
-        private function getHouseoverData($listingsData,$showBrokerImage)
+    // ttt move to template
+    private function getHouseoverData($listingsData,$showBrokerImage)
     {
 
         $houseoverData = array();
@@ -522,20 +457,6 @@ class Wolfnet_Api
         return $valid;
 
     }
-
-
-    // private function isSavedKey($find) {
-    //     $keyList = json_decode($this->getProductKey());
-
-    //     foreach($keyList as $key) {
-    //         if($key->key == $find) {
-    //             return true;
-    //         }
-    //     }
-
-    //     return false;
-    // }
-
 
 
     public function getMarketDisclaimer($productKey=null)
