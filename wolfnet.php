@@ -137,6 +137,7 @@ class Wolfnet
         spl_autoload_register(array( $this, 'autoload'));
 
         $this->api = new Wolfnet_Api($this);
+        
         if (is_admin()) {
             $Admin = new Wolfnet_Admin($this);
         }
@@ -394,6 +395,98 @@ class Wolfnet
 
         return (substr($pagename, 0, strlen($prefix)) === $prefix) ? false : $req;
 
+    }
+
+        public function searchManagerHtml($productKey=null)
+    {
+        global $wp_version;
+        $baseUrl = $this->api->getBaseUrl($productKey);
+        $maptracksEnabled = $this->api->getMaptracksEnabled($productKey);
+
+        if (!strstr($baseUrl, 'index.cfm')) {
+            if (substr($baseUrl, strlen($baseUrl) - 1) != '/') {
+                $baseUrl .= '/';
+            }
+
+            $baseUrl .= 'index.cfm';
+
+        }
+
+        /* commenting out map mode in search manager until we better figure out session constraints..
+        if (!array_key_exists('search_mode', $_GET)) {
+            $_GET['search_mode'] = ($maptracksEnabled) ? 'map' : 'form';
+        } */
+
+        $_GET['search_mode'] = 'form';
+
+        $url = $baseUrl
+             . ((!strstr($baseUrl, '?')) ? '?' : '')
+             . '&action=wpshortcodebuilder';
+
+        $resParams = array(
+            'page',
+            'action',
+            'market_guid',
+            'reinit',
+            'show_header_footer'
+            );
+
+        foreach ($_GET as $param => $paramValue) {
+            if (!array_search($param, $resParams)) {
+                $paramValue = urlencode($this->api->html_entity_decode_numeric($paramValue));
+                $url .= "&{$param}={$paramValue}";
+            }
+        }
+
+        $reqHeaders = array(
+            'cookies'    => $this->searchManagerCookies(),
+            'timeout'    => 180,
+            'user-agent' => 'WordPress/' . $wp_version,
+            );
+
+        $http = wp_remote_get($url, $reqHeaders);
+
+        if (!is_wp_error($http)) {
+
+            $http['request'] = array(
+                'url' => $url,
+                'headers' => $reqHeaders,
+                );
+
+            if ($http['response']['code'] == '200') {
+                $this->searchManagerCookies($http['cookies']);
+                $http['body'] = $this->removeJqueryFromHTML($http['body']);
+
+                return $http;
+
+            }
+            else {
+                $http['body'] = '';
+                return $http;
+            }
+
+        }
+        else {
+            return array('body' => '');
+
+        }
+
+    }
+
+
+    public function getProductKeyById($id) {
+        $keyList = json_decode($this->getProductKey());
+        foreach($keyList as $key) {
+            if($key->id == $id) {
+                return $key->key;
+            }
+        }
+    }
+
+
+    public function getDefaultProductKey() {
+        $productKey = json_decode($this->getProductKey());
+        return $productKey[0]->key;
     }
 
 
@@ -1567,16 +1660,10 @@ class Wolfnet
             'instance_id' => str_replace('.', '', uniqid('wolfnet_quickSearch_')),
             'markets'     => $markets,
             'keyids'      => $keyids,
-            // 'selectedKey' => ???,
             );
 
-        // ttt - how to get selectedKey
-
+        
         $args = array_merge($defaultArgs, $args);
-
-        // echo '<pre>';
-        // print_r($args);        
-        // echo '</pre>';
 
         return $this->parseTemplate('template/quickSearchOptions.php', $args);
 
@@ -1826,6 +1913,38 @@ class Wolfnet
     }
 
 
+    protected function registerAdminAjaxActions()
+    {
+        $ajxActions = array(
+            'wolfnet_validate_key'            => 'remoteValidateProductKey',
+            'wolfnet_saved_searches'          => 'remoteGetSavedSearches',
+            'wolfnet_save_search'             => 'remoteSaveSearch',
+            'wolfnet_delete_search'           => 'remoteDeleteSearch',
+            'wolfnet_scb_options_featured'    => 'remoteShortcodeBuilderOptionsFeatured',
+            'wolfnet_scb_options_grid'        => 'remoteShortcodeBuilderOptionsGrid',
+            'wolfnet_scb_options_list'        => 'remoteShortcodeBuilderOptionsList',
+            'wolfnet_scb_results_summary'     => 'remoteShortcodeBuilderOptionsResultsSummary',
+            'wolfnet_scb_options_quicksearch' => 'remoteShortcodeBuilderOptionsQuickSearch',
+            'wolfnet_scb_savedsearch'         => 'remoteShortcodeBuilderSavedSearch',
+            'wolfnet_content'                 => 'remoteContent',
+            'wolfnet_content_header'          => 'remoteContentHeader',
+            'wolfnet_content_footer'          => 'remoteContentFooter',
+            'wolfnet_listings'                => 'remoteListings',
+            'wolfnet_get_listings'            => 'remoteListingsGet',
+            'wolfnet_css'                     => 'remotePublicCss',
+            'wolfnet_price_range'             => 'remotePriceRange',
+            'wolfnet_market_name'             => 'remoteGetMarketName',
+            'wolfnet_map_enabled'             => 'remoteMapEnabled',
+            'wolfnet_base_url'                => 'remoteGetBaseUrl',
+            );
+
+        foreach ($ajxActions as $action => $method) {
+            $this->addAction('wp_ajax_' . $action, array(&$this, $method));
+        }
+
+    }
+
+
     
     /* PRIVATE METHODS ************************************************************************** */
     /*  ____       _            _         __  __      _   _               _                       */
@@ -1867,83 +1986,6 @@ class Wolfnet
         }
 
         return false;
-    }
-
-
-    public function searchManagerHtml($productKey=null)
-    {
-        global $wp_version;
-        $baseUrl = $this->api->getBaseUrl($productKey);
-        $maptracksEnabled = $this->api->getMaptracksEnabled($productKey);
-
-        if (!strstr($baseUrl, 'index.cfm')) {
-            if (substr($baseUrl, strlen($baseUrl) - 1) != '/') {
-                $baseUrl .= '/';
-            }
-
-            $baseUrl .= 'index.cfm';
-
-        }
-
-        /* commenting out map mode in search manager until we better figure out session constraints..
-        if (!array_key_exists('search_mode', $_GET)) {
-            $_GET['search_mode'] = ($maptracksEnabled) ? 'map' : 'form';
-        } */
-
-        $_GET['search_mode'] = 'form';
-
-        $url = $baseUrl
-             . ((!strstr($baseUrl, '?')) ? '?' : '')
-             . '&action=wpshortcodebuilder';
-
-        $resParams = array(
-            'page',
-            'action',
-            'market_guid',
-            'reinit',
-            'show_header_footer'
-            );
-
-        foreach ($_GET as $param => $paramValue) {
-            if (!array_search($param, $resParams)) {
-                $paramValue = urlencode($this->api->html_entity_decode_numeric($paramValue));
-                $url .= "&{$param}={$paramValue}";
-            }
-        }
-
-        $reqHeaders = array(
-            'cookies'    => $this->searchManagerCookies(),
-            'timeout'    => 180,
-            'user-agent' => 'WordPress/' . $wp_version,
-            );
-
-        $http = wp_remote_get($url, $reqHeaders);
-
-        if (!is_wp_error($http)) {
-
-            $http['request'] = array(
-                'url' => $url,
-                'headers' => $reqHeaders,
-                );
-
-            if ($http['response']['code'] == '200') {
-                $this->searchManagerCookies($http['cookies']);
-                $http['body'] = $this->removeJqueryFromHTML($http['body']);
-
-                return $http;
-
-            }
-            else {
-                $http['body'] = '';
-                return $http;
-            }
-
-        }
-        else {
-            return array('body' => '');
-
-        }
-
     }
 
 
@@ -2017,22 +2059,6 @@ class Wolfnet
             $key = $this->setJsonProductKey($key);
         }
         return $key;
-    }
-
-    
-    public function getProductKeyById($id) {
-        $keyList = json_decode($this->getProductKey());
-        foreach($keyList as $key) {
-            if($key->id == $id) {
-                return $key->key;
-            }
-        }
-    }
-
-    
-    private function getDefaultProductKey() {
-        $productKey = json_decode($this->getProductKey());
-        return $productKey[0]->key;
     }
 
    
@@ -2516,38 +2542,6 @@ class Wolfnet
 
         foreach ($ajxActions as $action => $method) {
             $this->addAction('wp_ajax_nopriv_' . $action, array(&$this, $method));
-        }
-
-    }
-
-
-    protected function registerAdminAjaxActions()
-    {
-        $ajxActions = array(
-            'wolfnet_validate_key'            => 'remoteValidateProductKey',
-            'wolfnet_saved_searches'          => 'remoteGetSavedSearches',
-            'wolfnet_save_search'             => 'remoteSaveSearch',
-            'wolfnet_delete_search'           => 'remoteDeleteSearch',
-            'wolfnet_scb_options_featured'    => 'remoteShortcodeBuilderOptionsFeatured',
-            'wolfnet_scb_options_grid'        => 'remoteShortcodeBuilderOptionsGrid',
-            'wolfnet_scb_options_list'        => 'remoteShortcodeBuilderOptionsList',
-            'wolfnet_scb_results_summary'     => 'remoteShortcodeBuilderOptionsResultsSummary',
-            'wolfnet_scb_options_quicksearch' => 'remoteShortcodeBuilderOptionsQuickSearch',
-            'wolfnet_scb_savedsearch'         => 'remoteShortcodeBuilderSavedSearch',
-            'wolfnet_content'                 => 'remoteContent',
-            'wolfnet_content_header'          => 'remoteContentHeader',
-            'wolfnet_content_footer'          => 'remoteContentFooter',
-            'wolfnet_listings'                => 'remoteListings',
-            'wolfnet_get_listings'            => 'remoteListingsGet',
-            'wolfnet_css'                     => 'remotePublicCss',
-            'wolfnet_price_range'             => 'remotePriceRange',
-            'wolfnet_market_name'             => 'remoteGetMarketName',
-            'wolfnet_map_enabled'             => 'remoteMapEnabled',
-            'wolfnet_base_url'                => 'remoteGetBaseUrl',
-            );
-
-        foreach ($ajxActions as $action => $method) {
-            $this->addAction('wp_ajax_' . $action, array(&$this, $method));
         }
 
     }
