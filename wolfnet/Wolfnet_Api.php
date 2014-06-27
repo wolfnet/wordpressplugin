@@ -52,13 +52,18 @@ class Wolfnet_Api
     private $requestSessionKey = 'wntSessionKey';
 
     /**
+     * This property contains the admin CSS as defined in the Edit CSS page.
+     * @var string
+     */
+    public $adminCssOptionKey = "wolfnetCss_adminCss";
+
+    /**
      * This property is used to determine how long a WNT session should last.
      * @var integer
      */
     private $sessionLength = 3600; // one hour
 
-    private $smHttp = null;
-
+    
     private $url;
 
     /**

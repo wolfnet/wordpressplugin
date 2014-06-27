@@ -2,7 +2,7 @@
 
 /**
  *
- * @title         Wolfnet.php
+ * @title         Wolfnet_Admin.php
  * @copyright     Copyright (c) 2012, 2013, WolfNet Technologies, LLC
  *
  *                This program is free software; you can redistribute it and/or
@@ -28,6 +28,12 @@ class Wolfnet_Admin extends Wolfnet
 {
 
     /**
+     * This property contains the admin CSS as defined in the Edit CSS page.
+     * @var string
+     */
+    public $adminCssOptionKey = "wolfnetCss_adminCss";
+
+    /**
      * This property defines a the request parameter which is used to determine if the values which
      * are cached in the Transient API should be cleared.
      * @var string
@@ -46,7 +52,9 @@ class Wolfnet_Admin extends Wolfnet
 
         $this->wolfnet = $wolfnet;
 
+        // ttt check and change $this->api to $this->wolfnet->api then remove this line
         $this->api = $wolfnet->api;
+        $this->views = $wolfnet->views;
 
 
         register_activation_hook( $this->pluginFile, array($this, 'activate' ));
@@ -202,10 +210,11 @@ class Wolfnet_Admin extends Wolfnet
         if(!$this->wolfnet->api->productKeyIsValid($productKey)) {
             $productKey = null;
         }
+        
         if ($pageKeyExists && $pageIsSM) {
-            $this->smHttp = $this->searchManagerHtml($productKey);
+            $this->wolfnet->smHttp = $this->searchManagerHtml($productKey);
         }
-
+     
     }
 
     /**
@@ -236,22 +245,22 @@ class Wolfnet_Admin extends Wolfnet
             array(
                 'title' => 'General Settings',
                 'key'   => 'wolfnet_plugin_settings',
-                'cb'    => array(&$this, 'amSettingsPage')
+                'cb'    => array(&$this->wolfnet->views, 'amSettingsPage')
                 ),
             array(
                 'title' => 'Edit CSS',
                 'key'   => 'wolfnet_plugin_css',
-                'cb'    => array(&$this, 'amEditCssPage')
+                'cb'    => array(&$this->wolfnet->views, 'amEditCssPage')
             ),
             array(
                 'title' => 'Search Manager',
                 'key'   => 'wolfnet_plugin_search_manager',
-                'cb'    => array(&$this, 'amSearchManagerPage')
+                'cb'    => array(&$this->wolfnet->views, 'amSearchManagerPage')
                 ),
             array(
                 'title' => 'Support',
                 'key'   => 'wolfnet_plugin_support',
-                'cb'    => array(&$this, 'amSupportPage')
+                'cb'    => array(&$this->wolfnet->views, 'amSupportPage')
                 ),
             );
 
@@ -282,23 +291,25 @@ class Wolfnet_Admin extends Wolfnet
 
     }
 
-     /**
+
+    // ttt moved to views
+    /**
      * This method is used in the context of admin_print_styles to output custom CSS.
      * @return void
      */
-    public function adminPrintStyles()
-    {
-        $adminCss = $this->getAdminCss();
-        echo '<style>' . $adminCss . '</style>';
+    // public function adminPrintStyles()
+    // {
+    //     $adminCss = $this->getAdminCss();
+    //     echo '<style>' . $adminCss . '</style>';
 
-    }
+    // }
 
+    // ttt moving to views
+    // public function getAdminCss() 
+    // {
+    //     return get_option($this->adminCssOptionKey);
 
-    public function getAdminCss() 
-    {
-        return get_option($this->adminCssOptionKey);
-
-    }
+    // }
 
 
 }

@@ -60,7 +60,7 @@ class Wolfnet_FeaturedListingsWidget extends Wolfnet_AbstractWidget
     {
         $options = $this->getOptions($instance);
 
-        echo $this->plugin->featuredListingsOptionsFormView($options);
+        echo $this->plugin->views->featuredListingsOptionsFormView($options);
 
     }
 

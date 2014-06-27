@@ -36,7 +36,7 @@ $zoomLevel = $map_start_scale;
 $mapId     = uniqid('wntMapTrack');
 $hideMapId = uniqid('hideMap');
 $showMapId = uniqid('showMap');
-$mapIcon   = $this->url . 'img/showmap.gif'
+$mapIcon   = $url . 'img/showmap.gif'
 ?>
 
 <div id="<?php echo $hideMapId; ?>" >
