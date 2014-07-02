@@ -1875,6 +1875,11 @@ class Wolfnet
 
     }
 
+    // remove this. for testing
+    private function testMethod ()
+    {
+        return true;
+    }
 
     private function getWpHeader ()
     {
