@@ -1,10 +1,12 @@
 <?php
-// a very simple example test.
-// 
+/**
+ * Unit tests for the WolfNet IDX for WordPress plugin
+ */
+
 class Test_Wolfnet extends WP_UnitTestCase 
 {
     /**
-     * Performs wordpres setup and pre cleanup. add to this method as needed. 
+     * Performs WordPress setup and pre test cleanup. add to this method as needed. 
      */
     function setUp() 
     {
@@ -16,7 +18,7 @@ class Test_Wolfnet extends WP_UnitTestCase
     }
 
     /**
-     * Cleans up after you, removeing any options, posts, etc. you may have added. add to as needed.
+     * Cleans up after tests, removing any options, posts, etc. we may have added as part of a test.
      */
     function tearDown() 
     {
@@ -31,11 +33,13 @@ class Test_Wolfnet extends WP_UnitTestCase
         $this->assertTrue( is_plugin_active('wolfnet-idx-for-wordpress/wolfnet.php') );
     }
 
-
+    /**
+     * Are the public scripts being enqueued?
+     */
     function testScripts() 
     {
         //$GLOBALS['wolfnet']->scripts();
-        $this->wolfnet->scripts(); // NOTE: Seems like we should have to call this. 
+        $this->wolfnet->scripts(); 
         $scripts = array(
             'smooth-div-scroll',
             'wolfnet-scrolling-items',
@@ -53,6 +57,9 @@ class Test_Wolfnet extends WP_UnitTestCase
     
     }
 
+    /**
+     * Are the public styles being enqueued?
+     */
     function testStyles() 
     {
         $this->wolfnet->styles();
@@ -60,6 +67,9 @@ class Test_Wolfnet extends WP_UnitTestCase
 
     }
 
+    /**
+     * are the widgets being initialized?
+     */
     function testWidgetInit() 
     {
         global $wp_widget_factory;
@@ -81,6 +91,9 @@ class Test_Wolfnet extends WP_UnitTestCase
     }
 
 
+    /**
+     * test if we are generating the header for remote used by the Wolfnet back office
+     */
     function testGetWpHeader()
     {
         // to access private methods
@@ -106,6 +119,9 @@ class Test_Wolfnet extends WP_UnitTestCase
     }
 
 
+    /**
+     * Test if we are generating the footer.
+     */
     function testGetWpFooter()
     {
         $reflection_class = new ReflectionClass("wolfnet");
@@ -121,5 +137,19 @@ class Test_Wolfnet extends WP_UnitTestCase
 
     }
 
+    /**
+     * Test to see if we are getting the search manager form
+     */
+    function testSearchManagerHtml() {
+        global $GLOBALS;
+
+        // see if we get the seach form back. The form id: "wntsearchForm"
+        $find_in_form = "wntsearchForm";
+
+        $http = $this->wolfnet->searchManagerHtml($GLOBALS['wnt_tests_options']['api_key_good1']);
+                
+        $this->assertTrue(strpos($http['body'], $find_in_form) !== false);
+
+    }
 }
 

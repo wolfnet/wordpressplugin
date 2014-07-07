@@ -77,8 +77,8 @@ class Wolfnet_Admin extends Wolfnet
             array('admin_print_styles',    'adminPrintStyles',  1000),
             ));
 
-            // Register admin only filters.
-            $this->addFilter(array(
+        // Register admin only filters.
+        $this->addFilter(array(
             array('mce_external_plugins', 'sbMcePlugin'),
             array('mce_buttons',          'sbButton'),
             ));
@@ -89,7 +89,7 @@ class Wolfnet_Admin extends Wolfnet
 
     public function activate()
     {
-        error_log("activating");
+        // error_log("activating");
         // Check for legacy transient data and remove it if it exists.
         $indexkey = 'wppf_cache_metadata';
         $metaData = get_transient($indexkey);
@@ -107,7 +107,7 @@ class Wolfnet_Admin extends Wolfnet
 
     public function deactivate()
     {
-        error_log("deactivating");
+        // error_log("deactivating");
         // Clear out all transient data as it is purely for caching and performance.
         $this->deleteTransientIndex();
 
@@ -115,7 +115,7 @@ class Wolfnet_Admin extends Wolfnet
 
     private function deleteTransientIndex()
     {
-        error_log("deleteTransientIndexing");
+        // error_log("deleteTransientIndexing");
         $this->clearTransients();
         delete_transient($this->wolfnet->api->transientIndexKey);
 
