@@ -461,7 +461,7 @@ class Wolfnet_Api
             $productKey = $key;
         }
         else {
-            $productKey = json_decode($this->getDefaultProductKey());
+            $productKey = json_decode($this->wolfnet->getDefaultProductKey());
         }
 
         $url = $this->serviceUrl . '/validateKey/' . $productKey . '.json';
@@ -487,7 +487,7 @@ class Wolfnet_Api
     public function getMarketDisclaimer($productKey=null)
     {
         if($productKey == null) {
-            $productKey = $this->getDefaultProductKey();
+            $productKey = $this->wolfnet->getDefaultProductKey();
         }
         $url = $this->serviceUrl . '/marketDisclaimer/' . $productKey . '.json';
         $url = $this->buildUrl($url, array('type'=>'search_results'));
