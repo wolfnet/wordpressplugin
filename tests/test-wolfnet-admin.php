@@ -23,7 +23,7 @@ class Test_Wolfnet_Admin extends WP_UnitTestCase
 
 
     /**
-     * Did out setup work?
+     * Did our setup work?
      */
     function testIsAdmin()
     { 
@@ -31,22 +31,92 @@ class Test_Wolfnet_Admin extends WP_UnitTestCase
         $this->assertTrue( is_admin() ) ;
     }
 
-    function testFilters() {
+    
+
+
+    /**
+     * Are our filters registered?
+     */
+    function testFilters() 
+    {
+        // the wordpress array that holds all registered filters
+        global $wp_filter; 
         // filters to check
         $filters = array(
             array('mce_external_plugins', 'sbMcePlugin'),
             array('mce_buttons',          'sbButton'),
             );
         $this->wolfnet->admin->__construct($this->wolfnet); 
-        // global $wp_filters;
-        // echo "Hello";
-        // print_r($wp_filters);
+        global $wp_filter;
 
-        // foreach ($filters as $filter) {
-        //     $this->assertTrue( has_filter( $filter[0], array( &$this, $filter[1] ) !== false ) );
-        // }
+
+        foreach ($filters as $filter) {
+            // we cant use somthing like this because has filter doesn't work with objects:
+            // $this->assertTrue( has_filter( 'mce_buttons', 'Wolfnet_Admin->sbButton' ) !== false );
+            // The registerd "function" (2nd parameter) contains a hash when it is an object method
+
+            // so we have to loop though the filters and find a key with our method as part of the name
+            // loop though each priority level
+            $found = false ;
+            foreach ($wp_filter[ $filter[0] ] as $priority) {
+                if ($found) break;
+                // loop though each registerd filter in the current piority to find our function name in the key
+                foreach ($priority as $fnkey => $fninfo) {
+                    // echo "$fnkey\n";
+                    $regex = '/'. $filter[1] .'$/';
+                    if (preg_match($regex, $fnkey)) {
+                        $found = true;
+                        break;
+                    }
+                }
+            }
+            $this->assertTrue($found);
+        }
 
     }
+
+    /**
+     * Are our actions registered
+     */
+    function testActions() {
+        // the wordpress array that holds all registered actions
+        global $wp_filter;
+        
+
+        // actions to check
+        $actions = array(
+            array('init',                  'init'),
+            array('wp_enqueue_scripts',    'scripts'),
+            array('wp_enqueue_scripts',    'styles'),
+            array('widgets_init',          'widgetInit'),
+            array('wp_footer',             'footer'),
+            array('template_redirect',     'templateRedirect'),
+            array('wp_enqueue_scripts',    'publicStyles',      1000),
+            );
+
+        foreach ($actions as $action) {
+            // see the comments in the testFilters() test for a better idea of what is going on here
+            
+            // loop though each priority level
+            $found = false ;
+            foreach ($wp_filter[ $action[0] ] as $priority) {
+                if ($found) break;
+                // loop though each registerd filter in the current piority to find our function name in the key
+                foreach ($priority as $fnkey => $fninfo) {
+                    // echo "$fnkey\n";
+                    $regex = '/'. $action[1] .'$/';
+                    if (preg_match($regex, $fnkey)) {
+                        $found = true;
+                        break;
+                    }
+                }
+            }
+            $this->assertTrue($found);
+        }
+
+
+    }
+
 
     /**
      * Are the Admin scripts being enqueued?

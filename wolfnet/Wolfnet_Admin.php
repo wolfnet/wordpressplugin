@@ -83,7 +83,6 @@ class Wolfnet_Admin extends Wolfnet
             array('mce_buttons',          'sbButton'),
             ));
 
-
     }
 
 
