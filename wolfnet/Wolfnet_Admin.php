@@ -291,24 +291,23 @@ class Wolfnet_Admin extends Wolfnet
     }
 
 
-    // ttt moved to views
     /**
      * This method is used in the context of admin_print_styles to output custom CSS.
      * @return void
      */
-    // public function adminPrintStyles()
-    // {
-    //     $adminCss = $this->getAdminCss();
-    //     echo '<style>' . $adminCss . '</style>';
+    public function adminPrintStyles()
+    {
+        $adminCss = $this->getAdminCss();
+        echo '<style>' . $adminCss . '</style>';
 
-    // }
+    }
 
-    // ttt moving to views
-    // public function getAdminCss() 
-    // {
-    //     return get_option($this->adminCssOptionKey);
 
-    // }
+    public function getAdminCss() 
+    {
+        return get_option($this->adminCssOptionKey);
+
+    }
 
 
 }

@@ -47,7 +47,6 @@ class Test_Wolfnet_Admin extends WP_UnitTestCase
             array('mce_buttons',          'sbButton'),
             );
         $this->wolfnet->admin->__construct($this->wolfnet); 
-        global $wp_filter;
 
 
         foreach ($filters as $filter) {
@@ -76,7 +75,7 @@ class Test_Wolfnet_Admin extends WP_UnitTestCase
     }
 
     /**
-     * Are our actions registered
+     * Are our actions registered?
      */
     function testActions() {
         // the wordpress array that holds all registered actions
@@ -85,13 +84,11 @@ class Test_Wolfnet_Admin extends WP_UnitTestCase
 
         // actions to check
         $actions = array(
-            array('init',                  'init'),
-            array('wp_enqueue_scripts',    'scripts'),
-            array('wp_enqueue_scripts',    'styles'),
-            array('widgets_init',          'widgetInit'),
-            array('wp_footer',             'footer'),
-            array('template_redirect',     'templateRedirect'),
-            array('wp_enqueue_scripts',    'publicStyles',      1000),
+            array('admin_menu',            'adminMenu'),
+            array('admin_init',            'adminInit'),
+            array('admin_enqueue_scripts', 'adminScripts'),
+            array('admin_enqueue_scripts', 'adminStyles'),
+            array('admin_print_styles',    'adminPrintStyles'),
             );
 
         foreach ($actions as $action) {
@@ -111,6 +108,9 @@ class Test_Wolfnet_Admin extends WP_UnitTestCase
                     }
                 }
             }
+            // uncoment to see which one failed
+            // echo "\n" . $action[0] . " " . $found; ;
+
             $this->assertTrue($found);
         }
 

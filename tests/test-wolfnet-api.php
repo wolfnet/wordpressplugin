@@ -16,11 +16,6 @@ class Test_Wolfnet_Api extends WP_UnitTestCase
         parent::tearDown();
     }
 
-    function testEmpty() {
-        // an empty test to prevent "no tests" warning
-        $this->assertTrue(true);
-    }
-
 
     function testTransientIndex() {
         
@@ -52,34 +47,5 @@ class Test_Wolfnet_Api extends WP_UnitTestCase
         $this->assertTrue( count($data_new2) >= 10 );
     }
 
-    
 
-    // function testTransient() {
-
-    //     // save a transient
-    //     // some stuff to save
-    //     $array = array(
-    //         'some',
-    //         'stuff',
-    //         array(
-    //             'detail' => 'detail',
-    //             'another' =>'different detail',
-    //             ),
-    //         'to save',
-    //         );
-
-    //     // save it
-    //     // 
-    //     // Transient
-    //     $data = $this->wolfnet->api->transient  ($array);
-    //     // print_r($data);
-    //     // the return value contains our saved data
-    //     $this->assertTrue( in_array( 'stuff', $data ) );
-        
-    //     // now a transient index should exist.
-    //     $data = $this->wolfnet->api->transientIndex();
-    //      print_r($data);
-    //     $this->assertTrue( count($data) >= 1 ); 
-
-    // } 
 }

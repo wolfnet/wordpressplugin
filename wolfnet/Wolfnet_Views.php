@@ -57,7 +57,7 @@ class Wolfnet_Views
     {
         ob_start(); settings_fields($this->wolfnet->CssOptionGroup); $formHeader = ob_get_clean();
         $publicCss = $this->getPublicCss();
-        $adminCss = $this->getAdminCss();
+        $adminCss = $this->wolfnet->admin->getAdminCss();
 
         include $this->wolfnet->dir .'/template/adminEditCss.php';
 
@@ -106,16 +106,11 @@ class Wolfnet_Views
      */
     public function adminPrintStyles()
     {
-        $adminCss = $this->getAdminCss();
+        $adminCss = $this->wolfnet->getAdminCss();
         echo '<style>' . $adminCss . '</style>';
 
     }
 
-    public function getAdminCss() 
-    {
-        return get_option($this->wolfnet->admin->adminCssOptionKey);
-
-    }
 
     private function parseTemplate($template, array $vars=array())
     {
@@ -393,7 +388,6 @@ class Wolfnet_Views
         return apply_filters('wolfnet_toolbarView', ob_get_clean());
 
     }
-
 
     
 }
