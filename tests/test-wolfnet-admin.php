@@ -28,7 +28,7 @@ class Test_Wolfnet_Admin extends WP_UnitTestCase
     function testIsAdmin()
     { 
         // is_admin true only if admin screen is being displayed.        
-        $this->assertTrue( is_admin() ) ;
+        $this->assertTrue( is_admin(), "We should be on an admin screen and logged in. We are not." ) ;
     }
 
     
@@ -69,7 +69,8 @@ class Test_Wolfnet_Admin extends WP_UnitTestCase
                     }
                 }
             }
-            $this->assertTrue($found);
+            $msg = "The filter '$filter[0]' with callable '$filter[1]' does not appear to be in place.";
+            $this->assertTrue($found, $msg);
         }
 
     }
@@ -110,8 +111,8 @@ class Test_Wolfnet_Admin extends WP_UnitTestCase
             }
             // uncoment to see which one failed
             // echo "\n" . $action[0] . " " . $found; ;
-
-            $this->assertTrue($found);
+            $msg = "The action '$action[0]' with callable '$action[1]' does not appear to be in place.";
+            $this->assertTrue($found, $msg);
         }
 
 
@@ -131,7 +132,8 @@ class Test_Wolfnet_Admin extends WP_UnitTestCase
             );
 
         foreach ($scripts as $script) {
-            $this->assertTrue( wp_script_is( $script, 'enqueued' ) );
+            $msg = "The script '$script' is not enqueued.";
+            $this->assertTrue( wp_script_is( $script, 'enqueued' ), $msg );
         }
     
     }
@@ -147,7 +149,8 @@ class Test_Wolfnet_Admin extends WP_UnitTestCase
             'wolfnet-admin',
             );
         foreach ($styles as $style) {
-            $this->assertTrue( wp_style_is( $style, 'enqueued' ) );
+            $msg = "The style '$style' is not enqueued";
+            $this->assertTrue( wp_style_is( $style, 'enqueued' ), $msg );
         }
     }
 
@@ -172,14 +175,16 @@ class Test_Wolfnet_Admin extends WP_UnitTestCase
         $data = $this->wolfnet->api->transientIndex();
 
         // we should have ten indexes in $data array
-        $this->assertTrue( count($data) >= 10 );
+        $msg = "Can not find the 10 transient indexes which should be set.";
+        $this->assertTrue( count($data) >= 10, $msg );
        
         // remove these on deactivate
         $this->wolfnet->admin->deactivate();
 
         // there should be no index now
         $data = $this->wolfnet->api->transientIndex();
-        $this->assertTrue( (count($data) == 0) );
+        $msg = "The transient index was not properly removed by deactivate().";
+        $this->assertTrue( (count($data) == 0), $msg );
 
     }
 

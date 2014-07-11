@@ -57,7 +57,8 @@ class Test_Wolfnet extends WP_UnitTestCase
             );
         
         foreach ($scripts as $script) {
-            $this->assertTrue( wp_script_is( $script, 'enqueued' ) );
+            $msg = "The script '$script' is not enqueued";
+            $this->assertTrue( wp_script_is( $script, 'enqueued' ), $msg );
         }
     
     }
@@ -68,7 +69,7 @@ class Test_Wolfnet extends WP_UnitTestCase
     function testStyles() 
     {
         $this->wolfnet->styles();
-        $this->assertTrue( wp_style_is( 'wolfnet', 'enqueued' ) );
+        $this->assertTrue( wp_style_is( 'wolfnet', 'enqueued' ), "'wolfnet' styles are not enqueued." );
 
     }
 
@@ -90,18 +91,19 @@ class Test_Wolfnet extends WP_UnitTestCase
 
 
         foreach ($filters as $filter) {
-            // we cant use somthing like this because has filter doesn't work with objects:
+            // we can't use something like this because has filter doesn't work with objects:
             // $this->assertTrue( has_filter( 'mce_buttons', 'Wolfnet_Admin->sbButton' ) !== false );
-            // The registerd "function" (2nd parameter) contains a hash when it is an object method
+            // The registered "function" (2nd parameter) contains a hash when it is an object method
 
             // so we have to loop though the filters and find a key with our method as part of the name
             // loop though each priority level
             $found = false ;
             foreach ($wp_filter[ $filter[0] ] as $priority) {
                 if ($found) break;
-                // loop though each registerd filter in the current piority to find our function name in the key
+                // loop though each registered filter in the current priority to find our function name in the key
                 foreach ($priority as $fnkey => $fninfo) {
                     // echo "$fnkey\n";
+                    
                     $regex = '/'. $filter[1] .'$/';
                     if (preg_match($regex, $fnkey)) {
                         $found = true;
@@ -109,7 +111,8 @@ class Test_Wolfnet extends WP_UnitTestCase
                     }
                 }
             }
-            $this->assertTrue($found);
+            $msg = "The filter '$filter[0]' with callable '$filter[1]' does not appear to be in place.";
+            $this->assertTrue($found, $msg);
         }
 
     }
@@ -149,7 +152,8 @@ class Test_Wolfnet extends WP_UnitTestCase
                     }
                 }
             }
-            $this->assertTrue($found);
+            $msg = "The action '$action[0]' with callable '$action[1]' does not appear to be in place.";
+            $this->assertTrue($found, $msg);
         }
 
     }
@@ -174,7 +178,8 @@ class Test_Wolfnet extends WP_UnitTestCase
             );
 
         foreach ($widgets as $widget) {
-            $this->assertTrue( isset( $wp_widget_factory->widgets[$widget] ) );
+            $msg = "The $widget widget is not initialized";
+            $this->assertTrue( isset( $wp_widget_factory->widgets[$widget] ), $msg );
         }
 
     }
@@ -198,10 +203,12 @@ class Test_Wolfnet extends WP_UnitTestCase
         $html = $method->invoke($this->wolfnet);
 
         // Does the header have an opening <html> tag? it should
-        $this->assertTrue(strpos($html,'<html') !== false);
+        $msg = "Could not find an opinging <html> tag in the header.";
+        $this->assertTrue(strpos($html,'<html') !== false, $msg);
 
         // and it should not have a closing html tag
-        $this->assertFalse(strpos($html,'</html'));
+        $msg = "Found a closing </html> tag in the header. The header should only contain the opening <html> tag.";
+        $this->assertFalse(strpos($html,'</html'), $msg);
 
     }
 
@@ -216,10 +223,12 @@ class Test_Wolfnet extends WP_UnitTestCase
         $html = $method->invoke($this->wolfnet);
 
         // should have closing html tag
-        $this->assertTrue(strpos($html,'</html') !== false);
+        $msg = "Could not find a closing </html> tag in the footer.";
+        $this->assertTrue(strpos($html,'</html') !== false, $msg);
         
         //should not have opening tag
-        $this->assertFalse(strpos($html,'<html'));     
+        $msg = "Found an opening <html> tag in the footer. The footer should only contain the closing </html> tag.";
+        $this->assertFalse(strpos($html,'<html'), $msg);     
 
     }
 
@@ -242,7 +251,8 @@ class Test_Wolfnet extends WP_UnitTestCase
         // print_r(json_decode($keyJson));
 
         // test setJsonProductKey. does it return valid Json?
-        $this->assertNotNull( json_decode($key_json) );
+        $msg = "setJsonProductKey() does not appear to be returning valid json.";
+        $this->assertNotNull( json_decode($key_json), $msg );
 
         // save our wordpress option
         update_option( $key, $key_json );
@@ -251,7 +261,8 @@ class Test_Wolfnet extends WP_UnitTestCase
         $default_key = $this->wolfnet->getDefaultProductKey();
 
         // Does getDefaultProductKey() return the key we just set?
-        $this->assertTrue( $default_key ==  $GLOBALS['wnt_tests_options']['api_key_good1'] );
+        $msg = "getDefaultProductKey() is not giving us the key we just set.";
+        $this->assertTrue( $default_key ==  $GLOBALS['wnt_tests_options']['api_key_good1'], $msg );
 
 
         // now add a second valid key
@@ -280,20 +291,22 @@ class Test_Wolfnet extends WP_UnitTestCase
         unset($key_json, $key_info, $key2_json, $key2_info);
         // now see if they are there:
         $key_info = json_decode($this->wolfnet->getProductKey());
-
-        $this->assertTrue( $key_info[0]->key ==  $GLOBALS['wnt_tests_options']['api_key_good1'] );
-        $this->assertTrue( $key_info[1]->key ==  $GLOBALS['wnt_tests_options']['api_key_good2'] );
+        $msg = "Can't retrieve the first of the two keys that should be set.";
+        $this->assertTrue( $key_info[0]->key ==  $GLOBALS['wnt_tests_options']['api_key_good1'], $msg );
+        $msg = "Can't retrieve the second of the two keys that should be set.";
+        $this->assertTrue( $key_info[1]->key ==  $GLOBALS['wnt_tests_options']['api_key_good2'], $msg );
 
 
         // and make sure getDefaultProductKey() still works with multiple keys
         unset($key_json);
         $key_json = $this->wolfnet->getDefaultProductKey();
-        $this->assertTrue( $key_json ==  $GLOBALS['wnt_tests_options']['api_key_good1'] );
+        $msg = "With 2 keys set, getDefaultProductKey() is not returning the 1st key";
+        $this->assertTrue( $key_json ==  $GLOBALS['wnt_tests_options']['api_key_good1'], $msg );
 
 
         // Can we getProductKeyById()?
-        
-        $this->assertTrue( $this->wolfnet->getProductKeyById(2) ==  $GLOBALS['wnt_tests_options']['api_key_good2'] );
+        $msg = "Unable to getProductKeyById()";
+        $this->assertTrue( $this->wolfnet->getProductKeyById(2) ==  $GLOBALS['wnt_tests_options']['api_key_good2'], $msg );
 
 
     }
@@ -309,8 +322,9 @@ class Test_Wolfnet extends WP_UnitTestCase
         $find_in_form = "wntsearchForm";
 
         $http = $this->wolfnet->searchManagerHtml($GLOBALS['wnt_tests_options']['api_key_good1']);
-                
-        $this->assertTrue(strpos($http['body'], $find_in_form) !== false);
+
+        $msg = "Could not find the string '$find_in_form' in the html returned by 'searchManagerHtml()'";     
+        $this->assertTrue((strpos($http['body'], $find_in_form) !== false), $msg);
 
     }
 }

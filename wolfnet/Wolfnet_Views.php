@@ -163,17 +163,18 @@ class Wolfnet_Views
     }
 
 
-    public function propertyListOptionsFormView(array $args=array())
-    {
-        $args = array_merge($args, array(
-            'instance_id' => str_replace('.', '', uniqid('wolfnet_propertyList_'))
-            ));
+    // I don't think this method is used anywhere
+    // public function propertyListOptionsFormView(array $args=array())
+    // {
+    //     $args = array_merge($args, array(
+    //         'instance_id' => str_replace('.', '', uniqid('wolfnet_propertyList_'))
+    //         ));
 
-        $args['criteria'] = esc_attr($args['criteria']);
+    //     $args['criteria'] = esc_attr($args['criteria']);
 
-        return $this->wolfnet->getListingGridOptions($args);
+    //     return $this->wolfnet->getListingGridOptions($args);
 
-    }
+    // }
 
 
     public function resultsSummaryOptionsFormView(array $args=array())
