@@ -393,6 +393,13 @@ class Wolfnet
 
     }
 
+
+    /**
+     * This method is used to retrieve search solution HTML from an MLSFinder 2.5 search solution
+     * for use as a 'search manager' interface in the WordPress admin.
+     * @param  string $productKey The product key for the solution to be retrieved.
+     * @return string             The HTML retrieved from the MLSFinder server.
+     */
     public function searchManagerHtml($productKey=null)
     {
         global $wp_version;
@@ -470,6 +477,12 @@ class Wolfnet
     }
 
 
+    /**
+     * This method retrieves a specific product key from the WordPress options table based on a
+     * provided unique ID value.
+     * @param  integer $id The ID of the key to be retrieved.
+     * @return string      The key that was retrieved from the WP options table.
+     */
     public function getProductKeyById($id) {
         $keyList = json_decode($this->getProductKey());
         foreach($keyList as $key) {
@@ -481,6 +494,10 @@ class Wolfnet
     }
 
 
+    /**
+     * This method retrieved the 'default' key (or first key on the stack) from the WP options table.
+     * @return string The key that was retrieved from the WP options table.
+     */
     public function getDefaultProductKey() {
         $productKey = json_decode($this->getProductKey());
         // TODO: Add some sort of error throwing for if there are no keys.
@@ -488,9 +505,15 @@ class Wolfnet
     }
 
 
+    /**
+     * This method retrieves a JSON representation of stored product keys from the WP options table.
+     * @return string JSON representation of the stored product keys.
+     */
     public function getProductKey()
     {
         $key = get_option(trim($this->productKeyOptionKey));
+        // If the value stored in the options table is a legacy, single key value convert it to the
+        // newer JSON format.
         if(!$this->isJsonEncoded($key)) {
             $key = $this->setJsonProductKey($key);
         }
@@ -499,6 +522,10 @@ class Wolfnet
     }
 
 
+    /**
+     * This method returns an array of integer values to be used as possible pagination item counts.
+     * @return array An array of integers.
+     */
     public function getItemsPerPage()
     {
         return array(5,10,15,20,25,30,35,40,45,50);
