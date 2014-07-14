@@ -98,6 +98,13 @@ class Wolfnet
     protected $postHookPrefix = 'wolfnet_post_';
 
     /**
+     * This Property is use as a prefix to request scope variables to avoid conflicts with get, 
+     * post, and other global variables used by wordpress and other plugins.
+     * @var string
+     */
+    public $requestPrefix = 'wolfnet_';
+
+    /**
      * This property is used to determine how long a WNT session should last.
      * @var integer
      */
@@ -981,14 +988,14 @@ class Wolfnet
         }
 
         $_REQUEST['wolfnet_includeDisclaimer'] = true;
-        $_REQUEST['productkey'] = $this->getProductKeyById($criteria['keyid']);
+        $_REQUEST[$this->requestPrefix.'productkey'] = $this->getProductKeyById($criteria['keyid']);
 
         // Keep a running array of product keys so we can output all necessary disclaimers
         if(!array_key_exists('keyList', $_REQUEST)) {
             $_REQUEST['keyList'] = array();
         }
-        if(!in_array($_REQUEST['productkey'], $_REQUEST['keyList'])) {
-            array_push($_REQUEST['keyList'], $_REQUEST['productkey']);
+        if(!in_array($_REQUEST[$this->requestPrefix.'productkey'], $_REQUEST['keyList'])) {
+            array_push($_REQUEST['keyList'], $_REQUEST[$this->requestPrefix.'productkey']);
         }
 
         $vars = array(
@@ -1092,14 +1099,14 @@ class Wolfnet
         }
 
         $_REQUEST['wolfnet_includeDisclaimer'] = true;
-        $_REQUEST['productkey'] = $this->getProductKeyById($criteria['keyid']);
+        $_REQUEST[$this->requestPrefix.'productkey'] = $this->getProductKeyById($criteria['keyid']);
 
         // Keep a running array of product keys so we can output all necessary disclaimers
         if(!array_key_exists('keyList', $_REQUEST)) {
             $_REQUEST['keyList'] = array();
         }
-        if(!in_array($_REQUEST['productkey'], $_REQUEST['keyList'])) {
-            array_push($_REQUEST['keyList'], $_REQUEST['productkey']);
+        if(!in_array($_REQUEST[$this->requestPrefix.'productkey'], $_REQUEST['keyList'])) {
+            array_push($_REQUEST['keyList'], $_REQUEST[$this->requestPrefix.'productkey']);
         }
 
         $vars = array(
@@ -1109,7 +1116,7 @@ class Wolfnet
             'siteUrl'            => site_url(),
             'criteria'           => json_encode($criteria),
             'class'              => 'wolfnet_listingGrid ',
-            'mapEnabled'         => $this->api->getMaptracksEnabled($_REQUEST['productkey']),
+            'mapEnabled'         => $this->api->getMaptracksEnabled($_REQUEST[$this->requestPrefix.'productkey']),
             'map'                => '',
             'mapType'            => '',
             'hideListingsTools'  => '',
@@ -1125,7 +1132,7 @@ class Wolfnet
         $vars = $this->convertDataType(array_merge($criteria, $vars));
 
         if ($vars['maptype'] != "disabled") {
-            $vars['map']     = $this->getMap($listingsData, $_REQUEST['productkey']);
+            $vars['map']     = $this->getMap($listingsData, $_REQUEST[$this->requestPrefix.'productkey']);
             $vars['mapType'] = $vars['maptype'];
             $vars['hideListingsTools'] = $this->getHideListingTools($vars['hideListingsId']
                                                                    ,$vars['showListingsId']
@@ -1214,14 +1221,14 @@ class Wolfnet
         }
 
         $_REQUEST['wolfnet_includeDisclaimer'] = true;
-        $_REQUEST['productkey'] = $this->getProductKeyById($criteria['keyid']);
+        $_REQUEST[$this->requestPrefix.'productkey'] = $this->getProductKeyById($criteria['keyid']);
 
         // Keep a running array of product keys so we can output all necessary disclaimers
         if(!array_key_exists('keyList', $_REQUEST)) {
             $_REQUEST['keyList'] = array();
         }
-        if(!in_array($_REQUEST['productkey'], $_REQUEST['keyList'])) {
-            array_push($_REQUEST['keyList'], $_REQUEST['productkey']);
+        if(!in_array($_REQUEST[$this->requestPrefix.'productkey'], $_REQUEST['keyList'])) {
+            array_push($_REQUEST['keyList'], $_REQUEST[$this->requestPrefix.'productkey']);
         }
 
         $vars = array(
@@ -1231,7 +1238,7 @@ class Wolfnet
             'siteUrl'            => site_url(),
             'criteria'           => json_encode($criteria),
             'class'              => 'wolfnet_propertyList ',
-            'mapEnabled'         => $this->api->getMaptracksEnabled($_REQUEST['productkey']),
+            'mapEnabled'         => $this->api->getMaptracksEnabled($_REQUEST[$this->requestPrefix.'productkey']),
             'map'                => '',
             'mapType'            => '',
             'hideListingsTools'  => '',
@@ -1246,7 +1253,7 @@ class Wolfnet
         $vars = $this->convertDataType(array_merge($criteria, $vars));
 
         if ($vars['maptype'] != "disabled") {
-            $vars['map']     = $this->getMap($listingsData, $_REQUEST['productkey']);
+            $vars['map']     = $this->getMap($listingsData, $_REQUEST[$this->requestPrefix.'productkey']);
             $vars['hideListingsTools'] = $this->getHideListingTools($vars['hideListingsId']
                                                                    ,$vars['showListingsId']
                                                                    ,$vars['collapseListingsId']
@@ -1337,14 +1344,14 @@ class Wolfnet
         }
 
         $_REQUEST['wolfnet_includeDisclaimer'] = true;
-        $_REQUEST['productkey'] = $criteria['productkey'];
+        $_REQUEST[$this->requestPrefix.'productkey'] = $criteria['productkey'];
 
         // Keep a running array of product keys so we can output all necessary disclaimers
         if(!array_key_exists('keyList', $_REQUEST)) {
             $_REQUEST['keyList'] = array();
         }
-        if(!in_array($_REQUEST['productkey'], $_REQUEST['keyList'])) {
-            array_push($_REQUEST['keyList'], $_REQUEST['productkey']);
+        if(!in_array($_REQUEST[$this->requestPrefix.'productkey'], $_REQUEST['keyList'])) {
+            array_push($_REQUEST['keyList'], $_REQUEST[$this->requestPrefix.'productkey']);
         }
 
         $vars = array(
