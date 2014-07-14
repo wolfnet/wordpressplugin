@@ -51,14 +51,14 @@ class Wolfnet_QuickSearchWidget extends Wolfnet_AbstractWidget
     {
         $options = $this->getOptions($instance);
 
-        echo $this->plugin->quickSearchOptionsFormView($options);
+        echo $this->plugin->views->quickSearchOptionsFormView($options);
 
     }
 
 
     public function update($new_instance, $old_instance)
     {
-        return parent::update($this->plugin->getQuickSearchDefaults(), $new_instance, $old_instance);
+        return parent::update($this->plugin->views->getQuickSearchDefaults(), $new_instance, $old_instance);
 
     }
 

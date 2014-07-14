@@ -1,9 +1,14 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<phpunit bootstrap="tests/testing-bootstrap.php" backupGlobals="false" colors="true">
+<phpunit
+    bootstrap="tests/testing-bootstrap.php"
+    backupGlobals="false"
+    colors="true"
+    convertErrorsToExceptions="true"
+    convertNoticesToExceptions="true"
+    convertWarningsToExceptions="true"
+    >
     <testsuites>
-        <!-- Default test suite to run all tests -->
         <testsuite>
-            <directory prefix="test_" suffix=".php">tests</directory>
+            <directory prefix="test-" suffix=".php">./</directory>
         </testsuite>
     </testsuites>
 </phpunit>

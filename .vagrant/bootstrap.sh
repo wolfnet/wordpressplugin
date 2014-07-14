@@ -32,6 +32,7 @@ if [ ! -f "${runfile}" ]; then
     ln -sf /vagrant/.vagrant/httpd.conf /etc/apache2/httpd.conf
     rm -f /etc/apache2/sites-enabled/000-default
     ln -sf /vagrant/.vagrant/vhost.conf /etc/apache2/sites-enabled/000-default
+    a2enmod rewrite
 
     echo "Start apache ..."
     service apache2 start > /dev/null 2> /dev/null

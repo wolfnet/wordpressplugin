@@ -24,17 +24,34 @@
 
 <div id="<?php echo $instance_id; ?>" class="wolfnet_listingGridOptions">
 
-    <input id="<?php echo $criteria_wpid; ?>" name="<?php echo $criteria_wpname; ?>"
+    <input id="<?php echo $criteria_wpid; ?>" name="<?php echo $criteria_wpname; ?>" 
            value="<?php echo $criteria; ?>" type="hidden" />
+
+    <?php if(count($markets) == 1): ?>
+    <input type="hidden" id="<?php echo $keyid_wpid; ?>" name="<?php echo $keyid_wpid; ?>" class="keyid" value="1" />
+    <?php endif; ?>
 
     <table class="form-table">
 
         <tr>
             <td><label>Title:</label></td>
-            <td><input id="<?php echo $title_wpid; ?>" name="<?php echo $title_wpname; ?>"
+            <td><input id="<?php echo $title_wpid; ?>" name="<?php echo $title_wpname; ?>" 
                        value="<?php echo $title; ?>" type="text" /></td>
         </tr>
 
+        <?php if(count($markets) > 1): ?>
+        <tr>
+            <td><label>Market:</label></td>
+            <td>
+                <select id="<?php echo $keyid_wpid; ?>" class="keyid" name="<?php echo $keyid_wpname; ?>" class="keyid">
+                    <?php for($i=0; $i<=count($markets)-1; $i++): ?>
+                    <option value="<?php echo $markets[$i]->id; ?>" <?php if($markets[$i]->id == $keyid) echo 'selected="selected"'; ?>><?php echo $markets[$i]->label; ?></option>
+                    <?php endfor; ?>
+                </select>
+            </td>
+        </tr>
+        <?php endif; ?>
+              
         <tr class="modeField">
             <td><label>Mode:</label></td>
             <td>
@@ -46,26 +63,30 @@
         <tr>
             <td><label>Include Map:</label></td>
             <td>
-                <select id="<?php echo $maptype_wpid; ?>" name="<?php echo $maptype_wpname; ?>" <?php if (!$mapEnabled) { ?>disabled<?php } ?> >
+                <select id="<?php echo $maptype_wpid; ?>" name="<?php echo $maptype_wpname; ?>" class="maptype" <?php if (!$mapEnabled) { ?>disabled<?php } ?> >
                     <?php foreach ($maptypes as $mt) { ?>
                         <option value="<?php echo $mt['value']; ?>" <?php selected($maptypes, $mt['value']); ?>>
                             <?php echo $mt['label']; ?>
                         </option>
                     <?php } ?>
                 </select>
+                
+                <p id="mapDisabled" class="mapDisabled" style="display:<?php echo ($mapEnabled ? 'none' : 'block'); ?>">
+                    <span style="color:#FF0000;font-weight:bold;">*</span> 
+
                 <?php if (!$mapEnabled) { ?>
                 <p>
                     <span style="color:#FF0000;font-weight:bold;">*</span>
                     <span style="font-style:italic;font-size:0.75em;">Map option is unavailable at this time. To enable this feature, please contact WolfNet sales for more information (612) 342-0088.</span>
                 </p>
-                <?php } ?>
+		<?php } ?>
             </td>
         </tr>
 
         <tr class="advanced-option savedSearchField">
             <td><label>Saved Search:</label></td>
             <td>
-                <select id="<?php echo $savedsearch_wpid; ?>" name="<?php echo $savedsearch_wpname; ?>" style="width:200px;">
+                <select id="<?php echo $savedsearch_wpid; ?>" class="savedsearch" name="<?php echo $savedsearch_wpname; ?>" style="width:200px;">
                     <?php $foundOne = false; ?>
                     <option value="">-- Saved Search --</option>
                     <?php foreach ($savedsearches as $ss) { ?>
@@ -88,7 +109,7 @@
         <tr class="basic-option">
             <td><label>Price:</label></td>
             <td>
-                <select id="<?php echo $minprice_wpid; ?>" name="<?php echo $minprice_wpname; ?>">
+                <select id="<?php echo $minprice_wpid; ?>" class="pricerange minprice" name="<?php echo $minprice_wpname; ?>">
                     <option value="">Min. Price</option>
                     <?php foreach ($prices as $price) { ?>
                         <option value="<?php echo $price['value']; ?>" <?php selected($minprice, $price['value']); ?>>
@@ -97,7 +118,7 @@
                     <?php } ?>
                 </select>
                 <span>to</span>
-                <select id="<?php echo $maxprice_wpid; ?>" name="<?php echo $maxprice_wpname; ?>">
+                <select id="<?php echo $maxprice_wpid; ?>" class="pricerange maxprice" name="<?php echo $maxprice_wpname; ?>">
                     <option value="">Max. Price</option>
                     <?php foreach ( $prices as $price ) { ?>
                         <option value="<?php echo $price['value']; ?>" <?php selected($maxprice, $price['value']); ?>>
@@ -115,7 +136,7 @@
                     type="text" value="<?php echo $city; ?>" /> <br/>
                 <input id="<?php echo $exactcity_wpid; ?>" name="<?php echo $exactcity_wpname; ?>"
                        type="checkbox" value="1" checked="checked">
-                Only listings that exactly match this city.
+                Only listings that exactly match this city.            
             </td>
         </tr>
 
