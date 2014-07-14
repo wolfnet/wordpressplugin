@@ -319,6 +319,7 @@ class Wolfnet
             }
             echo '</div>';
         }
+        // TODO: Add a filter point here. Allow developers to filter the disclaimer content for formatting purposes.
 
         do_action($this->postHookPrefix . 'footerDisclaimer'); // Legacy hook
 
@@ -475,12 +476,14 @@ class Wolfnet
             if($key->id == $id) {
                 return $key->key;
             }
+            // TODO: Add some sort of error throwing if no key is found for the given ID.
         }
     }
 
 
     public function getDefaultProductKey() {
         $productKey = json_decode($this->getProductKey());
+        // TODO: Add some sort of error throwing for if there are no keys.
         return $productKey[0]->key;
     }
 
@@ -491,6 +494,7 @@ class Wolfnet
         if(!$this->isJsonEncoded($key)) {
             $key = $this->setJsonProductKey($key);
         }
+        // TODO: perhaps it would be better to decode the JSON here instead of multiple other places.
         return $key;
     }
 
