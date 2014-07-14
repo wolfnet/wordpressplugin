@@ -22,7 +22,7 @@
 
 
 /**
- * This class us used when the user is logged in as the admin user
+ * This class us used when the user is logged in as an admin user.
  */
 class Wolfnet_Admin extends Wolfnet
 {
@@ -42,8 +42,8 @@ class Wolfnet_Admin extends Wolfnet
 
     /**
      * prepare the class for use.
-     * @param Object $wolfnet Pass in an instance or the Wolnet class 
-     *
+     * @param Object $wolfnet Pass in an instance or the Wolfnet class
+     * @return void
      */
     public function __construct($wolfnet)
     {
@@ -135,8 +135,8 @@ class Wolfnet_Admin extends Wolfnet
 
      /**
      * This method is a callback for the 'admin_enqueue_scripts' hook. Any JavaScript files (and
-     * their dependacies) which are needed by the plugin for admin interfaces are registered in this
-     * method.
+     * their dependencies) which are needed by the plugin for admin interfaces are registered in
+     * this method.
      * @return void
      */
     public function adminScripts()
