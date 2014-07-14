@@ -69,7 +69,7 @@ class Wolfnet
      */
     protected $customPostTypeSearch = 'wolfnet_search';
 
-   
+
     /**
      * This property is a unique idenitfier that is used to define a plugin option which saves the
      * product key used by the plugin to retreive data from the WolfNet API.
@@ -300,7 +300,7 @@ class Wolfnet
     }
 
 
-     /**
+    /**
      * This method is a callback for the 'wp_footer' hook. Currently this method is used to display
      * market disclaimer information if necessary for the request.
      * @return void
@@ -311,7 +311,7 @@ class Wolfnet
 
         /* If it has been established that we need to output the market disclaimer do so now in the
          * site footer, otherwise do nothing. */
-        if (array_key_exists('wolfnet_includeDisclaimer', $_REQUEST) && 
+        if (array_key_exists('wolfnet_includeDisclaimer', $_REQUEST) &&
             array_key_exists('keyList', $_REQUEST)) {
             echo '<div class="wolfnet_marketDisclaimer">';
             foreach($_REQUEST['keyList'] as $key) {
@@ -529,8 +529,8 @@ class Wolfnet
     public function getItemsPerPage()
     {
         return array(5,10,15,20,25,30,35,40,45,50);
-
     }
+
 
     /* Custom Post Types ************************************************************************ */
     /*  _                         _              ___                                              */
@@ -646,7 +646,7 @@ class Wolfnet
 
         return $this->resultsSummary($criteria);
 
-    }    
+    }
 
 
     public function scQuickSearch($attrs, $content='')
@@ -857,7 +857,7 @@ class Wolfnet
     }
 
 
-    public function remotePublicCss() 
+    public function remotePublicCss()
     {
         header('Content-type: text/css');
         $publicCss = $this->views->getPublicCss();
@@ -871,7 +871,7 @@ class Wolfnet
     }
 
 
-    public function remotePriceRange() 
+    public function remotePriceRange()
     {
         $productKey = $this->getProductKeyById($_REQUEST["keyid"]);
         $prices = $this->getPrices($productKey);
@@ -881,7 +881,7 @@ class Wolfnet
     }
 
 
-    public function remoteGetMarketName() 
+    public function remoteGetMarketName()
     {
         $productKey = $_REQUEST["productkey"];
         echo json_encode(strtoupper($this->api->getMarketName($productKey)));
@@ -1073,7 +1073,7 @@ class Wolfnet
         if (!array_key_exists('startrow', $criteria)) {
             $criteria['startrow'] = 1;
         }
-        
+
         $listingsData = $this->api->getListings($criteria);
 
         $listingsHtml = '';
@@ -1125,7 +1125,7 @@ class Wolfnet
 
         if ($vars['maptype'] != "disabled") {
             $vars['map']     = $this->getMap($listingsData, $_REQUEST['productkey']);
-            $vars['mapType'] = $vars['maptype'];         
+            $vars['mapType'] = $vars['maptype'];
             $vars['hideListingsTools'] = $this->getHideListingTools($vars['hideListingsId']
                                                                    ,$vars['showListingsId']
                                                                    ,$vars['collapseListingsId']
@@ -1299,13 +1299,13 @@ class Wolfnet
     }
 
 
-    public function resultsSummary(array $criteria) 
+    public function resultsSummary(array $criteria)
     {
         // Maintain backwards compatibility if there is no keyid in the shortcode.
         if(!array_key_exists('keyid', $criteria) || $criteria['keyid'] == '') {
             $criteria['keyid'] = 1;
         }
-        
+
         // if(!$this->isSavedKey($criteria['productkey'])) {
         if(!$this->isSavedKey($criteria['keyid'])) {
             return false;
@@ -1392,8 +1392,8 @@ class Wolfnet
             $vars['class'] .= 'wolfnet_withSortOptions ';
         }
 
-        return $this->views->resultsSummaryView($vars);        
-    }    
+        return $this->views->resultsSummaryView($vars);
+    }
 
 
 
@@ -1480,7 +1480,7 @@ class Wolfnet
             $data = get_posts($dataArgs);
 
             if(count($data) == 0 && $keyid == 1) {
-                /* 
+                /*
                  * This is for backwards compatibility - get posts without keyid meta query.
                  * We will loop through these custom posts and add the keyid meta key.
                  * Only do this on a keyid of 1 since that would be the default key back when we only allowed one.
@@ -1581,7 +1581,7 @@ class Wolfnet
     {
         $this->url = plugin_dir_url(__FILE__);
     }
-    
+
     protected function addAction($action, $callable=null, $priority=null)
     {
         if (is_array($action)) {
@@ -1664,7 +1664,7 @@ class Wolfnet
     }
 
 
-    
+
     /* PRIVATE METHODS ************************************************************************** */
     /*  ____       _            _         __  __      _   _               _                       */
     /* |  _ \ _ __(_)_   ____ _| |_ ___  |  \/  | ___| |_| |__   ___   __| |___                   */
@@ -1675,9 +1675,9 @@ class Wolfnet
     /* ****************************************************************************************** */
 
     /**
-     * This method is used to load additional classes as needed. defined in the construct by 
+     * This method is used to load additional classes as needed. defined in the construct by
      * spl_autoload_register().
-     * @param  string $class The name of the class to load. same as the name of the file in the 
+     * @param  string $class The name of the class to load. same as the name of the file in the
      * classes directory
      * @return bool success?
      */
@@ -1758,7 +1758,7 @@ class Wolfnet
 
     }
 
-   
+
     protected function setJsonProductKey($keyString) {
         // This takes the old style single key string and returns a JSON formatted key array
         $keyArray = array(
@@ -1772,7 +1772,7 @@ class Wolfnet
     }
 
 
-    private function isJsonEncoded($str) 
+    private function isJsonEncoded($str)
     {
         if(is_array(json_decode($str)) || is_object(json_decode($str))) {
             return true;
@@ -1844,8 +1844,8 @@ class Wolfnet
     }
 
 
-    private function getMap($listingsData, $productKey=null) 
-    {      
+    private function getMap($listingsData, $productKey=null)
+    {
         return $this->views->mapView($listingsData, $productKey);
     }
 
