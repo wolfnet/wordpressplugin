@@ -381,6 +381,12 @@ class Wolfnet_Views
 
     }
 
+    public function houseOver($args) 
+    {
+
+        return $this->parseTemplate('template/listingHouseover.php', $args);
+
+    }
 
     /* PRIVATE METHODS ************************************************************************** */
     /*  ____       _            _         __  __      _   _               _                       */

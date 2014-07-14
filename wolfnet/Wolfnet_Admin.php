@@ -72,7 +72,6 @@ class Wolfnet_Admin extends Wolfnet
 
         $this->wolfnet = $wolfnet;
 
-        // ttt check and change $this->api to $this->wolfnet->api then remove this line
         $this->api = $wolfnet->api;
         $this->views = $wolfnet->views;
 
