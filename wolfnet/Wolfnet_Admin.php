@@ -1,7 +1,6 @@
 <?php
 
 /**
- *
  * @title         Wolfnet_Admin.php
  * @copyright     Copyright (c) 2012, 2013, WolfNet Technologies, LLC
  *
@@ -33,6 +32,7 @@ class Wolfnet_Admin extends Wolfnet
      */
     public $adminCssOptionKey = "wolfnetCss_adminCss";
 
+
     /**
      * This property defines a the request parameter which is used to determine if the values which
      * are cached in the Transient API should be cleared.
@@ -48,7 +48,7 @@ class Wolfnet_Admin extends Wolfnet
     public function __construct($wolfnet)
     {
         // sets url
-        $this->setUrl(); 
+        $this->setUrl();
 
         $this->wolfnet = $wolfnet;
 
@@ -56,11 +56,9 @@ class Wolfnet_Admin extends Wolfnet
         $this->api = $wolfnet->api;
         $this->views = $wolfnet->views;
 
-
         register_activation_hook( $this->pluginFile, array($this, 'activate' ));
         register_deactivation_hook( $this->pluginFile, array($this, 'deactivate' ));
 
-        
         // Clear cache if url param exists.
         $cacheParamExists = array_key_exists($this->cacheFlag, $_REQUEST);
         $cacheParamClear = ($cacheParamExists) ? ($_REQUEST[$this->cacheFlag] == 'clear') : false;
@@ -178,6 +176,7 @@ class Wolfnet_Admin extends Wolfnet
 
     }
 
+
     /**
      * This method is a callback for the 'admin_init' hook. Any processes which are unique to the
      * admin interface of WordPress and have not been run as either part of the constructor method
@@ -209,12 +208,13 @@ class Wolfnet_Admin extends Wolfnet
         if(!$this->wolfnet->api->productKeyIsValid($productKey)) {
             $productKey = null;
         }
-        
+
         if ($pageKeyExists && $pageIsSM) {
             $this->wolfnet->smHttp = $this->searchManagerHtml($productKey);
         }
-     
+
     }
+
 
     /**
      * This method is a callback for the 'admin_menu' hook. This method is used to create any admin
@@ -229,12 +229,11 @@ class Wolfnet_Admin extends Wolfnet
 
         // echo " URL: ". $this->url;
         //error_log ("Admin  adminMenu tom: ". $this->tom );
-        
+
         // error_log ("Admin  adminMenu testUrl(): ". $this->testUrl() );
-        
+
         // error_log ("Admin  adminMenu url: ". $this->url );
-        
-       
+
         $pgs = array(
             array(
                 'title' => 'WolfNet <span class="wolfnet_sup">&reg;</span>',
@@ -303,7 +302,7 @@ class Wolfnet_Admin extends Wolfnet
     }
 
 
-    public function getAdminCss() 
+    public function getAdminCss()
     {
         return get_option($this->adminCssOptionKey);
 

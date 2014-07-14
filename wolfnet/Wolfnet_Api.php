@@ -1,7 +1,6 @@
 <?php
 
 /**
- *
  * @title         Wolfnet_Api.php
  * @copyright     Copyright (c) 2012, 2013, WolfNet Technologies, LLC
  *
@@ -23,7 +22,7 @@
 class Wolfnet_Api
 {
     /**
-     * This will be set to the version of the injected class in the constructor 
+     * This will be set to the version of the injected class in the constructor
      * @var string
      */
     protected $version;
@@ -351,7 +350,7 @@ class Wolfnet_Api
                 $concatHouseover .= '</div>';
                 $concatHouseover .= '</a>';
             }
-            $concatHouseover .= '</td>';            
+            $concatHouseover .= '</td>';
             $concatHouseover .= '<td valign="top" style="vertical-align:top;">';
             $concatHouseover .= '<div class="wolfnet_wntHOContentContainer">';
             $concatHouseover .= '<div style="text-align:left;font-weight:bold">' . $listing->listing_price;
@@ -359,13 +358,13 @@ class Wolfnet_Api
             $concatHouseover .= '<div style="text-align:left;">' . $listing->display_address;
             $concatHouseover .= '</div>';
             $concatHouseover .= '<div style="text-align:left;">' . $listing->city . ', ' . $listing->state;
-            $concatHouseover .= '</div>';            
-            $concatHouseover .= '<div style="text-align:left;">' . $listing->bedsbaths;
-            $concatHouseover .= '</div>';  
-            $concatHouseover .= '<div style="text-align:left;padding-top:20px;">' . $listing->branding->content;
-            $concatHouseover .= '</div>'; 
             $concatHouseover .= '</div>';
-            $concatHouseover .= '</td>';            
+            $concatHouseover .= '<div style="text-align:left;">' . $listing->bedsbaths;
+            $concatHouseover .= '</div>';
+            $concatHouseover .= '<div style="text-align:left;padding-top:20px;">' . $listing->branding->content;
+            $concatHouseover .= '</div>';
+            $concatHouseover .= '</div>';
+            $concatHouseover .= '</td>';
             $concatHouseover .= '</tr>';
             $concatHouseover .= '</tbody>';
             $concatHouseover .= '</table>';
@@ -568,5 +567,6 @@ class Wolfnet_Api
         return '';
 
     }
+
 
 }

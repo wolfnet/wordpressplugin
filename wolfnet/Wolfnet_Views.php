@@ -1,7 +1,6 @@
 <?php
 
 /**
- *
  * @title         Wolfnet_Views.php
  * @copyright     Copyright (c) 2012, 2013, WolfNet Technologies, LLC
  *
@@ -26,9 +25,7 @@ class Wolfnet_Views
 
     function __construct($wolfnet)
     {
-
         $this->wolfnet = $wolfnet;
-
     }
 
     /* Admin Menus ****************************************************************************** */
@@ -94,11 +91,12 @@ class Wolfnet_Views
 
     }
 
-    public function getPublicCss() 
+
+    public function getPublicCss()
     {
         return get_option(trim($this->wolfnet->publicCssOptionKey));
-
     }
+
 
     /**
      * This method is used in the context of admin_print_styles to output custom CSS.
@@ -203,7 +201,7 @@ class Wolfnet_Views
             'keyids'      => $keyids,
             );
 
-        
+
         $args = array_merge($defaultArgs, $args);
 
         return $this->parseTemplate('template/quickSearchOptions.php', $args);
@@ -352,7 +350,7 @@ class Wolfnet_Views
     {
         ob_start();
         $args = $this->wolfnet->api->getMapParameters($listingsData, $productKey);
-        $args["url"] = $this->wolfnet->url;  
+        $args["url"] = $this->wolfnet->url;
 
         echo $this->parseTemplate('template/map.php', $args);
 
