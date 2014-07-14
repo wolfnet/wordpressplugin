@@ -25,6 +25,7 @@
  * code inside an immediately invoked function expression (IIFE) to avoid naming conflicts with the $
  * variable.
  */
+
 if ( typeof jQuery != 'undefined' ) {
 
 	( function ( $ ) {
@@ -73,7 +74,7 @@ if ( typeof jQuery != 'undefined' ) {
 					return false;
 				} );
 
-				updateModalHeight = function () {
+				var updateModalHeight = function () {
 					var windowHeight = $( window ).height();
 					var windowWidth  = $( window ).width();
 					$thumbnailModal.dialog( { height:( windowHeight * .8 ), width:( windowWidth * .8 ) } );
@@ -208,11 +209,16 @@ if ( typeof jQuery != 'undefined' ) {
 				var $form   = $( this );
 				var $fields = $form.find( 'tr.basic-option,tr.advanced-option' );
 				var $mode   = $form.find( '.modeField input' );
+				var $key    = $form.find( '.keyid' );
 
 				$fields.hide();
 
 				$mode.each( function () {
 					this.$fields = $fields;
+				} );
+
+				$key.change( function() {
+					$(this).wolfnetUpdateShortcodeControls($form);
 				} );
 
 				$mode.click( eventHandler );
@@ -237,6 +243,7 @@ if ( typeof jQuery != 'undefined' ) {
 			} );
 
 		}
+
 
 		$.fn.wolfnetValidateProductKey = function ( clientOptions )
 		{
@@ -338,6 +345,34 @@ if ( typeof jQuery != 'undefined' ) {
 				var $wrapper = $this.parent();
 				$wrapper.addClass( options.validClass );
 				$wrapper.removeClass( options.invalidClass );
+
+				// Update market name
+				$.ajax( {
+					url: wolfnet_ajax.ajaxurl,
+					data: { action:'wolfnet_market_name', productkey:$(this).val() },
+					dataType: 'json',
+					type: 'GET',
+					cache: false,
+					timeout: 2500,
+					statusCode: {
+						404: function () {
+							commFailure();
+						}
+					},
+					success: function ( data ) {
+						$marketContainer = $wrapper.closest('tr').find('.wolfnet_keyMarket');
+						$marketLabel = $wrapper.closest('tr').find('.wolfnet_keyLabel');
+						if($marketContainer.html() == '') {
+							$marketContainer.html(data);
+						}
+						if($marketLabel.val() == '') {
+							$marketLabel.val(data);
+						}
+					},
+					error: function () {
+						$this.trigger( options.invalidEvent );
+					}
+				} );
 			}
 
 			var onInvalidEvent = function ()
@@ -387,6 +422,180 @@ if ( typeof jQuery != 'undefined' ) {
 			} );
 
 		}
+
+
+		$.fn.wolfnetDeleteKeyRow = function (button) {
+            var key = $(button.srcElement).attr('wnt-key');
+            $('.row' + key).remove();
+        }
+
+
+        $.fn.wolfnetInsertKeyRow = function ()
+        {
+
+            var nextIteration = parseInt($('#wolfnet_keyCount').val()) + 1;
+
+            // Row 1
+            var row = $('<tr />').attr('class', 'row' + nextIteration);
+            var headCell = $('<th />').attr('scope', 'row');
+            var headRow = row.clone().append(headCell.clone().html(
+                    $('<label />').attr('for', 'wolfnet_productKey_' + nextIteration).html('Product Key')
+                )
+            );
+            headRow.append(headCell.clone().html('Market Name'));
+            headRow.append(headCell.clone().html(
+                    $('<label />').attr('for', 'wolfnet_keyLabel_' + nextIteration).html('Label')
+                )
+            );
+            headRow.append(headCell.clone());
+
+            // Row 2
+            var cell = $('<td />');
+            var valueRow = row.clone().append(cell.clone().html(
+                    $('<input />').attr('id', 'wolfnet_productKey_' + nextIteration)
+                    .attr('class', 'wolfnet_productKey')
+                    .attr('name', 'wolfnet_productKey_' + nextIteration)
+                    .attr('type', 'text')
+                    .attr('value', '')
+                    .attr('size', '50')
+                )
+            );
+            valueRow.append(cell.clone().html($('<span/>').attr('class', 'wolfnet_keyMarket')));
+            valueRow.append(cell.clone().html(
+                    $('<input />').attr('id', 'wolfnet_keyLabel_' + nextIteration)
+                    .attr('name', 'wolfnet_keyLabel_' + nextIteration)
+                    .attr('class', 'wolfnet_keyLabel')
+                    .attr('type', 'text')
+                    .attr('value', '')
+                    .attr('size', '30')
+                )
+            );
+            valueRow.append(cell.clone().html(
+                    $('<input />').attr('class', 'wolfnet_deleteKey')
+                    .attr('wnt-key', nextIteration)
+                    .attr('type', 'button')
+                    .attr('value', 'Delete')
+                    .click(function(button) {
+                        $.fn.wolfnetDeleteKeyRow(button);
+                    })
+                )
+            )
+
+            $('#wolfnet_keys').append(headRow).append(valueRow);
+
+            $('#wolfnet_keyCount').val(nextIteration);
+
+            $('#wolfnet_productKey_' + nextIteration).wolfnetValidateProductKey( {
+                rootUri: '<?php echo site_url(); ?>?pagename=wolfnet-admin-validate-key'
+            } );
+
+        }
+
+        $.fn.wolfnetUpdateShortcodeControls = function (container)
+	    {
+
+	        var keyid = $(container).find('.keyid').val();
+
+	        $.ajax( {
+	            url: wolfnet_ajax.ajaxurl,
+	            data: { action:'wolfnet_price_range', keyid:keyid },
+	            dataType: 'json',
+	            type: 'GET',
+	            cache: false,
+	            timeout: 2500,
+	            statusCode: {
+	                404: function () {
+	                    commFailure();
+	                }
+	            },
+	            success: function ( data ) {
+	                var options = buildPriceDropdownOptions(data);
+	                $(container).find('.pricerange').html('');
+	                $(container).find('.maxprice').append($('<option />').attr('value', '').html('Max. Price'));
+	                $(container).find('.minprice').append($('<option />').attr('value', '').html('Min. Price'));
+	                $(options).each(function() {
+	                    $(container).find('.pricerange').append(this);
+	                });
+	            },
+	            error: function ( error ) {
+	                console.log(error);
+	            }
+	        } );
+
+	        $.ajax( {
+	            url: wolfnet_ajax.ajaxurl,
+	            data: { action:'wolfnet_saved_searches', keyid:keyid },
+	            dataType: 'json',
+	            type: 'GET',
+	            cache: false,
+	            timeout: 2500,
+	            statusCode: {
+	                404: function () {
+	                    commFailure();
+	                }
+	            },
+	            success: function ( data ) {
+	                var options = buildSavedSearchDropdownOptions(data);
+	                $(container).find('.savedsearch').html('');
+	                $(container).find('.savedsearch').append($('<option />').html('-- Saved Search --'));
+	                $(options).each(function() {
+	                    $(container).find('.savedsearch').append(this);
+	                });
+	            },
+	            error: function ( error ) {
+	                console.log(error);
+	            }
+	        } );
+
+	        $.ajax( {
+	            url: wolfnet_ajax.ajaxurl,
+	            data: { action:'wolfnet_map_enabled', keyid:keyid },
+	            dataType: 'json',
+	            type: 'GET',
+	            cache: false,
+	            timeout: 2500,
+	            statusCode: {
+	                404: function () {
+	                    commFailure();
+	                }
+	            },
+	            success: function ( data ) {
+	                if(data == true) {
+	                    $(container).find('.mapDisabled').css('display', 'none');
+	                    $(container).find('.maptype').removeAttr('disabled');
+	                } else {
+	                    $(container).find('.mapDisabled').css('display', 'block');
+	                    $(container).find('.maptype').attr('disabled', 'true');
+	                }
+	            },
+	            error: function ( error ) {
+	                console.log(error);
+	            }
+	        } );
+
+	        var buildPriceDropdownOptions = function(data) 
+	        {
+	            var options = [];
+	            $(data).each(function() {
+	                options.push(
+	                    $('<option />').attr('value', this.value).html(this.label)
+	                );
+	            });
+	            return options;
+	        }
+
+	        var buildSavedSearchDropdownOptions = function(data)
+	        {
+	            var options = [];
+	            $(data).each(function() {
+	                options.push(
+	                    $('<option />').attr('value', this.ID).html(this.post_title)
+	                );
+	            });
+	            return options;
+	        }
+
+	    }
 
 	} )( jQuery ); /* END: jQuery IIFE */
 

@@ -28,7 +28,7 @@
  *                Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-class wolfnet
+class Wolfnet
 {
 
 
@@ -46,97 +46,68 @@ class wolfnet
      * as part of the Ant build process that is run when the plugin is packaged for distribution.
      * @var string
      */
-    private $version = '{X.X.X}';
+    public $version = '{X.X.X}';
 
     /**
      * This property is used to set the option group for the plugin which creates a namespaced
      * collection of variables which are used in saving widget settings.
      * @var string
      */
-    private $optionGroup = 'wolfnet';
+    public $optionGroup = 'wolfnet';
 
     /**
      * This property is used to set the option group for the Edit Css page. It creates a namespaced
      * collection of variables which are used in saving page settings.
      * @var string
      */
-    private $CssOptionGroup = 'wolfnetCss';
+    public $CssOptionGroup = 'wolfnetCss';
 
     /**
      * This property is used to define the 'search' custom type which is how "Search Manager"
      * searches are saved.
      * @var string
      */
-    private $customPostTypeSearch = 'wolfnet_search';
+    protected $customPostTypeSearch = 'wolfnet_search';
+
 
     /**
      * This property is a unique idenitfier that is used to define a plugin option which saves the
      * product key used by the plugin to retreive data from the WolfNet API.
      * @var string
      */
-    private $productKeyOptionKey = 'wolfnet_productKey';
+    protected $productKeyOptionKey = 'wolfnet_productKey';
 
     /**
      * This property contains the public CSS as defined in the Edit CSS page.
      * @var string
      */
-    private $publicCssOptionKey = "wolfnetCss_publicCss";
-
-    /**
-     * This property contains the admin CSS as defined in the Edit CSS page.
-     * @var string
-     */
-    private $adminCssOptionKey = "wolfnetCss_adminCss";
-
-    /**
-     * This property is a unique identifier for a value in the WordPress Transient API where
-     * references to other transient values are stored.
-     * @var string
-     */
-    private $transientIndexKey = 'wolfnet_transients';
-
-    /**
-     * The maximum amount of time a wolfnet value should be stored in the as a transient object.
-     * Currently set to 1 week.
-     * @var integer
-     */
-    private $transientMaxExpiration = 604800;
-
-    /**
-     * This property defines a the request parameter which is used to determine if the values which
-     * are cached in the Transient API should be cleared.
-     * @var string
-     */
-    private $cacheFlag = '-wolfnet-cache';
+    public $publicCssOptionKey = "wolfnetCss_publicCss";
 
     /**
      * This property is used to prefix custom hooks which are defined in the plugin. Specifically
      * this prefix is used for hooks which are executed before a certain portion of code.
      * @var string
      */
-    private $preHookPrefix = 'wolfnet_pre_';
+    protected $preHookPrefix = 'wolfnet_pre_';
 
     /**
      * This property is used to prefix custom hooks which are defined in the plugin. Specifically
      * this prefix is used for hooks which are executed after a certain portion of code.
      * @var string
      */
-    private $postHookPrefix = 'wolfnet_post_';
-
-    /**
-     * This property is used as a request scope key for storing the unique session key value for the
-     * current user.
-     * @var string
-     */
-    private $requestSessionKey = 'wntSessionKey';
+    protected $postHookPrefix = 'wolfnet_post_';
 
     /**
      * This property is used to determine how long a WNT session should last.
      * @var integer
      */
-    private $sessionLength = 3600; // one hour
+    protected $sessionLength = 3600; // one hour
 
-    private $smHttp = null;
+    public $url;
+
+    protected $pluginFile = __FILE__;
+
+    public $smHttp = null;
 
 
     /* Constructor Method *********************************************************************** */
@@ -155,43 +126,34 @@ class wolfnet
      */
     public function __construct()
     {
-
         $this->dir = dirname(__FILE__);
-        $this->url = plugin_dir_url(__FILE__);
+        //$this->url = plugin_dir_url(__FILE__);
+        $this->setUrl();
 
-        // Clear cache if url param exists.
-        $cacheParamExists = array_key_exists($this->cacheFlag, $_REQUEST);
-        $cacheParamClear = ($cacheParamExists) ? ($_REQUEST[$this->cacheFlag] == 'clear') : false;
-        if ($cacheParamExists && $cacheParamClear) {
-            $this->clearTransients();
+        // Set the Autoloader Method
+        spl_autoload_register(array( $this, 'autoload'));
+
+        $this->api = new Wolfnet_Api($this);
+        $this->views = new Wolfnet_Views($this);
+        if (is_admin()) {
+            $this->admin = new Wolfnet_Admin($this);
         }
-
-        register_activation_hook(__FILE__, array($this, 'activate'));
-        register_deactivation_hook(__FILE__, array($this, 'deactivate'));
 
         // Register actions.
         $this->addAction(array(
             array('init',                  'init'),
             array('wp_enqueue_scripts',    'scripts'),
             array('wp_enqueue_scripts',    'styles'),
-            array('admin_menu',            'adminMenu'),
-            array('admin_init',            'adminInit'),
-            array('admin_enqueue_scripts', 'adminScripts'),
-            array('admin_enqueue_scripts', 'adminStyles'),
             array('widgets_init',          'widgetInit'),
             array('wp_footer',             'footer'),
             array('template_redirect',     'templateRedirect'),
-            array('admin_print_styles',    'adminPrintStyles',  1000),
             array('wp_enqueue_scripts',    'publicStyles',      1000),
             ));
 
         // Register filters.
         $this->addFilter(array(
             array('do_parse_request',     'doParseRequest'),
-            array('mce_external_plugins', 'sbMcePlugin'),
-            array('mce_buttons',          'sbButton'),
             ));
-
     }
 
 
@@ -210,30 +172,6 @@ class wolfnet
     /* | | (_) (_) |< _>                                                                          */
     /*                                                                                            */
     /* ****************************************************************************************** */
-
-    public function activate()
-    {
-        // Check for legacy transient data and remove it if it exists.
-        $indexkey = 'wppf_cache_metadata';
-        $metaData = get_transient($indexkey);
-
-        if (is_array($metaData)) {
-            foreach ($metaData as $key => $data) {
-                delete_transient($key);
-            }
-        }
-
-        delete_transient($indexkey);
-
-    }
-
-
-    public function deactivate()
-    {
-        // Clear out all transient data as it is purely for caching and performance.
-        $this->deleteTransientIndex();
-
-    }
 
 
     /**
@@ -258,13 +196,12 @@ class wolfnet
 
         // Register CSS
         $this->registerStyles();
-
     }
 
 
     /**
      * This method is a callback for the 'wp_enqueue_scripts' hook. Any JavaScript files (and their
-     * dependacies) which are needed by the plugin for public interfaces are registered in this
+     * dependencies) which are needed by the plugin for public interfaces are registered in this
      * method.
      * @return void
      */
@@ -315,13 +252,13 @@ class wolfnet
 
     /**
      * This method is a callback for the 'wp_enqueue_scripts' hook. This will load CSS files
-     * which are needed for the plugin after all the other CSS includes in the even that we
+     * which are needed for the plugin after all the other CSS includes in the event that we
      * need to override styles.
      * @return void
      */
     public function publicStyles()
     {
-        if(strlen($this->getPublicCss())) {
+        if(strlen($this->views->getPublicCss())) {
             $styles = array(
                 'wolfnet-custom',
             );
@@ -332,7 +269,6 @@ class wolfnet
 
             do_action($this->postHookPrefix . 'enqueueResources'); // Legacy hook
         }
-
     }
 
 
@@ -366,152 +302,6 @@ class wolfnet
 
 
     /**
-     * This method is a callback for the 'admin_init' hook. Any processes which are unique to the
-     * admin interface of WordPress and have not been run as either part of the constructor method
-     * or the 'init' hook are run in this method.
-     * @return void
-     */
-    public function adminInit()
-    {
-
-        // Register Options
-        register_setting($this->optionGroup, $this->productKeyOptionKey);
-        register_setting($this->CssOptionGroup, $this->publicCssOptionKey);
-        register_setting($this->CssOptionGroup, $this->adminCssOptionKey);
-
-        // Register Shortcode Builder Button
-        $canEditPosts = current_user_can('edit_posts');
-        $canEditPages = current_user_can('edit_pages');
-        $richEditing  = get_user_option('rich_editing');
-
-        // Register Ajax Actions
-        $this->registerAdminAjaxActions();
-
-        /* If we are serving up the search manager page we need to get the search manager HTML from
-         * the MLSFinder server now so that we can set cookies. */
-        $pageKeyExists = array_key_exists('page', $_REQUEST);
-        $pageIsSM = ($pageKeyExists) ? ($_REQUEST['page']=='wolfnet_plugin_search_manager') : false;
-        if ($pageKeyExists && $pageIsSM) {
-            $this->smHttp = $this->searchManagerHtml();
-        }
-
-    }
-
-
-    /**
-     * This method is a callback for the 'admin_menu' hook. This method is used to create any admin
-     * menu pages for the plugin.
-     * @return void
-     */
-    public function adminMenu()
-    {
-        $lvl = 'administrator';
-
-        do_action($this->preHookPrefix . 'createAdminPages'); // Legacy hook
-
-        $pgs = array(
-            array(
-                'title' => 'WolfNet <span class="wolfnet_sup">&reg;</span>',
-                'key'   => 'wolfnet_plugin_settings',
-                'icon'  => $this->url . 'img/wp_wolfnet_nav.png',
-                ),
-            array(
-                'title' => 'General Settings',
-                'key'   => 'wolfnet_plugin_settings',
-                'cb'    => array(&$this, 'amSettingsPage')
-                ),
-            array(
-                'title' => 'Edit CSS',
-                'key'   => 'wolfnet_plugin_css',
-                'cb'    => array(&$this, 'amEditCssPage')
-            ),
-            array(
-                'title' => 'Search Manager',
-                'key'   => 'wolfnet_plugin_search_manager',
-                'cb'    => array(&$this, 'amSearchManagerPage')
-                ),
-            array(
-                'title' => 'Support',
-                'key'   => 'wolfnet_plugin_support',
-                'cb'    => array(&$this, 'amSupportPage')
-                ),
-            );
-
-        add_menu_page(
-            $pgs[0]['title'],
-            $pgs[0]['title'],
-            $lvl,
-            $pgs[0]['key'],
-            null,
-            $pgs[0]['icon']
-            );
-
-        $l = count($pgs);
-        for ($i=1; $i<$l; $i++) {
-
-            add_submenu_page(
-                $pgs[0]['key'],
-                $pgs[$i]['title'],
-                $pgs[$i]['title'],
-                $lvl,
-                $pgs[$i]['key'],
-                $pgs[$i]['cb']
-                );
-
-        }
-
-        do_action($this->postHookPrefix . 'createAdminPages'); // Legacy hook
-
-    }
-
-
-    /**
-     * This method is a callback for the 'admin_enqueue_scripts' hook. Any JavaScript files (and
-     * their dependacies) which are needed by the plugin for admin interfaces are registered in this
-     * method.
-     * @return void
-     */
-    public function adminScripts()
-    {
-        do_action($this->preHookPrefix . 'enqueueAdminResources');
-
-        // JavaScript
-        $scripts = array(
-            'wolfnet-admin',
-            'wolfnet-shortcode-builder',
-            );
-
-        foreach ($scripts as $script) {
-            wp_enqueue_script($script);
-        }
-
-    }
-
-
-    /**
-     * This method is a callback for the 'admin_enqueue_scripts' hook. Any CSS files which are
-     * needed by the plugin for areas areas are registered in this method.
-     * @return void
-     */
-    public function adminStyles()
-    {
-
-        // CSS
-        $styles = array(
-            'jquery-ui',
-            'wolfnet-admin',
-            );
-
-        foreach ($styles as $style) {
-            wp_enqueue_style($style);
-        }
-
-        do_action($this->postHookPrefix . 'enqueueAdminResources');
-
-    }
-
-
-    /**
      * This method is a callback for the 'wp_footer' hook. Currently this method is used to display
      * market disclaimer information if necessary for the request.
      * @return void
@@ -522,11 +312,15 @@ class wolfnet
 
         /* If it has been established that we need to output the market disclaimer do so now in the
          * site footer, otherwise do nothing. */
-        if (array_key_exists('wolfnet_includeDisclaimer', $_REQUEST)) {
+        if (array_key_exists('wolfnet_includeDisclaimer', $_REQUEST) &&
+            array_key_exists('keyList', $_REQUEST)) {
             echo '<div class="wolfnet_marketDisclaimer">';
-            echo $this->getMarketDisclaimer();
+            foreach($_REQUEST['keyList'] as $key) {
+                echo $this->api->getMarketDisclaimer($key);
+            }
             echo '</div>';
         }
+        // TODO: Add a filter point here. Allow developers to filter the disclaimer content for formatting purposes.
 
         do_action($this->postHookPrefix . 'footerDisclaimer'); // Legacy hook
 
@@ -583,7 +377,7 @@ class wolfnet
 
     /**
      * This method is a callback for the 'do_parse_request' filter. This method checks for a
-     * specific pagename prefix and if it is present the WordPress should not parse the request.
+     * specific pagename prefix and if it is present then WordPress should not parse the request.
      * @param Boolean $req
      * @return void
      */
@@ -602,14 +396,140 @@ class wolfnet
 
 
     /**
-     * This method is used in the context of admin_print_styles to output custom CSS.
-     * @return void
+     * This method is used to retrieve search solution HTML from an MLSFinder 2.5 search solution
+     * for use as a 'search manager' interface in the WordPress admin.
+     * @param  string $productKey The product key for the solution to be retrieved.
+     * @return string             The HTML retrieved from the MLSFinder server.
      */
-    public function adminPrintStyles()
+    public function searchManagerHtml($productKey=null)
     {
-        $adminCss = $this->getAdminCss();
-        echo '<style>' . $adminCss . '</style>';
+        global $wp_version;
+        $baseUrl = $this->api->getBaseUrl($productKey);
+        $maptracksEnabled = $this->api->getMaptracksEnabled($productKey);
 
+        if (!strstr($baseUrl, 'index.cfm')) {
+            if (substr($baseUrl, strlen($baseUrl) - 1) != '/') {
+                $baseUrl .= '/';
+            }
+
+            $baseUrl .= 'index.cfm';
+
+        }
+
+        /* commenting out map mode in search manager until we better figure out session constraints..
+        if (!array_key_exists('search_mode', $_GET)) {
+            $_GET['search_mode'] = ($maptracksEnabled) ? 'map' : 'form';
+        } */
+
+        $_GET['search_mode'] = 'form';
+
+        $url = $baseUrl
+             . ((!strstr($baseUrl, '?')) ? '?' : '')
+             . '&action=wpshortcodebuilder';
+
+        $resParams = array(
+            'page',
+            'action',
+            'market_guid',
+            'reinit',
+            'show_header_footer'
+            );
+
+        foreach ($_GET as $param => $paramValue) {
+            if (!array_search($param, $resParams)) {
+                $paramValue = urlencode($this->api->html_entity_decode_numeric($paramValue));
+                $url .= "&{$param}={$paramValue}";
+            }
+        }
+
+        $reqHeaders = array(
+            'cookies'    => $this->searchManagerCookies(),
+            'timeout'    => 180,
+            'user-agent' => 'WordPress/' . $wp_version,
+            );
+
+        $http = wp_remote_get($url, $reqHeaders);
+
+        if (!is_wp_error($http)) {
+
+            $http['request'] = array(
+                'url' => $url,
+                'headers' => $reqHeaders,
+                );
+
+            if ($http['response']['code'] == '200') {
+                $this->searchManagerCookies($http['cookies']);
+                $http['body'] = $this->removeJqueryFromHTML($http['body']);
+
+                return $http;
+
+            }
+            else {
+                $http['body'] = '';
+                return $http;
+            }
+
+        }
+        else {
+            return array('body' => '');
+
+        }
+
+    }
+
+
+    /**
+     * This method retrieves a specific product key from the WordPress options table based on a
+     * provided unique ID value.
+     * @param  integer $id The ID of the key to be retrieved.
+     * @return string      The key that was retrieved from the WP options table.
+     */
+    public function getProductKeyById($id) {
+        $keyList = json_decode($this->getProductKey());
+        foreach($keyList as $key) {
+            if($key->id == $id) {
+                return $key->key;
+            }
+            // TODO: Add some sort of error throwing if no key is found for the given ID.
+        }
+    }
+
+
+    /**
+     * This method retrieved the 'default' key (or first key on the stack) from the WP options table.
+     * @return string The key that was retrieved from the WP options table.
+     */
+    public function getDefaultProductKey() {
+        $productKey = json_decode($this->getProductKey());
+        // TODO: Add some sort of error throwing for if there are no keys.
+        return $productKey[0]->key;
+    }
+
+
+    /**
+     * This method retrieves a JSON representation of stored product keys from the WP options table.
+     * @return string JSON representation of the stored product keys.
+     */
+    public function getProductKey()
+    {
+        $key = get_option(trim($this->productKeyOptionKey));
+        // If the value stored in the options table is a legacy, single key value convert it to the
+        // newer JSON format.
+        if(!$this->isJsonEncoded($key)) {
+            $key = $this->setJsonProductKey($key);
+        }
+        // TODO: perhaps it would be better to decode the JSON here instead of multiple other places.
+        return $key;
+    }
+
+
+    /**
+     * This method returns an array of integer values to be used as possible pagination item counts.
+     * @return array An array of integers.
+     */
+    public function getItemsPerPage()
+    {
+        return array(5,10,15,20,25,30,35,40,45,50);
     }
 
 
@@ -673,56 +593,6 @@ class wolfnet
         do_action($this->postHookPrefix . 'addShortcodeBuilderButton'); // Legacy hook
 
         return $buttons;
-
-    }
-
-
-    /* Admin Menus ****************************************************************************** */
-    /*                                                                                            */
-    /*  /\   _| ._ _  o ._    |\/|  _  ._       _                                                 */
-    /* /--\ (_| | | | | | |   |  | (/_ | | |_| _>                                                 */
-    /*                                                                                            */
-    /* ****************************************************************************************** */
-
-    public function amSettingsPage()
-    {
-        ob_start(); settings_fields($this->optionGroup); $formHeader = ob_get_clean();
-        $productKey = $this->getProductKey();
-        include 'template/adminSettings.php';
-
-    }
-
-
-    public function amEditCssPage()
-    {
-        ob_start(); settings_fields($this->CssOptionGroup); $formHeader = ob_get_clean();
-        $publicCss = $this->getPublicCss();
-        $adminCss = $this->getAdminCss();
-
-        include 'template/adminEditCss.php';
-
-    }
-
-
-    public function amSearchManagerPage()
-    {
-        if (!$this->productKeyIsValid()) {
-            include 'template/invalidProductKey.php';
-            return;
-        }
-        else {
-            $searchForm = ($this->smHttp !== null) ? $this->smHttp['body'] : '';
-            include 'template/adminSearchManager.php';
-
-        }
-
-    }
-
-
-    public function amSupportPage()
-    {
-        $imgdir = $this->url . 'img/';
-        include 'template/adminSupport.php';
 
     }
 
@@ -802,16 +672,19 @@ class wolfnet
     {
         $productKey = (array_key_exists('key', $_REQUEST)) ? $_REQUEST['key'] : '';
 
-        echo ($this->productKeyIsValid($productKey)) ? 'true' : 'false';
+        echo ($this->api->productKeyIsValid($productKey)) ? 'true' : 'false';
 
         die;
 
     }
 
 
-    public function remoteGetSavedSearchs()
+    public function remoteGetSavedSearches($keyid=null)
     {
-        echo json_encode($this->getSavedSearches());
+        if($keyid == null) {
+            $keyid = (array_key_exists('keyid', $_REQUEST)) ? $_REQUEST['keyid'] : '1';
+        }
+        echo json_encode($this->getSavedSearches(-1, $keyid));
 
         die;
 
@@ -837,9 +710,11 @@ class wolfnet
                 add_post_meta($post_id, $field, $value, true);
             }
 
+            $key = $_REQUEST['custom_fields']['keyid'];
+
         }
 
-        $this->remoteGetSavedSearchs();
+        $this->remoteGetSavedSearches($key);
 
     }
 
@@ -850,7 +725,7 @@ class wolfnet
             wp_delete_post($_REQUEST['id'], true);
         }
 
-        $this->remoteGetSavedSearchs();
+        $this->remoteGetSavedSearches();
 
     }
 
@@ -859,7 +734,7 @@ class wolfnet
     {
         $args = $this->getFeaturedListingsOptions();
 
-        echo $this->featuredListingsOptionsFormView($args);
+        echo $this->views->featuredListingsOptionsFormView($args);
 
         die;
 
@@ -870,7 +745,7 @@ class wolfnet
     {
         $args = $this->getListingGridOptions();
 
-        echo $this->listingGridOptionsFormView($args);
+        echo $this->views->listingGridOptionsFormView($args);
 
         die;
 
@@ -901,7 +776,7 @@ class wolfnet
     {
         $args = $this->getQuickSearchOptions();
 
-        echo $this->quickSearchOptionsFormView($args);
+        echo $this->views->quickSearchOptionsFormView($args);
 
         die;
 
@@ -975,7 +850,7 @@ class wolfnet
         }
 
         echo $callback ? $callback . '(' : '';
-        echo json_encode($this->getListings($args));
+        echo json_encode($this->api->getListings($args));
         echo $callback ? ');' : '';
 
         die;
@@ -986,7 +861,7 @@ class wolfnet
     public function remotePublicCss()
     {
         header('Content-type: text/css');
-        $publicCss = $this->getPublicCss();
+        $publicCss = $this->views->getPublicCss();
 
         if(strlen($publicCss) > 0) {
             echo $publicCss;
@@ -997,28 +872,48 @@ class wolfnet
     }
 
 
+    public function remotePriceRange()
+    {
+        $productKey = $this->getProductKeyById($_REQUEST["keyid"]);
+        $prices = $this->getPrices($productKey);
+        echo json_encode($prices);
+
+        die;
+    }
+
+
+    public function remoteGetMarketName()
+    {
+        $productKey = $_REQUEST["productkey"];
+        echo json_encode(strtoupper($this->api->getMarketName($productKey)));
+
+        die;
+    }
+
+
+    public function remoteMapEnabled()
+    {
+        $productKey = $this->getProductKeyById($_REQUEST["keyid"]);
+        echo json_encode($this->api->getMaptracksEnabled($productKey));
+
+        die;
+    }
+
+
+    public function remoteGetBaseUrl() {
+        $productKey = $this->getProductKeyById($_REQUEST["keyid"]);
+        echo json_encode($this->api->getBaseUrl($productKey));
+
+        die;
+    }
+
+
     /* Data ************************************************************************************* */
     /*  _                                                                                         */
     /* | \  _. _|_  _.                                                                            */
     /* |_/ (_|  |_ (_|                                                                            */
     /*                                                                                            */
     /* ****************************************************************************************** */
-
-    /* Featured Listings ************************************************************************ */
-
-    public function getFeaturedListings(array $criteria=array())
-    {
-        $criteria['numrows']     = $criteria['maxresults'];
-        $criteria['max_results'] = $criteria['maxresults'];
-        $criteria['owner_type']  = $criteria['ownertype'];
-
-        $productKey = $this->getProductKey();
-        $url = 'http://services.mlsfinder.com/v1/propertyBar/' . $productKey . '.json';
-        $url = $this->buildUrl($url, $criteria);
-
-        return $this->getApiData($url, 900)->listings;
-
-    }
 
 
     public function getFeaturedListingsDefaults()
@@ -1033,6 +928,7 @@ class wolfnet
             'maxresults' => 50,
             'numrows'    => 50,
             'startrow'   => 1,
+            'keyid' => '',
             );
 
     }
@@ -1055,12 +951,20 @@ class wolfnet
 
     public function featuredListings(array $criteria)
     {
+        // Maintain backwards compatibility if there is no keyid in the shortcode.
+        if(!array_key_exists('keyid', $criteria) || $criteria['keyid'] == '') {
+            $criteria['keyid'] = 1;
+        }
+
+        if(!$this->isSavedKey($this->getProductKeyById($criteria['keyid']))) {
+            return false;
+        }
 
         if (!array_key_exists('startrow', $criteria)) {
             $criteria['startrow'] = 1;
         }
 
-        $listingsData = $this->getFeaturedListings($criteria);
+        $listingsData = $this->api->getFeaturedListings($criteria);
 
         $listingsHtml = '';
 
@@ -1072,8 +976,19 @@ class wolfnet
                 'listing' => $listing
                 );
 
-            $listingsHtml .= $this->listingView($vars);
+            $listingsHtml .= $this->views->listingView($vars);
 
+        }
+
+        $_REQUEST['wolfnet_includeDisclaimer'] = true;
+        $_REQUEST['productkey'] = $this->getProductKeyById($criteria['keyid']);
+
+        // Keep a running array of product keys so we can output all necessary disclaimers
+        if(!array_key_exists('keyList', $_REQUEST)) {
+            $_REQUEST['keyList'] = array();
+        }
+        if(!in_array($_REQUEST['productkey'], $_REQUEST['keyList'])) {
+            array_push($_REQUEST['keyList'], $_REQUEST['productkey']);
         }
 
         $vars = array(
@@ -1085,47 +1000,7 @@ class wolfnet
 
         $args = $this->convertDataType(array_merge($criteria, $vars));
 
-        return $this->featuredListingView($args);
-
-    }
-
-
-    /* Listing Grid ***************************************************************************** */
-
-    public function getListings(array $criteria=array())
-    {
-        $keyConversion = array(
-            'maxresults' => 'max_results',
-            'ownertype'  => 'owner_type',
-            'minprice'   => 'min_price',
-            'maxprice'   => 'max_price',
-            'zipcode'    => 'zip_code',
-            'exactcity'  => 'exact_city',
-            );
-
-        foreach ($keyConversion as $key => $value) {
-            if (!array_key_exists($value, $criteria) && array_key_exists($key, $criteria)) {
-                $criteria[$value] = $criteria[$key];
-            }
-            unset($criteria[$key]);
-        }
-
-        $productKey = $this->getProductKey();
-        $url = 'http://services.mlsfinder.com/v1/propertyGrid/' . $productKey . '.json';
-        $url = $this->buildUrl($url, $criteria);
-
-        $data = $this->getApiData($url, 900);
-
-        $absMaxResults = $this->getMaxResults();
-        $absMaxResults = ($data->total_rows < $absMaxResults) ? $data->total_rows : $absMaxResults;
-
-        foreach ($data->listings as &$listing) {
-            $listing->numrows    = $criteria['numrows'];
-            $listing->startrow   = $criteria['startrow'];
-            $listing->maxresults = $absMaxResults;
-        }
-
-        return $data->listings;
+        return $this->views->featuredListingView($args);
 
     }
 
@@ -1148,6 +1023,7 @@ class wolfnet
             'exactcity'   => 0,
             'minprice'    => '',
             'maxprice'    => '',
+            'keyid'       => '',
             );
 
     }
@@ -1157,6 +1033,12 @@ class wolfnet
     {
         $options = $this->getOptions($this->getListingGridDefaults(), $instance);
 
+        if(array_key_exists('keyid', $options) && $options['keyid'] != '') {
+            $keyid = $options['keyid'];
+        } else {
+            $keyid = 1;
+        }
+
         $options['mode_basic_wpc']        = checked($options['mode'], 'basic', false);
         $options['mode_advanced_wpc']     = checked($options['mode'], 'advanced', false);
         $options['paginated_false_wps']   = selected($options['paginated'], 'false', false);
@@ -1164,11 +1046,10 @@ class wolfnet
         $options['sortoptions_false_wps'] = selected($options['sortoptions'], 'false', false);
         $options['sortoptions_true_wps']  = selected($options['sortoptions'], 'true', false);
         $options['ownertypes']            = $this->getOwnerTypes();
-        $options['prices']                = $this->getPrices();
-        $options['savedsearches']         = $this->getSavedSearches();
-        $options['mapEnabled']            = $this->getMaptracksEnabled();
+        $options['prices']                = $this->getPrices($this->getProductKeyById($keyid));
+        $options['savedsearches']         = $this->getSavedSearches(-1, $keyid);
+        $options['mapEnabled']            = $this->api->getMaptracksEnabled($this->getProductKeyById($keyid));
         $options['maptypes']              = $this->getMapTypes();
-
 
         return $options;
 
@@ -1177,6 +1058,15 @@ class wolfnet
 
     public function listingGrid(array $criteria)
     {
+        // Maintain backwards compatibility if there is no keyid in the shortcode.
+        if(!array_key_exists('keyid', $criteria) || $criteria['keyid'] == '') {
+            $criteria['keyid'] = 1;
+        }
+
+        if(!$this->isSavedKey($this->getProductKeyById($criteria['keyid']))) {
+            return false;
+        }
+
         if (!array_key_exists('numrows', $criteria)) {
             $criteria['numrows'] = $criteria['maxresults'];
         }
@@ -1185,7 +1075,7 @@ class wolfnet
             $criteria['startrow'] = 1;
         }
 
-        $listingsData = $this->getListings($criteria);
+        $listingsData = $this->api->getListings($criteria);
 
         $listingsHtml = '';
 
@@ -1197,11 +1087,20 @@ class wolfnet
                 'listing' => $listing
                 );
 
-            $listingsHtml .= $this->listingView($vars);
+            $listingsHtml .= $this->views->listingView($vars);
 
         }
 
         $_REQUEST['wolfnet_includeDisclaimer'] = true;
+        $_REQUEST['productkey'] = $this->getProductKeyById($criteria['keyid']);
+
+        // Keep a running array of product keys so we can output all necessary disclaimers
+        if(!array_key_exists('keyList', $_REQUEST)) {
+            $_REQUEST['keyList'] = array();
+        }
+        if(!in_array($_REQUEST['productkey'], $_REQUEST['keyList'])) {
+            array_push($_REQUEST['keyList'], $_REQUEST['productkey']);
+        }
 
         $vars = array(
             'instance_id'        => str_replace('.', '', uniqid('wolfnet_listingGrid_')),
@@ -1210,7 +1109,7 @@ class wolfnet
             'siteUrl'            => site_url(),
             'criteria'           => json_encode($criteria),
             'class'              => 'wolfnet_listingGrid ',
-            'mapEnabled'         => $this->getMaptracksEnabled(),
+            'mapEnabled'         => $this->api->getMaptracksEnabled($_REQUEST['productkey']),
             'map'                => '',
             'mapType'            => '',
             'hideListingsTools'  => '',
@@ -1219,14 +1118,14 @@ class wolfnet
             'collapseListingsId' => uniqid('collapseListings'),
             'toolbarTop'         => '',
             'toolbarBottom'      => '',
-            'maxresults'         => ((count($listingsData) > 0) ? $listingsData[0]->maxresults : 0),
+            'maxresults'         => ((count($listingsData) > 0) ? $listingsData[0]->maxresults : 0)
             );
 
 
         $vars = $this->convertDataType(array_merge($criteria, $vars));
 
         if ($vars['maptype'] != "disabled") {
-            $vars['map']     = $this->getMap($listingsData);
+            $vars['map']     = $this->getMap($listingsData, $_REQUEST['productkey']);
             $vars['mapType'] = $vars['maptype'];
             $vars['hideListingsTools'] = $this->getHideListingTools($vars['hideListingsId']
                                                                    ,$vars['showListingsId']
@@ -1250,7 +1149,7 @@ class wolfnet
             $vars['class'] .= 'wolfnet_withSortOptions ';
         }
 
-        return $this->listingGridView($vars);
+        return $this->views->listingGridView($vars);
 
     }
 
@@ -1281,6 +1180,15 @@ class wolfnet
 
     public function propertyList(array $criteria)
     {
+        // Maintain backwards compatibility if there is no keyid in the shortcode.
+        if(!array_key_exists('keyid', $criteria) || $criteria['keyid'] == '') {
+            $criteria['keyid'] = 1;
+        }
+
+        if(!$this->isSavedKey($this->getProductKeyById($criteria['keyid']))) {
+            return false;
+        }
+
         if (!array_key_exists('numrows', $criteria)) {
             $criteria['numrows'] = $criteria['maxresults'];
         }
@@ -1289,7 +1197,7 @@ class wolfnet
             $criteria['startrow'] = 1;
         }
 
-        $listingsData = $this->getListings($criteria);
+        $listingsData = $this->api->getListings($criteria);
 
         $listingsHtml = '';
 
@@ -1301,11 +1209,20 @@ class wolfnet
                 'listing' => $listing
                 );
 
-            $listingsHtml .= $this->listingBriefView($vars);
+            $listingsHtml .= $this->views->listingBriefView($vars);
 
         }
 
         $_REQUEST['wolfnet_includeDisclaimer'] = true;
+        $_REQUEST['productkey'] = $this->getProductKeyById($criteria['keyid']);
+
+        // Keep a running array of product keys so we can output all necessary disclaimers
+        if(!array_key_exists('keyList', $_REQUEST)) {
+            $_REQUEST['keyList'] = array();
+        }
+        if(!in_array($_REQUEST['productkey'], $_REQUEST['keyList'])) {
+            array_push($_REQUEST['keyList'], $_REQUEST['productkey']);
+        }
 
         $vars = array(
             'instance_id'        => str_replace('.', '', uniqid('wolfnet_propertyList_')),
@@ -1314,7 +1231,7 @@ class wolfnet
             'siteUrl'            => site_url(),
             'criteria'           => json_encode($criteria),
             'class'              => 'wolfnet_propertyList ',
-            'mapEnabled'         => $this->getMaptracksEnabled(),
+            'mapEnabled'         => $this->api->getMaptracksEnabled($_REQUEST['productkey']),
             'map'                => '',
             'mapType'            => '',
             'hideListingsTools'  => '',
@@ -1329,7 +1246,7 @@ class wolfnet
         $vars = $this->convertDataType(array_merge($criteria, $vars));
 
         if ($vars['maptype'] != "disabled") {
-            $vars['map']     = $this->getMap($listingsData);
+            $vars['map']     = $this->getMap($listingsData, $_REQUEST['productkey']);
             $vars['hideListingsTools'] = $this->getHideListingTools($vars['hideListingsId']
                                                                    ,$vars['showListingsId']
                                                                    ,$vars['collapseListingsId']
@@ -1353,7 +1270,7 @@ class wolfnet
             $vars['class'] .= 'wolfnet_withSortOptions ';
         }
 
-        return $this->propertyListView($vars);
+        return $this->views->propertyListView($vars);
 
     }
 
@@ -1385,6 +1302,15 @@ class wolfnet
 
     public function resultsSummary(array $criteria)
     {
+        // Maintain backwards compatibility if there is no keyid in the shortcode.
+        if(!array_key_exists('keyid', $criteria) || $criteria['keyid'] == '') {
+            $criteria['keyid'] = 1;
+        }
+
+        // if(!$this->isSavedKey($criteria['productkey'])) {
+        if(!$this->isSavedKey($criteria['keyid'])) {
+            return false;
+        }
 
         if (!array_key_exists('numrows', $criteria)) {
             $criteria['numrows'] = $criteria['maxresults'];
@@ -1394,7 +1320,7 @@ class wolfnet
             $criteria['startrow'] = 1;
         }
 
-        $listingsData = $this->getListings($criteria);
+        $listingsData = $this->api->getListings($criteria);
 
         $listingsHtml = '';
 
@@ -1406,11 +1332,20 @@ class wolfnet
                 'listing' => $listing
                 );
 
-            $listingsHtml .= $this->listingResultsView($vars);
+            $listingsHtml .= $this->views->listingResultsView($vars);
 
         }
 
         $_REQUEST['wolfnet_includeDisclaimer'] = true;
+        $_REQUEST['productkey'] = $criteria['productkey'];
+
+        // Keep a running array of product keys so we can output all necessary disclaimers
+        if(!array_key_exists('keyList', $_REQUEST)) {
+            $_REQUEST['keyList'] = array();
+        }
+        if(!in_array($_REQUEST['productkey'], $_REQUEST['keyList'])) {
+            array_push($_REQUEST['keyList'], $_REQUEST['productkey']);
+        }
 
         $vars = array(
             'instance_id'        => str_replace('.', '', uniqid('wolfnet_resultsSummary_')),
@@ -1419,7 +1354,7 @@ class wolfnet
             'siteUrl'            => site_url(),
             'criteria'           => json_encode($criteria),
             'class'              => 'wolfnet_resultsSummary ',
-            'mapEnabled'         => $this->getMaptracksEnabled(),
+            'mapEnabled'         => $this->api->getMaptracksEnabled($criteria["productkey"]),
             'map'                => '',
             'mapType'            => '',
             'hideListingsTools'  => '',
@@ -1434,7 +1369,7 @@ class wolfnet
         $vars = $this->convertDataType(array_merge($criteria, $vars));
 
         if ($vars['maptype'] != "disabled") {
-            $vars['map']     = $this->getMap($listingsData);
+            $vars['map']     = $this->getMap($listingsData, $criteria["productkey"]);
             $vars['hideListingsTools'] = $this->getHideListingTools($vars['hideListingsId']
                                                                    ,$vars['showListingsId']
                                                                    ,$vars['collapseListingsId']
@@ -1458,9 +1393,9 @@ class wolfnet
             $vars['class'] .= 'wolfnet_withSortOptions ';
         }
 
-        return $this->resultsSummaryView($vars);
-
+        return $this->views->resultsSummaryView($vars);
     }
+
 
 
     /* Quick Search ***************************************************************************** */
@@ -1469,7 +1404,9 @@ class wolfnet
     {
 
         return array(
-            'title' => 'QuickSearch'
+            'title' => 'QuickSearch',
+            'keyid' => '',
+            'keyids' => '',
             );
 
     }
@@ -1486,39 +1423,83 @@ class wolfnet
 
     public function quickSearch(array $criteria)
     {
+        $productKey = $this->getDefaultProductKey();
+
+        if(array_key_exists("keyids", $criteria)) {
+            $keyids = explode(",", $criteria["keyids"]);
+        } else {
+            $keyids[0] = 1;
+        }
+
+        if(count($keyids) == 1) {
+            $productKey = $this->getProductKeyById($keyids[0]);
+        }
+
         $vars = array(
             'instance_id'  => str_replace('.', '', uniqid('wolfnet_quickSearch_')),
             'siteUrl'      => site_url(),
-            'prices'       => $this->getPrices(),
+            'keyids'       => $keyids,
+            'markets'      => json_decode($this->getProductKey()),
+            'prices'       => $this->getPrices($productKey),
             'beds'         => $this->getBeds(),
             'baths'        => $this->getBaths(),
-            'formAction'   => $this->getBaseUrl()
+            'formAction'   => $this->api->getBaseUrl($productKey)
             );
 
         $args = $this->convertDataType(array_merge($criteria, $vars));
 
-        return $this->quickSearchView($args);
+        return $this->views->quickSearchView($args);
 
     }
 
 
     /* Misc. Data ******************************************************************************* */
 
-    public function getSavedSearches($count=-1)
+    public function getSavedSearches($count=-1, $keyid=null)
     {
         // Cache the data in the request scope so that we only have to query for it once per request.
         $cacheKey = 'wntSavedSearches';
         $data = (array_key_exists($cacheKey, $_REQUEST)) ? $_REQUEST[$cacheKey] : null;
+        if($keyid == null) {
+            $keyid = "1";
+        }
 
         if ($data==null) {
 
             $dataArgs = array(
                 'numberposts' => $count,
-                'post_type' => $this->customPostTypeSearch
+                'post_type' => $this->customPostTypeSearch,
+                'post_status' => 'publish',
+                'meta_query' => array(
+                    array(
+                        'key' => 'keyid',
+                        'value' => $keyid,
+                    )
+                )
+            );
+
+            $data = get_posts($dataArgs);
+
+            if(count($data) == 0 && $keyid == 1) {
+                /*
+                 * This is for backwards compatibility - get posts without keyid meta query.
+                 * We will loop through these custom posts and add the keyid meta key.
+                 * Only do this on a keyid of 1 since that would be the default key back when we only allowed one.
+                 */
+                $dataArgs = array(
+                    'numberposts' => $count,
+                    'post_type' => $this->customPostTypeSearch,
+                    'post_status' => 'publish',
                 );
 
-            $_REQUEST[$cacheKey] = get_posts($dataArgs);
-            $data = $_REQUEST[$cacheKey];
+                $data = get_posts($dataArgs);
+
+                foreach($data as $post) {
+                    add_post_meta($post->ID, 'keyid', 1);
+                }
+            }
+
+            $_REQUEST[$cacheKey] = $data;
 
         }
 
@@ -1586,238 +1567,100 @@ class wolfnet
     }
 
 
-    /* Views ************************************************************************************ */
-    /*                                                                                            */
-    /* \  / o  _        _                                                                         */
-    /*  \/  | (/_ \/\/ _>                                                                         */
+
+    /* PROTECTED METHODS ************************************************************************ */
+    /*  ____            _            _           _   __  __      _   _               _            */
+    /* |  _ \ _ __ ___ | |_ ___  ___| |_ ___  __| | |  \/  | ___| |_| |__   ___   __| |___        */
+    /* | |_) | '__/ _ \| __/ _ \/ __| __/ _ \/ _` | | |\/| |/ _ \ __| '_ \ / _ \ / _` / __|       */
+    /* |  __/| | | (_) | ||  __/ (__| ||  __/ (_| | | |  | |  __/ |_| | | | (_) | (_| \__ \       */
+    /* |_|   |_|  \___/ \__\___|\___|\__\___|\__,_| |_|  |_|\___|\__|_| |_|\___/ \__,_|___/       */
     /*                                                                                            */
     /* ****************************************************************************************** */
 
-    public function featuredListingsOptionsFormView(array $args=array())
+
+    protected function setUrl()
     {
-        $defaultArgs = array(
-            'instance_id'     => str_replace('.', '', uniqid('wolfnet_featuredListing_'))
+        $this->url = plugin_dir_url(__FILE__);
+    }
+
+    protected function addAction($action, $callable=null, $priority=null)
+    {
+        if (is_array($action)) {
+            foreach ($action as $act) {
+                if(count($act) == 2) {
+                    $this->addAction($act[0], $act[1]);
+                } else {
+                    $this->addAction($act[0], $act[1], $act[2]);
+                }
+            }
+        }
+        else {
+            if (is_callable($callable) && is_array($callable)) {
+                add_action($action, $callable, $priority);
+            }
+            else if (is_string($callable) && method_exists($this, $callable)) {
+                do_action($this->preHookPrefix . $callable);
+                add_action($action, array(&$this, $callable), $priority);
+                do_action($this->postHookPrefix . $callable);
+            }
+        }
+
+        return $this;
+
+    }
+
+
+    protected function addFilter($filter, $callable=null)
+    {
+        if (is_array($filter)) {
+            foreach ($filter as $flt) {
+                $this->addFilter($flt[0], $flt[1]);
+            }
+        }
+        else {
+            if (is_callable($callable)) {
+                add_filter($filter, $callable);
+            }
+            else if (is_string($callable) && method_exists($this, $callable)) {
+                do_action($this->preHookPrefix . $callable);
+                add_filter($filter, array(&$this, $callable));
+                do_action($this->postHookPrefix . $callable);
+            }
+        }
+
+        return $this;
+
+    }
+
+
+    protected function registerAdminAjaxActions()
+    {
+        $ajxActions = array(
+            'wolfnet_validate_key'            => 'remoteValidateProductKey',
+            'wolfnet_saved_searches'          => 'remoteGetSavedSearches',
+            'wolfnet_save_search'             => 'remoteSaveSearch',
+            'wolfnet_delete_search'           => 'remoteDeleteSearch',
+            'wolfnet_scb_options_featured'    => 'remoteShortcodeBuilderOptionsFeatured',
+            'wolfnet_scb_options_grid'        => 'remoteShortcodeBuilderOptionsGrid',
+            'wolfnet_scb_options_list'        => 'remoteShortcodeBuilderOptionsList',
+            'wolfnet_scb_results_summary'     => 'remoteShortcodeBuilderOptionsResultsSummary',
+            'wolfnet_scb_options_quicksearch' => 'remoteShortcodeBuilderOptionsQuickSearch',
+            'wolfnet_scb_savedsearch'         => 'remoteShortcodeBuilderSavedSearch',
+            'wolfnet_content'                 => 'remoteContent',
+            'wolfnet_content_header'          => 'remoteContentHeader',
+            'wolfnet_content_footer'          => 'remoteContentFooter',
+            'wolfnet_listings'                => 'remoteListings',
+            'wolfnet_get_listings'            => 'remoteListingsGet',
+            'wolfnet_css'                     => 'remotePublicCss',
+            'wolfnet_price_range'             => 'remotePriceRange',
+            'wolfnet_market_name'             => 'remoteGetMarketName',
+            'wolfnet_map_enabled'             => 'remoteMapEnabled',
+            'wolfnet_base_url'                => 'remoteGetBaseUrl',
             );
 
-        $args = array_merge($defaultArgs, $args);
-
-        return $this->parseTemplate('template/featuredListingsOptions.php', $args);
-
-    }
-
-
-    public function listingGridOptionsFormView(array $args=array())
-    {
-        $defaultArgs = array(
-            'instance_id'      => str_replace('.', '', uniqid('wolfnet_listingGrid_'))
-            );
-
-        $args = array_merge($defaultArgs, $args);
-
-        $args['criteria'] = esc_attr($args['criteria']);
-
-        return $this->parseTemplate('template/listingGridOptions.php', $args);
-
-    }
-
-
-    public function propertyListOptionsFormView(array $args=array())
-    {
-        $args = array_merge($args, array(
-            'instance_id' => str_replace('.', '', uniqid('wolfnet_propertyList_'))
-            ));
-
-        $args['criteria'] = esc_attr($args['criteria']);
-
-        return $this->getListingGridOptions($args);
-
-    }
-
-
-    public function resultsSummaryOptionsFormView(array $args=array())
-    {
-        $args = array_merge($args, array(
-            'instance_id' => str_replace('.', '', uniqid('wolfnet_resultsSummary_'))
-            ));
-
-        $args['criteria'] = esc_attr($args['criteria']);
-
-        return $this->getListingGridOptions($args);
-
-    }
-
-
-    public function quickSearchOptionsFormView(array $args=array())
-    {
-        $defaultArgs = array(
-            'instance_id' => str_replace('.', '', uniqid('wolfnet_quickSearch_'))
-            );
-
-        $args = array_merge($defaultArgs, $args);
-
-        return $this->parseTemplate('template/quickSearchOptions.php', $args);
-
-    }
-
-
-    public function listingView(array $args=array())
-    {
-        foreach ($args as $key => $item) {
-            $args[$key] = apply_filters('wolfnet_listingView_' . $key, $item);
+        foreach ($ajxActions as $action => $method) {
+            $this->addAction('wp_ajax_' . $action, array(&$this, $method));
         }
-
-        ob_start();
-        echo $this->parseTemplate('template/listing.php', $args);
-
-        return apply_filters('wolfnet_listingView', ob_get_clean());
-
-    }
-
-
-    public function listingBriefView(array $args=array())
-    {
-        foreach ($args as $key => $item) {
-            $args[$key] = apply_filters('wolfnet_listingBriefView_' . $key, $item);
-        }
-
-        ob_start();
-        echo $this->parseTemplate('template/briefListing.php', $args);
-
-        return apply_filters('wolfnet_listingBriefView', ob_get_clean());
-
-    }
-
-
-    public function listingResultsView(array $args=array())
-    {
-        foreach ($args as $key => $item) {
-            $args[$key] = apply_filters('wolfnet_listingResultsView_' . $key, $item);
-        }
-
-        ob_start();
-        echo $this->parseTemplate('template/resultsListing.php', $args);
-
-        return apply_filters('wolfnet_listingResultsView', ob_get_clean());
-
-    }
-
-
-    public function featuredListingView(array $args=array())
-    {
-        foreach ($args as $key => $item) {
-            $args[$key] = apply_filters('wolfnet_featuredListingView_' . $key, $item);
-        }
-
-        ob_start();
-        echo $this->parseTemplate('template/featuredListings.php', $args);
-
-        return apply_filters('wolfnet_featuredListingView', ob_get_clean());
-
-    }
-
-
-    public function propertyListView(array $args=array())
-    {
-        $args['itemsPerPage'] = $this->getItemsPerPage();
-        $args['sortOptions'] = $this->getSortOptions();
-
-        foreach ($args as $key => $item) {
-            $args[$key] = apply_filters('wolfnet_propertyListView_' . $key, $item);
-        }
-
-        ob_start();
-        echo $this->parseTemplate('template/propertyList.php', $args);
-
-        return apply_filters('wolfnet_propertyListView', ob_get_clean());
-
-    }
-
-
-    public function resultsSummaryView(array $args=array())
-    {
-        $args['itemsPerPage'] = $this->getItemsPerPage();
-        $args['sortOptions'] = $this->getSortOptions();
-
-        foreach ($args as $key => $item) {
-            $args[$key] = apply_filters('wolfnet_resultsSummaryView_' . $key, $item);
-        }
-
-        ob_start();
-        echo $this->parseTemplate('template/resultsSummary.php', $args);
-
-        return apply_filters('wolfnet_resultsSummaryView', ob_get_clean());
-
-    }
-
-
-    public function listingGridView(array $args=array())
-    {
-        $args['itemsPerPage'] = $this->getItemsPerPage();
-        $args['sortOptions'] = $this->getSortOptions();
-
-        foreach ($args as $key => $item) {
-            $args[$key] = apply_filters('wolfnet_listingGridView_' . $key, $item);
-        }
-
-        ob_start();
-        echo $this->parseTemplate('template/listingGrid.php', $args);
-
-        return apply_filters('wolfnet_listingGridView', ob_get_clean());
-
-    }
-
-
-    public function quickSearchView(array $args=array())
-    {
-        foreach ($args as $key => $item) {
-            $args[$key] = apply_filters( 'wolfnet_quickSearchView_' . $key, $item );
-        }
-
-        ob_start();
-        echo $this->parseTemplate('template/quickSearch.php', $args);
-
-        return apply_filters('wolfnet_quickSearchView', ob_get_clean());
-
-    }
-
-
-    public function mapView($listingsData)
-    {
-        ob_start();
-        $args = $this->getMapParameters($listingsData);
-        echo $this->parseTemplate('template/map.php', $args);
-
-        return apply_filters('wolfnet_mapView', ob_get_clean());
-
-    }
-
-
-    public function hideListingsToolsView($hideId,$showId,$collapseId,$instance_id)
-    {
-        ob_start();
-
-        $args['hideId'] = $hideId;
-        $args['showId'] = $showId;
-        $args['collapseId'] = $collapseId;
-        $args['instance_id'] = $instance_id;
-
-        echo $this->parseTemplate('template/hideListingsTools.php', $args);
-
-        return apply_filters('wolfnet_hideListingsTools', ob_get_clean());
-
-    }
-
-
-    public function toolbarView(array $args=array())
-    {
-        foreach ($args as $key => $item) {
-            $args[$key] = apply_filters('wolfnet_toolbarView_' . $key, $item);
-        }
-
-        ob_start();
-        echo $this->parseTemplate('template/toolbar.php', $args);
-
-        return apply_filters('wolfnet_toolbarView', ob_get_clean());
 
     }
 
@@ -1831,111 +1674,37 @@ class wolfnet
     /*                                                                                            */
     /* ****************************************************************************************** */
 
-    private function productKeyIsValid($key=null)
+    /**
+     * This method is used to load additional classes as needed. defined in the construct by
+     * spl_autoload_register().
+     * @param  string $class The name of the class to load. same as the name of the file in the
+     * classes directory
+     * @return bool success?
+     */
+    private function autoload($class)
     {
-        $valid = false;
-
-        if ($key != null) {
-            $productKey = $key;
+        $filename = $class . '.php';
+        $file = $this->dir . '/wolfnet/' . $filename;
+        if (!file_exists($file))
+        {
+            //  echo "could not fined $file.<br>";
+            return false;
         }
-        else {
-            $productKey = $this->getProductKey();
-        }
-
-        $url = 'http://services.mlsfinder.com/v1/validateKey/' . $productKey . '.json';
-
-        $http = wp_remote_get($url, array('timeout'=>180));
-
-        if (!is_wp_error($http) && $http['response']['code'] == '200') {
-            $data = json_decode($http['body']);
-            $errorExists = property_exists($data, 'error');
-            $statusExists = ($errorExists) ? property_exists($data->error, 'status') : false;
-
-            if ($errorExists && $statusExists && $data->error->status === false) {
-                $valid = true;
-            }
-
-        }
-
-        return $valid;
-
+        include $file;
+        return true;
     }
 
 
-    private function searchManagerHtml()
-    {
-        global $wp_version;
-        $baseUrl = $this->getBaseUrl();
-        $maptracksEnabled = $this->getMaptracksEnabled();
+    private function isSavedKey($find) {
+        $keyList = json_decode($this->getProductKey());
 
-        if (!strstr($baseUrl, 'index.cfm')) {
-            if (substr($baseUrl, strlen($baseUrl) - 1) != '/') {
-                $baseUrl .= '/';
-            }
-
-            $baseUrl .= 'index.cfm';
-
-        }
-
-        /* commenting out map mode in search manager until we better figure out session constraints..
-        if (!array_key_exists('search_mode', $_GET)) {
-            $_GET['search_mode'] = ($maptracksEnabled) ? 'map' : 'form';
-        } */
-
-        $_GET['search_mode'] = 'form';
-
-        $url = $baseUrl
-             . ((!strstr($baseUrl, '?')) ? '?' : '')
-             . '&action=wpshortcodebuilder';
-
-        $resParams = array(
-            'page',
-            'action',
-            'market_guid',
-            'reinit',
-            'show_header_footer'
-            );
-
-        foreach ($_GET as $param => $paramValue) {
-            if (!array_search($param, $resParams)) {
-                $paramValue = urlencode($this->html_entity_decode_numeric($paramValue));
-                $url .= "&{$param}={$paramValue}";
+        foreach($keyList as $key) {
+            if($key->key == $find) {
+                return true;
             }
         }
 
-        $reqHeaders = array(
-            'cookies'    => $this->searchManagerCookies(),
-            'timeout'    => 180,
-            'user-agent' => 'WordPress/' . $wp_version,
-            );
-
-        $http = wp_remote_get($url, $reqHeaders);
-
-        if (!is_wp_error($http)) {
-
-            $http['request'] = array(
-                'url' => $url,
-                'headers' => $reqHeaders,
-                );
-
-            if ($http['response']['code'] == '200') {
-                $this->searchManagerCookies($http['cookies']);
-                $http['body'] = $this->removeJqueryFromHTML($http['body']);
-
-                return $http;
-
-            }
-            else {
-                $http['body'] = '';
-                return $http;
-            }
-
-        }
-        else {
-            return array('body' => '');
-
-        }
-
+        return false;
     }
 
 
@@ -1990,216 +1759,26 @@ class wolfnet
     }
 
 
-    private function buildUrl($url='', array $params=array())
+    protected function setJsonProductKey($keyString) {
+        // This takes the old style single key string and returns a JSON formatted key array
+        $keyArray = array(
+            array(
+                "id" => "1",
+                "key" => $keyString,
+                "label" => ""
+            )
+        );
+        return json_encode($keyArray);
+    }
+
+
+    private function isJsonEncoded($str)
     {
-        if (!strstr($url, '?')) {
-            $url .= '?';
+        if(is_array(json_decode($str)) || is_object(json_decode($str))) {
+            return true;
+        } else {
+            return false;
         }
-
-        $restrictedParams = array('criteria','toolbarTop','toolbarBottom','listingsHtml','prevLink',
-            'nextLink','prevClass','nextClass','toolbarClass','instance_id','siteUrl','class','_');
-
-        $restrictedSuffix = array('_wpid', '_wpname', '_wps', '_wpc');
-
-        foreach ($params as $key => $value) {
-            $valid = true;
-            $valid = (array_search($key, $restrictedParams) !== false) ? false : $valid;
-            $valid = (!is_string($value) && !is_numeric($value) && !is_bool($value)) ? false : $valid;
-
-            foreach ($restrictedSuffix as $suffix) {
-                $valid = (substr($key, strlen($suffix)*-1) == $suffix) ? false : $valid;
-            }
-
-            if ($valid) {
-                $url .= '&' . $key . '=' . urlencode($this->html_entity_decode_numeric($value));
-            }
-
-        }
-
-        return $url;
-
-    }
-
-
-    private function parseTemplate($template, array $vars=array())
-    {
-        extract($vars, EXTR_OVERWRITE);
-        ob_start();
-
-        include $template;
-
-        return ob_get_clean();
-
-    }
-
-
-    private function getMarketDisclaimer()
-    {
-        $productKey = $this->getProductKey();
-        $url = 'http://services.mlsfinder.com/v1/marketDisclaimer/' . $productKey . '.json';
-        $url = $this->buildUrl($url, array('type'=>'search_results'));
-
-        return $this->getApiData($url, 86400)->disclaimer;
-
-    }
-
-
-    private function getProductKey()
-    {
-        return get_option(trim($this->productKeyOptionKey));
-
-    }
-
-
-    private function getPublicCss()
-    {
-        return get_option(trim($this->publicCssOptionKey));
-
-    }
-
-
-    private function getAdminCss()
-    {
-        return get_option($this->adminCssOptionKey);
-
-    }
-
-
-    private function getApiData($url, $cacheFor=900)
-    {
-        // Retrieve the WordPress version variable from the global scope for later use.
-        global $wp_version;
-        // Generate a key for caching based on a hash of the $url being requested.
-        $key = 'wolfnet_' . md5($url);
-        // Retrieve an index of all transient objects currently in use.
-        $index = $this->transientIndex();
-        // Create a time stamp of the current time.
-        $time = time();
-        // Attempt to retrieve a transient (cached) version of the data being requested.
-        $data = (array_key_exists($key, $index)) ? get_transient($key) : false;
-
-        // Add some extra values to the URL for metrics purposes.
-        $url = $this->buildUrl($url, array(
-            'pluginVersion' => $this->version,
-            'phpVersion'    => phpversion(),
-            'wpVersion'     => $wp_version,
-            ));
-
-        // If there was no matching data in the transient database or the time has expired we need
-        // to attempt to retrieve fresh data form the API.
-        if ($data === false || $time > $index[$key]) {
-
-            // Perform an HTTP request to the API.
-            $http = wp_remote_get($url, array('timeout'=>180));
-
-            // If we didn't get any data from the transient database we need to generate an object
-            // to populate with data from the API response.
-            if (!is_object($data)) {
-                $data = new stdClass();
-                $data->error = new stdClass();
-                $data->error->status = true;
-                $data->error->message = 'Unknown error.';
-                $data->url = $url;
-            }
-
-            // The API responded with a server error so capture that for later use
-            if (!is_wp_error($http) && $http['response']['code'] >= 500) {
-                $data->error->message = 'A remote server error occurred!';
-            }
-            // The API responded with a bad request error capture for later use
-            elseif (is_wp_error($http) || $http['response']['code'] >= 400) {
-                $data->error->message = 'A connection error occurred!';
-                $index[$key] = $time;
-                // We will cache this response since it may be a valid response such as the client's
-                // API key has expired.
-                set_transient($key, $data, $this->transientMaxExpiration);
-            }
-            else {
-                // The API response should be formated as JSON so we will deserialize it into a PHP
-                // standard object.
-                $tmp = json_decode($http['body']);
-
-                // If an error occurred while deserializing the JSON string (or what should have been
-                // one), generate an error message which can be used later.
-                if ($tmp === false) {
-                    $data->error->message = 'An error occurred while attempting '
-                        . 'to decode the body as Json.';
-                }
-                // The response was valid and decoded so we will use it as the data for this request.
-                else {
-                    $data = $tmp;
-                }
-
-                // If there is a data object we want to capture what URL the data came from.
-                if (is_object($data)) {
-                    $data->url = $url;
-                }
-
-                // Save the data to the transient database so we don't have to call the API again right away.
-                $index[$key] = $time + $cacheFor;
-                set_transient($key, $data, $this->transientMaxExpiration);
-
-            }
-
-        }
-
-        $errorExists = property_exists($data, 'error');
-        $statusExists = ($errorExists) ? property_exists($data->error, 'status') : false;
-
-        // If any errors occurred during this process output them to make debugging easier.
-        if ($errorExists && $statusExists && $data->error->status) {
-            print('<!-- WNT Plugin Error: ' . $data->error->message . ' -->');
-        }
-
-        // Save a "lookup" value in our transient database index to make future retrieval easier.
-        $this->transientIndex($index);
-
-        return $data;
-
-    }
-
-
-    private function transientIndex($data=null)
-    {
-        $key = $this->transientIndexKey;
-
-        // Set transient index data.
-        if ($data !== null && is_array($data)) {
-            set_transient($key, $data, $this->transientMaxExpiration);
-        }
-        // Get transient index data.
-        else {
-            $data = get_transient($key);
-
-            if ($data === false) {
-                $data = $this->transientIndex(array());
-            }
-
-        }
-
-        return $data;
-
-    }
-
-
-    private function deleteTransientIndex()
-    {
-        $this->clearTransients();
-        delete_transient($this->transientIndexKey);
-
-    }
-
-
-    private function clearTransients()
-    {
-        $index = $this->transientIndex();
-
-        foreach ($index as $key => $value) {
-            delete_transient($key);
-        }
-
-        $this->transientIndex(array());
-
     }
 
 
@@ -2265,98 +1844,15 @@ class wolfnet
     }
 
 
-    private function getMap($listingsData)
+    private function getMap($listingsData, $productKey=null)
     {
-        return $this->mapView($listingsData);
-
+        return $this->views->mapView($listingsData, $productKey);
     }
 
 
     private function getHideListingTools($hideId,$showId,$collapseId,$instance_id)
     {
-        return $this->hideListingsToolsView($hideId,$showId,$collapseId,$instance_id);
-
-    }
-
-
-    private function getMapParameters($listingsData)
-    {
-        $productKey = $this->getProductKey();
-
-        $url = 'http://services.mlsfinder.com/v1/setting/' . $productKey . '.json'
-             . '?setting=getallsettings';
-        $data = $this->getApiData($url, 86400);
-
-        $args['maptracks_map_provider'] = $data->settings->MAPTRACKS_MAP_PROVIDER;
-        $args['map_start_lat'] = $data->settings->MAP_START_LAT;
-        $args['map_start_lng'] = $data->settings->MAP_START_LNG;
-        $args['map_start_scale'] = $data->settings->MAP_START_SCALE;
-        $args['houseoverIcon'] = $this->url . 'img/houseover.png';
-        $args['houseoverData'] = $this->getHouseoverData($listingsData,$data->settings->SHOWBROKERIMAGEHO);
-
-        return $args;
-
-    }
-
-
-    private function getHouseoverData($listingsData,$showBrokerImage)
-    {
-
-        $houseoverData = array();
-
-        foreach ($listingsData as $listing) {
-
-            if (!is_null($listing->lat) && !is_null($listing->lng)) {
-
-                $concatHouseover  = '<a style="display:block" rel="follow" href="' . $listing->property_url . '">';
-                $concatHouseover .= '<div class="wolfnet_wntHouseOverWrapper">';
-                $concatHouseover .= '<div data-property-id="' . $listing->property_id . '" class="wntHOItem">';
-                $concatHouseover .= '<table class="wolfnet_wntHOTable">';
-                $concatHouseover .= '<tbody>';
-                $concatHouseover .= '<tr>';
-                $concatHouseover .= '<td class="wntHOImgCol" valign="top" style="vertical-align:top;">';
-                $concatHouseover .= '<div class="wolfnet_wntHOImg">';
-                $concatHouseover .= '<img src="' . $listing->thumbnail_url . '" style="max-height:100px;width:auto">';
-                $concatHouseover .= '</div>';
-                if ($showBrokerImage) {
-                    $concatHouseover .= '<div class="wolfnet_wntHOBroker" style="text-align: center">';
-                    $concatHouseover .= '<img src="' . $listing->branding->brokerLogo . '" style="max-height:50px;width:auto" alt="Broker Reciprocity">';
-                    $concatHouseover .= '</div>';
-                }
-                $concatHouseover .= '</td>';
-                $concatHouseover .= '<td valign="top" style="vertical-align:top;">';
-                $concatHouseover .= '<div class="wolfnet_wntHOContentContainer">';
-                $concatHouseover .= '<div style="text-align:left;font-weight:bold">' . $listing->listing_price;
-                $concatHouseover .= '</div>';
-                $concatHouseover .= '<div style="text-align:left;">' . $listing->display_address;
-                $concatHouseover .= '</div>';
-                $concatHouseover .= '<div style="text-align:left;">' . $listing->city . ', ' . $listing->state;
-                $concatHouseover .= '</div>';
-                $concatHouseover .= '<div style="text-align:left;">' . $listing->bedsbaths;
-                $concatHouseover .= '</div>';
-                $concatHouseover .= '<div style="text-align:left;padding-top:20px;">' . $listing->branding->content;
-                $concatHouseover .= '</div>';
-                $concatHouseover .= '</div>';
-                $concatHouseover .= '</td>';
-                $concatHouseover .= '</tr>';
-                $concatHouseover .= '</tbody>';
-                $concatHouseover .= '</table>';
-                $concatHouseover .= '</div>';
-                $concatHouseover .= '</div>';
-                $concatHouseover .= '</a>';
-
-                array_push($houseoverData, array(
-                    'lat'        => $listing->lat,
-                    'lng'        => $listing->lng,
-                    'content'    => $concatHouseover,
-                    'propertyId' => $listing->property_id,
-                    'propertyUrl'=> $listing->property_url
-                    ));
-
-            }
-        }
-
-        return $houseoverData;
+        return $this->views->hideListingsToolsView($hideId,$showId,$collapseId,$instance_id);
 
     }
 
@@ -2406,47 +1902,7 @@ class wolfnet
 
         $args = $this->convertDataType($args);
 
-        return $this->toolbarView($args);
-
-    }
-
-
-    private function getMaxResults()
-    {
-        $productKey = $this->getProductKey();
-        $url  = 'http://services.mlsfinder.com/v1/setting/' . $productKey . '.json'
-              . '?setting=site_text';
-        $data = $this->getApiData($url, 86400)->site_text;
-        $maxResults = (property_exists($data, 'Max Results')) ? $data->{'Max Results'} : '';
-
-        return (is_numeric($maxResults)) ? $maxResults : 250;
-
-    }
-
-
-    private function getPricesFromApi()
-    {
-        $productKey = $this->getProductKey();
-        $url  = 'http://services.mlsfinder.com/v1/setting/' . $productKey . '.json'
-              . '?setting=site_text';
-        $data = $this->getApiData($url, 86400);
-        $data = (property_exists($data, 'site_text')) ? $data->site_text : new stdClass();
-        $prcs = (property_exists($data, 'Price Range Values')) ? $data->{'Price Range Values'} : '';
-
-        return explode(',', $prcs);
-
-    }
-
-
-    private function getMaptracksEnabled()
-    {
-        $productKey = $this->getProductKey();
-        $url  = 'http://services.mlsfinder.com/v1/setting/' . $productKey
-              . '?setting=maptracks_enabled';
-        $data = $this->getApiData($url, 86400);
-        $data = (property_exists($data, 'maptracks_enabled')) ? ($data->maptracks_enabled == 'Y') : false;
-
-        return $data;
+        return $this->views->toolbarView($args);
 
     }
 
@@ -2497,23 +1953,6 @@ class wolfnet
     }
 
 
-    private function getSortOptions()
-    {
-        $productKey = $this->getProductKey();
-        $url  = 'http://services.mlsfinder.com/v1/sortOptions/' . $productKey . '.json';
-
-        return $this->getApiData($url, 86400)->sort_options;
-
-    }
-
-
-    private function getItemsPerPage()
-    {
-        return array(5,10,15,20,25,30,35,40,45,50);
-
-    }
-
-
     private function getOwnerTypes ()
     {
         return array(
@@ -2537,9 +1976,9 @@ class wolfnet
     }
 
 
-    private function getPrices()
+    private function getPrices($productKey)
     {
-        $values = $this->getPricesFromApi();
+        $values = $this->api->getPricesFromApi($productKey);
         $data   = array();
 
         foreach ($values as $value) {
@@ -2575,17 +2014,6 @@ class wolfnet
     }
 
 
-    private function getBaseUrl()
-    {
-        $productKey = $this->getProductKey();
-        $url  = 'http://services.mlsfinder.com/v1/setting/' . $productKey . '.json';
-        $url .= '?setting=SITE_BASE_URL';
-
-        return $this->getApiData($url, 86400)->site_base_url;
-
-    }
-
-
     private function localizedScriptData()
     {
         global $wp_version;
@@ -2599,57 +2027,6 @@ class wolfnet
             );
 
     }
-
-
-    private function addAction($action, $callable=null, $priority=null)
-    {
-        if (is_array($action)) {
-            foreach ($action as $act) {
-                if(count($act) == 2) {
-                    $this->addAction($act[0], $act[1]);
-                } else {
-                    $this->addAction($act[0], $act[1], $act[2]);
-                }
-            }
-        }
-        else {
-            if (is_callable($callable) && is_array($callable)) {
-                add_action($action, $callable, $priority);
-            }
-            else if (is_string($callable) && method_exists($this, $callable)) {
-                do_action($this->preHookPrefix . $callable);
-                add_action($action, array(&$this, $callable), $priority);
-                do_action($this->postHookPrefix . $callable);
-            }
-        }
-
-        return $this;
-
-    }
-
-
-    private function addFilter($filter, $callable=null)
-    {
-        if (is_array($filter)) {
-            foreach ($filter as $flt) {
-                $this->addFilter($flt[0], $flt[1]);
-            }
-        }
-        else {
-            if (is_callable($callable)) {
-                add_filter($filter, $callable);
-            }
-            else if (is_string($callable) && method_exists($this, $callable)) {
-                do_action($this->preHookPrefix . $callable);
-                add_filter($filter, array(&$this, $callable));
-                do_action($this->postHookPrefix . $callable);
-            }
-        }
-
-        return $this;
-
-    }
-
 
     private function registerCustomPostType()
     {
@@ -2852,103 +2229,9 @@ class wolfnet
 
     }
 
-
-    private function registerAdminAjaxActions()
-    {
-        $ajxActions = array(
-            'wolfnet_validate_key'            => 'remoteValidateProductKey',
-            'wolfnet_saved_searches'          => 'remoteGetSavedSearchs',
-            'wolfnet_save_search'             => 'remoteSaveSearch',
-            'wolfnet_delete_search'           => 'remoteDeleteSearch',
-            'wolfnet_scb_options_featured'    => 'remoteShortcodeBuilderOptionsFeatured',
-            'wolfnet_scb_options_grid'        => 'remoteShortcodeBuilderOptionsGrid',
-            'wolfnet_scb_options_list'        => 'remoteShortcodeBuilderOptionsList',
-            'wolfnet_scb_results_summary'     => 'remoteShortcodeBuilderOptionsResultsSummary',
-            'wolfnet_scb_options_quicksearch' => 'remoteShortcodeBuilderOptionsQuickSearch',
-            'wolfnet_scb_savedsearch'         => 'remoteShortcodeBuilderSavedSearch',
-            'wolfnet_content'                 => 'remoteContent',
-            'wolfnet_content_header'          => 'remoteContentHeader',
-            'wolfnet_content_footer'          => 'remoteContentFooter',
-            'wolfnet_listings'                => 'remoteListings',
-            'wolfnet_get_listings'            => 'remoteListingsGet',
-            'wolfnet_css'                     => 'remotePublicCss'
-            );
-
-        foreach ($ajxActions as $action => $method) {
-            $this->addAction('wp_ajax_' . $action, array(&$this, $method));
-        }
-
-    }
-
-
-    /**
-    * Decodes all HTML entities, including numeric and hexadecimal ones.
-    *
-    * @param mixed $string
-    * @return string decoded HTML
-    */
-    public function html_entity_decode_numeric($string, $quote_style=ENT_COMPAT, $charset='utf-8')
-    {
-        $hexCallback = array(&$this, 'chr_utf8_hex_callback');
-        $nonHexCallback = array(&$this, 'chr_utf8_nonhex_callback');
-
-        $string = html_entity_decode($string, $quote_style, $charset);
-        $string = preg_replace_callback('~&#x([0-9a-fA-F]+);~i', $hexCallback, $string);
-        $string = preg_replace_callback('~&#([0-9]+);~i', $nonHexCallback, $string);
-
-        return $string;
-
-    }
-
-
-    /**
-     * Callback helper
-     */
-    public function chr_utf8_hex_callback($matches)
-    {
-        return $this->chr_utf8(hexdec($matches[1]));
-
-    }
-
-
-    public function chr_utf8_nonhex_callback($matches)
-    {
-        return $this->chr_utf8($matches[1]);
-
-    }
-
-
-    /**
-    * Multi-byte chr(): Will turn a numeric argument into a UTF-8 string.
-    *
-    * @param mixed $num
-    * @return string
-    */
-    private function chr_utf8($num)
-    {
-        if ($num < 128) {
-            return chr($num);
-        }
-
-        if ($num < 2048) {
-            return chr(($num >> 6) + 192) . chr(($num & 63) + 128);
-        }
-
-        if ($num < 65536) {
-            return chr(($num >> 12) + 224) . chr((($num >> 6) & 63) + 128) . chr(($num & 63) + 128);
-        }
-
-        if ($num < 2097152) {
-            return chr(($num >> 18) + 240) . chr((($num >> 12) & 63) + 128)
-                . chr((($num >> 6) & 63) + 128) . chr(($num & 63) + 128);
-        }
-
-        return '';
-
-    }
-
-
 }
 
 
-$GLOBALS['wolfnet'] = new wolfnet();
+$GLOBALS['wolfnet'] = new Wolfnet();
+
+

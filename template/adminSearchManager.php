@@ -52,7 +52,27 @@
 
     </div>
 
+    <?php if(count($markets) > 1): ?>
+    <div class="style_box">
+        <div class="style_box_header">Market</div>
+        <div class="style_box_content">
+            Select the market that you'd like to use to create searches and click Apply.
+            <p><select id="keyid" name="keyid">
+                <?php for($i=0; $i<=count($markets)-1; $i++): ?>
+                <option value="<?php echo $markets[$i]->id; ?>"
+                    <?php if($markets[$i]->id == $selectedKey) echo ' selected="selected"'?>><?php echo $markets[$i]->label; ?></option>
+                <?php endfor; ?>
+            </select>
+            <input type="button" id="changeMarket" value="Apply" /></p>
+        </div>
+    </div>
+    <?php else: ?>
+    <input type="hidden" id="keyid" name="keyid" value="<?php echo $markets[0]->id; ?>" />
+    <?php endif; ?>
+
+    <div id="searchmanager">
     <?php echo $searchForm; ?>
+    </div>
 
     <div id="save_search" class="style_box">
         <div class="style_box_header">Save</div>
@@ -76,7 +96,7 @@
 
 </div>
 
-<script type="text/javascript" src="<?php echo $this->url; ?>/js/jquery.wolfnetSearchManager.src.js"></script>
+<script type="text/javascript" src="<?php echo $url; ?>/js/jquery.wolfnetSearchManager.src.js"></script>
 <script type="text/javascript">
 
     if ( typeof jQuery != 'undefined' ) {
@@ -86,6 +106,12 @@
             $( '#savedsearches' ).wolfnetSearchManager( {
                 saveForm  : $( '#save_search' )
             } );
+
+            <?php if(count($markets) > 1): ?>
+            $( '#changeMarket' ).click(function() {
+                document.location.href = "admin.php?page=wolfnet_plugin_search_manager&keyid=" + $('#keyid').val();
+            });
+            <?php endif; ?>
 
         } )( jQuery );
 

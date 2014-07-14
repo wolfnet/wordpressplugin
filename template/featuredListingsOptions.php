@@ -27,11 +27,29 @@
     <input id="<?php echo $direction_wpid; ?>" name="<?php echo $direction_wpname; ?>" type="hidden"
         class="wolfnet_featuredListingsOptions_dirField" />
 
+    <?php if(count($markets) == 1): ?>
+    <input type="hidden" id="<?php echo $keyid_wpid; ?>" name="<?php echo $keyid_wpid; ?>" value="1" />
+    <?php endif; ?>
+
     <table class="form-table">
         <tr>
             <td><label>Title:</label></td>
             <td><input id="<?php echo $title_wpid; ?>" name="<?php echo $title_wpname; ?>" value="<?php echo $title; ?>" type="text" /></td>
         </tr>
+
+        <?php if(count($markets) > 1): ?>
+        <tr>
+            <td><label>Market:</label></td>
+            <td>
+                <select id="<?php echo $keyid_wpid; ?>" name="<?php echo $keyid_wpid; ?>">
+                    <?php for($i=0; $i<=count($markets)-1; $i++): ?>
+                    <option value="<?php echo $markets[$i]->id; ?>"
+                        <?php if($markets[$i]->id == $selectedKey) echo ' selected="selected"'?>><?php echo $markets[$i]->label; ?></option>
+                    <?php endfor; ?>
+                </select>
+            </td>
+        </tr>
+        <?php endif; ?>
 
         <tr>
             <td><label for="<?php echo $autoplay_wpid; ?>">Scroll Control:</label></td>
