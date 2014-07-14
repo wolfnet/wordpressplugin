@@ -200,7 +200,7 @@ class Wolfnet
 
     /**
      * This method is a callback for the 'wp_enqueue_scripts' hook. Any JavaScript files (and their
-     * dependacies) which are needed by the plugin for public interfaces are registered in this
+     * dependencies) which are needed by the plugin for public interfaces are registered in this
      * method.
      * @return void
      */
@@ -251,7 +251,7 @@ class Wolfnet
 
     /**
      * This method is a callback for the 'wp_enqueue_scripts' hook. This will load CSS files
-     * which are needed for the plugin after all the other CSS includes in the even that we
+     * which are needed for the plugin after all the other CSS includes in the event that we
      * need to override styles.
      * @return void
      */
@@ -375,7 +375,7 @@ class Wolfnet
 
     /**
      * This method is a callback for the 'do_parse_request' filter. This method checks for a
-     * specific pagename prefix and if it is present the WordPress should not parse the request.
+     * specific pagename prefix and if it is present then WordPress should not parse the request.
      * @param Boolean $req
      * @return void
      */
