@@ -21,6 +21,17 @@
 
 class Wolfnet_Api
 {
+
+
+    /* Properties ******************************************************************************* */
+    /*  ____                            _   _                                                     */
+    /* |  _ \ _ __ ___  _ __   ___ _ __| |_(_) ___  ___                                           */
+    /* | |_) | '__/ _ \| '_ \ / _ \ '__| __| |/ _ \/ __|                                          */
+    /* |  __/| | | (_) | |_) |  __/ |  | |_| |  __/\__ \                                          */
+    /* |_|   |_|  \___/| .__/ \___|_|   \__|_|\___||___/                                          */
+    /*                 |_|                                                                        */
+    /* ****************************************************************************************** */
+
     /**
      * This will be set to the version of the injected class in the constructor
      * @var string
@@ -62,8 +73,18 @@ class Wolfnet_Api
      */
     private $sessionLength = 3600; // one hour
 
-    
+
     private $url;
+
+
+    /* Constructor Method *********************************************************************** */
+    /*   ____                _                   _                                                */
+    /*  / ___|___  _ __  ___| |_ _ __ _   _  ___| |_ ___  _ __                                    */
+    /* | |   / _ \| '_ \/ __| __| '__| | | |/ __| __/ _ \| '__|                                   */
+    /* | |__| (_) | | | \__ \ |_| |  | |_| | (__| || (_) | |                                      */
+    /*  \____\___/|_| |_|___/\__|_|   \__,_|\___|\__\___/|_|                                      */
+    /*                                                                                            */
+    /* ****************************************************************************************** */
 
     /**
      * This class expects an instance of the the main Wolfnet plugin class to be injected
@@ -71,11 +92,18 @@ class Wolfnet_Api
      */
     function __construct($wolfnet)
     {
-
         $this->wolfnet = $wolfnet;
-
     }
 
+
+    /* Public Methods *************************************************************************** */
+    /*  ____        _     _ _        __  __      _   _               _                            */
+    /* |  _ \ _   _| |__ | (_) ___  |  \/  | ___| |_| |__   ___   __| |___                        */
+    /* | |_) | | | | '_ \| | |/ __| | |\/| |/ _ \ __| '_ \ / _ \ / _` / __|                       */
+    /* |  __/| |_| | |_) | | | (__  | |  | |  __/ |_| | | | (_) | (_| \__ \                       */
+    /* |_|    \__,_|_.__/|_|_|\___| |_|  |_|\___|\__|_| |_|\___/ \__,_|___/                       */
+    /*                                                                                            */
+    /* ****************************************************************************************** */
 
     /* Featured Listings ************************************************************************ */
 
@@ -133,6 +161,201 @@ class Wolfnet_Api
 
     }
 
+
+    public function transientIndex($data=null)
+    {
+        $key = $this->transientIndexKey;
+
+        // Set transient index data.
+        if ($data !== null && is_array($data)) {
+            set_transient($key, $data, $this->transientMaxExpiration);
+        }
+        // Get transient index data.
+        else {
+            $data = get_transient($key);
+
+            if ($data === false) {
+                $data = $this->transientIndex(array());
+            }
+
+        }
+
+        return $data;
+
+    }
+
+
+    public function getMapParameters($listingsData, $productKey=null)
+    {
+        if($productKey == null) {
+            $productKey = $this->getDefaultProductKey();
+        }
+
+        $url = $this->serviceUrl . '/setting/' . $productKey . '.json'
+             . '?setting=getallsettings';
+        $data = $this->getApiData($url, 86400);
+
+        $args['maptracks_map_provider'] = $data->settings->MAPTRACKS_MAP_PROVIDER;
+        $args['map_start_lat'] = $data->settings->MAP_START_LAT;
+        $args['map_start_lng'] = $data->settings->MAP_START_LNG;
+        $args['map_start_scale'] = $data->settings->MAP_START_SCALE;
+        $args['houseoverIcon'] = $this->wolfnet->url . 'img/houseover.png';
+        $args['houseoverData'] = $this->getHouseoverData($listingsData,$data->settings->SHOWBROKERIMAGEHO);
+
+        return $args;
+
+    }
+
+
+    public function getPricesFromApi($productKey)
+    {
+        $url  = $this->serviceUrl . '/setting/' . $productKey . '.json'
+              . '?setting=site_text';
+        $data = $this->getApiData($url, 86400);
+        $data = (property_exists($data, 'site_text')) ? $data->site_text : new stdClass();
+        $prcs = (property_exists($data, 'Price Range Values')) ? $data->{'Price Range Values'} : '';
+
+        return explode(',', $prcs);
+
+    }
+
+
+    public function getMaptracksEnabled($productKey=null)
+    {
+        if($productKey == null) {
+            $productKey = json_decode($this->getDefaultProductKey());
+        }
+        $url  = $this->serviceUrl . '/setting/' . $productKey
+              . '?setting=maptracks_enabled';
+        $data = $this->getApiData($url, 86400);
+        $data = (property_exists($data, 'maptracks_enabled')) ? ($data->maptracks_enabled == 'Y') : false;
+
+        return $data;
+
+    }
+
+
+    public function getSortOptions($productKey=null)
+    {
+        if($productKey == null) {
+            $productKey = $this->getDefaultProductKey();
+        }
+        $url  = $this->serviceUrl . '/sortOptions/' . $productKey . '.json';
+
+        return $this->getApiData($url, 86400)->sort_options;
+
+    }
+
+
+    public function getBaseUrl($productKey=null)
+    {
+        if($productKey == null) {
+            $productKey = $this->wolfnet->getDefaultProductKey();
+        }
+
+        $url  = $this->serviceUrl . '/setting/' . $productKey . '.json';
+        $url .= '?setting=SITE_BASE_URL';
+
+        return $this->getApiData($url, 86400)->site_base_url;
+
+    }
+
+
+    public function productKeyIsValid($key=null)
+    {
+        $valid = false;
+
+        if ($key != null) {
+            $productKey = $key;
+        }
+        else {
+            $productKey = json_decode($this->wolfnet->getDefaultProductKey());
+        }
+
+        $url = $this->serviceUrl . '/validateKey/' . $productKey . '.json';
+
+        $http = wp_remote_get($url, array('timeout'=>180));
+
+        if (!is_wp_error($http) && $http['response']['code'] == '200') {
+            $data = json_decode($http['body']);
+            $errorExists = property_exists($data, 'error');
+            $statusExists = ($errorExists) ? property_exists($data->error, 'status') : false;
+
+            if ($errorExists && $statusExists && $data->error->status === false) {
+                $valid = true;
+            }
+
+        }
+
+        return $valid;
+
+    }
+
+
+    public function getMarketDisclaimer($productKey=null)
+    {
+        if($productKey == null) {
+            $productKey = $this->wolfnet->getDefaultProductKey();
+        }
+        $url = $this->serviceUrl . '/marketDisclaimer/' . $productKey . '.json';
+        $url = $this->buildUrl($url, array('type'=>'search_results'));
+
+        return $this->getApiData($url, 86400)->disclaimer;
+
+    }
+
+
+    public function getMarketName($apiKey)
+    {
+        $url = $this->serviceUrl . "/setting/" . $apiKey . ".json?setting=DATASOURCE";
+
+        return $this->getApiData($url, 1000)->datasource;
+
+    }
+
+
+    /**
+     * Decodes all HTML entities, including numeric and hexadecimal ones.
+     *
+     * @param mixed $string
+     * @return string decoded HTML
+     */
+    public function html_entity_decode_numeric($string, $quote_style=ENT_COMPAT, $charset='utf-8')
+    {
+        $hexCallback = array(&$this, 'chr_utf8_hex_callback');
+        $nonHexCallback = array(&$this, 'chr_utf8_nonhex_callback');
+
+        $string = html_entity_decode($string, $quote_style, $charset);
+        $string = preg_replace_callback('~&#x([0-9a-fA-F]+);~i', $hexCallback, $string);
+        $string = preg_replace_callback('~&#([0-9]+);~i', $nonHexCallback, $string);
+
+        return $string;
+
+    }
+
+    /**
+     * Callback helper
+     */
+    public function chr_utf8_hex_callback($matches)
+    {
+        return $this->chr_utf8(hexdec($matches[1]));
+    }
+
+
+    public function chr_utf8_nonhex_callback($matches)
+    {
+        return $this->chr_utf8($matches[1]);
+    }
+
+
+    /* PRIVATE METHODS ************************************************************************** */
+    /*  ____       _            _         __  __      _   _               _                       */
+    /* |  _ \ _ __(_)_   ____ _| |_ ___  |  \/  | ___| |_| |__   ___   __| |___                   */
+    /* | |_) | '__| \ \ / / _` | __/ _ \ | |\/| |/ _ \ __| '_ \ / _ \ / _` / __|                  */
+    /* |  __/| |  | |\ V / (_| | ||  __/ | |  | |  __/ |_| | | | (_) | (_| \__ \                  */
+    /* |_|   |_|  |_| \_/ \__,_|\__\___| |_|  |_|\___|\__|_| |_|\___/ \__,_|___/                  */
+    /*                                                                                            */
+    /* ****************************************************************************************** */
 
     private function buildUrl($url='', array $params=array())
     {
@@ -258,52 +481,8 @@ class Wolfnet_Api
 
     }
 
-    public function transientIndex($data=null)
-    {
-        $key = $this->transientIndexKey;
 
-        // Set transient index data.
-        if ($data !== null && is_array($data)) {
-            set_transient($key, $data, $this->transientMaxExpiration);
-        }
-        // Get transient index data.
-        else {
-            $data = get_transient($key);
-
-            if ($data === false) {
-                $data = $this->transientIndex(array());
-            }
-
-        }
-
-        return $data;
-
-    }
-
-
-    public function getMapParameters($listingsData, $productKey=null)
-    {
-        if($productKey == null) {
-            $productKey = $this->getDefaultProductKey();
-        }
-
-        $url = $this->serviceUrl . '/setting/' . $productKey . '.json'
-             . '?setting=getallsettings';
-        $data = $this->getApiData($url, 86400);
-
-        $args['maptracks_map_provider'] = $data->settings->MAPTRACKS_MAP_PROVIDER;
-        $args['map_start_lat'] = $data->settings->MAP_START_LAT;
-        $args['map_start_lng'] = $data->settings->MAP_START_LNG;
-        $args['map_start_scale'] = $data->settings->MAP_START_SCALE;
-        $args['houseoverIcon'] = $this->wolfnet->url . 'img/houseover.png';
-        $args['houseoverData'] = $this->getHouseoverData($listingsData,$data->settings->SHOWBROKERIMAGEHO);
-
-        return $args;
-
-    }
-    
-
-    // ttt move to template
+    // TODO: Make this a template
     private function getHouseoverData($listingsData,$showBrokerImage)
     {
 
@@ -379,162 +558,9 @@ class Wolfnet_Api
                 'propertyId' => $listing->property_id,
                 'propertyUrl'=> $listing->property_url
                 ));
-        }  
-
-        return $houseoverData;      
-
-    }
-
-
-    private function getMaxResults($productKey)
-    {
-        $url  = $this->serviceUrl . '/setting/' . $productKey . '.json'
-              . '?setting=site_text';
-        $data = $this->getApiData($url, 86400)->site_text;
-        $maxResults = (property_exists($data, 'Max Results')) ? $data->{'Max Results'} : '';
-
-        return (is_numeric($maxResults)) ? $maxResults : 250;
-
-    }
-
-    
-    public function getPricesFromApi($productKey)
-    {
-        $url  = $this->serviceUrl . '/setting/' . $productKey . '.json'
-              . '?setting=site_text';
-        $data = $this->getApiData($url, 86400);
-        $data = (property_exists($data, 'site_text')) ? $data->site_text : new stdClass();
-        $prcs = (property_exists($data, 'Price Range Values')) ? $data->{'Price Range Values'} : '';
-
-        return explode(',', $prcs);
-
-    }
-
-    
-    public function getMaptracksEnabled($productKey=null)
-    {
-        if($productKey == null) {
-            $productKey = json_decode($this->getDefaultProductKey());
-        }
-        $url  = $this->serviceUrl . '/setting/' . $productKey 
-              . '?setting=maptracks_enabled';
-        $data = $this->getApiData($url, 86400);
-        $data = (property_exists($data, 'maptracks_enabled')) ? ($data->maptracks_enabled == 'Y') : false;
-
-        return $data;
-
-    }
-
-
-    public function getSortOptions($productKey=null)
-    {
-        if($productKey == null) {
-            $productKey = $this->getDefaultProductKey();
-        }
-        $url  = $this->serviceUrl . '/sortOptions/' . $productKey . '.json';
-
-        return $this->getApiData($url, 86400)->sort_options;
-
-    }
-
-
-    public function getBaseUrl($productKey=null)
-    {
-        if($productKey == null) {
-            $productKey = $this->wolfnet->getDefaultProductKey();
         }
 
-        $url  = $this->serviceUrl . '/setting/' . $productKey . '.json';
-        $url .= '?setting=SITE_BASE_URL';
-
-        return $this->getApiData($url, 86400)->site_base_url;
-
-    }
-
-
-    public function productKeyIsValid($key=null)
-    {
-        $valid = false;
-
-        if ($key != null) {
-            $productKey = $key;
-        }
-        else {
-            $productKey = json_decode($this->wolfnet->getDefaultProductKey());
-        }
-
-        $url = $this->serviceUrl . '/validateKey/' . $productKey . '.json';
-
-        $http = wp_remote_get($url, array('timeout'=>180));
-
-        if (!is_wp_error($http) && $http['response']['code'] == '200') {
-            $data = json_decode($http['body']);
-            $errorExists = property_exists($data, 'error');
-            $statusExists = ($errorExists) ? property_exists($data->error, 'status') : false;
-
-            if ($errorExists && $statusExists && $data->error->status === false) {
-                $valid = true;
-            }
-
-        }
-
-        return $valid;
-
-    }
-
-
-    public function getMarketDisclaimer($productKey=null)
-    {
-        if($productKey == null) {
-            $productKey = $this->wolfnet->getDefaultProductKey();
-        }
-        $url = $this->serviceUrl . '/marketDisclaimer/' . $productKey . '.json';
-        $url = $this->buildUrl($url, array('type'=>'search_results'));
-
-        return $this->getApiData($url, 86400)->disclaimer;
-
-    }
-
-
-    public function getMarketName($apiKey)
-    {
-        $url = $this->serviceUrl . "/setting/" . $apiKey . ".json?setting=DATASOURCE";
-        return $this->getApiData($url, 1000)->datasource;
-    }
-
-
-    /**
-    * Decodes all HTML entities, including numeric and hexadecimal ones.
-    *
-    * @param mixed $string
-    * @return string decoded HTML
-    */
-    public function html_entity_decode_numeric($string, $quote_style=ENT_COMPAT, $charset='utf-8')
-    {
-        $hexCallback = array(&$this, 'chr_utf8_hex_callback');
-        $nonHexCallback = array(&$this, 'chr_utf8_nonhex_callback');
-
-        $string = html_entity_decode($string, $quote_style, $charset);
-        $string = preg_replace_callback('~&#x([0-9a-fA-F]+);~i', $hexCallback, $string);
-        $string = preg_replace_callback('~&#([0-9]+);~i', $nonHexCallback, $string);
-
-        return $string;
-
-    }
-
-    /**
-    * Callback helper
-    */
-    public function chr_utf8_hex_callback($matches)
-    {
-        return $this->chr_utf8(hexdec($matches[1]));
-
-    }
-
-
-    public function chr_utf8_nonhex_callback($matches)
-    {
-        return $this->chr_utf8($matches[1]);
+        return $houseoverData;
 
     }
 

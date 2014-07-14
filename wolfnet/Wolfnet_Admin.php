@@ -26,6 +26,16 @@
 class Wolfnet_Admin extends Wolfnet
 {
 
+
+    /* Properties ******************************************************************************* */
+    /*  ____                            _   _                                                     */
+    /* |  _ \ _ __ ___  _ __   ___ _ __| |_(_) ___  ___                                           */
+    /* | |_) | '__/ _ \| '_ \ / _ \ '__| __| |/ _ \/ __|                                          */
+    /* |  __/| | | (_) | |_) |  __/ |  | |_| |  __/\__ \                                          */
+    /* |_|   |_|  \___/| .__/ \___|_|   \__|_|\___||___/                                          */
+    /*                 |_|                                                                        */
+    /* ****************************************************************************************** */
+
     /**
      * This property contains the admin CSS as defined in the Edit CSS page.
      * @var string
@@ -39,6 +49,16 @@ class Wolfnet_Admin extends Wolfnet
      * @var string
      */
     protected $cacheFlag = '-wolfnet-cache';
+
+
+    /* Constructor Method *********************************************************************** */
+    /*   ____                _                   _                                                */
+    /*  / ___|___  _ __  ___| |_ _ __ _   _  ___| |_ ___  _ __                                    */
+    /* | |   / _ \| '_ \/ __| __| '__| | | |/ __| __/ _ \| '__|                                   */
+    /* | |__| (_) | | | \__ \ |_| |  | |_| | (__| || (_) | |                                      */
+    /*  \____\___/|_| |_|___/\__|_|   \__,_|\___|\__\___/|_|                                      */
+    /*                                                                                            */
+    /* ****************************************************************************************** */
 
     /**
      * prepare the class for use.
@@ -84,6 +104,15 @@ class Wolfnet_Admin extends Wolfnet
     }
 
 
+    /* Public Methods *************************************************************************** */
+    /*  ____        _     _ _        __  __      _   _               _                            */
+    /* |  _ \ _   _| |__ | (_) ___  |  \/  | ___| |_| |__   ___   __| |___                        */
+    /* | |_) | | | | '_ \| | |/ __| | |\/| |/ _ \ __| '_ \ / _ \ / _` / __|                       */
+    /* |  __/| |_| | |_) | | | (__  | |  | |  __/ |_| | | | (_) | (_| \__ \                       */
+    /* |_|    \__,_|_.__/|_|_|\___| |_|  |_|\___|\__|_| |_|\___/ \__,_|___/                       */
+    /*                                                                                            */
+    /* ****************************************************************************************** */
+
     public function activate()
     {
         // error_log("activating");
@@ -110,28 +139,8 @@ class Wolfnet_Admin extends Wolfnet
 
     }
 
-    private function deleteTransientIndex()
-    {
-        // error_log("deleteTransientIndexing");
-        $this->clearTransients();
-        delete_transient($this->wolfnet->api->transientIndexKey);
 
-    }
-
-
-    private function clearTransients()
-    {
-        $index = $this->wolfnet->api->transientIndex();
-
-        foreach ($index as $key => $value) {
-            delete_transient($key);
-        }
-
-        $this->wolfnet->api->transientIndex(array());
-
-    }
-
-     /**
+    /**
      * This method is a callback for the 'admin_enqueue_scripts' hook. Any JavaScript files (and
      * their dependencies) which are needed by the plugin for admin interfaces are registered in
      * this method.
@@ -305,6 +314,36 @@ class Wolfnet_Admin extends Wolfnet
     public function getAdminCss()
     {
         return get_option($this->adminCssOptionKey);
+    }
+
+
+    /* PRIVATE METHODS ************************************************************************** */
+    /*  ____       _            _         __  __      _   _               _                       */
+    /* |  _ \ _ __(_)_   ____ _| |_ ___  |  \/  | ___| |_| |__   ___   __| |___                   */
+    /* | |_) | '__| \ \ / / _` | __/ _ \ | |\/| |/ _ \ __| '_ \ / _ \ / _` / __|                  */
+    /* |  __/| |  | |\ V / (_| | ||  __/ | |  | |  __/ |_| | | | (_) | (_| \__ \                  */
+    /* |_|   |_|  |_| \_/ \__,_|\__\___| |_|  |_|\___|\__|_| |_|\___/ \__,_|___/                  */
+    /*                                                                                            */
+    /* ****************************************************************************************** */
+
+    private function deleteTransientIndex()
+    {
+        // error_log("deleteTransientIndexing");
+        $this->clearTransients();
+        delete_transient($this->wolfnet->api->transientIndexKey);
+
+    }
+
+
+    private function clearTransients()
+    {
+        $index = $this->wolfnet->api->transientIndex();
+
+        foreach ($index as $key => $value) {
+            delete_transient($key);
+        }
+
+        $this->wolfnet->api->transientIndex(array());
 
     }
 

@@ -23,10 +23,29 @@ class Wolfnet_Views
 {
 
 
+    /* Constructor Method *********************************************************************** */
+    /*   ____                _                   _                                                */
+    /*  / ___|___  _ __  ___| |_ _ __ _   _  ___| |_ ___  _ __                                    */
+    /* | |   / _ \| '_ \/ __| __| '__| | | |/ __| __/ _ \| '__|                                   */
+    /* | |__| (_) | | | \__ \ |_| |  | |_| | (__| || (_) | |                                      */
+    /*  \____\___/|_| |_|___/\__|_|   \__,_|\___|\__\___/|_|                                      */
+    /*                                                                                            */
+    /* ****************************************************************************************** */
+
     function __construct($wolfnet)
     {
         $this->wolfnet = $wolfnet;
     }
+
+
+    /* Public Methods *************************************************************************** */
+    /*  ____        _     _ _        __  __      _   _               _                            */
+    /* |  _ \ _   _| |__ | (_) ___  |  \/  | ___| |_| |__   ___   __| |___                        */
+    /* | |_) | | | | '_ \| | |/ __| | |\/| |/ _ \ __| '_ \ / _ \ / _` / __|                       */
+    /* |  __/| |_| | |_) | | | (__  | |  | |  __/ |_| | | | (_) | (_| \__ \                       */
+    /* |_|    \__,_|_.__/|_|_|\___| |_|  |_|\___|\__|_| |_|\___/ \__,_|___/                       */
+    /*                                                                                            */
+    /* ****************************************************************************************** */
 
     /* Admin Menus ****************************************************************************** */
     /*                                                                                            */
@@ -110,18 +129,6 @@ class Wolfnet_Views
     }
 
 
-    private function parseTemplate($template, array $vars=array())
-    {
-        extract($vars, EXTR_OVERWRITE);
-        ob_start();
-
-        include $this->wolfnet->dir .'/'. $template;
-
-        return ob_get_clean();
-
-    }
-
-
     /* Views ************************************************************************************ */
     /*                                                                                            */
     /* \  / o  _        _                                                                         */
@@ -159,20 +166,6 @@ class Wolfnet_Views
         return $this->parseTemplate('template/listingGridOptions.php', $args);
 
     }
-
-
-    // I don't think this method is used anywhere
-    // public function propertyListOptionsFormView(array $args=array())
-    // {
-    //     $args = array_merge($args, array(
-    //         'instance_id' => str_replace('.', '', uniqid('wolfnet_propertyList_'))
-    //         ));
-
-    //     $args['criteria'] = esc_attr($args['criteria']);
-
-    //     return $this->wolfnet->getListingGridOptions($args);
-
-    // }
 
 
     public function resultsSummaryOptionsFormView(array $args=array())
@@ -388,5 +381,26 @@ class Wolfnet_Views
 
     }
 
-    
+
+    /* PRIVATE METHODS ************************************************************************** */
+    /*  ____       _            _         __  __      _   _               _                       */
+    /* |  _ \ _ __(_)_   ____ _| |_ ___  |  \/  | ___| |_| |__   ___   __| |___                   */
+    /* | |_) | '__| \ \ / / _` | __/ _ \ | |\/| |/ _ \ __| '_ \ / _ \ / _` / __|                  */
+    /* |  __/| |  | |\ V / (_| | ||  __/ | |  | |  __/ |_| | | | (_) | (_| \__ \                  */
+    /* |_|   |_|  |_| \_/ \__,_|\__\___| |_|  |_|\___|\__|_| |_|\___/ \__,_|___/                  */
+    /*                                                                                            */
+    /* ****************************************************************************************** */
+
+    private function parseTemplate($template, array $vars=array())
+    {
+        extract($vars, EXTR_OVERWRITE);
+        ob_start();
+
+        include $this->wolfnet->dir .'/'. $template;
+
+        return ob_get_clean();
+
+    }
+
+
 }
