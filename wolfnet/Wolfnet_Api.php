@@ -565,6 +565,18 @@ class Wolfnet_Api
     }
 
 
+    private function getMaxResults($productKey)
+    {
+        $url  = $this->serviceUrl . '/setting/' . $productKey . '.json'
+              . '?setting=site_text';
+        $data = $this->getApiData($url, 86400)->site_text;
+        $maxResults = (property_exists($data, 'Max Results')) ? $data->{'Max Results'} : '';
+
+        return (is_numeric($maxResults)) ? $maxResults : 250;
+
+    }
+
+
     /**
     * Multi-byte chr(): Will turn a numeric argument into a UTF-8 string.
     *
