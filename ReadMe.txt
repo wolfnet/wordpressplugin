@@ -51,6 +51,9 @@ entered in the "WolfNet >> General Settings" page before any IDX data can be dis
 
 == Changelog ==
 
+= 1.6 =
+
+
 = 1.5.2 =
 * Deprecating support for versions 3.5.0 and below
 * MLS logo sizing on maps
