@@ -51,6 +51,11 @@ entered in the "WolfNet >> General Settings" page before any IDX data can be dis
 
 == Changelog ==
 
+= 1.5.3 =
+* Re-architecture of the plugin code splitting into multiple classes based on functionality.
+* Added unit testing.
+* Fixed some JavaScript issues in preparation for multi-market features.
+
 = 1.5.2 =
 * Deprecating support for versions 3.5.0 and below
 * MLS logo sizing on maps
