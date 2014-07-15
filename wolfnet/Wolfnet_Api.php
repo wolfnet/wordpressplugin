@@ -116,7 +116,7 @@ class Wolfnet_Api
         $productKey = $this->wolfnet->getProductKeyById($criteria['keyid']);
 
         $url = $this->serviceUrl . '/propertyBar/' . $productKey . '.json';
-        $url = $this->buildUrl($url, $criteria);
+        $url = $this->wolfnet->buildUrl($url, $criteria);
 
         return $this->getApiData($url, 900)->listings;
 
@@ -144,7 +144,7 @@ class Wolfnet_Api
         $productKey = $this->wolfnet->getProductKeyById($criteria['keyid']);
 
         $url = $this->serviceUrl . '/propertyGrid/' . $productKey . '.json';
-        $url = $this->buildUrl($url, $criteria);
+        $url = $this->wolfnet->buildUrl($url, $criteria);
 
         $data = $this->getApiData($url, 900);
 
@@ -298,7 +298,7 @@ class Wolfnet_Api
             $productKey = $this->wolfnet->getDefaultProductKey();
         }
         $url = $this->serviceUrl . '/marketDisclaimer/' . $productKey . '.json';
-        $url = $this->buildUrl($url, array('type'=>'search_results'));
+        $url = $this->wolfnet->buildUrl($url, array('type'=>'search_results'));
 
         return $this->getApiData($url, 86400)->disclaimer;
 
@@ -357,36 +357,6 @@ class Wolfnet_Api
     /*                                                                                            */
     /* ****************************************************************************************** */
 
-    private function buildUrl($url='', array $params=array())
-    {
-        if (!strstr($url, '?')) {
-            $url .= '?';
-        }
-
-        $restrictedParams = array('criteria','toolbarTop','toolbarBottom','listingsHtml','prevLink',
-            'nextLink','prevClass','nextClass','toolbarClass','instance_id','siteUrl','class','_');
-
-        $restrictedSuffix = array('_wpid', '_wpname', '_wps', '_wpc');
-
-        foreach ($params as $key => $value) {
-            $valid = true;
-            $valid = (array_search($key, $restrictedParams) !== false) ? false : $valid;
-            $valid = (!is_string($value) && !is_numeric($value) && !is_bool($value)) ? false : $valid;
-
-            foreach ($restrictedSuffix as $suffix) {
-                $valid = (substr($key, strlen($suffix)*-1) == $suffix) ? false : $valid;
-            }
-
-            if ($valid) {
-                $url .= '&' . $key . '=' . urlencode($this->html_entity_decode_numeric($value));
-            }
-
-        }
-
-        return $url;
-
-    }
-
 
     private function getApiData($url, $cacheFor=900)
     {
@@ -402,7 +372,7 @@ class Wolfnet_Api
         $data = (array_key_exists($key, $index)) ? get_transient($key) : false;
 
         // Add some extra values to the URL for metrics purposes.
-        $url = $this->buildUrl($url, array(
+        $url = $this->wolfnet->buildUrl($url, array(
             'pluginVersion' => $this->wolfnet->version,
             'phpVersion'    => phpversion(),
             'wpVersion'     => $wp_version,

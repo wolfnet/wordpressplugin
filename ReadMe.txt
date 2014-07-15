@@ -51,7 +51,7 @@ entered in the "WolfNet >> General Settings" page before any IDX data can be dis
 
 == Changelog ==
 
-= 1.5.3 =
+= 1.6 =
 * Re-architecture of the plugin code splitting into multiple classes based on functionality.
 * Added unit testing.
 * Fixed some JavaScript issues in preparation for multi-market features.
