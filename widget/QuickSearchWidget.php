@@ -58,7 +58,7 @@ class Wolfnet_QuickSearchWidget extends Wolfnet_AbstractWidget
 
     public function update($new_instance, $old_instance)
     {
-        return parent::update($this->plugin->views->getQuickSearchDefaults(), $new_instance, $old_instance);
+        return parent::update($this->plugin->getQuickSearchDefaults(), $new_instance, $old_instance);
 
     }
 
