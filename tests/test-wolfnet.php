@@ -173,7 +173,6 @@ class Test_Wolfnet extends WP_UnitTestCase
             'Wolfnet_FeaturedListingsWidget',
             'Wolfnet_ListingGridWidget',
             'Wolfnet_PropertyListWidget',
-            'Wolfnet_ResultsSummaryWidget',
             'Wolfnet_QuickSearchWidget',
             );
 

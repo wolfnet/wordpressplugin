@@ -168,19 +168,6 @@ class Wolfnet_Views
     }
 
 
-    public function resultsSummaryOptionsFormView(array $args=array())
-    {
-        $args = array_merge($args, array(
-            'instance_id' => str_replace('.', '', uniqid('wolfnet_resultsSummary_'))
-            ));
-
-        $args['criteria'] = esc_attr($args['criteria']);
-
-        return $this->wolfnet->getListingGridOptions($args);
-
-    }
-
-
     public function quickSearchOptionsFormView(array $args=array())
     {
         $markets = json_decode($this->wolfnet->getProductKey());
@@ -276,28 +263,6 @@ class Wolfnet_Views
         echo $this->parseTemplate('template/propertyList.php', $args);
 
         return apply_filters('wolfnet_propertyListView', ob_get_clean());
-
-    }
-
-
-    public function resultsSummaryView(array $args=array())
-    {
-        if(!array_key_exists('keyid', $args)) {
-            $args['productkey'] = $this->wolfnet->getDefaultProductKey();
-        } else {
-            $args['productkey'] = $this->wolfnet->getProductKeyById($args["keyid"]);
-        }
-        $args['itemsPerPage'] = $this->wolfnet->getItemsPerPage();
-        $args['sortOptions'] = $this->wolfnet->api->getSortOptions($args['productkey']);
-
-        foreach ($args as $key => $item) {
-            $args[$key] = apply_filters('wolfnet_resultsSummaryView_' . $key, $item);
-        }
-
-        ob_start();
-        echo $this->parseTemplate('template/resultsSummary.php', $args);
-
-        return apply_filters('wolfnet_resultsSummaryView', ob_get_clean());
 
     }
 
