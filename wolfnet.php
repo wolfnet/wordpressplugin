@@ -1438,6 +1438,7 @@ class Wolfnet
 
     public function convertDataType($value)
     {
+
         if (is_array($value)) {
             foreach ($value as $key => $val) {
                 $value[$key] = $this->convertDataType($val);
@@ -1446,11 +1447,12 @@ class Wolfnet
         else if (is_string($value) && ($value==='true' || $value==='false')) {
             return ($value==='true') ? true : false;
         }
-        else if (is_string($value) && @$int = (integer) $value) {
-            return $int;
+        
+        else if (is_string($value) && ctype_digit($value)) {
+            return (integer) $value;
         }
-        else if (is_string($value) && @$float = (float) $value) {
-            return $float;
+        else if (is_string($value) && is_numeric($value) ) {
+            return (float) $value;
         }
 
         return $value;
