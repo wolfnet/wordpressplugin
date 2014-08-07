@@ -141,7 +141,9 @@ class Wolfnet
         spl_autoload_register(array( $this, 'autoload'));
 
         $this->api = new Wolfnet_Api($this);
+        $this->apin = new Wolfnet_Api_Wp_Client($this);
         $this->views = new Wolfnet_Views($this);
+
         if (is_admin()) {
             $this->admin = new Wolfnet_Admin($this);
         }
@@ -663,6 +665,73 @@ class Wolfnet
     }
 
 
+    public function scListingGridN($attrs)
+    {
+        $a = shortcode_atts( array(
+            'key'       => '03ee4eeee4cbf74b940fb5af3474356a', // temporary, replace with keyid and lookup
+            'keyid'     => 1, // default
+            'resource'  => '/listing',
+            'method'    => 'GET',
+            'maptype'   => 'disabled',
+            'maxresults'=> '50', 
+            'max_price' => '',
+            'min_price' => '',
+            'zip_code'  => '',
+            // 'exactcity' => "1", // old api what is this?
+            // ownertype="all"   // not needed
+            // paginated="false" // not needed
+            // sortoptions="false" // not needed
+        ), $attrs );
+
+        $data = array (
+            'maxresults'=> $a['maxresults'],
+            'max_price' => $a['max_price'],
+            'min_price' => $a['min_price'],
+            'zip_code'  => $a['zip_code'],
+            );
+
+        // old shortcod atts [wnt_grid 
+        // keyid="1" 
+        // maptype="disabled" 
+        // exactcity="1" 
+        // ownertype="all" 
+        // paginated="false" 
+        // sortoptions="false" 
+        // maxresults="50" 
+
+        // old listing grid defaults
+        // return array(
+        //     'title'       => '',
+        //     'criteria'    => '',
+        //     'ownertype'   => 'all',
+        //     'maptype'     => 'disabled',
+        //     'paginated'   => false,
+        //     'sortoptions' => false,
+        //     'maxresults'  => 50,
+        //     'mode'        => 'advanced',
+        //     'savedsearch' => '',
+        //     'zipcode'     => '',
+        //     'city'        => '',
+        //     'exactcity'   => 0,
+        //     'minprice'    => '',
+        //     'maxprice'    => '',
+        //     'keyid'       => '',
+        //     );
+
+        $apiResponse = $this->apin->sendRequest($a['key'], $a['resource'], $a['method'], $data);
+
+        $this->listingGridN( $apiResponse );
+        //$defaultAttributes = $this->getListingGridDefaults();
+
+        //$criteria = array_merge($defaultAttributes, (is_array($attrs)) ? $attrs : array());
+
+        //$criteria = $this->getOptions($criteria);
+
+        //return $this->listingGrid($criteria);
+
+    }
+
+
     public function scPropertyList($attrs, $content='')
     {
         $defaultAttributes = $this->getPropertyListDefaults();
@@ -1167,6 +1236,91 @@ class Wolfnet
 
     }
 
+    public function listingGridN(array $apiResponse)
+    {
+        // expects $listingsData to be the array returned from the api sendRequest
+
+        echo "<pre>apiResponse: \n";
+        print_r($apiResponse);
+        echo "</pre>";
+        $listingsData = $apiResponse['responseData']['data']['listing'];
+
+        $listingsHtml = '';
+
+        foreach ($listingsData as &$listing) {
+
+            $this->augmentListingData($listing);
+
+            $vars = array(
+                'listing' => $listing
+                );
+
+            $listingsHtml .= $this->views->listingView($vars);
+
+        }
+
+        $_REQUEST['wolfnet_includeDisclaimer'] = true;
+        $_REQUEST[$this->requestPrefix.'productkey'] = $this->getProductKeyById($criteria['keyid']);
+
+        // Keep a running array of product keys so we can output all necessary disclaimers
+        if(!array_key_exists('keyList', $_REQUEST)) {
+            $_REQUEST['keyList'] = array();
+        }
+        if(!in_array($_REQUEST[$this->requestPrefix.'productkey'], $_REQUEST['keyList'])) {
+            array_push($_REQUEST['keyList'], $_REQUEST[$this->requestPrefix.'productkey']);
+        }
+
+        $vars = array(
+            'instance_id'        => str_replace('.', '', uniqid('wolfnet_listingGrid_')),
+            'listings'           => $listingsData,
+            'listingsHtml'       => $listingsHtml,
+            'siteUrl'            => site_url(),
+            'criteria'           => json_encode($criteria),
+            'class'              => 'wolfnet_listingGrid ',
+            'mapEnabled'         => $this->api->getMaptracksEnabled($_REQUEST[$this->requestPrefix.'productkey']),
+            'map'                => '',
+            'mapType'            => '',
+            'hideListingsTools'  => '',
+            'hideListingsId'     => uniqid('hideListings'),
+            'showListingsId'     => uniqid('showListings'),
+            'collapseListingsId' => uniqid('collapseListings'),
+            'toolbarTop'         => '',
+            'toolbarBottom'      => '',
+            'maxresults'         => ((count($listingsData) > 0) ? $listingsData[0]->maxresults : 0)
+            );
+
+
+        $vars = $this->convertDataType(array_merge($criteria, $vars));
+
+        if ($vars['maptype'] != "disabled") {
+            $vars['map']     = $this->getMap($listingsData, $_REQUEST[$this->requestPrefix.'productkey']);
+            $vars['mapType'] = $vars['maptype'];
+            $vars['hideListingsTools'] = $this->getHideListingTools($vars['hideListingsId']
+                                                                   ,$vars['showListingsId']
+                                                                   ,$vars['collapseListingsId']
+                                                                   ,$vars['instance_id']);
+        }
+        else {
+            $vars['mapType'] = $vars['maptype'];
+        }
+
+        if ($vars['paginated'] || $vars['sortoptions']) {
+            $vars['toolbarTop']    = $this->getToolbar($vars, 'wolfnet_toolbarTop ');
+            $vars['toolbarBottom'] = $this->getToolbar($vars, 'wolfnet_toolbarBottom ');
+        }
+
+        if ($vars['paginated']) {
+            $vars['class'] .= 'wolfnet_withPagination ';
+        }
+
+        if ($vars['sortoptions']) {
+            $vars['class'] .= 'wolfnet_withSortOptions ';
+        }
+
+        return $this->views->listingGridView($vars);
+
+    }
+
 
     /* Property List **************************************************************************** */
 
@@ -1571,19 +1725,26 @@ class Wolfnet
      * spl_autoload_register().
      * @param  string $class The name of the class to load. same as the name of the file in the
      * classes directory
-     * @return bool success?
+     * @return bool success/fail
      */
     private function autoload($class)
     {
         $filename = $class . '.php';
         $file = $this->dir . '/wolfnet/' . $filename;
-        if (!file_exists($file))
+        if (file_exists($file))
         {
-            //  echo "could not fined $file.<br>";
-            return false;
+            include $file;
+            return true;
         }
-        include $file;
-        return true;
+
+        $file = $this->dir . '/wolfnet/wolfnet-api-wp-client/' . $filename;
+        if (file_exists($file))
+        {
+            include $file;
+            return true;
+        }
+        
+        return false;
     }
 
 
@@ -1677,61 +1838,73 @@ class Wolfnet
     private function augmentListingData(&$listing)
     {
 
-        if (is_numeric($listing->listing_price)) {
-            $listing->listing_price = '$' . number_format($listing->listing_price);
+        // if (is_numeric($listing->listing_price)) {
+        if (is_numeric($listing['listing_price'])) {
+            // $listing->listing_price = '$' . number_format($listing->listing_price);
+            $listing['listing_price'] = '$' . number_format($listing['listing_price']);
         }
 
-        $listing->location = $listing->city;
+        $listing['location'] = $listing['city'];
 
-        if ( $listing->city != '' && $listing->state != '' ) {
-            $listing->location .= ', ';
+        if ( $listing['city'] != '' && $listing['state'] != '' ) {
+            $listing['location'] .= ', ';
         }
 
-        $listing->location .= $listing->state;
-        $listing->location .= ' ' . $listing->zip_code;
+        $listing['location'] .= $listing['state'];
+        $listing['location'] .= ' ' . $listing['zip_code'];
 
-        $listing->bedsbaths = '';
+        $listing['bedsbaths'] = '';
 
-        if (is_numeric($listing->bedrooms)) {
-            $listing->bedsbaths .= $listing->bedrooms . 'bd';
+        if (is_numeric($listing['total_bedrooms'])) {
+            $listing['bedsbaths'] .= $listing['total_bedrooms'] . 'bd';
         }
 
-        if (is_numeric($listing->bedrooms) && is_numeric($listing->bathroom)) {
-            $listing->bedsbaths .= '/';
+        if (is_numeric($listing['total_bedrooms'] && is_numeric($listing['bathroom'])))  {
+            $listing['bedsbaths'] .= '/';
         }
 
-        if (is_numeric($listing->bathroom)) {
-            $listing->bedsbaths .= $listing->bathroom . 'ba';
+        $listing['total_baths'] = 0;
+
+        if (is_numeric($listing['total_partial_baths'])) {
+            $listing['total_baths'] += $listing['total_partial_baths'];
         }
 
-        $listing->bedsbaths_full = '';
-
-        if ( is_numeric( $listing->bedrooms ) ) {
-            $listing->bedsbaths_full .= $listing->bedrooms . ' Bed Rooms';
+        if (is_numeric($listing['total_full_baths'])) {
+            $listing['total_baths'] += $listing['total_full_baths'];
         }
 
-        if ( is_numeric( $listing->bedrooms ) && is_numeric( $listing->bathroom ) ) {
-            $listing->bedsbaths_full .= ' & ';
+        if (is_numeric($listing['total_baths'])) {
+            $listing['bedsbaths'] .= $listing['total_baths'] . 'ba';
         }
 
-        if ( is_numeric( $listing->bathroom ) ) {
-            $listing->bedsbaths_full .= $listing->bathroom . ' Bath Rooms';
+        $listing['bedsbaths_full'] = '';
+
+        if ( is_numeric( $listing['bedrooms'] ) ) {
+            $listing['bedsbaths_full'] .= $listing['bedrooms'] . ' Bed Rooms';
         }
 
-        $listing->address = $listing->display_address;
-
-        if ($listing->city != '' && $listing->address != '') {
-            $listing->address .= ', ';
+        if ( is_numeric( $listing['bedrooms'] ) && is_numeric( $listing['bathroom'] ) ) {
+            $listing['bedsbaths_full'] .= ' & ';
         }
 
-        $listing->address .= $listing->city;
-
-        if ($listing->state != '' && $listing->address != '') {
-            $listing->address .= ', ';
+        if ( is_numeric( $listing['bathroom'] ) ) {
+            $listing['bedsbaths_full'] .= $listi['bathroom'] . ' Bath Rooms';
         }
 
-        $listing->address .= ' ' . $listing->state;
-        $listing->address .= ' ' . $listing->zip_code;
+        $listing['address'] = $listing['display_address'];
+
+        if ($listing['city'] != '' && $listing['address'] != '') {
+            $listing['address'] .= ', ';
+        }
+
+        $listing['address'] .= $listing['city'];
+
+        if ($listing['state'] != '' && $listing['address'] != '') {
+            $listing['address'] .= ', ';
+        }
+
+        $listing['address'] .= ' ' . $listing['state'];
+        $listing['address'] .= ' ' . $listing['zip_code'];
 
     }
 
@@ -1964,6 +2137,7 @@ class Wolfnet
             'wolfnetlistinggrid'        => 'scListingGrid',
             'WOLFNETLISTINGGRID'        => 'scListingGrid',
             'wnt_grid'                  => 'scListingGrid',
+            'wnt_grid_n'                => 'scListingGridN',
             'WolfNetPropertyList'       => 'scPropertyList',
             'wolfnetpropertylist'       => 'scPropertyList',
             'WOLFNETPROPERTYLIST'       => 'scPropertyList',
