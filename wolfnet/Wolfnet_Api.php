@@ -92,7 +92,7 @@ class Wolfnet_Api
      */
     function __construct($wolfnet)
     {
-        $this->wolfnet = $wolfnet;
+        // $this->wolfnet = $wolfnet;
     }
 
 
@@ -113,10 +113,10 @@ class Wolfnet_Api
         $criteria['max_results'] = $criteria['maxresults'];
         $criteria['owner_type']  = $criteria['ownertype'];
 
-        $productKey = $this->wolfnet->getProductKeyById($criteria['keyid']);
+        $productKey = $GLOBALS['wolfnet']->getProductKeyById($criteria['keyid']);
 
         $url = $this->serviceUrl . '/propertyBar/' . $productKey . '.json';
-        $url = $this->wolfnet->buildUrl($url, $criteria);
+        $url = $GLOBALS['wolfnet']->buildUrl($url, $criteria);
 
         return $this->getApiData($url, 900)->listings;
 
@@ -141,10 +141,10 @@ class Wolfnet_Api
             unset($criteria[$key]);
         }
 
-        $productKey = $this->wolfnet->getProductKeyById($criteria['keyid']);
+        $productKey = $GLOBALS['wolfnet']->getProductKeyById($criteria['keyid']);
 
         $url = $this->serviceUrl . '/propertyGrid/' . $productKey . '.json';
-        $url = $this->wolfnet->buildUrl($url, $criteria);
+        $url = $GLOBALS['wolfnet']->buildUrl($url, $criteria);
 
         $data = $this->getApiData($url, 900);
 
@@ -199,7 +199,7 @@ class Wolfnet_Api
         $args['map_start_lat'] = $data->settings->MAP_START_LAT;
         $args['map_start_lng'] = $data->settings->MAP_START_LNG;
         $args['map_start_scale'] = $data->settings->MAP_START_SCALE;
-        $args['houseoverIcon'] = $this->wolfnet->url . 'img/houseover.png';
+        $args['houseoverIcon'] = $GLOBALS['wolfnet']->url . 'img/houseover.png';
         $args['houseoverData'] = $this->getHouseoverData($listingsData,$data->settings->SHOWBROKERIMAGEHO);
 
         return $args;
@@ -250,7 +250,7 @@ class Wolfnet_Api
     public function getBaseUrl($productKey=null)
     {
         if($productKey == null) {
-            $productKey = $this->wolfnet->getDefaultProductKey();
+            $productKey = $GLOBALS['wolfnet']->getDefaultProductKey();
         }
 
         $url  = $this->serviceUrl . '/setting/' . $productKey . '.json';
@@ -269,7 +269,7 @@ class Wolfnet_Api
             $productKey = $key;
         }
         else {
-            $productKey = json_decode($this->wolfnet->getDefaultProductKey());
+            $productKey = json_decode($GLOBALS['wolfnet']->getDefaultProductKey());
         }
 
         $url = $this->serviceUrl . '/validateKey/' . $productKey . '.json';
@@ -295,10 +295,10 @@ class Wolfnet_Api
     public function getMarketDisclaimer($productKey=null)
     {
         if($productKey == null) {
-            $productKey = $this->wolfnet->getDefaultProductKey();
+            $productKey = $GLOBALS['wolfnet']->getDefaultProductKey();
         }
         $url = $this->serviceUrl . '/marketDisclaimer/' . $productKey . '.json';
-        $url = $this->wolfnet->buildUrl($url, array('type'=>'search_results'));
+        $url = $GLOBALS['wolfnet']->buildUrl($url, array('type'=>'search_results'));
 
         return $this->getApiData($url, 86400)->disclaimer;
 
@@ -372,8 +372,8 @@ class Wolfnet_Api
         $data = (array_key_exists($key, $index)) ? get_transient($key) : false;
 
         // Add some extra values to the URL for metrics purposes.
-        $url = $this->wolfnet->buildUrl($url, array(
-            'pluginVersion' => $this->wolfnet->version,
+        $url = $GLOBALS['wolfnet']->buildUrl($url, array(
+            'pluginVersion' => $GLOBALS['wolfnet']->version,
             'phpVersion'    => phpversion(),
             'wpVersion'     => $wp_version,
             ));

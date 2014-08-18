@@ -70,11 +70,11 @@ class Wolfnet_Admin extends Wolfnet
         // sets url
         $this->setUrl();
 
-        $this->wolfnet = $wolfnet;
+        //$this->wolfnet = $wolfnet;
 
         // ttt check and change $this->api to $this->wolfnet->api then remove this line
-        $this->api = $wolfnet->api;
-        $this->views = $wolfnet->views;
+        // $this->api = $wolfnet->api;
+        // $this->views = $wolfnet->views;
 
         register_activation_hook( $this->pluginFile, array($this, 'activate' ));
         register_deactivation_hook( $this->pluginFile, array($this, 'deactivate' ));
@@ -214,12 +214,12 @@ class Wolfnet_Admin extends Wolfnet
         $pageIsSM = ($pageKeyExists) ? ($_REQUEST['page']=='wolfnet_plugin_search_manager') : false;
         $key = (array_key_exists("keyid", $_REQUEST)) ? $_REQUEST["keyid"] : "1";
         $productKey = $this->getProductKeyById($key);
-        if(!$this->wolfnet->api->productKeyIsValid($productKey)) {
+        if(!$GLOBALS['wolfnet']->api->productKeyIsValid($productKey)) {
             $productKey = null;
         }
 
         if ($pageKeyExists && $pageIsSM) {
-            $this->wolfnet->smHttp = $this->searchManagerHtml($productKey);
+            $GLOBALS['wolfnet']->smHttp = $this->searchManagerHtml($productKey);
         }
 
     }
@@ -252,22 +252,22 @@ class Wolfnet_Admin extends Wolfnet
             array(
                 'title' => 'General Settings',
                 'key'   => 'wolfnet_plugin_settings',
-                'cb'    => array(&$this->wolfnet->views, 'amSettingsPage')
+                'cb'    => array(&$GLOBALS['wolfnet']->views, 'amSettingsPage')
                 ),
             array(
                 'title' => 'Edit CSS',
                 'key'   => 'wolfnet_plugin_css',
-                'cb'    => array(&$this->wolfnet->views, 'amEditCssPage')
+                'cb'    => array(&$GLOBALS['wolfnet']->views, 'amEditCssPage')
             ),
             array(
                 'title' => 'Search Manager',
                 'key'   => 'wolfnet_plugin_search_manager',
-                'cb'    => array(&$this->wolfnet->views, 'amSearchManagerPage')
+                'cb'    => array(&$GLOBALS['wolfnet']->views, 'amSearchManagerPage')
                 ),
             array(
                 'title' => 'Support',
                 'key'   => 'wolfnet_plugin_support',
-                'cb'    => array(&$this->wolfnet->views, 'amSupportPage')
+                'cb'    => array(&$GLOBALS['wolfnet']->views, 'amSupportPage')
                 ),
             );
 
@@ -330,20 +330,20 @@ class Wolfnet_Admin extends Wolfnet
     {
         // error_log("deleteTransientIndexing");
         $this->clearTransients();
-        delete_transient($this->wolfnet->api->transientIndexKey);
+        delete_transient($GLOBALS['wolfnet']->api->transientIndexKey);
 
     }
 
 
     private function clearTransients()
     {
-        $index = $this->wolfnet->api->transientIndex();
+        $index = $GLOBALS['wolfnet']->api->transientIndex();
 
         foreach ($index as $key => $value) {
             delete_transient($key);
         }
 
-        $this->wolfnet->api->transientIndex(array());
+        $GLOBALS['wolfnet']->api->transientIndex(array());
 
     }
 
