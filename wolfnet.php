@@ -133,8 +133,8 @@ class Wolfnet
         // Set the Autoloader Method
         spl_autoload_register(array( $this, 'autoload'));
 
-        $this->api = new Wolfnet_Api($this);
-        $this->views = new Wolfnet_Views($this);
+        $this->api = new Wolfnet_Api();
+        $this->views = new Wolfnet_Views();
         if (is_admin()) {
             $this->admin = new Wolfnet_Admin($this);
         }
@@ -747,7 +747,7 @@ class Wolfnet
     }
 
 
-    public function remoteShortcodeBuilderOptionsFeatured ()
+    public function remoteShortcodeBuilderOptionsFeatured()
     {
         $args = $this->getFeaturedListingsOptions();
 
