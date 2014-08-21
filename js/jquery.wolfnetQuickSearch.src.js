@@ -217,6 +217,72 @@ if ( typeof jQuery != 'undefined' ) {
 
 		}; /* END: function $.fn.wolfnetQuickSearch */
 
+		$.fn.toggleQuickSearchFields = function(state) {
+			var fieldNames = ['open_text', 'min_price', 'max_price', 'min_bedrooms', 'min_bathrooms', 'search'];
+			for(var element in fieldNames) {
+				$('[name=' + fieldNames[element] + ']').prop('disabled', state);
+			}
+		}
+
+		$.fn.rebuildQuickSearchOptions = function(keyId) {
+			$.ajax( {
+	            url: wolfnet_ajax.ajaxurl,
+	            data: { action:'wolfnet_base_url', keyid:keyId },
+	            dataType: 'json',
+	            type: 'GET',
+	            cache: false,
+	            timeout: 2500,
+	            statusCode: {
+	                404: function () {
+	                    commFailure();
+	                }
+	            },
+	            success: function ( data ) {
+	                $('.wolfnet_quickSearch_form').attr('action', data);
+	            },
+	            error: function ( error ) {
+	                console.log(error);
+	            }
+	        } );
+	        
+			$.ajax( {
+	            url: wolfnet_ajax.ajaxurl,
+	            data: { action:'wolfnet_price_range', keyid:keyId },
+	            dataType: 'json',
+	            type: 'GET',
+	            cache: false,
+	            timeout: 2500,
+	            statusCode: {
+	                404: function () {
+	                    commFailure();
+	                }
+	            },
+	            success: function ( data ) {
+	                var options = buildPriceDropdownOptions(data);
+	                $('[name=min_price],[name=max_price]').html('');
+	                $('[name=max_price]').append($('<option />').attr('value', '').html('Max. Price'));
+	                $('[name=min_price]').append($('<option />').attr('value', '').html('Min. Price'));
+	                $(options).each(function() {
+	                    $('[name=min_price],[name=max_price]').append(this);
+	                });
+	            },
+	            error: function ( error ) {
+	                console.log(error);
+	            }
+	        } );
+		}
+
+		var buildPriceDropdownOptions = function(data) 
+        {
+            var options = [];
+            $(data).each(function() {
+                options.push(
+                    $('<option />').attr('value', this.value).html(this.label)
+                );
+            });
+            return options;
+        }
+
 	} )( jQuery ); /* END: jQuery IIFE */
 
 } /* END: If jQuery Exists */

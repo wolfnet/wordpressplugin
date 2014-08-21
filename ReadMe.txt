@@ -1,6 +1,6 @@
 === WolfNet IDX for WordPress  ===
 Author:             WolfNet Technologies, LLC
-Contributors:       wolfnettech, ajmichels, asbaumgart, michaelpidde
+Contributors:       wolfnettech, ajmichels, asbaumgart, michaelpidde, tpenney
 Tags:               idx, mls, homes
 Requires at least:  3.5.1
 Tested up to:       3.9
@@ -50,6 +50,9 @@ entered in the "WolfNet >> General Settings" page before any IDX data can be dis
 
 
 == Changelog ==
+
+= 1.6 =
+
 
 = 1.5.2 =
 * Deprecating support for versions 3.5.0 and below

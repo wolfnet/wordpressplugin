@@ -161,6 +161,11 @@
 
             }
 
+            .wolfnet_market {
+                float: left;
+                margin: 0 20px 10px 0;
+            }
+
         }
 
         &.wolfnet_wWide
@@ -379,8 +384,7 @@
     }
 
     &.wolfnet_listingGrid,
-    &.wolfnet_propertyList,
-	&.wolfnet_resultsSummary
+    &.wolfnet_propertyList
     {
         .mqa-display img
         {
@@ -550,112 +554,6 @@
 
     }
 
-    &.wolfnet_resultsSummary
-    {
-
-        .wolfnet_listing
-        {
-            width:          100%;
-            text-align:     center;
-            margin:         0 auto 1em auto;
-            position:       relative;
-            text-align:     left;
-            font-size:      .8em;
-            margin:         0 5px 0 5px;
-            clear:          both;
-            padding-bottom: 20px;
-            a
-            {
-                color:           inherit;
-                text-decoration: none;
-            }
-
-            .wolfnet_detailsLink
-            {
-                display:block;
-            }
-
-            .wolfnet_listingImage
-            {
-                width:      160px;
-                height:     auto;
-                display:    block;
-                overflow:   hidden;
-                margin:     0;
-                text-align: center;
-                margin-bottom:    .5em;
-                border:           1px solid hsl(0, 0%, 87%);
-                background-color: #F5F5F5;
-                padding:          10px 0 10px 0;
-                float:  left;
-
-                img
-                {
-                    height: @imageHeight;
-                    box-shadow:   0 5px 10px hsla(0, 0%, 60%, 0.25);
-                    border: 1px solid #EBEBEB;
-                }
-
-            }
-
-            .wolfnet_data
-            {
-                padding-left: 175px;
-            }
-
-            .wolfnet_price
-            {
-                font-size: 1.2em;
-                font-weight: bold;
-                display:     block;
-            }
-
-            .wolfnet_location
-            {
-                display: block;
-            }
-
-            .wolfnet_bed_bath
-            {
-                display: block;
-                position: absolute;
-                top:      @imageHeight + 30px;
-                right:    0;
-            }
-
-            .wolfnet_branding
-            {
-
-                .wolfnet_brokerLogo
-                {
-                    display: block;
-
-                    img
-                    {
-                        height: auto;
-                        border: 0;
-                        border-radius: 0;
-                        box-shadow: none;
-                    }
-
-                    &.wolfnet_idxLogo {
-                        img {
-                            max-width: 45px;
-                        }
-                    }
-
-                }
-
-                .wolfnet_brandingMessage
-                {
-                    display: block;
-                }
-
-            }
-
-        }
-
-    }
 
     &.wolfnet_featuredListings
     {
