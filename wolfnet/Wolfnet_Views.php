@@ -276,11 +276,20 @@ class Wolfnet_Views
             $args['productkey'] = $this->wolfnet->getProductKeyById($args["keyid"]);
         }
         $args['itemsPerPage'] = $this->wolfnet->getItemsPerPage();
-        $args['sortOptions'] = $this->wolfnet->api->getSortOptions($args['productkey']);
+        //$args['sortOptions'] = $this->wolfnet->api->getSortOptions($args['productkey']);
+        $args['sortOptions'] = $this->wolfnet->apin->sendRequest($args['productkey'], '/search_criteria/sort_option');
+
+        // echo "<pre>args['sortOptions']: \n";
+        // print_r($args['sortOptions']);
+        // echo "</pre>";
 
         foreach ($args as $key => $item) {
             $args[$key] = apply_filters('wolfnet_listingGridView_' . $key, $item);
         }
+
+        //echo "<pre>args: \n";
+        //print_r($args);
+        //echo "</pre>";
 
         ob_start();
         echo $this->parseTemplate('template/listingGrid.php', $args);
@@ -364,6 +373,10 @@ class Wolfnet_Views
 
     private function parseTemplate($template, array $vars=array())
     {
+        // echo "<pre>parseTemplate vars: \n";
+        // print_r($vars);
+        // echo "</pre>";
+        
         extract($vars, EXTR_OVERWRITE);
         ob_start();
 

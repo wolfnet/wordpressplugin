@@ -113,7 +113,7 @@ class Wolfnet_Api
         $criteria['max_results'] = $criteria['maxresults'];
         $criteria['owner_type']  = $criteria['ownertype'];
 
-        $productKey = $this->wolfnet->getProductKeyById($criteria['keyid']);
+        $productKey = $GLOBALS['wolfnet']->getProductKeyById($criteria['keyid']);
 
         $url = $this->serviceUrl . '/propertyBar/' . $productKey . '.json';
         $url = $this->wolfnet->buildUrl($url, $criteria);
@@ -188,7 +188,7 @@ class Wolfnet_Api
     public function getMapParameters($listingsData, $productKey=null)
     {
         if($productKey == null) {
-            $productKey = $this->getDefaultProductKey();
+            $productKey = $this->wolfnet->getDefaultProductKey();
         }
 
         $url = $this->serviceUrl . '/setting/' . $productKey . '.json'
@@ -223,7 +223,7 @@ class Wolfnet_Api
     public function getMaptracksEnabled($productKey=null)
     {
         if($productKey == null) {
-            $productKey = json_decode($this->getDefaultProductKey());
+            $productKey = json_decode($this->wolfnet->getDefaultProductKey());
         }
         $url  = $this->serviceUrl . '/setting/' . $productKey
               . '?setting=maptracks_enabled';
@@ -238,7 +238,7 @@ class Wolfnet_Api
     public function getSortOptions($productKey=null)
     {
         if($productKey == null) {
-            $productKey = $this->getDefaultProductKey();
+            $productKey = $this->wolfnet-getDefaultProductKey();
         }
         $url  = $this->serviceUrl . '/sortOptions/' . $productKey . '.json';
 

@@ -28,11 +28,11 @@
         <h2 class="widget-title"><?php echo $title; ?></h2>
     <?php } ?>
 
-    <?php if (($mapType == 'above' || $mapType == 'map_only') && $mapEnabled) {
+    <?php if (($maptype == 'above' || $maptype == 'map_only') && $mapEnabled) {
         echo $map;
     } ?>
 
-    <?php if ($mapType != 'disabled' && $mapEnabled) {
+    <?php if ($maptype != 'disabled' && $mapEnabled) {
         echo $hideListingsTools;
     } ?>
 
@@ -48,7 +48,7 @@
 
     </div>
 
-    <?php if ($mapType == 'below' && $mapEnabled) {
+    <?php if ($maptype == 'below' && $mapEnabled) {
         echo $map;
     } ?>
 
@@ -73,8 +73,8 @@
 
     });
 
-    var mapType = '<?php echo "$mapType"; ?>' 
-    if (mapType == 'map_only') {
+    var maptype = '<?php echo "$maptype"; ?>' 
+    if (maptype == 'map_only') {
 
         var collapseListingsId = '<?php echo $collapseListingsId; ?>';
         var hideId             = '<?php echo $hideListingsId; ?>';

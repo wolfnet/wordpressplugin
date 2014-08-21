@@ -42,6 +42,12 @@ class Wolfnet
     /* ****************************************************************************************** */
 
     /**
+     * Temporary Hard Coded Key. Replace this with me lookup logic when finished
+     * @var string
+     */
+    public $tempReplaceMeKey = '03ee4eeee4cbf74b940fb5af3474356a';
+
+    /**
      * This property holds the current version number of the plugin. The value is actually generated
      * as part of the Ant build process that is run when the plugin is packaged for distribution.
      * @var string
@@ -353,7 +359,17 @@ class Wolfnet
             array_key_exists('keyList', $_REQUEST)) {
             echo '<div class="wolfnet_marketDisclaimer">';
             foreach($_REQUEST['keyList'] as $key) {
-                echo $this->api->getMarketDisclaimer($key);
+                //echo $this->api->getMarketDisclaimer($key);
+                //$this->apin->sendRequest($this->tempReplaceMeKey, '/settings/market_settings', $a['method'], $data);
+                $disclaimer = $this->apin->sendRequest(
+                    $this->tempReplaceMeKey, 
+                    '/core/disclaimer', 
+                    'get', 
+                    array('type'=>'search_results', 'format'=>'html')
+                    );
+                echo "<pre>market_settings: \n";
+                print_r($disclaimer['responseData']['data']);
+                echo "</pre>";
             }
             echo '</div>';
         }
@@ -667,27 +683,36 @@ class Wolfnet
 
     public function scListingGridN($attrs)
     {
+        $default_maxrows = '50';
         $a = shortcode_atts( array(
-            'key'       => '03ee4eeee4cbf74b940fb5af3474356a', // temporary, replace with keyid and lookup
-            'keyid'     => 1, // default
-            'resource'  => '/listing',
-            'method'    => 'GET',
-            'maptype'   => 'disabled',
-            'maxresults'=> '50', 
-            'max_price' => '',
-            'min_price' => '',
-            'zip_code'  => '',
+            'key'         => $this->tempReplaceMeKey, // temporary, replace with keyid and lookup
+            'keyid'       => 1, // default
+            'resource'    => '/listing',
+            'method'      => 'GET',
+            'maptype'     => 'disabled',
+            'maxresults'  => $default_maxrows,    // for backwords compatability
+            'maxrows'     => $default_maxrows,
+            'max_price'   => '',
+            'min_price'   => '',
+            'zip_code'    => '',
+            'paginated'   => false,
+            'sortoptions' => false,
+            'title'       => '',
             // 'exactcity' => "1", // old api what is this?
-            // ownertype="all"   // not needed
-            // paginated="false" // not needed
-            // sortoptions="false" // not needed
+            // ownertype="all"   // not needed ??  
         ), $attrs );
 
-        $data = array (
-            'maxresults'=> $a['maxresults'],
+        // Maintain backwards compatibility if shortcode uses the old maxresults
+        if ($a['maxrows'] == $default_maxrows && $a['maxresults'] != $default_maxrows ) {
+            $a['maxrows'] = $a['maxresults'];
+        }
+
+        $qdata = array (
+            'maxrows'   => $a['maxrows'],
             'max_price' => $a['max_price'],
             'min_price' => $a['min_price'],
             'zip_code'  => $a['zip_code'],
+
             );
 
         // old shortcod atts [wnt_grid 
@@ -718,9 +743,23 @@ class Wolfnet
         //     'keyid'       => '',
         //     );
 
-        $apiResponse = $this->apin->sendRequest($a['key'], $a['resource'], $a['method'], $data);
+        
 
-        $this->listingGridN( $apiResponse );
+        // sendRequest( $key, a$resource, $method = "GET", $data = array(), $headers = array() )
+
+        $data = $this->apin->sendRequest($a['key'], $a['resource'], $a['method'], $qdata);
+
+        if (is_wp_error($data))  return $data;
+
+        // $data['wpMeta'] = array(
+        //     'paginated' => $a['paginated'],
+        //     'sortoptions' => $a['sortoptions'],
+        //     'title'     => $a['title'],
+        //     // 'startrow'  => ???
+        //     ); 
+        $data['wpMeta'] = $a;
+
+        $this->listingGridN( $data );
         //$defaultAttributes = $this->getListingGridDefaults();
 
         //$criteria = array_merge($defaultAttributes, (is_array($attrs)) ? $attrs : array());
@@ -1194,7 +1233,7 @@ class Wolfnet
             'class'              => 'wolfnet_listingGrid ',
             'mapEnabled'         => $this->api->getMaptracksEnabled($_REQUEST[$this->requestPrefix.'productkey']),
             'map'                => '',
-            'mapType'            => '',
+            'maptype'            => '',
             'hideListingsTools'  => '',
             'hideListingsId'     => uniqid('hideListings'),
             'showListingsId'     => uniqid('showListings'),
@@ -1209,14 +1248,14 @@ class Wolfnet
 
         if ($vars['maptype'] != "disabled") {
             $vars['map']     = $this->getMap($listingsData, $_REQUEST[$this->requestPrefix.'productkey']);
-            $vars['mapType'] = $vars['maptype'];
+            $vars['maptype'] = $vars['maptype'];
             $vars['hideListingsTools'] = $this->getHideListingTools($vars['hideListingsId']
                                                                    ,$vars['showListingsId']
                                                                    ,$vars['collapseListingsId']
                                                                    ,$vars['instance_id']);
         }
         else {
-            $vars['mapType'] = $vars['maptype'];
+            $vars['maptype'] = $vars['maptype'];
         }
 
         if ($vars['paginated'] || $vars['sortoptions']) {
@@ -1236,14 +1275,15 @@ class Wolfnet
 
     }
 
-    public function listingGridN(array $apiResponse)
+    public function listingGridN(array $data)
     {
         // expects $listingsData to be the array returned from the api sendRequest
+        $pre_style = "font-size: 10px; border: solid 1px green; background: #EEEDFF;";
 
-        echo "<pre>apiResponse: \n";
-        print_r($apiResponse);
-        echo "</pre>";
-        $listingsData = $apiResponse['responseData']['data']['listing'];
+        // echo "<pre style=\"$pre_style\" >data: \n";
+        // print_r($data);
+        // echo "</pre>";
+        $listingsData = $data['responseData']['data']['listing'];
 
         $listingsHtml = '';
 
@@ -1256,11 +1296,18 @@ class Wolfnet
                 );
 
             $listingsHtml .= $this->views->listingView($vars);
+            
 
         }
+        // troublemshooting only: 
+        //echo $listingsHtml;
 
         $_REQUEST['wolfnet_includeDisclaimer'] = true;
-        $_REQUEST[$this->requestPrefix.'productkey'] = $this->getProductKeyById($criteria['keyid']);
+        
+        // TODO replace this
+        //$_REQUEST[$this->requestPrefix.'productkey'] = $this->getProductKeyById($criteria['keyid']);
+        $_REQUEST[$this->requestPrefix.'productkey'] = $this->tempReplaceMeKey;
+
 
         // Keep a running array of product keys so we can output all necessary disclaimers
         if(!array_key_exists('keyList', $_REQUEST)) {
@@ -1272,51 +1319,58 @@ class Wolfnet
 
         $vars = array(
             'instance_id'        => str_replace('.', '', uniqid('wolfnet_listingGrid_')),
+            // ??? TODO not needed?? we are mering $vars and listing data below.
             'listings'           => $listingsData,
             'listingsHtml'       => $listingsHtml,
             'siteUrl'            => site_url(),
-            'criteria'           => json_encode($criteria),
+            'wpMeta'             => $data['wpMeta'],
+            'title'              => $data['wpMeta']['title'],
+            // 'criteria'           => json_encode($criteria),
             'class'              => 'wolfnet_listingGrid ',
             'mapEnabled'         => $this->api->getMaptracksEnabled($_REQUEST[$this->requestPrefix.'productkey']),
             'map'                => '',
-            'mapType'            => '',
+            'maptype'            => $data['wpMeta']['maptype'],
             'hideListingsTools'  => '',
             'hideListingsId'     => uniqid('hideListings'),
             'showListingsId'     => uniqid('showListings'),
             'collapseListingsId' => uniqid('collapseListings'),
             'toolbarTop'         => '',
             'toolbarBottom'      => '',
-            'maxresults'         => ((count($listingsData) > 0) ? $listingsData[0]->maxresults : 0)
+            // 'maxresults'         => ((count($listingsData) > 0) ? $listingsData[0]->maxresults : 0),
+            // is this needed??
+            'maxrows'            => ((count($listingsData) > 0) ? $data['requestData']['maxrows'] : 0),
+
             );
 
 
-        $vars = $this->convertDataType(array_merge($criteria, $vars));
+        // $vars = $this->convertDataType(array_merge($criteria, $vars));
+        // $vars = $this->convertDataType(array_merge($listingsData, $vars));
+        $vars = $this->convertDataType(array_merge($vars, $listingsData));
 
         if ($vars['maptype'] != "disabled") {
             $vars['map']     = $this->getMap($listingsData, $_REQUEST[$this->requestPrefix.'productkey']);
-            $vars['mapType'] = $vars['maptype'];
+            $vars['maptype'] = $vars['maptype'];
             $vars['hideListingsTools'] = $this->getHideListingTools($vars['hideListingsId']
                                                                    ,$vars['showListingsId']
                                                                    ,$vars['collapseListingsId']
                                                                    ,$vars['instance_id']);
         }
-        else {
-            $vars['mapType'] = $vars['maptype'];
-        }
 
-        if ($vars['paginated'] || $vars['sortoptions']) {
+        if ($vars['wpMeta']['paginated'] || $vars['wpMeta']['sortoptions']) {
             $vars['toolbarTop']    = $this->getToolbar($vars, 'wolfnet_toolbarTop ');
             $vars['toolbarBottom'] = $this->getToolbar($vars, 'wolfnet_toolbarBottom ');
         }
 
-        if ($vars['paginated']) {
+        if ($vars['wpMeta']['paginated']) {
             $vars['class'] .= 'wolfnet_withPagination ';
         }
 
-        if ($vars['sortoptions']) {
+        if ($vars['wpMeta']['sortoptions']) {
             $vars['class'] .= 'wolfnet_withSortOptions ';
         }
 
+
+        echo $this->views->listingGridView($vars);
         return $this->views->listingGridView($vars);
 
     }
@@ -1859,9 +1913,7 @@ class Wolfnet
             $listing['bedsbaths'] .= $listing['total_bedrooms'] . 'bd';
         }
 
-        if (is_numeric($listing['total_bedrooms'] && is_numeric($listing['bathroom'])))  {
-            $listing['bedsbaths'] .= '/';
-        }
+
 
         $listing['total_baths'] = 0;
 
@@ -1873,22 +1925,28 @@ class Wolfnet
             $listing['total_baths'] += $listing['total_full_baths'];
         }
 
+
+        if (is_numeric($listing['total_bedrooms'] && is_numeric($listing['total_baths'])))  {
+            $listing['bedsbaths'] .= '/';
+        }
+
+
         if (is_numeric($listing['total_baths'])) {
             $listing['bedsbaths'] .= $listing['total_baths'] . 'ba';
         }
 
         $listing['bedsbaths_full'] = '';
 
-        if ( is_numeric( $listing['bedrooms'] ) ) {
-            $listing['bedsbaths_full'] .= $listing['bedrooms'] . ' Bed Rooms';
+        if ( is_numeric( $listing['total_bedrooms'] ) ) {
+            $listing['bedsbaths_full'] .= $listing['total_bedrooms'] . ' Bed Rooms';
         }
 
-        if ( is_numeric( $listing['bedrooms'] ) && is_numeric( $listing['bathroom'] ) ) {
+        if ( is_numeric( $listing['total_bedrooms'] ) && is_numeric( $listing['total_baths'] ) ) {
             $listing['bedsbaths_full'] .= ' & ';
         }
 
-        if ( is_numeric( $listing['bathroom'] ) ) {
-            $listing['bedsbaths_full'] .= $listi['bathroom'] . ' Bath Rooms';
+        if ( is_numeric( $listing['total_baths'] ) ) {
+            $listing['bedsbaths_full'] .= $listing['total_baths'] . ' Bath Rooms';
         }
 
         $listing['address'] = $listing['display_address'];
