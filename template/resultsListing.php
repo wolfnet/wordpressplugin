@@ -25,7 +25,7 @@
 <div id="wolfnet_listing_<?php echo $listing->property_id; ?>" class="wolfnet_listing" itemscope>
     <a href="<?php echo $listing->property_url; ?>" rel="follow">
         <span class="wolfnet_listingImage">
-            <img src="<?php echo $listing->photo_url; ?>" alt="Property for sale at <?php echo $listing->address; ?>" />
+            <img src="<?php echo $listing->thumbnail_url; ?>" alt="Property for sale at <?php echo $listing->address; ?>" />
         </span>
         <div class="wolfnet_data">
             <span class="wolfnet_price" itemprop="price"><?php echo $listing->listing_price; ?></span>
