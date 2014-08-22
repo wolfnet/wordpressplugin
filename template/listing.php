@@ -19,9 +19,7 @@
  *                along with this program; if not, write to the Free Software
  *                Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-echo "<pre>listing: \n";
-print_r($listing);
-echo "</pre>";
+
 ?>
 
 <div id="wolfnet_listing_<?php echo $listing->property_id; ?>" class="wolfnet_listing" itemscope>
