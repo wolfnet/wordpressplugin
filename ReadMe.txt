@@ -52,7 +52,9 @@ entered in the "WolfNet >> General Settings" page before any IDX data can be dis
 == Changelog ==
 
 = 1.6 =
-
+* Code refactoring 
+* minor bug fixes
+* Update thumbnail image path
 
 = 1.5.2 =
 * Deprecating support for versions 3.5.0 and below
