@@ -15,7 +15,7 @@
     Developer: Tom Penney
     Website: tompenney.com
     Twitter: @tompenney
-    Location: Oakdale, MN, USA
+    Location: Minneapolis, MN, USA
 
 
 /* THANKS */
