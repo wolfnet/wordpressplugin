@@ -51,12 +51,15 @@ entered in the "WolfNet >> General Settings" page before any IDX data can be dis
 
 == Changelog ==
 
+= 1.6.2 =
+* Fixed minor bug causing notices in rare circumstance 
+
 = 1.6.1 =
 * Fixed key entry bug
 
 = 1.6.0 =
 * Code refactoring 
-* minor bug fixes
+* Minor bug fixes
 * Update thumbnail image path
 
 = 1.5.2 =

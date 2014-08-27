@@ -45,7 +45,10 @@
                             <?php
                             $numrows = count($productKey);
                             // we need to show at least one row of form fields so they can add a key if there are none
-                            if ($numrows < 1 ) $numrows = 1;
+                            if ($numrows < 1 ) {
+                                $numrows = 1;
+                                $productKey = array( (object) array('key' => '', 'market' => '', 'label' => '') );
+                            }
                             for($i=1; $i<=$numrows; $i++):
                             ?>
                             <tr class="row<?php echo $i; ?>">

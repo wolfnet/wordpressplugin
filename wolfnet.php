@@ -530,7 +530,12 @@ class Wolfnet
     public function getDefaultProductKey() {
         $productKey = json_decode($this->getProductKey());
         // TODO: Add some sort of error throwing for if there are no keys.
-        return $productKey[0]->key;
+
+        if (is_array($productKey) && array_key_exists(0, $productKey)) {
+            return $productKey[0]->key;
+        } else {
+            return false;
+        }
     }
 
 
