@@ -146,10 +146,16 @@ class Wolfnet
         // Set the Autoloader Method
         spl_autoload_register(array( $this, 'autoload'));
 
-        $this->api = new Wolfnet_Api($this);
-        $this->apin = new Wolfnet_Api_Wp_Client($this);
-        $this->views = new Wolfnet_Views($this);
-
+        $this->api = new Wolfnet_Api();
+        // TODO: fix or abandon autoloader. change naming convention
+        $file = $this->dir . '/wolfnet/wolfnet-api-wp-client/WolfnetApiClient.php';
+        // /wolfnet-idx-for-wordpress/wolfnet/wolfnet-api-wp-client
+        // /wolfnet-idx-for-wordpress/wolfnet/wolfnet-api-wp-client/Wolfnet_Api_Wp_Client/WolfnetApiClient.php
+        // echo "<br><br><br><br><br>$file<br>";
+        // echo $this->dir ."<br>";
+        include_once($file);
+        $this->apin = new Wolfnet_Api_Wp_Client();
+        $this->views = new Wolfnet_Views();
         if (is_admin()) {
             $this->admin = new Wolfnet_Admin($this);
         }
@@ -759,7 +765,7 @@ class Wolfnet
         //     ); 
         $data['wpMeta'] = $a;
 
-        $this->listingGridN( $data );
+        return $this->listingGridN( $data );
         //$defaultAttributes = $this->getListingGridDefaults();
 
         //$criteria = array_merge($defaultAttributes, (is_array($attrs)) ? $attrs : array());
@@ -862,7 +868,7 @@ class Wolfnet
     }
 
 
-    public function remoteShortcodeBuilderOptionsFeatured ()
+    public function remoteShortcodeBuilderOptionsFeatured()
     {
         $args = $this->getFeaturedListingsOptions();
 
@@ -1280,46 +1286,49 @@ class Wolfnet
         // expects $listingsData to be the array returned from the api sendRequest
         $pre_style = "font-size: 10px; border: solid 1px green; background: #EEEDFF;";
 
-        // echo "<pre style=\"$pre_style\" >data: \n";
-        // print_r($data);
-        // echo "</pre>";
-        $listingsData = $data['responseData']['data']['listing'];
+        echo "<pre style=\"$pre_style\" >data: \n";
+        print_r($data);
+        echo "</pre>";
+
+        $listingsData = array();
+
+        if (is_array($data['responseData']['data']))
+            $listingsData = $data['responseData']['data']['listing'];
 
         $listingsHtml = '';
 
-        foreach ($listingsData as &$listing) {
+        if (!count($listingsData)){
+            $listingsHtml = 'No Listings Found.';
+        } else {
+           foreach ($listingsData as &$listing) {
+               $this->augmentListingData($listing);
+               $vars = array(
+                   'listing' => $listing
+                   );
+               $listingsHtml .= $this->views->listingView($vars);
+            }
 
-            $this->augmentListingData($listing);
-
-            $vars = array(
-                'listing' => $listing
-                );
-
-            $listingsHtml .= $this->views->listingView($vars);
+            $_REQUEST['wolfnet_includeDisclaimer'] = true;
             
+            // Keep a running array of product keys so we can output all necessary disclaimers
+            if(!array_key_exists('keyList', $_REQUEST)) {
+                $_REQUEST['keyList'] = array();
+            }
+            if(!in_array($_REQUEST[$this->requestPrefix.'productkey'], $_REQUEST['keyList'])) {
+                array_push($_REQUEST['keyList'], $_REQUEST[$this->requestPrefix.'productkey']);
+            }
+
 
         }
-        // troublemshooting only: 
-        //echo $listingsHtml;
 
-        $_REQUEST['wolfnet_includeDisclaimer'] = true;
-        
         // TODO replace this
         //$_REQUEST[$this->requestPrefix.'productkey'] = $this->getProductKeyById($criteria['keyid']);
         $_REQUEST[$this->requestPrefix.'productkey'] = $this->tempReplaceMeKey;
 
 
-        // Keep a running array of product keys so we can output all necessary disclaimers
-        if(!array_key_exists('keyList', $_REQUEST)) {
-            $_REQUEST['keyList'] = array();
-        }
-        if(!in_array($_REQUEST[$this->requestPrefix.'productkey'], $_REQUEST['keyList'])) {
-            array_push($_REQUEST['keyList'], $_REQUEST[$this->requestPrefix.'productkey']);
-        }
-
         $vars = array(
             'instance_id'        => str_replace('.', '', uniqid('wolfnet_listingGrid_')),
-            // ??? TODO not needed?? we are mering $vars and listing data below.
+            // ??? TODO not needed?? we are merging $vars and listing data below.
             'listings'           => $listingsData,
             'listingsHtml'       => $listingsHtml,
             'siteUrl'            => site_url(),
@@ -1341,11 +1350,15 @@ class Wolfnet
             'maxrows'            => ((count($listingsData) > 0) ? $data['requestData']['maxrows'] : 0),
 
             );
-
+    
+        // echo "<pre>vars: \n";
+        // print_r($vars);
+        // echo "</pre>";
 
         // $vars = $this->convertDataType(array_merge($criteria, $vars));
         // $vars = $this->convertDataType(array_merge($listingsData, $vars));
-        $vars = $this->convertDataType(array_merge($vars, $listingsData));
+        if (count($listingsData) && is_array($listingsData))
+            $vars = $this->convertDataType(array_merge($vars, $listingsData));
 
         if ($vars['maptype'] != "disabled") {
             $vars['map']     = $this->getMap($listingsData, $_REQUEST[$this->requestPrefix.'productkey']);
@@ -1356,6 +1369,10 @@ class Wolfnet
                                                                    ,$vars['instance_id']);
         }
 
+        if (!array_key_exists('startrow', $vars['wpMeta'])) {
+            $vars['wpMeta']['startrow'] = 1;
+        }
+        
         if ($vars['wpMeta']['paginated'] || $vars['wpMeta']['sortoptions']) {
             $vars['toolbarTop']    = $this->getToolbar($vars, 'wolfnet_toolbarTop ');
             $vars['toolbarBottom'] = $this->getToolbar($vars, 'wolfnet_toolbarBottom ');
@@ -1369,10 +1386,9 @@ class Wolfnet
             $vars['class'] .= 'wolfnet_withSortOptions ';
         }
 
-
-        echo $this->views->listingGridView($vars);
         return $this->views->listingGridView($vars);
-
+        // return "This is a test. this is only a test. Do not be alarmed.";
+    
     }
 
 
@@ -1791,12 +1807,16 @@ class Wolfnet
             return true;
         }
 
-        $file = $this->dir . '/wolfnet/wolfnet-api-wp-client/' . $filename;
-        if (file_exists($file))
-        {
-            include $file;
-            return true;
-        }
+        // ttt not working, bad nameing tom 
+        // class name: Wolfnet_Api_Wp_Client
+        // filepath:  /wolfnet/wolfnet-api-wp-client/WolfnetApiClient.php
+        // $file = $this->dir . '/wolfnet/wolfnet-api-wp-client/' . $filename;
+
+        // if (file_exists($file))
+        // {
+        //     include $file;
+        //     return true;
+        // }
         
         return false;
     }
@@ -1982,12 +2002,16 @@ class Wolfnet
 
     private function getToolbar($data, $class)
     {
-        $args = array_merge(json_decode($data['criteria'], true), array(
+        
+        //$args = array_merge(json_decode($data['criteria'], true), array(
+        $args = array_merge($data['wpMeta'], array(
             'toolbarClass' => $class . ' ',
-            'maxresults'   => $data['maxresults'],
-            'numrows'      => $data['numrows'],
-            'prevClass'    => ($data['startrow']<=1) ? 'wolfnet_disabled' : '',
-            'lastitem'     => $data['startrow'] + $data['numrows'] - 1,
+            'maxresults'   => $data['wpMeta']['maxresults'],
+            // ttt do we really need this duplication of max results?
+            //'numrows'      => $data['numrows'],
+            'numrows'      => $data['wpMeta']['maxresults'],
+            'prevClass'    => ($data['wpMeta']['startrow']<=1) ? 'wolfnet_disabled' : '',
+            'lastitem'     => $data['wpMeta']['startrow'] + $data['wpMeta']['maxresults'] - 1,
             'action'       => 'wolfnet_listings'
             ));
 
@@ -2219,9 +2243,13 @@ class Wolfnet
     private function registerScripts()
     {
         $scripts = array(
+            'migrate' => array(
+                $this->url . 'js/jquery.migrate.src.js',
+                array('jquery'),
+                ),
             'tooltipjs' => array(
                 $this->url . 'js/jquery.tooltip.src.js',
-                array('jquery'),
+                array('jquery', 'migrate'),
                 ),
             'imagesloadedjs' => array(
                 $this->url . 'js/jquery.imagesloaded.src.js',
@@ -2272,7 +2300,7 @@ class Wolfnet
                 ),
             'wolfnet-maptracks' => array(
                 $this->url . 'js/jquery.wolfnetMaptracks.src.js',
-                array('jquery', 'mapquest-api'),
+                array('jquery', 'migrate', 'mapquest-api'),
                 )
             );
 
