@@ -42,7 +42,15 @@
                 <tr valign="top">
                     <td>
                         <table class="key-table" id="wolfnet_keys">
-                            <?php for($i=1; $i<=count($productKey); $i++): ?>
+                            <?php
+                            $numrows = count($productKey);
+                            // we need to show at least one row of form fields so they can add a key if there are none
+                            if ($numrows < 1 ) {
+                                $numrows = 1;
+                                $productKey = array( (object) array('key' => '', 'market' => '', 'label' => '') );
+                            }
+                            for($i=1; $i<=$numrows; $i++):
+                            ?>
                             <tr class="row<?php echo $i; ?>">
                                 <th scope="row"><label for="wolfnet_productKey_<?php echo $i; ?>">Product Key</label></th>
                                 <th scope="row">Market Name</th>

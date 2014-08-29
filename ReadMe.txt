@@ -1,6 +1,6 @@
 === WolfNet IDX for WordPress  ===
 Author:             WolfNet Technologies, LLC
-Contributors:       wolfnettech, ajmichels, asbaumgart, michaelpidde, tpenney
+Contributors:       wolfnettech, ajmichels, asbaumgart, michaelpidde, blots
 Tags:               idx, mls, homes
 Requires at least:  3.5.1
 Tested up to:       3.9
@@ -51,10 +51,16 @@ entered in the "WolfNet >> General Settings" page before any IDX data can be dis
 
 == Changelog ==
 
-= 1.6 =
-* Re-architecture of the plugin code splitting into multiple classes based on functionality.
-* Added unit testing.
-* Fixed some JavaScript issues in preparation for multi-market features.
+= 1.6.2 =
+* Fixed minor bug causing notices in rare circumstance 
+
+= 1.6.1 =
+* Fixed key entry bug
+
+= 1.6.0 =
+* Code refactoring 
+* Minor bug fixes
+* Update thumbnail image path
 
 = 1.5.2 =
 * Deprecating support for versions 3.5.0 and below
