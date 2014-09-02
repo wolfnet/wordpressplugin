@@ -1314,7 +1314,7 @@ class Wolfnet
     {
         $productKey = $this->getDefaultProductKey();
 
-        if(array_key_exists("keyids", $criteria)) {
+        if(array_key_exists("keyids", $criteria) && !empty($criteria["keyids"])) {
             $keyids = explode(",", $criteria["keyids"]);
         } else {
             $keyids[0] = 1;
