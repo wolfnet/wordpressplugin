@@ -718,13 +718,16 @@ class Wolfnet
             $a['maxrows'] = $a['maxresults'];
         }
 
-        $qdata = array (
-            'maxrows'   => $a['maxrows'],
-            'max_price' => $a['max_price'],
-            'min_price' => $a['min_price'],
-            'zip_code'  => $a['zip_code'],
+        $qdata = array (); 
 
-            );
+        if ( !empty( $a['maxrows'] ))  $qdata['maxrows'] = $a['maxrows'];
+        if ( !empty( $a['max_price'] ))  $qdata['max_price'] = $a['max_price'];
+        if ( !empty( $a['min_price'] ))  $qdata['min_price'] = $a['min_price'];
+        if ( !empty( $a['zip_code'] ))  $qdata['zip_code'] = $a['zip_code'];
+        //if ( !empty( $a[''] ))  $qdata[''] => $a[''],
+        
+
+            
 
         // old shortcod atts [wnt_grid 
         // keyid="1" 
@@ -1291,9 +1294,9 @@ class Wolfnet
         // expects $listingsData to be the array returned from the api sendRequest
         $pre_style = "font-size: 10px; border: solid 1px green; background: #EEEDFF;";
 
-        echo "<pre style=\"$pre_style\" >data: \n";
-        print_r($data);
-        echo "</pre>";
+        // echo "<pre style=\"$pre_style\" >data: \n";
+        // print_r($data);
+        // echo "</pre>";
 
         $listingsData = array();
 
@@ -1314,6 +1317,9 @@ class Wolfnet
             }
 
             $_REQUEST['wolfnet_includeDisclaimer'] = true;
+            // TODO replace this
+            //$_REQUEST[$this->requestPrefix.'productkey'] = $this->getProductKeyById($criteria['keyid']);
+            $_REQUEST[$this->requestPrefix.'productkey'] = $this->tempReplaceMeKey;
             
             // Keep a running array of product keys so we can output all necessary disclaimers
             if(!array_key_exists('keyList', $_REQUEST)) {
@@ -1326,9 +1332,7 @@ class Wolfnet
 
         }
 
-        // TODO replace this
-        //$_REQUEST[$this->requestPrefix.'productkey'] = $this->getProductKeyById($criteria['keyid']);
-        $_REQUEST[$this->requestPrefix.'productkey'] = $this->tempReplaceMeKey;
+        
 
 
         $vars = array(

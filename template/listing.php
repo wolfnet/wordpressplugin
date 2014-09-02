@@ -36,12 +36,12 @@
         <?php // is courtesy_text the correct replacement for $listing->branding->content ? ?>
         <?php if (array_key_exists('branding', $listing) && ($listing['branding']['logo'] != '' || $listing['branding']['courtesy_text'] != '')) { ?>
         <div class="wolfnet_branding">
-            <?php if (trim($listing['branding']['brokerLogo']) !== '') { ?>
-                <span class="wolfnet_brokerLogo<?php echo ($listing['branding']['branding_type']=='idx') ? ' wolfnet_idxLogo' : ''; ?>">
-                    <img src="<?php echo $listing['branding']['brokerLogo']; ?>" />
+            <?php if (trim($listing['branding']['logo']) !== '') { ?>
+                <span class="wolfnet_brokerLogo<?php echo ($listing['branding']['type']=='idx') ? ' wolfnet_idxLogo' : ''; ?>">
+                    <img src="<?php echo $listing['branding']['logo']; ?>" />
                 </span>
             <?php } ?>
-            <span class="wolfnet_brandingMessage"><?php echo $listing['branding']['content']; ?></span>
+            <span class="wolfnet_brandingMessage"><?php echo $listing['branding']['courtesy_text']; ?></span>
         </div>
         <?php } ?>
     </a>
