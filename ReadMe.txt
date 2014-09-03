@@ -51,6 +51,9 @@ entered in the "WolfNet >> General Settings" page before any IDX data can be dis
 
 == Changelog ==
 
+= 1.6.3 =
+* Fixed Quick Search price selection bug 
+
 = 1.6.2 =
 * Fixed minor bug causing notices in rare circumstance 
 
