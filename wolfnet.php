@@ -1938,7 +1938,7 @@ class Wolfnet
 
         $listing['bedsbaths'] = '';
 
-        if (is_numeric($listing['total_bedrooms'])) {
+        if (is_numeric($listing['total_bedrooms']) && ($listing['total_bedrooms'] > 0 )) {
             $listing['bedsbaths'] .= $listing['total_bedrooms'] . 'bd';
         }
 
@@ -1950,17 +1950,18 @@ class Wolfnet
             $listing['total_baths'] += $listing['total_partial_baths'];
         }
 
-        if (is_numeric($listing['total_full_baths'])) {
+        if (is_numeric($listing['total_full_baths']) ) {
             $listing['total_baths'] += $listing['total_full_baths'];
         }
 
 
-        if (is_numeric($listing['total_bedrooms'] && is_numeric($listing['total_baths'])))  {
+        // if (is_numeric($listing['total_bedrooms']) && is_numeric($listing['total_baths']))  {
+        if ( !empty($listing['bedsbaths']) && is_numeric($listing['total_baths']) && ( $listing['total_baths'] > 0 ))  {
             $listing['bedsbaths'] .= '/';
         }
 
 
-        if (is_numeric($listing['total_baths'])) {
+        if (is_numeric($listing['total_baths']) && ($listing['total_baths'] > 0)) {
             $listing['bedsbaths'] .= $listing['total_baths'] . 'ba';
         }
 
