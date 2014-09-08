@@ -757,7 +757,6 @@ class Wolfnet
         //     'keyid'       => '',
         //     );
 
-        
 
         // sendRequest( $key, a$resource, $method = "GET", $data = array(), $headers = array() )
 
