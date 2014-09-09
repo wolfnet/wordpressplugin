@@ -262,27 +262,17 @@ class Wolfnet_Views
         }
 
         $args['itemsPerPage'] = $GLOBALS['wolfnet']->getItemsPerPage();
-        //$args['sortOptions'] = $GLOBALS['wolfnet']->api->getSortOptions($args['productkey']);
         $args['sortOptions'] = $GLOBALS['wolfnet']->apin->sendRequest($args['productkey'], '/search_criteria/sort_option');
 
-        // echo "<pre>args['sortOptions']: \n";
-        // print_r($args['sortOptions']);
-        // echo "</pre>";
 
         foreach ($args as $key => $item) {
             $args[$key] = apply_filters('wolfnet_listingGridView_' . $key, $item);
         }
 
-        // echo "<pre>args: \n";
+        // echo "<pre>\$args: \n";
         // print_r($args);
         // echo "</pre>";
-
-        // ob_start();
-        //return $this->parseTemplate('template/listingGrid.php', $args);
-
-        // echo "Fu Manchu";
-
-
+  
         return apply_filters('wolfnet_listingGridView', $this->parseTemplate('template/listingGrid.php', $args));
 
     }
@@ -305,7 +295,8 @@ class Wolfnet_Views
     public function mapView($listingsData, $productKey=null)
     {
         ob_start();
-        $args = $GLOBALS['wolfnet']->api->getMapParameters($listingsData, $productKey);
+        //$args = $GLOBALS['wolfnet']->api->getMapParameters($listingsData, $productKey);
+        $args = $GLOBALS['wolfnet']->getMapParameters($listingsData, $productKey);
         $args["url"] = $GLOBALS['wolfnet']->url;
 
         echo $this->parseTemplate('template/map.php', $args);

@@ -165,27 +165,31 @@ class Wolfnet_Api
 
     }
 
+    // moving this method back to wolfnet.php
+    // public function getMapParameters($listingsData, $productKey=null)
+    // {
+    //     if($productKey == null) {
+    //         $productKey = $this->wolfnet->getDefaultProductKey();
+    //     }
 
-    public function getMapParameters($listingsData, $productKey=null)
-    {
-        if($productKey == null) {
-            $productKey = $this->wolfnet->getDefaultProductKey();
-        }
+    //     echo "<pre>\$listingsData: \n";
+    //     print_r($listingsData);
+    //     echo "</pre>";
 
-        $url = $this->serviceUrl . '/setting/' . $productKey . '.json'
-             . '?setting=getallsettings';
-        $data = $this->getApiData($url, 86400);
+    //     $url = $this->serviceUrl . '/setting/' . $productKey . '.json'
+    //          . '?setting=getallsettings';
+    //     $data = $this->getApiData($url, 86400);
 
-        $args['maptracks_map_provider'] = $data->settings->MAPTRACKS_MAP_PROVIDER;
-        $args['map_start_lat'] = $data->settings->MAP_START_LAT;
-        $args['map_start_lng'] = $data->settings->MAP_START_LNG;
-        $args['map_start_scale'] = $data->settings->MAP_START_SCALE;
-        $args['houseoverIcon'] = $GLOBALS['wolfnet']->url . 'img/houseover.png';
-        $args['houseoverData'] = $this->getHouseoverData($listingsData,$data->settings->SHOWBROKERIMAGEHO);
+    //     $args['maptracks_map_provider'] = $data->settings->MAPTRACKS_MAP_PROVIDER;
+    //     $args['map_start_lat'] = $data->settings->MAP_START_LAT;
+    //     $args['map_start_lng'] = $data->settings->MAP_START_LNG;
+    //     $args['map_start_scale'] = $data->settings->MAP_START_SCALE;
+    //     $args['houseoverIcon'] = $GLOBALS['wolfnet']->url . 'img/houseover.png';
+    //     $args['houseoverData'] = $this->getHouseoverData($listingsData,$data->settings->SHOWBROKERIMAGEHO);
 
-        return $args;
+    //     return $args;
 
-    }
+    // }
 
 
     public function getPricesFromApi($productKey)
@@ -432,32 +436,32 @@ class Wolfnet_Api
 
     }
 
+    // moved back to wolfnet.php
+    // private function getHouseoverData($listingsData,$showBrokerImage)
+    // {
 
-    private function getHouseoverData($listingsData,$showBrokerImage)
-    {
+    //     $houseoverData = array();
 
-        $houseoverData = array();
+    //     foreach ($listingsData as $listing) {
+    //         $vars = array(
+    //             'listing'         => $listing,
+    //             'showBrokerImage' => $showBrokerImage,
+    //         );
 
-        foreach ($listingsData as $listing) {
-            $vars = array(
-                'listing'         => $listing,
-                'showBrokerImage' => $showBrokerImage,
-            );
+    //         $concatHouseover = $this->wolfnet->views->houseOver($vars);                
 
-            $concatHouseover = $this->wolfnet->views->houseOver($vars);                
+    //         array_push($houseoverData, array(
+    //             'lat'        => $listing->lat,
+    //             'lng'        => $listing->lng,
+    //             'content'    => $concatHouseover,
+    //             'propertyId' => $listing->property_id,
+    //             'propertyUrl'=> $listing->property_url
+    //             ));
+    //     }
 
-            array_push($houseoverData, array(
-                'lat'        => $listing->lat,
-                'lng'        => $listing->lng,
-                'content'    => $concatHouseover,
-                'propertyId' => $listing->property_id,
-                'propertyUrl'=> $listing->property_url
-                ));
-        }
+    //     return $houseoverData;
 
-        return $houseoverData;
-
-    }
+    // }
 
 
     private function getMaxResults($productKey)

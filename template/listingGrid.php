@@ -56,15 +56,22 @@
 
 <div class="wolfnet_clearfix"></div>
 
+
+<?php
+// echo "<pre>\$wpMeta: \n";
+// print_r($wpMeta);
+// echo "</pre>";
+?>
+
 <script type="text/javascript">
 
     jQuery(function($){
         var instance = <?php echo "'#" . $instance_id . "';"; ?>
 
         $(instance).wolfnetToolbar({
-             numrows          : <?php echo $numrows . "\n"; ?>
+             numrows          : <?php echo $wpMeta['maxrows'] . "\n"; ?>
             ,criteria         : <?php echo ((trim($criteria)!='') ? $criteria : '{}')  . "\n"; ?>
-            ,maxResults       : <?php echo $maxresults . "\n"; ?>
+            ,maxResults       : <?php echo $wpMeta['maxrows'] . "\n"; ?>
             ,itemsPerPageData : <?php echo json_encode($itemsPerPage) . "\n"; ?>
             ,sortOptionsData  : <?php echo json_encode($sortOptions) . "\n"; ?>
         });
