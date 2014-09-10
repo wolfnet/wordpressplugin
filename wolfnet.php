@@ -679,7 +679,7 @@ class Wolfnet
     }
 
 
-    public function scListingGrid($attrs, $content='')
+    public function scListingGridOld($attrs, $content='')
     {
         $defaultAttributes = $this->getListingGridDefaults();
 
@@ -692,7 +692,7 @@ class Wolfnet
     }
 
 
-    public function scListingGridN($attrs)
+    public function sclistingGrid($attrs)
     {
         $default_maxrows = '50';
         $a = shortcode_atts( array(
@@ -719,69 +719,8 @@ class Wolfnet
             $a['maxrows'] = $a['maxresults'];
         }
 
-        // $qdata = array (); 
-
-        // if ( !empty( $a['maxrows'] ))  $qdata['maxrows'] = $a['maxrows'];
-        // if ( !empty( $a['max_price'] ))  $qdata['max_price'] = $a['max_price'];
-        // if ( !empty( $a['min_price'] ))  $qdata['min_price'] = $a['min_price'];
-        // if ( !empty( $a['zip_code'] ))  $qdata['zip_code'] = $a['zip_code'];
-        // //if ( !empty( $a[''] ))  $qdata[''] => $a[''],
-        
-
-            
-
-        // old shortcod atts [wnt_grid 
-        // keyid="1" 
-        // maptype="disabled" 
-        // exactcity="1" 
-        // ownertype="all" 
-        // paginated="false" 
-        // sortoptions="false" 
-        // maxresults="50" 
-
-        // old listing grid defaults
-        // return array(
-        //     'title'       => '',
-        //     'criteria'    => '',
-        //     'ownertype'   => 'all',
-        //     'maptype'     => 'disabled',
-        //     'paginated'   => false,
-        //     'sortoptions' => false,
-        //     'maxresults'  => 50,
-        //     'mode'        => 'advanced',
-        //     'savedsearch' => '',
-        //     'zipcode'     => '',
-        //     'city'        => '',
-        //     'exactcity'   => 0,
-        //     'minprice'    => '',
-        //     'maxprice'    => '',
-        //     'keyid'       => '',
-        //     );
-
-
-        // sendRequest( $key, a$resource, $method = "GET", $data = array(), $headers = array() )
-
-        // $data = $this->apin->sendRequest($a['key'], $a['resource'], $a['method'], $qdata);
-
-        // if (is_wp_error($data))  return $data;
-
-        // // $data['wpMeta'] = array(
-        // //     'paginated' => $a['paginated'],
-        // //     'sortoptions' => $a['sortoptions'],
-        // //     'title'     => $a['title'],
-        // //     // 'startrow'  => ???
-        // //     ); 
-        // $data['wpMeta'] = $a;
-
-        return $this->listingGridN( $a );
-        //$defaultAttributes = $this->getListingGridDefaults();
-
-        //$criteria = array_merge($defaultAttributes, (is_array($attrs)) ? $attrs : array());
-
-        //$criteria = $this->getOptions($criteria);
-
-        //return $this->listingGrid($criteria);
-
+        return $this->listingGrid( $a );
+   
     }
 
 
@@ -966,7 +905,7 @@ class Wolfnet
         $args = $this->getListingGridOptions($_REQUEST);
 
         echo $this->getWpHeader();
-        echo $this->listingGridN($args);
+        echo $this->listingGrid($args);
         echo $this->getWpFooter();
 
         die;
@@ -1193,7 +1132,7 @@ class Wolfnet
     }
 
 
-    public function listingGrid(array $criteria)
+    public function listingGridOld(array $criteria)
     {
         // Maintain backwards compatibility if there is no keyid in the shortcode.
         if(!array_key_exists('keyid', $criteria) || $criteria['keyid'] == '') {
@@ -1290,8 +1229,8 @@ class Wolfnet
 
     }
 
-    // public function listingGridN(array $data)
-    public function listingGridN(array $criteria)
+
+    public function listingGrid(array $criteria)
     
     {
         // $pre_style = "font-size: 10px; border: solid 1px green; background: #EEEDFF;";
@@ -1320,7 +1259,7 @@ class Wolfnet
         $qdata = array (); 
 
         if ( !empty( $criteria['maxrows'] ))  $qdata['maxrows'] = $criteria['maxrows'];
-        if ( !empty( $criteria['max_price'] ))  $qdata['max_price'] = $criteria['max_price'];
+        if ( !empty( $criteria['max_pric=e'] ))  $qdata['max_price'] = $criteria['max_price'];
         if ( !empty( $criteria['min_price'] ))  $qdata['min_price'] = $criteria['min_price'];
         if ( !empty( $criteria['zip_code'] ))  $qdata['zip_code'] = $criteria['zip_code'];
         //if ( !empty( $a[''] ))  $qdata[''] => $a[''],
@@ -1336,6 +1275,7 @@ class Wolfnet
         //     // 'startrow'  => ???
         //     ); 
         $data['wpMeta'] = $criteria;
+        $data['wpMeta']['total_rows'] = $data['responseData']['data']['total_rows'];
 
         $listingsData = array();
 
@@ -1372,7 +1312,7 @@ class Wolfnet
         }
 
         
-
+        // "data" "total_rows"
 
         $vars = array(
             'instance_id'        => str_replace('.', '', uniqid('wolfnet_listingGrid_')),
@@ -1435,7 +1375,6 @@ class Wolfnet
         }
 
         return $this->views->listingGridView($vars);
-        // return "This is a test. this is only a test. Do not be alarmed.";
     
     }
 
@@ -2328,7 +2267,6 @@ class Wolfnet
             'wolfnetlistinggrid'        => 'scListingGrid',
             'WOLFNETLISTINGGRID'        => 'scListingGrid',
             'wnt_grid'                  => 'scListingGrid',
-            'wnt_grid_n'                => 'scListingGridN',
             'WolfNetPropertyList'       => 'scPropertyList',
             'wolfnetpropertylist'       => 'scPropertyList',
             'WOLFNETPROPERTYLIST'       => 'scPropertyList',
