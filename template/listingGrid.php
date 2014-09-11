@@ -70,7 +70,8 @@
 
         $(instance).wolfnetToolbar({
              numrows          : <?php echo $wpMeta['maxrows'] . "\n"; ?>
-            ,criteria         : <?php echo ((trim($criteria)!='') ? $criteria : '{}')  . "\n"; ?>
+            //,criteria         : <?php //echo ((trim($criteria)!='') ? $criteria : '{}')  . "\n"; ?>
+            ,criteria         : <?php echo json_encode($wpMeta) . "\n"; ?>
             ,maxResults       : <?php echo $wpMeta['total_rows'] . "\n"; ?>
             ,itemsPerPageData : <?php echo json_encode($itemsPerPage) . "\n"; ?>
             ,sortOptionsData  : <?php echo json_encode($sortOptions) . "\n"; ?>

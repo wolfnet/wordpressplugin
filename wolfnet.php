@@ -2022,6 +2022,7 @@ class Wolfnet
             $prev = $args['startrow'];
         }
 
+
         $args['prevLink'] = $this->buildUrl(
             admin_url('admin-ajax.php'),
             array_merge($args, array('startrow'=>$prev))
@@ -2029,6 +2030,10 @@ class Wolfnet
 
         $next = $args['startrow'] + $args['numrows'];
 
+        echo "<pre>\$args: \n";
+        print_r($args);
+        echo "</pre>";
+        
         if ($next >= $args['maxresults']) {
             $next = 1;
         }
