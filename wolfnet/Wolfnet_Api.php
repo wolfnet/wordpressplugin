@@ -86,6 +86,14 @@ class Wolfnet_Api
     /*                                                                                            */
     /* ****************************************************************************************** */
 
+    public function __construct()
+    {
+        $this->dir = dirname(__FILE__);
+        $file = $this->dir . '/wolfnet-api-wp-client/WolfnetApiClient.php';
+        include_once($file);
+        $this->apin = new Wolfnet_Api_Wp_Client();
+    }
+
     /* Featured Listings ************************************************************************ */
 
     public function getFeaturedListings(array $criteria=array())
@@ -257,19 +265,12 @@ class Wolfnet_Api
             $productKey = json_decode($GLOBALS['wolfnet']->getDefaultProductKey());
         }
 
-        $url = $this->serviceUrl . '/validateKey/' . $productKey . '.json';
+        $http = $this->apin->sendRequest(
+                    $productKey, 
+                    '/status');
 
-        $http = wp_remote_get($url, array('timeout'=>180));
-
-        if (!is_wp_error($http) && $http['response']['code'] == '200') {
-            $data = json_decode($http['body']);
-            $errorExists = property_exists($data, 'error');
-            $statusExists = ($errorExists) ? property_exists($data->error, 'status') : false;
-
-            if ($errorExists && $statusExists && $data->error->status === false) {
-                $valid = true;
-            }
-
+        if (!is_wp_error($http) && $http['responseStatusCode'] == '200') {
+            $valid = true;
         }
 
         return $valid;
@@ -292,9 +293,11 @@ class Wolfnet_Api
 
     public function getMarketName($apiKey)
     {
-        $url = $this->serviceUrl . "/setting/" . $apiKey . ".json?setting=DATASOURCE";
+        $data = $this->apin->sendRequest(
+                    $apiKey, 
+                    '/settings/market_settings');
 
-        return $this->getApiData($url, 1000)->datasource;
+        return $data['responseData']['data']['datasource_name'];
 
     }
 
