@@ -34,7 +34,18 @@
         </span>
         <?php // if (property_exists($listing, 'branding') && ($listing['branding']['brokerLogo'] != '' || $listing['branding']['content'] != '')) { ?>
         <?php // is courtesy_text the correct replacement for $listing->branding->content ? ?>
-        <?php if (array_key_exists('branding', $listing) && ($listing['branding']['logo'] != '' || $listing['branding']['courtesy_text'] != '')) { ?>
+        <?php
+        // echo '<pre>$listing: \n';
+        // print_r($listing);
+        // echo "</pre>";
+        ?>
+        <?php 
+        if (array_key_exists('branding', $listing) 
+            && ($listing['branding']['logo'] != '' 
+                || $listing['branding']['courtesy_text'] != '')
+            ) 
+        { 
+        ?>
         <div class="wolfnet_branding">
             <?php if (trim($listing['branding']['logo']) !== '') { ?>
                 <span class="wolfnet_brokerLogo<?php echo ($listing['branding']['type']=='idx') ? ' wolfnet_idxLogo' : ''; ?>">

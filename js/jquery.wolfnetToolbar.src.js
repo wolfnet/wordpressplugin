@@ -103,8 +103,15 @@ if ( typeof String.prototype.wolfnetPriceFormat !== 'function' ) {
     }
 
     var renderListingGrid = function(data)
-    {
-        var data = ($.isArray(data)) ? data : [];
+    {   
+        // alert('trying to render this data: ' + JSON.stringify(data));
+        //$('.entry-content').html( JSON.stringify(data) );
+
+        // alert( data.requestUrl );
+        //alert( data.responseData.metadata.status.extendedInfo );
+        //alert( data.responseData.data.total_rows);
+        
+        var data = ($.isArray(data.responseData.data.listing)) ? data.responseData.data.listing : [];
         var $container = this;
         var $listings = $('<div>').addClass('wolfnet_listings');
 
@@ -140,20 +147,30 @@ if ( typeof String.prototype.wolfnetPriceFormat !== 'function' ) {
                 .html(data[i].listing_price.toString().wolfnetPriceFormat())
                 .appendTo($link);
 
+            // calculate total number of baths
+            var total_baths = 0;
+            if(data[i].total_partial_baths !== '') {
+                total_baths += parseInt(data[i].total_partial_baths);
+            } 
+
+            if(data[i].total_full_baths !== '' ) {
+                total_baths += parseInt(data[i].total_full_baths);
+            }
+
             var $bedBath = $('<span>')
                 .addClass('wolfnet_bed_bath')
-                .attr('title', data[i].bedrooms + ' Bedrooms & ' + data[i].bathroom + ' Bathrooms')
+                .attr('title', data[i].total_bedrooms + ' Bedrooms & ' + total_baths + ' Bathrooms')
                 .appendTo($link);
-
-                if (data[i].bedrooms != '' && data[i].bedrooms != 'n/a') {
-                    $bedBath.append(data[i].bedrooms + 'bd');
+                
+                if (data[i].total_bedrooms != '' ) {
+                    $bedBath.append(data[i].total_bedrooms + 'bd');
                 }
 
-                if (data[i].bathroom != '' && data[i].bathroom != 'n/a') {
+                if ( total_baths > 0 ) {
                     if ($bedBath.text() != '') {
                         $bedBath.append('/');
                     }
-                    $bedBath.append(data[i].bathroom + 'ba');
+                    $bedBath.append(total_baths + 'ba');
                 }
 
             var $locationContainer = $('<span>')
@@ -258,7 +275,15 @@ if ( typeof String.prototype.wolfnetPriceFormat !== 'function' ) {
 
     var populateMap = function(data)
     {
-        var data = ($.isArray(data)) ? data : [];
+        // alert("hit populateMap");
+        // alert(JSON.stringify(data));
+        // console.log(JSON.stringify(data));
+
+        // "responseData"."data"."listing"
+
+
+        //var data = ($.isArray(data)) ? data : [];
+        var data = ($.isArray(data.responseData.data.listing)) ? data.responseData.data.listing : [];
         var $container = this;
         var componentMap = $container.find('.wolfnet_wntMainMap').data('map');
         var houseIcon = wolfnet_ajax.houseoverIcon;
@@ -268,7 +293,7 @@ if ( typeof String.prototype.wolfnetPriceFormat !== 'function' ) {
         for (var i=0, l=data.length; i<l; i++) {
             houseoverHtml = getHouseoverHtml(data[i]);
             var houseoverIcon = componentMap.mapIcon(houseIcon,30,30);
-            var houseover = componentMap.poi(data[i].lat, data[i].lng, houseoverIcon, houseoverHtml, data[i].property_id, data[i].property_url);
+            var houseover = componentMap.poi(data[i].geo.lat, data[i].geo.lng, houseoverIcon, houseoverHtml, data[i].property_id, data[i].property_url);
             componentMap.addPoi(houseover);
         }
 
@@ -432,7 +457,9 @@ if ( typeof String.prototype.wolfnetPriceFormat !== 'function' ) {
             return this.each(function() {
                 var $container = $(this);
                 var opts = $.extend(true, {}, defaultOptions, options);
+                // alert('options in methods: ' + JSON.stringify(options));
                 var state = $.extend(true, {}, opts.criteria, opts, {page:1});
+                //alert('state in methods: ' + JSON.stringify(state));
 
                 delete opts.criteria;
                 delete state.criteria;
@@ -499,6 +526,8 @@ if ( typeof String.prototype.wolfnetPriceFormat !== 'function' ) {
                 var state = $container.data(stateKey);
 
                 var getData = function() {
+                
+                    // alert(JSON.stringify(state));
                     var data = $.extend(state, {});
                     delete data.itemsPerPageData;
                     delete data.sortOptionsData;

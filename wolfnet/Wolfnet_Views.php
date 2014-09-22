@@ -337,7 +337,9 @@ class Wolfnet_Views
 
     public function houseOver($args) 
     {
-
+        // echo '<pre>$args:' ."\n";
+        // print_r($args);
+        // echo "</pre>";
         return $this->parseTemplate('template/listingHouseover.php', $args);
 
     }

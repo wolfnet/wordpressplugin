@@ -205,19 +205,20 @@ class Wolfnet_Api
     }
 
 
-    public function getMaptracksEnabled($productKey=null)
-    {
-        if($productKey == null) {
-            $productKey = json_decode($this->wolfnet->getDefaultProductKey());
-        }
-        $url  = $this->serviceUrl . '/setting/' . $productKey
-              . '?setting=maptracks_enabled';
-        $data = $this->getApiData($url, 86400);
-        $data = (property_exists($data, 'maptracks_enabled')) ? ($data->maptracks_enabled == 'Y') : false;
+    // moved to wolfnet
+    // public function getMaptracksEnabled($productKey=null)
+    // {
+    //     if($productKey == null) {
+    //         $productKey = json_decode($this->wolfnet->getDefaultProductKey());
+    //     }
+    //     $url  = $this->serviceUrl . '/setting/' . $productKey
+    //           . '?setting=maptracks_enabled';
+    //     $data = $this->getApiData($url, 86400);
+    //     $data = (property_exists($data, 'maptracks_enabled')) ? ($data->maptracks_enabled == 'Y') : false;
 
-        return $data;
+    //     return $data;
 
-    }
+    // }
 
 
     public function getSortOptions($productKey=null)
@@ -464,16 +465,17 @@ class Wolfnet_Api
     // }
 
 
-    private function getMaxResults($productKey)
-    {
-        $url  = $this->serviceUrl . '/setting/' . $productKey . '.json'
-              . '?setting=site_text';
-        $data = $this->getApiData($url, 86400)->site_text;
-        $maxResults = (property_exists($data, 'Max Results')) ? $data->{'Max Results'} : '';
+    // moved back to wolfnet.php
+    // private function getMaxResults($productKey)
+    // {
+    //     $url  = $this->serviceUrl . '/setting/' . $productKey . '.json'
+    //           . '?setting=site_text';
+    //     $data = $this->getApiData($url, 86400)->site_text;
+    //     $maxResults = (property_exists($data, 'Max Results')) ? $data->{'Max Results'} : '';
 
-        return (is_numeric($maxResults)) ? $maxResults : 250;
+    //     return (is_numeric($maxResults)) ? $maxResults : 250;
 
-    }
+    // }
 
 
     /**

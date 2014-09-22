@@ -22,6 +22,8 @@
  
 ?>
 
+
+
 <div id="<?php echo $instance_id; ?>" class="wolfnet_widget <?php echo $class; ?>">
 
     <?php if (trim($title) != '') { ?>
@@ -70,7 +72,6 @@
 
         $(instance).wolfnetToolbar({
              numrows          : <?php echo $wpMeta['maxrows'] . "\n"; ?>
-            //,criteria         : <?php //echo ((trim($criteria)!='') ? $criteria : '{}')  . "\n"; ?>
             ,criteria         : <?php echo json_encode($wpMeta) . "\n"; ?>
             ,maxResults       : <?php echo $wpMeta['total_rows'] . "\n"; ?>
             ,itemsPerPageData : <?php echo json_encode($itemsPerPage) . "\n"; ?>
@@ -80,6 +81,7 @@
         $(instance).filter('.wolfnet_propertyList').wolfnetPropertyList();
 
     });
+
 
     var maptype = '<?php echo "$maptype"; ?>' 
     if (maptype == 'map_only') {
