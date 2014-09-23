@@ -62,7 +62,7 @@ if ( typeof String.prototype.wolfnetPriceFormat !== 'function' ) {
 
     var renderPropertyList = function(data)
     {
-        var data = ($.isArray(data)) ? data : [];
+        var data = ($.isArray(data.responseData.data.listing)) ? data.responseData.data.listing : [];
         var $container = this;
         var $listings = $('<div>').addClass('wolfnet_listings');
 
@@ -104,12 +104,6 @@ if ( typeof String.prototype.wolfnetPriceFormat !== 'function' ) {
 
     var renderListingGrid = function(data)
     {   
-        // alert('trying to render this data: ' + JSON.stringify(data));
-        //$('.entry-content').html( JSON.stringify(data) );
-
-        // alert( data.requestUrl );
-        //alert( data.responseData.metadata.status.extendedInfo );
-        //alert( data.responseData.data.total_rows);
         
         var data = ($.isArray(data.responseData.data.listing)) ? data.responseData.data.listing : [];
         var $container = this;
@@ -275,13 +269,6 @@ if ( typeof String.prototype.wolfnetPriceFormat !== 'function' ) {
 
     var populateMap = function(data)
     {
-        // alert("hit populateMap");
-        // alert(JSON.stringify(data));
-        // console.log(JSON.stringify(data));
-
-        // "responseData"."data"."listing"
-
-
         //var data = ($.isArray(data)) ? data : [];
         var data = ($.isArray(data.responseData.data.listing)) ? data.responseData.data.listing : [];
         var $container = this;

@@ -292,15 +292,16 @@ class Wolfnet_Api
     }
 
 
-    public function getMarketName($apiKey)
-    {
-        $data = $this->apin->sendRequest(
-                    $apiKey, 
-                    '/settings/market_settings');
+    // moved to wolfnet.php 
+    // public function getMarketName($apiKey)
+    // {
+    //     $data = $this->apin->sendRequest(
+    //                 $apiKey, 
+    //                 '/settings/market_settings');
 
-        return $data['responseData']['data']['datasource_name'];
+    //     return $data['responseData']['data']['datasource_name'];
 
-    }
+    // }
 
 
     /**

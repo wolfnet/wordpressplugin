@@ -45,16 +45,13 @@ class Wolfnet
      * Temporary Hard Coded Key. Replace this with me lookup logic when finished
      * @var string
      */
-    //public $tempReplaceMeKey = '03ee4eeee4cbf74b940fb5af3474356a'; // tx no br, lists br image resource but no display
+    // public $tempReplaceMeKey = '03ee4eeee4cbf74b940fb5af3474356a'; // tx no br, lists br image resource but no display
     // public $tempReplaceMeKey = '1b752eae9d1f2cec3d4ce1b96d478492'; // co
-    //public $tempReplaceMeKey = 'wp_a4d5ae59c276a4ed6af4465431bb3bff';
-    public $tempReplaceMeKey = '82e8a6f0f0fa13b42087a971971af3d7'; // mn no br image set
+    // public $tempReplaceMeKey = 'wp_a4d5ae59c276a4ed6af4465431bb3bff';
+    // public $tempReplaceMeKey = '82e8a6f0f0fa13b42087a971971af3d7'; // mn_rmls no br image set
 
     // had br logo in settings at one point but does not any more.
     // 82e8a6f0f0fa13b42087a971971af3d7
-
-
-
 
     /**
      * This property holds the current version number of the plugin. The value is actually generated
@@ -377,7 +374,8 @@ class Wolfnet
                 //echo $this->api->getMarketDisclaimer($key);
                 //$this->apin->sendRequest($this->tempReplaceMeKey, '/settings/market_settings', $a['method'], $data);
                 $disclaimer = $this->apin->sendRequest(
-                    $this->tempReplaceMeKey, 
+                    //$this->tempReplaceMeKey, 
+                    $key, 
                     '/core/disclaimer', 
                     'get', 
                     array('type'=>'search_results', 'format'=>'html')
@@ -606,6 +604,15 @@ class Wolfnet
     }
 
 
+    public function getMarketName($apiKey)
+    {
+        $data = $this->apin->sendRequest( $apiKey, '/settings');
+        if (is_wp_error($data)) return $data;
+
+        return $data['responseData']['data']['market']['datasource_name'];
+    }
+
+
     /* Custom Post Types ************************************************************************ */
     /*  _                         _              ___                                              */
     /* /       _ _|_  _  ._ _    |_) _   _ _|_    |    ._   _   _                                 */
@@ -700,46 +707,38 @@ class Wolfnet
 
     }
 
-
-    public function sclistingGrid($attrs)
-    {
-        $default_maxrows = '50';
-        $a = shortcode_atts( array(
-            'key'         => $this->tempReplaceMeKey, // temporary, replace with keyid and lookup
-            'keyid'       => 1, // default
-            'resource'    => '/listing',
-            'method'      => 'GET',
-            'maptype'     => 'disabled',
-            'maxresults'  => $default_maxrows,    // for backwords compatability
-            'maxrows'     => $default_maxrows,
-            'startrow'   => 1,
-            'max_price'   => '',
-            'min_price'   => '',
-            'zip_code'    => '',
-            'paginated'   => false,
-            'sortoptions' => false,
-            'title'       => '',
-            // 'exactcity' => "1", // old api what is this?
-            // ownertype="all"   // not needed ??  
-        ), $attrs );
-
-        // Maintain backwards compatibility if shortcode uses the old maxresults
-        if ($a['maxrows'] == $default_maxrows && $a['maxresults'] != $default_maxrows ) {
-            $a['maxrows'] = $a['maxresults'];
-        }
-        
-        return $this->listingGrid( $a );
-   
-    }
-
-
-    public function scPropertyList($attrs, $content='')
+    public function scPropertyListOld($attrs, $content='')
     {
         $defaultAttributes = $this->getPropertyListDefaults();
 
         $criteria = array_merge($defaultAttributes, (is_array($attrs)) ? $attrs : array());
 
         return $this->propertyList($criteria);
+
+    }
+
+    public function sclistingGrid($attrs)
+    {
+        $default_maxrows = '50';
+        $criteria = shortcode_atts( $this->getListingGridDefaults(), $attrs );
+        
+        if ($criteria['maxrows'] == $default_maxrows && $criteria['maxresults'] != $default_maxrows ) {
+           $criteria['maxrows'] = $criteria['maxresults'];
+        }
+        
+        return $this->listingGrid( $criteria );
+   
+    }
+
+
+    public function scPropertyList($attrs)
+    {
+        //$defaultAttributes = $this->getPropertyListDefaults();
+
+        $criteria = shortcode_atts( $this->getPropertyListDefaults(), $attrs );
+        //$criteria = array_merge($defaultAttributes, (is_array($attrs)) ? $attrs : array());
+
+        return $this->listingGrid($criteria, 'list');
 
     }
 
@@ -932,11 +931,6 @@ class Wolfnet
             header('Content-Type: application/json');
         }   
 
-        // keyid should be coming from the request then we will get the key from that?
-        // echo "<pre>\$_REQUEST: \n";
-        // print_r($_REQUEST);
-        // echo "</pre>";
-
         $qdata = array (); 
         if ( !empty( $_REQUEST['maxrows'] ))  $qdata['maxrows'] = $_REQUEST['maxrows'];
         if ( !empty( $_REQUEST['max_price'] ))  $qdata['max_price'] = $_REQUEST['max_price'];
@@ -996,7 +990,7 @@ class Wolfnet
     public function remoteGetMarketName()
     {
         $productKey = $_REQUEST["productkey"];
-        echo json_encode(strtoupper($this->api->getMarketName($productKey)));
+        echo json_encode(strtoupper($this->getMarketName($productKey)));
 
         die;
     }
@@ -1121,12 +1115,16 @@ class Wolfnet
 
         return array(
             'title'       => '',
+            'class'       => 'wolfnet_listingGrid ',
             'criteria'    => '',
             'ownertype'   => 'all',
+            'resource'    => '/listing',
+            'method'      => 'GET',
             'maptype'     => 'disabled',
             'paginated'   => false,
             'sortoptions' => false,
-            'maxresults'  => 50,
+            'maxresults'  => 50, // needed??
+            'maxrows'     => 50, 
             'mode'        => 'advanced',
             'savedsearch' => '',
             'zipcode'     => '',
@@ -1134,7 +1132,9 @@ class Wolfnet
             'exactcity'   => 0,
             'minprice'    => '',
             'maxprice'    => '',
-            'keyid'       => '',
+            'keyid'       => 1,
+            'key'         => $this->getDefaultProductKey(),
+            'startrow'    => 1,
             );
 
     }
@@ -1167,111 +1167,106 @@ class Wolfnet
     }
 
 
-    public function listingGridOld(array $criteria)
+    // public function listingGridOld(array $criteria)
+    // {
+    //     // Maintain backwards compatibility if there is no keyid in the shortcode.
+    //     if(!array_key_exists('keyid', $criteria) || $criteria['keyid'] == '') {
+    //         $criteria['keyid'] = 1;
+    //     }
+
+    //     if(!$this->isSavedKey($this->getProductKeyById($criteria['keyid']))) {
+    //         return false;
+    //     }
+
+    //     if (!array_key_exists('numrows', $criteria)) {
+    //         $criteria['numrows'] = $criteria['maxresults'];
+    //     }
+
+    //     if (!array_key_exists('startrow', $criteria)) {
+    //         $criteria['startrow'] = 1;
+    //     }
+
+    //     $listingsData = $this->api->getListings($criteria);
+
+    //     $listingsHtml = '';
+
+    //     foreach ($listingsData as &$listing) {
+
+    //         $this->augmentListingData($listing);
+
+    //         $vars = array(
+    //             'listing' => $listing
+    //             );
+
+    //         $listingsHtml .= $this->views->listingView($vars);
+
+    //     }
+
+    //     $_REQUEST['wolfnet_includeDisclaimer'] = true;
+    //     $_REQUEST[$this->requestPrefix.'productkey'] = $this->getProductKeyById($criteria['keyid']);
+
+    //     // Keep a running array of product keys so we can output all necessary disclaimers
+    //     if(!array_key_exists('keyList', $_REQUEST)) {
+    //         $_REQUEST['keyList'] = array();
+    //     }
+    //     if(!in_array($_REQUEST[$this->requestPrefix.'productkey'], $_REQUEST['keyList'])) {
+    //         array_push($_REQUEST['keyList'], $_REQUEST[$this->requestPrefix.'productkey']);
+    //     }
+
+    //     $vars = array(
+    //         'instance_id'        => str_replace('.', '', uniqid('wolfnet_listingGrid_')),
+    //         'listings'           => $listingsData,
+    //         'listingsHtml'       => $listingsHtml,
+    //         'siteUrl'            => site_url(),
+    //         'criteria'           => json_encode($criteria),
+    //         'class'              => 'wolfnet_listingGrid ',
+    //         'mapEnabled'         => $this->api->getMaptracksEnabled($_REQUEST[$this->requestPrefix.'productkey']),
+    //         'map'                => '',
+    //         'maptype'            => '',
+    //         'hideListingsTools'  => '',
+    //         'hideListingsId'     => uniqid('hideListings'),
+    //         'showListingsId'     => uniqid('showListings'),
+    //         'collapseListingsId' => uniqid('collapseListings'),
+    //         'toolbarTop'         => '',
+    //         'toolbarBottom'      => '',
+    //         'maxresults'         => ((count($listingsData) > 0) ? $listingsData[0]->maxresults : 0)
+    //         );
+
+
+    //     $vars = $this->convertDataType(array_merge($criteria, $vars));
+
+    //     if ($vars['maptype'] != "disabled") {
+    //         $vars['map']     = $this->getMap($listingsData, $_REQUEST[$this->requestPrefix.'productkey']);
+    //         $vars['maptype'] = $vars['maptype'];
+    //         $vars['hideListingsTools'] = $this->getHideListingTools($vars['hideListingsId']
+    //                                                                ,$vars['showListingsId']
+    //                                                                ,$vars['collapseListingsId']
+    //                                                                ,$vars['instance_id']);
+    //     }
+    //     else {
+    //         $vars['maptype'] = $vars['maptype'];
+    //     }
+
+    //     if ($vars['paginated'] || $vars['sortoptions']) {
+    //         $vars['toolbarTop']    = $this->getToolbar($vars, 'wolfnet_toolbarTop ');
+    //         $vars['toolbarBottom'] = $this->getToolbar($vars, 'wolfnet_toolbarBottom ');
+    //     }
+
+    //     if ($vars['paginated']) {
+    //         $vars['class'] .= 'wolfnet_withPagination ';
+    //     }
+
+    //     if ($vars['sortoptions']) {
+    //         $vars['class'] .= 'wolfnet_withSortOptions ';
+    //     }
+
+    //     return $this->views->listingGridView($vars);
+
+    // }
+
+
+    public function listingGrid(array $criteria, $layout='grid')
     {
-        // Maintain backwards compatibility if there is no keyid in the shortcode.
-        if(!array_key_exists('keyid', $criteria) || $criteria['keyid'] == '') {
-            $criteria['keyid'] = 1;
-        }
-
-        if(!$this->isSavedKey($this->getProductKeyById($criteria['keyid']))) {
-            return false;
-        }
-
-        if (!array_key_exists('numrows', $criteria)) {
-            $criteria['numrows'] = $criteria['maxresults'];
-        }
-
-        if (!array_key_exists('startrow', $criteria)) {
-            $criteria['startrow'] = 1;
-        }
-
-        $listingsData = $this->api->getListings($criteria);
-
-        $listingsHtml = '';
-
-        foreach ($listingsData as &$listing) {
-
-            $this->augmentListingData($listing);
-
-            $vars = array(
-                'listing' => $listing
-                );
-
-            $listingsHtml .= $this->views->listingView($vars);
-
-        }
-
-        $_REQUEST['wolfnet_includeDisclaimer'] = true;
-        $_REQUEST[$this->requestPrefix.'productkey'] = $this->getProductKeyById($criteria['keyid']);
-
-        // Keep a running array of product keys so we can output all necessary disclaimers
-        if(!array_key_exists('keyList', $_REQUEST)) {
-            $_REQUEST['keyList'] = array();
-        }
-        if(!in_array($_REQUEST[$this->requestPrefix.'productkey'], $_REQUEST['keyList'])) {
-            array_push($_REQUEST['keyList'], $_REQUEST[$this->requestPrefix.'productkey']);
-        }
-
-        $vars = array(
-            'instance_id'        => str_replace('.', '', uniqid('wolfnet_listingGrid_')),
-            'listings'           => $listingsData,
-            'listingsHtml'       => $listingsHtml,
-            'siteUrl'            => site_url(),
-            'criteria'           => json_encode($criteria),
-            'class'              => 'wolfnet_listingGrid ',
-            'mapEnabled'         => $this->api->getMaptracksEnabled($_REQUEST[$this->requestPrefix.'productkey']),
-            'map'                => '',
-            'maptype'            => '',
-            'hideListingsTools'  => '',
-            'hideListingsId'     => uniqid('hideListings'),
-            'showListingsId'     => uniqid('showListings'),
-            'collapseListingsId' => uniqid('collapseListings'),
-            'toolbarTop'         => '',
-            'toolbarBottom'      => '',
-            'maxresults'         => ((count($listingsData) > 0) ? $listingsData[0]->maxresults : 0)
-            );
-
-
-        $vars = $this->convertDataType(array_merge($criteria, $vars));
-
-        if ($vars['maptype'] != "disabled") {
-            $vars['map']     = $this->getMap($listingsData, $_REQUEST[$this->requestPrefix.'productkey']);
-            $vars['maptype'] = $vars['maptype'];
-            $vars['hideListingsTools'] = $this->getHideListingTools($vars['hideListingsId']
-                                                                   ,$vars['showListingsId']
-                                                                   ,$vars['collapseListingsId']
-                                                                   ,$vars['instance_id']);
-        }
-        else {
-            $vars['maptype'] = $vars['maptype'];
-        }
-
-        if ($vars['paginated'] || $vars['sortoptions']) {
-            $vars['toolbarTop']    = $this->getToolbar($vars, 'wolfnet_toolbarTop ');
-            $vars['toolbarBottom'] = $this->getToolbar($vars, 'wolfnet_toolbarBottom ');
-        }
-
-        if ($vars['paginated']) {
-            $vars['class'] .= 'wolfnet_withPagination ';
-        }
-
-        if ($vars['sortoptions']) {
-            $vars['class'] .= 'wolfnet_withSortOptions ';
-        }
-
-        return $this->views->listingGridView($vars);
-
-    }
-
-
-    public function listingGrid(array $criteria)
-    {
-        // $pre_style = "font-size: 10px; border: solid 1px green; background: #EEEDFF;";
-
-        // echo "<pre style=\"$pre_style\" >data: \n";
-        // print_r($criteria);
-        // echo "</pre>";
         
         // Maintain backwards compatibility if there is no keyid in the shortcode.
         if(!array_key_exists('keyid', $criteria) || $criteria['keyid'] == '') {
@@ -1321,18 +1316,10 @@ class Wolfnet
             //return $data;
 
         }
-            
-
-        // echo '<pre>$data : '. "\n";
-        // print_r($data);
-        // echo "</pre>";
 
         // add some elements to the array returned by the API
         // wpMeta should contain any criteria or other setting which do not come from the API
-        // wpMarkup stores rendered markup for later use, like toolbar or map markup
         $data['wpMeta']   = $criteria;
-        if ( !array_key_exists('wpMarup', $data))  
-            $data['wpMarkup'] = array();
 
         $data['wpMeta']['total_rows'] = $data['responseData']['data']['total_rows'];
 
@@ -1343,56 +1330,41 @@ class Wolfnet
         if (is_array($data['responseData']['data']))
             $listingsData = $data['responseData']['data']['listing'];
 
-
-
         $listingsHtml = '';
-
-        // echo '<pre>\$data : '. "\n";
-        // print_r($data);
-        // echo "</pre>";
-
-        // $br_logo = $this->getBrLogo($criteria['key']);
-        // $show_logo = $data['responseData']['metadata']['display_rules']['results']['display_broker_reciprocity_logo'];
 
         if (!count($listingsData)){
             $listingsHtml = 'No Listings Found.';
         } else {
             foreach ($listingsData as &$listing) {
-                // $this->augmentListingData($listing);
-                
-                // if ($show_logo && empty($listing['branding']['logo'])) {
-                //     $listing['branding']['logo'] = $br_logo['SRC'];
-                // }
-
-                // if (empty($listing['property_url']))
-                //     $listing['property_url'] = getPropertyUrl($criteria['key'], $listing['property_id']);
 
                 // do we need this ??
-               $vars = array(
+                $vars = array(
                    'listing' => $listing
                    );
-               $listingsHtml .= $this->views->listingView($vars);
+
+                if($layout=='list') {
+                    $listingsHtml .= $this->views->listingBriefView($vars);
+                    
+                } 
+                elseif($layout=='grid') {
+                    $listingsHtml .= $this->views->listingView($vars);
+                }
+                
+                
             }
 
             $_REQUEST['wolfnet_includeDisclaimer'] = true;
-            // TODO replace this
-            //$_REQUEST[$this->requestPrefix.'productkey'] = $this->getProductKeyById($criteria['keyid']);
-            $_REQUEST[$this->requestPrefix.'productkey'] = $this->tempReplaceMeKey;
-            
-            // Keep a running array of product keys so we can output all necessary disclaimers
-            if(!array_key_exists('keyList', $_REQUEST)) {
-                $_REQUEST['keyList'] = array();
-            }
-            if(!in_array($_REQUEST[$this->requestPrefix.'productkey'], $_REQUEST['keyList'])) {
-                array_push($_REQUEST['keyList'], $_REQUEST[$this->requestPrefix.'productkey']);
-            }
-
-
-
-        }
-
+        } 
         
-        // "data" "total_rows"
+        $_REQUEST[$this->requestPrefix.'productkey'] = $this->getProductKeyById($criteria['keyid']);
+        
+        // Keep a running array of product keys so we can output all necessary disclaimers
+        if(!array_key_exists('keyList', $_REQUEST)) {
+            $_REQUEST['keyList'] = array();
+        }
+        if(!in_array($_REQUEST[$this->requestPrefix.'productkey'], $_REQUEST['keyList'])) {
+            array_push($_REQUEST['keyList'], $_REQUEST[$this->requestPrefix.'productkey']);
+        }
 
         $vars = array(
             'instance_id'        => str_replace('.', '', uniqid('wolfnet_listingGrid_')),
@@ -1403,8 +1375,9 @@ class Wolfnet
             'wpMeta'             => $data['wpMeta'],
             'title'              => $data['wpMeta']['title'],
             // 'criteria'           => json_encode($criteria),
-            'class'              => 'wolfnet_listingGrid ',
-            //'mapEnabled'         => $this->api->getMaptracksEnabled($_REQUEST[$this->requestPrefix.'productkey']),
+            // 'class'              => 'wolfnet_listingGrid ',
+            'class'              => $criteria['class'],
+            // 'mapEnabled'         => $this->api->getMaptracksEnabled($_REQUEST[$this->requestPrefix.'productkey']),
             'mapEnabled'         => $this->getMaptracksEnabled($data['wpMeta']['key']),
             'map'                => '',
             'maptype'            => $data['wpMeta']['maptype'],
@@ -1419,13 +1392,7 @@ class Wolfnet
             'maxrows'            => ((count($listingsData) > 0) ? $data['requestData']['maxrows'] : 0),
 
             );
-    
-        // echo "<pre>vars: \n";
-        // print_r($vars);
-        // echo "</pre>";
 
-        // $vars = $this->convertDataType(array_merge($criteria, $vars));
-        // $vars = $this->convertDataType(array_merge($listingsData, $vars));
         if (count($listingsData) && is_array($listingsData))
             $vars = $this->convertDataType(array_merge($vars, $listingsData));
 
@@ -1455,7 +1422,14 @@ class Wolfnet
             $vars['class'] .= 'wolfnet_withSortOptions ';
         }
 
-        return $this->views->listingGridView($vars);
+        // $layout='grid'
+        if($layout=='list') {
+            // echo "propertyListView<br>";
+            return $this->views->propertyListView($vars);
+        } else {
+            return $this->views->listingGridView($vars);
+        }
+        
     
     }
 
@@ -1464,14 +1438,28 @@ class Wolfnet
 
     public function getPropertyListDefaults()
     {
-
         return array(
             'title'       => '',
+            'class'       => 'wolfnet_propertyList ',
+            'criteria'    => '',
             'ownertype'   => 'all',
+            'resource'    => '/listing',
+            'method'      => 'GET',
+            'maptype'     => 'disabled',
             'paginated'   => false,
             'sortoptions' => false,
-            'maxresults'  => 50,
-            'maptype'     => 'disabled'
+            'maxresults'  => 50, // needed??
+            'maxrows'     => 50, 
+            'mode'        => 'advanced',
+            'savedsearch' => '',
+            'zipcode'     => '',
+            'city'        => '',
+            'exactcity'   => 0,
+            'minprice'    => '',
+            'maxprice'    => '',
+            'keyid'       => 1,
+            'key'         => $this->getDefaultProductKey(),
+            'startrow'    => 1,
             );
 
     }
@@ -1484,101 +1472,105 @@ class Wolfnet
     }
 
 
-    public function propertyList(array $criteria)
-    {
-        // Maintain backwards compatibility if there is no keyid in the shortcode.
-        if(!array_key_exists('keyid', $criteria) || $criteria['keyid'] == '') {
-            $criteria['keyid'] = 1;
-        }
+    // REMOVED
+    // propertyList() was combined with listingGrid() since most of the code was identicle.
+    // 
+    // 
+    // public function propertyListOld(array $criteria)
+    // {
+    //     // Maintain backwards compatibility if there is no keyid in the shortcode.
+    //     if(!array_key_exists('keyid', $criteria) || $criteria['keyid'] == '') {
+    //         $criteria['keyid'] = 1;
+    //     }
 
-        if(!$this->isSavedKey($this->getProductKeyById($criteria['keyid']))) {
-            return false;
-        }
+    //     if(!$this->isSavedKey($this->getProductKeyById($criteria['keyid']))) {
+    //         return false;
+    //     }
 
-        if (!array_key_exists('numrows', $criteria)) {
-            $criteria['numrows'] = $criteria['maxresults'];
-        }
+    //     if (!array_key_exists('numrows', $criteria)) {
+    //         $criteria['numrows'] = $criteria['maxresults'];
+    //     }
 
-        if (!array_key_exists('startrow', $criteria)) {
-            $criteria['startrow'] = 1;
-        }
+    //     if (!array_key_exists('startrow', $criteria)) {
+    //         $criteria['startrow'] = 1;
+    //     }
 
-        $listingsData = $this->api->getListings($criteria);
+    //     $listingsData = $this->api->getListings($criteria);
 
-        $listingsHtml = '';
+    //     $listingsHtml = '';
 
-        foreach ($listingsData as &$listing) {
+    //     foreach ($listingsData as &$listing) {
 
-            $this->augmentListingData($listing);
+    //         $this->augmentListingData($listing);
 
-            $vars = array(
-                'listing' => $listing
-                );
+    //         $vars = array(
+    //             'listing' => $listing
+    //             );
 
-            $listingsHtml .= $this->views->listingBriefView($vars);
+    //         $listingsHtml .= $this->views->listingBriefView($vars);
 
-        }
+    //     }
 
-        $_REQUEST['wolfnet_includeDisclaimer'] = true;
-        $_REQUEST[$this->requestPrefix.'productkey'] = $this->getProductKeyById($criteria['keyid']);
+    //     $_REQUEST['wolfnet_includeDisclaimer'] = true;
+    //     $_REQUEST[$this->requestPrefix.'productkey'] = $this->getProductKeyById($criteria['keyid']);
 
-        // Keep a running array of product keys so we can output all necessary disclaimers
-        if(!array_key_exists('keyList', $_REQUEST)) {
-            $_REQUEST['keyList'] = array();
-        }
-        if(!in_array($_REQUEST[$this->requestPrefix.'productkey'], $_REQUEST['keyList'])) {
-            array_push($_REQUEST['keyList'], $_REQUEST[$this->requestPrefix.'productkey']);
-        }
+    //     // Keep a running array of product keys so we can output all necessary disclaimers
+    //     if(!array_key_exists('keyList', $_REQUEST)) {
+    //         $_REQUEST['keyList'] = array();
+    //     }
+    //     if(!in_array($_REQUEST[$this->requestPrefix.'productkey'], $_REQUEST['keyList'])) {
+    //         array_push($_REQUEST['keyList'], $_REQUEST[$this->requestPrefix.'productkey']);
+    //     }
 
-        $vars = array(
-            'instance_id'        => str_replace('.', '', uniqid('wolfnet_propertyList_')),
-            'listings'           => $listingsData,
-            'listingsHtml'       => $listingsHtml,
-            'siteUrl'            => site_url(),
-            'criteria'           => json_encode($criteria),
-            'class'              => 'wolfnet_propertyList ',
-            'mapEnabled'         => $this->api->getMaptracksEnabled($_REQUEST[$this->requestPrefix.'productkey']),
-            'map'                => '',
-            'mapType'            => '',
-            'hideListingsTools'  => '',
-            'hideListingsId'     => uniqid('hideListings'),
-            'showListingsId'     => uniqid('showListings'),
-            'collapseListingsId' => uniqid('collapseListings'),
-            'toolbarTop'         => '',
-            'toolbarBottom'      => '',
-            'maxresults'         => ((count($listingsData) > 0) ? $listingsData[0]->maxresults : 0),
-            );
+    //     $vars = array(
+    //         'instance_id'        => str_replace('.', '', uniqid('wolfnet_propertyList_')),
+    //         'listings'           => $listingsData,
+    //         'listingsHtml'       => $listingsHtml,
+    //         'siteUrl'            => site_url(),
+    //         'criteria'           => json_encode($criteria),
+    //         'class'              => 'wolfnet_propertyList ',
+    //         'mapEnabled'         => $this->api->getMaptracksEnabled($_REQUEST[$this->requestPrefix.'productkey']),
+    //         'map'                => '',
+    //         'mapType'            => '',
+    //         'hideListingsTools'  => '',
+    //         'hideListingsId'     => uniqid('hideListings'),
+    //         'showListingsId'     => uniqid('showListings'),
+    //         'collapseListingsId' => uniqid('collapseListings'),
+    //         'toolbarTop'         => '',
+    //         'toolbarBottom'      => '',
+    //         'maxresults'         => ((count($listingsData) > 0) ? $listingsData[0]->maxresults : 0),
+    //         );
 
-        $vars = $this->convertDataType(array_merge($criteria, $vars));
+    //     $vars = $this->convertDataType(array_merge($criteria, $vars));
 
-        if ($vars['maptype'] != "disabled") {
-            $vars['map']     = $this->getMap($listingsData, $_REQUEST[$this->requestPrefix.'productkey']);
-            $vars['hideListingsTools'] = $this->getHideListingTools($vars['hideListingsId']
-                                                                   ,$vars['showListingsId']
-                                                                   ,$vars['collapseListingsId']
-                                                                   ,$vars['instance_id']);
-            $vars['mapType'] = $vars['maptype'];
-        }
-        else {
-            $vars['mapType'] = $vars['maptype'];
-        }
+    //     if ($vars['maptype'] != "disabled") {
+    //         $vars['map']     = $this->getMap($listingsData, $_REQUEST[$this->requestPrefix.'productkey']);
+    //         $vars['hideListingsTools'] = $this->getHideListingTools($vars['hideListingsId']
+    //                                                                ,$vars['showListingsId']
+    //                                                                ,$vars['collapseListingsId']
+    //                                                                ,$vars['instance_id']);
+    //         $vars['mapType'] = $vars['maptype'];
+    //     }
+    //     else {
+    //         $vars['mapType'] = $vars['maptype'];
+    //     }
 
-        if ($vars['paginated'] || $vars['sortoptions']) {
-            $vars['toolbarTop']    = $this->getToolbar($vars, 'wolfnet_toolbarTop ');
-            $vars['toolbarBottom'] = $this->getToolbar($vars, 'wolfnet_toolbarBottom ');
-        }
+    //     if ($vars['paginated'] || $vars['sortoptions']) {
+    //         $vars['toolbarTop']    = $this->getToolbar($vars, 'wolfnet_toolbarTop ');
+    //         $vars['toolbarBottom'] = $this->getToolbar($vars, 'wolfnet_toolbarBottom ');
+    //     }
 
-        if ($vars['paginated']) {
-            $vars['class'] .= 'wolfnet_withPagination ';
-        }
+    //     if ($vars['paginated']) {
+    //         $vars['class'] .= 'wolfnet_withPagination ';
+    //     }
 
-        if ($vars['sortoptions']) {
-            $vars['class'] .= 'wolfnet_withSortOptions ';
-        }
+    //     if ($vars['sortoptions']) {
+    //         $vars['class'] .= 'wolfnet_withSortOptions ';
+    //     }
 
-        return $this->views->propertyListView($vars);
+    //     return $this->views->propertyListView($vars);
 
-    }
+    // }
 
 
     /* Quick Search ***************************************************************************** */
@@ -1994,7 +1986,7 @@ class Wolfnet
         // echo "</pre>";
 
         $br_logo = $this->getBrLogo($key);
-        $br_logo_url =  $br_logo['SRC'];
+        $br_logo_url =  $br_logo['src'];
         $show_logo = $data['responseData']['metadata']['display_rules']['results']['display_broker_reciprocity_logo'];
         $wnt_base_url = $this->getWntSiteBaseUrl($key);
 
@@ -2359,7 +2351,7 @@ class Wolfnet
     public function getMapParameters($listingsData, $productKey=null)
     {
         if($productKey == null) {
-            $productKey = $this->wolfnet->getDefaultProductKey();
+            $productKey = $this->getDefaultProductKey();
         }
 
         // $url = $this->serviceUrl . '/setting/' . $productKey . '.json'

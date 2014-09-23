@@ -46,7 +46,8 @@ class Wolfnet_Views
 
         // add the market name
         for($i=1; $i<=count($productKey); $i++) {
-            $productKey[$i-1]->market = strtoupper($GLOBALS['wolfnet']->api->getMarketName($productKey[$i-1]->key));
+            // $productKey[$i-1]->market = strtoupper($GLOBALS['wolfnet']->api->getMarketName($productKey[$i-1]->key));
+            $productKey[$i-1]->market = strtoupper($GLOBALS['wolfnet']->getMarketName($productKey[$i-1]->key));
         }
 
         include $GLOBALS['wolfnet']->dir . '/template/adminSettings.php';
@@ -238,7 +239,8 @@ class Wolfnet_Views
             $args['productkey'] = $GLOBALS['wolfnet']->getProductKeyById($args["keyid"]);
         }
         $args['itemsPerPage'] = $GLOBALS['wolfnet']->getItemsPerPage();
-        $args['sortOptions'] = $GLOBALS['wolfnet']->api->getSortOptions($args['productkey']);
+        // $args['sortOptions'] = $GLOBALS['wolfnet']->api->getSortOptions($args['productkey']);
+        $args['sortOptions'] = $GLOBALS['wolfnet']->apin->sendRequest($args['productkey'], '/search_criteria/sort_option');
 
         foreach ($args as $key => $item) {
             $args[$key] = apply_filters('wolfnet_propertyListView_' . $key, $item);
@@ -268,10 +270,6 @@ class Wolfnet_Views
         foreach ($args as $key => $item) {
             $args[$key] = apply_filters('wolfnet_listingGridView_' . $key, $item);
         }
-
-        // echo "<pre>\$args: \n";
-        // print_r($args);
-        // echo "</pre>";
   
         return apply_filters('wolfnet_listingGridView', $this->parseTemplate('template/listingGrid.php', $args));
 
