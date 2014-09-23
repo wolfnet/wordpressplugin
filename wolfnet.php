@@ -377,7 +377,7 @@ class Wolfnet
                     //$this->tempReplaceMeKey, 
                     $key, 
                     '/core/disclaimer', 
-                    'get', 
+                    'GET', 
                     array('type'=>'search_results', 'format'=>'html')
                     );
                 echo "<pre>market_settings: \n";
@@ -944,7 +944,7 @@ class Wolfnet
         if ( !empty( $_REQUEST['city'] ))  $qdata['city'] = $_REQUEST['city'];
         if ( !empty( $_REQUEST['exactcity'] ))  $qdata['exactcity'] = $_REQUEST['exactcity'];
 
-        $data = $this->apin->sendRequest($_REQUEST['key'], '/listing', 'get', $qdata);
+        $data = $this->apin->sendRequest($_REQUEST['key'], '/listing', 'GET', $qdata);
         if (is_wp_error($data)){
             echo "API returned and error: ";
             echo $data->get_error_code();
@@ -1056,22 +1056,74 @@ class Wolfnet
 
     public function featuredListings(array $criteria)
     {
+        // echo '<pre>\$criteria : '. "\n";
+        // print_r($criteria);
+        // echo "</pre>";
         // Maintain backwards compatibility if there is no keyid in the shortcode.
         if(!array_key_exists('keyid', $criteria) || $criteria['keyid'] == '') {
             $criteria['keyid'] = 1;
+        }
+
+        if(!array_key_exists('key', $criteria) || $criteria['key'] == '') {
+            $criteria['key'] = $this->getDefaultProductKey();
         }
 
         if(!$this->isSavedKey($this->getProductKeyById($criteria['keyid']))) {
             return false;
         }
 
+        
+
         if (!array_key_exists('startrow', $criteria)) {
             $criteria['startrow'] = 1;
         }
 
-        $listingsData = $this->api->getFeaturedListings($criteria);
+        $qdata = array(
+            'numrows' => $criteria['numrows'],
+            'startrow' => $criteria['startrow'],
+            'ownertype' => $criteria['ownertype'],
+            );
+
+        // if($criteria['ownertype'] == 'agent_broker' ) 
+        //     $qdata['agent_office_only'] = true;
+
+        // if($criteria['ownertype'] == 'agent' ) 
+        //     $qdata['agent_only'] = true;
+
+        // if($criteria['ownertype'] == 'broker' ) 
+        //     $qdata['office_only'] = true;
+        
+
+        // $listingsData = $this->api->getFeaturedListings($criteria);
+
+        $data = $this->apin->sendRequest($criteria['key'], '/listing', 'GET', $qdata);
+
+        // TODO
+        // create a wp_error display method with some nice formating
+        if (is_wp_error($data)) {
+            $msg = "Wolfnet Error: <br>";
+            $code = $data->get_error_code();
+            $msg .= "code: $code </br> Message: ";
+            $msg .= $data->get_error_message($code);
+            $msg .= "<br>Data: <pre>";
+            $msg .= print_r($data, true);
+            $msg .= "</pre>";
+            return $msg;
+            //return $data;
+        }
+
+        // echo '<pre>\$data : '. "\n";
+        // print_r($data);
+        // echo "</pre>";
+        
+        //$listingsData = $this->api->getFeaturedListings($criteria);
+        $listingsData = array();
+
+        if (is_array($data['responseData']['data']))
+            $listingsData = $data['responseData']['data']['listing'];
 
         $listingsHtml = '';
+        
 
         foreach ($listingsData as &$listing) {
 
@@ -1118,12 +1170,15 @@ class Wolfnet
             'class'       => 'wolfnet_listingGrid ',
             'criteria'    => '',
             'ownertype'   => 'all',
+            // TODO resource and Method could be hard coded into request.
             'resource'    => '/listing',
             'method'      => 'GET',
             'maptype'     => 'disabled',
             'paginated'   => false,
             'sortoptions' => false,
-            'maxresults'  => 50, // needed??
+            // TODO
+            // there is some confusion betweend maxresults and maxrows that should be resolved
+            'maxresults'  => 50, 
             'maxrows'     => 50, 
             'mode'        => 'advanced',
             'savedsearch' => '',
@@ -1303,7 +1358,9 @@ class Wolfnet
 
 
         $data = $this->apin->sendRequest($criteria['key'], $criteria['resource'], $criteria['method'], $qdata);
-        // if we get an error pass it along
+        
+        // TODO
+        // create a wp_error display method with some nice formating
         if (is_wp_error($data)) {
             $msg = "Wolfnet Error: <br>";
             $code = $data->get_error_code();
@@ -1314,7 +1371,6 @@ class Wolfnet
             $msg .= "</pre>";
             return $msg;
             //return $data;
-
         }
 
         // add some elements to the array returned by the API
