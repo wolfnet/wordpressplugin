@@ -152,13 +152,8 @@ class Wolfnet
         // Set the Autoloader Method
         spl_autoload_register(array( $this, 'autoload'));
 
-        $this->api = new Wolfnet_Api();
         // TODO: fix or abandon autoloader. change naming convention
         $file = $this->dir . '/wolfnet/wolfnet-api-wp-client/WolfnetApiClient.php';
-        // /wolfnet-idx-for-wordpress/wolfnet/wolfnet-api-wp-client
-        // /wolfnet-idx-for-wordpress/wolfnet/wolfnet-api-wp-client/Wolfnet_Api_Wp_Client/WolfnetApiClient.php
-        // echo "<br><br><br><br><br>$file<br>";
-        // echo $this->dir ."<br>";
         include_once($file);
         $this->apin = new Wolfnet_Api_Wp_Client();
         $this->views = new Wolfnet_Views();
@@ -215,7 +210,7 @@ class Wolfnet
             }
 
             if ($valid) {
-                $url .= '&' . $key . '=' . urlencode($this->api->html_entity_decode_numeric($value));
+                $url .= '&' . $key . '=' . urlencode($this->html_entity_decode_numeric($value));
             }
 
         }
@@ -224,6 +219,38 @@ class Wolfnet
 
     }
 
+    /**
+     * Decodes all HTML entities, including numeric and hexadecimal ones.
+     *
+     * @param mixed $string
+     * @return string decoded HTML
+     */
+    public function html_entity_decode_numeric($string, $quote_style=ENT_COMPAT, $charset='utf-8')
+    {
+        $hexCallback = array(&$this, 'chr_utf8_hex_callback');
+        $nonHexCallback = array(&$this, 'chr_utf8_nonhex_callback');
+
+        $string = html_entity_decode($string, $quote_style, $charset);
+        $string = preg_replace_callback('~&#x([0-9a-fA-F]+);~i', $hexCallback, $string);
+        $string = preg_replace_callback('~&#([0-9]+);~i', $nonHexCallback, $string);
+
+        return $string;
+
+    }
+
+    /**
+     * Callback helper
+     */
+    public function chr_utf8_hex_callback($matches)
+    {
+        return $this->chr_utf8(hexdec($matches[1]));
+    }
+
+
+    public function chr_utf8_nonhex_callback($matches)
+    {
+        return $this->chr_utf8($matches[1]);
+    }
 
     /* Hooks ************************************************************************************ */
     /* |_|  _   _  |   _                                                                          */
@@ -371,8 +398,6 @@ class Wolfnet
             array_key_exists('keyList', $_REQUEST)) {
             echo '<div class="wolfnet_marketDisclaimer">';
             foreach($_REQUEST['keyList'] as $key) {
-                //echo $this->api->getMarketDisclaimer($key);
-                //$this->apin->sendRequest($this->tempReplaceMeKey, '/settings/market_settings', $a['method'], $data);
                 $disclaimer = $this->apin->sendRequest(
                     //$this->tempReplaceMeKey, 
                     $key, 
@@ -470,8 +495,8 @@ class Wolfnet
     public function searchManagerHtml($productKey=null)
     {
         global $wp_version;
-        $baseUrl = $this->api->getBaseUrl($productKey);
-        $maptracksEnabled = $this->api->getMaptracksEnabled($productKey);
+        $baseUrl = $this->getBaseUrl($productKey);
+        $maptracksEnabled = $this->getMaptracksEnabled($productKey);
 
         if (!strstr($baseUrl, 'index.cfm')) {
             if (substr($baseUrl, strlen($baseUrl) - 1) != '/') {
@@ -503,7 +528,7 @@ class Wolfnet
 
         foreach ($_GET as $param => $paramValue) {
             if (!array_search($param, $resParams)) {
-                $paramValue = urlencode($this->api->html_entity_decode_numeric($paramValue));
+                $paramValue = urlencode($this->html_entity_decode_numeric($paramValue));
                 $url .= "&{$param}={$paramValue}";
             }
         }
@@ -552,6 +577,7 @@ class Wolfnet
      */
     public function getProductKeyById($id) {
         $keyList = json_decode($this->getProductKey());
+
         foreach($keyList as $key) {
             if($key->id == $id) {
                 return $key->key;
@@ -566,9 +592,10 @@ class Wolfnet
      * @return string The key that was retrieved from the WP options table.
      */
     public function getDefaultProductKey() {
+        
         $productKey = json_decode($this->getProductKey());
         // TODO: Add some sort of error throwing for if there are no keys.
-
+      
         if (is_array($productKey) && array_key_exists(0, $productKey)) {
             return $productKey[0]->key;
         } else {
@@ -765,7 +792,7 @@ class Wolfnet
     {
         $productKey = (array_key_exists('key', $_REQUEST)) ? $_REQUEST['key'] : '';
 
-        echo ($this->api->productKeyIsValid($productKey)) ? 'true' : 'false';
+        echo ($this->productKeyIsValid($productKey)) ? 'true' : 'false';
 
         die;
 
@@ -931,18 +958,19 @@ class Wolfnet
             header('Content-Type: application/json');
         }   
 
+        // TODO
+        // create a method for building the querydata so it is not duplicated in remoteListingsGet()
         $qdata = array (); 
         if ( !empty( $_REQUEST['maxrows'] ))  $qdata['maxrows'] = $_REQUEST['maxrows'];
-        if ( !empty( $_REQUEST['max_price'] ))  $qdata['max_price'] = $_REQUEST['max_price'];
-        if ( !empty( $_REQUEST['min_price'] ))  $qdata['min_price'] = $_REQUEST['min_price'];
+        if ( !empty( $_REQUEST['maxprice'] ))  $qdata['max_price'] = $_REQUEST['maxprice'];
+        if ( !empty( $_REQUEST['minprice'] ))  $qdata['min_price'] = $_REQUEST['minprice'];
         if ( !empty( $_REQUEST['zip_code'] ))  $qdata['zip_code'] = $_REQUEST['zip_code'];
         if ( !empty( $_REQUEST['startrow'] ))  $qdata['startrow'] = $_REQUEST['startrow'];
-
-
         if ( !empty( $_REQUEST['ownertype'] ))  $qdata['ownertype'] = $_REQUEST['ownertype'];
         if ( !empty( $_REQUEST['maptype'] ))  $qdata['maptype'] = $_REQUEST['maptype'];
         if ( !empty( $_REQUEST['city'] ))  $qdata['city'] = $_REQUEST['city'];
         if ( !empty( $_REQUEST['exactcity'] ))  $qdata['exactcity'] = $_REQUEST['exactcity'];
+        if ( !empty( $_REQUEST['sort'] ))  $qdata['sort'] = $_REQUEST['sort'];
 
         $data = $this->apin->sendRequest($_REQUEST['key'], '/listing', 'GET', $qdata);
         if (is_wp_error($data)){
@@ -999,7 +1027,7 @@ class Wolfnet
     public function remoteMapEnabled()
     {
         $productKey = $this->getProductKeyById($_REQUEST["keyid"]);
-        echo json_encode($this->api->getMaptracksEnabled($productKey));
+        echo json_encode($this->getMaptracksEnabled($productKey));
 
         die;
     }
@@ -1007,7 +1035,7 @@ class Wolfnet
 
     public function remoteGetBaseUrl() {
         $productKey = $this->getProductKeyById($_REQUEST["keyid"]);
-        echo json_encode($this->api->getBaseUrl($productKey));
+        echo json_encode($this->getBaseUrl($productKey));
 
         die;
     }
@@ -1079,24 +1107,21 @@ class Wolfnet
         }
 
         $qdata = array(
-            'numrows' => $criteria['numrows'],
+            'maxrows' => $criteria['maxresults'],
             'startrow' => $criteria['startrow'],
-            'ownertype' => $criteria['ownertype'],
             );
 
-        // if($criteria['ownertype'] == 'agent_broker' ) 
-        //     $qdata['agent_office_only'] = true;
+        if($criteria['ownertype'] == 'agent_broker' ) 
+            $qdata['agent_office_only'] = true;
 
-        // if($criteria['ownertype'] == 'agent' ) 
-        //     $qdata['agent_only'] = true;
+        if($criteria['ownertype'] == 'agent' ) 
+            $qdata['agent_only'] = true;
 
-        // if($criteria['ownertype'] == 'broker' ) 
-        //     $qdata['office_only'] = true;
-        
-
-        // $listingsData = $this->api->getFeaturedListings($criteria);
+        if($criteria['ownertype'] == 'broker' ) 
+            $qdata['office_only'] = true;
 
         $data = $this->apin->sendRequest($criteria['key'], '/listing', 'GET', $qdata);
+        $this->augmentListingsData($data, $criteria['key']);
 
         // TODO
         // create a wp_error display method with some nice formating
@@ -1112,22 +1137,15 @@ class Wolfnet
             //return $data;
         }
 
-        // echo '<pre>\$data : '. "\n";
-        // print_r($data);
-        // echo "</pre>";
-        
-        //$listingsData = $this->api->getFeaturedListings($criteria);
         $listingsData = array();
-
+        
         if (is_array($data['responseData']['data']))
             $listingsData = $data['responseData']['data']['listing'];
 
         $listingsHtml = '';
         
 
-        foreach ($listingsData as &$listing) {
-
-            $this->augmentListingData($listing);
+        foreach ($listingsData as &$listing) {   
 
             $vars = array(
                 'listing' => $listing
@@ -1222,104 +1240,12 @@ class Wolfnet
     }
 
 
-    // public function listingGridOld(array $criteria)
-    // {
-    //     // Maintain backwards compatibility if there is no keyid in the shortcode.
-    //     if(!array_key_exists('keyid', $criteria) || $criteria['keyid'] == '') {
-    //         $criteria['keyid'] = 1;
-    //     }
-
-    //     if(!$this->isSavedKey($this->getProductKeyById($criteria['keyid']))) {
-    //         return false;
-    //     }
-
-    //     if (!array_key_exists('numrows', $criteria)) {
-    //         $criteria['numrows'] = $criteria['maxresults'];
-    //     }
-
-    //     if (!array_key_exists('startrow', $criteria)) {
-    //         $criteria['startrow'] = 1;
-    //     }
-
-    //     $listingsData = $this->api->getListings($criteria);
-
-    //     $listingsHtml = '';
-
-    //     foreach ($listingsData as &$listing) {
-
-    //         $this->augmentListingData($listing);
-
-    //         $vars = array(
-    //             'listing' => $listing
-    //             );
-
-    //         $listingsHtml .= $this->views->listingView($vars);
-
-    //     }
-
-    //     $_REQUEST['wolfnet_includeDisclaimer'] = true;
-    //     $_REQUEST[$this->requestPrefix.'productkey'] = $this->getProductKeyById($criteria['keyid']);
-
-    //     // Keep a running array of product keys so we can output all necessary disclaimers
-    //     if(!array_key_exists('keyList', $_REQUEST)) {
-    //         $_REQUEST['keyList'] = array();
-    //     }
-    //     if(!in_array($_REQUEST[$this->requestPrefix.'productkey'], $_REQUEST['keyList'])) {
-    //         array_push($_REQUEST['keyList'], $_REQUEST[$this->requestPrefix.'productkey']);
-    //     }
-
-    //     $vars = array(
-    //         'instance_id'        => str_replace('.', '', uniqid('wolfnet_listingGrid_')),
-    //         'listings'           => $listingsData,
-    //         'listingsHtml'       => $listingsHtml,
-    //         'siteUrl'            => site_url(),
-    //         'criteria'           => json_encode($criteria),
-    //         'class'              => 'wolfnet_listingGrid ',
-    //         'mapEnabled'         => $this->api->getMaptracksEnabled($_REQUEST[$this->requestPrefix.'productkey']),
-    //         'map'                => '',
-    //         'maptype'            => '',
-    //         'hideListingsTools'  => '',
-    //         'hideListingsId'     => uniqid('hideListings'),
-    //         'showListingsId'     => uniqid('showListings'),
-    //         'collapseListingsId' => uniqid('collapseListings'),
-    //         'toolbarTop'         => '',
-    //         'toolbarBottom'      => '',
-    //         'maxresults'         => ((count($listingsData) > 0) ? $listingsData[0]->maxresults : 0)
-    //         );
-
-
-    //     $vars = $this->convertDataType(array_merge($criteria, $vars));
-
-    //     if ($vars['maptype'] != "disabled") {
-    //         $vars['map']     = $this->getMap($listingsData, $_REQUEST[$this->requestPrefix.'productkey']);
-    //         $vars['maptype'] = $vars['maptype'];
-    //         $vars['hideListingsTools'] = $this->getHideListingTools($vars['hideListingsId']
-    //                                                                ,$vars['showListingsId']
-    //                                                                ,$vars['collapseListingsId']
-    //                                                                ,$vars['instance_id']);
-    //     }
-    //     else {
-    //         $vars['maptype'] = $vars['maptype'];
-    //     }
-
-    //     if ($vars['paginated'] || $vars['sortoptions']) {
-    //         $vars['toolbarTop']    = $this->getToolbar($vars, 'wolfnet_toolbarTop ');
-    //         $vars['toolbarBottom'] = $this->getToolbar($vars, 'wolfnet_toolbarBottom ');
-    //     }
-
-    //     if ($vars['paginated']) {
-    //         $vars['class'] .= 'wolfnet_withPagination ';
-    //     }
-
-    //     if ($vars['sortoptions']) {
-    //         $vars['class'] .= 'wolfnet_withSortOptions ';
-    //     }
-
-    //     return $this->views->listingGridView($vars);
-
-    // }
-
-
+    /**
+     * Returns the markup for listings. generates both the listingGrid layour as well as the property list layout
+     * @param  array  $criteria the search criteria 
+     * @param  string $layout   'grid' or 'list' 
+     * @return string           listings markup
+     */
     public function listingGrid(array $criteria, $layout='grid')
     {
         
@@ -1335,19 +1261,16 @@ class Wolfnet
         if(!$this->isSavedKey($this->getProductKeyById($criteria['keyid']))) {
             return false;
         }
-        // if (!array_key_exists('numrows', $criteria)) {
-        //     $criteria['numrows'] = $criteria['maxresults'];
-        // }
 
-        // if (!array_key_exists('startrow', $criteria)) {
-        //     $criteria['startrow'] = 1;
-        // }
+        if (!array_key_exists('numrows', $criteria)) {
+            $criteria['maxrows'] = $criteria['maxresults'];
+        }
 
         $qdata = array (); 
 
         if ( !empty( $criteria['maxrows'] ))  $qdata['maxrows'] = $criteria['maxrows'];
-        if ( !empty( $criteria['max_price'] ))  $qdata['max_price'] = $criteria['max_price'];
-        if ( !empty( $criteria['min_price'] ))  $qdata['min_price'] = $criteria['min_price'];
+        if ( !empty( $criteria['maxprice'] ))  $qdata['max_price'] = $criteria['maxprice'];
+        if ( !empty( $criteria['minprice'] ))  $qdata['min_price'] = $criteria['minprice'];
         if ( !empty( $criteria['zip_code'] ))  $qdata['zip_code'] = $criteria['zip_code'];
         if ( !empty( $criteria['startrow'] ))  $qdata['startrow'] = $criteria['startrow'];
         if ( !empty( $criteria['ownertype'] ))  $qdata['ownertype'] = $criteria['ownertype'];
@@ -1528,107 +1451,6 @@ class Wolfnet
     }
 
 
-    // REMOVED
-    // propertyList() was combined with listingGrid() since most of the code was identicle.
-    // 
-    // 
-    // public function propertyListOld(array $criteria)
-    // {
-    //     // Maintain backwards compatibility if there is no keyid in the shortcode.
-    //     if(!array_key_exists('keyid', $criteria) || $criteria['keyid'] == '') {
-    //         $criteria['keyid'] = 1;
-    //     }
-
-    //     if(!$this->isSavedKey($this->getProductKeyById($criteria['keyid']))) {
-    //         return false;
-    //     }
-
-    //     if (!array_key_exists('numrows', $criteria)) {
-    //         $criteria['numrows'] = $criteria['maxresults'];
-    //     }
-
-    //     if (!array_key_exists('startrow', $criteria)) {
-    //         $criteria['startrow'] = 1;
-    //     }
-
-    //     $listingsData = $this->api->getListings($criteria);
-
-    //     $listingsHtml = '';
-
-    //     foreach ($listingsData as &$listing) {
-
-    //         $this->augmentListingData($listing);
-
-    //         $vars = array(
-    //             'listing' => $listing
-    //             );
-
-    //         $listingsHtml .= $this->views->listingBriefView($vars);
-
-    //     }
-
-    //     $_REQUEST['wolfnet_includeDisclaimer'] = true;
-    //     $_REQUEST[$this->requestPrefix.'productkey'] = $this->getProductKeyById($criteria['keyid']);
-
-    //     // Keep a running array of product keys so we can output all necessary disclaimers
-    //     if(!array_key_exists('keyList', $_REQUEST)) {
-    //         $_REQUEST['keyList'] = array();
-    //     }
-    //     if(!in_array($_REQUEST[$this->requestPrefix.'productkey'], $_REQUEST['keyList'])) {
-    //         array_push($_REQUEST['keyList'], $_REQUEST[$this->requestPrefix.'productkey']);
-    //     }
-
-    //     $vars = array(
-    //         'instance_id'        => str_replace('.', '', uniqid('wolfnet_propertyList_')),
-    //         'listings'           => $listingsData,
-    //         'listingsHtml'       => $listingsHtml,
-    //         'siteUrl'            => site_url(),
-    //         'criteria'           => json_encode($criteria),
-    //         'class'              => 'wolfnet_propertyList ',
-    //         'mapEnabled'         => $this->api->getMaptracksEnabled($_REQUEST[$this->requestPrefix.'productkey']),
-    //         'map'                => '',
-    //         'mapType'            => '',
-    //         'hideListingsTools'  => '',
-    //         'hideListingsId'     => uniqid('hideListings'),
-    //         'showListingsId'     => uniqid('showListings'),
-    //         'collapseListingsId' => uniqid('collapseListings'),
-    //         'toolbarTop'         => '',
-    //         'toolbarBottom'      => '',
-    //         'maxresults'         => ((count($listingsData) > 0) ? $listingsData[0]->maxresults : 0),
-    //         );
-
-    //     $vars = $this->convertDataType(array_merge($criteria, $vars));
-
-    //     if ($vars['maptype'] != "disabled") {
-    //         $vars['map']     = $this->getMap($listingsData, $_REQUEST[$this->requestPrefix.'productkey']);
-    //         $vars['hideListingsTools'] = $this->getHideListingTools($vars['hideListingsId']
-    //                                                                ,$vars['showListingsId']
-    //                                                                ,$vars['collapseListingsId']
-    //                                                                ,$vars['instance_id']);
-    //         $vars['mapType'] = $vars['maptype'];
-    //     }
-    //     else {
-    //         $vars['mapType'] = $vars['maptype'];
-    //     }
-
-    //     if ($vars['paginated'] || $vars['sortoptions']) {
-    //         $vars['toolbarTop']    = $this->getToolbar($vars, 'wolfnet_toolbarTop ');
-    //         $vars['toolbarBottom'] = $this->getToolbar($vars, 'wolfnet_toolbarBottom ');
-    //     }
-
-    //     if ($vars['paginated']) {
-    //         $vars['class'] .= 'wolfnet_withPagination ';
-    //     }
-
-    //     if ($vars['sortoptions']) {
-    //         $vars['class'] .= 'wolfnet_withSortOptions ';
-    //     }
-
-    //     return $this->views->propertyListView($vars);
-
-    // }
-
-
     /* Quick Search ***************************************************************************** */
 
     public function getQuickSearchDefaults()
@@ -1651,12 +1473,17 @@ class Wolfnet
 
     }
 
-
+    /**
+     * Get markup for Quick Search form
+     * @param  array  $criteria 
+     * @return string           form markup
+     */
     public function quickSearch(array $criteria)
     {
-        $productKey = $this->getDefaultProductKey();
 
-        if(array_key_exists("keyids", $criteria)) {
+        if( array_key_exists("key", $criteria) && !empty($criteria['keyids']) ) {}
+
+        if( array_key_exists("keyids", $criteria) && !empty($criteria['keyids']) ) {
             $keyids = explode(",", $criteria["keyids"]);
         } else {
             $keyids[0] = 1;
@@ -1664,6 +1491,8 @@ class Wolfnet
 
         if(count($keyids) == 1) {
             $productKey = $this->getProductKeyById($keyids[0]);
+        } else {
+            $productKey = $this->getDefaultProductKey();
         }
 
         $vars = array(
@@ -1674,7 +1503,7 @@ class Wolfnet
             'prices'       => $this->getPrices($productKey),
             'beds'         => $this->getBeds(),
             'baths'        => $this->getBaths(),
-            'formAction'   => $this->api->getBaseUrl($productKey)
+            'formAction'   => $this->getBaseUrl($productKey)
             );
 
         $args = $this->convertDataType(array_merge($criteria, $vars));
@@ -1682,7 +1511,6 @@ class Wolfnet
         return $this->views->quickSearchView($args);
 
     }
-
 
     /* Misc. Data ******************************************************************************* */
 
@@ -2037,17 +1865,16 @@ class Wolfnet
         if (is_array($data['responseData']['data']))
             $listingsData = &$data['responseData']['data']['listing'];
 
-        // echo '<pre>\$data : '. "\n";
-        // print_r($data);
-        // echo "</pre>";
-
         $br_logo = $this->getBrLogo($key);
         $br_logo_url =  $br_logo['src'];
         $show_logo = $data['responseData']['metadata']['display_rules']['results']['display_broker_reciprocity_logo'];
-        $wnt_base_url = $this->getWntSiteBaseUrl($key);
+        $wnt_base_url = $this->getBaseUrl($key);
 
         // loop over listings 
         foreach ($listingsData as &$listing) {
+
+            if (is_numeric($listing['listing_price']))
+                $listing['listing_price'] = '$' . number_format($listing['listing_price']);
 
             if ($show_logo && empty($listing['branding']['logo']))
                 $listing['branding']['logo'] = $br_logo_url;  
@@ -2057,66 +1884,52 @@ class Wolfnet
     
             $listing['location'] = $listing['city'];
     
-            if ( $listing['city'] != '' && $listing['state'] != '' ) {
+            if ( $listing['city'] != '' && $listing['state'] != '' ) 
                 $listing['location'] .= ', ';
-            }
     
             $listing['location'] .= $listing['state'];
             $listing['location'] .= ' ' . $listing['zip_code'];
     
             $listing['bedsbaths'] = '';
     
-            if (is_numeric($listing['total_bedrooms']) && ($listing['total_bedrooms'] > 0 )) {
+            if (is_numeric($listing['total_bedrooms']) && ($listing['total_bedrooms'] > 0 ))
                 $listing['bedsbaths'] .= $listing['total_bedrooms'] . 'bd';
-            }
     
             
             $listing['total_baths'] = 0;
     
-            if (is_numeric($listing['total_partial_baths'])) {
+            if (is_numeric($listing['total_partial_baths']))
                 $listing['total_baths'] += $listing['total_partial_baths'];
-            }
     
-            if (is_numeric($listing['total_full_baths']) ) {
+            if (is_numeric($listing['total_full_baths']) )
                 $listing['total_baths'] += $listing['total_full_baths'];
-            }
     
-    
-            // if (is_numeric($listing['total_bedrooms']) && is_numeric($listing['total_baths']))  {
-            if ( !empty($listing['bedsbaths']) && is_numeric($listing['total_baths']) && ( $listing['total_baths'] > 0 ))  {
+            if ( !empty($listing['bedsbaths']) && is_numeric($listing['total_baths']) && ( $listing['total_baths'] > 0 ))
                 $listing['bedsbaths'] .= '/';
-            }
     
-    
-            if (is_numeric($listing['total_baths']) && ($listing['total_baths'] > 0)) {
+            if (is_numeric($listing['total_baths']) && ($listing['total_baths'] > 0))
                 $listing['bedsbaths'] .= $listing['total_baths'] . 'ba';
-            }
     
             $listing['bedsbaths_full'] = '';
     
-            if ( is_numeric( $listing['total_bedrooms'] ) ) {
+            if ( is_numeric( $listing['total_bedrooms'] ) )
                 $listing['bedsbaths_full'] .= $listing['total_bedrooms'] . ' Bed Rooms';
-            }
     
-            if ( is_numeric( $listing['total_bedrooms'] ) && is_numeric( $listing['total_baths'] ) ) {
+            if ( is_numeric( $listing['total_bedrooms'] ) && is_numeric( $listing['total_baths'] ) )
                 $listing['bedsbaths_full'] .= ' & ';
-            }
     
-            if ( is_numeric( $listing['total_baths'] ) ) {
+            if ( is_numeric( $listing['total_baths'] ) )
                 $listing['bedsbaths_full'] .= $listing['total_baths'] . ' Bath Rooms';
-            }
     
             $listing['address'] = $listing['display_address'];
     
-            if ($listing['city'] != '' && $listing['address'] != '') {
+            if ($listing['city'] != '' && $listing['address'] != '')
                 $listing['address'] .= ', ';
-            }
     
             $listing['address'] .= $listing['city'];
     
-            if ($listing['state'] != '' && $listing['address'] != '') {
+            if ($listing['state'] != '' && $listing['address'] != '')
                 $listing['address'] .= ', ';
-            }
     
             $listing['address'] .= ' ' . $listing['state'];
             $listing['address'] .= ' ' . $listing['zip_code'];
@@ -2132,77 +1945,59 @@ class Wolfnet
     private function augmentListingData(&$listing)
     {
 
-        // echo "<pre>\$listing: \n";
-        // print_r($listing);
-        // echo "</pre>";
-        // if (is_numeric($listing->listing_price)) {
-        if (is_numeric($listing['listing_price'])) {
-            // $listing->listing_price = '$' . number_format($listing->listing_price);
+        if (is_numeric($listing['listing_price'])) 
             $listing['listing_price'] = '$' . number_format($listing['listing_price']);
-        }
 
         $listing['location'] = $listing['city'];
 
-        if ( $listing['city'] != '' && $listing['state'] != '' ) {
+        if ( $listing['city'] != '' && $listing['state'] != '' )
             $listing['location'] .= ', ';
-        }
 
         $listing['location'] .= $listing['state'];
         $listing['location'] .= ' ' . $listing['zip_code'];
 
         $listing['bedsbaths'] = '';
 
-        if (is_numeric($listing['total_bedrooms']) && ($listing['total_bedrooms'] > 0 )) {
+        if (is_numeric($listing['total_bedrooms']) && ($listing['total_bedrooms'] > 0 ))
             $listing['bedsbaths'] .= $listing['total_bedrooms'] . 'bd';
-        }
 
         
         $listing['total_baths'] = 0;
 
-        if (is_numeric($listing['total_partial_baths'])) {
+        if (is_numeric($listing['total_partial_baths'])) 
             $listing['total_baths'] += $listing['total_partial_baths'];
-        }
 
-        if (is_numeric($listing['total_full_baths']) ) {
+        if (is_numeric($listing['total_full_baths']) )
             $listing['total_baths'] += $listing['total_full_baths'];
-        }
-
 
         // if (is_numeric($listing['total_bedrooms']) && is_numeric($listing['total_baths']))  {
-        if ( !empty($listing['bedsbaths']) && is_numeric($listing['total_baths']) && ( $listing['total_baths'] > 0 ))  {
+        if ( !empty($listing['bedsbaths']) && is_numeric($listing['total_baths']) && ( $listing['total_baths'] > 0 ))
             $listing['bedsbaths'] .= '/';
-        }
 
 
-        if (is_numeric($listing['total_baths']) && ($listing['total_baths'] > 0)) {
+        if (is_numeric($listing['total_baths']) && ($listing['total_baths'] > 0))
             $listing['bedsbaths'] .= $listing['total_baths'] . 'ba';
-        }
 
         $listing['bedsbaths_full'] = '';
 
-        if ( is_numeric( $listing['total_bedrooms'] ) ) {
+        if ( is_numeric( $listing['total_bedrooms'] ) )
             $listing['bedsbaths_full'] .= $listing['total_bedrooms'] . ' Bed Rooms';
-        }
 
-        if ( is_numeric( $listing['total_bedrooms'] ) && is_numeric( $listing['total_baths'] ) ) {
+        if ( is_numeric( $listing['total_bedrooms'] ) && is_numeric( $listing['total_baths'] ) )
             $listing['bedsbaths_full'] .= ' & ';
-        }
 
-        if ( is_numeric( $listing['total_baths'] ) ) {
+        if ( is_numeric( $listing['total_baths'] ) )
             $listing['bedsbaths_full'] .= $listing['total_baths'] . ' Bath Rooms';
-        }
 
         $listing['address'] = $listing['display_address'];
 
-        if ($listing['city'] != '' && $listing['address'] != '') {
+        if ($listing['city'] != '' && $listing['address'] != '')
             $listing['address'] .= ', ';
-        }
 
         $listing['address'] .= $listing['city'];
 
-        if ($listing['state'] != '' && $listing['address'] != '') {
+        if ($listing['state'] != '' && $listing['address'] != '')
             $listing['address'] .= ', ';
-        }
 
         $listing['address'] .= ' ' . $listing['state'];
         $listing['address'] .= ' ' . $listing['zip_code'];
@@ -2251,10 +2046,6 @@ class Wolfnet
             $prev = $args['startrow'];
         }
 
-        // echo "<pre>\$args: \n";
-        // print_r($args);
-        // echo "</pre>";
-
         $args['prevLink'] = $this->buildUrl(
             admin_url('admin-ajax.php'),
             array_merge($args, array('startrow'=>$prev))
@@ -2262,8 +2053,6 @@ class Wolfnet
 
         $next = $args['startrow'] + $args['numrows'];
 
-        
-        
         if ($next >= $args['maxresults']) {
             $next = 1;
         }
@@ -2308,12 +2097,6 @@ class Wolfnet
         $data = $this->apin->sendRequest($productKey, '/settings');
         if (is_wp_error($data)) return $data;
 
-        // echo '<pre>\ settings data getBrLogo: '. "\n";
-        // print_r($data);
-        // echo "</pre>";
-
-        // echo $data['responseData']['data']['market']['broker_reciprocity_logo'];
-
         return $data['responseData']['data']['market']['broker_reciprocity_logo'];
     }
 
@@ -2322,16 +2105,11 @@ class Wolfnet
         if($productKey == null) {
             $productKey = json_decode($this->getDefaultProductKey());
         }
-        // $url  = $this->serviceUrl . '/setting/' . $productKey
-        //       . '?setting=maptracks_enabled';
-        // $data = $this->getApiData($url, 86400);
+
         $data = $this->apin->sendRequest($productKey, '/settings');
         if (is_wp_error($data)) return $data;
-        
-        // $data = (property_exists($data, 'maptracks_enabled')) ? ($data->maptracks_enabled == 'Y') : false;
 
         return ($data['responseData']['data']['site']['maptracks_enabled'] == 'Y'); 
-        // return $data;
 
     }
 
@@ -2410,26 +2188,12 @@ class Wolfnet
             $productKey = $this->getDefaultProductKey();
         }
 
-        // $url = $this->serviceUrl . '/setting/' . $productKey . '.json'
-        //      . '?setting=getallsettings';
-        // $data = $this->getApiData($url, 86400);
-
-        //$data = $this->apin->sendRequest($a['key'], $a['resource'], $a['method'], $qdata);
         $data  = $this->apin->sendRequest( $productKey, '/settings' );
 
-        // echo "<pre>\$data: \n";
-        // print_r( $data);
-        // echo "</pre>";
-
-        // TODO verify which lat and lng to use
-        // old $args['map_start_lat'] = $data->settings->MAP_START_LAT;
         $args['map_start_lat'] = $data['responseData']['data']['market']['maptracks']['map_start_lat'];
         $args['map_start_lng'] = $data['responseData']['data']['market']['maptracks']['map_start_lng'];
-        // old $args['map_start_lng'] = $data->settings->MAP_START_LNG;
-        // $args['map_start_scale'] = $data->settings->MAP_START_SCALE;
         $args['map_start_scale'] = $data['responseData']['data']['market']['maptracks']['map_start_scale'];
         $args['houseoverIcon'] = $GLOBALS['wolfnet']->url . 'img/houseover.png';
-
         $args['houseoverData'] = $this->getHouseoverData($listingsData,$data['responseData']['data']['resource']['searchResults']['allLayouts']['showBrokerReciprocityLogo']);
 
         return $args;
@@ -2438,15 +2202,6 @@ class Wolfnet
 
     private function getHouseoverData($listingsData, $showBrokerImage)
     {
-    
-        // error_log(print_r($listingsData, true));
-        // error_log($_SERVER['HTTP_HOST']);
-        
-        // ttt
-        // TODO verify branding logo is there when we have an api for a market that shows them.
-        // echo '<pre>\$listingsData : '. "\n";
-        // print_r($listingsData);
-        // echo "</pre>";
      
         $houseoverData = array();
 
@@ -2459,13 +2214,10 @@ class Wolfnet
             $concatHouseover = $this->views->houseOver($vars);                
 
             array_push($houseoverData, array(
-                // 'lat'        => $listing->lat,
                 'lat'        => $listing['geo']['lat'],
-                //'lng'        => $listing->lng,
                 'lng'        => $listing['geo']['lng'],
                 'content'    => $concatHouseover,
                 'propertyId' => $listing['property_id'],
-                //'propertyUrl'=> $listing->property_url
                 ));
         }
 
@@ -2478,10 +2230,11 @@ class Wolfnet
      * @param  string $productKey 
      * @return string             base URL of the Wolfnet search solution
      */
-    private function getWntSiteBaseUrl($productKey=null ) 
+    // private function getWntSiteBaseUrl($productKey=null ) 
+    private function getBaseUrl($productKey=null ) 
     {
         if($productKey == null) 
-            $productKey = $this->wolfnet->getDefaultProductKey();
+            $productKey = $this->getDefaultProductKey();
         
         $data  = $this->apin->sendRequest( $productKey, '/settings' );
         if (is_wp_error($data)) return $data;
@@ -2489,20 +2242,46 @@ class Wolfnet
         return $data['responseData']['data']['site']['site_base_url'] ;
     }
 
+    
+    /**
+     * check if key is valid
+     * @param  string $key 
+     * @return bool         true?
+     */
+    public function productKeyIsValid($key=null)
+    {
+        $valid = false;
+
+        if ($key != null) {
+            $productKey = $key;
+        }
+        else {
+            $productKey = json_decode($GLOBALS['wolfnet']->getDefaultProductKey());
+        }
+
+        $http = $this->apin->sendRequest(
+                    $productKey, 
+                    '/status');
+
+        if (!is_wp_error($http) && $http['responseStatusCode'] == '200') {
+            $valid = true;
+        }
+
+        return $valid;
+
+    }
 
     private function getPrices($productKey)
     {
-        $values = $this->api->getPricesFromApi($productKey);
-        $data   = array();
 
-        foreach ($values as $value) {
-            $data[] = array(
-                'value' => trim($value),
-                'label' => (is_numeric($value)) ? '$' . number_format(trim($value)) : $value
-                );
-        }
+        $data = $this->apin->sendRequest($productKey, '/search_criteria/property_feature');
+        if (is_wp_error($data)) return $data->get_error_message();
+        
+        $prices = array();
+        $prices['max_price'] = $data['responseData']['data']['max_price'];
+        $prices['min_price'] = $data['responseData']['data']['min_price'];
 
-        return $data;
+        return $prices;
 
     }
 
@@ -2747,5 +2526,3 @@ class Wolfnet
 
 
 $GLOBALS['wolfnet'] = new Wolfnet();
-
-

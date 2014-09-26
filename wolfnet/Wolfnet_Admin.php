@@ -109,7 +109,6 @@ class Wolfnet_Admin extends Wolfnet
 
     public function activate()
     {
-        // error_log("activating");
         // Check for legacy transient data and remove it if it exists.
         $indexkey = 'wppf_cache_metadata';
         $metaData = get_transient($indexkey);
@@ -127,7 +126,6 @@ class Wolfnet_Admin extends Wolfnet
 
     public function deactivate()
     {
-        // error_log("deactivating");
         // Clear out all transient data as it is purely for caching and performance.
         $this->deleteTransientIndex();
 
@@ -208,7 +206,7 @@ class Wolfnet_Admin extends Wolfnet
         $pageIsSM = ($pageKeyExists) ? ($_REQUEST['page']=='wolfnet_plugin_search_manager') : false;
         $key = (array_key_exists("keyid", $_REQUEST)) ? $_REQUEST["keyid"] : "1";
         $productKey = $this->getProductKeyById($key);
-        if(!$GLOBALS['wolfnet']->api->productKeyIsValid($productKey)) {
+        if(!$GLOBALS['wolfnet']->productKeyIsValid($productKey)) {
             $productKey = null;
         }
 
@@ -229,13 +227,6 @@ class Wolfnet_Admin extends Wolfnet
         $lvl = 'administrator';
 
         do_action($this->preHookPrefix . 'createAdminPages'); // Legacy hook
-
-        // echo " URL: ". $this->url;
-        //error_log ("Admin  adminMenu tom: ". $this->tom );
-
-        // error_log ("Admin  adminMenu testUrl(): ". $this->testUrl() );
-
-        // error_log ("Admin  adminMenu url: ". $this->url );
 
         $pgs = array(
             array(
@@ -320,26 +311,27 @@ class Wolfnet_Admin extends Wolfnet
     /*                                                                                            */
     /* ****************************************************************************************** */
 
-    private function deleteTransientIndex()
-    {
-        // error_log("deleteTransientIndexing");
-        $this->clearTransients();
-        delete_transient($GLOBALS['wolfnet']->api->transientIndexKey);
+    // TODO rewrite transient garbage collection
+    // private function deleteTransientIndex()
+    // {
+    //     // error_log("deleteTransientIndexing");
+    //     $this->clearTransients();
+    //     delete_transient($GLOBALS['wolfnet']->api->transientIndexKey);
 
-    }
+    // }
 
 
-    private function clearTransients()
-    {
-        $index = $GLOBALS['wolfnet']->api->transientIndex();
+    // private function clearTransients()
+    // {
+    //     $index = $GLOBALS['wolfnet']->api->transientIndex();
 
-        foreach ($index as $key => $value) {
-            delete_transient($key);
-        }
+    //     foreach ($index as $key => $value) {
+    //         delete_transient($key);
+    //     }
 
-        $GLOBALS['wolfnet']->api->transientIndex(array());
+    //     $GLOBALS['wolfnet']->api->transientIndex(array());
 
-    }
+    // }
 
 
 }

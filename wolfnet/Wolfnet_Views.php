@@ -71,7 +71,7 @@ class Wolfnet_Views
         $key = (array_key_exists("keyid", $_REQUEST)) ? $_REQUEST["keyid"] : "1";
         $productkey = $GLOBALS['wolfnet']->getProductKeyById($key);
 
-        if (!$GLOBALS['wolfnet']->api->productKeyIsValid($productkey)) {
+        if (!$GLOBALS['wolfnet']->productKeyIsValid($productkey)) {
             include $GLOBALS['wolfnet']->dir .'/template/invalidProductKey.php';
             return;
         }
@@ -239,8 +239,9 @@ class Wolfnet_Views
             $args['productkey'] = $GLOBALS['wolfnet']->getProductKeyById($args["keyid"]);
         }
         $args['itemsPerPage'] = $GLOBALS['wolfnet']->getItemsPerPage();
-        // $args['sortOptions'] = $GLOBALS['wolfnet']->api->getSortOptions($args['productkey']);
-        $args['sortOptions'] = $GLOBALS['wolfnet']->apin->sendRequest($args['productkey'], '/search_criteria/sort_option');
+
+        $data = $GLOBALS['wolfnet']->apin->sendRequest($args['productkey'], '/search_criteria/sort_option');
+        $args['sortOptions'] = $data['responseData']['data']['options'];
 
         foreach ($args as $key => $item) {
             $args[$key] = apply_filters('wolfnet_propertyListView_' . $key, $item);
@@ -264,8 +265,10 @@ class Wolfnet_Views
         }
 
         $args['itemsPerPage'] = $GLOBALS['wolfnet']->getItemsPerPage();
-        $args['sortOptions'] = $GLOBALS['wolfnet']->apin->sendRequest($args['productkey'], '/search_criteria/sort_option');
 
+        // $args['sortOptions'] = $GLOBALS['wolfnet']->apin->sendRequest($args['productkey'], '/search_criteria/sort_option');
+        $data = $GLOBALS['wolfnet']->apin->sendRequest($args['productkey'], '/search_criteria/sort_option');
+        $args['sortOptions'] = $data['responseData']['data']['options'];
 
         foreach ($args as $key => $item) {
             $args[$key] = apply_filters('wolfnet_listingGridView_' . $key, $item);
@@ -335,9 +338,7 @@ class Wolfnet_Views
 
     public function houseOver($args) 
     {
-        // echo '<pre>$args:' ."\n";
-        // print_r($args);
-        // echo "</pre>";
+
         return $this->parseTemplate('template/listingHouseover.php', $args);
 
     }

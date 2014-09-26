@@ -23,7 +23,6 @@
 class Wolfnet_PropertyListWidget extends Wolfnet_ListingGridWidget
 {
 
-
     public $idBase = 'wolfnet_propertyListWidget';
 
     public $name = 'WolfNet Property List';
@@ -35,8 +34,9 @@ class Wolfnet_PropertyListWidget extends Wolfnet_ListingGridWidget
 
     public function widget($args, $instance)
     {
+
         echo $args['before_widget'];
-        echo $this->plugin->propertyList($this->collectData($args, $instance));
+        echo $this->plugin->listingGrid($this->collectData($args, $instance), 'list');
         echo $args['after_widget'];
 
     }

@@ -18,22 +18,23 @@
  *                Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-if ( typeof String.prototype.wolfnetPriceFormat !== 'function' ) {
-    String.prototype.wolfnetPriceFormat = function() {
-        var number = this.valueOf();
-        var dollars = number.split('.')[0];
-        var dollars = dollars
-            .split('')
-            .reverse()
-            .join('')
-            .replace(/(\d{3}(?!$))/g, '$1,')
-            .split('')
-            .reverse()
-            .join('');
+// formating done in php
+// if ( typeof String.prototype.wolfnetPriceFormat !== 'function' ) {
+//     String.prototype.wolfnetPriceFormat = function() {
+//         var number = this.valueOf();
+//         var dollars = number.split('.')[0];
+//         var dollars = dollars
+//             .split('')
+//             .reverse()
+//             .join('')
+//             .replace(/(\d{3}(?!$))/g, '$1,')
+//             .split('')
+//             .reverse()
+//             .join('');
 
-        return '$' + dollars;
-    }
-}
+//         return '$' + dollars;
+//     }
+// }
 
 (function($){
 
@@ -87,7 +88,7 @@ if ( typeof String.prototype.wolfnetPriceFormat !== 'function' ) {
             var $price = $('<span>')
                 .addClass('wolfnet_price')
                 .attr('itemprop', 'price')
-                .html(data[i].listing_price.toString().wolfnetPriceFormat())
+                .html(data[i].listing_price.toString())
                 .appendTo($link);
 
             var $streetAddress = $('<span>')
@@ -110,8 +111,8 @@ if ( typeof String.prototype.wolfnetPriceFormat !== 'function' ) {
         var $listings = $('<div>').addClass('wolfnet_listings');
 
         for (var i=0, l=data.length; i<l; i++) {
-            var brokerLogo  = data[i].branding.brokerLogo  || null;
-            var brandingType  = data[i].branding.branding_type || '';
+            var brokerLogo  = data[i].branding.logo  || null;
+            var brandingType  = data[i].branding.type || '';
             var brokerName  = data[i].branding.content || null;
             var cityState   = data[i].city + ', ' + data[i].state;
             var fullAddress = data[i].display_address + ', ' + cityState;
@@ -138,7 +139,7 @@ if ( typeof String.prototype.wolfnetPriceFormat !== 'function' ) {
             var $price = $('<span>')
                 .addClass('wolfnet_price')
                 .attr('itemprop', 'price')
-                .html(data[i].listing_price.toString().wolfnetPriceFormat())
+                .html(data[i].listing_price.toString())
                 .appendTo($link);
 
             // calculate total number of baths
@@ -226,42 +227,46 @@ if ( typeof String.prototype.wolfnetPriceFormat !== 'function' ) {
     }
 
 
-    var getBedBath = function(bath,bed)
-    {
-        var bedBathString = '';
+    // var getBedBath = function(bath,bed)
+    // {
+    //     var bedBathString = '';
 
-        if (bed != '' && bed != 'n/a') {
-            bedBathString = bed + 'bd';
-        }
-        if (bath != '' && bath != 'n/a') {
-            if (bedBathString != '') {
-                bedBathString += '/';
-            }
-            bedBathString += bath + 'ba';
-        }
+    //     if (bed != '' && bed != 'n/a') {
+    //         bedBathString = bed + 'bd';
+    //     }
+    //     if (bath != '' && bath != 'n/a') {
+    //         if (bedBathString != '') {
+    //             bedBathString += '/';
+    //         }
+    //         bedBathString += bath + 'ba';
+    //     }
 
-        return bedBathString;
-    }
+    //     return bedBathString;
+    // }
 
 
     //replicating building of html dom in wolfnet.php, function: getHouseoverHtml
     var getHouseoverHtml = function(listing)
     {
         var concatHouseover = '';
-        var bed_bath = getBedBath(listing.bathroom,listing.bedrooms);
+        //var bed_bath = getBedBath(listing.bathroom,listing.bedrooms);
+
+        // alert('listing in fetHouseoverHtml: ' + JSON.stringify(listing));
 
         concatHouseover += '<a style="display:block" rel="follow" href="' + listing.property_url + '">';
         concatHouseover += '<div class="wolfnet_wntHouseOverWrapper"><div data-property-id="' + listing.property_id;
         concatHouseover += '" class="wntHOItem"><table class="wolfnet_wntHOTable"><tbody><tr>';
         concatHouseover += '<td class="wntHOImgCol" valign="top" style="vertical-align:top;"><div class="wolfnet_wntHOImg">';
         concatHouseover += '<img src="' + listing.thumbnail_url + '" style="max-height:100px;width:auto"></div><div class="wolfnet_wntHOBroker" style="text-align: center">';
-        concatHouseover += '<img class="wolfnet_wntHOBrokerLogo" src="' + listing.branding.brokerLogo + '" style="max-height:50px;width:auto" alt="Broker Reciprocity">';
+        concatHouseover += '<img class="wolfnet_wntHOBrokerLogo" src="' + listing.branding.logo + '" style="max-height:50px;width:auto" alt="Broker Reciprocity">';
         concatHouseover += '</div></td><td valign="top" style="vertical-align:top;"><div class="wolfnet_wntHOContentContainer">';
-        concatHouseover += '<div style="text-align:left;font-weight:bold">' + listing.listing_price.toString().wolfnetPriceFormat() + '</div>';
+        concatHouseover += '<div style="text-align:left;font-weight:bold">' + listing.listing_price.toString() + '</div>';
         concatHouseover += '<div style="text-align:left;">' + listing.display_address + '</div><div style="text-align:left;">';
-        concatHouseover += listing.city + ', ' + listing.state + '</div><div style="text-align:left;">' + bed_bath;
-        concatHouseover += '</div><div style="text-align:left;padding-top:20px;">' + listing.branding.content + '</div>';
+        concatHouseover += listing.city + ', ' + listing.state + '</div><div style="text-align:left;">' + listing.bedsbaths;
+        concatHouseover += '</div><div style="text-align:left;padding-top:20px;">' + listing.branding.courtesy_text + '</div>';
         concatHouseover += '</div></td></tr></tbody></table></div></div></a>';
+
+        // alert(concatHouseover);
 
         return concatHouseover;
     }

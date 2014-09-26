@@ -20,6 +20,12 @@
  *                Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
+ 
+// echo '<pre>\$prices : '. "\n";
+// //print_r($prices);
+// echo $prices;
+// echo "</pre>"; 
+
 ?>
 
 <div id="<?php echo $instance_id; ?>" class="wolfnet_widget wolfnet_quickSearch">
@@ -65,11 +71,12 @@
 
             <label>Price</label>
 
+
             <div>
                 <select id="<?php echo $instance_id; ?>_min_price" name="min_price">
                     <option value="">Min. Price</option>
-                    <?php foreach ($prices as $price) { ?>
-                    <option value="<?php echo $price['value']; ?>"><?php echo $price['label']; ?></option>
+                    <?php foreach ($prices['min_price']['options'] as $price) { ?>
+                        <option value="<?php echo $price['value']; ?>"><?php echo $price['label']; ?></option>
                     <?php } ?>
                 </select>
             </div>
@@ -77,8 +84,8 @@
             <div>
                 <select id="<?php echo $instance_id; ?>_max_price" name="max_price">
                     <option value="">Max. Price</option>
-                    <?php foreach ($prices as $price) { ?>
-                    <option value="<?php echo $price['value']; ?>"><?php echo $price['label']; ?></option>
+                    <?php foreach ($prices['max_price']['options'] as $price) { ?>
+                        <option value="<?php echo $price['value']; ?>"><?php echo $price['label']; ?></option>
                     <?php } ?>
                 </select>
             </div>
