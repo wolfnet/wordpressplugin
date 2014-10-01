@@ -176,6 +176,12 @@ class Wolfnet
         $this->addFilter(array(
             array('do_parse_request',     'doParseRequest'),
             ));
+
+        register_activation_hook( __FILE__, array( $this, 'wolfnet_activation' ));
+        // ttt
+        error_log('activation hook registered');
+        register_deactivation_hook( __FILE__, array( $this, 'wolfnet_deactivation' ));
+
     }
 
 
@@ -281,6 +287,22 @@ class Wolfnet
 
         // Register CSS
         $this->registerStyles();
+
+    }
+
+    public function wolfnet_activation() 
+    {
+        // ttt
+        error_log('activation method hit - wolfnet');
+        $this->apin->startWpDailyCron();
+        
+        
+    }
+
+    public function wolfnet_deactivation() 
+    {
+        error_log('deactivation method hit - wolfnet');
+        $this->apin->stopWpDailyCron();
     }
 
 
@@ -1866,7 +1888,8 @@ class Wolfnet
             $listingsData = &$data['responseData']['data']['listing'];
 
         $br_logo = $this->getBrLogo($key);
-        $br_logo_url =  $br_logo['src'];
+        if (array_key_exists('src', $br_logo))
+            $br_logo_url =  $br_logo['src'];
         $show_logo = $data['responseData']['metadata']['display_rules']['results']['display_broker_reciprocity_logo'];
         $wnt_base_url = $this->getBaseUrl($key);
 
@@ -1876,7 +1899,7 @@ class Wolfnet
             if (is_numeric($listing['listing_price']))
                 $listing['listing_price'] = '$' . number_format($listing['listing_price']);
 
-            if ($show_logo && empty($listing['branding']['logo']))
+            if ($show_logo && empty($listing['branding']['logo'])&& !empty($br_logo_url))
                 $listing['branding']['logo'] = $br_logo_url;  
             
             if (empty($listing['property_url']))

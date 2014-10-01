@@ -20,9 +20,6 @@
  */
 
 
-
-error_log(print_r($listing, true));
-
 // this template renders the markup for map property info that shows up on mouse hover.
 if (!is_null($listing['geo']['lat']) && !is_null($listing['geo']['lng'])) : 
     ?>
