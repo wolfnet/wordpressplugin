@@ -48,7 +48,7 @@ class Wolfnet_Admin extends Wolfnet
      * are cached in the Transient API should be cleared.
      * @var string
      */
-    protected $cacheFlag = '-wolfnet-cache';
+    // protected $cacheFlag = 'wolfnet-cache';
 
 
     /* Constructor Method *********************************************************************** */
@@ -74,11 +74,11 @@ class Wolfnet_Admin extends Wolfnet
         // register_deactivation_hook( $this->pluginFile, array($this, 'deactivate' ));
 
         // Clear cache if url param exists.
-        $cacheParamExists = array_key_exists($this->cacheFlag, $_REQUEST);
-        $cacheParamClear = ($cacheParamExists) ? ($_REQUEST[$this->cacheFlag] == 'clear') : false;
-        if ($cacheParamExists && $cacheParamClear) {
-            $this->clearTransients();
-        }
+        // $cacheParamExists = array_key_exists($this->cacheFlag, $_REQUEST);
+        // $cacheParamClear = ($cacheParamExists) ? ($_REQUEST[$this->cacheFlag] == 'clear') : false;
+        // if ($cacheParamExists && $cacheParamClear) {
+        //     $this->clearTransients();
+        // }
 
         // Register admin only actions.
         $this->addAction(array(

@@ -22,6 +22,11 @@
 class Wolfnet_Views
 {
 
+    /**
+     * location of images hosted remotely
+     * @var string
+     */
+    public $remoteImages = '//common.wolfnet.com/wordpress/';
 
     /* Public Methods *************************************************************************** */
     /*  ____        _     _ _        __  __      _   _               _                            */
@@ -91,7 +96,8 @@ class Wolfnet_Views
 
     public function amSupportPage()
     {
-        $imgdir = $GLOBALS['wolfnet']->url . 'img/';
+        // $imgdir = $GLOBALS['wolfnet']->url . 'img/';
+        $imgdir = $this->remoteImages;
         include $GLOBALS['wolfnet']->dir .'/template/adminSupport.php';
 
     }
