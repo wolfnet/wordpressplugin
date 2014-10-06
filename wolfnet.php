@@ -122,6 +122,14 @@ class Wolfnet
      */
     protected $sessionLength = 3600; // one hour
 
+
+    /**
+     * This property defines a the request parameter which is used to determine if the values which
+     * are cached in the Transient API should be cleared.
+     * @var string
+     */
+    protected $cacheFlag = 'wolfnet-cache';
+
     public $url;
 
     protected $pluginFile = __FILE__;
@@ -161,6 +169,13 @@ class Wolfnet
             $this->admin = new Wolfnet_Admin($this);
         }
 
+        // Clear cache if url param exists.
+        $cacheParamExists = array_key_exists($this->cacheFlag, $_REQUEST);
+        $cacheParamClear = ($cacheParamExists) ? ($_REQUEST[$this->cacheFlag] == 'clear') : false;
+        if ($cacheParamExists && $cacheParamClear) {
+            $this->apin->clearTransients('all');
+        }
+
         // Register actions.
         $this->addAction(array(
             array('init',                  'init'),
@@ -178,8 +193,6 @@ class Wolfnet
             ));
 
         register_activation_hook( __FILE__, array( $this, 'wolfnet_activation' ));
-        // ttt
-        error_log('activation hook registered');
         register_deactivation_hook( __FILE__, array( $this, 'wolfnet_deactivation' ));
 
     }
@@ -292,16 +305,11 @@ class Wolfnet
 
     public function wolfnet_activation() 
     {
-        // ttt
-        error_log('activation method hit - wolfnet');
         $this->apin->startWpDailyCron();
-        
-        
     }
 
     public function wolfnet_deactivation() 
     {
-        error_log('deactivation method hit - wolfnet');
         $this->apin->stopWpDailyCron();
     }
 

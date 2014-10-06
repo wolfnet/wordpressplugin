@@ -43,14 +43,6 @@ class Wolfnet_Admin extends Wolfnet
     public $adminCssOptionKey = "wolfnetCss_adminCss";
 
 
-    /**
-     * This property defines a the request parameter which is used to determine if the values which
-     * are cached in the Transient API should be cleared.
-     * @var string
-     */
-    // protected $cacheFlag = 'wolfnet-cache';
-
-
     /* Constructor Method *********************************************************************** */
     /*   ____                _                   _                                                */
     /*  / ___|___  _ __  ___| |_ _ __ _   _  ___| |_ ___  _ __                                    */
@@ -77,7 +69,7 @@ class Wolfnet_Admin extends Wolfnet
         // $cacheParamExists = array_key_exists($this->cacheFlag, $_REQUEST);
         // $cacheParamClear = ($cacheParamExists) ? ($_REQUEST[$this->cacheFlag] == 'clear') : false;
         // if ($cacheParamExists && $cacheParamClear) {
-        //     $this->clearTransients();
+        //     $GLOBALS['wolfnet']->apin->clearTransients('all');
         // }
 
         // Register admin only actions.
