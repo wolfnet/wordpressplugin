@@ -139,17 +139,22 @@ class Wolfnet
             $this->admin = new Wolfnet_Admin($this);
         }
 
-        // Register actions.
+        
+       
         $this->addAction(array(
             array('init',                  'init'),
             array('wp_enqueue_scripts',    'scripts'),
-            array('wp_enqueue_scripts',    'styles'),
-            array('widgets_init',          'widgetInit'),
+            array('wp_enqueue_scripts',    'styles'),            
             array('wp_footer',             'footer'),
             array('template_redirect',     'templateRedirect'),
             array('wp_enqueue_scripts',    'publicStyles',      1000),
             ));
 
+        if ($this->getDefaultProductKey()){
+            $this->addAction(array(
+                array('widgets_init',      'widgetInit'),
+            ));
+        }
         // Register filters.
         $this->addFilter(array(
             array('do_parse_request',     'doParseRequest'),

@@ -204,7 +204,7 @@ class Wolfnet_Api
     public function getMaptracksEnabled($productKey=null)
     {
         if($productKey == null) {
-            $productKey = json_decode($this->getDefaultProductKey());
+            $productKey = $GLOBALS['wolfnet']->getDefaultProductKey();
         }
         $url  = $this->serviceUrl . '/setting/' . $productKey
               . '?setting=maptracks_enabled';
@@ -219,7 +219,7 @@ class Wolfnet_Api
     public function getSortOptions($productKey=null)
     {
         if($productKey == null) {
-            $productKey = $this->getDefaultProductKey();
+            $productKey = $GLOBALS['wolfnet']->getDefaultProductKey();
         }
         $url  = $this->serviceUrl . '/sortOptions/' . $productKey . '.json';
 
