@@ -145,7 +145,8 @@ class Test_Wolfnet_Views extends WP_UnitTestCase
 
         $defaultAttributes = $this->wolfnet->getPropertyListDefaults();
         
-        $html = $this->wolfnet->propertyList($defaultAttributes);
+        // $html = $this->wolfnet->propertyList($defaultAttributes);
+        $html = $this->wolfnet->listingGrid($criteria, 'list');
         $this->assertRegExp($this->wnt_html_regex, $html, $this->wnt_html_msg);
 
     }

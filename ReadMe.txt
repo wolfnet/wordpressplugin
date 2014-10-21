@@ -3,7 +3,7 @@ Author:             WolfNet Technologies, LLC
 Contributors:       wolfnettech, ajmichels, asbaumgart, michaelpidde, blots
 Tags:               idx, mls, homes
 Requires at least:  3.5.1
-Tested up to:       3.9
+Tested up to:       4.0
 Stable tag:         {X.X.X}
 License:            GPLv2 or later
 License URI:        http://www.gnu.org/licenses/gpl-2.0.html
@@ -50,6 +50,10 @@ entered in the "WolfNet >> General Settings" page before any IDX data can be dis
 
 
 == Changelog ==
+
+= 1.6.3 =
+* Tested to WordPress 4.0
+* Fixed Quick Search price selection bug 
 
 = 1.6.2 =
 * Fixed minor bug causing notices in rare circumstance 

@@ -160,31 +160,26 @@ class Test_Wolfnet_Admin extends WP_UnitTestCase
      */
     function testDeactivate() {
 
-        // first set some index then make sure they are removed on deactivate
-        $url = 'http://just.atest.com/v1/?key=value&something=somethingelse';
+        // preform a query to set some transients
+
+        $data = $this->wolfnet->apin->sendRequest($GLOBALS['wnt_tests_options']['api_key_good1'], '/listing');
+
+        global $wpdb;
+        $sql = 'SELECT option_name FROM wptests_options WHERE option_name LIKE "_transient_timeout_wnt_tran_%" OR option_name LIKE "_transient_wnt_tran_%"';
+
+        $listings = $wpdb->get_col( $sql );
         
-        // set some transients
-        for($i = 1; $i <= 10; $i++) {
-            $key = 'wolfnet_' . md5($url . $i);
-            $time = time();
-            $data[$key] = $time;
-            $data_new1 = $this->wolfnet->api->transientIndex($data);
-        }
-
+        $msg = 'There should be Transients after activation';
+        $this->assertTrue( (count($listings) > 0), $msg );
         
-        $data = $this->wolfnet->api->transientIndex();
 
-        // we should have ten indexes in $data array
-        $msg = "Can not find the 10 transient indexes which should be set.";
-        $this->assertTrue( count($data) >= 10, $msg );
-       
-        // remove these on deactivate
-        $this->wolfnet->admin->deactivate();
+        $this->wolfnet->wolfnet_deactivation();
 
-        // there should be no index now
-        $data = $this->wolfnet->api->transientIndex();
-        $msg = "The transient index was not properly removed by deactivate().";
-        $this->assertTrue( (count($data) == 0), $msg );
+        $listings = $wpdb->get_col( $sql );
+
+        $msg = 'There should be no transients after deactivation';
+        $this->assertTrue( (count($listings) == 0), $msg );
+
 
     }
 

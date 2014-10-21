@@ -111,11 +111,22 @@
             <td>
                 <select id="<?php echo $minprice_wpid; ?>" class="pricerange minprice" name="<?php echo $minprice_wpname; ?>">
                     <option value="">Min. Price</option>
-                    <?php foreach ($prices['max_price']['options'] as $price) { ?>
-                        <option value="<?php echo $price['value']; ?>" <?php selected($minprice, $price['value']); ?>>
-                            <?php echo $price['label']; ?>
-                        </option>
-                    <?php } ?>
+
+                    <?php echo '<pre>\$prices : '. "\n";
+                    print_r($prices);
+                    echo "</pre>"; ?>
+                    <?php 
+                    if (is_array($prices)) {
+                        foreach ($prices['max_price']['options'] as $price) { 
+                            ?>
+                            <option value="<?php echo $price['value']; ?>" <?php selected($minprice, $price['value']); ?>>
+                                <?php echo $price['label']; ?>
+                            </option>
+                        <?php 
+                        } 
+                    }
+                    ?>
+                    
                 </select>
                 <span>to</span>
                 <select id="<?php echo $maxprice_wpid; ?>" class="pricerange maxprice" name="<?php echo $maxprice_wpname; ?>">

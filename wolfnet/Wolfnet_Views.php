@@ -52,7 +52,13 @@ class Wolfnet_Views
         // add the market name
         for($i=1; $i<=count($productKey); $i++) {
             // $productKey[$i-1]->market = strtoupper($GLOBALS['wolfnet']->api->getMarketName($productKey[$i-1]->key));
-            $productKey[$i-1]->market = strtoupper($GLOBALS['wolfnet']->getMarketName($productKey[$i-1]->key));
+            $key = $productKey[$i-1]->key;
+            $market = $GLOBALS['wolfnet']->getMarketName($key);
+            
+            if (!is_wp_error($market)) {
+                $productKey[$i-1]->market = strtoupper( $market );
+            }
+            // $productKey[$i-1]->market = strtoupper( $GLOBALS['wolfnet']->getMarketName( $productKey[$i-1]->key ) );
         }
 
         include $GLOBALS['wolfnet']->dir . '/template/adminSettings.php';

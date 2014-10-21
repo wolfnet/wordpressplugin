@@ -308,9 +308,10 @@ class Wolfnet
         $this->apin->startWpDailyCron();
     }
 
-    public function wolfnet_deactivation() 
+    public function wolfnet_deactivation()
     {
         $this->apin->stopWpDailyCron();
+        $this->apin->clearTransients('all');
     }
 
 
@@ -751,28 +752,6 @@ class Wolfnet
 
     }
 
-
-    public function scListingGridOld($attrs, $content='')
-    {
-        $defaultAttributes = $this->getListingGridDefaults();
-
-        $criteria = array_merge($defaultAttributes, (is_array($attrs)) ? $attrs : array());
-
-        $criteria = $this->getOptions($criteria);
-
-        return $this->listingGrid($criteria);
-
-    }
-
-    public function scPropertyListOld($attrs, $content='')
-    {
-        $defaultAttributes = $this->getPropertyListDefaults();
-
-        $criteria = array_merge($defaultAttributes, (is_array($attrs)) ? $attrs : array());
-
-        return $this->propertyList($criteria);
-
-    }
 
     public function sclistingGrid($attrs)
     {
@@ -1309,7 +1288,6 @@ class Wolfnet
         if ( !empty( $criteria['exactcity'] ))  $qdata['exactcity'] = $criteria['exactcity'];
         // if ( !empty( $criteria[''] ))  $qdata[''] = $criteria[''];
 
-
         $data = $this->apin->sendRequest($criteria['key'], $criteria['resource'], $criteria['method'], $qdata);
         
         // TODO
@@ -1511,9 +1489,8 @@ class Wolfnet
     public function quickSearch(array $criteria)
     {
 
-        if( array_key_exists("key", $criteria) && !empty($criteria['keyids']) ) {}
-
         if( array_key_exists("keyids", $criteria) && !empty($criteria['keyids']) ) {
+
             $keyids = explode(",", $criteria["keyids"]);
         } else {
             $keyids[0] = 1;
