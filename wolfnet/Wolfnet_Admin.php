@@ -293,37 +293,4 @@ class Wolfnet_Admin extends Wolfnet
         return get_option($this->adminCssOptionKey);
     }
 
-
-    /* PRIVATE METHODS ************************************************************************** */
-    /*  ____       _            _         __  __      _   _               _                       */
-    /* |  _ \ _ __(_)_   ____ _| |_ ___  |  \/  | ___| |_| |__   ___   __| |___                   */
-    /* | |_) | '__| \ \ / / _` | __/ _ \ | |\/| |/ _ \ __| '_ \ / _ \ / _` / __|                  */
-    /* |  __/| |  | |\ V / (_| | ||  __/ | |  | |  __/ |_| | | | (_) | (_| \__ \                  */
-    /* |_|   |_|  |_| \_/ \__,_|\__\___| |_|  |_|\___|\__|_| |_|\___/ \__,_|___/                  */
-    /*                                                                                            */
-    /* ****************************************************************************************** */
-
-    // TODO rewrite transient garbage collection
-    // private function deleteTransientIndex()
-    // {
-    //     // error_log("deleteTransientIndexing");
-    //     $this->clearTransients();
-    //     delete_transient($GLOBALS['wolfnet']->api->transientIndexKey);
-
-    // }
-
-
-    // private function clearTransients()
-    // {
-    //     $index = $GLOBALS['wolfnet']->api->transientIndex();
-
-    //     foreach ($index as $key => $value) {
-    //         delete_transient($key);
-    //     }
-
-    //     $GLOBALS['wolfnet']->api->transientIndex(array());
-
-    // }
-
-
 }

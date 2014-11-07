@@ -181,12 +181,18 @@ class Wolfnet
             array('init',                  'init'),
             array('wp_enqueue_scripts',    'scripts'),
             array('wp_enqueue_scripts',    'styles'),
-            array('widgets_init',          'widgetInit'),
             array('wp_footer',             'footer'),
             array('template_redirect',     'templateRedirect'),
             array('wp_enqueue_scripts',    'publicStyles',      1000),
             ));
 
+        if ($this->getDefaultProductKey()){
+            $this->addAction(array(
+                array('widgets_init',      'widgetInit'),
+            ));
+        }
+
+ 
         // Register filters.
         $this->addFilter(array(
             array('do_parse_request',     'doParseRequest'),
@@ -967,19 +973,7 @@ class Wolfnet
             header('Content-Type: application/json');
         }   
 
-        // TODO
-        // create a method for building the querydata so it is not duplicated in remoteListingsGet()
-        $qdata = array (); 
-        if ( !empty( $_REQUEST['maxrows'] ))  $qdata['maxrows'] = $_REQUEST['maxrows'];
-        if ( !empty( $_REQUEST['maxprice'] ))  $qdata['max_price'] = $_REQUEST['maxprice'];
-        if ( !empty( $_REQUEST['minprice'] ))  $qdata['min_price'] = $_REQUEST['minprice'];
-        if ( !empty( $_REQUEST['zip_code'] ))  $qdata['zip_code'] = $_REQUEST['zip_code'];
-        if ( !empty( $_REQUEST['startrow'] ))  $qdata['startrow'] = $_REQUEST['startrow'];
-        if ( !empty( $_REQUEST['ownertype'] ))  $qdata['ownertype'] = $_REQUEST['ownertype'];
-        if ( !empty( $_REQUEST['maptype'] ))  $qdata['maptype'] = $_REQUEST['maptype'];
-        if ( !empty( $_REQUEST['city'] ))  $qdata['city'] = $_REQUEST['city'];
-        if ( !empty( $_REQUEST['exactcity'] ))  $qdata['exactcity'] = $_REQUEST['exactcity'];
-        if ( !empty( $_REQUEST['sort'] ))  $qdata['sort'] = $_REQUEST['sort'];
+        $qdata = $this->prepareListingQuery($_REQUEST);
 
         $data = $this->apin->sendRequest($_REQUEST['key'], '/listing', 'GET', $qdata);
         if (is_wp_error($data)){
@@ -1275,18 +1269,7 @@ class Wolfnet
             $criteria['maxrows'] = $criteria['maxresults'];
         }
 
-        $qdata = array (); 
-
-        if ( !empty( $criteria['maxrows'] ))  $qdata['maxrows'] = $criteria['maxrows'];
-        if ( !empty( $criteria['maxprice'] ))  $qdata['max_price'] = $criteria['maxprice'];
-        if ( !empty( $criteria['minprice'] ))  $qdata['min_price'] = $criteria['minprice'];
-        if ( !empty( $criteria['zip_code'] ))  $qdata['zip_code'] = $criteria['zip_code'];
-        if ( !empty( $criteria['startrow'] ))  $qdata['startrow'] = $criteria['startrow'];
-        if ( !empty( $criteria['ownertype'] ))  $qdata['ownertype'] = $criteria['ownertype'];
-        if ( !empty( $criteria['maptype'] ))  $qdata['maptype'] = $criteria['maptype'];
-        if ( !empty( $criteria['city'] ))  $qdata['city'] = $criteria['city'];
-        if ( !empty( $criteria['exactcity'] ))  $qdata['exactcity'] = $criteria['exactcity'];
-        // if ( !empty( $criteria[''] ))  $qdata[''] = $criteria[''];
+        $qdata = $this->prepareListingQuery($criteria);
 
         $data = $this->apin->sendRequest($criteria['key'], $criteria['resource'], $criteria['method'], $qdata);
         
@@ -1589,6 +1572,33 @@ class Wolfnet
 
         return $data;
 
+    }
+
+
+    /**
+     * Prepare an array usable by the Wolfnet API for a /listing query
+     * @param  array  $criteria mixed array containing query api parameter. this can also contain 
+     * other items not used by the API, these will be stripped out. 
+     * @return array            Return array containing only query parameters to be passed to the api
+     */
+    public function prepareListingQuery(array $criteria)
+    {
+    
+        $qdata = array();
+
+        if ( !empty( $criteria['maxrows'] ))  $qdata['maxrows'] = $criteria['maxrows'];
+        if ( !empty( $criteria['maxprice'] ))  $qdata['max_price'] = $criteria['maxprice'];
+        if ( !empty( $criteria['minprice'] ))  $qdata['min_price'] = $criteria['minprice'];
+        if ( !empty( $criteria['zip_code'] ))  $qdata['zip_code'] = $criteria['zip_code'];
+        if ( !empty( $criteria['startrow'] ))  $qdata['startrow'] = $criteria['startrow'];
+        if ( !empty( $criteria['ownertype'] ))  $qdata['ownertype'] = $criteria['ownertype'];
+        if ( !empty( $criteria['maptype'] ))  $qdata['maptype'] = $criteria['maptype'];
+        if ( !empty( $criteria['city'] ))  $qdata['city'] = $criteria['city'];
+        if ( !empty( $criteria['exactcity'] ))  $qdata['exactcity'] = $criteria['exactcity'];
+        // if ( !empty( $criteria[''] ))  $qdata[''] = $criteria[''];
+
+        return $qdata;
+    
     }
 
 
