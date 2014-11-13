@@ -31,7 +31,6 @@
 class Wolfnet
 {
 
-
     /* Properties ******************************************************************************* */
     /*  ____                            _   _                                                     */
     /* |  _ \ _ __ ___  _ __   ___ _ __| |_(_) ___  ___                                           */
@@ -40,18 +39,6 @@ class Wolfnet
     /* |_|   |_|  \___/| .__/ \___|_|   \__|_|\___||___/                                          */
     /*                 |_|                                                                        */
     /* ****************************************************************************************** */
-
-    /**
-     * Temporary Hard Coded Key. Replace this with me lookup logic when finished
-     * @var string
-     */
-    // public $tempReplaceMeKey = '03ee4eeee4cbf74b940fb5af3474356a'; // tx no br, lists br image resource but no display
-    // public $tempReplaceMeKey = '1b752eae9d1f2cec3d4ce1b96d478492'; // co
-    // public $tempReplaceMeKey = 'wp_a4d5ae59c276a4ed6af4465431bb3bff';
-    // public $tempReplaceMeKey = '82e8a6f0f0fa13b42087a971971af3d7'; // mn_rmls no br image set
-
-    // had br logo in settings at one point but does not any more.
-    // 82e8a6f0f0fa13b42087a971971af3d7
 
     /**
      * This property holds the current version number of the plugin. The value is actually generated
@@ -436,7 +423,6 @@ class Wolfnet
             echo '<div class="wolfnet_marketDisclaimer">';
             foreach($_REQUEST['keyList'] as $key) {
                 $disclaimer = $this->apin->sendRequest(
-                    //$this->tempReplaceMeKey, 
                     $key, 
                     '/core/disclaimer', 
                     'GET', 
@@ -762,7 +748,7 @@ class Wolfnet
     public function sclistingGrid($attrs)
     {
         $default_maxrows = '50';
-        $criteria = shortcode_atts( $this->getListingGridDefaults(), $attrs );
+        $criteria = array_merge($this->getListingGridDefaults(), (is_array($attrs)) ? $attrs : array());
         
         if ($criteria['maxrows'] == $default_maxrows && $criteria['maxresults'] != $default_maxrows ) {
            $criteria['maxrows'] = $criteria['maxresults'];
@@ -773,12 +759,9 @@ class Wolfnet
     }
 
 
-    public function scPropertyList($attrs)
+    public function scPropertyList($attrs = array())
     {
-        //$defaultAttributes = $this->getPropertyListDefaults();
-
-        $criteria = shortcode_atts( $this->getPropertyListDefaults(), $attrs );
-        //$criteria = array_merge($defaultAttributes, (is_array($attrs)) ? $attrs : array());
+        $criteria = array_merge($this->getPropertyListDefaults(), (is_array($attrs)) ? $attrs : array());
 
         return $this->listingGrid($criteria, 'list');
 
@@ -971,7 +954,12 @@ class Wolfnet
         }
         else {
             header('Content-Type: application/json');
-        }   
+        }
+
+        // used by pagination dropdown "per page" 
+        if (!empty($_REQUEST['numrows'])) {
+            $_REQUEST['maxrows'] = $_REQUEST['numrows'];
+        } 
 
         $qdata = $this->prepareListingQuery($_REQUEST);
 
@@ -1087,9 +1075,7 @@ class Wolfnet
 
     public function featuredListings(array $criteria)
     {
-        // echo '<pre>\$criteria : '. "\n";
-        // print_r($criteria);
-        // echo "</pre>";
+
         // Maintain backwards compatibility if there is no keyid in the shortcode.
         if(!array_key_exists('keyid', $criteria) || $criteria['keyid'] == '') {
             $criteria['keyid'] = 1;
@@ -1133,11 +1119,12 @@ class Wolfnet
             $code = $data->get_error_code();
             $msg .= "code: $code </br> Message: ";
             $msg .= $data->get_error_message($code);
+            $msg .= '<div style="display:none;">';
             $msg .= "<br>Data: <pre>";
             $msg .= print_r($data, true);
             $msg .= "</pre>";
+            $msg .= "</div>";
             return $msg;
-            //return $data;
         }
 
         $listingsData = array();
@@ -1183,39 +1170,6 @@ class Wolfnet
     }
 
 
-    public function getListingGridDefaults()
-    {
-
-        return array(
-            'title'       => '',
-            'class'       => 'wolfnet_listingGrid ',
-            'criteria'    => '',
-            'ownertype'   => 'all',
-            // TODO resource and Method could be hard coded into request.
-            'resource'    => '/listing',
-            'method'      => 'GET',
-            'maptype'     => 'disabled',
-            'paginated'   => false,
-            'sortoptions' => false,
-            // TODO
-            // there is some confusion betweend maxresults and maxrows that should be resolved
-            'maxresults'  => 50, 
-            'maxrows'     => 50, 
-            'mode'        => 'advanced',
-            'savedsearch' => '',
-            'zipcode'     => '',
-            'city'        => '',
-            'exactcity'   => 0,
-            'minprice'    => '',
-            'maxprice'    => '',
-            'keyid'       => 1,
-            'key'         => $this->getDefaultProductKey(),
-            'startrow'    => 1,
-            );
-
-    }
-
-
     public function getListingGridOptions($instance=null)
     {
         $options = $this->getOptions($this->getListingGridDefaults(), $instance);
@@ -1244,7 +1198,7 @@ class Wolfnet
 
 
     /**
-     * Returns the markup for listings. generates both the listingGrid layour as well as the property list layout
+     * Returns the markup for listings. generates both the listingGrid layout as well as the property list layout
      * @param  array  $criteria the search criteria 
      * @param  string $layout   'grid' or 'list' 
      * @return string           listings markup
@@ -1271,7 +1225,7 @@ class Wolfnet
 
         $qdata = $this->prepareListingQuery($criteria);
 
-        $data = $this->apin->sendRequest($criteria['key'], $criteria['resource'], $criteria['method'], $qdata);
+        $data = $this->apin->sendRequest($criteria['key'], '/listing', 'GET', $qdata);
         
         // TODO
         // create a wp_error display method with some nice formating
@@ -1344,10 +1298,7 @@ class Wolfnet
             'siteUrl'            => site_url(),
             'wpMeta'             => $data['wpMeta'],
             'title'              => $data['wpMeta']['title'],
-            // 'criteria'           => json_encode($criteria),
-            // 'class'              => 'wolfnet_listingGrid ',
             'class'              => $criteria['class'],
-            // 'mapEnabled'         => $this->api->getMaptracksEnabled($_REQUEST[$this->requestPrefix.'productkey']),
             'mapEnabled'         => $this->getMaptracksEnabled($data['wpMeta']['key']),
             'map'                => '',
             'maptype'            => $data['wpMeta']['maptype'],
@@ -1357,8 +1308,6 @@ class Wolfnet
             'collapseListingsId' => uniqid('collapseListings'),
             'toolbarTop'         => '',
             'toolbarBottom'      => '',
-            // 'maxresults'         => ((count($listingsData) > 0) ? $listingsData[0]->maxresults : 0),
-            // is this needed??
             'maxrows'            => ((count($listingsData) > 0) ? $data['requestData']['maxrows'] : 0),
 
             );
@@ -1404,7 +1353,47 @@ class Wolfnet
     }
 
 
-    /* Property List **************************************************************************** */
+    /* listings **************************************************************************** */
+
+    /**
+     * returns array containing all fields supported by the /listing queries to the API 
+     * plus some legacy fields
+     * @return array all sported /listing query fields
+     */
+    public function getListingFields()
+    {
+        return array (
+
+            );
+    }
+
+    public function getListingGridDefaults()
+    {
+
+        return array(
+            'title'       => '',
+            'class'       => 'wolfnet_listingGrid ',
+            'criteria'    => '',
+            'ownertype'   => 'all',
+            'maptype'     => 'disabled',
+            'paginated'   => false,
+            'sortoptions' => false,
+            'maxresults'  => 50, 
+            'maxrows'     => 50, 
+            'mode'        => 'advanced',
+            'savedsearch' => '',
+            'zipcode'     => '',
+            'city'        => '',
+            'exactcity'   => 0,
+            'minprice'    => '',
+            'maxprice'    => '',
+            'keyid'       => 1,
+            'key'         => $this->getDefaultProductKey(),
+            'startrow'    => 1,
+            );
+
+    }
+
 
     public function getPropertyListDefaults()
     {
@@ -1413,8 +1402,6 @@ class Wolfnet
             'class'       => 'wolfnet_propertyList ',
             'criteria'    => '',
             'ownertype'   => 'all',
-            'resource'    => '/listing',
-            'method'      => 'GET',
             'maptype'     => 'disabled',
             'paginated'   => false,
             'sortoptions' => false,
@@ -1584,21 +1571,223 @@ class Wolfnet
     public function prepareListingQuery(array $criteria)
     {
     
-        $qdata = array();
+        $qdata = array(); // will hold only valid api criteria 
 
-        if ( !empty( $criteria['maxrows'] ))  $qdata['maxrows'] = $criteria['maxrows'];
-        if ( !empty( $criteria['maxprice'] ))  $qdata['max_price'] = $criteria['maxprice'];
-        if ( !empty( $criteria['minprice'] ))  $qdata['min_price'] = $criteria['minprice'];
-        if ( !empty( $criteria['zip_code'] ))  $qdata['zip_code'] = $criteria['zip_code'];
-        if ( !empty( $criteria['startrow'] ))  $qdata['startrow'] = $criteria['startrow'];
-        if ( !empty( $criteria['ownertype'] ))  $qdata['ownertype'] = $criteria['ownertype'];
-        if ( !empty( $criteria['maptype'] ))  $qdata['maptype'] = $criteria['maptype'];
-        if ( !empty( $criteria['city'] ))  $qdata['city'] = $criteria['city'];
-        if ( !empty( $criteria['exactcity'] ))  $qdata['exactcity'] = $criteria['exactcity'];
-        // if ( !empty( $criteria[''] ))  $qdata[''] = $criteria[''];
+        if ( !empty( $criteria['exactcity'] ))  $qdata['exact_city'] = $criteria['exactcity']; // old
+        if ( !empty( $criteria['exact_city'] ))  $qdata['exact_city'] = $criteria['exact_city']; // new
+
+        // additional checks for city to handle multiple cities
+        if ( !empty( $criteria['city'] )) {
+            $qdata['city'] = $criteria['city'];
+            // in order to parse a list of cities separated by commas ',' exact_city must be false
+            // Because 'exact_city' in the past was set to true by default even when a list is used
+            // we look for a comma in the string and change exact city to false if one exists
+            if ( strpos($criteria['city'], ',') !== false) $qdata['exact_city'] = 0;
+        }  
+
+        if (isset($criteria['address'])) $qdata['address'] = $criteria['address'];
+        if (isset($criteria['agent_id'])) $qdata['agent_id'] = $criteria['agent_id'];
+        if (isset( $criteria['agent_office_only'] ))  
+            $qdata['agent_office_only'] = $this->convertBool($criteria['agent_office_only']);
+        if (isset( $criteria['agent_only'] ))  
+            $qdata['agent_only'] = $this->convertBool($criteria['agent_only']);
+        if (isset($criteria['custom1'])) $qdata['area_name'] = $criteria['custom1']; // legacy
+        if (isset($criteria['area_name'])) $qdata['area_name'] = $criteria['area_name'];
+        if (isset($criteria['building_name'])) $qdata['building_name'] = $criteria['building_name'];
+        if (isset($criteria['built_after'])) $qdata['built_after'] = $criteria['built_after'];
+        if (isset($criteria['built_before'])) $qdata['built_before'] = $criteria['built_before'];
+        if (isset( $criteria['business_with_real_estate'] ))  
+            $qdata['business_with_real_estate'] = $this->convertBool($criteria['business_with_real_estate']);
+        if (isset( $criteria['commercial'] ))  
+            $qdata['commercial'] = $this->convertBool($criteria['commercial']);
+        if (isset( $criteria['commercial_lease'] ))  
+            $qdata['commercial_lease'] = $this->convertBool($criteria['commercial_lease']);
+        if (isset($criteria['community'])) $qdata['community'] = $criteria['community'];
+        if (isset($criteria['community_text'])) $qdata['community_text'] = $criteria['community_text'];
+        if (isset($criteria['commute_time'])) $qdata['commute_time'] = $criteria['commute_time'];
+        if (isset( $criteria['condo'] ))  
+            $qdata['condo'] = $this->convertBool($criteria['condo']);
+        if (isset( $criteria['condo_townhouse'] ))  
+            $qdata['condo_townhouse'] = $this->convertBool($criteria['condo_townhouse']);
+        if (isset($criteria['cost_of_living'])) $qdata['cost_of_living'] = $criteria['cost_of_living'];
+        if (isset($criteria['county'])) $qdata['county'] = $criteria['county'];
+        if (isset($criteria['crime_rating'])) $qdata['crime_rating'] = $criteria['crime_rating'];
+        if (isset($criteria['date_from'])) $qdata['date_from'] = $criteria['date_from'];
+        if (isset($criteria['date_to'])) $qdata['date_to'] = $criteria['date_to'];
+        if (isset($criteria['detaillevel'])) $qdata['detaillevel'] = $criteria['detaillevel'];
+        if (isset( $criteria['duplex'] ))  
+            $qdata['duplex'] = $this->convertBool($criteria['duplex']);
+        if (isset($criteria['elementary_school'])) $qdata['elementary_school'] = $criteria['elementary_school'];
+        if (isset( $criteria['exact_property_id'] ))  
+            $qdata['exact_property_id'] = $this->convertBool($criteria['exact_property_id']);
+        if (isset( $criteria['farm_hobby'] ))  
+            $qdata['farm_hobby'] = $this->convertBool($criteria['farm_hobby']);
+        if (isset($criteria['favorites_id'])) $qdata['favorites_id'] = $criteria['favorites_id'];
+        if (isset( $criteria['foreclosure'] ))  
+            $qdata['foreclosure'] = $this->convertBool($criteria['foreclosure']);
+        if (isset($criteria['garage_spaces'])) $qdata['garage_spaces'] = $criteria['garage_spaces'];
+        if (isset( $criteria['gated_community'] ))  
+            $qdata['gated_community'] = $this->convertBool($criteria['gated_community']);
+        if (isset( $criteria['half_duplex'] ))  
+            $qdata['half_duplex'] = $this->convertBool($criteria['half_duplex']);
+        if (isset( $criteria['has_basement'] ))  
+            $qdata['has_basement'] = $this->convertBool($criteria['has_basement']);
+        if (isset( $criteria['has_family_room'] ))  
+            $qdata['has_family_room'] = $this->convertBool($criteria['has_family_room']);
+        if (isset( $criteria['has_fireplace'] ))  
+            $qdata['has_fireplace'] = $this->convertBool($criteria['has_fireplace']);
+        if (isset( $criteria['has_garage'] ))  
+            $qdata['has_garage'] = $this->convertBool($criteria['has_garage']);
+        if (isset( $criteria['has_golf'] ))  
+            $qdata['has_golf'] = $this->convertBool($criteria['has_golf']);
+        if (isset( $criteria['has_horse_property'] ))  
+            $qdata['has_horse_property'] = $this->convertBool($criteria['has_horse_property']);
+        if (isset( $criteria['has_mountain_view'] ))  
+            $qdata['has_mountain_view'] = $this->convertBool($criteria['has_mountain_view']);
+        if (isset( $criteria['has_pool'] ))  
+            $qdata['has_pool'] = $this->convertBool($criteria['has_pool']);
+        if (isset( $criteria['has_waterfront'] ))  
+            $qdata['has_waterfront'] = $this->convertBool($criteria['has_waterfront']);
+        if (isset( $criteria['has_waterview'] ))  
+            $qdata['has_waterview'] = $this->convertBool($criteria['has_waterview']);
+        if (isset($criteria['high_school'])) $qdata['high_school'] = $criteria['high_school'];
+        if (isset( $criteria['industrial'] ))  
+            $qdata['industrial'] = $this->convertBool($criteria['industrial']);
+        if (isset( $criteria['investment'] ))  
+            $qdata['investment'] = $this->convertBool($criteria['investment']);
+        if (isset($criteria['jr_high_school'])) $qdata['jr_high_school'] = $criteria['jr_high_school'];
+        if (isset($criteria['lake_name'])) $qdata['lake_name'] = $criteria['lake_name'];
+        if (isset($criteria['last_update_date'])) $qdata['last_update_date'] = $criteria['last_update_date'];
+        if (isset($criteria['list_date'])) $qdata['list_date'] = $criteria['list_date'];
+        if (isset($criteria['listing_status'])) $qdata['listing_status'] = $criteria['listing_status'];
+        if (isset( $criteria['loft'] ))  
+            $qdata['loft'] = $this->convertBool($criteria['loft']);
+        if (isset( $criteria['lots_acreage'] ))  
+            $qdata['lots_acreage'] = $this->convertBool($criteria['lots_acreage']);
+        if (isset($criteria['map_br_lat'])) $qdata['map_br_lat'] = $criteria['map_br_lat'];
+        if (isset($criteria['map_br_lng'])) $qdata['map_br_lng'] = $criteria['map_br_lng'];
+        if (isset($criteria['map_tl_lat'])) $qdata['map_tl_lat'] = $criteria['map_tl_lat'];
+        if (isset($criteria['map_tl_lng'])) $qdata['map_tl_lng'] = $criteria['map_tl_lng'];
+        if (isset($criteria['max_bathrooms'])) $qdata['max_bathrooms'] = $criteria['max_bathrooms'];
+        if (isset($criteria['max_bedrooms'])) $qdata['max_bedrooms'] = $criteria['max_bedrooms'];
+        if (isset($criteria['max_price'])) $qdata['max_price'] = $criteria['max_price'];
+        if (isset($criteria['maxprice'])) $qdata['max_price'] = $criteria['maxprice']; // legacy
+        if (isset($criteria['max_price'])) $qdata['max_price'] = $criteria['max_price'];
+        if (isset($criteria['maxrows'])) $qdata['maxrows'] = $criteria['maxrows'];
+        if (isset($criteria['median_household_income'])) $qdata['median_household_income'] = $criteria['median_household_income'];
+        if (isset($criteria['middle_school'])) $qdata['middle_school'] = $criteria['middle_school'];
+        if (isset($criteria['min_acres'])) $qdata['min_acres'] = $criteria['min_acres'];
+        if (isset($criteria['min_bathrooms'])) $qdata['min_bathrooms'] = $criteria['min_bathrooms'];
+        if (isset($criteria['min_bedrooms'])) $qdata['min_bedrooms'] = $criteria['min_bedrooms'];
+        if (isset($criteria['min_price'])) $qdata['min_price'] = $criteria['min_price'];
+        if (isset($criteria['min_square_feet'])) $qdata['min_square_feet'] = $criteria['min_square_feet'];
+        if (isset($criteria['minprice'])) $qdata['min_price'] = $criteria['minprice']; // legacy
+        if (isset($criteria['min_price'])) $qdata['min_price'] = $criteria['min_price'];
+        if (isset( $criteria['mixed_use'] ))  
+            $qdata['mixed_use'] = $this->convertBool($criteria['mixed_use']);
+        if (isset( $criteria['mobile_home'] ))  
+            $qdata['mobile_home'] = $this->convertBool($criteria['mobile_home']);
+        if (isset( $criteria['model'] ))  
+            $qdata['model'] = $this->convertBool($criteria['model']);
+        if (isset( $criteria['multi_family'] ))  
+            $qdata['multi_family'] = $this->convertBool($criteria['multi_family']);
+        if (isset( $criteria['new_and_updated'] ))  
+            $qdata['new_and_updated'] = $this->convertBool($criteria['new_and_updated']);
+        if (isset( $criteria['new_construction'] ))  
+            $qdata['new_construction'] = $this->convertBool($criteria['new_construction']);
+        if (isset( $criteria['newlistings'] ))  
+            $qdata['newlistings'] = $this->convertBool($criteria['newlistings']);
+        if (isset($criteria['office_id'])) $qdata['office_id'] = $criteria['office_id'];
+        if (isset( $criteria['office_only'] ))  
+            $qdata['office_only'] = $this->convertBool($criteria['office_only']);
+        if (isset( $criteria['on_golf_course'] ))  
+            $qdata['on_golf_course'] = $this->convertBool($criteria['on_golf_course']);
+        if (isset( $criteria['open_house'] ))  
+            $qdata['open_house'] = $this->convertBool($criteria['open_house']);
+        if (isset($criteria['open_text'])) $qdata['open_text'] = $criteria['open_text'];
+        if (isset($criteria['price_weight'])) $qdata['price_weight'] = $criteria['price_weight'];
+        if (isset( $criteria['priceReduced'] ))  
+            $qdata['pricereduced'] = $this->convertBool($criteria['priceReduced']); // legacy
+        if (isset( $criteria['pricereduced'] ))  
+            $qdata['pricereduced'] = $this->convertBool($criteria['pricereduced']);
+        if (isset($criteria['property_id'])) $qdata['property_id'] = $criteria['property_id'];
+        if (isset($criteria['property_type'])) $qdata['property_type'] = $criteria['property_type'];
+        if (isset($criteria['property_url'])) $qdata['property_url'] = $criteria['property_url'];
+        if (isset( $criteria['property_view'] ))  
+            $qdata['property_view'] = $this->convertBool($criteria['property_view']);
+        if (isset($criteria['r_lat'])) $qdata['r_lat'] = $criteria['r_lat'];
+        if (isset($criteria['r_lng'])) $qdata['r_lng'] = $criteria['r_lng'];
+        if (isset($criteria['radius'])) $qdata['radius'] = $criteria['radius'];
+        if (isset( $criteria['redraw_map_bounds'] ))  
+            $qdata['redraw_map_bounds'] = $this->convertBool($criteria['redraw_map_bounds']);
+        if (isset( $criteria['residential_lease'] ))  
+            $qdata['residential_lease'] = $this->convertBool($criteria['residential_lease']);
+        if (isset( $criteria['residential_lease_detached'] ))  
+            $qdata['residential_lease_detached'] = $this->convertBool($criteria['residential_lease_detached']);
+        if (isset( $criteria['retail_store'] ))  
+            $qdata['retail_store'] = $this->convertBool($criteria['retail_store']);
+        if (isset($criteria['school'])) $qdata['school'] = $criteria['school'];
+        if (isset($criteria['school_district_name'])) $qdata['school_district_name'] = $criteria['school_district_name'];
+        if (isset($criteria['school_rating'])) $qdata['school_rating'] = $criteria['school_rating'];
+        if (isset($criteria['selling_agent_id'])) $qdata['selling_agent_id'] = $criteria['selling_agent_id'];
+        if (isset($criteria['selling_office_id'])) $qdata['selling_office_id'] = $criteria['selling_office_id'];
+        if (isset( $criteria['shortsale'] ))  
+            $qdata['shortsale'] = $this->convertBool($criteria['shortsale']);
+        if (isset( $criteria['similar_listings'] ))  
+            $qdata['similar_listings'] = $this->convertBool($criteria['similar_listings']);
+        if (isset( $criteria['single_family'] ))  
+            $qdata['single_family'] = $this->convertBool($criteria['single_family']);
+        if (isset( $criteria['single_family_detached'] ))  
+            $qdata['single_family_detached'] = $this->convertBool($criteria['single_family_detached']);
+        if (isset( $criteria['sold'] ))  
+            $qdata['sold'] = $this->convertBool($criteria['sold']);
+        if (isset($criteria['sold_age'])) $qdata['sold_age'] = $criteria['sold_age'];
+        if (isset($criteria['sort'])) $qdata['sort'] = $criteria['sort'];
+        if (isset($criteria['startrow'])) $qdata['startrow'] = $criteria['startrow'];
+        if (isset($criteria['state'])) $qdata['state'] = $criteria['state'];
+        if (isset($criteria['street_name'])) $qdata['street_name'] = $criteria['street_name'];
+        if (isset($criteria['style'])) $qdata['style'] = $criteria['style'];
+        if (isset($criteria['subdivision'])) $qdata['subdivision'] = $criteria['subdivision'];
+        if (isset($criteria['subdivision_text'])) $qdata['subdivision_text'] = $criteria['subdivision_text'];
+        if (isset( $criteria['townhouse'] ))  
+            $qdata['townhouse'] = $this->convertBool($criteria['townhouse']);
+        if (isset($criteria['township'])) $qdata['township'] = $criteria['township'];
+        if (isset($criteria['type_of_neighborhood'])) $qdata['type_of_neighborhood'] = $criteria['type_of_neighborhood'];
+        if (isset($criteria['virtual_tour'])) $qdata['virtual_tour'] = $criteria['virtual_tour'];
+        if (isset($criteria['zipcode'])) $qdata['zip_code'] = $criteria['zipcode']; // legacy
+        if (isset($criteria['zip_code'])) $qdata['zip_code'] = $criteria['zip_code'];
+ 
+        // stories use to be a select called "custom2" with possible values 1,2,3,4,5,Multi-Leve - note the l is missing
+        $three_plus = array(3,4,5,'Multi-Leve', 'Multi-Level');
+        if ($criteria['custom2'] == 1) { $qdata['one_story'] = 1; }  // legacy 
+        else if ($criteria['custom2'] == 2) { $qdata['two_story'] =1; } // legacy 
+        else if ( in_array($criteria['custom2'], $three_plus)) { $qdata['three_plus_story'] = 1; } // legacy 
+        
+        if (isset( $criteria['one_story'] ))  
+            $qdata['one_story'] = $this->convertBool($criteria['one_story']);
+        if (isset( $criteria['two_story'] ))  
+            $qdata['two_story'] = $this->convertBool($criteria['two_story']);
+        if (isset( $criteria['three_plus_story'] ))  
+            $qdata['three_plus_story'] = $this->convertBool($criteria['three_plus_story']);
+
 
         return $qdata;
     
+    }
+
+    /**
+     * The API expects boolean values to be passed as 0 or 1.
+     * shortcodes arguments from saved searches save boolean args in many non constant ways 
+     * Y/N, y/n, true/false, 0/1. This method converts these to API friendly 0/1 
+     * @param  string   to be converted to 1 or 0 
+     * @return int      API friendly 1 or 0 
+     */
+    private function convertBool($to_bool)
+    {
+        $bool_true = array(true,'Y','y',1);
+        
+        return (in_array($to_bool, $bool_true)) ? 1 : 0 ;
+
     }
 
 
@@ -1768,17 +1957,6 @@ class Wolfnet
             return true;
         }
 
-        // ttt not working, bad nameing tom 
-        // class name: Wolfnet_Api_Wp_Client
-        // filepath:  /wolfnet/wolfnet-api-wp-client/WolfnetApiClient.php
-        // $file = $this->dir . '/wolfnet/wolfnet-api-wp-client/' . $filename;
-
-        // if (file_exists($file))
-        // {
-        //     include $file;
-        //     return true;
-        // }
-        
         return false;
     }
 
@@ -1956,72 +2134,7 @@ class Wolfnet
         return $data;
 
     }
-
-    
-    // this is the old one listing at a time function
-    // TODO check to see that this is not being used and remove it.
-    private function augmentListingData(&$listing)
-    {
-
-        if (is_numeric($listing['listing_price'])) 
-            $listing['listing_price'] = '$' . number_format($listing['listing_price']);
-
-        $listing['location'] = $listing['city'];
-
-        if ( $listing['city'] != '' && $listing['state'] != '' )
-            $listing['location'] .= ', ';
-
-        $listing['location'] .= $listing['state'];
-        $listing['location'] .= ' ' . $listing['zip_code'];
-
-        $listing['bedsbaths'] = '';
-
-        if (is_numeric($listing['total_bedrooms']) && ($listing['total_bedrooms'] > 0 ))
-            $listing['bedsbaths'] .= $listing['total_bedrooms'] . 'bd';
-
-        
-        $listing['total_baths'] = 0;
-
-        if (is_numeric($listing['total_partial_baths'])) 
-            $listing['total_baths'] += $listing['total_partial_baths'];
-
-        if (is_numeric($listing['total_full_baths']) )
-            $listing['total_baths'] += $listing['total_full_baths'];
-
-        // if (is_numeric($listing['total_bedrooms']) && is_numeric($listing['total_baths']))  {
-        if ( !empty($listing['bedsbaths']) && is_numeric($listing['total_baths']) && ( $listing['total_baths'] > 0 ))
-            $listing['bedsbaths'] .= '/';
-
-
-        if (is_numeric($listing['total_baths']) && ($listing['total_baths'] > 0))
-            $listing['bedsbaths'] .= $listing['total_baths'] . 'ba';
-
-        $listing['bedsbaths_full'] = '';
-
-        if ( is_numeric( $listing['total_bedrooms'] ) )
-            $listing['bedsbaths_full'] .= $listing['total_bedrooms'] . ' Bed Rooms';
-
-        if ( is_numeric( $listing['total_bedrooms'] ) && is_numeric( $listing['total_baths'] ) )
-            $listing['bedsbaths_full'] .= ' & ';
-
-        if ( is_numeric( $listing['total_baths'] ) )
-            $listing['bedsbaths_full'] .= $listing['total_baths'] . ' Bath Rooms';
-
-        $listing['address'] = $listing['display_address'];
-
-        if ($listing['city'] != '' && $listing['address'] != '')
-            $listing['address'] .= ', ';
-
-        $listing['address'] .= $listing['city'];
-
-        if ($listing['state'] != '' && $listing['address'] != '')
-            $listing['address'] .= ', ';
-
-        $listing['address'] .= ' ' . $listing['state'];
-        $listing['address'] .= ' ' . $listing['zip_code'];
-
-    }
-
+   
 
     private function getMap($listingsData, $productKey=null)
     {
@@ -2038,7 +2151,6 @@ class Wolfnet
 
     private function getToolbar($data, $class)
     {
-        //$args = array_merge(json_decode($data['criteria'], true), array(
         $args = array_merge($data['wpMeta'], array(
             'toolbarClass' => $class . ' ',
             'maxresults'   => $this->getMaxResults($data['wpMeta']['key']), // total results on all pages

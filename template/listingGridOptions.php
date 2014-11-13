@@ -112,9 +112,6 @@
                 <select id="<?php echo $minprice_wpid; ?>" class="pricerange minprice" name="<?php echo $minprice_wpname; ?>">
                     <option value="">Min. Price</option>
 
-                    <?php echo '<pre>\$prices : '. "\n";
-                    print_r($prices);
-                    echo "</pre>"; ?>
                     <?php 
                     if (is_array($prices)) {
                         foreach ($prices['max_price']['options'] as $price) { 
@@ -146,8 +143,8 @@
                 <input id="<?php echo $city_wpid; ?>" name="<?php echo $city_wpname; ?>"
                     type="text" value="<?php echo $city; ?>" /> <br/>
                 <input id="<?php echo $exactcity_wpid; ?>" name="<?php echo $exactcity_wpname; ?>"
-                       type="checkbox" value="1" checked="checked">
-                Only listings that exactly match this city.            
+                       type="checkbox" value="1" >
+                Only listings that exactly match this city.           
             </td>
         </tr>
 

@@ -43,8 +43,6 @@ class Test_Wolfnet_Views extends WP_UnitTestCase
         $this->wnt_html_regex = '/<[^>]*>/';
         $this->wnt_html_msg = "Method returned nothing that looks like an HTML tag";
 
-        
-
     }
 
     
@@ -179,7 +177,7 @@ class Test_Wolfnet_Views extends WP_UnitTestCase
     function  testMapView()
     {
 
-        $method = $this->wolfnet_reflection->getMethod("augmentListingData");
+        $method = $this->wolfnet_reflection->getMethod("augmentListingsData");
         $method->setAccessible(true);
 
         $criteria = $this->wolfnet->getListingGridDefaults();

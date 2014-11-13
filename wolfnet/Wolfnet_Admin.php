@@ -62,16 +62,6 @@ class Wolfnet_Admin extends Wolfnet
         // sets url
         $this->setUrl();
 
-        // register_activation_hook( $this->pluginFile, array($this, 'activate' ));
-        // register_deactivation_hook( $this->pluginFile, array($this, 'deactivate' ));
-
-        // Clear cache if url param exists.
-        // $cacheParamExists = array_key_exists($this->cacheFlag, $_REQUEST);
-        // $cacheParamClear = ($cacheParamExists) ? ($_REQUEST[$this->cacheFlag] == 'clear') : false;
-        // if ($cacheParamExists && $cacheParamClear) {
-        //     $GLOBALS['wolfnet']->apin->clearTransients('all');
-        // }
-
         // Register admin only actions.
         $this->addAction(array(
             array('admin_menu',            'adminMenu'),
@@ -98,30 +88,6 @@ class Wolfnet_Admin extends Wolfnet
     /* |_|    \__,_|_.__/|_|_|\___| |_|  |_|\___|\__|_| |_|\___/ \__,_|___/                       */
     /*                                                                                            */
     /* ****************************************************************************************** */
-
-    // public function activate()
-    // {
-    //     // Check for legacy transient data and remove it if it exists.
-    //     $indexkey = 'wppf_cache_metadata';
-    //     $metaData = get_transient($indexkey);
-
-    //     if (is_array($metaData)) {
-    //         foreach ($metaData as $key => $data) {
-    //             delete_transient($key);
-    //         }
-    //     }
-
-    //     delete_transient($indexkey);
-
-    // }
-
-
-    // public function deactivate()
-    // {
-    //     // Clear out all transient data as it is purely for caching and performance.
-    //     $this->deleteTransientIndex();
-
-    // }
 
 
     /**
