@@ -51,6 +51,9 @@ entered in the "WolfNet >> General Settings" page before any IDX data can be dis
 
 == Changelog ==
 
+= 1.6.4 =
+* Fixed Widget issue when there is no active key
+
 = 1.6.3 =
 * Tested to WordPress 4.0
 * Fixed Quick Search price selection bug 

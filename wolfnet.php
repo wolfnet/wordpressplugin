@@ -156,6 +156,7 @@ class Wolfnet
             $this->admin = new Wolfnet_Admin($this);
         }
 
+
         // Clear cache if url param exists.
         $cacheParamExists = array_key_exists($this->cacheFlag, $_REQUEST);
         $cacheParamClear = ($cacheParamExists) ? ($_REQUEST[$this->cacheFlag] == 'clear') : false;
@@ -168,6 +169,7 @@ class Wolfnet
             array('init',                  'init'),
             array('wp_enqueue_scripts',    'scripts'),
             array('wp_enqueue_scripts',    'styles'),
+
             array('wp_footer',             'footer'),
             array('template_redirect',     'templateRedirect'),
             array('wp_enqueue_scripts',    'publicStyles',      1000),
@@ -178,7 +180,6 @@ class Wolfnet
                 array('widgets_init',      'widgetInit'),
             ));
         }
-
  
         // Register filters.
         $this->addFilter(array(
