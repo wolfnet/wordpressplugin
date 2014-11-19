@@ -28,16 +28,19 @@ entered in the "WolfNet >> General Settings" page before any IDX data can be dis
 [Downloading & Activating Your WolfNet WordPress Plugin](https://www.youtube.com/watch?v=hp9ojJdstQM&list=UUWqJ_1djHKa_Uxg_bZ4HiTw)
 
 = WordPress.org Installation =
-1. From the your WordPress websites admin section go to the Plugins page.
+1. From the your WordPress websites Dashboard section go to the Plugins page.
 2. Click "Add New"
 3. Search for "WolfNet".
 4. Click "Install Now" under the "WolfNet IDX for WordPress" plugin.
 5. Click "Activate Plugin"
+6. Go to WolfNet and add your Product Key.
+7. Click "Save".
 
 = Manual Installation =
 1. Place the 'wolfnet' folder in your '/wp-content/plugins/' directory.
 2. Activate "WolfNet IDX for WordPress" from the "Plugins" page in the admin.
-
+3. Go to WolfNet and add your Product Key.
+4. Click "Save".
 
 == Frequently Asked Questions ==
 
@@ -50,6 +53,9 @@ entered in the "WolfNet >> General Settings" page before any IDX data can be dis
 
 
 == Changelog ==
+
+= 1.7.0 =
+* Incorporated new API improving speed and performance
 
 = 1.6.4 =
 * Fixed Widget issue when there is no active key

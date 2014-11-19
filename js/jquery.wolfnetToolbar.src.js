@@ -307,6 +307,7 @@
         }
         else if ($container.is('.wolfnet_listingGrid')) {
             renderListingGrid.call($container, data);
+            $container.wolfnetListingGrid('reload');
         }
 
         if ($container.find('.wolfnet_wntMainMap').length > 0) {

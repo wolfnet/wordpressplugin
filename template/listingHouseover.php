@@ -60,24 +60,4 @@ if (!is_null($listing['geo']['lat']) && !is_null($listing['geo']['lng'])) :
     </div>
     </a>
 <?php endif; ?>
-</td>
-<td valign="top" style="vertical-align:top;">
-<div class="wolfnet_wntHOContentContainer">
-<div style="text-align:left;font-weight:bold"><?php echo $listing['listing_price']; ?>
-</div>
-<div style="text-align:left;"><?php echo $listing['display_address']; ?>
-</div>
-<div style="text-align:left;"><?php echo $listing['city']; ?>, <?php echo $listing['state']; ?>
-</div>
-<div style="text-align:left;"><?php echo $listing['bedsbaths']; ?>
-</div>
-<div style="text-align:left;padding-top:20px;"><?php echo $listing['branding']['courtesy_text']; ?>
-</div>
-</div>
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-</a>
+
