@@ -1231,12 +1231,15 @@ class Wolfnet
         // TODO
         // create a wp_error display method with some nice formating
         if (is_wp_error($data)) {
+
             $msg = "Wolfnet Error: <br>";
             $code = $data->get_error_code();
             $msg .= "code: $code </br> Message: ";
             $msg .= $data->get_error_message($code);
-            $msg .= "<br>Data: <pre>";
+            $msg .= '<div style="display:none">';
+            $msg .= "Returned data: \n";
             $msg .= print_r($data, true);
+            $msg .= '</div>';
             $msg .= "</pre>";
             return $msg;
             //return $data;
