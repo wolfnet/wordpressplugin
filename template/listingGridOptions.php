@@ -130,12 +130,12 @@
                     <option value="">Max. Price</option>
                     <?php 
                     if (is_array($prices) && array_key_exists('min_price', $prices)) {
-                            foreach ($prices['min_price']['options'] as $price) { ?>
-                                <option value="<?php echo $price['value']; ?>" <?php selected($maxprice, $price['value']); ?>>
-                                    <?php echo $price['label']; ?>
-                                </option>
-                            <?php 
-                            }
+                        foreach ($prices['min_price']['options'] as $price) { ?>
+                            <option value="<?php echo $price['value']; ?>" <?php selected($maxprice, $price['value']); ?>>
+                                <?php echo $price['label']; ?>
+                            </option>
+                        <?php 
+                        }
                     } 
                     ?>
                 </select>
