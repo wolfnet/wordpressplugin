@@ -129,7 +129,9 @@ class Test_Wolfnet extends WP_UnitTestCase
             array('init',                  'init'),
             array('wp_enqueue_scripts',    'scripts'),
             array('wp_enqueue_scripts',    'styles'),
-            array('widgets_init',          'widgetInit'),
+            // widgetInit now only inits if there is a valid key saved as a wordpress option
+            // see wolfnet->getDefaultProductKey()
+            // array('widgets_init',          'widgetInit'),
             array('wp_footer',             'footer'),
             array('template_redirect',     'templateRedirect'),
             array('wp_enqueue_scripts',    'publicStyles',      1000),

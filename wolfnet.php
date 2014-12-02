@@ -1762,11 +1762,13 @@ class Wolfnet
         if (isset($criteria['zip_code'])) $qdata['zip_code'] = $criteria['zip_code'];
  
         // stories use to be a select called "custom2" with possible values 1,2,3,4,5,Multi-Leve - note the l is missing
-        $three_plus = array(3,4,5,'Multi-Leve', 'Multi-Level');
-        if ($criteria['custom2'] == 1) { $qdata['one_story'] = 1; }  // legacy 
-        else if ($criteria['custom2'] == 2) { $qdata['two_story'] =1; } // legacy 
-        else if ( in_array($criteria['custom2'], $three_plus)) { $qdata['three_plus_story'] = 1; } // legacy 
-        
+        if (isset($criteria['custom2'])) {
+            $three_plus = array(3,4,5,'Multi-Leve', 'Multi-Level');
+            if ($criteria['custom2'] == 1) { $qdata['one_story'] = 1; }  // legacy 
+            else if ($criteria['custom2'] == 2) { $qdata['two_story'] =1; } // legacy 
+            else if ( in_array($criteria['custom2'], $three_plus)) { $qdata['three_plus_story'] = 1; } // legacy 
+        }
+
         if (isset( $criteria['one_story'] ))  
             $qdata['one_story'] = $this->convertBool($criteria['one_story']);
         if (isset( $criteria['two_story'] ))  
@@ -2059,7 +2061,7 @@ class Wolfnet
      * @param  string        the api key
      * @return array         returns the same array structure with additional info
      */
-    private function augmentListingsData(&$data, $key)
+    public function augmentListingsData(&$data, $key)
     {
         if (is_array($data['responseData']['data']))
             $listingsData = &$data['responseData']['data']['listing'];
@@ -2070,7 +2072,7 @@ class Wolfnet
         $show_logo = $data['responseData']['metadata']['display_rules']['results']['display_broker_reciprocity_logo'];
         $wnt_base_url = $this->getBaseUrl($key);
 
-        // loop over listings 
+        // loop over listings
         foreach ($listingsData as &$listing) {
 
             if (is_numeric($listing['listing_price']))
