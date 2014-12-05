@@ -2160,16 +2160,18 @@ class Wolfnet
         $args = array_merge($data['wpMeta'], array(
             'toolbarClass' => $class . ' ',
             'maxresults'   => $this->getMaxResults($data['wpMeta']['key']), // total results on all pages
-            'numrows'      => $data['wpMeta']['maxresults'], // toal results per page
+            'numrows'      => $data['wpMeta']['maxresults'], // total results per page
             'prevClass'    => ($data['wpMeta']['startrow']<=1) ? 'wolfnet_disabled' : '',
             'lastitem'     => $data['wpMeta']['startrow'] + $data['wpMeta']['maxresults'] - 1,
             'action'       => 'wolfnet_listings'
             ));
 
+        if ($args['total_rows'] < $args['maxresults'] )  $args['maxresults'] = $args['total_rows'];
+
         $args['nextClass'] = ($args['lastitem']>=$args['maxresults']) ? 'wolfnet_disabled' : '';
 
-        if ($args['lastitem'] > $args['maxresults']) {
-            $args['lastitem'] = $args['maxresults'];
+        if ($args['lastitem'] > $args['total_rows']) {
+            $args['lastitem'] = $args['total_rows'];
         }
 
         $prev = $args['startrow'] - $args['numrows'];
