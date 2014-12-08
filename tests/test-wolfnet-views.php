@@ -23,6 +23,8 @@ class Test_Wolfnet_Views extends WP_UnitTestCase
         // a new instance with active admin user
         $this->wolfnet = new Wolfnet();
 
+        $GLOBALS['wolfnet'] = &$this->wolfnet;
+
         // // protected reflection class needed
         // $key = $this->wolfnet->setJsonProductKey($GLOBALS['wnt_tests_options']['api_key_good1']);
         // $option = $wolfnet_productKey->wolfnet->productKeyOptionKey;
@@ -43,8 +45,6 @@ class Test_Wolfnet_Views extends WP_UnitTestCase
         $this->wnt_html_regex = '/<[^>]*>/';
         $this->wnt_html_msg = "Method returned nothing that looks like an HTML tag";
 
-        
-
     }
 
     
@@ -62,16 +62,15 @@ class Test_Wolfnet_Views extends WP_UnitTestCase
         $this->assertTrue(true);
     }
 
+
     function  testAmStettingsPage(){
 
         ob_start();
         $this->wolfnet->views->amSettingsPage();
         $html = ob_get_clean();
-        
         $this->assertRegExp($this->wnt_html_regex, $html, $this->wnt_html_msg);
 
     }
-
 
 
     function  testAmEditCssPage(){
@@ -140,12 +139,11 @@ class Test_Wolfnet_Views extends WP_UnitTestCase
     
     function  testPropertyListView(){
 
-        // This view is tested indirectly though because of all the setup that happens in 
+        // This view is tested indirectly because of all the setup that happens in 
         // wolfnet->propertyList
 
-        $defaultAttributes = $this->wolfnet->getPropertyListDefaults();
-        
-        $html = $this->wolfnet->propertyList($defaultAttributes);
+        $criteria = $this->wolfnet->getPropertyListDefaults();
+        $html = $this->wolfnet->listingGrid($criteria, 'list');
         $this->assertRegExp($this->wnt_html_regex, $html, $this->wnt_html_msg);
 
     }
@@ -178,19 +176,10 @@ class Test_Wolfnet_Views extends WP_UnitTestCase
     function  testMapView()
     {
 
-        $method = $this->wolfnet_reflection->getMethod("augmentListingData");
-        $method->setAccessible(true);
-
-        $criteria = $this->wolfnet->getListingGridDefaults();
-        $criteria['keyid'] = 1;
-        $criteria['numrows'] = 5;
-        $criteria['startrow'] = 1;
-        $listingsData = $this->wolfnet->api->getListings($criteria);
-
-        foreach ($listingsData as &$listing) {
-            $method->invoke( $this->wolfnet, $listing );
-        }
-
+        $qdata['maxrows'] = 5;
+        $data = $this->wolfnet->apin->sendRequest($GLOBALS['wnt_tests_options']['api_key_good1'], '/listing', 'GET', $qdata);
+        $this->wolfnet->augmentListingsData($data, $GLOBALS['wnt_tests_options']['api_key_good1'] );
+        $listingsData = $data['responseData']['data']['listing'];
         $html = $this->wolfnet->views->mapView($listingsData, $GLOBALS['wnt_tests_options']['api_key_good1'] );
         $this->assertRegExp($this->wnt_html_regex, $html, $this->wnt_html_msg);
 

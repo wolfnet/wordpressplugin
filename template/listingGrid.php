@@ -19,8 +19,10 @@
  *                along with this program; if not, write to the Free Software
  *                Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-
+ 
 ?>
+
+
 
 <div id="<?php echo $instance_id; ?>" class="wolfnet_widget <?php echo $class; ?>">
 
@@ -28,11 +30,11 @@
         <h2 class="widget-title"><?php echo $title; ?></h2>
     <?php } ?>
 
-    <?php if (($mapType == 'above' || $mapType == 'map_only') && $mapEnabled) {
+    <?php if (($maptype == 'above' || $maptype == 'map_only') && $mapEnabled) {
         echo $map;
     } ?>
 
-    <?php if ($mapType != 'disabled' && $mapEnabled) {
+    <?php if ($maptype != 'disabled' && $mapEnabled) {
         echo $hideListingsTools;
     } ?>
 
@@ -48,7 +50,7 @@
 
     </div>
 
-    <?php if ($mapType == 'below' && $mapEnabled) {
+    <?php if ($maptype == 'below' && $mapEnabled) {
         echo $map;
     } ?>
 
@@ -56,15 +58,22 @@
 
 <div class="wolfnet_clearfix"></div>
 
+
+<?php
+// echo "<pre>\$wpMeta: \n";
+// print_r($wpMeta);
+// echo "</pre>";
+?>
+
 <script type="text/javascript">
 
     jQuery(function($){
         var instance = <?php echo "'#" . $instance_id . "';"; ?>
 
         $(instance).wolfnetToolbar({
-             numrows          : <?php echo $numrows . "\n"; ?>
-            ,criteria         : <?php echo ((trim($criteria)!='') ? $criteria : '{}')  . "\n"; ?>
-            ,maxResults       : <?php echo $maxresults . "\n"; ?>
+             numrows          : <?php echo $wpMeta['maxrows'] . "\n"; ?>
+            ,criteria         : <?php echo json_encode($wpMeta) . "\n"; ?>
+            ,maxResults       : <?php echo $wpMeta['total_rows'] . "\n"; ?>
             ,itemsPerPageData : <?php echo json_encode($itemsPerPage) . "\n"; ?>
             ,sortOptionsData  : <?php echo json_encode($sortOptions) . "\n"; ?>
         });
@@ -73,8 +82,9 @@
 
     });
 
-    var mapType = '<?php echo "$mapType"; ?>' 
-    if (mapType == 'map_only') {
+
+    var maptype = '<?php echo "$maptype"; ?>' 
+    if (maptype == 'map_only') {
 
         var collapseListingsId = '<?php echo $collapseListingsId; ?>';
         var hideId             = '<?php echo $hideListingsId; ?>';

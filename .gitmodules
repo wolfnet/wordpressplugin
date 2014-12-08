@@ -1,0 +1,3 @@
+[submodule "wolfnet/wolfnet-api-wp-client"]
+	path = wolfnet/wolfnet-api-wp-client
+	url = https://github.com/wolfnet/wolfnet-api-wp-client.git

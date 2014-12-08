@@ -111,20 +111,33 @@
             <td>
                 <select id="<?php echo $minprice_wpid; ?>" class="pricerange minprice" name="<?php echo $minprice_wpname; ?>">
                     <option value="">Min. Price</option>
-                    <?php foreach ($prices as $price) { ?>
-                        <option value="<?php echo $price['value']; ?>" <?php selected($minprice, $price['value']); ?>>
-                            <?php echo $price['label']; ?>
-                        </option>
-                    <?php } ?>
+
+                    <?php 
+                    if (is_array($prices) && array_key_exists('max_price', $prices)) {
+                        foreach ($prices['max_price']['options'] as $price) { 
+                            ?>
+                            <option value="<?php echo $price['value']; ?>" <?php selected($minprice, $price['value']); ?>>
+                                <?php echo $price['label']; ?>
+                            </option>
+                        <?php 
+                        } 
+                    }
+                    ?>
+                    
                 </select>
                 <span>to</span>
                 <select id="<?php echo $maxprice_wpid; ?>" class="pricerange maxprice" name="<?php echo $maxprice_wpname; ?>">
                     <option value="">Max. Price</option>
-                    <?php foreach ( $prices as $price ) { ?>
-                        <option value="<?php echo $price['value']; ?>" <?php selected($maxprice, $price['value']); ?>>
-                            <?php echo $price['label']; ?>
-                        </option>
-                    <?php } ?>
+                    <?php 
+                    if (is_array($prices) && array_key_exists('min_price', $prices)) {
+                        foreach ($prices['min_price']['options'] as $price) { ?>
+                            <option value="<?php echo $price['value']; ?>" <?php selected($maxprice, $price['value']); ?>>
+                                <?php echo $price['label']; ?>
+                            </option>
+                        <?php 
+                        }
+                    } 
+                    ?>
                 </select>
             </td>
         </tr>
@@ -135,8 +148,8 @@
                 <input id="<?php echo $city_wpid; ?>" name="<?php echo $city_wpname; ?>"
                     type="text" value="<?php echo $city; ?>" /> <br/>
                 <input id="<?php echo $exactcity_wpid; ?>" name="<?php echo $exactcity_wpname; ?>"
-                       type="checkbox" value="1" checked="checked">
-                Only listings that exactly match this city.            
+                       type="checkbox" value="1" >
+                Only listings that exactly match this city.           
             </td>
         </tr>
 

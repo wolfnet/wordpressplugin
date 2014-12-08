@@ -23,12 +23,17 @@
 ?>
 
 <?php
-if ($maptracks_map_provider == 'MapQuest') { 
+// TODO
+// maptracks_map_provider is not provided by the new API. 
+// Should we remove the Bing stuff from
+// wordpressplugin/js/jquery.wolfnetMaptracks.src.js  
+// TODO remove bing stuff
+//if ($maptracks_map_provider == 'MapQuest') { 
 	$mapClient = 'mapquest';
-}	
-else {
-	$mapClient = 'bing';
-}
+//}	
+//else {
+//	$mapClient = 'bing';
+//}
 
 $centerLat = $map_start_lat;
 $centerLng = $map_start_lng;
