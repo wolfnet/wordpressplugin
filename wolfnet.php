@@ -2352,10 +2352,11 @@ class Wolfnet
             $concatHouseover = $this->views->houseOver($vars);                
 
             array_push($houseoverData, array(
-                'lat'        => $listing['geo']['lat'],
-                'lng'        => $listing['geo']['lng'],
-                'content'    => $concatHouseover,
-                'propertyId' => $listing['property_id'],
+                'lat'         => $listing['geo']['lat'],
+                'lng'         => $listing['geo']['lng'],
+                'content'     => $concatHouseover,
+                'propertyId'  => $listing['property_id'],
+                'propertyUrl' => $listing['property_url'],
                 ));
         }
 
