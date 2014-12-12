@@ -44,12 +44,12 @@ $showMapId = uniqid('showMap');
 $mapIcon   = $url . 'img/showmap.gif'
 ?>
 
-<div id="<?php echo $hideMapId; ?>" >
+<div id="<?php echo $hideMapId; ?>" class="wolfnet_showhide">
 	<a href="javascript:void(0)" onclick="wolfnet.hideMap('<?php echo $mapId; ?>','<?php echo $hideMapId; ?>','<?php echo $showMapId; ?>');">
 		<img src="<?php echo $mapIcon; ?>" style="padding-right:10px;">Hide Map
 	</a>
 </div>
-<div id="<?php echo $showMapId; ?>" style="display:none;">
+<div id="<?php echo $showMapId; ?>" style="display:none;" class="wolfnet_showhide">
 	<a href="javascript:void(0)" onclick="wolfnet.showMap('<?php echo $mapId; ?>','<?php echo $hideMapId; ?>','<?php echo $showMapId; ?>');">
 		<img src="<?php echo $mapIcon; ?>" style="padding-right:10px;">Show these properties on a map
 	</a>
