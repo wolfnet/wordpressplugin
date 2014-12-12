@@ -293,6 +293,11 @@ class Wolfnet_Views
 
     public function quickSearchView(array $args=array())
     {
+        // array containing possible values for "view" arg
+        $views = array( "basic" , "legacy");
+        //set up a custom css class for the wrapper. default "wolfnet_quickSearch_legacy"
+        $args['viewclass'] = "wolfnet_quickSearch_" . ( in_array($args['view'], $views ) ? $args['view'] : "legacy");
+
         foreach ($args as $key => $item) {
             $args[$key] = apply_filters( 'wolfnet_quickSearchView_' . $key, $item );
         }

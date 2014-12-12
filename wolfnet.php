@@ -202,36 +202,6 @@ class Wolfnet
     /* ****************************************************************************************** */
 
 
-    public function buildUrl($url='', array $params=array())
-    {
-        if (!strstr($url, '?')) {
-            $url .= '?';
-        }
-
-        $restrictedParams = array('criteria','toolbarTop','toolbarBottom','listingsHtml','prevLink',
-            'nextLink','prevClass','nextClass','toolbarClass','instance_id','siteUrl','class','_');
-
-        $restrictedSuffix = array('_wpid', '_wpname', '_wps', '_wpc');
-
-        foreach ($params as $key => $value) {
-            $valid = true;
-            $valid = (array_search($key, $restrictedParams) !== false) ? false : $valid;
-            $valid = (!is_string($value) && !is_numeric($value) && !is_bool($value)) ? false : $valid;
-
-            foreach ($restrictedSuffix as $suffix) {
-                $valid = (substr($key, strlen($suffix)*-1) == $suffix) ? false : $valid;
-            }
-
-            if ($valid) {
-                $url .= '&' . $key . '=' . urlencode($this->html_entity_decode_numeric($value));
-            }
-
-        }
-
-        return $url;
-
-    }
-
     /**
      * Decodes all HTML entities, including numeric and hexadecimal ones.
      *
@@ -663,6 +633,37 @@ class Wolfnet
         return $data['responseData']['data']['market']['datasource_name'];
     }
 
+
+
+    public function buildUrl($url='', array $params=array())
+    {
+        if (!strstr($url, '?')) {
+            $url .= '?';
+        }
+
+        $restrictedParams = array('criteria','toolbarTop','toolbarBottom','listingsHtml','prevLink',
+            'nextLink','prevClass','nextClass','toolbarClass','instance_id','siteUrl','class','_');
+
+        $restrictedSuffix = array('_wpid', '_wpname', '_wps', '_wpc');
+
+        foreach ($params as $key => $value) {
+            $valid = true;
+            $valid = (array_search($key, $restrictedParams) !== false) ? false : $valid;
+            $valid = (!is_string($value) && !is_numeric($value) && !is_bool($value)) ? false : $valid;
+
+            foreach ($restrictedSuffix as $suffix) {
+                $valid = (substr($key, strlen($suffix)*-1) == $suffix) ? false : $valid;
+            }
+
+            if ($valid) {
+                $url .= '&' . $key . '=' . urlencode($this->html_entity_decode_numeric($value));
+            }
+
+        }
+
+        return $url;
+
+    }
 
     /* Custom Post Types ************************************************************************ */
     /*  _                         _              ___                                              */
@@ -1439,9 +1440,10 @@ class Wolfnet
     {
 
         return array(
-            'title' => 'QuickSearch',
-            'keyid' => '',
-            'keyids' => '',
+            'title'     => 'QuickSearch',
+            'keyid'     => '',
+            'keyids'    => '',
+            'view'      => '',
             );
 
     }

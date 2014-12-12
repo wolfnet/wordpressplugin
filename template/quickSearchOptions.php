@@ -32,6 +32,15 @@
             <td><label>Title:</label></td>
             <td><input id="<?php echo $title_wpid; ?>" name="<?php echo $title_wpname; ?>" value="<?php echo $title; ?>" type="text" /></td>
         </tr>
+        <tr>
+            <td><label>Layout:</label></td>
+            <td>
+                <select name="view">
+                    <option value="basic">Basic</option>
+                    <option value="legacy">Legacy</option>
+                </select>
+            </td>
+        </tr>
         <?php if(count($markets) > 1): 
             $keyids = explode(",", $keyids); 
             if ((count($keyids) < 1 ) || !$keyids[0]) $keyids[0] = 1;
