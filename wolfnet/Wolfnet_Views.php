@@ -170,6 +170,8 @@ class Wolfnet_Views
     {
         $markets = json_decode($GLOBALS['wolfnet']->getProductKey());
         $keyids = array();
+        $view = '';
+
         foreach($markets as $market) {
             array_push($keyids, $market->id);
         }
@@ -177,6 +179,7 @@ class Wolfnet_Views
             'instance_id' => str_replace('.', '', uniqid('wolfnet_quickSearch_')),
             'markets'     => $markets,
             'keyids'      => $keyids,
+            'view'        => $view,
             );
 
 

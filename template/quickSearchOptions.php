@@ -35,9 +35,9 @@
         <tr>
             <td><label>Layout:</label></td>
             <td>
-                <select name="view">
-                    <option value="basic">Basic</option>
-                    <option value="legacy">Legacy</option>
+                <select id="<?php echo $view_wpid; ?>" name="<?php echo $view_wpname; ?>" >
+                    <option value="basic" <?php echo ($view == "basic" ? 'selected="selcted"': "") ?>>Basic</option>
+                    <option value="legacy" <?php echo ($view == "legacy" ? 'selected="selcted"': "") ?>>Legacy</option>
                 </select>
             </td>
         </tr>
