@@ -423,15 +423,8 @@ class Wolfnet
             array_key_exists('keyList', $_REQUEST)) {
             echo '<div class="wolfnet_marketDisclaimer">';
             foreach($_REQUEST['keyList'] as $key) {
-                $disclaimer = $this->apin->sendRequest(
-                    $key, 
-                    '/core/disclaimer', 
-                    'GET', 
-                    array('type'=>'search_results', 'format'=>'html')
-                    );
-                echo "<pre>market_settings: \n";
-                print_r($disclaimer['responseData']['data']);
-                echo "</pre>";
+                $disclaimer = $this->apin->sendRequest( $key, '/core/disclaimer', 'GET', array('type'=>'search_results', 'format'=>'html') );
+                if (!is_wp_error($disclaimer)) echo $disclaimer['responseData']['data'];
             }
             echo '</div>';
         }
