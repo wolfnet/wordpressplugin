@@ -48,6 +48,33 @@ entered in the "WolfNet >> General Settings" page before any IDX data can be dis
 
 [WolfNet WordPress Plugin Advanced Display Options](https://www.youtube.com/watch?v=oAoljC6_yF8&list=UUWqJ_1djHKa_Uxg_bZ4HiTw)
 
+= The "Twenty Fifteen" theme shows some of the disclaimer text is hidden behind the sidebar. How can I fix this? =
+
+The Wolfnet plugin automatically adds the required text to the footer of the site. Unfortunately information in the footer can not always be properly styled by the plugin. Footer formatting issues can be resolved with CSS either by writing the CSS into the sites theme or by adding the CSS to the Wolfnet settings. To add custom CSS to the Wolfnet settings, in your dashboard go to "Wolfnet" > "Edit CSS"  and add css to the "Public CSS" area of the form.
+
+This css will resolve the layout issue in the "Twenty Fifteen" theme
+
+.wolfnet_marketDisclaimer {
+    margin: 4em 0 0 0;
+    padding: 2% 4%;
+    color: #707070;
+    color: rgba(51, 51, 51, 0.7);
+    font-size: 10px;
+    font-size: 1rem;
+    box-shadow: 0 0 1px rgba(0, 0, 0, 0.15);
+}
+
+@media screen and (min-width: 59.6875em) {
+    .wolfnet_marketDisclaimer {
+    border-bottom: 1px solid rgba(0, 0, 0, 0);
+    padding: 2% 4%;
+    background-color: white;
+    float: left;
+    margin: 4em 0 0 35.2941%;
+    width: 58.8235%;
+    }
+}
+
 
 == Screenshots ==
 
@@ -56,6 +83,7 @@ entered in the "WolfNet >> General Settings" page before any IDX data can be dis
 
 = 1.7.0 =
 * Incorporated new API improving speed and performance
+* Fixed several small display issues which occur in some themes
 
 = 1.6.4 =
 * Fixed Widget issue when there is no active key
