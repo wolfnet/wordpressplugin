@@ -81,6 +81,11 @@ This css will resolve the layout issue in the "Twenty Fifteen" theme
 
 == Changelog ==
 
+= 1.7.1 =
+* updated error handling and reporting
+* added support for custom field search
+* added alternate Quick Search view
+
 = 1.7.0 =
 * Incorporated new API improving speed and performance
 * Fixed several small display issues which occur in some themes
