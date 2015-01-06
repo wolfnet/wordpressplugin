@@ -235,6 +235,7 @@ class Wolfnet
         return $this->chr_utf8($matches[1]);
     }
 
+
     /* Hooks ************************************************************************************ */
     /* |_|  _   _  |   _                                                                          */
     /* | | (_) (_) |< _>                                                                          */
@@ -1110,16 +1111,7 @@ class Wolfnet
         // TODO
         // create a wp_error display method with some nice formating
         if (is_wp_error($data)) {
-            $msg = "Wolfnet Error: <br>";
-            $code = $data->get_error_code();
-            $msg .= "code: $code </br> Message: ";
-            $msg .= $data->get_error_message($code);
-            $msg .= '<div style="display:none;">';
-            $msg .= "<br>Data: <pre>";
-            $msg .= print_r($data, true);
-            $msg .= "</pre>";
-            $msg .= "</div>";
-            return $msg;
+            return $this->getWpError($data);
         }
 
         $listingsData = array();
@@ -1225,18 +1217,7 @@ class Wolfnet
         // TODO
         // create a wp_error display method with some nice formating
         if (is_wp_error($data)) {
-
-            $msg = "Wolfnet Error: <br>";
-            $code = $data->get_error_code();
-            $msg .= "code: $code </br> Message: ";
-            $msg .= $data->get_error_message($code);
-            $msg .= '<div style="display:none">';
-            $msg .= "Returned data: \n";
-            $msg .= print_r($data, true);
-            $msg .= '</div>';
-            $msg .= "</pre>";
-            return $msg;
-            //return $data;
+            return $this->getWpError($data);
         }
 
         // add some elements to the array returned by the API
@@ -1590,8 +1571,8 @@ class Wolfnet
             $qdata['agent_office_only'] = $this->convertBool($criteria['agent_office_only']);
         if (isset( $criteria['agent_only'] ))  
             $qdata['agent_only'] = $this->convertBool($criteria['agent_only']);
-        if (isset($criteria['custom1'])) $qdata['area_name'] = $criteria['custom1']; // legacy
         if (isset($criteria['area_name'])) $qdata['area_name'] = $criteria['area_name'];
+        if (isset($criteria['area_int'])) $qdata['area_int'] = $criteria['area_int'];
         if (isset($criteria['building_name'])) $qdata['building_name'] = $criteria['building_name'];
         if (isset($criteria['built_after'])) $qdata['built_after'] = $criteria['built_after'];
         if (isset($criteria['built_before'])) $qdata['built_before'] = $criteria['built_before'];
@@ -1755,14 +1736,6 @@ class Wolfnet
         if (isset($criteria['virtual_tour'])) $qdata['virtual_tour'] = $criteria['virtual_tour'];
         if (isset($criteria['zipcode'])) $qdata['zip_code'] = $criteria['zipcode']; // legacy
         if (isset($criteria['zip_code'])) $qdata['zip_code'] = $criteria['zip_code'];
- 
-        // stories use to be a select called "custom2" with possible values 1,2,3,4,5,Multi-Leve - note the l is missing
-        if (isset($criteria['custom2'])) {
-            $three_plus = array(3,4,5,'Multi-Leve', 'Multi-Level');
-            if ($criteria['custom2'] == 1) { $qdata['one_story'] = 1; }  // legacy 
-            else if ($criteria['custom2'] == 2) { $qdata['two_story'] =1; } // legacy 
-            else if ( in_array($criteria['custom2'], $three_plus)) { $qdata['three_plus_story'] = 1; } // legacy 
-        }
 
         if (isset( $criteria['one_story'] ))  
             $qdata['one_story'] = $this->convertBool($criteria['one_story']);
@@ -1771,6 +1744,10 @@ class Wolfnet
         if (isset( $criteria['three_plus_story'] ))  
             $qdata['three_plus_story'] = $this->convertBool($criteria['three_plus_story']);
 
+        for ($i = 1; $i <= 25; $i++) {
+            $check = 'custom' . $i;
+            if (isset( $criteria[ $check ] )) $qdata[ $check ] = $criteria[ $check ];
+        }
 
         return $qdata;
     
@@ -2199,6 +2176,11 @@ class Wolfnet
 
         return $this->views->toolbarView($args);
 
+    }
+
+    public function getWpError($error)
+    {
+        return $this->views->errorView($error);
     }
 
     /**

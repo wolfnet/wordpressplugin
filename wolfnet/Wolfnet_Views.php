@@ -356,6 +356,15 @@ class Wolfnet_Views
 
     }
 
+    public function errorView($error)
+    {
+
+        ob_start();
+        include $GLOBALS['wolfnet']->dir .'/template/error.php';
+        return ob_get_clean();
+
+    }
+
     public function houseOver($args) 
     {
 

@@ -130,6 +130,10 @@ if ( typeof jQuery != 'undefined' ) {
 
 			( function () {
 
+				$(".wolfnet_error a").click( function() {
+					$(this).siblings("div").toggle();
+				});
+
 				if ( !isPlaceholderSupported() ) {
 
 					var $placeHolderInputs = $( 'input[placeholder]');

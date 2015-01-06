@@ -332,25 +332,32 @@ class Wolfnet_Api_Wp_Client
 
     private function getApiToken( $key, $force = false)
     {
+        global $wp_version;
         // Unless forced to do otherwise, attempt to retrieve the token from a cache.
         $transient_key = $this->transientIndexKey . $key;
         $token = get_transient( $transient_key );
+        $theme = wp_get_theme();
         //$token = $force ? "" : $this->retrieveApiTokenDataFromCache($key);
-
-         
+              
         // If a token was not retrieved from the cache perform an API request to retrieve a new one.
         if ($token == "") {
             $data = array(
                 'key' => $key,
                 'v' => $this->version,
             );
-            // echo "how about here?<br>";
+            $headers = array(
+                'pluginVersion' => $GLOBALS['wolfnet']->version,
+                'phpVersion'    => phpversion(),
+                'wpVersion'     => $wp_version,
+                'wpTheme'       => $theme->get('Name'),
+                );
+           
             $auth_response = $this->rawRequest(
                 $key,
                 '/core/auth',
                 "POST",
                 $data,
-                array(),
+                $headers,
                 true // Since we don't have a valid token we don't want to attempt to include it.
                 );
             
