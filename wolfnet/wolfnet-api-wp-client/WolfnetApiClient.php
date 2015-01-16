@@ -144,6 +144,7 @@ class Wolfnet_Api_Wp_Client
         $args = array(
             'method'   => $method,
             'headers'  => $headers,
+            // 'timeout'  => 10000, // 10sec
         );
 
         //set up headers, body, and url data as needed
@@ -367,8 +368,6 @@ class Wolfnet_Api_Wp_Client
             // TODO: Validate that the response includes the data we need.
             $token = $auth_response['responseData']['data']['api_token'];
 
-            // time to live. when should this transient expire?
-            // expiration time - time created - 5
             $ttl = ( strtotime($auth_response['responseData']['data']['expiration']) - strtotime($auth_response['responseData']['data']['date_created']) - 5 );
 
             // check if valid int greater than 0 less then #seconds in 7 days

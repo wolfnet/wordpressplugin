@@ -31,12 +31,12 @@ $codes = $error->get_error_codes()
     foreach ($codes as $code) {
         $data = $error->get_error_data($code);
 
-        if ( $api_responce = json_decode($data['body']) ) {
+        if ( isset($data['body']) && $api_responce = json_decode($data['body']) ) {
             // if we have a clean error resopnce from the api server
             $msg = $api_responce->metadata->status->message;
             $msg_long = $api_responce->metadata->status->extendedInfo;
             $err_id = $api_responce->metadata->status->error_id;
-        } elseif (is_array($data['response'])) {
+        } elseif ( isset($data['response']) && is_array($data['response']) ) {
             // if we generated and without getting a responce from the api server
             $msg = $data['response']['code'];
             $msg_long = print_r($data, true);
