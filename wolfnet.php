@@ -1559,7 +1559,9 @@ class Wolfnet
         } 
 
         if ( !empty( $criteria['primarysearchtype'] )) {
+            if ( $criteria['primarysearchtype'] == 'sold' ) $qdata['sold'] = 1;
             if ( $criteria['primarysearchtype'] == 'open' ) $qdata['open_house'] = 1;
+            if ( $criteria['primarysearchtype'] == 'foreclosure' ) $qdata['foreclosure'] = 1;
         }
 
         // 'owner_type' was replaced by bools 'agent_only', 'office_only' and 'agent_office_only'
