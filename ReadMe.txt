@@ -81,6 +81,14 @@ This css will resolve the layout issue in the "Twenty Fifteen" theme
 
 == Changelog ==
 
+= 1.7.1 =
+* Fixed bugs with several search manager search fields
+* Fixed issue which caused some fields in widgets to be handled differently than shortcodes 
+* Updated error handling and reporting
+* Added support for custom field search
+* Added alternate Quick Search view
+* Fix several other bugs with Search Manager searches
+
 = 1.7.0 =
 * Incorporated new API improving speed and performance
 * Fixed several small display issues which occur in some themes

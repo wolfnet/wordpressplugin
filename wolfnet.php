@@ -202,36 +202,6 @@ class Wolfnet
     /* ****************************************************************************************** */
 
 
-    public function buildUrl($url='', array $params=array())
-    {
-        if (!strstr($url, '?')) {
-            $url .= '?';
-        }
-
-        $restrictedParams = array('criteria','toolbarTop','toolbarBottom','listingsHtml','prevLink',
-            'nextLink','prevClass','nextClass','toolbarClass','instance_id','siteUrl','class','_');
-
-        $restrictedSuffix = array('_wpid', '_wpname', '_wps', '_wpc');
-
-        foreach ($params as $key => $value) {
-            $valid = true;
-            $valid = (array_search($key, $restrictedParams) !== false) ? false : $valid;
-            $valid = (!is_string($value) && !is_numeric($value) && !is_bool($value)) ? false : $valid;
-
-            foreach ($restrictedSuffix as $suffix) {
-                $valid = (substr($key, strlen($suffix)*-1) == $suffix) ? false : $valid;
-            }
-
-            if ($valid) {
-                $url .= '&' . $key . '=' . urlencode($this->html_entity_decode_numeric($value));
-            }
-
-        }
-
-        return $url;
-
-    }
-
     /**
      * Decodes all HTML entities, including numeric and hexadecimal ones.
      *
@@ -264,6 +234,7 @@ class Wolfnet
     {
         return $this->chr_utf8($matches[1]);
     }
+
 
     /* Hooks ************************************************************************************ */
     /* |_|  _   _  |   _                                                                          */
@@ -513,6 +484,9 @@ class Wolfnet
     {
         global $wp_version;
         $baseUrl = $this->getBaseUrl($productKey);
+
+        if (is_wp_error($baseUrl)) return $this->getWpError($baseUrl);
+
         $maptracksEnabled = $this->getMaptracksEnabled($productKey);
 
         if (!strstr($baseUrl, 'index.cfm')) {
@@ -656,6 +630,37 @@ class Wolfnet
         return $data['responseData']['data']['market']['datasource_name'];
     }
 
+
+
+    public function buildUrl($url='', array $params=array())
+    {
+        if (!strstr($url, '?')) {
+            $url .= '?';
+        }
+
+        $restrictedParams = array('criteria','toolbarTop','toolbarBottom','listingsHtml','prevLink',
+            'nextLink','prevClass','nextClass','toolbarClass','instance_id','siteUrl','class','_');
+
+        $restrictedSuffix = array('_wpid', '_wpname', '_wps', '_wpc');
+
+        foreach ($params as $key => $value) {
+            $valid = true;
+            $valid = (array_search($key, $restrictedParams) !== false) ? false : $valid;
+            $valid = (!is_string($value) && !is_numeric($value) && !is_bool($value)) ? false : $valid;
+
+            foreach ($restrictedSuffix as $suffix) {
+                $valid = (substr($key, strlen($suffix)*-1) == $suffix) ? false : $valid;
+            }
+
+            if ($valid) {
+                $url .= '&' . $key . '=' . urlencode($this->html_entity_decode_numeric($value));
+            }
+
+        }
+
+        return $url;
+
+    }
 
     /* Custom Post Types ************************************************************************ */
     /*  _                         _              ___                                              */
@@ -958,11 +963,7 @@ class Wolfnet
         $qdata = $this->prepareListingQuery($_REQUEST);
 
         $data = $this->apin->sendRequest($_REQUEST['key'], '/listing', 'GET', $qdata);
-        if (is_wp_error($data)){
-            echo "API returned and error: ";
-            echo $data->get_error_code();
-            return $data;
-        }  
+        if (is_wp_error($data)) return $this->getWpError($data);
  
         $this->augmentListingsData($data, $_REQUEST['key']);
 
@@ -1104,22 +1105,12 @@ class Wolfnet
             $qdata['office_only'] = true;
 
         $data = $this->apin->sendRequest($criteria['key'], '/listing', 'GET', $qdata);
+
+        if (is_wp_error($data)) return $this->getWpError($data);
+
         $this->augmentListingsData($data, $criteria['key']);
 
-        // TODO
-        // create a wp_error display method with some nice formating
-        if (is_wp_error($data)) {
-            $msg = "Wolfnet Error: <br>";
-            $code = $data->get_error_code();
-            $msg .= "code: $code </br> Message: ";
-            $msg .= $data->get_error_message($code);
-            $msg .= '<div style="display:none;">';
-            $msg .= "<br>Data: <pre>";
-            $msg .= print_r($data, true);
-            $msg .= "</pre>";
-            $msg .= "</div>";
-            return $msg;
-        }
+       
 
         $listingsData = array();
         
@@ -1219,24 +1210,8 @@ class Wolfnet
 
         $qdata = $this->prepareListingQuery($criteria);
 
-        $data = $this->apin->sendRequest($criteria['key'], '/listing', 'GET', $qdata);
-        
-        // TODO
-        // create a wp_error display method with some nice formating
-        if (is_wp_error($data)) {
-
-            $msg = "Wolfnet Error: <br>";
-            $code = $data->get_error_code();
-            $msg .= "code: $code </br> Message: ";
-            $msg .= $data->get_error_message($code);
-            $msg .= '<div style="display:none">';
-            $msg .= "Returned data: \n";
-            $msg .= print_r($data, true);
-            $msg .= '</div>';
-            $msg .= "</pre>";
-            return $msg;
-            //return $data;
-        }
+        $data = $this->apin->sendRequest($criteria['key'], '/listing', 'GET', $qdata);   
+        if (is_wp_error($data)) return $this->getWpError($data);
 
         // add some elements to the array returned by the API
         // wpMeta should contain any criteria or other setting which do not come from the API
@@ -1432,9 +1407,10 @@ class Wolfnet
     {
 
         return array(
-            'title' => 'QuickSearch',
-            'keyid' => '',
-            'keyids' => '',
+            'title'     => 'QuickSearch',
+            'keyid'     => '',
+            'keyids'    => '',
+            'view'      => '',
             );
 
     }
@@ -1580,16 +1556,42 @@ class Wolfnet
             // Because 'exact_city' in the past was set to true by default even when a list is used
             // we look for a comma in the string and change exact city to false if one exists
             if ( strpos($criteria['city'], ',') !== false) $qdata['exact_city'] = 0;
-        }  
+        } 
+
+        if ( !empty( $criteria['primarysearchtype'] )) {
+            if ( $criteria['primarysearchtype'] == 'sold' ) $qdata['sold'] = 1;
+            if ( $criteria['primarysearchtype'] == 'open' ) $qdata['open_house'] = 1;
+            if ( $criteria['primarysearchtype'] == 'foreclosure' ) $qdata['foreclosure'] = 1;
+        }
+
+        // 'owner_type' was replaced by bools 'agent_only', 'office_only' and 'agent_office_only'
+        // if owner_type is set then add the correct bool
+        // if the bool is set directly the value set will overwrite what has been set by owner_type below
+        // 
+        // The field 'ownertype' is being used by a client but I can't find where the plugin is generating that
+        if ( !empty( $criteria['ownertype'] )) { 
+            if ($criteria['ownertype'] == 'agent') $qdata['agent_only'] = 1;
+            if ($criteria['ownertype'] == 'broker') $qdata['office_only'] = 1;
+            if ($criteria['ownertype'] == 'agent_broker') $qdata['agent_office_only'] = 1;
+        }
+        if ( !empty( $criteria['owner_type'] )) {
+            if ($criteria['owner_type'] == 'agent') $qdata['agent_only'] = 1;
+            if ($criteria['owner_type'] == 'broker') $qdata['office_only'] = 1;
+            if ($criteria['owner_type'] == 'agent_broker') $qdata['agent_office_only'] = 1;
+        }
+
+        if (isset( $criteria['agent_only'] ))  
+            $qdata['agent_only'] = $this->convertBool($criteria['agent_only']);
+        if (isset( $criteria['office_only'] ))  
+            $qdata['office_only'] = $this->convertBool($criteria['office_only']);
+        if (isset( $criteria['agent_office_only'] ))  
+            $qdata['agent_office_only'] = $this->convertBool($criteria['agent_office_only']);
 
         if (isset($criteria['address'])) $qdata['address'] = $criteria['address'];
         if (isset($criteria['agent_id'])) $qdata['agent_id'] = $criteria['agent_id'];
-        if (isset( $criteria['agent_office_only'] ))  
-            $qdata['agent_office_only'] = $this->convertBool($criteria['agent_office_only']);
-        if (isset( $criteria['agent_only'] ))  
-            $qdata['agent_only'] = $this->convertBool($criteria['agent_only']);
-        if (isset($criteria['custom1'])) $qdata['area_name'] = $criteria['custom1']; // legacy
+        
         if (isset($criteria['area_name'])) $qdata['area_name'] = $criteria['area_name'];
+        if (isset($criteria['area_int'])) $qdata['area_int'] = $criteria['area_int'];
         if (isset($criteria['building_name'])) $qdata['building_name'] = $criteria['building_name'];
         if (isset($criteria['built_after'])) $qdata['built_after'] = $criteria['built_after'];
         if (isset($criteria['built_before'])) $qdata['built_before'] = $criteria['built_before'];
@@ -1695,8 +1697,7 @@ class Wolfnet
         if (isset( $criteria['newlistings'] ))  
             $qdata['newlistings'] = $this->convertBool($criteria['newlistings']);
         if (isset($criteria['office_id'])) $qdata['office_id'] = $criteria['office_id'];
-        if (isset( $criteria['office_only'] ))  
-            $qdata['office_only'] = $this->convertBool($criteria['office_only']);
+        
         if (isset( $criteria['on_golf_course'] ))  
             $qdata['on_golf_course'] = $this->convertBool($criteria['on_golf_course']);
         if (isset( $criteria['open_house'] ))  
@@ -1753,14 +1754,6 @@ class Wolfnet
         if (isset($criteria['virtual_tour'])) $qdata['virtual_tour'] = $criteria['virtual_tour'];
         if (isset($criteria['zipcode'])) $qdata['zip_code'] = $criteria['zipcode']; // legacy
         if (isset($criteria['zip_code'])) $qdata['zip_code'] = $criteria['zip_code'];
- 
-        // stories use to be a select called "custom2" with possible values 1,2,3,4,5,Multi-Leve - note the l is missing
-        if (isset($criteria['custom2'])) {
-            $three_plus = array(3,4,5,'Multi-Leve', 'Multi-Level');
-            if ($criteria['custom2'] == 1) { $qdata['one_story'] = 1; }  // legacy 
-            else if ($criteria['custom2'] == 2) { $qdata['two_story'] =1; } // legacy 
-            else if ( in_array($criteria['custom2'], $three_plus)) { $qdata['three_plus_story'] = 1; } // legacy 
-        }
 
         if (isset( $criteria['one_story'] ))  
             $qdata['one_story'] = $this->convertBool($criteria['one_story']);
@@ -1769,6 +1762,10 @@ class Wolfnet
         if (isset( $criteria['three_plus_story'] ))  
             $qdata['three_plus_story'] = $this->convertBool($criteria['three_plus_story']);
 
+        for ($i = 1; $i <= 25; $i++) {
+            $check = 'custom' . $i;
+            if (isset( $criteria[ $check ] )) $qdata[ $check ] = $criteria[ $check ];
+        }
 
         return $qdata;
     
@@ -2048,7 +2045,7 @@ class Wolfnet
 
 
     /**
-     * Prepair the listings for display. Pass in the array returned from the api /listing method.
+     * Prepare the listings for display. Pass in the array returned from the api /listing method.
      * Format fields & add missing data items needed for displays
      * @param  array $data   the array as returned from the api /listing method
      * @param  string        the api key
@@ -2056,6 +2053,7 @@ class Wolfnet
      */
     public function augmentListingsData(&$data, $key)
     {
+
         if (is_array($data['responseData']['data']))
             $listingsData = &$data['responseData']['data']['listing'];
 
@@ -2199,6 +2197,11 @@ class Wolfnet
 
     }
 
+    public function getWpError($error)
+    {
+        return $this->views->errorView($error);
+    }
+
     /**
      * get the api display setting for "Max Results". If it is not set use 250
      * @param  string $productKey 
@@ -2320,6 +2323,7 @@ class Wolfnet
         }
 
         $data  = $this->apin->sendRequest( $productKey, '/settings' );
+        if (is_wp_error($data)) return $this->getWpError($data);
 
         $args['map_start_lat'] = $data['responseData']['data']['market']['maptracks']['map_start_lat'];
         $args['map_start_lng'] = $data['responseData']['data']['market']['maptracks']['map_start_lng'];
@@ -2391,9 +2395,8 @@ class Wolfnet
             $productKey = json_decode($GLOBALS['wolfnet']->getDefaultProductKey());
         }
 
-        $http = $this->apin->sendRequest(
-                    $productKey, 
-                    '/status');
+        $http = $this->apin->sendRequest( $productKey, '/status');
+
 
         if (!is_wp_error($http) && $http['responseStatusCode'] == '200') {
             $valid = true;

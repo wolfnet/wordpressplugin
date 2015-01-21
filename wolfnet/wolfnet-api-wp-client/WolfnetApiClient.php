@@ -144,6 +144,7 @@ class Wolfnet_Api_Wp_Client
         $args = array(
             'method'   => $method,
             'headers'  => $headers,
+            // 'timeout'  => 10000, // 10sec
         );
 
         //set up headers, body, and url data as needed
@@ -332,25 +333,32 @@ class Wolfnet_Api_Wp_Client
 
     private function getApiToken( $key, $force = false)
     {
+        global $wp_version;
         // Unless forced to do otherwise, attempt to retrieve the token from a cache.
         $transient_key = $this->transientIndexKey . $key;
         $token = get_transient( $transient_key );
+        $theme = wp_get_theme();
         //$token = $force ? "" : $this->retrieveApiTokenDataFromCache($key);
-
-         
+              
         // If a token was not retrieved from the cache perform an API request to retrieve a new one.
         if ($token == "") {
             $data = array(
                 'key' => $key,
                 'v' => $this->version,
             );
-            // echo "how about here?<br>";
+            $headers = array(
+                'pluginVersion' => $GLOBALS['wolfnet']->version,
+                'phpVersion'    => phpversion(),
+                'wpVersion'     => $wp_version,
+                'wpTheme'       => $theme->get('Name'),
+                );
+           
             $auth_response = $this->rawRequest(
                 $key,
                 '/core/auth',
                 "POST",
                 $data,
-                array(),
+                $headers,
                 true // Since we don't have a valid token we don't want to attempt to include it.
                 );
             
@@ -360,8 +368,6 @@ class Wolfnet_Api_Wp_Client
             // TODO: Validate that the response includes the data we need.
             $token = $auth_response['responseData']['data']['api_token'];
 
-            // time to live. when should this transient expire?
-            // expiration time - time created - 5
             $ttl = ( strtotime($auth_response['responseData']['data']['expiration']) - strtotime($auth_response['responseData']['data']['date_created']) - 5 );
 
             // check if valid int greater than 0 less then #seconds in 7 days
