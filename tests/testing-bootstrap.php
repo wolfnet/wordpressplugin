@@ -16,8 +16,8 @@ $GLOBALS['wp_tests_options'] = array(
 // get a 2nd good Key. currently good1 and good2 are the same key
 
 $GLOBALS['wnt_tests_options'] = array(
-    'api_key_good1'  => 'wp_ccd9757c95bb4fffa7bf513b9c792eed',
-    'api_key_good2'  => 'wp_ccd9757c95bb4fffa7bf513b9c792eed',
+    'api_key_good1'  => 'wp_8f0d2c30ddb3b3ac5b5df4c3d4fad11b',
+    'api_key_good2'  => 'wp_e30d1090d28bf1b863d77bfea17891ef',
     'api_key_bad'    => 'wp_d1bf90d8bf9046d1d1c43f1fad34ec7e',
 );
 
