@@ -62,7 +62,9 @@
                                     <input id="wolfnet_productKey_<?php echo $i; ?>" name="wolfnet_productKey_<?php echo $i; ?>" type="text"
                                         value="<?php echo $productKey[$i-1]->key; ?>" class="wolfnet_productKey" size="50" />
                                 </td>
-                                <td><span class="wolfnet_keyMarket"><?php echo $productKey[$i-1]->market; ?></span></td>
+                                <td><span class="wolfnet_keyMarket">
+                                <?php if ( isset($productKey[$i-1]->market) ) echo $productKey[$i-1]->market; ?>
+                                </span></td>
                                 <td>
                                     <input id="wolfnet_keyLabel_<?php echo $i; ?>" class="wolfnet_keyLabel" name="wolfnet_keyLabel_<?php echo $i; ?>" type="text" 
                                         value="<?php echo $productKey[$i-1]->label; ?>" size="30" />
