@@ -134,7 +134,7 @@ class Wolfnet_Api_Wp_Client
 
         // Unless told otherwise, attempt to retrieve an API token.
         if (!$skipAuth) {
-            $api_token = $this->getApiToken( $key, $reAuth);
+            $api_token =  $this->getApiToken( $key, $reAuth);
             if (is_wp_error($api_token))  return $api_token;
             $headers['api_token'] = $api_token;
             $headers['Accept-Encoding'] = 'gzip, deflate';
@@ -144,7 +144,8 @@ class Wolfnet_Api_Wp_Client
         $args = array(
             'method'   => $method,
             'headers'  => $headers,
-            // 'timeout'  => 10000, // 10sec
+            'httpversion' => '1.1', // at jason k's request
+            // 'timeout'  => 10, // 10sec
         );
 
         //set up headers, body, and url data as needed
@@ -169,15 +170,15 @@ class Wolfnet_Api_Wp_Client
 
         // check to see if we have this cached:
         $transient_key = $this->transientIndexKey . md5($full_url . json_encode($args));
+        
+        $response = get_transient($transient_key);
 
         // set response to the value of the transient if it is valid
-        if ( ($response = get_transient($transient_key)) === false ) {
+        if ( $response === false ) {
 
             $api_response = wp_remote_request($full_url, $args);
 
-            if (is_wp_error($api_response)) {
-                return $api_response;
-            }
+            if (is_wp_error($api_response)) return $api_response;
 
             // The API returned a 401 Unauthorized
             if ($api_response['response']['code'] == 401)
@@ -197,25 +198,22 @@ class Wolfnet_Api_Wp_Client
 
             // The API returned a 400 Bad Response because the token it was given was not valid, so attempt to re-authenticated and perform the request again.
             if ($api_response['response']['code'] == 400) {
-                $data = json_decode($api_response['body']);
+                $responsedata = json_decode($api_response['body']);
 
                 if ( 
-                    //(   array_key_exists('status', $data['metadata']) 
-                    (   property_exists($data->metadata, 'status') 
-                        //&& (array_key_exists('errorCode', $data['metadata']['status']) 
-                        && (property_exists($data->metadata->status, 'errorCode' ) 
-                        //&& $data['metadata']['status']['errorCode']  == "Auth1005")
-                        && $data->metadata->status->errorCode  == "Auth1005")
+                    (   property_exists($responsedata->metadata, 'status') 
+                        && (property_exists($responsedata->metadata->status, 'errorCode' ) 
+                        && $responsedata->metadata->status->errorCode  == "Auth1005")
                     ) || ( 
-                        // array_key_exists("statusCode", $data['metadata']['status']) 
-                        property_exists($data->metadata->status, "statusCode" ) 
-                        // && $data['metadata']['status']['statusCode']  == "Auth1005") 
-                        && $data->metadata->status->statusCode  == "Auth1005" )
+                        property_exists($responsedata->metadata->status, "statusCode" ) 
+                        && $responsedata->metadata->status->statusCode  == "Auth1005" )
                     )
                 {
                     if (!$reAuth) {
                         return $this->rawRequest($key, $resource, $method, $data, $headers, false, true);
-                    } 
+                    } else {
+                        return new WP_Error( $responsedata->metadata->status->statusCode, __( "Unable to Re-Authenticate API Key" ));
+                    }
                     
                 } 
                 elseif(array_key_exists('message', $api_response['response'])) 
@@ -232,7 +230,7 @@ class Wolfnet_Api_Wp_Client
                 return new WP_Error( '200', __( "Received unexpected response from the API" ), $api_response );
 
             }
-    
+
             // build an array with useful representation of the response 
             $response = array(
                 'requestUrl' => $full_url,
@@ -242,7 +240,7 @@ class Wolfnet_Api_Wp_Client
                 'responseData' => $api_response['body'],
                 'timestamp' => time(),
                 );
-    
+
             // If the response type is JSON convert it to an array.
             // ie if the response content type contains the string 'application/json'
             if ( strpos($api_response['headers']['content-type'], 'application/json') == "application/json") {
@@ -276,7 +274,6 @@ class Wolfnet_Api_Wp_Client
     private function isValidResource($resource)
     {
         // TODO: Add more validation criteria.
-
         // If the resource does not start with a leading slash it is not valid.
         if (substr($resource, 0, 1) !== "/") {
             return new WP_Error('badResource', __("The Resource does not start with a leading slash."));
@@ -308,8 +305,9 @@ class Wolfnet_Api_Wp_Client
      * @param  array   $data     Any query string or body data to be include with the request.
      * @return boolean|WP_Error  Is the data valid? true or WP_Error if not
      */
-    private function isValidData( $data = array() )
+    private function isValidData( $data  )
     {
+
         $valid = true;
 
         // Ensure that only simple values are included in the data. ie. strings, numbers, and booleans.
@@ -321,7 +319,10 @@ class Wolfnet_Api_Wp_Client
                     $valid->add('badData', __("Invalid API request argument"), $show);
                 } else {
                     $show = print_r($data, true);
-                    $valid = new WP_Error( 'badData', __("Invalid API request argument"), $show );
+                    $valid = new WP_Error( 'badData', __("Invalid value for the API request \"".$key."\" argument"), $show );
+                    echo '<pre>\$data : '. "\n";
+                    print_r($data);
+                    echo "</pre>";
                 }
             }
         }
@@ -334,12 +335,16 @@ class Wolfnet_Api_Wp_Client
     private function getApiToken( $key, $force = false)
     {
         global $wp_version;
+        $token = "";
         // Unless forced to do otherwise, attempt to retrieve the token from a cache.
-        $transient_key = $this->transientIndexKey . $key;
-        $token = get_transient( $transient_key );
+        if (!$force) {
+            $transient_key = $this->transientIndexKey . $key;
+            $token = get_transient( $transient_key );
+        }
+
         $theme = wp_get_theme();
         //$token = $force ? "" : $this->retrieveApiTokenDataFromCache($key);
-              
+
         // If a token was not retrieved from the cache perform an API request to retrieve a new one.
         if ($token == "") {
             $data = array(
@@ -366,7 +371,8 @@ class Wolfnet_Api_Wp_Client
             if (is_wp_error($auth_response))  return $auth_response;
                     
             // TODO: Validate that the response includes the data we need.
-            $token = $auth_response['responseData']['data']['api_token'];
+            if (isset($auth_response['responseData']['data']['api_token']))
+                $token = $auth_response['responseData']['data']['api_token'];
 
             $ttl = ( strtotime($auth_response['responseData']['data']['expiration']) - strtotime($auth_response['responseData']['data']['date_created']) - 5 );
 
