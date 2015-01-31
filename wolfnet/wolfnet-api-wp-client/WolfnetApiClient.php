@@ -137,6 +137,8 @@ class Wolfnet_Api_Wp_Client
             $api_token =  $this->getApiToken( $key, $reAuth);
             if (is_wp_error($api_token))  return $api_token;
             $headers['api_token'] = $api_token;
+            // with this 'Accept-Encoding' ='gzip, deflate' and using http 1.1 we were having issues
+            // with the data on our test vms. With http 1.0 very early on I was having issues without this.
             $headers['Accept-Encoding'] = 'gzip, deflate';
         }
 
@@ -144,8 +146,9 @@ class Wolfnet_Api_Wp_Client
         $args = array(
             'method'   => $method,
             'headers'  => $headers,
-            'httpversion' => '1.1', // at jason k's request
-            // 'timeout'  => 10, // 10sec
+            // There are some strange issue when using http 1.1 on SOME servers, see comments above
+            // 'httpversion' => '1.1', 
+            'timeout'  => 10, // 10sec
         );
 
         //set up headers, body, and url data as needed

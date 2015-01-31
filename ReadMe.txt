@@ -82,7 +82,7 @@ This css will resolve the layout issue in the "Twenty Fifteen" theme
 == Changelog ==
 
 = 1.7.2 =
-* Fixed "badData" bug. An error when re-authenticating an expired token which was still held as a valid transient
+* Fixed "badData" bug. An error when re-authenticating an expired token which was still held as a valid transient.
 
 = 1.7.1 =
 * Fixed bugs with several search manager search fields
