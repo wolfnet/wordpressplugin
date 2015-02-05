@@ -10,3 +10,4 @@ Desktop.ini
 
 /vendor/
 .vagrant/temp/*
+.vagrant/certs/*

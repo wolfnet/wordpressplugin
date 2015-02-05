@@ -33,11 +33,13 @@
 {
     margin: 1em auto 2em auto;
 
-    &.wolfnet_quickSearch
+    &.wolfnet_quickSearch_basic
     {
-        border:     1px solid #DDD;
-        padding:    8px;
-        position:   relative;
+
+    }
+
+    &.wolfnet_quickSearch_legacy
+    {
         z-index:    10;
         background: -moz-linear-gradient(top,  @gradientColor1 60%, @gradientColor2 100%); /* FF3.6+ */
         background: -webkit-gradient(linear, left top, left bottom, color-stop(60%,@gradientColor1), color-stop(100%,@gradientColor2)); /* Chrome,Safari4+ */
@@ -46,7 +48,14 @@
         background: -ms-linear-gradient(top,  @gradientColor1 60%,@gradientColor2 100%); /* IE10+ */
         background: linear-gradient(to bottom,  @gradientColor1 60%,@gradientColor2 100%); /* W3C */
         filter:     ~'progid:DXImageTransform.Microsoft.gradient(startColorstr="@{gradientColor1}",endColorstr="@{gradientColor2}",GradientType=0)'; /* IE6-9 */
+    }
 
+    &.wolfnet_quickSearch
+    {
+        border:     1px solid #DDD;
+        padding:    8px;
+        position:   relative;
+        
         .wolfnet_widgetTitle
         {
             font-size:   1.5em;
@@ -281,6 +290,12 @@
 
     }
 
+    &.wolfnet_quickSearch_basic
+    {
+        z-index:    0;
+
+    }
+
     &.wolfnet_featuredListings,
     &.wolfnet_listingGrid
     {
@@ -323,6 +338,7 @@
                 {
                     height: @imageHeight;
                     box-shadow:   0 5px 10px hsla(0, 0%, 60%, 0.25);
+                    margin: auto;
                     border: 1px solid #EBEBEB;
                 }
 
@@ -335,7 +351,8 @@
                 display:     block;
             }
 
-            .wolfnet_location
+            .wolfnet_location,
+            .wolfnet_address
             {
                 display: block;
             }
@@ -386,6 +403,10 @@
     &.wolfnet_listingGrid,
     &.wolfnet_propertyList
     {
+        .wolfnet_showhide
+        {
+            clear:both;
+        }
         .mqa-display img
         {
             max-width:none !important;
@@ -639,7 +660,7 @@
     &.wolfnet_listingGrid
     {
         text-align: left;
-        margin:     0 auto 0 auto;
+        margin:     0 auto 2em auto;
 
         .wolfnet_listing
         {

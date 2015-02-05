@@ -72,14 +72,15 @@
                 </select>
                 
                 <p id="mapDisabled" class="mapDisabled" style="display:<?php echo ($mapEnabled ? 'none' : 'block'); ?>">
-                    <span style="color:#FF0000;font-weight:bold;">*</span> 
-
-                <?php if (!$mapEnabled) { ?>
-                <p>
-                    <span style="color:#FF0000;font-weight:bold;">*</span>
-                    <span style="font-style:italic;font-size:0.75em;">Map option is unavailable at this time. To enable this feature, please contact WolfNet sales for more information (612) 342-0088.</span>
+                    <?php if (!$mapEnabled) { ?>
+                        <p>
+                            <span style="color:#FF0000;font-weight:bold;">*</span>
+                            <span style="font-style:italic;font-size:0.75em;">
+                                Map option is unavailable at this time. To enable this feature, please contact WolfNet sales for more information (612) 342-0088.
+                            </span>
+                        </p>
+                    <?php } ?>
                 </p>
-		<?php } ?>
             </td>
         </tr>
 
@@ -111,20 +112,33 @@
             <td>
                 <select id="<?php echo $minprice_wpid; ?>" class="pricerange minprice" name="<?php echo $minprice_wpname; ?>">
                     <option value="">Min. Price</option>
-                    <?php foreach ($prices as $price) { ?>
-                        <option value="<?php echo $price['value']; ?>" <?php selected($minprice, $price['value']); ?>>
-                            <?php echo $price['label']; ?>
-                        </option>
-                    <?php } ?>
+
+                    <?php 
+                    if (is_array($prices) && array_key_exists('max_price', $prices)) {
+                        foreach ($prices['max_price']['options'] as $price) { 
+                            ?>
+                            <option value="<?php echo $price['value']; ?>" <?php selected($minprice, $price['value']); ?>>
+                                <?php echo $price['label']; ?>
+                            </option>
+                        <?php 
+                        } 
+                    }
+                    ?>
+                    
                 </select>
                 <span>to</span>
                 <select id="<?php echo $maxprice_wpid; ?>" class="pricerange maxprice" name="<?php echo $maxprice_wpname; ?>">
                     <option value="">Max. Price</option>
-                    <?php foreach ( $prices as $price ) { ?>
-                        <option value="<?php echo $price['value']; ?>" <?php selected($maxprice, $price['value']); ?>>
-                            <?php echo $price['label']; ?>
-                        </option>
-                    <?php } ?>
+                    <?php 
+                    if (is_array($prices) && array_key_exists('min_price', $prices)) {
+                        foreach ($prices['min_price']['options'] as $price) { ?>
+                            <option value="<?php echo $price['value']; ?>" <?php selected($maxprice, $price['value']); ?>>
+                                <?php echo $price['label']; ?>
+                            </option>
+                        <?php 
+                        }
+                    } 
+                    ?>
                 </select>
             </td>
         </tr>
@@ -135,8 +149,8 @@
                 <input id="<?php echo $city_wpid; ?>" name="<?php echo $city_wpname; ?>"
                     type="text" value="<?php echo $city; ?>" /> <br/>
                 <input id="<?php echo $exactcity_wpid; ?>" name="<?php echo $exactcity_wpname; ?>"
-                       type="checkbox" value="1" checked="checked">
-                Only listings that exactly match this city.            
+                       type="checkbox" value="1" >
+                Only listings that exactly match this city.           
             </td>
         </tr>
 

@@ -1,9 +1,9 @@
 === WolfNet IDX for WordPress  ===
 Author:             WolfNet Technologies, LLC
-Contributors:       wolfnettech, ajmichels, asbaumgart, michaelpidde, tpenney
+Contributors:       wolfnettech, ajmichels, asbaumgart, michaelpidde, blots
 Tags:               idx, mls, homes
 Requires at least:  3.5.1
-Tested up to:       3.9
+Tested up to:       4.1
 Stable tag:         {X.X.X}
 License:            GPLv2 or later
 License URI:        http://www.gnu.org/licenses/gpl-2.0.html
@@ -28,16 +28,19 @@ entered in the "WolfNet >> General Settings" page before any IDX data can be dis
 [Downloading & Activating Your WolfNet WordPress Plugin](https://www.youtube.com/watch?v=hp9ojJdstQM&list=UUWqJ_1djHKa_Uxg_bZ4HiTw)
 
 = WordPress.org Installation =
-1. From the your WordPress websites admin section go to the Plugins page.
+1. From the your WordPress websites Dashboard section go to the Plugins page.
 2. Click "Add New"
 3. Search for "WolfNet".
 4. Click "Install Now" under the "WolfNet IDX for WordPress" plugin.
 5. Click "Activate Plugin"
+6. Go to WolfNet and add your Product Key.
+7. Click "Save".
 
 = Manual Installation =
 1. Place the 'wolfnet' folder in your '/wp-content/plugins/' directory.
 2. Activate "WolfNet IDX for WordPress" from the "Plugins" page in the admin.
-
+3. Go to WolfNet and add your Product Key.
+4. Click "Save".
 
 == Frequently Asked Questions ==
 
@@ -45,16 +48,71 @@ entered in the "WolfNet >> General Settings" page before any IDX data can be dis
 
 [WolfNet WordPress Plugin Advanced Display Options](https://www.youtube.com/watch?v=oAoljC6_yF8&list=UUWqJ_1djHKa_Uxg_bZ4HiTw)
 
+= The "Twenty Fifteen" theme shows some of the disclaimer text is hidden behind the sidebar. How can I fix this? =
+
+The Wolfnet plugin automatically adds the required text to the footer of the site. Unfortunately information in the footer can not always be properly styled by the plugin. Footer formatting issues can be resolved with CSS either by writing the CSS into the sites theme or by adding the CSS to the Wolfnet settings. To add custom CSS to the Wolfnet settings, in your dashboard go to "Wolfnet" > "Edit CSS"  and add css to the "Public CSS" area of the form.
+
+This css will resolve the layout issue in the "Twenty Fifteen" theme
+
+.wolfnet_marketDisclaimer {
+    margin: 4em 0 0 0;
+    padding: 2% 4%;
+    color: #707070;
+    color: rgba(51, 51, 51, 0.7);
+    font-size: 10px;
+    font-size: 1rem;
+    box-shadow: 0 0 1px rgba(0, 0, 0, 0.15);
+}
+
+@media screen and (min-width: 59.6875em) {
+    .wolfnet_marketDisclaimer {
+    border-bottom: 1px solid rgba(0, 0, 0, 0);
+    padding: 2% 4%;
+    background-color: white;
+    float: left;
+    margin: 4em 0 0 35.2941%;
+    width: 58.8235%;
+    }
+}
+
 
 == Screenshots ==
 
 
 == Changelog ==
 
-= 1.6 =
-* Re-architecture of the plugin code splitting into multiple classes based on functionality.
-* Added unit testing.
-* Fixed some JavaScript issues in preparation for multi-market features.
+= 1.7.2 =
+* Fixed "badData" bug. An error when re-authenticating an expired token which was still held as a valid transient.
+
+= 1.7.1 =
+* Fixed bugs with several search manager search fields
+* Fixed issue which caused some fields in widgets to be handled differently than shortcodes 
+* Updated error handling and reporting
+* Added support for custom field search
+* Added alternate Quick Search view
+* Fix several other bugs with Search Manager searches
+
+= 1.7.0 =
+* Incorporated new API improving speed and performance
+* Fixed several small display issues which occur in some themes
+
+= 1.6.4 =
+* Fixed Widget issue when there is no active key
+
+= 1.6.3 =
+* Tested to WordPress 4.0
+* Fixed Quick Search price selection bug 
+
+= 1.6.2 =
+* Fixed minor bug causing notices in rare circumstance 
+
+= 1.6.1 =
+* Fixed key entry bug
+
+= 1.6.0 =
+* Code refactoring 
+* Minor bug fixes
+* Update thumbnail image path
 
 = 1.5.2 =
 * Deprecating support for versions 3.5.0 and below

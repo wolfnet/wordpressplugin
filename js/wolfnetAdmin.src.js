@@ -258,22 +258,11 @@ if ( typeof jQuery != 'undefined' ) {
 			};
 			$.extend( options, clientOptions );
 
-			/* Validate that the key has the appropriate prefix. */
-			var validatePrefix = function ( key )
-			{
-				if ( key.substring( 0, 3 ).toLowerCase() == 'wp_' ) {
-					return true;
-				}
-				else {
-					return false;
-				}
-
-			}
-
 			/* Validate that the key is of an appropriate length. */
 			var validateLength = function ( key )
 			{
-				if ( key.length == 35 ) {
+				// Account for old keys with "wp_" and new keys without that prefix.
+				if ( key.length == 35 || key.length == 32 ) {
 					return true;
 				}
 				else {
@@ -325,7 +314,7 @@ if ( typeof jQuery != 'undefined' ) {
 				var key      = $this.val();
 
 				if ( key != '' ) {
-					if ( validatePrefix( key ) === true && validateLength( key ) === true ) {
+					if ( validateLength( key ) === true ) {
 						$this.trigger( options.validEvent );
 						validateViaApi( this );
 					}

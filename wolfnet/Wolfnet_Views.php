@@ -22,21 +22,11 @@
 class Wolfnet_Views
 {
 
-
-    /* Constructor Method *********************************************************************** */
-    /*   ____                _                   _                                                */
-    /*  / ___|___  _ __  ___| |_ _ __ _   _  ___| |_ ___  _ __                                    */
-    /* | |   / _ \| '_ \/ __| __| '__| | | |/ __| __/ _ \| '__|                                   */
-    /* | |__| (_) | | | \__ \ |_| |  | |_| | (__| || (_) | |                                      */
-    /*  \____\___/|_| |_|___/\__|_|   \__,_|\___|\__\___/|_|                                      */
-    /*                                                                                            */
-    /* ****************************************************************************************** */
-
-    function __construct($wolfnet)
-    {
-        $this->wolfnet = $wolfnet;
-    }
-
+    /**
+     * location of images hosted remotely
+     * @var string
+     */
+    public $remoteImages = '//common.wolfnet.com/wordpress/';
 
     /* Public Methods *************************************************************************** */
     /*  ____        _     _ _        __  __      _   _               _                            */
@@ -56,26 +46,33 @@ class Wolfnet_Views
 
     public function amSettingsPage()
     {
-        ob_start(); settings_fields($this->wolfnet->optionGroup); $formHeader = ob_get_clean();
-        $productKey = json_decode($this->wolfnet->getProductKey());
+        ob_start(); settings_fields($GLOBALS['wolfnet']->optionGroup); $formHeader = ob_get_clean();
+        $productKey = json_decode($GLOBALS['wolfnet']->getProductKey());
 
         // add the market name
         for($i=1; $i<=count($productKey); $i++) {
-            $productKey[$i-1]->market = strtoupper($this->wolfnet->api->getMarketName($productKey[$i-1]->key));
+            // $productKey[$i-1]->market = strtoupper($GLOBALS['wolfnet']->api->getMarketName($productKey[$i-1]->key));
+            $key = $productKey[$i-1]->key;
+            $market = $GLOBALS['wolfnet']->getMarketName($key);
+            
+            if (!is_wp_error($market)) {
+                $productKey[$i-1]->market = strtoupper( $market );
+            }
+            // $productKey[$i-1]->market = strtoupper( $GLOBALS['wolfnet']->getMarketName( $productKey[$i-1]->key ) );
         }
 
-        include $this->wolfnet->dir . '/template/adminSettings.php';
+        include $GLOBALS['wolfnet']->dir . '/template/adminSettings.php';
 
     }
 
 
     public function amEditCssPage()
     {
-        ob_start(); settings_fields($this->wolfnet->CssOptionGroup); $formHeader = ob_get_clean();
+        ob_start(); settings_fields($GLOBALS['wolfnet']->CssOptionGroup); $formHeader = ob_get_clean();
         $publicCss = $this->getPublicCss();
-        $adminCss = $this->wolfnet->admin->getAdminCss();
+        $adminCss = $GLOBALS['wolfnet']->admin->getAdminCss();
 
-        include $this->wolfnet->dir .'/template/adminEditCss.php';
+        include $GLOBALS['wolfnet']->dir .'/template/adminEditCss.php';
 
     }
 
@@ -83,19 +80,19 @@ class Wolfnet_Views
     public function amSearchManagerPage()
     {
         $key = (array_key_exists("keyid", $_REQUEST)) ? $_REQUEST["keyid"] : "1";
-        $productkey = $this->wolfnet->getProductKeyById($key);
+        $productkey = $GLOBALS['wolfnet']->getProductKeyById($key);
 
-        if (!$this->wolfnet->api->productKeyIsValid($productkey)) {
-            include $this->wolfnet->dir .'/template/invalidProductKey.php';
+        if (!$GLOBALS['wolfnet']->productKeyIsValid($productkey)) {
+            include $GLOBALS['wolfnet']->dir .'/template/invalidProductKey.php';
             return;
         }
         else {
 
-            $searchForm = ($this->wolfnet->smHttp !== null) ? $this->wolfnet->smHttp['body'] : '';
-            $markets = json_decode($this->wolfnet->getProductKey());
+            $searchForm = ($GLOBALS['wolfnet']->smHttp !== null) ? $GLOBALS['wolfnet']->smHttp['body'] : '';
+            $markets = json_decode($GLOBALS['wolfnet']->getProductKey());
             $selectedKey = $key;
-            $url = $this->wolfnet->url;
-            include $this->wolfnet->dir .'/template/adminSearchManager.php';
+            $url = $GLOBALS['wolfnet']->url;
+            include $GLOBALS['wolfnet']->dir .'/template/adminSearchManager.php';
 
         }
 
@@ -105,15 +102,16 @@ class Wolfnet_Views
 
     public function amSupportPage()
     {
-        $imgdir = $this->wolfnet->url . 'img/';
-        include $this->wolfnet->dir .'/template/adminSupport.php';
+        // $imgdir = $GLOBALS['wolfnet']->url . 'img/';
+        $imgdir = $this->remoteImages;
+        include $GLOBALS['wolfnet']->dir .'/template/adminSupport.php';
 
     }
 
 
     public function getPublicCss()
     {
-        return get_option(trim($this->wolfnet->publicCssOptionKey));
+        return get_option(trim($GLOBALS['wolfnet']->publicCssOptionKey));
     }
 
 
@@ -123,7 +121,7 @@ class Wolfnet_Views
      */
     public function adminPrintStyles()
     {
-        $adminCss = $this->wolfnet->getAdminCss();
+        $adminCss = $GLOBALS['wolfnet']->getAdminCss();
         echo '<style>' . $adminCss . '</style>';
 
     }
@@ -140,7 +138,7 @@ class Wolfnet_Views
     {
         $defaultArgs = array(
             'instance_id'     => str_replace('.', '', uniqid('wolfnet_featuredListing_')),
-            'markets'         => json_decode($this->wolfnet->getProductKey()),
+            'markets'         => json_decode($GLOBALS['wolfnet']->getProductKey()),
             'selectedKey'     => (array_key_exists("keyid", $_REQUEST)) ? $_REQUEST["keyid"] : "1",
             );
 
@@ -155,7 +153,7 @@ class Wolfnet_Views
     {
         $defaultArgs = array(
             'instance_id'      => str_replace('.', '', uniqid('wolfnet_listingGrid_')),
-            'markets'          => json_decode($this->wolfnet->getProductKey()),
+            'markets'          => json_decode($GLOBALS['wolfnet']->getProductKey()),
             'keyid'            => ''
             );
 
@@ -170,8 +168,10 @@ class Wolfnet_Views
 
     public function quickSearchOptionsFormView(array $args=array())
     {
-        $markets = json_decode($this->wolfnet->getProductKey());
+        $markets = json_decode($GLOBALS['wolfnet']->getProductKey());
         $keyids = array();
+        $view = '';
+
         foreach($markets as $market) {
             array_push($keyids, $market->id);
         }
@@ -179,6 +179,7 @@ class Wolfnet_Views
             'instance_id' => str_replace('.', '', uniqid('wolfnet_quickSearch_')),
             'markets'     => $markets,
             'keyids'      => $keyids,
+            'view'        => $view,
             );
 
 
@@ -248,12 +249,14 @@ class Wolfnet_Views
     public function propertyListView(array $args=array())
     {
         if(!array_key_exists('keyid', $args)) {
-            $args['productkey'] = $this->wolfnet->getDefaultProductKey();
+            $args['productkey'] = $GLOBALS['wolfnet']->getDefaultProductKey();
         } else {
-            $args['productkey'] = $this->wolfnet->getProductKeyById($args["keyid"]);
+            $args['productkey'] = $GLOBALS['wolfnet']->getProductKeyById($args["keyid"]);
         }
-        $args['itemsPerPage'] = $this->wolfnet->getItemsPerPage();
-        $args['sortOptions'] = $this->wolfnet->api->getSortOptions($args['productkey']);
+        $args['itemsPerPage'] = $GLOBALS['wolfnet']->getItemsPerPage();
+
+        $data = $GLOBALS['wolfnet']->apin->sendRequest($args['productkey'], '/search_criteria/sort_option');
+        $args['sortOptions'] = $data['responseData']['data']['options'];
 
         foreach ($args as $key => $item) {
             $args[$key] = apply_filters('wolfnet_propertyListView_' . $key, $item);
@@ -271,27 +274,33 @@ class Wolfnet_Views
     {
 
         if(!array_key_exists('keyid', $args)) {
-            $args['productkey'] = $this->wolfnet->getDefaultProductKey();
+            $args['productkey'] = $GLOBALS['wolfnet']->getDefaultProductKey();
         } else {
-            $args['productkey'] = $this->wolfnet->getProductKeyById($args["keyid"]);
+            $args['productkey'] = $GLOBALS['wolfnet']->getProductKeyById($args["keyid"]);
         }
-        $args['itemsPerPage'] = $this->wolfnet->getItemsPerPage();
-        $args['sortOptions'] = $this->wolfnet->api->getSortOptions($args['productkey']);
+
+        $args['itemsPerPage'] = $GLOBALS['wolfnet']->getItemsPerPage();
+
+        // $args['sortOptions'] = $GLOBALS['wolfnet']->apin->sendRequest($args['productkey'], '/search_criteria/sort_option');
+        $data = $GLOBALS['wolfnet']->apin->sendRequest($args['productkey'], '/search_criteria/sort_option');
+        $args['sortOptions'] = $data['responseData']['data']['options'];
 
         foreach ($args as $key => $item) {
             $args[$key] = apply_filters('wolfnet_listingGridView_' . $key, $item);
         }
-
-        ob_start();
-        echo $this->parseTemplate('template/listingGrid.php', $args);
-
-        return apply_filters('wolfnet_listingGridView', ob_get_clean());
+  
+        return apply_filters('wolfnet_listingGridView', $this->parseTemplate('template/listingGrid.php', $args));
 
     }
 
 
     public function quickSearchView(array $args=array())
     {
+        // array containing possible values for "view" arg
+        $views = array( "basic" , "legacy");
+        //set up a custom css class for the wrapper. default "wolfnet_quickSearch_legacy"
+        $args['viewclass'] = "wolfnet_quickSearch_" . ( in_array($args['view'], $views ) ? $args['view'] : "legacy");
+
         foreach ($args as $key => $item) {
             $args[$key] = apply_filters( 'wolfnet_quickSearchView_' . $key, $item );
         }
@@ -307,8 +316,9 @@ class Wolfnet_Views
     public function mapView($listingsData, $productKey=null)
     {
         ob_start();
-        $args = $this->wolfnet->api->getMapParameters($listingsData, $productKey);
-        $args["url"] = $this->wolfnet->url;
+        //$args = $GLOBALS['wolfnet']->api->getMapParameters($listingsData, $productKey);
+        $args = $GLOBALS['wolfnet']->getMapParameters($listingsData, $productKey);
+        $args["url"] = $GLOBALS['wolfnet']->url;
 
         echo $this->parseTemplate('template/map.php', $args);
 
@@ -346,6 +356,15 @@ class Wolfnet_Views
 
     }
 
+    public function errorView($error)
+    {
+
+        ob_start();
+        include $GLOBALS['wolfnet']->dir .'/template/error.php';
+        return ob_get_clean();
+
+    }
+
     public function houseOver($args) 
     {
 
@@ -364,11 +383,10 @@ class Wolfnet_Views
 
     private function parseTemplate($template, array $vars=array())
     {
+        
         extract($vars, EXTR_OVERWRITE);
         ob_start();
-
-        include $this->wolfnet->dir .'/'. $template;
-
+        include $GLOBALS['wolfnet']->dir .'/'. $template;
         return ob_get_clean();
 
     }

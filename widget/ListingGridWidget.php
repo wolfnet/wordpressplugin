@@ -43,6 +43,8 @@ class Wolfnet_ListingGridWidget extends Wolfnet_AbstractWidget
 
     public function widget($args, $instance)
     {
+
+        $instance['maxrows'] = $instance['maxresults'];
         echo $args['before_widget'];
         echo $this->plugin->listingGrid($this->collectData($args, $instance));
         echo $args['after_widget'];
@@ -127,6 +129,8 @@ class Wolfnet_ListingGridWidget extends Wolfnet_AbstractWidget
 
         if ($data['mode'] == 'advanced') {
             $criteriaArray = $this->convertCriteriaJsonToArray($data['criteria']);
+            // array keys need to be lowercase
+            $criteriaArray = array_change_key_case($criteriaArray);
             $data = array_merge($data, $criteriaArray);
         }
 

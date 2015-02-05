@@ -43,14 +43,6 @@ class Wolfnet_Admin extends Wolfnet
     public $adminCssOptionKey = "wolfnetCss_adminCss";
 
 
-    /**
-     * This property defines a the request parameter which is used to determine if the values which
-     * are cached in the Transient API should be cleared.
-     * @var string
-     */
-    protected $cacheFlag = '-wolfnet-cache';
-
-
     /* Constructor Method *********************************************************************** */
     /*   ____                _                   _                                                */
     /*  / ___|___  _ __  ___| |_ _ __ _   _  ___| |_ ___  _ __                                    */
@@ -69,21 +61,6 @@ class Wolfnet_Admin extends Wolfnet
     {
         // sets url
         $this->setUrl();
-
-        $this->wolfnet = $wolfnet;
-
-        $this->api = $wolfnet->api;
-        $this->views = $wolfnet->views;
-
-        register_activation_hook( $this->pluginFile, array($this, 'activate' ));
-        register_deactivation_hook( $this->pluginFile, array($this, 'deactivate' ));
-
-        // Clear cache if url param exists.
-        $cacheParamExists = array_key_exists($this->cacheFlag, $_REQUEST);
-        $cacheParamClear = ($cacheParamExists) ? ($_REQUEST[$this->cacheFlag] == 'clear') : false;
-        if ($cacheParamExists && $cacheParamClear) {
-            $this->clearTransients();
-        }
 
         // Register admin only actions.
         $this->addAction(array(
@@ -111,32 +88,6 @@ class Wolfnet_Admin extends Wolfnet
     /* |_|    \__,_|_.__/|_|_|\___| |_|  |_|\___|\__|_| |_|\___/ \__,_|___/                       */
     /*                                                                                            */
     /* ****************************************************************************************** */
-
-    public function activate()
-    {
-        // error_log("activating");
-        // Check for legacy transient data and remove it if it exists.
-        $indexkey = 'wppf_cache_metadata';
-        $metaData = get_transient($indexkey);
-
-        if (is_array($metaData)) {
-            foreach ($metaData as $key => $data) {
-                delete_transient($key);
-            }
-        }
-
-        delete_transient($indexkey);
-
-    }
-
-
-    public function deactivate()
-    {
-        // error_log("deactivating");
-        // Clear out all transient data as it is purely for caching and performance.
-        $this->deleteTransientIndex();
-
-    }
 
 
     /**
@@ -205,7 +156,7 @@ class Wolfnet_Admin extends Wolfnet
         $richEditing  = get_user_option('rich_editing');
 
         // Register Ajax Actions
-        $this->registerAdminAjaxActions();
+        $GLOBALS['wolfnet']->registerAdminAjaxActions();
 
         /* If we are serving up the search manager page we need to get the search manager HTML from
          * the MLSFinder server now so that we can set cookies. */
@@ -213,12 +164,12 @@ class Wolfnet_Admin extends Wolfnet
         $pageIsSM = ($pageKeyExists) ? ($_REQUEST['page']=='wolfnet_plugin_search_manager') : false;
         $key = (array_key_exists("keyid", $_REQUEST)) ? $_REQUEST["keyid"] : "1";
         $productKey = $this->getProductKeyById($key);
-        if(!$this->wolfnet->api->productKeyIsValid($productKey)) {
+        if(!$GLOBALS['wolfnet']->productKeyIsValid($productKey)) {
             $productKey = null;
         }
 
         if ($pageKeyExists && $pageIsSM) {
-            $this->wolfnet->smHttp = $this->searchManagerHtml($productKey);
+            $GLOBALS['wolfnet']->smHttp = $GLOBALS['wolfnet']->searchManagerHtml($productKey);
         }
 
     }
@@ -235,13 +186,6 @@ class Wolfnet_Admin extends Wolfnet
 
         do_action($this->preHookPrefix . 'createAdminPages'); // Legacy hook
 
-        // echo " URL: ". $this->url;
-        //error_log ("Admin  adminMenu tom: ". $this->tom );
-
-        // error_log ("Admin  adminMenu testUrl(): ". $this->testUrl() );
-
-        // error_log ("Admin  adminMenu url: ". $this->url );
-
         $pgs = array(
             array(
                 'title' => 'WolfNet <span class="wolfnet_sup">&reg;</span>',
@@ -251,22 +195,22 @@ class Wolfnet_Admin extends Wolfnet
             array(
                 'title' => 'General Settings',
                 'key'   => 'wolfnet_plugin_settings',
-                'cb'    => array(&$this->wolfnet->views, 'amSettingsPage')
+                'cb'    => array(&$GLOBALS['wolfnet']->views, 'amSettingsPage')
                 ),
             array(
                 'title' => 'Edit CSS',
                 'key'   => 'wolfnet_plugin_css',
-                'cb'    => array(&$this->wolfnet->views, 'amEditCssPage')
+                'cb'    => array(&$GLOBALS['wolfnet']->views, 'amEditCssPage')
             ),
             array(
                 'title' => 'Search Manager',
                 'key'   => 'wolfnet_plugin_search_manager',
-                'cb'    => array(&$this->wolfnet->views, 'amSearchManagerPage')
+                'cb'    => array(&$GLOBALS['wolfnet']->views, 'amSearchManagerPage')
                 ),
             array(
                 'title' => 'Support',
                 'key'   => 'wolfnet_plugin_support',
-                'cb'    => array(&$this->wolfnet->views, 'amSupportPage')
+                'cb'    => array(&$GLOBALS['wolfnet']->views, 'amSupportPage')
                 ),
             );
 
@@ -314,37 +258,5 @@ class Wolfnet_Admin extends Wolfnet
     {
         return get_option($this->adminCssOptionKey);
     }
-
-
-    /* PRIVATE METHODS ************************************************************************** */
-    /*  ____       _            _         __  __      _   _               _                       */
-    /* |  _ \ _ __(_)_   ____ _| |_ ___  |  \/  | ___| |_| |__   ___   __| |___                   */
-    /* | |_) | '__| \ \ / / _` | __/ _ \ | |\/| |/ _ \ __| '_ \ / _ \ / _` / __|                  */
-    /* |  __/| |  | |\ V / (_| | ||  __/ | |  | |  __/ |_| | | | (_) | (_| \__ \                  */
-    /* |_|   |_|  |_| \_/ \__,_|\__\___| |_|  |_|\___|\__|_| |_|\___/ \__,_|___/                  */
-    /*                                                                                            */
-    /* ****************************************************************************************** */
-
-    private function deleteTransientIndex()
-    {
-        // error_log("deleteTransientIndexing");
-        $this->clearTransients();
-        delete_transient($this->wolfnet->api->transientIndexKey);
-
-    }
-
-
-    private function clearTransients()
-    {
-        $index = $this->wolfnet->api->transientIndex();
-
-        foreach ($index as $key => $value) {
-            delete_transient($key);
-        }
-
-        $this->wolfnet->api->transientIndex(array());
-
-    }
-
 
 }
