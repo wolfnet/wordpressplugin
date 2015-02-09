@@ -958,7 +958,13 @@ class Wolfnet
         // used by pagination dropdown "per page" 
         if (!empty($_REQUEST['numrows'])) {
             $_REQUEST['maxrows'] = $_REQUEST['numrows'];
-        } 
+        }
+
+        // Convert 'zipcode' to 'zip_code' for new API
+        if (array_key_exists('zipcode', $criteria)) {
+            $criteria['zip_code'] = $criteria['zipcode'];
+            unset($criteria['zipcode']);
+        }
 
         $qdata = $this->prepareListingQuery($_REQUEST);
 
@@ -1208,6 +1214,12 @@ class Wolfnet
             $criteria['maxrows'] = $criteria['maxresults'];
         }
 
+        // Convert 'zipcode' to 'zip_code' for new API
+        if (array_key_exists('zipcode', $criteria)) {
+            $criteria['zip_code'] = $criteria['zipcode'];
+            unset($criteria['zipcode']);
+        }
+
         $qdata = $this->prepareListingQuery($criteria);
 
         $data = $this->apin->sendRequest($criteria['key'], '/listing', 'GET', $qdata);   
@@ -1354,7 +1366,7 @@ class Wolfnet
             'maxrows'     => 50, 
             'mode'        => 'advanced',
             'savedsearch' => '',
-            //'zipcode'     => '',
+            'zipcode'     => '',
             'city'        => '',
             'exactcity'   => 0,
             'minprice'    => '',
@@ -1381,7 +1393,7 @@ class Wolfnet
             'maxrows'     => 50, 
             'mode'        => 'advanced',
             'savedsearch' => '',
-            //'zipcode'     => '',
+            'zipcode'     => '',
             'city'        => '',
             'exactcity'   => 0,
             'minprice'    => '',
