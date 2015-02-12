@@ -402,9 +402,6 @@ class Wolfnet_Api_Wp_Client
                 } else {
                     $show = print_r($data, true);
                     $valid = new WP_Error('badData', __("Invalid value for the API request \"".$key."\" argument"), $show);
-                    echo '<pre>\$data : '. "\n";
-                    print_r($data);
-                    echo "</pre>";
                 }
 
             }
