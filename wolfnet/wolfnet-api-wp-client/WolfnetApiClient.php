@@ -457,6 +457,11 @@ class Wolfnet_Api_Wp_Client
                 return $auth_response;
             }
 
+            // Check that the response from the API was valid.
+            if (!is_array($auth_response) || !array_key_exists('responseData', $auth_response) || !is_array($auth_response['responseData']) || !array_key_exists('data', $auth_response['responseData'])) {
+                return new WP_Error('wnt.InvalidApiResponse', __('The response from the API was not valid.'), $auth_response);
+            }
+
             // TODO: Validate that the response includes the data we need.
             if (isset($auth_response['responseData']['data']['api_token'])) {
                 $token = $auth_response['responseData']['data']['api_token'];
