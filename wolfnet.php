@@ -1010,7 +1010,13 @@ class Wolfnet
     public function remoteGetMarketName()
     {
         $productKey = $_REQUEST["productkey"];
-        echo json_encode(strtoupper($this->getMarketName($productKey)));
+        $marketName = $this->getMarketName($productKey);
+
+        if (is_wp_error($marketName)) {
+            echo '';
+        } else {
+            echo json_encode(strtoupper($marketName));
+        }
 
         die;
     }
