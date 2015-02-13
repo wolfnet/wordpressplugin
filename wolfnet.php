@@ -481,22 +481,25 @@ class Wolfnet
      * @return string             The HTML retrieved from the MLSFinder server.
      */
     public function searchManagerHtml($productKey=null)
-    {
+    {       
         global $wp_version;
+
         $baseUrl = $this->getBaseUrl($productKey);
-
-        if (is_wp_error($baseUrl)) return $this->getWpError($baseUrl);
-
-        $maptracksEnabled = $this->getMaptracksEnabled($productKey);
+        //$maptracksEnabled = $this->getMaptracksEnabled($productKey);
+            
+        //unfortunately needed for now since a wp_error object may be returned
+        //TODO: log/handle exceptions thrown? so we can better assess and intelligently handle
+        if (is_wp_error($baseUrl)) {
+            throw new exception('API error retrieving baseUrl.');
+        }
 
         if (!strstr($baseUrl, 'index.cfm')) {
             if (substr($baseUrl, strlen($baseUrl) - 1) != '/') {
                 $baseUrl .= '/';
             }
-
             $baseUrl .= 'index.cfm';
-
         }
+
 
         /* commenting out map mode in search manager until we better figure out session constraints..
         if (!array_key_exists('search_mode', $_GET)) {
@@ -544,17 +547,15 @@ class Wolfnet
                 $http['body'] = $this->removeJqueryFromHTML($http['body']);
 
                 return $http;
-
             }
             else {
-                $http['body'] = '';
-                return $http;
-            }
 
+                throw new exception('Non-200 Response Code.');
+            }
         }
         else {
-            return array('body' => '');
 
+            throw new exception('WordPress error on wp_remote_get call.');
         }
 
     }
@@ -2378,7 +2379,7 @@ class Wolfnet
      */
     // private function getWntSiteBaseUrl($productKey=null )
     private function getBaseUrl($productKey=null )
-    {
+    {    
         if($productKey == null)
             $productKey = $this->getDefaultProductKey();
 
