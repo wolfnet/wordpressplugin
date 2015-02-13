@@ -394,7 +394,7 @@ class Wolfnet_Api_Wp_Client
         // Ensure that only simple values are included in the data. ie. strings, numbers, and booleans.
         foreach ($data as $key => $value) {
 
-            if (!is_scalar($value)) {
+            if ($value != null && !is_scalar($value)) {
 
                 if (is_wp_error($valid)) { // if we already have error add a message to it
                     $show = print_r($data, true);
