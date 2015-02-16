@@ -93,7 +93,7 @@ This css will resolve the layout issue in the "Twenty Fifteen" theme
 
 = 1.7.1 =
 * Fixed bugs with several search manager search fields
-* Fixed issue which caused some fields in widgets to be handled differently than shortcodes 
+* Fixed issue which caused some fields in widgets to be handled differently than shortcodes
 * Updated error handling and reporting
 * Added support for custom field search
 * Added alternate Quick Search view
@@ -108,16 +108,16 @@ This css will resolve the layout issue in the "Twenty Fifteen" theme
 
 = 1.6.3 =
 * Tested to WordPress 4.0
-* Fixed Quick Search price selection bug 
+* Fixed Quick Search price selection bug
 
 = 1.6.2 =
-* Fixed minor bug causing notices in rare circumstance 
+* Fixed minor bug causing notices in rare circumstance
 
 = 1.6.1 =
 * Fixed key entry bug
 
 = 1.6.0 =
-* Code refactoring 
+* Code refactoring
 * Minor bug fixes
 * Update thumbnail image path
 
