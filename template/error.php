@@ -46,9 +46,9 @@ $codes = $error->get_error_codes()
             // if we don't have any data with this error.
             $msg = $error->get_error_message($code);
             $msg_long = "$code : $msg";
-            $err_id = $code;   
+            $err_id = $code;
         }
-    
+
         echo "<span>$msg</span><br>";
         echo '<a>More Info</a>';
         echo '<div class="wolfnet_more" style="display:none;">';
