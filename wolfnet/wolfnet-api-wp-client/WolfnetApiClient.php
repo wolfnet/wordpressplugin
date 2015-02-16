@@ -402,9 +402,6 @@ class Wolfnet_Api_Wp_Client
                 } else {
                     $show = print_r($data, true);
                     $valid = new WP_Error('badData', __("Invalid value for the API request \"".$key."\" argument"), $show);
-                    echo '<pre>\$data : '. "\n";
-                    print_r($data);
-                    echo "</pre>";
                 }
 
             }
@@ -458,6 +455,11 @@ class Wolfnet_Api_Wp_Client
             // check if valid response
             if (is_wp_error($auth_response)) {
                 return $auth_response;
+            }
+
+            // Check that the response from the API was valid.
+            if (!is_array($auth_response) || !array_key_exists('responseData', $auth_response) || !is_array($auth_response['responseData']) || !array_key_exists('data', $auth_response['responseData'])) {
+                return new WP_Error('wnt.InvalidApiResponse', __('The response from the API was not valid.'), $auth_response);
             }
 
             // TODO: Validate that the response includes the data we need.
