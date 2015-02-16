@@ -81,6 +81,13 @@ This css will resolve the layout issue in the "Twenty Fifteen" theme
 
 == Changelog ==
 
+= 1.7.3 =
+* Adding some simple styling to error messages to make them a bit more presentable.
+* Updating listing branding to use the new API fields.
+* Fixing bug causing error to display in admin when API is not available.
+* Fixing bug resulting in bad request Ajax request.
+* Removing inappropriate output (probably left over from some debugging), causing "headers set" error.
+
 = 1.7.2 =
 * Fixed "badData" bug. An error when re-authenticating an expired token which was still held as a valid transient.
 
