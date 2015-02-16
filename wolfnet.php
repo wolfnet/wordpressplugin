@@ -1448,8 +1448,7 @@ class Wolfnet
     public function quickSearch(array $criteria)
     {
 
-        if( array_key_exists("keyids", $criteria) && !empty($criteria['keyids']) ) {
-
+        if (array_key_exists("keyids", $criteria) && !empty($criteria['keyids'])) {
             $keyids = explode(",", $criteria["keyids"]);
         } else {
             $keyids[0] = 1;
