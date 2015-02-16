@@ -169,11 +169,7 @@ class Wolfnet_Admin extends Wolfnet
         }
 
         if ($pageKeyExists && $pageIsSM) {
-            try {
-                $GLOBALS['wolfnet']->smHttp = $GLOBALS['wolfnet']->searchManagerHtml($productKey);
-            } catch (Exception $e) {     
-                $GLOBALS['wolfnet']->smHttp = array('body' => $this->getSearchMgrUnavailMsg());
-            }
+            $GLOBALS['wolfnet']->smHttp = $GLOBALS['wolfnet']->searchManagerHtml($productKey);
         }
 
     }
@@ -261,12 +257,6 @@ class Wolfnet_Admin extends Wolfnet
     public function getAdminCss()
     {
         return get_option($this->adminCssOptionKey);
-    }
-
-
-    private function getSearchMgrUnavailMsg()
-    {
-        return 'Search Manager is currently unavailable. Please try again later.';
     }
 
 

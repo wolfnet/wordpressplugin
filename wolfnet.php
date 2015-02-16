@@ -487,10 +487,9 @@ class Wolfnet
         $baseUrl = $this->getBaseUrl($productKey);
         //$maptracksEnabled = $this->getMaptracksEnabled($productKey);
             
-        //unfortunately needed for now since a wp_error object may be returned
-        //TODO: log/handle exceptions thrown? so we can better assess and intelligently handle
         if (is_wp_error($baseUrl)) {
-            throw new exception('API error retrieving baseUrl.');
+            $http['body'] = $this->getWpError($baseUrl);     
+            return $http;
         }
 
         if (!strstr($baseUrl, 'index.cfm')) {
@@ -549,13 +548,13 @@ class Wolfnet
                 return $http;
             }
             else {
-
-                throw new exception('Non-200 Response Code.');
+                //null returned on non-200; wperrors returned in all other error handling in this fctn
+                return array('body' => '');
             }
         }
         else {
-
-            throw new exception('WordPress error on wp_remote_get call.');
+            $http['body'] = $this->getWpError($http);     
+            return $http;
         }
 
     }

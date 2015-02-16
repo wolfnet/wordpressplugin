@@ -79,7 +79,6 @@ class Wolfnet_Api_Wp_Client
         $data = array(),
         $headers = array()
     ) {
-        //TODO: no WP_ERROR returns here;  better error handling
         return $this->rawRequest($key, $resource, $method, $data, $headers);
     }
 
