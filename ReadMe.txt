@@ -81,12 +81,19 @@ This css will resolve the layout issue in the "Twenty Fifteen" theme
 
 == Changelog ==
 
+= 1.7.3 =
+* Adding some simple styling to error messages to make them a bit more presentable.
+* Updating listing branding to use the new API fields.
+* Fixing bug causing error to display in admin when API is not available.
+* Fixing bug resulting in bad request Ajax request.
+* Removing inappropriate output (probably left over from some debugging), causing "headers set" error.
+
 = 1.7.2 =
 * Fixed "badData" bug. An error when re-authenticating an expired token which was still held as a valid transient.
 
 = 1.7.1 =
 * Fixed bugs with several search manager search fields
-* Fixed issue which caused some fields in widgets to be handled differently than shortcodes 
+* Fixed issue which caused some fields in widgets to be handled differently than shortcodes
 * Updated error handling and reporting
 * Added support for custom field search
 * Added alternate Quick Search view
@@ -101,16 +108,16 @@ This css will resolve the layout issue in the "Twenty Fifteen" theme
 
 = 1.6.3 =
 * Tested to WordPress 4.0
-* Fixed Quick Search price selection bug 
+* Fixed Quick Search price selection bug
 
 = 1.6.2 =
-* Fixed minor bug causing notices in rare circumstance 
+* Fixed minor bug causing notices in rare circumstance
 
 = 1.6.1 =
 * Fixed key entry bug
 
 = 1.6.0 =
-* Code refactoring 
+* Code refactoring
 * Minor bug fixes
 * Update thumbnail image path
 
