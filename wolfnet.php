@@ -483,6 +483,7 @@ class Wolfnet
     public function searchManagerHtml($productKey=null)
     {       
         global $wp_version;
+        $http = array();
 
         $baseUrl = $this->getBaseUrl($productKey);
         //$maptracksEnabled = $this->getMaptracksEnabled($productKey);
