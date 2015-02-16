@@ -1461,15 +1461,46 @@ class Wolfnet
             $productKey = $this->getDefaultProductKey();
         }
 
+        if (is_wp_error($productKey)) {
+            return $this->getWpError($productKey);
+        }
+
+        // Get data
+        $prices = $this->getPrices($productKey);
+        $beds = $this->getBeds();
+        $baths = $this->getBaths();
+        $formAction = $this->getBaseUrl($productKey);
+        $markets = $this->getProductKey();
+
+        if (is_wp_error($prices)) {
+            return $this->getWpError($prices);
+        }
+
+        if (is_wp_error($beds)) {
+            return $this->getWpError($beds);
+        }
+
+        if (is_wp_error($baths)) {
+            return $this->getWpError($baths);
+        }
+
+        if (is_wp_error($formAction)) {
+            return $this->getWpError($formAction);
+        }
+
+        if (is_wp_error($markets)) {
+            return $this->getWpError($markets);
+        }
+
         $vars = array(
             'instance_id'  => str_replace('.', '', uniqid('wolfnet_quickSearch_')),
             'siteUrl'      => site_url(),
             'keyids'       => $keyids,
-            'markets'      => json_decode($this->getProductKey()),
-            'prices'       => $this->getPrices($productKey),
-            'beds'         => $this->getBeds(),
-            'baths'        => $this->getBaths(),
-            'formAction'   => $this->getBaseUrl($productKey)
+            'markets'      => json_decode($markets),
+            'prices'       => $prices,
+            'beds'         => $beds,
+            'baths'        => $baths,
+            'formAction'   => $formAction,
             );
 
         $args = $this->convertDataType(array_merge($criteria, $vars));
