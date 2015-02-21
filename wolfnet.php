@@ -28,6 +28,6 @@
  *                Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-require_once dirname(__FILE__) . '/wolfnet/Wolfnet_Plugin.php';
+require_once dirname(__FILE__) . '/bootstrap/autoload.php';
 
 $GLOBALS['wolfnet'] = new Wolfnet();

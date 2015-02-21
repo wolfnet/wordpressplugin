@@ -136,12 +136,6 @@ class Wolfnet
         //$this->url = plugin_dir_url(__FILE__);
         $this->setUrl();
 
-        // Set the Autoloader Method
-        spl_autoload_register(array( $this, 'autoload'));
-
-        // TODO: fix or abandon autoloader. change naming convention
-        $file = $this->dir . '/wolfnet/wolfnet-api-wp-client/WolfnetApiClient.php';
-        include_once($file);
         $this->apin = new Wolfnet_Api_Wp_Client();
         $this->views = new Wolfnet_Views();
         if (is_admin()) {
@@ -1974,26 +1968,6 @@ class Wolfnet
     /* |_|   |_|  |_| \_/ \__,_|\__\___| |_|  |_|\___|\__|_| |_|\___/ \__,_|___/                  */
     /*                                                                                            */
     /* ****************************************************************************************** */
-
-    /**
-     * This method is used to load additional classes as needed. defined in the construct by
-     * spl_autoload_register().
-     * @param  string $class The name of the class to load. same as the name of the file in the
-     * classes directory
-     * @return bool success/fail
-     */
-    private function autoload($class)
-    {
-        $filename = $class . '.php';
-        $file = $this->dir . '/wolfnet/' . $filename;
-        if (file_exists($file))
-        {
-            include $file;
-            return true;
-        }
-
-        return false;
-    }
 
 
     private function isSavedKey($find) {
