@@ -192,7 +192,7 @@ class Wolfnet_Admin extends Wolfnet
             array(
                 'title' => 'WolfNet <span class="wolfnet_sup">&reg;</span>',
                 'key'   => 'wolfnet_plugin_settings',
-                'icon'  => $this->url . '/img/wp_wolfnet_nav.png',
+                'icon'  => $this->url . 'img/wp_wolfnet_nav.png',
                 ),
             array(
                 'title' => 'General Settings',

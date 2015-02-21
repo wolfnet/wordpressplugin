@@ -133,7 +133,6 @@ class Wolfnet
     {
         $this->pluginFile = dirname(dirname(__FILE__)) . '/wolfnet.php';
         $this->dir = dirname($this->pluginFile);
-        //$this->url = plugin_dir_url(__FILE__);
         $this->setUrl();
 
         $this->apin = new Wolfnet_Api_Wp_Client();
@@ -1876,7 +1875,7 @@ class Wolfnet
 
     protected function setUrl()
     {
-        $this->url = plugin_dir_url($this->pluginFile);
+        $this->url = plugin_dir_url($this->pluginFile) . 'public/';
     }
 
     protected function addAction($action, $callable=null, $priority=null)

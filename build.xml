@@ -8,8 +8,8 @@
     <property name="dir.ant"   value="${basedir}/.ant" />
     <property name="dir.build" value="${basedir}/build" />
     <property name="dir.dist"  value="${basedir}/dist" />
-    <property name="dir.js"    value="js" />
-    <property name="dir.css"   value="css" />
+    <property name="dir.js"    value="public/js" />
+    <property name="dir.css"   value="public/css" />
 
     <property name="tool.yuicompressor" value="${dir.ant}/yuicompressor-2.4.5.jar"  />
     <property name="tool.closure"       value="${dir.ant}/closure/compiler.jar" />
