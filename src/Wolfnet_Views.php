@@ -54,7 +54,7 @@ class Wolfnet_Views
     /*                                                                                            */
     /* ****************************************************************************************** */
 
-    public function amSettingsPage()
+    public function amSettingsPage($echo=true)
     {
         ob_start(); settings_fields($GLOBALS['wolfnet']->optionGroup); $formHeader = ob_get_clean();
         $productKey = json_decode($GLOBALS['wolfnet']->getProductKey());
@@ -71,50 +71,78 @@ class Wolfnet_Views
             // $productKey[$i-1]->market = strtoupper( $GLOBALS['wolfnet']->getMarketName( $productKey[$i-1]->key ) );
         }
 
-        include $this->templateDir . '/adminSettings.php';
+        $out = $this->parseTemplate('adminSettings.php', array(
+            'formHeader' => $formHeader,
+            'productKey' => $productKey,
+        ));
+
+        if ($echo) {
+            echo $print;
+        }
+
+        return $out;
 
     }
 
 
-    public function amEditCssPage()
+    public function amEditCssPage($echo=true)
     {
         ob_start(); settings_fields($GLOBALS['wolfnet']->CssOptionGroup); $formHeader = ob_get_clean();
-        $publicCss = $this->getPublicCss();
-        $adminCss = $GLOBALS['wolfnet']->admin->getAdminCss();
 
-        include $this->templateDir . '/adminEditCss.php';
+        $out = $this->parseTemplate('adminEditCss.php', array(
+            'formHeader' => $formHeader,
+            'publicCss' => $this->getPublicCss(),
+            'adminCss' => $GLOBALS['wolfnet']->admin->getAdminCss(),
+        ));
+
+        if ($out) {
+            echo $out;
+        }
+
+        return $out;
 
     }
 
 
-    public function amSearchManagerPage()
+    public function amSearchManagerPage($echo=true)
     {
         $key = (array_key_exists("keyid", $_REQUEST)) ? $_REQUEST["keyid"] : "1";
         $productkey = $GLOBALS['wolfnet']->getProductKeyById($key);
 
         if (!$GLOBALS['wolfnet']->productKeyIsValid($productkey)) {
-            include $this->templateDir . '/invalidProductKey.php';
-            return;
+            $out = $this->parseTemplate('invalidProductKey.php');
         }
         else {
 
-            $searchForm = ($GLOBALS['wolfnet']->smHttp !== null) ? $GLOBALS['wolfnet']->smHttp['body'] : '';
-            $markets = json_decode($GLOBALS['wolfnet']->getProductKey());
-            $selectedKey = $key;
-            $url = $GLOBALS['wolfnet']->url;
-            include $this->templateDir . '/adminSearchManager.php';
+            $out = $this->parseTemplate('adminSearchManager.php', array(
+                'searchForm' => ($GLOBALS['wolfnet']->smHttp !== null) ? $GLOBALS['wolfnet']->smHttp['body'] : '',
+                'markets' => json_decode($GLOBALS['wolfnet']->getProductKey()),
+                'selectedKey' => $key,
+                'url' => $GLOBALS['wolfnet']->url,
+            ));
 
         }
 
+        if ($echo) {
+            echo $out;
+        }
+
+        return $out;
 
     }
 
 
-    public function amSupportPage()
+    public function amSupportPage($echo=true)
     {
-        // $imgdir = $GLOBALS['wolfnet']->url . 'img/';
-        $imgdir = $this->remoteImages;
-        include $this->templateDir . '/adminSupport.php';
+        $out = $this->parseTemplate('adminSupport.php', array(
+            'imgdir' => $this->remoteImages,
+        ));
+
+        if ($echo) {
+            echo $out;
+        }
+
+        return $out;
 
     }
 
@@ -368,11 +396,7 @@ class Wolfnet_Views
 
     public function errorView($error)
     {
-
-        ob_start();
-        include $this->templateDir . '/error.php';
-        return ob_get_clean();
-
+        return $this->parseTemplate('error.php', array('error'=>$error));
     }
 
     public function houseOver($args)
