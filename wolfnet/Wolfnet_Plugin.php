@@ -347,16 +347,12 @@ class Wolfnet
     {
         do_action($this->preHookPrefix . 'registerWidgets'); // Legacy hook
 
-        require_once $this->dir . '/widget/FeaturedListingsWidget.php';
         register_widget('Wolfnet_FeaturedListingsWidget');
 
-        require_once $this->dir . '/widget/ListingGridWidget.php';
         register_widget('Wolfnet_ListingGridWidget');
 
-        require_once $this->dir . '/widget/PropertyListWidget.php';
         register_widget('Wolfnet_PropertyListWidget');
 
-        require_once $this->dir . '/widget/QuickSearchWidget.php';
         register_widget('Wolfnet_QuickSearchWidget');
 
         do_action($this->postHookPrefix . 'registerWidgets'); // Legacy hook
