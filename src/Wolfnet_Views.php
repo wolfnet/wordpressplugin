@@ -54,7 +54,7 @@ class Wolfnet_Views
     /*                                                                                            */
     /* ****************************************************************************************** */
 
-    public function amSettingsPage($echo=true)
+    public function amSettingsPage()
     {
         ob_start(); settings_fields($GLOBALS['wolfnet']->optionGroup); $formHeader = ob_get_clean();
         $productKey = json_decode($GLOBALS['wolfnet']->getProductKey());
@@ -76,16 +76,14 @@ class Wolfnet_Views
             'productKey' => $productKey,
         ));
 
-        if ($echo) {
-            echo $print;
-        }
+        echo $out;
 
         return $out;
 
     }
 
 
-    public function amEditCssPage($echo=true)
+    public function amEditCssPage()
     {
         ob_start(); settings_fields($GLOBALS['wolfnet']->CssOptionGroup); $formHeader = ob_get_clean();
 
@@ -95,16 +93,14 @@ class Wolfnet_Views
             'adminCss' => $GLOBALS['wolfnet']->admin->getAdminCss(),
         ));
 
-        if ($out) {
-            echo $out;
-        }
+        echo $out;
 
         return $out;
 
     }
 
 
-    public function amSearchManagerPage($echo=true)
+    public function amSearchManagerPage()
     {
         $key = (array_key_exists("keyid", $_REQUEST)) ? $_REQUEST["keyid"] : "1";
         $productkey = $GLOBALS['wolfnet']->getProductKeyById($key);
@@ -123,24 +119,20 @@ class Wolfnet_Views
 
         }
 
-        if ($echo) {
-            echo $out;
-        }
+        echo $out;
 
         return $out;
 
     }
 
 
-    public function amSupportPage($echo=true)
+    public function amSupportPage()
     {
         $out = $this->parseTemplate('adminSupport.php', array(
             'imgdir' => $this->remoteImages,
         ));
 
-        if ($echo) {
-            echo $out;
-        }
+        echo $out;
 
         return $out;
 
