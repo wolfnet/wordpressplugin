@@ -22,11 +22,21 @@
 class Wolfnet_Views
 {
 
+    /* PROPERTIES ******************************************************************************* */
+
     /**
      * location of images hosted remotely
      * @var string
      */
     public $remoteImages = '//common.wolfnet.com/wordpress/';
+
+
+    /* CONSTRUCTOR ****************************************************************************** */
+
+    public function __construct()
+    {
+        $this->templateDir = dirname(__FILE__) . '/template';
+    }
 
     /* Public Methods *************************************************************************** */
     /*  ____        _     _ _        __  __      _   _               _                            */
@@ -54,14 +64,14 @@ class Wolfnet_Views
             // $productKey[$i-1]->market = strtoupper($GLOBALS['wolfnet']->api->getMarketName($productKey[$i-1]->key));
             $key = $productKey[$i-1]->key;
             $market = $GLOBALS['wolfnet']->getMarketName($key);
-            
+
             if (!is_wp_error($market)) {
                 $productKey[$i-1]->market = strtoupper( $market );
             }
             // $productKey[$i-1]->market = strtoupper( $GLOBALS['wolfnet']->getMarketName( $productKey[$i-1]->key ) );
         }
 
-        include $GLOBALS['wolfnet']->dir . '/template/adminSettings.php';
+        include $this->templateDir . '/adminSettings.php';
 
     }
 
@@ -72,7 +82,7 @@ class Wolfnet_Views
         $publicCss = $this->getPublicCss();
         $adminCss = $GLOBALS['wolfnet']->admin->getAdminCss();
 
-        include $GLOBALS['wolfnet']->dir .'/template/adminEditCss.php';
+        include $this->templateDir . '/adminEditCss.php';
 
     }
 
@@ -83,7 +93,7 @@ class Wolfnet_Views
         $productkey = $GLOBALS['wolfnet']->getProductKeyById($key);
 
         if (!$GLOBALS['wolfnet']->productKeyIsValid($productkey)) {
-            include $GLOBALS['wolfnet']->dir .'/template/invalidProductKey.php';
+            include $this->templateDir . '/invalidProductKey.php';
             return;
         }
         else {
@@ -92,7 +102,7 @@ class Wolfnet_Views
             $markets = json_decode($GLOBALS['wolfnet']->getProductKey());
             $selectedKey = $key;
             $url = $GLOBALS['wolfnet']->url;
-            include $GLOBALS['wolfnet']->dir .'/template/adminSearchManager.php';
+            include $this->templateDir . '/adminSearchManager.php';
 
         }
 
@@ -104,7 +114,7 @@ class Wolfnet_Views
     {
         // $imgdir = $GLOBALS['wolfnet']->url . 'img/';
         $imgdir = $this->remoteImages;
-        include $GLOBALS['wolfnet']->dir .'/template/adminSupport.php';
+        include $this->templateDir . '/adminSupport.php';
 
     }
 
@@ -144,7 +154,7 @@ class Wolfnet_Views
 
         $args = array_merge($defaultArgs, $args);
 
-        return $this->parseTemplate('template/featuredListingsOptions.php', $args);
+        return $this->parseTemplate('featuredListingsOptions.php', $args);
 
     }
 
@@ -161,7 +171,7 @@ class Wolfnet_Views
 
         $args['criteria'] = esc_attr($args['criteria']);
 
-        return $this->parseTemplate('template/listingGridOptions.php', $args);
+        return $this->parseTemplate('listingGridOptions.php', $args);
 
     }
 
@@ -185,7 +195,7 @@ class Wolfnet_Views
 
         $args = array_merge($defaultArgs, $args);
 
-        return $this->parseTemplate('template/quickSearchOptions.php', $args);
+        return $this->parseTemplate('quickSearchOptions.php', $args);
 
     }
 
@@ -197,7 +207,7 @@ class Wolfnet_Views
         }
 
         ob_start();
-        echo $this->parseTemplate('template/listing.php', $args);
+        echo $this->parseTemplate('listing.php', $args);
 
         return apply_filters('wolfnet_listingView', ob_get_clean());
 
@@ -211,7 +221,7 @@ class Wolfnet_Views
         }
 
         ob_start();
-        echo $this->parseTemplate('template/briefListing.php', $args);
+        echo $this->parseTemplate('briefListing.php', $args);
 
         return apply_filters('wolfnet_listingBriefView', ob_get_clean());
 
@@ -225,7 +235,7 @@ class Wolfnet_Views
         }
 
         ob_start();
-        echo $this->parseTemplate('template/resultsListing.php', $args);
+        echo $this->parseTemplate('resultsListing.php', $args);
 
         return apply_filters('wolfnet_listingResultsView', ob_get_clean());
 
@@ -239,7 +249,7 @@ class Wolfnet_Views
         }
 
         ob_start();
-        echo $this->parseTemplate('template/featuredListings.php', $args);
+        echo $this->parseTemplate('featuredListings.php', $args);
 
         return apply_filters('wolfnet_featuredListingView', ob_get_clean());
 
@@ -263,7 +273,7 @@ class Wolfnet_Views
         }
 
         ob_start();
-        echo $this->parseTemplate('template/propertyList.php', $args);
+        echo $this->parseTemplate('propertyList.php', $args);
 
         return apply_filters('wolfnet_propertyListView', ob_get_clean());
 
@@ -288,8 +298,8 @@ class Wolfnet_Views
         foreach ($args as $key => $item) {
             $args[$key] = apply_filters('wolfnet_listingGridView_' . $key, $item);
         }
-  
-        return apply_filters('wolfnet_listingGridView', $this->parseTemplate('template/listingGrid.php', $args));
+
+        return apply_filters('wolfnet_listingGridView', $this->parseTemplate('listingGrid.php', $args));
 
     }
 
@@ -306,7 +316,7 @@ class Wolfnet_Views
         }
 
         ob_start();
-        echo $this->parseTemplate('template/quickSearch.php', $args);
+        echo $this->parseTemplate('quickSearch.php', $args);
 
         return apply_filters('wolfnet_quickSearchView', ob_get_clean());
 
@@ -320,7 +330,7 @@ class Wolfnet_Views
         $args = $GLOBALS['wolfnet']->getMapParameters($listingsData, $productKey);
         $args["url"] = $GLOBALS['wolfnet']->url;
 
-        echo $this->parseTemplate('template/map.php', $args);
+        echo $this->parseTemplate('map.php', $args);
 
         return apply_filters('wolfnet_mapView', ob_get_clean());
 
@@ -336,7 +346,7 @@ class Wolfnet_Views
         $args['collapseId'] = $collapseId;
         $args['instance_id'] = $instance_id;
 
-        echo $this->parseTemplate('template/hideListingsTools.php', $args);
+        echo $this->parseTemplate('hideListingsTools.php', $args);
 
         return apply_filters('wolfnet_hideListingsTools', ob_get_clean());
 
@@ -350,7 +360,7 @@ class Wolfnet_Views
         }
 
         ob_start();
-        echo $this->parseTemplate('template/toolbar.php', $args);
+        echo $this->parseTemplate('toolbar.php', $args);
 
         return apply_filters('wolfnet_toolbarView', ob_get_clean());
 
@@ -360,15 +370,15 @@ class Wolfnet_Views
     {
 
         ob_start();
-        include $GLOBALS['wolfnet']->dir .'/template/error.php';
+        include $this->templateDir . '/error.php';
         return ob_get_clean();
 
     }
 
-    public function houseOver($args) 
+    public function houseOver($args)
     {
 
-        return $this->parseTemplate('template/listingHouseover.php', $args);
+        return $this->parseTemplate('listingHouseover.php', $args);
 
     }
 
@@ -383,10 +393,10 @@ class Wolfnet_Views
 
     private function parseTemplate($template, array $vars=array())
     {
-        
+
         extract($vars, EXTR_OVERWRITE);
         ob_start();
-        include $GLOBALS['wolfnet']->dir .'/'. $template;
+        include $this->templateDir .'/'. $template;
         return ob_get_clean();
 
     }

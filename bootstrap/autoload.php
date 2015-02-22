@@ -9,15 +9,15 @@
 $wntClassRoot = dirname(dirname(__FILE__));
 
 $wntClassMap = array(
-    'Wolfnet' => '/wolfnet/Wolfnet_Plugin.php',
-    'Wolfnet_Admin' => '/wolfnet/Wolfnet_Admin.php',
-    'Wolfnet_Views' => '/wolfnet/Wolfnet_Views.php',
-    'Wolfnet_Api_Wp_Client' => '/wolfnet/wolfnet-api-wp-client/WolfnetApiClient.php',
-    'Wolfnet_AbstractWidget' => '/widget/AbstractWidget.php',
-    'Wolfnet_FeaturedListingsWidget' => '/widget/FeaturedListingsWidget.php',
-    'Wolfnet_ListingGridWidget' => '/widget/ListingGridWidget.php',
-    'Wolfnet_PropertyListWidget' => '/widget/PropertyListWidget.php',
-    'Wolfnet_QuickSearchWidget' => '/widget/QuickSearchWidget.php',
+    'Wolfnet' => '/src/Wolfnet_Plugin.php',
+    'Wolfnet_Admin' => '/src/Wolfnet_Admin.php',
+    'Wolfnet_Views' => '/src/Wolfnet_Views.php',
+    'Wolfnet_Api_Wp_Client' => '/src/wolfnet-api-wp-client/WolfnetApiClient.php',
+    'Wolfnet_AbstractWidget' => '/src/widget/AbstractWidget.php',
+    'Wolfnet_FeaturedListingsWidget' => '/src/widget/FeaturedListingsWidget.php',
+    'Wolfnet_ListingGridWidget' => '/src/widget/ListingGridWidget.php',
+    'Wolfnet_PropertyListWidget' => '/src/widget/PropertyListWidget.php',
+    'Wolfnet_QuickSearchWidget' => '/src/widget/QuickSearchWidget.php',
 );
 
 function wntAutoload($class)

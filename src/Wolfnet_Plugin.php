@@ -132,7 +132,6 @@ class Wolfnet
     public function __construct()
     {
         $this->pluginFile = dirname(dirname(__FILE__)) . '/wolfnet.php';
-        $this->dir = dirname($this->pluginFile);
         $this->setUrl();
 
         $this->apin = new Wolfnet_Api_Wp_Client();
