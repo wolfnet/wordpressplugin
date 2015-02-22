@@ -234,10 +234,7 @@ class Wolfnet_Views
             $args[$key] = apply_filters('wolfnet_listingView_' . $key, $item);
         }
 
-        ob_start();
-        echo $this->parseTemplate('listing.php', $args);
-
-        return apply_filters('wolfnet_listingView', ob_get_clean());
+        return apply_filters('wolfnet_listingView', $this->parseTemplate('listing.php', $args));
 
     }
 
@@ -248,10 +245,7 @@ class Wolfnet_Views
             $args[$key] = apply_filters('wolfnet_listingBriefView_' . $key, $item);
         }
 
-        ob_start();
-        echo $this->parseTemplate('briefListing.php', $args);
-
-        return apply_filters('wolfnet_listingBriefView', ob_get_clean());
+        return apply_filters('wolfnet_listingBriefView', $this->parseTemplate('briefListing.php', $args));
 
     }
 
@@ -262,10 +256,7 @@ class Wolfnet_Views
             $args[$key] = apply_filters('wolfnet_listingResultsView_' . $key, $item);
         }
 
-        ob_start();
-        echo $this->parseTemplate('resultsListing.php', $args);
-
-        return apply_filters('wolfnet_listingResultsView', ob_get_clean());
+        return apply_filters('wolfnet_listingResultsView', $this->parseTemplate('resultsListing.php', $args));
 
     }
 
@@ -276,10 +267,7 @@ class Wolfnet_Views
             $args[$key] = apply_filters('wolfnet_featuredListingView_' . $key, $item);
         }
 
-        ob_start();
-        echo $this->parseTemplate('featuredListings.php', $args);
-
-        return apply_filters('wolfnet_featuredListingView', ob_get_clean());
+        return apply_filters('wolfnet_featuredListingView', $this->parseTemplate('featuredListings.php', $args));
 
     }
 
@@ -300,10 +288,7 @@ class Wolfnet_Views
             $args[$key] = apply_filters('wolfnet_propertyListView_' . $key, $item);
         }
 
-        ob_start();
-        echo $this->parseTemplate('propertyList.php', $args);
-
-        return apply_filters('wolfnet_propertyListView', ob_get_clean());
+        return apply_filters('wolfnet_propertyListView', $this->parseTemplate('propertyList.php', $args));
 
     }
 
@@ -343,40 +328,29 @@ class Wolfnet_Views
             $args[$key] = apply_filters( 'wolfnet_quickSearchView_' . $key, $item );
         }
 
-        ob_start();
-        echo $this->parseTemplate('quickSearch.php', $args);
-
-        return apply_filters('wolfnet_quickSearchView', ob_get_clean());
+        return apply_filters('wolfnet_quickSearchView', $this->parseTemplate('quickSearch.php', $args));
 
     }
 
 
     public function mapView($listingsData, $productKey=null)
     {
-        ob_start();
-        //$args = $GLOBALS['wolfnet']->api->getMapParameters($listingsData, $productKey);
         $args = $GLOBALS['wolfnet']->getMapParameters($listingsData, $productKey);
         $args["url"] = $GLOBALS['wolfnet']->url;
 
-        echo $this->parseTemplate('map.php', $args);
-
-        return apply_filters('wolfnet_mapView', ob_get_clean());
+        return apply_filters('wolfnet_mapView', $this->parseTemplate('map.php', $args));
 
     }
 
 
     public function hideListingsToolsView($hideId,$showId,$collapseId,$instance_id)
     {
-        ob_start();
-
         $args['hideId'] = $hideId;
         $args['showId'] = $showId;
         $args['collapseId'] = $collapseId;
         $args['instance_id'] = $instance_id;
 
-        echo $this->parseTemplate('hideListingsTools.php', $args);
-
-        return apply_filters('wolfnet_hideListingsTools', ob_get_clean());
+        return apply_filters('wolfnet_hideListingsTools', $this->parseTemplate('hideListingsTools.php', $args));
 
     }
 
@@ -387,10 +361,7 @@ class Wolfnet_Views
             $args[$key] = apply_filters('wolfnet_toolbarView_' . $key, $item);
         }
 
-        ob_start();
-        echo $this->parseTemplate('toolbar.php', $args);
-
-        return apply_filters('wolfnet_toolbarView', ob_get_clean());
+        return apply_filters('wolfnet_toolbarView', $this->parseTemplate('toolbar.php', $args));
 
     }
 
