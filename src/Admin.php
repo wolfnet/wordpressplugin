@@ -23,7 +23,7 @@
 /**
  * This class us used when the user is logged in as an admin user.
  */
-class Wolfnet_Admin extends Wolfnet
+class Wolfnet_Admin extends Wolfnet_Plugin
 {
 
 
@@ -159,19 +159,29 @@ class Wolfnet_Admin extends Wolfnet
         // Register Ajax Actions
         $GLOBALS['wolfnet']->registerAdminAjaxActions();
 
-        /* If we are serving up the search manager page we need to get the search manager HTML from
-         * the MLSFinder server now so that we can set cookies. */
-        $pageKeyExists = array_key_exists('page', $_REQUEST);
-        $pageIsSM = ($pageKeyExists) ? ($_REQUEST['page']=='wolfnet_plugin_search_manager') : false;
+         /* If we are serving up the search manager page we need to get the search manager HTML from
+          * the MLSFinder server now so that we can set cookies. */
+
         $key = (array_key_exists("keyid", $_REQUEST)) ? $_REQUEST["keyid"] : "1";
-        $productKey = $this->getProductKeyById($key);
-        if(!$GLOBALS['wolfnet']->productKeyIsValid($productKey)) {
-            $productKey = null;
+        $productKey = $GLOBALS['wolfnet']->getProductKeyById($key);
+
+        if ($GLOBALS['wolfnet']->productKeyIsValid($productKey)) {
+
+            $pageKeyExists = array_key_exists('page', $_REQUEST);
+            $pageIsSM = ($pageKeyExists) ? ($_REQUEST['page']=='wolfnet_plugin_search_manager') : false;
+
+            if ($pageKeyExists && $pageIsSM) {
+
+                try {
+                    $GLOBALS['wolfnet']->smHttp = $GLOBALS['wolfnet']->searchManagerHtml($productKey);
+                } catch (Wolfnet_Exception $e) {
+                    $GLOBALS['wolfnet']->smHttp = $GLOBALS['wolfnet']->displayException($e);
+                }
+
+            }
+
         }
 
-        if ($pageKeyExists && $pageIsSM) {
-            $GLOBALS['wolfnet']->smHttp = $GLOBALS['wolfnet']->searchManagerHtml($productKey);
-        }
 
     }
 

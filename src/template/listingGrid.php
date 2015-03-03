@@ -19,10 +19,8 @@
  *                along with this program; if not, write to the Free Software
  *                Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
- 
+
 ?>
-
-
 
 <div id="<?php echo $instance_id; ?>" class="wolfnet_widget <?php echo $class; ?>">
 
@@ -41,11 +39,11 @@
     <div id="<?php echo $collapseListingsId; ?>" >
 
         <?php echo $toolbarTop; ?>
-    
+
         <div class="wolfnet_listings">
             <?php echo (isset($listingsHtml)) ? $listingsHtml : 'No Listings to Display.'; ?>
         </div>
-    
+
         <?php echo $toolbarBottom; ?>
 
     </div>
@@ -57,13 +55,6 @@
 </div>
 
 <div class="wolfnet_clearfix"></div>
-
-
-<?php
-// echo "<pre>\$wpMeta: \n";
-// print_r($wpMeta);
-// echo "</pre>";
-?>
 
 <script type="text/javascript">
 
@@ -83,7 +74,7 @@
     });
 
 
-    var maptype = '<?php echo "$maptype"; ?>' 
+    var maptype = '<?php echo "$maptype"; ?>'
     if (maptype == 'map_only') {
 
         var collapseListingsId = '<?php echo $collapseListingsId; ?>';

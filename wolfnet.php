@@ -30,4 +30,4 @@
 
 require_once dirname(__FILE__) . '/bootstrap/autoload.php';
 
-$GLOBALS['wolfnet'] = new Wolfnet();
+$GLOBALS['wolfnet'] = new Wolfnet_Plugin();

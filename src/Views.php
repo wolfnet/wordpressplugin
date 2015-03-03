@@ -43,24 +43,45 @@ class Wolfnet_Views
 
     public function amSettingsPage()
     {
-        $productKey = json_decode($GLOBALS['wolfnet']->getProductKey());
 
-        // add the market name
-        for($i=1; $i<=count($productKey); $i++) {
-            // $productKey[$i-1]->market = strtoupper($GLOBALS['wolfnet']->api->getMarketName($productKey[$i-1]->key));
-            $key = $productKey[$i-1]->key;
-            $market = $GLOBALS['wolfnet']->getMarketName($key);
+        try {
 
-            if (!is_wp_error($market)) {
-                $productKey[$i-1]->market = strtoupper( $market );
+            $productKey = json_decode($GLOBALS['wolfnet']->getProductKey());
+
+            // add the market name
+            for($i=1; $i<=count($productKey); $i++) {
+
+                $key = $productKey[$i-1]->key;
+                $validKey = $GLOBALS['wolfnet']->productKeyIsValid($key);
+
+                if ($validKey) {
+
+                    try {
+                        $market = $GLOBALS['wolfnet']->getMarketName($key);
+                    } catch (Wolfnet_Exception $e) {
+                        // Catch the error and display no market
+                        // TODO: We may want to display an error about this.
+                        $market = '';
+                    }
+
+                } else {
+                    $market = '';
+                }
+
+                if (!is_wp_error($market)) {
+                    $productKey[$i-1]->market = strtoupper( $market );
+                }
+
             }
-            // $productKey[$i-1]->market = strtoupper( $GLOBALS['wolfnet']->getMarketName( $productKey[$i-1]->key ) );
-        }
 
-        $out = $this->parseTemplate('adminSettings', array(
-            'formHeader' => $this->settingsFormHeaders(),
-            'productKey' => $productKey,
-        ));
+            $out = $this->parseTemplate('adminSettings', array(
+                'formHeader' => $this->settingsFormHeaders(),
+                'productKey' => $productKey,
+            ));
+
+        } catch (Wolfnet_Exception $e) {
+            $out = $this->exceptionView($exception);
+        }
 
         echo $out;
 
@@ -71,11 +92,18 @@ class Wolfnet_Views
 
     public function amEditCssPage()
     {
-        $out = $this->parseTemplate('adminEditCss', array(
-            'formHeader' => $this->cssFormHeaders(),
-            'publicCss' => $this->getPublicCss(),
-            'adminCss' => $GLOBALS['wolfnet']->admin->getAdminCss(),
-        ));
+
+        try {
+
+            $out = $this->parseTemplate('adminEditCss', array(
+                'formHeader' => $this->cssFormHeaders(),
+                'publicCss' => $this->getPublicCss(),
+                'adminCss' => $GLOBALS['wolfnet']->admin->getAdminCss(),
+            ));
+
+        } catch (Wolfnet_Exception $e) {
+            $out = $this->exceptionView($exception);
+        }
 
         echo $out;
 
@@ -86,21 +114,27 @@ class Wolfnet_Views
 
     public function amSearchManagerPage()
     {
-        $key = (array_key_exists('keyid', $_REQUEST)) ? $_REQUEST['keyid'] : '1';
-        $productkey = $GLOBALS['wolfnet']->getProductKeyById($key);
 
-        if (!$GLOBALS['wolfnet']->productKeyIsValid($productkey)) {
-            $out = $this->parseTemplate('invalidProductKey');
-        }
-        else {
+        try {
+            $key = (array_key_exists("keyid", $_REQUEST)) ? $_REQUEST["keyid"] : "1";
+            $productKey = $GLOBALS['wolfnet']->getProductKeyById($key);
 
-            $out = $this->parseTemplate('adminSearchManager', array(
-                'searchForm' => ($GLOBALS['wolfnet']->smHttp !== null) ? $GLOBALS['wolfnet']->smHttp['body'] : '',
-                'markets' => json_decode($GLOBALS['wolfnet']->getProductKey()),
-                'selectedKey' => $key,
-                'url' => $GLOBALS['wolfnet']->url,
-            ));
+            if (!$GLOBALS['wolfnet']->productKeyIsValid($productKey)) {
+                $out = $this->parseTemplate('invalidProductKey');
+            }
+            else {
 
+                $out = $this->parseTemplate('adminSearchManager', array(
+                    'searchForm' => ($GLOBALS['wolfnet']->smHttp !== null) ? $GLOBALS['wolfnet']->smHttp['body'] : '',
+                    'markets' => json_decode($GLOBALS['wolfnet']->getProductKey()),
+                    'selectedKey' => $key,
+                    'url' => $GLOBALS['wolfnet']->url,
+                ));
+
+            }
+
+        } catch (Wolfnet_Exception $e) {
+            $out = $this->exceptionView($e);
         }
 
         echo $out;
@@ -112,9 +146,16 @@ class Wolfnet_Views
 
     public function amSupportPage()
     {
-        $out = $this->parseTemplate('adminSupport', array(
-            'imgdir' => $this->remoteImages,
-        ));
+
+        try {
+
+            $out = $this->parseTemplate('adminSupport', array(
+                'imgdir' => $this->remoteImages,
+            ));
+
+        } catch (Wolfnet_Exception $e) {
+            $out = $this->exceptionView($exception);
+        }
 
         echo $out;
 
@@ -340,6 +381,12 @@ class Wolfnet_Views
     public function errorView($error)
     {
         return $this->parseTemplate('error', array('error'=>$error));
+    }
+
+
+    public function exceptionView(Wolfnet_Exception $exception)
+    {
+        return $this->parseTemplate('exception', array('exception'=>$exception));
     }
 
 

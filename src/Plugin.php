@@ -19,7 +19,7 @@
  *                Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-class Wolfnet
+class Wolfnet_Plugin
 {
 
     /* Properties ******************************************************************************* */
@@ -94,25 +94,15 @@ class Wolfnet
      */
     public $requestPrefix = 'wolfnet_';
 
-    /**
-     * This property is used to determine how long a WNT session should last.
-     * @var integer
-     */
-    protected $sessionLength = 3600; // one hour
-
-
-    /**
-     * This property defines a the request parameter which is used to determine if the values which
-     * are cached in the Transient API should be cleared.
-     * @var string
-     */
-    protected $cacheFlag = 'wolfnet-cache';
-
     public $url;
 
     protected $pluginFile;
 
     public $smHttp = null;
+
+    private $cachingService;
+
+    const CACHE_CRON_HOOK = 'wntCronCacheDaily';
 
 
     /* Constructor Method *********************************************************************** */
@@ -134,18 +124,25 @@ class Wolfnet
         $this->pluginFile = dirname(dirname(__FILE__)) . '/wolfnet.php';
         $this->setUrl();
 
-        $this->apin = new Wolfnet_Api_Wp_Client();
-        $this->views = new Wolfnet_Views();
-        if (is_admin()) {
-            $this->admin = new Wolfnet_Admin($this);
+        // Clear cache if url param exists.
+        $cacheFlag = Wolfnet_Service_CachingService::CACHE_FLAG;
+        $cacheParamExists = array_key_exists($cacheFlag, $_REQUEST);
+        $cacheRenew = ($cacheParamExists) ? ($_REQUEST[$cacheFlag] == 'refresh') : false;
+        $cacheClear = ($cacheParamExists) ? ($_REQUEST[$cacheFlag] == 'clear') : false;
+
+        $this->cachingService = new Wolfnet_Service_CachingService($cacheRenew);
+        $this->cachingService->clearExpired();
+
+        if ($cacheClear) {
+            $this->cachingService->clearAll();
         }
 
+        $this->apin = $this->getApiClientInstance();
 
-        // Clear cache if url param exists.
-        $cacheParamExists = array_key_exists($this->cacheFlag, $_REQUEST);
-        $cacheParamClear = ($cacheParamExists) ? ($_REQUEST[$this->cacheFlag] == 'clear') : false;
-        if ($cacheParamExists && $cacheParamClear) {
-            $this->apin->clearTransients('all');
+        $this->views = new Wolfnet_Views();
+
+        if (is_admin()) {
+            $this->admin = new Wolfnet_Admin($this);
         }
 
         // Register actions.
@@ -153,10 +150,10 @@ class Wolfnet
             array('init',                  'init'),
             array('wp_enqueue_scripts',    'scripts'),
             array('wp_enqueue_scripts',    'styles'),
-
             array('wp_footer',             'footer'),
             array('template_redirect',     'templateRedirect'),
             array('wp_enqueue_scripts',    'publicStyles',      1000),
+            array(self::CACHE_CRON_HOOK, array($this->cachingService, 'clearExpired')),
             ));
 
         if ($this->getDefaultProductKey()){
@@ -170,8 +167,12 @@ class Wolfnet
             array('do_parse_request',     'doParseRequest'),
             ));
 
-        register_activation_hook( $this->pluginFile, array( $this, 'wolfnet_activation' ));
-        register_deactivation_hook( $this->pluginFile, array( $this, 'wolfnet_deactivation' ));
+        // Register Cron Events
+        // NOTE: We do this here instead of on activation because the activation does not fire for updates.
+        $this->registerCronEvents();
+
+        register_activation_hook($this->pluginFile, array($this, 'wolfnet_activation'));
+        register_deactivation_hook($this->pluginFile, array($this, 'wolfnet_deactivation'));
 
     }
 
@@ -254,13 +255,13 @@ class Wolfnet
 
     public function wolfnet_activation()
     {
-        $this->apin->startWpDailyCron();
+
     }
 
     public function wolfnet_deactivation()
     {
-        $this->apin->stopWpDailyCron();
-        $this->apin->clearTransients('all');
+        $this->removeCronEvents();
+        $this->cachingService->clearAll();
     }
 
 
@@ -333,7 +334,9 @@ class Wolfnet
             }
 
             do_action($this->postHookPrefix . 'enqueueResources'); // Legacy hook
+
         }
+
     }
 
 
@@ -374,8 +377,14 @@ class Wolfnet
             array_key_exists('keyList', $_REQUEST)) {
             echo '<div class="wolfnet_marketDisclaimer">';
             foreach($_REQUEST['keyList'] as $key) {
-                $disclaimer = $this->apin->sendRequest( $key, '/core/disclaimer', 'GET', array('type'=>'search_results', 'format'=>'html') );
-                if (!is_wp_error($disclaimer)) echo $disclaimer['responseData']['data'];
+
+                try {
+                    $disclaimer = $this->apin->sendRequest( $key, '/core/disclaimer', 'GET', array('type'=>'search_results', 'format'=>'html') );
+                    echo $disclaimer['responseData']['data'];
+                } catch (Wolfnet_Exception $e) {
+                    echo $this->displayException($e);
+                }
+
             }
             echo '</div>';
         }
@@ -606,9 +615,9 @@ class Wolfnet
     public function getMarketName($apiKey)
     {
         $data = $this->apin->sendRequest( $apiKey, '/settings');
-        if (is_wp_error($data)) return $data;
 
         return $data['responseData']['data']['market']['datasource_name'];
+
     }
 
 
@@ -716,45 +725,78 @@ class Wolfnet
 
     public function scFeaturedListings($attrs, $content='')
     {
-        $defaultAttributes = $this->getFeaturedListingsDefaults();
 
-        $criteria = array_merge($defaultAttributes, (is_array($attrs)) ? $attrs : array());
+        try {
 
-        return $this->featuredListings($criteria);
+            $defaultAttributes = $this->getFeaturedListingsDefaults();
+
+            $criteria = array_merge($defaultAttributes, (is_array($attrs)) ? $attrs : array());
+
+            $out = $this->featuredListings($criteria);
+
+        } catch (Wolfnet_Exception $e) {
+            $out = $this->displayException($e);
+        }
+
+        return $out;
 
     }
 
 
     public function sclistingGrid($attrs)
     {
-        $default_maxrows = '50';
-        $criteria = array_merge($this->getListingGridDefaults(), (is_array($attrs)) ? $attrs : array());
 
-        if ($criteria['maxrows'] == $default_maxrows && $criteria['maxresults'] != $default_maxrows ) {
-           $criteria['maxrows'] = $criteria['maxresults'];
+        try {
+            $default_maxrows = '50';
+            $criteria = array_merge($this->getListingGridDefaults(), (is_array($attrs)) ? $attrs : array());
+
+            if ($criteria['maxrows'] == $default_maxrows && $criteria['maxresults'] != $default_maxrows ) {
+               $criteria['maxrows'] = $criteria['maxresults'];
+            }
+
+            $out = $this->listingGrid($criteria);
+
+        } catch (Wolfnet_Exception $e) {
+            $out = $this->displayException($e);
         }
 
-        return $this->listingGrid( $criteria );
+        return $out;
 
     }
 
 
     public function scPropertyList($attrs = array())
     {
-        $criteria = array_merge($this->getPropertyListDefaults(), (is_array($attrs)) ? $attrs : array());
 
-        return $this->listingGrid($criteria, 'list');
+        try {
+            $criteria = array_merge($this->getPropertyListDefaults(), (is_array($attrs)) ? $attrs : array());
+
+            $out = $this->listingGrid($criteria, 'list');
+
+        } catch (Wolfnet_Exception $e) {
+            $out = $this->displayException($e);
+        }
+
+        return $out;
 
     }
 
 
     public function scQuickSearch($attrs, $content='')
     {
-        $defaultAttributes = $this->getQuickSearchDefaults();
 
-        $criteria = array_merge($defaultAttributes, (is_array($attrs)) ? $attrs : array());
+        try {
+            $defaultAttributes = $this->getQuickSearchDefaults();
 
-        return $this->quickSearch($criteria);
+            $criteria = array_merge($defaultAttributes, (is_array($attrs)) ? $attrs : array());
+
+            $out = $this->quickSearch($criteria);
+
+        } catch (Wolfnet_Exception $e) {
+            $out = $this->displayException($e);
+        }
+
+        return $out;
 
     }
 
@@ -770,7 +812,22 @@ class Wolfnet
     {
         $productKey = (array_key_exists('key', $_REQUEST)) ? $_REQUEST['key'] : '';
 
-        echo ($this->productKeyIsValid($productKey)) ? 'true' : 'false';
+        try {
+
+            $response = ($this->productKeyIsValid($productKey)) ? 'true' : 'false';
+
+        } catch (Wolfnet_Exception $e) {
+            status_header(500);
+
+            $response = array(
+                'message' => $e->getMessage(),
+                'data' => $e->getData(),
+            );
+
+        }
+
+        header('Content-Type: application/json');
+        echo json_encode($response);
 
         die;
 
@@ -779,11 +836,27 @@ class Wolfnet
 
     public function remoteGetSavedSearches($keyid=null)
     {
-        if($keyid == null) {
-            $keyid = (array_key_exists('keyid', $_REQUEST)) ? $_REQUEST['keyid'] : '1';
-        }
-        echo json_encode($this->getSavedSearches(-1, $keyid));
 
+        try {
+
+            if ($keyid == null) {
+                $keyid = (array_key_exists('keyid', $_REQUEST)) ? $_REQUEST['keyid'] : '1';
+            }
+
+            $response = $this->getSavedSearches(-1, $keyid);
+
+        } catch (Wolfnet_Exception $e) {
+            status_header(500);
+
+            $response = array(
+                'message' => $e->getMessage(),
+                'data' => $e->getData(),
+            );
+
+        }
+
+        header('Content-Type: application/json');
+        echo json_encode($response);
         die;
 
     }
@@ -791,59 +864,120 @@ class Wolfnet
 
     public function remoteSaveSearch()
     {
-        if (array_key_exists('post_title', $_REQUEST)) {
 
-            // Create post object
-            $my_post = array(
-                'post_title'  => $_REQUEST['post_title'],
-                'post_status' => 'publish',
-                'post_author' => wp_get_current_user()->ID,
-                'post_type'   => $this->customPostTypeSearch
-                );
+        try {
 
-            // Insert the post into the database
-            $post_id = wp_insert_post($my_post);
+            if (array_key_exists('post_title', $_REQUEST)) {
 
-            foreach ($_REQUEST['custom_fields'] as $field => $value) {
-                add_post_meta($post_id, $field, $value, true);
+                // Create post object
+                $my_post = array(
+                    'post_title'  => $_REQUEST['post_title'],
+                    'post_status' => 'publish',
+                    'post_author' => wp_get_current_user()->ID,
+                    'post_type'   => $this->customPostTypeSearch
+                    );
+
+                // Insert the post into the database
+                $post_id = wp_insert_post($my_post);
+
+                foreach ($_REQUEST['custom_fields'] as $field => $value) {
+                    add_post_meta($post_id, $field, $value, true);
+                }
+
+                $key = $_REQUEST['custom_fields']['keyid'];
+
             }
 
-            $key = $_REQUEST['custom_fields']['keyid'];
+            $this->remoteGetSavedSearches($key);
+
+            $response = null;
+
+        } catch (Wolfnet_Exception $e) {
+            status_header(500);
+
+            $response = array(
+                'message' => $e->getMessage(),
+                'data' => $e->getData(),
+            );
 
         }
 
-        $this->remoteGetSavedSearches($key);
+        header('Content-Type: application/json');
+        echo json_encode($response);
+        die;
 
     }
 
 
     public function remoteDeleteSearch()
     {
-        if (array_key_exists('id', $_REQUEST)) {
-            wp_delete_post($_REQUEST['id'], true);
+
+        try {
+
+            if (array_key_exists('id', $_REQUEST)) {
+                wp_delete_post($_REQUEST['id'], true);
+            }
+
+            $this->remoteGetSavedSearches();
+            $response = null;
+
+        } catch (Wolfnet_Exception $e) {
+            status_header(500);
+
+            $response = array(
+                'message' => $e->getMessage(),
+                'data' => $e->getData(),
+            );
+
         }
 
-        $this->remoteGetSavedSearches();
+        header('Content-Type: application/json');
+        echo json_encode($response);
+        die;
 
     }
 
 
     public function remoteShortcodeBuilderOptionsFeatured()
     {
-        $args = $this->getFeaturedListingsOptions();
 
-        echo $this->views->featuredListingsOptionsFormView($args);
+        try {
+
+            $args = $this->getFeaturedListingsOptions();
+
+            $response = $this->views->featuredListingsOptionsFormView($args);
+
+        } catch (Wolfnet_Exception $e) {
+            status_header(500);
+
+            $response = $this->displayException($e);
+
+        }
+
+        echo $response;
 
         die;
 
     }
 
 
-    public function remoteShortcodeBuilderOptionsGrid ()
+    public function remoteShortcodeBuilderOptionsGrid()
     {
-        $args = $this->getListingGridOptions();
 
-        echo $this->views->listingGridOptionsFormView($args);
+        try {
+
+            $args = $this->getListingGridOptions();
+
+            $response = $this->views->listingGridOptionsFormView($args);
+
+        } catch (Wolfnet_Exception $e) {
+            status_header(500);
+
+            $response = $this->displayException($e);
+
+        }
+
+        echo $response;
 
         die;
 
@@ -852,8 +986,21 @@ class Wolfnet
 
     public function remoteShortcodeBuilderOptionsList ()
     {
-        $args = $this->getPropertyListOptions();
-        $this->remoteShortcodeBuilderOptionsGrid($args);
+
+        try {
+
+            $args = $this->getPropertyListOptions();
+
+            $response = $this->views->listingGridOptionsFormView($args);
+
+        } catch (Wolfnet_Exception $e) {
+            status_header(500);
+
+            $response = $this->displayException($e);
+
+        }
+
+        echo $response;
 
         die;
 
@@ -862,9 +1009,21 @@ class Wolfnet
 
     public function remoteShortcodeBuilderOptionsQuickSearch ()
     {
-        $args = $this->getQuickSearchOptions();
 
-        echo $this->views->quickSearchOptionsFormView($args);
+        try {
+
+            $args = $this->getQuickSearchOptions();
+
+            $response = $this->views->quickSearchOptionsFormView($args);
+
+        } catch (Wolfnet_Exception $e) {
+            status_header(500);
+
+            $response = $this->displayException($e);
+
+        }
+
+        echo $response;
 
         die;
 
@@ -873,10 +1032,25 @@ class Wolfnet
 
     public function remoteShortcodeBuilderSavedSearch ()
     {
-        $id = (array_key_exists('id', $_REQUEST)) ? $_REQUEST['id'] : 0;
 
-        echo json_encode($this->getSavedSearch($id));
+        try {
 
+            $id = (array_key_exists('id', $_REQUEST)) ? $_REQUEST['id'] : 0;
+
+            $response = $this->getSavedSearch($id);
+
+        } catch (Wolfnet_Exception $e) {
+            status_header(500);
+
+            $response = array(
+                'message' => $e->getMessage(),
+                'data' => $e->getData(),
+            );
+
+        }
+
+        header('Content-Type: application/json');
+        echo json_encode($response);
         die;
 
     }
@@ -884,8 +1058,19 @@ class Wolfnet
 
     public function remoteContent ()
     {
-        echo $this->getWpHeader();
-        echo $this->getWpFooter();
+
+        try {
+
+            $response = $this->getWpHeader() . $this->getWpFooter();
+
+        } catch (Wolfnet_Exception $e) {
+            status_header(500);
+
+            $response = $this->displayException($e);
+
+        }
+
+        echo $response;
 
         die;
 
@@ -894,7 +1079,19 @@ class Wolfnet
 
     public function remoteContentHeader ()
     {
-        echo $this->getWpHeader();
+
+        try {
+
+            $response = $this->getWpHeader();
+
+        } catch (Wolfnet_Exception $e) {
+            status_header(500);
+
+            $response = $this->displayException($e);
+
+        }
+
+        echo $response;
 
         die;
 
@@ -903,9 +1100,21 @@ class Wolfnet
 
     public function remoteContentFooter ()
     {
-        $this->getWpHeader();
 
-        echo $this->getWpFooter();
+        try {
+
+            $this->getWpHeader();
+
+            $response = $this->getWpFooter();
+
+        } catch (Wolfnet_Exception $e) {
+            status_header(500);
+
+            $response = $this->displayException($e);
+
+        }
+
+        echo $response;
 
         die;
 
@@ -914,10 +1123,21 @@ class Wolfnet
 
     public function remoteListings ()
     {
-        $args = $this->getListingGridOptions($_REQUEST);
-        echo $this->getWpHeader();
-        echo $this->listingGrid($args);
-        echo $this->getWpFooter();
+
+        try {
+
+            $args = $this->getListingGridOptions($_REQUEST);
+
+            $response = $this->getWpHeader() . $this->listingGrid($args) . $this->getWpFooter();
+
+        } catch (Wolfnet_Exception $e) {
+            status_header(500);
+
+            $response = $this->displayException($e);
+
+        }
+
+        echo $response;
 
         die;
 
@@ -926,38 +1146,48 @@ class Wolfnet
 
     public function remoteListingsGet()
     {
+
+        try {
+
+            $args = $this->getListingGridOptions($_REQUEST);
+
+            // used by pagination dropdown "per page"
+            if (!empty($_REQUEST['numrows'])) {
+                $_REQUEST['maxrows'] = $_REQUEST['numrows'];
+            }
+
+            // Convert 'zipcode' to 'zip_code' for new API
+            if (array_key_exists('zipcode', $args)) {
+                $args['zip_code'] = $args['zipcode'];
+                unset($args['zipcode']);
+            }
+
+            $qdata = $this->prepareListingQuery($_REQUEST);
+
+            $data = $this->apin->sendRequest($_REQUEST['key'], '/listing', 'GET', $qdata);
+
+            $this->augmentListingsData($data, $_REQUEST['key']);
+
+        } catch (Wolfnet_Exception $e) {
+
+            status_header(500);
+            $data = array(
+                'message' => $e->getMessage(),
+                'data' => $e->getData(),
+            );
+
+        }
+
+        // TODO: Do we really need to support AjaxP here?
         $callback = (array_key_exists('callback', $_REQUEST)) ? $_REQUEST['callback'] : false;
-        $args = $this->getListingGridOptions($_REQUEST);
 
-        if ($callback) {
+        if ($callback !== false) {
             header('Content-Type: application/javascript');
-        }
-        else {
+            echo $callback . '(' . json_encode($data) . ');';
+        } else {
             header('Content-Type: application/json');
+            echo json_encode($data);
         }
-
-        // used by pagination dropdown "per page"
-        if (!empty($_REQUEST['numrows'])) {
-            $_REQUEST['maxrows'] = $_REQUEST['numrows'];
-        }
-
-        // Convert 'zipcode' to 'zip_code' for new API
-        if (array_key_exists('zipcode', $criteria)) {
-            $criteria['zip_code'] = $criteria['zipcode'];
-            unset($criteria['zipcode']);
-        }
-
-        $qdata = $this->prepareListingQuery($_REQUEST);
-
-        $data = $this->apin->sendRequest($_REQUEST['key'], '/listing', 'GET', $qdata);
-        if (is_wp_error($data)) return $this->getWpError($data);
-
-        $this->augmentListingsData($data, $_REQUEST['key']);
-
-        echo $callback ? $callback . '(' : '';
-
-        echo json_encode($data);
-        echo $callback ? ');' : '';
 
         die;
 
@@ -966,12 +1196,21 @@ class Wolfnet
 
     public function remotePublicCss()
     {
-        header('Content-type: text/css');
-        $publicCss = $this->views->getPublicCss();
 
-        if(strlen($publicCss) > 0) {
-            echo $publicCss;
+        try {
+
+            $response = $this->views->getPublicCss();
+
+        } catch (Wolfnet_Exception $e) {
+            status_header(500);
+
+            echo $this->displayException($e);
+            die;
+
         }
+
+        header('Content-type: text/css');
+        echo $response;
 
         die;
 
@@ -980,43 +1219,113 @@ class Wolfnet
 
     public function remotePriceRange()
     {
-        $productKey = $this->getProductKeyById($_REQUEST["keyid"]);
-        $prices = $this->getPrices($productKey);
-        echo json_encode($prices);
 
+        try {
+
+            // TODO: Assign default value.
+            $keyid = $_REQUEST["keyid"];
+
+            $productKey = $this->getProductKeyById($keyid);
+
+            $response = $this->getPrices($productKey);
+
+        } catch (Wolfnet_Exception $e) {
+            status_header(500);
+
+            $response = array(
+                'message' => $e->getMessage(),
+                'data' => $e->getData(),
+            );
+
+        }
+
+        header('Content-Type: application/json');
+        echo json_encode($response);
         die;
+
     }
 
 
     public function remoteGetMarketName()
     {
-        $productKey = $_REQUEST["productkey"];
-        $marketName = $this->getMarketName($productKey);
 
-        if (is_wp_error($marketName)) {
-            echo '';
-        } else {
-            echo json_encode(strtoupper($marketName));
+        try {
+
+            // TODO: Assign default value.
+            $productKey = $_REQUEST["productkey"];
+
+            $marketName = $this->getMarketName($productKey);
+            $response = strtoupper($marketName);
+
+        } catch (Wolfnet_Exception $e) {
+            status_header(500);
+
+            $response = array(
+                'message' => $e->getMessage(),
+                'data' => $e->getData(),
+            );
+
         }
 
+        header('Content-Type: application/json');
+        echo json_encode($response);
         die;
+
     }
 
 
     public function remoteMapEnabled()
     {
-        $productKey = $this->getProductKeyById($_REQUEST["keyid"]);
-        echo json_encode($this->getMaptracksEnabled($productKey));
 
+        try {
+
+            // TODO: Assign default value.
+            $keyid = $_REQUEST["keyid"];
+
+            $productKey = $this->getProductKeyById($keyid);
+
+            $response = $this->getMaptracksEnabled($productKey);
+
+        } catch (Wolfnet_Exception $e) {
+            status_header(500);
+
+            $response = array(
+                'message' => $e->getMessage(),
+                'data' => $e->getData(),
+            );
+
+        }
+
+        header('Content-Type: application/json');
+        echo json_encode($response);
         die;
+
     }
 
 
-    public function remoteGetBaseUrl() {
-        $productKey = $this->getProductKeyById($_REQUEST["keyid"]);
-        echo json_encode($this->getBaseUrl($productKey));
+    public function remoteGetBaseUrl()
+    {
 
+        try {
+            // TODO: Assign default value.
+            $keyid = $_REQUEST["keyid"];
+            $productKey = $this->getProductKeyById($keyid);
+            $response = $this->getBaseUrl($productKey);
+
+        } catch (Wolfnet_Exception $e) {
+            status_header(500);
+
+            $response = array(
+                'message' => $e->getMessage(),
+                'data' => $e->getData(),
+            );
+
+        }
+
+        header('Content-Type: application/json');
+        echo json_encode($response);
         die;
+
     }
 
 
@@ -1095,13 +1404,13 @@ class Wolfnet
         if($criteria['ownertype'] == 'broker' )
             $qdata['office_only'] = true;
 
-        $data = $this->apin->sendRequest($criteria['key'], '/listing', 'GET', $qdata);
-
-        if (is_wp_error($data)) return $this->getWpError($data);
+        try {
+            $data = $this->apin->sendRequest($criteria['key'], '/listing', 'GET', $qdata);
+        } catch (Wolfnet_Exception $e) {
+            return $this->displayException($e);
+        }
 
         $this->augmentListingsData($data, $criteria['key']);
-
-
 
         $listingsData = array();
 
@@ -1207,8 +1516,11 @@ class Wolfnet
 
         $qdata = $this->prepareListingQuery($criteria);
 
-        $data = $this->apin->sendRequest($criteria['key'], '/listing', 'GET', $qdata);
-        if (is_wp_error($data)) return $this->getWpError($data);
+        try {
+            $data = $this->apin->sendRequest($criteria['key'], '/listing', 'GET', $qdata);
+        } catch (Wolfnet_Exception $e) {
+            return $this->displayException($e);
+        }
 
         // add some elements to the array returned by the API
         // wpMeta should contain any criteria or other setting which do not come from the API
@@ -1261,7 +1573,7 @@ class Wolfnet
 
         $vars = array(
             'instance_id'        => str_replace('.', '', uniqid('wolfnet_listingGrid_')),
-            // ??? TODO not needed?? we are merging $vars and listing data below.
+            // TODO: not needed?? we are merging $vars and listing data below.
             'listings'           => $listingsData,
             'listingsHtml'       => $listingsHtml,
             'siteUrl'            => site_url(),
@@ -1278,8 +1590,7 @@ class Wolfnet
             'toolbarTop'         => '',
             'toolbarBottom'      => '',
             'maxrows'            => ((count($listingsData) > 0) ? $data['requestData']['maxrows'] : 0),
-
-            );
+        );
 
         if (count($listingsData) && is_array($listingsData))
             $vars = $this->convertDataType(array_merge($vars, $listingsData));
@@ -1317,7 +1628,6 @@ class Wolfnet
         } else {
             return $this->views->listingGridView($vars);
         }
-
 
     }
 
@@ -2209,6 +2519,11 @@ class Wolfnet
         return $this->views->errorView($error);
     }
 
+    public function displayException(Wolfnet_Exception $exception)
+    {
+        return $this->views->exceptionView($exception);
+    }
+
     /**
      * get the api display setting for "Max Results". If it is not set use 250
      * @param  string $productKey
@@ -2219,10 +2534,13 @@ class Wolfnet
         if($productKey == null) {
             $productKey = json_decode($this->getDefaultProductKey());
         }
+
         $data = $this->apin->sendRequest($productKey, '/settings');
-        if (is_wp_error($data)) return $data;
+
         $maxResults = $data['responseData']['data']['market']['display_rules']['Max Results'];
+
         return (is_numeric($maxResults) && $maxResults <= 250 ) ? $maxResults : 250;
+
     }
 
     /**
@@ -2236,7 +2554,6 @@ class Wolfnet
         }
 
         $data = $this->apin->sendRequest($productKey, '/settings');
-        if (is_wp_error($data)) return $data;
 
         return $data['responseData']['data']['market']['broker_reciprocity_logo'];
     }
@@ -2393,7 +2710,7 @@ class Wolfnet
      */
     public function productKeyIsValid($key=null)
     {
-        $valid = false;
+        $valid = true;
 
         if ($key != null) {
             $productKey = $key;
@@ -2402,11 +2719,23 @@ class Wolfnet
             $productKey = json_decode($GLOBALS['wolfnet']->getDefaultProductKey());
         }
 
-        $http = $this->apin->sendRequest( $productKey, '/status');
+        if (trim($productKey) !== '') {
 
+            try {
+                $http = $this->apin->authenticate($productKey, array('force'=>true));
+            }
+            catch (Wolfnet_Exception_ApiException $e) {
 
-        if (!is_wp_error($http) && $http['responseStatusCode'] == '200') {
-            $valid = true;
+                if ($e->getCode() == Wolfnet_ApiClient::NO_AUTH_ERROR) {
+                    $valid = false;
+                } else {
+                    throw $e;
+                }
+
+            }
+
+        } else {
+            $valid = false;
         }
 
         return $valid;
@@ -2663,5 +2992,68 @@ class Wolfnet
         }
 
     }
+
+
+    /**
+     * This method is used to retrieve an instance of the API Client. This logic is encapsulated in
+     * its own function for clarity. Because we are decorating the API Client there are a number of
+     * other objects that are needed before we can return the API Client.
+     *
+     * TODO: Ideally this kind of logic would be encapsulated inside of IOC container which handles
+     * dependency injection. At some point we want to introduce such an object.
+     *
+     *                +-------------------+
+     *                |                   |
+     *    +---------->+ Wolfnet_ApiClient |
+     *    |           |                   |
+     *    |           +---------+---------+
+     *    |                     ^
+     *    |                     |
+     *    |                     |
+     *    |           +---------+-------------------+      +--------------------------------+
+     *    |  extends  |                             |      |                                |
+     *    +-----------+ Wolfnet_ApiCachingDecorator +----->+ Wolfnet_Service_CachingService |
+     *    ^           |                             |      |                                |
+     *    |           +---------+-------------------+      +--------------------------------+
+     *    |                     ^
+     *    |                     |
+     *    |                     |
+     *    |           +---------+----------------+
+     *    |  extends  |                          |
+     *    +-----------+ Wolfnet_ApiAuthDecorator |
+     *                |                          |
+     *                +--------------------------+
+     *
+     * @return  Wolfnet_ApiClient  A decorated API client.
+     *
+     */
+    private function getApiClientInstance()
+    {
+        $apiClient = new Wolfnet_ApiClient();
+        $cachingDecorator = new Wolfnet_ApiCachingDecorator($apiClient, $this->cachingService);
+        $authDecorator = new Wolfnet_ApiAuthDecorator($cachingDecorator);
+
+        return $authDecorator;
+
+    }
+
+
+    public function registerCronEvents()
+    {
+        // Schedule Cache Clearing event
+        if (!wp_next_scheduled(self::CACHE_CRON_HOOK)) {
+            wp_schedule_event(time(), 'daily', self::CACHE_CRON_HOOK);
+        }
+
+    }
+
+
+    public function removeCronEvents()
+    {
+        // Remove Cache Clearing event
+        wp_clear_scheduled_hook(self::CACHE_CRON_HOOK);
+
+    }
+
 
 }
