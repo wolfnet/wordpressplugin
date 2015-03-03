@@ -15,12 +15,12 @@
  * being the API Token that would normally be retrieved via an authentication request the consumer
  * will send an API key which this class will use to perform authentication.
  *
- * @package Wolfnet
+ * @package Wolfnet\Api
  * @copyright 2015 WolfNet Technologies, LLC.
  * @license GNU v2
  *
  */
-class Wolfnet_ApiAuthDecorator extends Wolfnet_ApiClient
+class Wolfnet_Api_AuthDecorator extends Wolfnet_Api_Client
 {
 
 
@@ -28,7 +28,7 @@ class Wolfnet_ApiAuthDecorator extends Wolfnet_ApiClient
 
     /**
      * This property holds a reference to the API client which is being decorated.
-     * @var Wolfnet_ApiClient
+     * @var Wolfnet_Api_Client
      */
     private $client;
 
@@ -39,9 +39,9 @@ class Wolfnet_ApiAuthDecorator extends Wolfnet_ApiClient
      * This constructor method must received a reference to the API Client which is being decorated.
      * This reference will then be used to perform actual requests to the API.
      *
-     * @param  Wolfnet_ApiClient  $client  A reference to an API client
+     * @param  Wolfnet_Api_Client  $client  A reference to an API client
      */
-    public function __construct(Wolfnet_ApiClient &$client)
+    public function __construct(Wolfnet_Api_Client &$client)
     {
         $this->client = $client;
     }
@@ -102,9 +102,9 @@ class Wolfnet_ApiAuthDecorator extends Wolfnet_ApiClient
             $result = call_user_func_array(array($this->client, 'sendRequest'), $args);
 
         }
-        catch (Wolfnet_Exception_ApiException $e) {
+        catch (Wolfnet_Api_Exception $e) {
 
-            if ($e->getCode() === Wolfnet_ApiClient::AUTH_ERROR && $attempts < 5) {
+            if ($e->getCode() === Wolfnet_Api_Client::AUTH_ERROR && $attempts < 5) {
                 $args[0] = $key;
                 $args[5]['reAuth'] = true;
                 $args[5]['attempts'] = $attempts + 1;

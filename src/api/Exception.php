@@ -10,12 +10,12 @@
  * extension of the Wolfnet_Exception class so that we can more easily catch exception of this
  * specific type.
  *
- * @package Wolfnet
+ * @package Wolfnet\Api
  * @copyright 2015 WolfNet Technologies, LLC.
  * @license GNU v2
  *
  */
-class Wolfnet_Exception_ApiException extends Wolfnet_Exception
+class Wolfnet_Api_Exception extends Wolfnet_Exception
 {
 
 }

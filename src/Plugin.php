@@ -2724,9 +2724,9 @@ class Wolfnet_Plugin
             try {
                 $http = $this->apin->authenticate($productKey, array('force'=>true));
             }
-            catch (Wolfnet_Exception_ApiException $e) {
+            catch (Wolfnet_Api_Exception $e) {
 
-                if ($e->getCode() == Wolfnet_ApiClient::NO_AUTH_ERROR) {
+                if ($e->getCode() == Wolfnet_Api_Client::NO_AUTH_ERROR) {
                     $valid = false;
                 } else {
                     throw $e;
@@ -3002,36 +3002,36 @@ class Wolfnet_Plugin
      * TODO: Ideally this kind of logic would be encapsulated inside of IOC container which handles
      * dependency injection. At some point we want to introduce such an object.
      *
-     *                +-------------------+
-     *                |                   |
-     *    +---------->+ Wolfnet_ApiClient |
-     *    |           |                   |
-     *    |           +---------+---------+
+     *                +--------------------+
+     *                |                    |
+     *    +---------->+ Wolfnet_Api_Client |
+     *    |           |                    |
+     *    |           +---------+----------+
      *    |                     ^
      *    |                     |
      *    |                     |
-     *    |           +---------+-------------------+      +--------------------------------+
-     *    |  extends  |                             |      |                                |
-     *    +-----------+ Wolfnet_ApiCachingDecorator +----->+ Wolfnet_Service_CachingService |
-     *    ^           |                             |      |                                |
-     *    |           +---------+-------------------+      +--------------------------------+
+     *    |           +---------+--------------------+      +--------------------------------+
+     *    |  extends  |                              |      |                                |
+     *    +-----------+ Wolfnet_Api_CachingDecorator +----->+ Wolfnet_Service_CachingService |
+     *    ^           |                              |      |                                |
+     *    |           +---------+--------------------+      +--------------------------------+
      *    |                     ^
      *    |                     |
      *    |                     |
-     *    |           +---------+----------------+
-     *    |  extends  |                          |
-     *    +-----------+ Wolfnet_ApiAuthDecorator |
-     *                |                          |
-     *                +--------------------------+
+     *    |           +---------+-----------------+
+     *    |  extends  |                           |
+     *    +-----------+ Wolfnet_Api_AuthDecorator |
+     *                |                           |
+     *                +---------------------------+
      *
-     * @return  Wolfnet_ApiClient  A decorated API client.
+     * @return  Wolfnet_Api_Client  A decorated API client.
      *
      */
     private function getApiClientInstance()
     {
-        $apiClient = new Wolfnet_ApiClient();
-        $cachingDecorator = new Wolfnet_ApiCachingDecorator($apiClient, $this->cachingService);
-        $authDecorator = new Wolfnet_ApiAuthDecorator($cachingDecorator);
+        $apiClient = new Wolfnet_Api_Client();
+        $cachingDecorator = new Wolfnet_Api_CachingDecorator($apiClient, $this->cachingService);
+        $authDecorator = new Wolfnet_Api_AuthDecorator($cachingDecorator);
 
         return $authDecorator;
 

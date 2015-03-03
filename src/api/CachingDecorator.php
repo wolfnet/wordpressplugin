@@ -22,7 +22,7 @@
  * @license GNU v2
  *
  */
-class Wolfnet_ApiCachingDecorator extends Wolfnet_ApiClient
+class Wolfnet_Api_CachingDecorator extends Wolfnet_Api_Client
 {
 
 
@@ -45,7 +45,7 @@ class Wolfnet_ApiCachingDecorator extends Wolfnet_ApiClient
 
     /**
      * This property holds a reference to the API client which is being decorated.
-     * @var Wolfnet_ApiClient
+     * @var Wolfnet_Api_Client
      */
     private $client;
 
@@ -65,11 +65,11 @@ class Wolfnet_ApiCachingDecorator extends Wolfnet_ApiClient
      * cached data while the API Client be used to perform actual requests to the API when no cached
      * data exists.
      *
-     * @param  Wolfnet_ApiClient  $client  A reference to an API client
+     * @param  Wolfnet_Api_Client  $client  A reference to an API client
      * @param  Wolfnet_Service_CachingService  $service  A reference to the WolfNet caching service.
      *
      */
-    public function __construct(Wolfnet_ApiClient &$client, Wolfnet_Service_CachingService &$service)
+    public function __construct(Wolfnet_Api_Client &$client, Wolfnet_Service_CachingService &$service)
     {
         $this->client = $client;
         $this->service = $service;
