@@ -79,6 +79,9 @@ This css will resolve the layout issue in the "Twenty Fifteen" theme
 == Screenshots ==
 
 
+== Upgrade Notice ==
+
+
 == Changelog ==
 
 = 1.7.3 =
@@ -342,4 +345,36 @@ This css will resolve the layout issue in the "Twenty Fifteen" theme
 * Initial beta release for limited distribution.
 
 
-== Upgrade Notice ==
+== Contributors ==
+The following individuals contributed to the creation of this plugin.
+
+**AJ Michels**
+http://ajmichels.com
+@ajmichels
+Oakdale, Minnesota, USA
+
+**Andrew Baumgart**
+Minnesota, USA
+
+**Michael Pidde**
+http://michaelpidde.com
+Minnesota, USA
+
+**Tom Penney**
+http://tompenney.com
+@tompenney
+Minneapolis, Minnesota, USA
+
+
+== Thanks ==
+We would like to thank the following projects as they have been a big part of creating this plugin.
+
+* **[Sublime Text](http://sublimetext.com)**
+* **[jQuery](http://jquery.com)**
+* **[Vagrant](http://vagrantup.com)**
+* **[Less CSS](http://lesscss.org)**
+* **jQuery SmoothDivScroll** by Thomas Kahn
+* **jQuery Tooltip** by Jörn Zaefferer
+* **jQuery imagesLoaded** by Paul Irish
+* **jQuery MouseWheel** by [Brandon Aaron](http://brandonaaron.net)
+* **[PHPUnit](http://phpunit.de)**
