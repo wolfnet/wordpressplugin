@@ -55,7 +55,7 @@ class Wolfnet_Exception extends Exception
      * @param Exception  $previous  An exception that was throw before the current instance.
      * @param mixed      $code      An arbitrary code to make error handling easier.
      */
-    public function __construct($message, $details='', $data=null, Exception &$previous=null, $code=0)
+    public function __construct($message, $details='', $data=null, Exception $previous=null, $code=0)
     {
         parent::__construct($message, $code);
 
