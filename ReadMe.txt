@@ -52,8 +52,9 @@ entered in the "WolfNet >> General Settings" page before any IDX data can be dis
 
 The Wolfnet plugin automatically adds the required text to the footer of the site. Unfortunately information in the footer can not always be properly styled by the plugin. Footer formatting issues can be resolved with CSS either by writing the CSS into the sites theme or by adding the CSS to the Wolfnet settings. To add custom CSS to the Wolfnet settings, in your dashboard go to "Wolfnet" > "Edit CSS"  and add css to the "Public CSS" area of the form.
 
-This css will resolve the layout issue in the "Twenty Fifteen" theme
+The following CSS will resolve the layout issue in the "Twenty Fifteen" theme:
 
+`
 .wolfnet_marketDisclaimer {
     margin: 4em 0 0 0;
     padding: 2% 4%;
@@ -74,6 +75,7 @@ This css will resolve the layout issue in the "Twenty Fifteen" theme
     width: 58.8235%;
     }
 }
+`
 
 
 == Screenshots ==
