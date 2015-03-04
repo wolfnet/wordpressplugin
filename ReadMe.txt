@@ -350,22 +350,22 @@ The following CSS will resolve the layout issue in the "Twenty Fifteen" theme:
 == Contributors ==
 The following individuals contributed to the creation of this plugin.
 
-**AJ Michels**
-http://ajmichels.com
-@ajmichels
-Oakdale, Minnesota, USA
+= AJ Michels =
+* http://ajmichels.com
+* @ajmichels
+* Oakdale, Minnesota, USA
 
-**Andrew Baumgart**
-Minnesota, USA
+= Andrew Baumgart =
+* Minnesota, USA
 
-**Michael Pidde**
-http://michaelpidde.com
-Minnesota, USA
+= Michael Pidde =
+* http://michaelpidde.com
+* Minnesota, USA
 
-**Tom Penney**
-http://tompenney.com
-@tompenney
-Minneapolis, Minnesota, USA
+= Tom Penney =
+* http://tompenney.com
+* @tompenney
+* Minneapolis, Minnesota, USA
 
 
 == Thanks ==
