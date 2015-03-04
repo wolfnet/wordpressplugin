@@ -22,7 +22,7 @@
 
 require_once dirname(__FILE__) . '/AbstractWidget.php';
 
-class Wolfnet_QuickSearchWidget extends Wolfnet_AbstractWidget
+class Wolfnet_Widget_QuickSearchWidget extends Wolfnet_Widget_AbstractWidget
 {
 
 

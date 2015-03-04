@@ -349,13 +349,13 @@ class Wolfnet_Plugin
     {
         do_action($this->preHookPrefix . 'registerWidgets'); // Legacy hook
 
-        register_widget('Wolfnet_FeaturedListingsWidget');
+        register_widget('Wolfnet_Widget_FeaturedListingsWidget');
 
-        register_widget('Wolfnet_ListingGridWidget');
+        register_widget('Wolfnet_Widget_ListingGridWidget');
 
-        register_widget('Wolfnet_PropertyListWidget');
+        register_widget('Wolfnet_Widget_PropertyListWidget');
 
-        register_widget('Wolfnet_QuickSearchWidget');
+        register_widget('Wolfnet_Widget_QuickSearchWidget');
 
         do_action($this->postHookPrefix . 'registerWidgets'); // Legacy hook
 

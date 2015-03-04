@@ -22,7 +22,7 @@
 
 require_once dirname(__FILE__) . '/AbstractWidget.php';
 
-class Wolfnet_ListingGridWidget extends Wolfnet_AbstractWidget
+class Wolfnet_Widget_ListingGridWidget extends Wolfnet_Widget_AbstractWidget
 {
 
 

@@ -20,7 +20,7 @@
  *                Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-abstract class Wolfnet_AbstractWidget extends WP_Widget
+abstract class Wolfnet_Widget_AbstractWidget extends WP_Widget
 {
 
 
