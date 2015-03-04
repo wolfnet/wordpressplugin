@@ -304,15 +304,19 @@ class Wolfnet_Api_Client
             $errorCode = property_exists($status, 'errorCode') ? $status->errorCode : null;
             $statusCode = property_exists($status, 'statusCode') ? $status->statusCode : null;
             $errorID = property_exists($status, 'error_id') ? $status->error_id : null;
+            $extendedInfo = property_exists($status, 'extendedInfo') ? $status->extendedInfo : null;
 
+            // TODO: These two variables are used repeatedly below. Could be done better.
             $errorIDMessage = ($errorID !== null) ? 'API Error ID: ' . $errorID : null;
+            $errorMessage = ($extendedInfo !== null) ? 'The API says: [' . $extendedInfo . ']' : null;
 
             // The API returned a 401 Unauthorized
             if ($responseCode == 401) {
                 $message = 'Remote request resulted in a [401 Unauthorized] response.';
                 $details = 'The WolfNet API has indicated that the request was made '
                          . 'without properly authentication. '
-                         . (($errorIDMessage !== null) ? $errorIDMessage : '');
+                         . (($errorIDMessage !== null) ? $errorIDMessage : '') . ' '
+                         . (($errorMessage !== null) ? $errorMessage : '');
                 throw new Wolfnet_Api_ApiException($message, $details, $response, null, self::NO_AUTH_ERROR);
             }
 
@@ -320,7 +324,8 @@ class Wolfnet_Api_Client
             if ($responseCode == 500) {
                 $message = 'Remote request resulted in a [500 Internal Server Error] response.';
                 $details = 'The WolfNet API appears to be unresponsive at this time.'
-                         . (($errorIDMessage !== null) ? $errorIDMessage : '');
+                         . (($errorIDMessage !== null) ? $errorIDMessage : '') . ' '
+                         . (($errorMessage !== null) ? $errorMessage : '');
                 throw new Wolfnet_Api_ApiException($message, $details, $response);
             }
 
@@ -328,7 +333,8 @@ class Wolfnet_Api_Client
             if ($responseCode == 503) {
                 $message = 'Remote request resulted in a [503 Service Unavailable] response.';
                 $details = 'The WolfNet API appears to be unresponsive at this time but should be back soon.'
-                         . (($errorIDMessage !== null) ? $errorIDMessage : '');
+                         . (($errorIDMessage !== null) ? $errorIDMessage : '') . ' '
+                         . (($errorMessage !== null) ? $errorMessage : '');
                 throw new Wolfnet_Api_ApiException($message, $details, $response);
             }
 
@@ -337,7 +343,8 @@ class Wolfnet_Api_Client
                 $message = 'Remote request resulted in a [403 Forbidden] response.';
                 $details = 'An attempt was made to request data that is not available to the key that '
                          . 'was used to authenticate the request.'
-                         . (($errorIDMessage !== null) ? $errorIDMessage : '');
+                         . (($errorIDMessage !== null) ? $errorIDMessage : '') . ' '
+                         . (($errorMessage !== null) ? $errorMessage : '');
                 throw new Wolfnet_Api_ApiException($message, $details, $response);
             }
 
@@ -354,7 +361,8 @@ class Wolfnet_Api_Client
                 if ($errorCode == $authErrorCode || $statusCode == $authErrorCode) {
                     $message = 'Remote request was not authorized.';
                     $details = 'The WolfNet API has responded that it did not receive a valid API token.'
-                             . (($errorIDMessage !== null) ? $errorIDMessage : '');
+                             . (($errorIDMessage !== null) ? $errorIDMessage : '') . ' '
+                             . (($errorMessage !== null) ? $errorMessage : '');
                     throw new Wolfnet_Api_ApiException($message, $details, $response, null, self::AUTH_ERROR);
 
                 // If WordPress has provided a message use that for the exception
@@ -365,7 +373,8 @@ class Wolfnet_Api_Client
                 } else {
                     $message = 'Remote request was not successful.';
                     $details = 'The WolfNet API has indicated that the request was "bad" for an unknown reason.'
-                             . (($errorIDMessage !== null) ? $errorIDMessage : '');
+                             . (($errorIDMessage !== null) ? $errorIDMessage : '') . ' '
+                             . (($errorMessage !== null) ? $errorMessage : '');
                     throw new Wolfnet_Api_ApiException($message, $details, $response);
 
                 }
@@ -377,7 +386,8 @@ class Wolfnet_Api_Client
             $message = 'Remote request was not successful.';
             $details = 'The WolfNet plugin received an API response it is not prepared to deal with. '
                      . 'Status: ' . $responseCode . ' ' . $responseText . ";\n"
-                     . (($errorIDMessage !== null) ? $errorIDMessage : '');
+                     . (($errorIDMessage !== null) ? $errorIDMessage : '') . ' '
+                     . (($errorMessage !== null) ? $errorMessage : '');
             throw new Wolfnet_Api_ApiException($message, $details, $response);
 
         }
