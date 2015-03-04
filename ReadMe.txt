@@ -50,7 +50,7 @@ entered in the "WolfNet >> General Settings" page before any IDX data can be dis
 
 = The "Twenty Fifteen" theme shows some of the disclaimer text is hidden behind the sidebar. How can I fix this? =
 
-The Wolfnet plugin automatically adds the required text to the footer of the site. Unfortunately information in the footer can not always be properly styled by the plugin. Footer formatting issues can be resolved with CSS either by writing the CSS into the sites theme or by adding the CSS to the Wolfnet settings. To add custom CSS to the Wolfnet settings, in your dashboard go to "Wolfnet" > "Edit CSS"  and add css to the "Public CSS" area of the form.
+The WolfNet plugin automatically adds the required text to the footer of the site. Unfortunately information in the footer can not always be properly styled by the plugin. Footer formatting issues can be resolved with CSS either by writing the CSS into the sites theme or by adding the CSS to the WolfNet settings. To add custom CSS to the WolfNet settings, in your dashboard go to "Wolfnet" > "Edit CSS"  and add CSS to the "Public CSS" area of the form.
 
 The following CSS will resolve the layout issue in the "Twenty Fifteen" theme:
 
@@ -146,7 +146,7 @@ The following CSS will resolve the layout issue in the "Twenty Fifteen" theme:
 
 = 1.4.0 =
 * Adding CSS Editor page.
-* Implementing jsonp for pagination so that pagniated components can be displayed as part of header/footer content wrapping search solution on mlsfinder servers.
+* Implementing Jsonp for pagination so that paginated components can be displayed as part of header/footer content wrapping search solution on MLSFinder servers.
 
 = 1.3.19 =
 * Fixing issue with grid columns when paginating.
