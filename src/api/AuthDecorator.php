@@ -84,7 +84,7 @@ class Wolfnet_Api_AuthDecorator extends Wolfnet_Api_Client
         $args = func_get_args();
 
         // Retrieve authentication information.
-        $auth = $this->authenticate($key, array('force'=>$reAuth));
+        $auth = $this->authenticate($key, array(), array('force'=>$reAuth));
         $token = $auth['responseData']['data']['api_token'];
 
         // var_dump($auth); exit;
@@ -124,15 +124,16 @@ class Wolfnet_Api_AuthDecorator extends Wolfnet_Api_Client
      * This method just passes the authentication request off to the decorated client.
      *
      * @param  string  $key      The API key to be used to authenticate with the API.
+     * @param  array   $headers  The HTTP headers to be sent with the request.
      * @param  array   $options  Extra options that may be passed into the request. This parameter
      *                           mostly exists to facilitate the decorators.
      *
      * @return array             The API response structure
      *
      */
-    public function authenticate($key, array $options=array())
+    public function authenticate($key, array $headers=array(), array $options=array())
     {
-        return $this->client->authenticate($key, $options);
+        return $this->client->authenticate($key, $headers, $options);
     }
 
 

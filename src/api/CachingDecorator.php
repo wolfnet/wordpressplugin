@@ -163,6 +163,7 @@ class Wolfnet_Api_CachingDecorator extends Wolfnet_Api_Client
      * made to the API.
      *
      * @param  string  $key      The API key to authenticate with.
+     * @param  array   $headers  The HTTP headers to be sent with the request.
      * @param  array   $options  Extra options that may be passed into the request. This argument
      *                           mostly exists to facilitate the decorators. Possible keys used by
      *                           this decorator include 'force'.
@@ -170,7 +171,7 @@ class Wolfnet_Api_CachingDecorator extends Wolfnet_Api_Client
      * @return array             The API response structure.
      *
      */
-    public function authenticate($key, $options=array())
+    public function authenticate($key, array $headers=array(), array $options=array())
     {
         /* If the force key is present we should force the decorator to retrieve new data from the
          * API even if cached data was found. */
@@ -189,7 +190,7 @@ class Wolfnet_Api_CachingDecorator extends Wolfnet_Api_Client
         // If we don't have a token at this point we need to get one from the API.
         if ($force || $result === null) {
             // Retrieve a token from the API if one was not in the cache.
-            $result = $this->client->authenticate($key);
+            $result = $this->client->authenticate($key, $headers, $options);
 
             // Put the new token into the cache.
             $this->service->cachePut($cacheKey, $result, self::AUTH_CACHE_SPAN);

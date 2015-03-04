@@ -3010,6 +3010,14 @@ class Wolfnet_Plugin
      *    |                     ^
      *    |                     |
      *    |                     |
+     *    |           +---------+------------------+
+     *    |  extends  |                            |
+     *    +-----------+ Wolfnet_Api_StatsDecorator |
+     *    ^           |                            |
+     *    |           +----------------------------+
+     *    |                     ^
+     *    |                     |
+     *    |                     |
      *    |           +---------+--------------------+      +--------------------------------+
      *    |  extends  |                              |      |                                |
      *    +-----------+ Wolfnet_Api_CachingDecorator +----->+ Wolfnet_Service_CachingService |
@@ -3030,7 +3038,8 @@ class Wolfnet_Plugin
     private function getApiClientInstance()
     {
         $apiClient = new Wolfnet_Api_Client();
-        $cachingDecorator = new Wolfnet_Api_CachingDecorator($apiClient, $this->cachingService);
+        $statsDecorator = new Wolfnet_Api_StatsDecorator($apiClient);
+        $cachingDecorator = new Wolfnet_Api_CachingDecorator($statsDecorator, $this->cachingService);
         $authDecorator = new Wolfnet_Api_AuthDecorator($cachingDecorator);
 
         return $authDecorator;

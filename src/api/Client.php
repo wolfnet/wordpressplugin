@@ -87,18 +87,21 @@ class Wolfnet_Api_Client
      * to perform any other requests to the API.
      *
      * @param  string  $key  API key to be used for authentication.
+     * @param  array   $headers  The HTTP headers to be sent with the request.
+     * @param  array   $options  Extra options that may be passed into the request. This parameter
+     *                           mostly exists to facilitate the decorators.
      *
      * @return array         The API response structure.
      *
      */
-    public function authenticate($key)
+    public function authenticate($key, array $headers=array(), array $options=array())
     {
         $data = array(
             'key' => $key,
             'v' => $this->version,
         );
 
-        return $this->performRequest($key, null, '/core/auth', 'POST', $data);
+        return $this->performRequest($key, null, '/core/auth', 'POST', $data, $headers);
 
     }
 
@@ -111,6 +114,8 @@ class Wolfnet_Api_Client
      * @param  string  $method   The HTTP verb that should be used to make the request.
      * @param  array   $data     Any data that should be passed along with the request.
      * @param  array   $headers  The HTTP headers to be sent with the request.
+     * @param  array   $options  Extra options that may be passed into the request. This parameter
+     *                           mostly exists to facilitate the decorators.
      *
      * @return array  An array containing the HTTP response.
      *
@@ -120,7 +125,8 @@ class Wolfnet_Api_Client
         $resource,
         $method = "GET",
         array $data = array(),
-        array $headers = array()
+        array $headers = array(),
+        array $options = array()
     ) {
 
         $headers['api_token'] = $token;
