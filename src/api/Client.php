@@ -311,7 +311,7 @@ class Wolfnet_Api_Client
             if ($responseCode == 401) {
                 $message = 'Remote request resulted in a [401 Unauthorized] response.';
                 $details = 'The WolfNet API has indicated that the request was made '
-                         . 'without property authentication. '
+                         . 'without properly authentication. '
                          . (($errorIDMessage !== null) ? $errorIDMessage : '');
                 throw new Wolfnet_Api_ApiException($message, $details, $response, null, self::NO_AUTH_ERROR);
             }
