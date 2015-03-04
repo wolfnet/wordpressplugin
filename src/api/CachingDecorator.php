@@ -17,9 +17,9 @@
  * group all of our (WolfNet) entries in the cache. This way we can target them and clear them all
  * explicitly without affecting any other transient data.
  *
- * @package Wolfnet
+ * @package Wolfnet\Api
  * @copyright 2015 WolfNet Technologies, LLC.
- * @license GNU v2
+ * @license GPLv2 or later (http://www.gnu.org/licenses/gpl-2.0.html)
  *
  */
 class Wolfnet_Api_CachingDecorator extends Wolfnet_Api_Client

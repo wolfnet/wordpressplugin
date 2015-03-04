@@ -1,5 +1,17 @@
 <?php
 
+/**
+ * WolfNet Exception
+ *
+ * This exception class is used to convey any exceptional state that may occur during the execution
+ * of code specific to this plugin. Having this custom exception class makes handling WolfNet
+ * specific exceptions much simpler.
+ *
+ * @package Wolfnet\Api
+ * @copyright 2015 WolfNet Technologies, LLC.
+ * @license GPLv2 or later (http://www.gnu.org/licenses/gpl-2.0.html)
+ *
+ */
 class Wolfnet_Exception extends Exception
 {
 

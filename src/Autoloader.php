@@ -8,8 +8,8 @@
  * future we will change this to use a directory/naming convention.
  *
  * @package Wolfnet
- * @license GNU v2
  * @copyright 2015 WolfNet Technologies, LLC.
+ * @license GPLv2 or later (http://www.gnu.org/licenses/gpl-2.0.html)
  *
  */
 class Wolfnet_Autoloader
