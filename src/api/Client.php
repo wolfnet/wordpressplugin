@@ -76,6 +76,7 @@ class Wolfnet_Api_Client
         $this->host = $host;
         $this->port = $port;
         $this->version = $version;
+
     }
 
 
