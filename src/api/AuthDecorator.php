@@ -102,7 +102,7 @@ class Wolfnet_Api_AuthDecorator extends Wolfnet_Api_Client
             $result = call_user_func_array(array($this->client, 'sendRequest'), $args);
 
         }
-        catch (Wolfnet_Api_Exception $e) {
+        catch (Wolfnet_Api_ApiException $e) {
 
             if ($e->getCode() === Wolfnet_Api_Client::AUTH_ERROR && $attempts < 5) {
                 $args[0] = $key;

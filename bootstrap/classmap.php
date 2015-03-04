@@ -13,7 +13,7 @@ return array(
     'Wolfnet_Api_AuthDecorator' => '/api/AuthDecorator.php',
     'Wolfnet_Api_CachingDecorator' => '/api/CachingDecorator.php',
     'Wolfnet_Api_Client' => '/api/Client.php',
-    'Wolfnet_Api_Exception' => '/api/Exception.php',
+    'Wolfnet_Api_ApiException' => '/api/ApiException.php',
     'Wolfnet_Service_CachingService' => '/service/CachingService.php',
     'Wolfnet_Widget_AbstractWidget' => '/widget/AbstractWidget.php',
     'Wolfnet_Widget_FeaturedListingsWidget' => '/widget/FeaturedListingsWidget.php',

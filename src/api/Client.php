@@ -143,9 +143,9 @@ class Wolfnet_Api_Client
      * @param  array   $data     Any data that should be passed along with the request.
      * @param  array   $headers  The HTTP headers to be sent with the request.
      *
-     * @throws Wolfnet_Api_Exception  This exception is thrown any time there is an issue
-     *                                with the request. This exception should then be caught
-     *                                later and displayed as a user friendly message.
+     * @throws Wolfnet_Api_ApiException  This exception is thrown any time there is an issue
+     *                                   with the request. This exception should then be caught
+     *                                   later and displayed as a user friendly message.
      *
      * @return array  An array containing the HTTP response.
      */
@@ -163,7 +163,7 @@ class Wolfnet_Api_Client
         try {
             $this->validateRequestData($data);
         }
-        catch (Wolfnet_Api_Exception $e) {
+        catch (Wolfnet_Api_ApiException $e) {
             throw $e->appendDetails('While attempting request to (' . $uri . ').');
         }
 
@@ -184,7 +184,7 @@ class Wolfnet_Api_Client
         try {
             $this->validateResponse($response);
         }
-        catch (Wolfnet_Api_Exception $e) {
+        catch (Wolfnet_Api_ApiException $e) {
             throw $e->appendDetails('While attempting request to (' . $uri . ').');
         }
 
@@ -202,8 +202,8 @@ class Wolfnet_Api_Client
      *
      * @param  array  $data  The data to be validated.
      *
-     * @throws Wolfnet_Api_Exception  This exception is thrown if any of the data that was
-     *                                given does not meet the validation criteria.
+     * @throws Wolfnet_Api_ApiException  This exception is thrown if any of the data that was
+     *                                   given does not meet the validation criteria.
      *
      * @return null
      */
@@ -218,7 +218,7 @@ class Wolfnet_Api_Client
                 $details = '[' . $key . '] is not a valid API argument. '
                          . 'All API arguments must be scalar values. ';
 
-                throw new Wolfnet_Api_Exception($message, $details);
+                throw new Wolfnet_Api_ApiException($message, $details);
 
             }
 
@@ -277,7 +277,7 @@ class Wolfnet_Api_Client
         if (is_wp_error($response)) {
             $message = 'Remote request failed for unknown reason.';
             $details = 'WordPress error says: ' . $response->get_error_message();
-            throw new Wolfnet_Api_Exception($message, $details, $response);
+            throw new Wolfnet_Api_ApiException($message, $details, $response);
         }
 
         $wpResponse = $response['response'];
@@ -313,7 +313,7 @@ class Wolfnet_Api_Client
                 $details = 'The WolfNet API has indicated that the request was made '
                          . 'without property authentication. '
                          . (($errorIDMessage !== null) ? $errorIDMessage : '');
-                throw new Wolfnet_Api_Exception($message, $details, $response, null, self::NO_AUTH_ERROR);
+                throw new Wolfnet_Api_ApiException($message, $details, $response, null, self::NO_AUTH_ERROR);
             }
 
             // The API returned a 500 Internal Server Error
@@ -321,7 +321,7 @@ class Wolfnet_Api_Client
                 $message = 'Remote request resulted in a [500 Internal Server Error] response.';
                 $details = 'The WolfNet API appears to be unresponsive at this time.'
                          . (($errorIDMessage !== null) ? $errorIDMessage : '');
-                throw new Wolfnet_Api_Exception($message, $details, $response);
+                throw new Wolfnet_Api_ApiException($message, $details, $response);
             }
 
             // The API returned a 503 Service Unavailable
@@ -329,7 +329,7 @@ class Wolfnet_Api_Client
                 $message = 'Remote request resulted in a [503 Service Unavailable] response.';
                 $details = 'The WolfNet API appears to be unresponsive at this time but should be back soon.'
                          . (($errorIDMessage !== null) ? $errorIDMessage : '');
-                throw new Wolfnet_Api_Exception($message, $details, $response);
+                throw new Wolfnet_Api_ApiException($message, $details, $response);
             }
 
             // The API returned a 403 Forbidden
@@ -338,7 +338,7 @@ class Wolfnet_Api_Client
                 $details = 'An attempt was made to request data that is not available to the key that '
                          . 'was used to authenticate the request.'
                          . (($errorIDMessage !== null) ? $errorIDMessage : '');
-                throw new Wolfnet_Api_Exception($message, $details, $response);
+                throw new Wolfnet_Api_ApiException($message, $details, $response);
             }
 
             // The API returned a 400 Bad Response
@@ -355,18 +355,18 @@ class Wolfnet_Api_Client
                     $message = 'Remote request was not authorized.';
                     $details = 'The WolfNet API has responded that it did not receive a valid API token.'
                              . (($errorIDMessage !== null) ? $errorIDMessage : '');
-                    throw new Wolfnet_Api_Exception($message, $details, $response, null, self::AUTH_ERROR);
+                    throw new Wolfnet_Api_ApiException($message, $details, $response, null, self::AUTH_ERROR);
 
                 // If WordPress has provided a message use that for the exception
                 } else if ($message !== null) {
-                    throw new Wolfnet_Api_Exception($message, 'See data for details.', $response);
+                    throw new Wolfnet_Api_ApiException($message, 'See data for details.', $response);
 
                 // Default exception for bad responses
                 } else {
                     $message = 'Remote request was not successful.';
                     $details = 'The WolfNet API has indicated that the request was "bad" for an unknown reason.'
                              . (($errorIDMessage !== null) ? $errorIDMessage : '');
-                    throw new Wolfnet_Api_Exception($message, $details, $response);
+                    throw new Wolfnet_Api_ApiException($message, $details, $response);
 
                 }
 
@@ -378,7 +378,7 @@ class Wolfnet_Api_Client
             $details = 'The WolfNet plugin received an API response it is not prepared to deal with. '
                      . 'Status: ' . $responseCode . ' ' . $responseText . ";\n"
                      . (($errorIDMessage !== null) ? $errorIDMessage : '');
-            throw new Wolfnet_Api_Exception($message, $details, $response);
+            throw new Wolfnet_Api_ApiException($message, $details, $response);
 
         }
 

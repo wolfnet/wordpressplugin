@@ -2724,7 +2724,7 @@ class Wolfnet_Plugin
             try {
                 $http = $this->apin->authenticate($productKey, array('force'=>true));
             }
-            catch (Wolfnet_Api_Exception $e) {
+            catch (Wolfnet_Api_ApiException $e) {
 
                 if ($e->getCode() == Wolfnet_Api_Client::NO_AUTH_ERROR) {
                     $valid = false;

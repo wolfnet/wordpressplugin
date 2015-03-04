@@ -15,7 +15,7 @@
  * @license GPLv2 or later (http://www.gnu.org/licenses/gpl-2.0.html)
  *
  */
-class Wolfnet_Api_Exception extends Wolfnet_Exception
+class Wolfnet_Api_ApiException extends Wolfnet_Exception
 {
 
 }
