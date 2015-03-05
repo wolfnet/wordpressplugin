@@ -130,19 +130,24 @@ class Wolfnet_Plugin
         $cacheRenew = ($cacheParamExists) ? ($_REQUEST[$cacheFlag] == 'refresh') : false;
         $cacheClear = ($cacheParamExists) ? ($_REQUEST[$cacheFlag] == 'clear') : false;
 
-        $this->cachingService = new Wolfnet_Service_CachingService($cacheRenew);
-        $this->cachingService->clearExpired();
+        $this->ioc = new Wolfnet_Factory(array(
+            'plugin' => &$this,
+            'cacheRenew' => $cacheRenew,
+            'cacheClear' => $cacheClear,
+        ));
+
+        $this->cachingService = $this->ioc->get('Wolfnet_Service_CachingService');
 
         if ($cacheClear) {
             $this->cachingService->clearAll();
         }
 
-        $this->apin = $this->getApiClientInstance();
+        $this->apin = $this->ioc->get('Wolfnet_Api_Client');
 
-        $this->views = new Wolfnet_Views();
+        $this->views = $this->ioc->get('Wolfnet_Views');
 
         if (is_admin()) {
-            $this->admin = new Wolfnet_Admin($this);
+            $this->admin = $this->ioc->get('Wolfnet_Admin');
         }
 
         // Register actions.
@@ -2990,59 +2995,6 @@ class Wolfnet_Plugin
         foreach ($ajxActions as $action => $method) {
             $this->addAction('wp_ajax_nopriv_' . $action, array(&$this, $method));
         }
-
-    }
-
-
-    /**
-     * This method is used to retrieve an instance of the API Client. This logic is encapsulated in
-     * its own function for clarity. Because we are decorating the API Client there are a number of
-     * other objects that are needed before we can return the API Client.
-     *
-     * TODO: Ideally this kind of logic would be encapsulated inside of IOC container which handles
-     * dependency injection. At some point we want to introduce such an object.
-     *
-     *                +--------------------+
-     *                |                    |
-     *    +---------->+ Wolfnet_Api_Client |
-     *    |           |                    |
-     *    |           +---------+----------+
-     *    |                     ^
-     *    |                     |
-     *    |                     |
-     *    |           +---------+------------------+
-     *    |  extends  |                            |
-     *    +-----------+ Wolfnet_Api_StatsDecorator |
-     *    ^           |                            |
-     *    |           +----------------------------+
-     *    |                     ^
-     *    |                     |
-     *    |                     |
-     *    |           +---------+--------------------+      +--------------------------------+
-     *    |  extends  |                              |      |                                |
-     *    +-----------+ Wolfnet_Api_CachingDecorator +----->+ Wolfnet_Service_CachingService |
-     *    ^           |                              |      |                                |
-     *    |           +---------+--------------------+      +--------------------------------+
-     *    |                     ^
-     *    |                     |
-     *    |                     |
-     *    |           +---------+-----------------+
-     *    |  extends  |                           |
-     *    +-----------+ Wolfnet_Api_AuthDecorator |
-     *                |                           |
-     *                +---------------------------+
-     *
-     * @return  Wolfnet_Api_Client  A decorated API client.
-     *
-     */
-    private function getApiClientInstance()
-    {
-        $apiClient = new Wolfnet_Api_Client();
-        $statsDecorator = new Wolfnet_Api_StatsDecorator($apiClient);
-        $cachingDecorator = new Wolfnet_Api_CachingDecorator($statsDecorator, $this->cachingService);
-        $authDecorator = new Wolfnet_Api_AuthDecorator($cachingDecorator);
-
-        return $authDecorator;
 
     }
 

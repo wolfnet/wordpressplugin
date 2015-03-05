@@ -8,6 +8,7 @@ return array(
     'Wolfnet_Admin' => '/Admin.php',
     'Wolfnet_Autoloader' => '/Autoloader.php',
     'Wolfnet_Exception' => '/Exception.php',
+    'Wolfnet_Factory' => '/Factory.php',
     'Wolfnet_Plugin' => '/Plugin.php',
     'Wolfnet_Views' => '/Views.php',
     'Wolfnet_Api_ApiException' => '/api/ApiException.php',
