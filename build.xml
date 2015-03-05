@@ -164,7 +164,7 @@
                 <replacefilter token="{majorVersion}" value="${majorVersion}" />
                 <replacefilter token="{minorVersion}" value="${minorVersion}" />
                 <replacefilter token="{X.X.X}" value="${version}" />
-                <replacefilter token="{X.X.X}" value="${version}" />
+                <replacefilter token="{X.X.X-stable}" value="${version}" />
             </replace>
         </sequential>
     </macrodef>
@@ -185,7 +185,7 @@
                 <replacefilter token="{majorVersion}" value="${majorVersion}" />
                 <replacefilter token="{minorVersion}" value="${minorVersion}" />
                 <replacefilter token="{X.X.X}" value="${version}+${git.revision}" />
-                <replacefilter token="{X.X.X}" value="${git.revision}" />
+                <replacefilter token="{X.X.X-stable}" value="${version}" />
             </replace>
         </sequential>
     </macrodef>
