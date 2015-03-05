@@ -88,9 +88,6 @@
         <zip destfile="${dist.name}_${version}.zip" compress="true">
             <zipfileset dir="${dir.build}" prefix="${ant.project.name}" />
         </zip>
-        <zip destfile="${dist.name}_${version}_src.zip" compress="true">
-            <zipfileset dir="${basedir}" prefix="${ant.project.name}" excludes="dist/*,.vagrant/temp/*,.vagrant/machines/*" />
-        </zip>
     </target>
 
 
@@ -99,9 +96,6 @@
         <prep-for-test-dist />
         <zip destfile="${dist.name}_${version}+${git.revision}.zip" compress="true">
             <zipfileset dir="${dir.build}" prefix="${ant.project.name}" />
-        </zip>
-        <zip destfile="${dist.name}_${version}+${git.revision}_src.zip" compress="true">
-            <zipfileset dir="${basedir}" prefix="${ant.project.name}" excludes="dist/*,.vagrant/temp/*,.vagrant/machines/*" />
         </zip>
     </target>
 
@@ -134,7 +128,6 @@
     <macrodef name="clean-for-dist">
         <sequential>
             <delete file="${dist.name}_${version}.zip" />
-            <delete file="${dist.name}_${version}_src.zip" />
         </sequential>
     </macrodef>
 
@@ -142,7 +135,6 @@
     <macrodef name="clean-for-test-dist">
         <sequential>
             <delete file="${dist.name}_${version}+${git.revision}.zip" />
-            <delete file="${dist.name}_${version}+${git.revision}_src.zip" />
         </sequential>
     </macrodef>
 
