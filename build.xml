@@ -60,21 +60,18 @@
         <copy todir="${dir.build}">
             <fileset dir="${basedir}">
                 <!-- Excluded Directories -->
-                <exclude name=".ant/" />
-                <exclude name=".ant/" />
-                <exclude name=".vagrant/" />
-                <exclude name="build/" />
-                <exclude name="dist/" />
-                <exclude name="docs/" />
-                <exclude name="tests/" />
-                <exclude name="phpunit.xml" />
+                <exclude name="**/build/*" />
+                <exclude name="**/dist/*" />
+                <exclude name="**/docs/*" />
+                <exclude name="**/tests/*" />
                 <!-- Excluded Files -->
-                <exclude name=".gitconfig" />
                 <exclude name="build.xml" />
+                <exclude name="phpunit.xml" />
                 <exclude name="LessCompilerOutput.txt" />
                 <exclude name="vagrantfile" />
                 <!-- Excluded File Patterns -->
-                <exclude name="*.vagrant" />
+                <exclude name="**/.*" />
+                <exclude name="**/.*/" />
                 <exclude name="*.sublime*" />
                 <exclude name="**/*.less" />
                 <exclude name="**/*.tmp" />
