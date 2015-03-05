@@ -47,11 +47,17 @@ class Wolfnet_Widget_FeaturedListingsWidget extends Wolfnet_Widget_AbstractWidge
      */
     public function widget($args, $instance)
     {
-        $options = $this->getOptions($instance);
 
-        echo $args['before_widget'];
-        echo $this->plugin->featuredListings($options);
-        echo $args['after_widget'];
+        try {
+
+            $options = $this->getOptions($instance);
+            $response = $this->plugin->featuredListings($options);
+
+        } catch (Wolfnet_Api_ApiException $e) {
+            $response = $this->plugin->displayException($e);
+        }
+
+        echo $args['before_widget'] . $response . $args['after_widget'];
 
     }
 

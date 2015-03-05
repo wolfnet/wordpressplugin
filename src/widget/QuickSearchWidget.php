@@ -38,11 +38,17 @@ class Wolfnet_Widget_QuickSearchWidget extends Wolfnet_Widget_AbstractWidget
 
     public function widget($args, $instance)
     {
-        $options = $this->getOptions($instance);
 
-        echo $args['before_widget'];
-        echo $this->plugin->quickSearch($options);
-        echo $args['after_widget'];
+        try {
+
+            $options = $this->getOptions($instance);
+            $response = $this->plugin->quickSearch($options);
+
+        } catch (Wolfnet_Api_ApiException $e) {
+            $response = $this->plugin->displayException($e);
+        }
+
+        echo $args['before_widget'] . $response . $args['after_widget'];
 
     }
 

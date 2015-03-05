@@ -44,10 +44,16 @@ class Wolfnet_Widget_ListingGridWidget extends Wolfnet_Widget_AbstractWidget
     public function widget($args, $instance)
     {
 
-        $instance['maxrows'] = $instance['maxresults'];
-        echo $args['before_widget'];
-        echo $this->plugin->listingGrid($this->collectData($args, $instance));
-        echo $args['after_widget'];
+        try {
+
+            $instance['maxrows'] = $instance['maxresults'];
+            $response = $this->plugin->listingGrid($this->collectData($args, $instance));
+
+        } catch (Wolfnet_Api_ApiException $e) {
+            $response = $this->plugin->displayException($e);
+        }
+
+        echo $args['before_widget'] . $response . $args['after_widget'];
 
     }
 

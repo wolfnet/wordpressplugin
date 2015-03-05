@@ -35,9 +35,15 @@ class Wolfnet_Widget_PropertyListWidget extends Wolfnet_Widget_ListingGridWidget
     public function widget($args, $instance)
     {
 
-        echo $args['before_widget'];
-        echo $this->plugin->listingGrid($this->collectData($args, $instance), 'list');
-        echo $args['after_widget'];
+        try {
+
+            $response = $this->plugin->listingGrid($this->collectData($args, $instance), 'list');
+
+        } catch (Wolfnet_Api_ApiException $e) {
+            $response = $this->plugin->displayException($e);
+        }
+
+        echo $args['before_widget'] . $response . $args['after_widget'];
 
     }
 
