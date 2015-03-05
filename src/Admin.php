@@ -164,24 +164,18 @@ class Wolfnet_Admin extends Wolfnet_Plugin
 
         $key = (array_key_exists("keyid", $_REQUEST)) ? $_REQUEST["keyid"] : "1";
         $productKey = $GLOBALS['wolfnet']->getProductKeyById($key);
+        $pageKeyExists = array_key_exists('page', $_REQUEST);
+        $pageIsSM = ($pageKeyExists) ? ($_REQUEST['page']=='wolfnet_plugin_search_manager') : false;
 
-        if ($GLOBALS['wolfnet']->productKeyIsValid($productKey)) {
+        if ($pageKeyExists && $pageIsSM && $GLOBALS['wolfnet']->productKeyIsValid($productKey)) {
 
-            $pageKeyExists = array_key_exists('page', $_REQUEST);
-            $pageIsSM = ($pageKeyExists) ? ($_REQUEST['page']=='wolfnet_plugin_search_manager') : false;
-
-            if ($pageKeyExists && $pageIsSM) {
-
-                try {
-                    $GLOBALS['wolfnet']->smHttp = $GLOBALS['wolfnet']->searchManagerHtml($productKey);
-                } catch (Wolfnet_Exception $e) {
-                    $GLOBALS['wolfnet']->smHttp = $GLOBALS['wolfnet']->displayException($e);
-                }
-
+            try {
+                $GLOBALS['wolfnet']->smHttp = $GLOBALS['wolfnet']->searchManagerHtml($productKey);
+            } catch (Wolfnet_Exception $e) {
+                $GLOBALS['wolfnet']->smHttp = $GLOBALS['wolfnet']->displayException($e);
             }
 
         }
-
 
     }
 
