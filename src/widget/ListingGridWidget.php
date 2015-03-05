@@ -86,7 +86,7 @@ class Wolfnet_Widget_ListingGridWidget extends Wolfnet_Widget_AbstractWidget
             $saveData['city'] = '';
             $saveData['minprice'] = '';
             $saveData['maxprice'] = '';
-            
+
             if ( $saveData['keyid'] != '' ) {
                 $criteria['keyid'] = $saveData['keyid'];
             }
