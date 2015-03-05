@@ -60,10 +60,10 @@
         <copy todir="${dir.build}">
             <fileset dir="${basedir}">
                 <!-- Excluded Directories -->
-                <exclude name="**/build/*" />
-                <exclude name="**/dist/*" />
-                <exclude name="**/docs/*" />
-                <exclude name="**/tests/*" />
+                <exclude name="build/" />
+                <exclude name="dist/" />
+                <exclude name="docs/" />
+                <exclude name="tests/" />
                 <!-- Excluded Files -->
                 <exclude name="build.xml" />
                 <exclude name="phpunit.xml" />
