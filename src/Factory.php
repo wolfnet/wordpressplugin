@@ -96,8 +96,8 @@ class Wolfnet_Factory
         $apiClient = new Wolfnet_Api_Client();
 
         $apiClient = new Wolfnet_Api_StatsDecorator($apiClient);
-        // $cachingService = $this->get('Wolfnet_Service_CachingService');
-        // $apiClient = new Wolfnet_Api_CachingDecorator($apiClient, $cachingService);
+        $cachingService = $this->get('Wolfnet_Service_CachingService');
+        $apiClient = new Wolfnet_Api_CachingDecorator($apiClient, $cachingService);
         $apiClient = new Wolfnet_Api_AuthDecorator($apiClient);
 
         return $apiClient;
