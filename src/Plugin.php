@@ -1162,10 +1162,10 @@ class Wolfnet_Plugin
             }
 
             // Convert 'zipcode' to 'zip_code' for new API
-            if (array_key_exists('zipcode', $args)) {
+            if (array_key_exists('zipcode', $args) && !array_key_exists('zip_code', $args)) {
                 $args['zip_code'] = $args['zipcode'];
-                unset($args['zipcode']);
             }
+            unset($args['zipcode']);
 
             $qdata = $this->prepareListingQuery($_REQUEST);
 
@@ -1518,10 +1518,10 @@ class Wolfnet_Plugin
         }
 
         // Convert 'zipcode' to 'zip_code' for new API
-        if (array_key_exists('zipcode', $criteria)) {
+        if (array_key_exists('zipcode', $criteria) && !array_key_exists('zip_code', $criteria)) {
             $criteria['zip_code'] = $criteria['zipcode'];
-            unset($criteria['zipcode']);
         }
+        unset($criteria['zipcode']);
 
         $qdata = $this->prepareListingQuery($criteria);
 
