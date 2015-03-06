@@ -4,7 +4,7 @@ Contributors:       wolfnettech, ajmichels, asbaumgart, michaelpidde, blots
 Tags:               idx, mls, homes
 Requires at least:  3.5.1
 Tested up to:       4.1
-Stable tag:         {X.X.X}
+Stable tag:         {X.X.X-stable}
 License:            GPLv2 or later
 License URI:        http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -15,10 +15,9 @@ website.
 == Description ==
 The WolfNet IDX for WordPress plugin provides IDX search solution integration with any WordPress
 website. To integrate WolfNet IDX data with your WordPress website, you must have a WolfNet IDX
-property search solution. To activate the WolfNet IDX for WordPress plugin, you must have a unique
-product key. Please contact WolfNet Customer Service for support via phone at 612-342-0088 or toll
-free at 1-866-WOLFNET, or via email at service@wolfnet.com. You may also find us online at
-[WolfNet.com](http://wolfnet.com).
+property search solution. To activate the plugin, you must have a unique product key. Please contact
+WolfNet Customer Service for support via phone at 612-342-0088 or toll free at 1-866-WOLFNET, or via
+email at service@wolfnet.com. You may also find us online at [WolfNet.com](http://wolfnet.com).
 
 
 == Installation ==
@@ -50,10 +49,11 @@ entered in the "WolfNet >> General Settings" page before any IDX data can be dis
 
 = The "Twenty Fifteen" theme shows some of the disclaimer text is hidden behind the sidebar. How can I fix this? =
 
-The Wolfnet plugin automatically adds the required text to the footer of the site. Unfortunately information in the footer can not always be properly styled by the plugin. Footer formatting issues can be resolved with CSS either by writing the CSS into the sites theme or by adding the CSS to the Wolfnet settings. To add custom CSS to the Wolfnet settings, in your dashboard go to "Wolfnet" > "Edit CSS"  and add css to the "Public CSS" area of the form.
+The WolfNet plugin automatically adds the required text to the footer of the site. Unfortunately information in the footer can not always be properly styled by the plugin. Footer formatting issues can be resolved with CSS either by writing the CSS into the sites theme or by adding the CSS to the WolfNet settings. To add custom CSS to the WolfNet settings, in your dashboard go to "Wolfnet" > "Edit CSS"  and add CSS to the "Public CSS" area of the form.
 
-This css will resolve the layout issue in the "Twenty Fifteen" theme
+The following CSS will resolve the layout issue in the "Twenty Fifteen" theme:
 
+`
 .wolfnet_marketDisclaimer {
     margin: 4em 0 0 0;
     padding: 2% 4%;
@@ -74,9 +74,13 @@ This css will resolve the layout issue in the "Twenty Fifteen" theme
     width: 58.8235%;
     }
 }
+`
 
 
 == Screenshots ==
+
+
+== Upgrade Notice ==
 
 
 == Changelog ==
@@ -141,7 +145,7 @@ This css will resolve the layout issue in the "Twenty Fifteen" theme
 
 = 1.4.0 =
 * Adding CSS Editor page.
-* Implementing jsonp for pagination so that pagniated components can be displayed as part of header/footer content wrapping search solution on mlsfinder servers.
+* Implementing Jsonp for pagination so that paginated components can be displayed as part of header/footer content wrapping search solution on MLSFinder servers.
 
 = 1.3.19 =
 * Fixing issue with grid columns when paginating.
@@ -342,4 +346,36 @@ This css will resolve the layout issue in the "Twenty Fifteen" theme
 * Initial beta release for limited distribution.
 
 
-== Upgrade Notice ==
+== Contributors ==
+The following individuals contributed to the creation of this plugin.
+
+= AJ Michels =
+* http://ajmichels.com
+* @ajmichels
+* Oakdale, Minnesota, USA
+
+= Andrew Baumgart =
+* Minnesota, USA
+
+= Michael Pidde =
+* http://michaelpidde.com
+* Minnesota, USA
+
+= Tom Penney =
+* http://tompenney.com
+* @tompenney
+* Minneapolis, Minnesota, USA
+
+
+== Thanks ==
+We would like to thank the following projects as they have been a big part of creating this plugin.
+
+* **[Sublime Text](http://sublimetext.com)**
+* **[jQuery](http://jquery.com)**
+* **[Vagrant](http://vagrantup.com)**
+* **[Less CSS](http://lesscss.org)**
+* **jQuery SmoothDivScroll** by Thomas Kahn
+* **jQuery Tooltip** by Jörn Zaefferer
+* **jQuery imagesLoaded** by Paul Irish
+* **jQuery MouseWheel** by [Brandon Aaron](http://brandonaaron.net)
+* **[PHPUnit](http://phpunit.de)**

@@ -2,9 +2,9 @@
 build
 dist
 LessCompilerOutput.txt
-css/*wolfnet*.css
-css/*.min.css
-js/*.min.js
+*wolfnet*.css
+*.min.css
+*.min.js
 Desktop.ini
 *.sublime*
 

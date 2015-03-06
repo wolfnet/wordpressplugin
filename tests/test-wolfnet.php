@@ -172,10 +172,10 @@ class Test_Wolfnet extends WP_UnitTestCase
         $this->wolfnet->widgetInit();
 
         $widgets = array(
-            'Wolfnet_FeaturedListingsWidget',
-            'Wolfnet_ListingGridWidget',
-            'Wolfnet_PropertyListWidget',
-            'Wolfnet_QuickSearchWidget',
+            'Wolfnet_Widget_FeaturedListingsWidget',
+            'Wolfnet_Widget_ListingGridWidget',
+            'Wolfnet_Widget_PropertyListWidget',
+            'Wolfnet_Widget_QuickSearchWidget',
             );
 
         foreach ($widgets as $widget) {

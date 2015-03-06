@@ -8,8 +8,8 @@
     <property name="dir.ant"   value="${basedir}/.ant" />
     <property name="dir.build" value="${basedir}/build" />
     <property name="dir.dist"  value="${basedir}/dist" />
-    <property name="dir.js"    value="js" />
-    <property name="dir.css"   value="css" />
+    <property name="dir.js"    value="public/js" />
+    <property name="dir.css"   value="public/css" />
 
     <property name="tool.yuicompressor" value="${dir.ant}/yuicompressor-2.4.5.jar"  />
     <property name="tool.closure"       value="${dir.ant}/closure/compiler.jar" />
@@ -60,21 +60,18 @@
         <copy todir="${dir.build}">
             <fileset dir="${basedir}">
                 <!-- Excluded Directories -->
-                <exclude name=".ant/" />
-                <exclude name=".ant/" />
-                <exclude name=".vagrant/" />
                 <exclude name="build/" />
                 <exclude name="dist/" />
                 <exclude name="docs/" />
                 <exclude name="tests/" />
-                <exclude name="phpunit.xml" />
                 <!-- Excluded Files -->
-                <exclude name=".gitconfig" />
                 <exclude name="build.xml" />
+                <exclude name="phpunit.xml" />
                 <exclude name="LessCompilerOutput.txt" />
                 <exclude name="vagrantfile" />
                 <!-- Excluded File Patterns -->
-                <exclude name="*.vagrant" />
+                <exclude name="**/.*" />
+                <exclude name="**/.*/" />
                 <exclude name="*.sublime*" />
                 <exclude name="**/*.less" />
                 <exclude name="**/*.tmp" />
@@ -91,20 +88,14 @@
         <zip destfile="${dist.name}_${version}.zip" compress="true">
             <zipfileset dir="${dir.build}" prefix="${ant.project.name}" />
         </zip>
-        <zip destfile="${dist.name}_${version}_src.zip" compress="true">
-            <zipfileset dir="${basedir}" prefix="${ant.project.name}" excludes="dist/*,.vagrant/temp/*,.vagrant/machines/*" />
-        </zip>
     </target>
 
 
     <target name="test-dist" depends="build">
         <clean-for-test-dist />
         <prep-for-test-dist />
-        <zip destfile="${dist.name}_${version}_${git.revision}.zip" compress="true">
+        <zip destfile="${dist.name}_${version}+${git.revision}.zip" compress="true">
             <zipfileset dir="${dir.build}" prefix="${ant.project.name}" />
-        </zip>
-        <zip destfile="${dist.name}_${version}_${git.revision}_src.zip" compress="true">
-            <zipfileset dir="${basedir}" prefix="${ant.project.name}" excludes="dist/*,.vagrant/temp/*,.vagrant/machines/*" />
         </zip>
     </target>
 
@@ -112,6 +103,7 @@
     <target name="git-revision" description="Store git revision in ${repository.version}" if="git.present">
         <exec executable="git" outputproperty="git.revision" failifexecutionfails="false" errorproperty="">
             <arg value="rev-parse"/>
+            <arg value="--short"/>
             <arg value="HEAD"/>
         </exec>
         <condition property="repository.version" value="${git.revision}" else="unknown">
@@ -136,15 +128,13 @@
     <macrodef name="clean-for-dist">
         <sequential>
             <delete file="${dist.name}_${version}.zip" />
-            <delete file="${dist.name}_${version}_src.zip" />
         </sequential>
     </macrodef>
 
 
     <macrodef name="clean-for-test-dist">
         <sequential>
-            <delete file="${dist.name}_${git.revision}.zip" />
-            <delete file="${dist.name}_${git.revision}_src.zip" />
+            <delete file="${dist.name}_${version}+${git.revision}.zip" />
         </sequential>
     </macrodef>
 
@@ -163,7 +153,7 @@
                 <replacefilter token="{majorVersion}" value="${majorVersion}" />
                 <replacefilter token="{minorVersion}" value="${minorVersion}" />
                 <replacefilter token="{X.X.X}" value="${version}" />
-                <replacefilter token="{X.X.X}" value="${version}" />
+                <replacefilter token="{X.X.X-stable}" value="${version}" />
             </replace>
         </sequential>
     </macrodef>
@@ -183,8 +173,8 @@
                 <replacefilter token=".src.css" value=".min.css" />
                 <replacefilter token="{majorVersion}" value="${majorVersion}" />
                 <replacefilter token="{minorVersion}" value="${minorVersion}" />
-                <replacefilter token="{X.X.X}" value="${git.revision}" />
-                <replacefilter token="{X.X.X}" value="${git.revision}" />
+                <replacefilter token="{X.X.X}" value="${version}+${git.revision}" />
+                <replacefilter token="{X.X.X-stable}" value="${version}" />
             </replace>
         </sequential>
     </macrodef>

@@ -2,7 +2,7 @@
 
 /**
  *
- * @title         FeaturedListingsWidget.php
+ * @title         QuickSearchWidget.php
  * @copyright     Copyright (c) 2012, 2013, WolfNet Technologies, LLC
  *
  *                This program is free software; you can redistribute it and/or
@@ -22,36 +22,33 @@
 
 require_once dirname(__FILE__) . '/AbstractWidget.php';
 
-class Wolfnet_FeaturedListingsWidget extends Wolfnet_AbstractWidget
+class Wolfnet_Widget_QuickSearchWidget extends Wolfnet_Widget_AbstractWidget
 {
 
 
-    public $idBase = 'wolfnet_featuredListingsWidget';
+    public $idBase = 'wolfnet_quickSearchWidget';
 
-    public $name = 'WolfNet Featured Listings';
+    public $name = 'WolfNet Quick Search';
 
     public $options = array(
-        'description' => 'Configure a scrollable list to feature your properties.'
-        );
-
-    public $controlOptions = array(
-        'width' => '300px'
+        'description'  => 'Configure a quick search to include on your website.  When executed,
+            the user is directed to matching properties within your WolfNet property search.'
         );
 
 
-    /**
-     * [widget description]
-     * @param  array  $args      An array of arguments for the widget.
-     * @param  array  $instance  Instance data for the active widget.
-     * @return void
-     */
     public function widget($args, $instance)
     {
-        $options = $this->getOptions($instance);
 
-        echo $args['before_widget'];
-        echo $this->plugin->featuredListings($options);
-        echo $args['after_widget'];
+        try {
+
+            $options = $this->getOptions($instance);
+            $response = $this->plugin->quickSearch($options);
+
+        } catch (Wolfnet_Api_ApiException $e) {
+            $response = $this->plugin->displayException($e);
+        }
+
+        echo $args['before_widget'] . $response . $args['after_widget'];
 
     }
 
@@ -60,21 +57,21 @@ class Wolfnet_FeaturedListingsWidget extends Wolfnet_AbstractWidget
     {
         $options = $this->getOptions($instance);
 
-        echo $this->plugin->views->featuredListingsOptionsFormView($options);
+        echo $this->plugin->views->quickSearchOptionsFormView($options);
 
     }
 
 
     public function update($new_instance, $old_instance)
     {
-        return parent::update($this->plugin->getFeaturedListingsDefaults(), $new_instance, $old_instance);
+        return parent::update($this->plugin->getQuickSearchDefaults(), $new_instance, $old_instance);
 
     }
 
 
     protected function getOptions($instance=null)
     {
-        $options = $this->plugin->getFeaturedListingsOptions($instance);
+        $options = $this->plugin->getQuickSearchOptions($instance);
 
         return parent::prepOptions($options);
 
