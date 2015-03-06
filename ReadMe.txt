@@ -85,6 +85,20 @@ The following CSS will resolve the layout issue in the "Twenty Fifteen" theme:
 
 == Changelog ==
 
+= 1.7.4 =
+* Wrapped plugin output points with exception handling.
+* Moved object instantiation to a IOC container class.
+* Various updates the ReadMe file such as typo fixes.
+* Removed humans.txt file in favor of custom ReadMe sections
+* Major refactoring of the API client interface including the removal of custom WP_Error objects in favor of custom Exception classes.
+* Various improvements to the Views class.
+* Removing unnecessary usage of output buffers.
+* Updating views which use the "include" directive directly to instead use the parseTemplate method.
+* Moved PHP code into "src" directory to match composer style project directory structure and for general organization.
+* Moved static content (JS, CSS, Images) into separate directory.
+* Implemented auto-loader class
+* Moved primary plugin class to its own file per PSR guidelines.
+
 = 1.7.3 =
 * Adding some simple styling to error messages to make them a bit more presentable.
 * Updating listing branding to use the new API fields.
