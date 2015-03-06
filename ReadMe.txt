@@ -99,6 +99,7 @@ The following CSS will resolve the layout issue in the "Twenty Fifteen" theme:
 * Implemented auto-loader class
 * Moved primary plugin class to its own file per PSR guidelines.
 * Fixing some issues with the key validation in the admin. Hopefully making it more reliable.
+* Fixing issue with "zip_code" vs "zipcode" parameters.
 
 = 1.7.3 =
 * Adding some simple styling to error messages to make them a bit more presentable.
