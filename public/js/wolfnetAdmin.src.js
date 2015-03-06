@@ -519,9 +519,6 @@ if ( typeof jQuery != 'undefined' ) {
 	                $(options).each(function() {
 	                    $(container).find('.pricerange').append(this);
 	                });
-	            },
-	            error: function ( error ) {
-	                console.log(error);
 	            }
 	        } );
 
@@ -544,9 +541,6 @@ if ( typeof jQuery != 'undefined' ) {
 	                $(options).each(function() {
 	                    $(container).find('.savedsearch').append(this);
 	                });
-	            },
-	            error: function ( error ) {
-	                console.log(error);
 	            }
 	        } );
 
@@ -570,9 +564,6 @@ if ( typeof jQuery != 'undefined' ) {
 	                    $(container).find('.mapDisabled').css('display', 'block');
 	                    $(container).find('.maptype').attr('disabled', 'true');
 	                }
-	            },
-	            error: function ( error ) {
-	                console.log(error);
 	            }
 	        } );
 
