@@ -112,22 +112,22 @@ class Wolfnet_Api_CachingDecorator extends Wolfnet_Api_Client
         /* Attempt to retrieve a 'key' value from the options argument which will be use to uniquely
          * identify requests being made for that specific key. If none is present we fall back to
          * the token which is even more unique. */
-        $key = array_key_exists('key', $options) ? $options['key'] : $token;
+        $options['key'] = array_key_exists('key', $options) ? $options['key'] : $token;
 
         /* Attempt to retrieve the 'cache' value from the options argument. */
-        $cache = array_key_exists('cache', $options) ? $options['cache'] : true;
+        $options['cache'] = array_key_exists('cache', $options) ? $options['cache'] : true;
 
         /* If the force key is present we should force the decorator to retrieve new data from the
          * API even if cached data was found. */
-        $force = array_key_exists('force', $options) ? $options['force'] : false;
+        $options['force'] = array_key_exists('force', $options) ? $options['force'] : false;
 
         // The request is not a GET request we should not be caching.
         if ($method != 'GET') {
-            $cache = false;
+            $options['cache'] = false;
         }
 
         // Generate a cache key if appropriate
-        $cacheKey = ($cache) ? $this->cacheKeyFromRequest($key, $resource, $data) : null;
+        $cacheKey = ($options['cache']) ? $this->cacheKeyFromRequest($options['key'], $resource, $data) : null;
 
         // Attempt to use the key to retrieve data.
         if ($cacheKey !== null) {
@@ -135,8 +135,22 @@ class Wolfnet_Api_CachingDecorator extends Wolfnet_Api_Client
         }
 
         // If we don't have any data yet perform the request.
-        if ($force || $result === null) {
-            $result = call_user_func_array(array($this->client, 'sendRequest'), $args);
+        if ($options['force'] || $result === null) {
+
+            try {
+                $result = $this->client->sendRequest($token, $resource, $method, $data, $headers, $options);
+
+            } catch (Wolfnet_Api_ApiException $e) {
+
+                /* If the exception states that the API Token is invalid we should remove it from
+                   the cache so that we retrieve a new one on the next request. */
+                if ($e->getCode() === Wolfnet_Api_Client::AUTH_ERROR) {
+                    $this->service->cacheDelete($this->cacheKeyFromApiKey($options['key']));
+                }
+
+                throw $e;
+
+            }
 
             // Now that we have the data set it in the cache if we have a key.
             if ($cacheKey !== null) {
@@ -175,7 +189,7 @@ class Wolfnet_Api_CachingDecorator extends Wolfnet_Api_Client
     {
         /* If the force key is present we should force the decorator to retrieve new data from the
          * API even if cached data was found. */
-        $force = array_key_exists('force', $options) ? $options['force'] : false;
+        $options['force'] = array_key_exists('force', $options) ? $options['force'] : false;
 
         // Generate a cache key
         $cacheKey = $this->cacheKeyFromApiKey($key);
@@ -188,7 +202,7 @@ class Wolfnet_Api_CachingDecorator extends Wolfnet_Api_Client
         // var_dump($result); exit;
 
         // If we don't have a token at this point we need to get one from the API.
-        if ($force || $result === null) {
+        if ($options['force'] || $result === null) {
             // Retrieve a token from the API if one was not in the cache.
             $result = $this->client->authenticate($key, $headers, $options);
 

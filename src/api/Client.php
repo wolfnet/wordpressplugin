@@ -33,12 +33,12 @@ class Wolfnet_Api_Client
      * @var  string  This code is received from the API when a request is made without proper
      *               client authentication.
      */
-    const NO_AUTH_ERROR = '1001';
+    const NO_AUTH_ERROR = 1001;
 
     /**
      * @var  string  This code is received from the API when an invalid API token is provided.
      */
-    const AUTH_ERROR = '1005';
+    const AUTH_ERROR = 1005;
 
 
     /* PROPERTIES ******************************************************************************* */

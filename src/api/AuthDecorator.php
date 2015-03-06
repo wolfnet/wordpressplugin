@@ -77,40 +77,44 @@ class Wolfnet_Api_AuthDecorator extends Wolfnet_Api_Client
     ) {
 
         // Apply some default values for options that we may not get.
-        $reAuth = array_key_exists('reAuth', $options) ? $options['reAuth'] : false;
-        $attempts = array_key_exists('attempts', $options) ? $options['attempts'] : 1;
+        $options['reAuth'] = array_key_exists('reAuth', $options) ? $options['reAuth'] : false;
+        $options['attempts'] = array_key_exists('attempts', $options) ? $options['attempts'] : 1;
 
         // Get an array of the arguments to this function call.
         $args = func_get_args();
 
         // Retrieve authentication information.
-        $auth = $this->authenticate($key, array(), array('force'=>$reAuth));
+        $auth = $this->authenticate($key, array(), array('force'=>$options['reAuth']));
         $token = $auth['responseData']['data']['api_token'];
 
-        // var_dump($auth); exit;
-
-        /* Since we want to pass an option we need to make sure default args get set. */
-        $args[0] = $token;
-        $args[2] = (isset($args[2])) ? $args[2] : 'GET';
-        $args[3] = (isset($args[3])) ? $args[3] : array();
-        $args[4] = (isset($args[4])) ? $args[4] : array();
-        $args[5] = array('key' => $key);
+        /* Since we will be passing the token instead of key we want to add the key to the options
+           so that we may refer to it later (hint: in the caching decorator) */
+        $options['key'] = $key;
 
         try {
 
             // Forward the request on to the API Client.
-            $result = call_user_func_array(array($this->client, 'sendRequest'), $args);
+            $result = $this->client->sendRequest($token, $resource, $method, $data, $headers, $options);
 
         }
         catch (Wolfnet_Api_ApiException $e) {
 
-            if ($e->getCode() === Wolfnet_Api_Client::AUTH_ERROR && $attempts < 5) {
-                $args[0] = $key;
-                $args[5]['reAuth'] = true;
-                $args[5]['attempts'] = $attempts + 1;
-                $result = call_user_func_array(array($this, 'sendRequest'), $args);
+            $e->append('Several attempts were made.');
+            $e->append($e->getCode() === Wolfnet_Api_Client::AUTH_ERROR ? 'auth-code' : '!auth-code');
+            $e->append($options['attempts'] < 5 ? 'attempts' : '!attempts');
+
+            if ($e->getCode() === Wolfnet_Api_Client::AUTH_ERROR && $options['attempts'] < 5) {
+                $options['reAuth'] = true; // This will force the authentication to bypass caching
+                $options['attempts']++;
+
+                $result = $this->sendRequest($key, $resource, $method, $data, $headers, $options);
+
+            } else if ($options['attempts'] > 1) {
+                throw $e->append('Several attempts were made.');
+
             } else {
                 throw $e;
+
             }
 
         }
