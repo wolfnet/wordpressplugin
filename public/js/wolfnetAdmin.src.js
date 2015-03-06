@@ -245,172 +245,186 @@ if ( typeof jQuery != 'undefined' ) {
 		}
 
 
-		$.fn.wolfnetValidateProductKey = function ( clientOptions )
-		{
+        $.fn.wolfnetValidateProductKey = function(clientOptions) {
 
-			var options = {
-				validClass      : 'valid',
-				invalidClass    : 'invalid',
-				wrapperClass    : 'wolfnetProductKeyValidationWrapper',
-				validEvent      : 'validProductKey',
-				invalidEvent    : 'invalidProductKey',
-				validationEvent : 'validateProductKey'
-			};
-			$.extend( options, clientOptions );
+            var options = {
+                validClass      : 'valid',
+                invalidClass    : 'invalid',
+                wrapperClass    : 'wolfnetProductKeyValidationWrapper',
+                validEvent      : 'validProductKey',
+                invalidEvent    : 'invalidProductKey',
+                validationEvent : 'validateProductKey'
+            };
 
-			/* Validate that the key is of an appropriate length. */
-			var validateLength = function ( key )
-			{
-				// Account for old keys with "wp_" and new keys without that prefix.
-				if ( key.length == 35 || key.length == 32 ) {
-					return true;
-				}
-				else {
-					return false;
-				}
+            $.extend(options, clientOptions);
 
-			}
+            var clearValidation = function($input) {
+                var $wrapper = $input.parent();
 
-			/* Send the key to the API and validate that the key is active in mlsfinder.com */
-			var validateViaApi = function ( input )
-			{
-				var $this    = $( input );
-				var key      = $this.val();
+                $wrapper.removeClass(options.validClass);
+                $wrapper.removeClass(options.invalidClass);
 
-				$.ajax( {
-					url: wolfnet_ajax.ajaxurl,
-					data: { action:'wolfnet_validate_key', key:key },
-					dataType: 'json',
-					type: 'GET',
-					cache: false,
-					timeout: 2500,
-					statusCode: {
-						404: function () {
-							commFailure();
-						}
-					},
-					success: function ( data ) {
-						if ( data === true ) {
-							$this.trigger( options.validEvent );
-						}
-						else {
-							$this.trigger( options.invalidEvent );
-						}
-					},
-					error: function () {
-						/* If the Ajax request failed notify the user that validation of the key was not possible. */
-						$this.trigger( options.invalidEvent );
-						alert( 'Your product key appears to be formated correctly but we are unable to validate it against our servers at this time.' );
-					}
-				} );
-			}
+            };
 
-			/* This callback function is called whenever the validation event is trigger and takes
-			 * any neccessary action to notify the user if the key is valid or not. */
-			var onValidateEvent = function ()
-			{
-				var $this    = $( this );
-				var $wrapper = $this.parent();
-				var key      = $this.val();
+            /* Validate that the key is of an appropriate length. */
+            var validateLength = function(key) {
+                key = $.trim(key);
 
-				if ( key != '' ) {
-					if ( validateLength( key ) === true ) {
-						$this.trigger( options.validEvent );
-						validateViaApi( this );
-					}
-					else {
-						$this.trigger( options.invalidEvent );
-					}
-				}
-				else {
-					$wrapper.removeClass( options.validClass );
-					$wrapper.removeClass( options.invalidClass );
-				}
-			}
+                // Account for old keys with "wp_" and new keys without that prefix.
+                if (key.length == 35 || key.length == 32) {
+                    return true;
+                } else {
+                    return false;
+                }
 
-			var onValidEvent = function ()
-			{
-				var $this    = $( this );
-				var $wrapper = $this.parent();
-				$wrapper.addClass( options.validClass );
-				$wrapper.removeClass( options.invalidClass );
+            };
 
-				// Update market name
-				$.ajax( {
-					url: wolfnet_ajax.ajaxurl,
-					data: { action:'wolfnet_market_name', productkey:$(this).val() },
-					dataType: 'json',
-					type: 'GET',
-					cache: false,
-					timeout: 2500,
-					statusCode: {
-						404: function () {
-							commFailure();
-						}
-					},
-					success: function ( data ) {
-						$marketContainer = $wrapper.closest('tr').find('.wolfnet_keyMarket');
-						$marketLabel = $wrapper.closest('tr').find('.wolfnet_keyLabel');
-						if($marketContainer.html() == '') {
-							$marketContainer.html(data);
-						}
-						if($marketLabel.val() == '') {
-							$marketLabel.val(data);
-						}
-					},
-					error: function () {
-						$this.trigger( options.invalidEvent );
-					}
-				} );
-			}
+            /* Send the key to the API and validate that the key is active in mlsfinder.com */
+            var validateViaApi = function($input) {
+                var key = $input.val();
 
-			var onInvalidEvent = function ()
-			{
-				var $this    = $( this );
-				var $wrapper = $this.parent();
-				$wrapper.addClass( options.invalidClass );
-				$wrapper.removeClass( options.validClass );
-			}
+                $.ajax({
+                    url: wolfnet_ajax.ajaxurl,
+                    data: {action:'wolfnet_validate_key', key:key},
+                    dataType: 'json',
+                    type: 'GET',
+                    cache: false,
+                    timeout: 2500,
+                    success: function(data) {
+                        if (data === 'true') {
+                            $input.trigger(options.validEvent);
+                        } else {
+                            $input.trigger(options.invalidEvent);
+                        }
+                    },
+                    error: function () {
+                        /* If the Ajax request failed notify the user that validation of the key was not possible. */
+                        $input.trigger(options.invalidEvent);
+                        alert('Your product key appears to be formated correctly but we are ' +
+                            'unable to validate it against our servers at this time.');
+                    }
+                });
 
-			return this.each( function () {
+            };
 
-				var $this = $( this );
+            /* This callback function is called whenever the validation event is trigger and takes
+             * any necessary action to notify the user if the key is valid or not. */
+            var onValidateEvent = function(event) {
+                var $input = $(this);
+                var key = $input.val();
 
-				/* Ensure the plugin is only applied to input elements. */
-				if ( this.nodeName.toLowerCase() != 'input' ) {
-					throw "wolfnetValidateProductKey jQuery plugin can only be applied to an input element!"
-				}
-				else {
+                // Only perform validation when the user has entered something.
+                if ($.trim(key) !== '') {
 
-					/* Create an element to wrap the input field with. ( this will make styling easier ) */
-					var $wrapper = $( '<span/>' );
-					$wrapper.addClass( options.wrapperClass );
+                    // First perform client side validation.
+                    var valid = validateLength(key);
 
-					/* Add the wrapper element to the DOM immediately after the input field. Then
-					 * move the input field inside of the wrapper. */
-					$this.after( $wrapper );
-					$this.appendTo( $wrapper );
+                    // If the client side validation passed move on to server side validation.
+                    if (valid) {
+                        validateViaApi($input);
+                    }
 
-					/* Bind the some custom events to callback */
-					$this.bind( options.validationEvent, onValidateEvent );
-					$this.bind( options.validEvent, onValidEvent );
-					$this.bind( options.invalidEvent, onInvalidEvent );
+                    // Trigger the appropriate validation event.
+                    if (valid) {
+                        $input.trigger(options.validEvent);
+                    } else {
+                        $input.trigger(options.invalidEvent);
+                    }
 
-					/* Trigger the validation even every time a key is pressed in input field. */
-					$this.keyup( function () {
-						$this.trigger( options.validationEvent );
-					} );
+                } else {
+                    clearValidation($input);
 
-					/* Trigger the validation event when the document is ready. */
-					$( document ).ready( function () {
-						$this.trigger( options.validationEvent );
-					} );
+                }
 
-				}
+            };
 
-			} );
+            var onValidEvent = function(event) {
+                var $input = $(this);
+                var $wrapper = $input.parent();
+                var $marketContainer = $wrapper.closest('tr').find('.wolfnet_keyMarket');
+                var $marketLabel = $wrapper.closest('tr').find('.wolfnet_keyLabel');
+                var key = $input.val();
 
-		}
+                // Updating the appearance to indicate the input is valid
+                $wrapper.addClass(options.validClass);
+                $wrapper.removeClass(options.invalidClass);
+
+                if ($.trim($marketContainer.html()) !== '' || $.trim($marketLabel.val()) !== '') {
+
+                    // Update market name
+                    $.ajax({
+                        url: wolfnet_ajax.ajaxurl,
+                        data: {action:'wolfnet_market_name', productkey:key},
+                        dataType: 'json',
+                        type: 'GET',
+                        cache: false,
+                        timeout: 2500,
+                        success: function(data) {
+
+                            if ($.trim($marketContainer.html()) === '') {
+                                $marketContainer.html(data);
+                            }
+
+                            if ($.trim($marketLabel.val()) === '') {
+                                $marketLabel.val(data);
+                            }
+
+                        },
+                        error: function() {
+                            $input.trigger(options.invalidEvent);
+                        }
+                    });
+
+                }
+
+            };
+
+            var onInvalidEvent = function(event) {
+                var $input = $(this);
+                var $wrapper = $input.parent();
+
+                $wrapper.addClass(options.invalidClass);
+                $wrapper.removeClass(options.validClass);
+
+            };
+
+            return this.each(function() {
+
+                var $input = $(this);
+
+                /* Ensure the plugin is only applied to input elements. */
+                if (this.nodeName.toLowerCase() != 'input') {
+                    $.error('wolfnetValidateProductKey jQuery plugin can only be applied to an input element!');
+                } else {
+
+                    /* Create an element to wrap the input field with. ( this will make styling easier ) */
+                    var $wrapper = $('<span/>').addClass(options.wrapperClass);
+
+                    /* Add the wrapper element to the DOM immediately after the input field. Then
+                     * move the input field inside of the wrapper. */
+                    $input.after($wrapper);
+                    $input.appendTo($wrapper);
+
+                    /* Bind the some custom events to callback */
+                    $input.bind(options.validationEvent, onValidateEvent);
+                    $input.bind(options.validEvent, onValidEvent);
+                    $input.bind(options.invalidEvent, onInvalidEvent);
+
+                    /* Trigger the validation even every time a key is pressed in input field. */
+                    $input.keyup(function() {
+                        $input.trigger(options.validationEvent);
+                    });
+
+                    /* Trigger the validation event when the document is ready. */
+                    $(document).ready(function() {
+                        $input.trigger(options.validationEvent);
+                    });
+
+                }
+
+            });
+
+        };
 
 
 		$.fn.wolfnetDeleteKeyRow = function (button) {
