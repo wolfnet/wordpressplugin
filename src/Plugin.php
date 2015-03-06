@@ -634,7 +634,7 @@ class Wolfnet_Plugin
         }
 
         $restrictedParams = array('criteria','toolbarTop','toolbarBottom','listingsHtml','prevLink',
-            'nextLink','prevClass','nextClass','toolbarClass','instance_id','siteUrl','class','_');
+            'nextLink','prevClass','nextClass','toolbarClass','instance_id','siteUrl','class','_','key');
 
         $restrictedSuffix = array('_wpid', '_wpname', '_wps', '_wpc');
 
@@ -1169,9 +1169,13 @@ class Wolfnet_Plugin
 
             $qdata = $this->prepareListingQuery($_REQUEST);
 
-            $data = $this->apin->sendRequest($_REQUEST['key'], '/listing', 'GET', $qdata);
+            $keyid = $_REQUEST["keyid"];
 
-            $this->augmentListingsData($data, $_REQUEST['key']);
+            $productKey = $this->getProductKeyById($keyid);
+
+            $data = $this->apin->sendRequest($productKey, '/listing', 'GET', $qdata);
+
+            $this->augmentListingsData($data, $productKey);
 
         } catch (Wolfnet_Exception $e) {
 

@@ -20,6 +20,10 @@
  *                Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
+
+// HACK: Make sure the API key does not get included in the criteria
+unset($wpMeta['key']);
+
 ?>
 
 <div id="<?php echo $instance_id; ?>" class="wolfnet_widget <?php echo $class; ?>">
