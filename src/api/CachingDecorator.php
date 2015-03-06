@@ -38,7 +38,7 @@ class Wolfnet_Api_CachingDecorator extends Wolfnet_Api_Client
      * This constant is use hold the default cache length for authentication API requests.
      * @var int
      */
-    const AUTH_CACHE_SPAN = 3600; // 60 minutes
+    const AUTH_CACHE_SPAN = 3300; // 55 minutes (5 minutes less than the API expiration)
 
 
     /* PROPERTIES ******************************************************************************* */
