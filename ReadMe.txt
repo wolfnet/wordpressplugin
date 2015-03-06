@@ -98,6 +98,7 @@ The following CSS will resolve the layout issue in the "Twenty Fifteen" theme:
 * Moved static content (JS, CSS, Images) into separate directory.
 * Implemented auto-loader class
 * Moved primary plugin class to its own file per PSR guidelines.
+* Fixing some issues with the key validation in the admin. Hopefully making it more reliable.
 
 = 1.7.3 =
 * Adding some simple styling to error messages to make them a bit more presentable.
