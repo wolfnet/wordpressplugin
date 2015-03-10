@@ -36,6 +36,11 @@ class Wolfnet_Api_Client
     const NO_AUTH_ERROR = 1001;
 
     /**
+     * @var  string  This code is received from the API when the user must be authenticated.
+     */
+    const USER_AUTH_ERROR = 1004;
+
+    /**
      * @var  string  This code is received from the API when an invalid API token is provided.
      */
     const AUTH_ERROR = 1005;
@@ -316,6 +321,37 @@ class Wolfnet_Api_Client
             $errorIDMessage = ($errorID !== null) ? 'API Error ID: ' . $errorID : null;
             $errorMessage = ($extendedInfo !== null) ? 'The API says: [' . $extendedInfo . ']' : null;
 
+
+            // Here we will handle special API error responses.
+
+            /**
+             * The API has indicated that the request was made without a valid API token so we will
+             * throw a special exception that we can can catch and attempt to re-authenticate.
+             */
+            $authErrorCode = 'Auth1005';
+            if ($errorCode == $authErrorCode || $statusCode == $authErrorCode) {
+                $message = 'Remote request was not authorized.';
+                $details = 'The WolfNet API has responded that it did not receive a valid API token.'
+                         . (($errorIDMessage !== null) ? $errorIDMessage : '') . ' '
+                         . (($errorMessage !== null) ? $errorMessage : '');
+                throw new Wolfnet_Api_ApiException($message, $details, $response, null, self::AUTH_ERROR);
+            }
+
+            /**
+             * The API has indicated that the request was made but the data can only be accessed by
+             * a user who has authenticated (double opt-in) their account.
+             */
+            $userAuthErrorCode = 'Auth1004';
+            if ($errorCode == $userAuthErrorCode || $statusCode == $userAuthErrorCode) {
+                $message = 'User must be authenticated to view this information.';
+                $details = 'The WolfNet API has responded the data requested can only be viewed by '
+                         . 'a user that has authenticated their account. '
+                         . (($errorIDMessage !== null) ? $errorIDMessage : '') . ' '
+                         . (($errorMessage !== null) ? $errorMessage : '');
+                throw new Wolfnet_Api_ApiException($message, $details, $response, null, self::USER_AUTH_ERROR);
+            }
+
+
             // The API returned a 401 Unauthorized
             if ($responseCode == 401) {
                 $message = 'Remote request resulted in a [401 Unauthorized] response.';
@@ -358,21 +394,8 @@ class Wolfnet_Api_Client
             // There are several reasons why this might have happened so we should check for those
             if ($responseCode == 400) {
 
-                $authErrorCode = 'Auth1005';
-
-                /**
-                 * The API has indicated that the request was made without a valid API token so we will
-                 * throw a special exception that we can can catch and attempt to re-authenticate.
-                 */
-                if ($errorCode == $authErrorCode || $statusCode == $authErrorCode) {
-                    $message = 'Remote request was not authorized.';
-                    $details = 'The WolfNet API has responded that it did not receive a valid API token.'
-                             . (($errorIDMessage !== null) ? $errorIDMessage : '') . ' '
-                             . (($errorMessage !== null) ? $errorMessage : '');
-                    throw new Wolfnet_Api_ApiException($message, $details, $response, null, self::AUTH_ERROR);
-
                 // If WordPress has provided a message use that for the exception
-                } else if ($message !== null) {
+                if ($message !== null) {
                     throw new Wolfnet_Api_ApiException($message, 'See data for details.', $response);
 
                 // Default exception for bad responses
