@@ -239,9 +239,6 @@ if ( typeof jQuery != 'undefined' ) {
 	            },
 	            success: function ( data ) {
 	                $('.wolfnet_quickSearch_form').attr('action', data);
-	            },
-	            error: function ( error ) {
-	                console.log(error);
 	            }
 	        } );
 	        
@@ -265,9 +262,6 @@ if ( typeof jQuery != 'undefined' ) {
 	                $(options).each(function() {
 	                    $('[name=min_price],[name=max_price]').append(this);
 	                });
-	            },
-	            error: function ( error ) {
-	                console.log(error);
 	            }
 	        } );
 		}

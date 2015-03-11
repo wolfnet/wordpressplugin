@@ -23,7 +23,7 @@
 /**
  * This class us used when the user is logged in as an admin user.
  */
-class Wolfnet_Admin extends Wolfnet
+class Wolfnet_Admin extends Wolfnet_Plugin
 {
 
 
@@ -59,6 +59,7 @@ class Wolfnet_Admin extends Wolfnet
      */
     public function __construct($wolfnet)
     {
+        $this->pluginFile = dirname(dirname(__FILE__)) . '/wolfnet.php';
         // sets url
         $this->setUrl();
 
@@ -158,18 +159,22 @@ class Wolfnet_Admin extends Wolfnet
         // Register Ajax Actions
         $GLOBALS['wolfnet']->registerAdminAjaxActions();
 
-        /* If we are serving up the search manager page we need to get the search manager HTML from
-         * the MLSFinder server now so that we can set cookies. */
+         /* If we are serving up the search manager page we need to get the search manager HTML from
+          * the MLSFinder server now so that we can set cookies. */
+
+        $key = (array_key_exists("keyid", $_REQUEST)) ? $_REQUEST["keyid"] : "1";
+        $productKey = $GLOBALS['wolfnet']->getProductKeyById($key);
         $pageKeyExists = array_key_exists('page', $_REQUEST);
         $pageIsSM = ($pageKeyExists) ? ($_REQUEST['page']=='wolfnet_plugin_search_manager') : false;
-        $key = (array_key_exists("keyid", $_REQUEST)) ? $_REQUEST["keyid"] : "1";
-        $productKey = $this->getProductKeyById($key);
-        if(!$GLOBALS['wolfnet']->productKeyIsValid($productKey)) {
-            $productKey = null;
-        }
 
-        if ($pageKeyExists && $pageIsSM) {
-            $GLOBALS['wolfnet']->smHttp = $GLOBALS['wolfnet']->searchManagerHtml($productKey);
+        if ($pageKeyExists && $pageIsSM && $GLOBALS['wolfnet']->productKeyIsValid($productKey)) {
+
+            try {
+                $GLOBALS['wolfnet']->smHttp = $GLOBALS['wolfnet']->searchManagerHtml($productKey);
+            } catch (Wolfnet_Exception $e) {
+                $GLOBALS['wolfnet']->smHttp = $GLOBALS['wolfnet']->displayException($e);
+            }
+
         }
 
     }
@@ -190,7 +195,7 @@ class Wolfnet_Admin extends Wolfnet
             array(
                 'title' => 'WolfNet <span class="wolfnet_sup">&reg;</span>',
                 'key'   => 'wolfnet_plugin_settings',
-                'icon'  => $this->url . '/img/wp_wolfnet_nav.png',
+                'icon'  => $this->url . 'img/wp_wolfnet_nav.png',
                 ),
             array(
                 'title' => 'General Settings',

@@ -20,7 +20,7 @@
  *                Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-class Wolfnet_PropertyListWidget extends Wolfnet_ListingGridWidget
+class Wolfnet_Widget_PropertyListWidget extends Wolfnet_Widget_ListingGridWidget
 {
 
     public $idBase = 'wolfnet_propertyListWidget';
@@ -35,9 +35,15 @@ class Wolfnet_PropertyListWidget extends Wolfnet_ListingGridWidget
     public function widget($args, $instance)
     {
 
-        echo $args['before_widget'];
-        echo $this->plugin->listingGrid($this->collectData($args, $instance), 'list');
-        echo $args['after_widget'];
+        try {
+
+            $response = $this->plugin->listingGrid($this->collectData($args, $instance), 'list');
+
+        } catch (Wolfnet_Api_ApiException $e) {
+            $response = $this->plugin->displayException($e);
+        }
+
+        echo $args['before_widget'] . $response . $args['after_widget'];
 
     }
 
