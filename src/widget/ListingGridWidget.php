@@ -22,7 +22,7 @@
 
 require_once dirname(__FILE__) . '/AbstractWidget.php';
 
-class Wolfnet_ListingGridWidget extends Wolfnet_AbstractWidget
+class Wolfnet_Widget_ListingGridWidget extends Wolfnet_Widget_AbstractWidget
 {
 
 
@@ -44,10 +44,16 @@ class Wolfnet_ListingGridWidget extends Wolfnet_AbstractWidget
     public function widget($args, $instance)
     {
 
-        $instance['maxrows'] = $instance['maxresults'];
-        echo $args['before_widget'];
-        echo $this->plugin->listingGrid($this->collectData($args, $instance));
-        echo $args['after_widget'];
+        try {
+
+            $instance['maxrows'] = $instance['maxresults'];
+            $response = $this->plugin->listingGrid($this->collectData($args, $instance));
+
+        } catch (Wolfnet_Api_ApiException $e) {
+            $response = $this->plugin->displayException($e);
+        }
+
+        echo $args['before_widget'] . $response . $args['after_widget'];
 
     }
 
@@ -80,7 +86,7 @@ class Wolfnet_ListingGridWidget extends Wolfnet_AbstractWidget
             $saveData['city'] = '';
             $saveData['minprice'] = '';
             $saveData['maxprice'] = '';
-            
+
             if ( $saveData['keyid'] != '' ) {
                 $criteria['keyid'] = $saveData['keyid'];
             }

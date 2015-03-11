@@ -1,0 +1,3 @@
+# WolfNet - Bootstrap
+This directory is for code which is needed to "bootstrap" the plugin. It should not contain any
+code or content which is related to the actual functionality of the plugin.
