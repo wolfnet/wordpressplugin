@@ -58,6 +58,9 @@ if [ ! -f "${runfile}" ]; then
     chmod +x phpunit.phar
     mv phpunit.phar /usr/local/bin/phpunit
 
+    # Fixing issues with WordPress API host
+    echo "66.155.40.202 api.wordpress.org" >> /etc/hosts
+
     touch "${runfile}"
 
 fi
