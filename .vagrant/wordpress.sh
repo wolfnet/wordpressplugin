@@ -19,6 +19,9 @@ if [ ! -f "${runfile}" ]; then
     export WP_DEVELOP_DIR=/var/www
     cp -f /vagrant/.vagrant/wp-tests-config.php /var/www/wp-tests-config.php
 
+    # Enable WordPress Debug mode
+    sed -i "s/define('WP_DEBUG', false);/define('WP_DEBUG', true);/g" /var/www/wp-config.php
+
     echo "Set project directory ..."
     ln -fs "/wolfnet-idx-for-wordpress" "/var/www/src/wp-content/plugins/wolfnet-idx-for-wordpress"
 
