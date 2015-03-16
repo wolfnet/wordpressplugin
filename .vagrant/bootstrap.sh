@@ -38,8 +38,17 @@ if [ ! -f "${runfile}" ]; then
     rm -f /etc/apache2/httpd.conf
     ln -sf /vagrant/.vagrant/httpd.conf /etc/apache2/httpd.conf
     rm -f /etc/apache2/sites-enabled/000-default
+    rm -f /etc/apache2/sites-enabled/000-default.conf
     ln -sf /vagrant/.vagrant/vhost.conf /etc/apache2/sites-enabled/000-default
+    ln -sf /vagrant/.vagrant/vhost.conf /etc/apache2/sites-enabled/000-default.conf
     a2enmod rewrite > /dev/null
+
+    echo "Configure php ..."
+    # if the development INI file exists use it instead of the default INI file.
+    if [ -f /usr/share/php5/php.ini-development ]; then
+        rm -f /etc/php5/apache2/php.ini
+        cp -f /usr/share/php5/php.ini-development /etc/php5/apache2/php.ini
+    fi
 
     echo "Start apache ..."
     service apache2 start > /dev/null 2> /dev/null
