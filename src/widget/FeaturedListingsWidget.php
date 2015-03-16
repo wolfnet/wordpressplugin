@@ -73,7 +73,7 @@ class Wolfnet_Widget_FeaturedListingsWidget extends Wolfnet_Widget_AbstractWidge
 
     public function update($new_instance, $old_instance)
     {
-        return parent::update($this->plugin->getFeaturedListingsDefaults(), $new_instance, $old_instance);
+        return parent::updateWithDefault($this->plugin->getFeaturedListingsDefaults(), $new_instance, $old_instance);
 
     }
 

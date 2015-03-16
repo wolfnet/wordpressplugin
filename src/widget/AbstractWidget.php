@@ -52,7 +52,7 @@ abstract class Wolfnet_Widget_AbstractWidget extends WP_Widget
     }
 
 
-    public function update(array $defaultOptions, $new_instance, $old_instance)
+    public function updateWithDefault(array $defaultOptions, $new_instance, $old_instance)
     {
         /* processes widget options to be saved */
         $newData = $this->getOptions($new_instance);
