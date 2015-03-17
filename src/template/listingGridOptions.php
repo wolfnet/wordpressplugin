@@ -65,7 +65,7 @@
             <td>
                 <select id="<?php echo $maptype_wpid; ?>" name="<?php echo $maptype_wpname; ?>" class="maptype" <?php if (!$mapEnabled) { ?>disabled<?php } ?> >
                     <?php foreach ($maptypes as $mt) { ?>
-                        <option value="<?php echo $mt['value']; ?>" <?php selected($maptypes, $mt['value']); ?>>
+                        <option value="<?php echo $mt['value']; ?>" <?php selected($maptype, $mt['value']); ?>>
                             <?php echo $mt['label']; ?>
                         </option>
                     <?php } ?>
