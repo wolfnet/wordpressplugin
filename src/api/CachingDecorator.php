@@ -102,9 +102,9 @@ class Wolfnet_Api_CachingDecorator extends Wolfnet_Api_Client
         $token,
         $resource,
         $method = "GET",
-        $data = array(),
-        $headers = array(),
-        $options = array()
+        array $data = array(),
+        array $headers = array(),
+        array $options = array()
     ) {
         $args = func_get_args();
         $result = null;

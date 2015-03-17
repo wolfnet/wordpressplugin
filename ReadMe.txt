@@ -3,7 +3,7 @@ Author:             WolfNet Technologies, LLC
 Contributors:       wolfnettech, ajmichels, asbaumgart, michaelpidde, blots
 Tags:               idx, mls, homes
 Requires at least:  3.5.1
-Tested up to:       4.1
+Tested up to:       4.1.1
 Stable tag:         {X.X.X-stable}
 License:            GPLv2 or later
 License URI:        http://www.gnu.org/licenses/gpl-2.0.html
@@ -87,6 +87,10 @@ The following CSS will resolve the layout issue in the "Twenty Fifteen" theme:
 
 
 == Changelog ==
+
+= 1.7.5 =
+* Fixes PHP Strict notices on some inappropriately configured production servers
+* Fixes bug with listing grid options form
 
 = 1.7.4 =
 * Wrapped plugin output points with exception handling.
