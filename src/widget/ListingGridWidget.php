@@ -70,7 +70,7 @@ class Wolfnet_Widget_ListingGridWidget extends Wolfnet_Widget_AbstractWidget
     public function update($new_instance, $old_instance)
     {
         // processes widget options to be saved
-        $saveData = parent::update($this->plugin->getListingGridDefaults(), $new_instance, $old_instance);
+        $saveData = parent::updateWithDefault($this->plugin->getListingGridDefaults(), $new_instance, $old_instance);
 
         /* Advanced Mode */
         if ( $saveData['mode'] == 'advanced' ) {
