@@ -197,6 +197,9 @@ class Wolfnet_Api_Client
             $uri = add_query_arg($data, $uri);
         }
 
+        // Adding HTTP Encoding header.
+        $requestArgs['headers']['Accept-Encoding'] = 'gzip, deflate';
+
         $response = wp_remote_request($uri, $requestArgs);
 
         try {
