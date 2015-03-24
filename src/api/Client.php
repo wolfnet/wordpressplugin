@@ -63,6 +63,11 @@ class Wolfnet_Api_Client
      */
     private $version;
 
+    /**
+     * @var  boolean  Whether or not the client should use HTTPS
+     */
+    private $ssl;
+
 
     /* CONSTRUCTOR ****************************************************************************** */
 
@@ -75,12 +80,14 @@ class Wolfnet_Api_Client
      * @param string  $host    The hostname for the API where requests will be sent.
      * @param integer $port    The port for the API where requests will be sent
      * @param integer $version The API version that will be interacted with.
+     * @param boolean $ssl     Whether or not the client should use HTTPS
      */
-    public function __construct($host='api.wolfnet.com', $port=80, $version=1)
+    public function __construct($host='api.wolfnet.com', $port=80, $version=1, $ssl=true)
     {
         $this->host = $host;
         $this->port = $port;
         $this->version = $version;
+        $this->ssl = $ssl;
 
     }
 
@@ -249,7 +256,13 @@ class Wolfnet_Api_Client
      */
     private function uriFromResource($resource)
     {
-        return 'http://' . $this->host . ($this->port!=80 ? ':' . $this->port : '') . $resource;
+        $url = ($this->ssl) ? 'https://' : 'http://';
+        $url .= $this->host;
+        $url .= ($this->port != 80) ? ':' . $this->port : '';
+        $url .= $resource;
+
+        return $url;
+
     }
 
 
