@@ -737,6 +737,8 @@ class Wolfnet_Plugin
 
             $criteria = array_merge($defaultAttributes, (is_array($attrs)) ? $attrs : array());
 
+            $this->decodeCriteria($criteria);
+
             $out = $this->featuredListings($criteria);
 
         } catch (Wolfnet_Exception $e) {
@@ -759,6 +761,8 @@ class Wolfnet_Plugin
                $criteria['maxrows'] = $criteria['maxresults'];
             }
 
+            $this->decodeCriteria($criteria);
+
             $out = $this->listingGrid($criteria);
 
         } catch (Wolfnet_Exception $e) {
@@ -775,6 +779,8 @@ class Wolfnet_Plugin
 
         try {
             $criteria = array_merge($this->getPropertyListDefaults(), (is_array($attrs)) ? $attrs : array());
+
+            $this->decodeCriteria($criteria);
 
             $out = $this->listingGrid($criteria, 'list');
 
@@ -794,6 +800,8 @@ class Wolfnet_Plugin
             $defaultAttributes = $this->getQuickSearchDefaults();
 
             $criteria = array_merge($defaultAttributes, (is_array($attrs)) ? $attrs : array());
+
+            $this->decodeCriteria($criteria);
 
             $out = $this->quickSearch($criteria);
 
@@ -2998,6 +3006,16 @@ class Wolfnet_Plugin
 
         foreach ($ajxActions as $action => $method) {
             $this->addAction('wp_ajax_nopriv_' . $action, array(&$this, $method));
+        }
+
+    }
+
+
+    private function decodeCriteria(array &$criteria) {
+
+        // Decode req parameters vals so they can be cleanly encoded before api req
+        foreach ($criteria as &$value) {
+            $value = html_entity_decode($value);
         }
 
     }
