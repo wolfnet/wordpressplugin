@@ -24,7 +24,8 @@ email at service@wolfnet.com. You may also find us online at [WolfNet.com](http:
 There are no special instructions for installing the plugin, however a valid product key must be
 entered in the "WolfNet >> General Settings" page before any IDX data can be displayed.
 
-[Downloading & Activating Your WolfNet WordPress Plugin](https://www.youtube.com/watch?v=hp9ojJdstQM&list=UUWqJ_1djHKa_Uxg_bZ4HiTw)
+= Downloading & Activating =
+[youtube https://www.youtube.com/watch?v=hp9ojJdstQM]
 
 = WordPress.org Installation =
 1. From the your WordPress websites Dashboard section go to the Plugins page.
@@ -43,9 +44,11 @@ entered in the "WolfNet >> General Settings" page before any IDX data can be dis
 
 == Frequently Asked Questions ==
 
-[WolfNet WordPress Plugin Basic Display Options](https://www.youtube.com/watch?v=tOLJDhCvgzQ&list=UUWqJ_1djHKa_Uxg_bZ4HiTw)
+= Basic Display Options =
+[youtube https://www.youtube.com/watch?v=tOLJDhCvgzQ]
 
-[WolfNet WordPress Plugin Advanced Display Options](https://www.youtube.com/watch?v=oAoljC6_yF8&list=UUWqJ_1djHKa_Uxg_bZ4HiTw)
+= Advanced Display Options =
+[youtube https://www.youtube.com/watch?v=oAoljC6_yF8]
 
 = The "Twenty Fifteen" theme shows some of the disclaimer text is hidden behind the sidebar. How can I fix this? =
 
