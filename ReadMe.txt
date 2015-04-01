@@ -85,8 +85,18 @@ The following CSS will resolve the layout issue in the "Twenty Fifteen" theme:
 
 == Upgrade Notice ==
 
+= HTTP Deprecation - April 2015 =
+Please upgrade to the latest version of the plugin as we will be disabling the insecure HTTP protocol on the WolfNet API server. This means that plugin versions 1.7.0 - 1.7.5 will no longer function.
+
+= Old API Deprecation - January 2015 =
+Please upgrade to the latest version of the plugin as we will be disabling our old API servers. This means that plugin versions 0.1.0 - 1.6.4 will no longer function.
 
 == Changelog ==
+
+= 1.7.6 =
+* Decoding request parameters in shortcodes so they can be cleanly encoded right before api request @21754246
+* Adds HTTP Encoding header to API requests
+* Switches API Client to use SSL. NOTE: non-SSL (http://) requests are now deprecated. API requests that do not use the HTTPS protocol will be will be rejected in near future so it is important to update to the new version.
 
 = 1.7.5 =
 * Fixes PHP Strict notices on some inappropriately configured production servers
