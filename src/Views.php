@@ -80,7 +80,7 @@ class Wolfnet_Views
             ));
 
         } catch (Wolfnet_Exception $e) {
-            $out = $this->exceptionView($exception);
+            $out = $this->exceptionView($e);
         }
 
         echo $out;
@@ -102,7 +102,7 @@ class Wolfnet_Views
             ));
 
         } catch (Wolfnet_Exception $e) {
-            $out = $this->exceptionView($exception);
+            $out = $this->exceptionView($e);
         }
 
         echo $out;
@@ -154,7 +154,7 @@ class Wolfnet_Views
             ));
 
         } catch (Wolfnet_Exception $e) {
-            $out = $this->exceptionView($exception);
+            $out = $this->exceptionView($e);
         }
 
         echo $out;
