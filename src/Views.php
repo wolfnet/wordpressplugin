@@ -79,9 +79,12 @@ class Wolfnet_Views
 
             }
 
+            $sslEnabled = $GLOBALS['wolfnet']->getSslEnabled();
+
             $out = $this->parseTemplate('adminSettings', array(
                 'formHeader' => $this->settingsFormHeaders(),
                 'productKey' => $productKey,
+                'sslEnabled' => $sslEnabled,
             ));
 
         } catch (Wolfnet_Exception $e) {

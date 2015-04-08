@@ -66,7 +66,7 @@
                                 <?php if ( isset($productKey[$i-1]->market) ) echo $productKey[$i-1]->market; ?>
                                 </span></td>
                                 <td>
-                                    <input id="wolfnet_keyLabel_<?php echo $i; ?>" class="wolfnet_keyLabel" name="wolfnet_keyLabel_<?php echo $i; ?>" type="text" 
+                                    <input id="wolfnet_keyLabel_<?php echo $i; ?>" class="wolfnet_keyLabel" name="wolfnet_keyLabel_<?php echo $i; ?>" type="text"
                                         value="<?php echo $productKey[$i-1]->label; ?>" size="30" />
                                 </td>
                                 <td>
@@ -102,6 +102,16 @@
                             You may also find us online at
                             <a href="http://wolfnet.com" target="_blank">WolfNet.com</a>.
                         </p>
+                    </td>
+                </tr>
+
+                <tr valign="top">
+                    <td>
+                        <input name="<?php echo Wolfnet_Plugin::SSL_WP_OPTION; ?>" <?php checked($sslEnabled, true); ?> type="checkbox" value="1">
+                        <label>SSL Enabled</label><br>
+                        <small>This option determines if the plugin will communicate with the API via
+                            a secure connection. In the near future this option will be deprecated
+                            and the API will only work over SSL.</small>
                     </td>
                 </tr>
 

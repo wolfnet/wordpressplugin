@@ -104,6 +104,8 @@ class Wolfnet_Plugin
 
     const CACHE_CRON_HOOK = 'wntCronCacheDaily';
 
+    const SSL_WP_OPTION = 'wolfnet_sslEnabled';
+
 
     /* Constructor Method *********************************************************************** */
     /*   ____                _                   _                                                */
@@ -134,6 +136,7 @@ class Wolfnet_Plugin
             'plugin' => &$this,
             'cacheRenew' => $cacheRenew,
             'cacheClear' => $cacheClear,
+            'sslEnabled' => $this->getSslEnabled(),
         ));
 
         $this->cachingService = $this->ioc->get('Wolfnet_Service_CachingService');
@@ -3035,6 +3038,14 @@ class Wolfnet_Plugin
     {
         // Remove Cache Clearing event
         wp_clear_scheduled_hook(self::CACHE_CRON_HOOK);
+
+    }
+
+
+    public function getSslEnabled()
+    {
+        // Attempt to read value from the options, but default to Client default
+        return get_option(self::SSL_WP_OPTION, Wolfnet_Api_Client::DEFAULT_SSL);
 
     }
 
