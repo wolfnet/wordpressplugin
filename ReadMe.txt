@@ -94,9 +94,11 @@ Please upgrade to the latest version of the plugin as we will be disabling our o
 == Changelog ==
 
 = 1.7.6 =
-* Decoding request parameters in shortcodes so they can be cleanly encoded right before api request @21754246
+* Decodes request parameters in shortcodes so they can be cleanly encoded right before api request @21754246
 * Adds HTTP Encoding header to API requests
-* Switches API Client to use SSL. NOTE: non-SSL (http://) requests are now deprecated. API requests that do not use the HTTPS protocol will be will be rejected in near future so it is important to update to the new version.
+* Switches API Client to use SSL and adds a new option to the settings page to toggle. NOTE: non-SSL (http://) requests are now deprecated. API requests that do not use the HTTPS protocol will be will be rejected in near future so it is important to update to the new version.
+* Fixes bug preventing exception from being displayed correctly.
+* Fixes bug preventing settings page from displaying when exception occurs while communicating with the API.
 
 = 1.7.5 =
 * Fixes PHP Strict notices on some inappropriately configured production servers
