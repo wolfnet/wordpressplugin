@@ -24,7 +24,8 @@ email at service@wolfnet.com. You may also find us online at [WolfNet.com](http:
 There are no special instructions for installing the plugin, however a valid product key must be
 entered in the "WolfNet >> General Settings" page before any IDX data can be displayed.
 
-[Downloading & Activating Your WolfNet WordPress Plugin](https://www.youtube.com/watch?v=hp9ojJdstQM&list=UUWqJ_1djHKa_Uxg_bZ4HiTw)
+= Downloading & Activating =
+[youtube https://www.youtube.com/watch?v=hp9ojJdstQM]
 
 = WordPress.org Installation =
 1. From the your WordPress websites Dashboard section go to the Plugins page.
@@ -43,9 +44,11 @@ entered in the "WolfNet >> General Settings" page before any IDX data can be dis
 
 == Frequently Asked Questions ==
 
-[WolfNet WordPress Plugin Basic Display Options](https://www.youtube.com/watch?v=tOLJDhCvgzQ&list=UUWqJ_1djHKa_Uxg_bZ4HiTw)
+= Basic Display Options =
+[youtube https://www.youtube.com/watch?v=tOLJDhCvgzQ]
 
-[WolfNet WordPress Plugin Advanced Display Options](https://www.youtube.com/watch?v=oAoljC6_yF8&list=UUWqJ_1djHKa_Uxg_bZ4HiTw)
+= Advanced Display Options =
+[youtube https://www.youtube.com/watch?v=oAoljC6_yF8]
 
 = The "Twenty Fifteen" theme shows some of the disclaimer text is hidden behind the sidebar. How can I fix this? =
 
@@ -82,8 +85,20 @@ The following CSS will resolve the layout issue in the "Twenty Fifteen" theme:
 
 == Upgrade Notice ==
 
+= HTTP Deprecation - April 2015 =
+Please upgrade to the latest version of the plugin as we will be disabling the insecure HTTP protocol on the WolfNet API server. This means that plugin versions 1.7.0 - 1.7.5 will no longer function.
+
+= Old API Deprecation - January 2015 =
+Please upgrade to the latest version of the plugin as we will be disabling our old API servers. This means that plugin versions 0.1.0 - 1.6.4 will no longer function.
 
 == Changelog ==
+
+= 1.7.6 =
+* Decodes request parameters in shortcodes so they can be cleanly encoded right before api request @21754246
+* Adds HTTP Encoding header to API requests
+* Switches API Client to use SSL and adds a new option to the settings page to toggle. NOTE: non-SSL (http://) requests are now deprecated. API requests that do not use the HTTPS protocol will be will be rejected in near future so it is important to update to the new version.
+* Fixes bug preventing exception from being displayed correctly.
+* Fixes bug preventing settings page from displaying when exception occurs while communicating with the API.
 
 = 1.7.5 =
 * Fixes PHP Strict notices on some inappropriately configured production servers

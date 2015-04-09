@@ -104,6 +104,8 @@ class Wolfnet_Plugin
 
     const CACHE_CRON_HOOK = 'wntCronCacheDaily';
 
+    const SSL_WP_OPTION = 'wolfnet_sslEnabled';
+
 
     /* Constructor Method *********************************************************************** */
     /*   ____                _                   _                                                */
@@ -134,6 +136,7 @@ class Wolfnet_Plugin
             'plugin' => &$this,
             'cacheRenew' => $cacheRenew,
             'cacheClear' => $cacheClear,
+            'sslEnabled' => $this->getSslEnabled(),
         ));
 
         $this->cachingService = $this->ioc->get('Wolfnet_Service_CachingService');
@@ -737,6 +740,8 @@ class Wolfnet_Plugin
 
             $criteria = array_merge($defaultAttributes, (is_array($attrs)) ? $attrs : array());
 
+            $this->decodeCriteria($criteria);
+
             $out = $this->featuredListings($criteria);
 
         } catch (Wolfnet_Exception $e) {
@@ -759,6 +764,8 @@ class Wolfnet_Plugin
                $criteria['maxrows'] = $criteria['maxresults'];
             }
 
+            $this->decodeCriteria($criteria);
+
             $out = $this->listingGrid($criteria);
 
         } catch (Wolfnet_Exception $e) {
@@ -775,6 +782,8 @@ class Wolfnet_Plugin
 
         try {
             $criteria = array_merge($this->getPropertyListDefaults(), (is_array($attrs)) ? $attrs : array());
+
+            $this->decodeCriteria($criteria);
 
             $out = $this->listingGrid($criteria, 'list');
 
@@ -794,6 +803,8 @@ class Wolfnet_Plugin
             $defaultAttributes = $this->getQuickSearchDefaults();
 
             $criteria = array_merge($defaultAttributes, (is_array($attrs)) ? $attrs : array());
+
+            $this->decodeCriteria($criteria);
 
             $out = $this->quickSearch($criteria);
 
@@ -3003,6 +3014,16 @@ class Wolfnet_Plugin
     }
 
 
+    private function decodeCriteria(array &$criteria) {
+
+        // Decode req parameters vals so they can be cleanly encoded before api req
+        foreach ($criteria as &$value) {
+            $value = html_entity_decode($value);
+        }
+
+    }
+
+
     public function registerCronEvents()
     {
         // Schedule Cache Clearing event
@@ -3017,6 +3038,14 @@ class Wolfnet_Plugin
     {
         // Remove Cache Clearing event
         wp_clear_scheduled_hook(self::CACHE_CRON_HOOK);
+
+    }
+
+
+    public function getSslEnabled()
+    {
+        // Attempt to read value from the options, but default to Client default
+        return get_option(self::SSL_WP_OPTION, Wolfnet_Api_Client::DEFAULT_SSL);
 
     }
 
