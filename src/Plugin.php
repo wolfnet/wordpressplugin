@@ -129,21 +129,16 @@ class Wolfnet_Plugin
         // Clear cache if url param exists.
         $cacheFlag = Wolfnet_Service_CachingService::CACHE_FLAG;
         $cacheParamExists = array_key_exists($cacheFlag, $_REQUEST);
-        $cacheRenew = ($cacheParamExists) ? ($_REQUEST[$cacheFlag] == 'refresh') : false;
-        $cacheClear = ($cacheParamExists) ? ($_REQUEST[$cacheFlag] == 'clear') : false;
 
         $this->ioc = new Wolfnet_Factory(array(
             'plugin' => &$this,
-            'cacheRenew' => $cacheRenew,
-            'cacheClear' => $cacheClear,
+            'cacheRenew' => ($cacheParamExists) ? ($_REQUEST[$cacheFlag] == 'refresh') : false,
+            'cacheClear' => ($cacheParamExists) ? ($_REQUEST[$cacheFlag] == 'clear') : false,
+            'cacheReap' => ($cacheParamExists) ? ($_REQUEST[$cacheFlag] == 'reap') : false,
             'sslEnabled' => $this->getSslEnabled(),
         ));
 
         $this->cachingService = $this->ioc->get('Wolfnet_Service_CachingService');
-
-        if ($cacheClear) {
-            $this->cachingService->clearAll();
-        }
 
         $this->apin = $this->ioc->get('Wolfnet_Api_Client');
 
