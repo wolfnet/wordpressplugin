@@ -281,7 +281,7 @@ class Wolfnet_Service_CachingService
 
         $optTable = $wpdb->options;
         $where = "";
-        $args = [];
+        $args = array();
 
         // If we are clearing only expired values add a statement to the where clause.
         if ($mode === self::CLEAR_EXPIRED) {
