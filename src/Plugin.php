@@ -2001,6 +2001,8 @@ class Wolfnet_Plugin
             $qdata['has_waterfront'] = $this->convertBool($criteria['has_waterfront']);
         if (isset( $criteria['has_waterview'] ))
             $qdata['has_waterview'] = $this->convertBool($criteria['has_waterview']);
+        if (isset( $criteria['has_lakefront'] ))
+            $qdata['has_lakefront'] = $this->convertBool($criteria['has_lakefront']);
         if (isset($criteria['high_school'])) $qdata['high_school'] = $criteria['high_school'];
         if (isset( $criteria['industrial'] ))
             $qdata['industrial'] = $this->convertBool($criteria['industrial']);

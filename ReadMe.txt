@@ -95,6 +95,7 @@ Please upgrade to the latest version of the plugin as we will be disabling our o
 
 = 1.7.7 =
 * Updates caching service to remove registry and add more reliable cache clean-up
+* Adds support for criteria that was missed during conversion to new API. (has_lakefront)
 
 = 1.7.6 =
 * Decodes request parameters in shortcodes so they can be cleanly encoded right before api request @21754246
