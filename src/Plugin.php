@@ -129,21 +129,16 @@ class Wolfnet_Plugin
         // Clear cache if url param exists.
         $cacheFlag = Wolfnet_Service_CachingService::CACHE_FLAG;
         $cacheParamExists = array_key_exists($cacheFlag, $_REQUEST);
-        $cacheRenew = ($cacheParamExists) ? ($_REQUEST[$cacheFlag] == 'refresh') : false;
-        $cacheClear = ($cacheParamExists) ? ($_REQUEST[$cacheFlag] == 'clear') : false;
 
         $this->ioc = new Wolfnet_Factory(array(
             'plugin' => &$this,
-            'cacheRenew' => $cacheRenew,
-            'cacheClear' => $cacheClear,
+            'cacheRenew' => ($cacheParamExists) ? ($_REQUEST[$cacheFlag] == 'refresh') : false,
+            'cacheClear' => ($cacheParamExists) ? ($_REQUEST[$cacheFlag] == 'clear') : false,
+            'cacheReap' => ($cacheParamExists) ? ($_REQUEST[$cacheFlag] == 'reap') : false,
             'sslEnabled' => $this->getSslEnabled(),
         ));
 
         $this->cachingService = $this->ioc->get('Wolfnet_Service_CachingService');
-
-        if ($cacheClear) {
-            $this->cachingService->clearAll();
-        }
 
         $this->apin = $this->ioc->get('Wolfnet_Api_Client');
 
@@ -2006,6 +2001,8 @@ class Wolfnet_Plugin
             $qdata['has_waterfront'] = $this->convertBool($criteria['has_waterfront']);
         if (isset( $criteria['has_waterview'] ))
             $qdata['has_waterview'] = $this->convertBool($criteria['has_waterview']);
+        if (isset( $criteria['has_lakefront'] ))
+            $qdata['has_lakefront'] = $this->convertBool($criteria['has_lakefront']);
         if (isset($criteria['high_school'])) $qdata['high_school'] = $criteria['high_school'];
         if (isset( $criteria['industrial'] ))
             $qdata['industrial'] = $this->convertBool($criteria['industrial']);

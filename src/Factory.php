@@ -110,7 +110,11 @@ class Wolfnet_Factory
 
     private function getWolfnet_Service_CachingService()
     {
-        return new Wolfnet_Service_CachingService($this->args['cacheRenew']);
+        return new Wolfnet_Service_CachingService(
+            $this->args['cacheRenew'],
+            $this->args['cacheReap'],
+            $this->args['cacheClear']
+            );
     }
 
 
