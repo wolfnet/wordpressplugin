@@ -104,6 +104,8 @@ class Wolfnet_Plugin
 
     const CACHE_CRON_HOOK = 'wntCronCacheDaily';
 
+    const SSL_WP_OPTION = 'wolfnet_sslEnabled';
+
 
     /* Constructor Method *********************************************************************** */
     /*   ____                _                   _                                                */
@@ -127,20 +129,16 @@ class Wolfnet_Plugin
         // Clear cache if url param exists.
         $cacheFlag = Wolfnet_Service_CachingService::CACHE_FLAG;
         $cacheParamExists = array_key_exists($cacheFlag, $_REQUEST);
-        $cacheRenew = ($cacheParamExists) ? ($_REQUEST[$cacheFlag] == 'refresh') : false;
-        $cacheClear = ($cacheParamExists) ? ($_REQUEST[$cacheFlag] == 'clear') : false;
 
         $this->ioc = new Wolfnet_Factory(array(
             'plugin' => &$this,
-            'cacheRenew' => $cacheRenew,
-            'cacheClear' => $cacheClear,
+            'cacheRenew' => ($cacheParamExists) ? ($_REQUEST[$cacheFlag] == 'refresh') : false,
+            'cacheClear' => ($cacheParamExists) ? ($_REQUEST[$cacheFlag] == 'clear') : false,
+            'cacheReap' => ($cacheParamExists) ? ($_REQUEST[$cacheFlag] == 'reap') : false,
+            'sslEnabled' => $this->getSslEnabled(),
         ));
 
         $this->cachingService = $this->ioc->get('Wolfnet_Service_CachingService');
-
-        if ($cacheClear) {
-            $this->cachingService->clearAll();
-        }
 
         $this->apin = $this->ioc->get('Wolfnet_Api_Client');
 
@@ -737,6 +735,8 @@ class Wolfnet_Plugin
 
             $criteria = array_merge($defaultAttributes, (is_array($attrs)) ? $attrs : array());
 
+            $this->decodeCriteria($criteria);
+
             $out = $this->featuredListings($criteria);
 
         } catch (Wolfnet_Exception $e) {
@@ -759,6 +759,8 @@ class Wolfnet_Plugin
                $criteria['maxrows'] = $criteria['maxresults'];
             }
 
+            $this->decodeCriteria($criteria);
+
             $out = $this->listingGrid($criteria);
 
         } catch (Wolfnet_Exception $e) {
@@ -775,6 +777,8 @@ class Wolfnet_Plugin
 
         try {
             $criteria = array_merge($this->getPropertyListDefaults(), (is_array($attrs)) ? $attrs : array());
+
+            $this->decodeCriteria($criteria);
 
             $out = $this->listingGrid($criteria, 'list');
 
@@ -794,6 +798,8 @@ class Wolfnet_Plugin
             $defaultAttributes = $this->getQuickSearchDefaults();
 
             $criteria = array_merge($defaultAttributes, (is_array($attrs)) ? $attrs : array());
+
+            $this->decodeCriteria($criteria);
 
             $out = $this->quickSearch($criteria);
 
@@ -1995,6 +2001,8 @@ class Wolfnet_Plugin
             $qdata['has_waterfront'] = $this->convertBool($criteria['has_waterfront']);
         if (isset( $criteria['has_waterview'] ))
             $qdata['has_waterview'] = $this->convertBool($criteria['has_waterview']);
+        if (isset( $criteria['has_lakefront'] ))
+            $qdata['has_lakefront'] = $this->convertBool($criteria['has_lakefront']);
         if (isset($criteria['high_school'])) $qdata['high_school'] = $criteria['high_school'];
         if (isset( $criteria['industrial'] ))
             $qdata['industrial'] = $this->convertBool($criteria['industrial']);
@@ -3003,6 +3011,16 @@ class Wolfnet_Plugin
     }
 
 
+    private function decodeCriteria(array &$criteria) {
+
+        // Decode req parameters vals so they can be cleanly encoded before api req
+        foreach ($criteria as &$value) {
+            $value = html_entity_decode($value);
+        }
+
+    }
+
+
     public function registerCronEvents()
     {
         // Schedule Cache Clearing event
@@ -3017,6 +3035,14 @@ class Wolfnet_Plugin
     {
         // Remove Cache Clearing event
         wp_clear_scheduled_hook(self::CACHE_CRON_HOOK);
+
+    }
+
+
+    public function getSslEnabled()
+    {
+        // Attempt to read value from the options, but default to Client default
+        return get_option(self::SSL_WP_OPTION, Wolfnet_Api_Client::DEFAULT_SSL);
 
     }
 

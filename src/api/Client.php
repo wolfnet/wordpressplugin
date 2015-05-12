@@ -45,6 +45,26 @@ class Wolfnet_Api_Client
      */
     const AUTH_ERROR = 1005;
 
+    /**
+     * @var  string  The default host name to use to connect to the WolfNet API.
+     */
+    const DEFAULT_HOST = 'api.wolfnet.com';
+
+    /**
+     * @var  int  The default port to use to connect to the WolfNet API.
+     */
+    const DEFAULT_PORT = 443;
+
+    /**
+     * @var  boolean  The default SSL setting for connecting to the WolfNet API.
+     */
+    const DEFAULT_SSL = true;
+
+    /**
+     * @var  int  The default API version to connect to.
+     */
+    const DEFAULT_VERSION = 1;
+
 
     /* PROPERTIES ******************************************************************************* */
 
@@ -63,6 +83,11 @@ class Wolfnet_Api_Client
      */
     private $version;
 
+    /**
+     * @var  boolean  Whether or not the client should use HTTPS
+     */
+    private $ssl;
+
 
     /* CONSTRUCTOR ****************************************************************************** */
 
@@ -74,12 +99,19 @@ class Wolfnet_Api_Client
      *
      * @param string  $host    The hostname for the API where requests will be sent.
      * @param integer $port    The port for the API where requests will be sent
+     * @param boolean $ssl     Whether or not the client should use HTTPS
      * @param integer $version The API version that will be interacted with.
+     * @param boolean $ssl     Whether or not the client should use HTTPS
      */
-    public function __construct($host='api.wolfnet.com', $port=80, $version=1)
-    {
+    public function __construct(
+        $host=self::DEFAULT_HOST,
+        $port=self::DEFAULT_PORT,
+        $ssl=self::DEFAULT_SSL,
+        $version=self::DEFAULT_VERSION
+    ) {
         $this->host = $host;
         $this->port = $port;
+        $this->ssl = $ssl;
         $this->version = $version;
 
     }
@@ -190,6 +222,9 @@ class Wolfnet_Api_Client
             $uri = add_query_arg($data, $uri);
         }
 
+        // Adding HTTP Encoding header.
+        $requestArgs['headers']['Accept-Encoding'] = 'gzip, deflate';
+
         $response = wp_remote_request($uri, $requestArgs);
 
         try {
@@ -249,7 +284,17 @@ class Wolfnet_Api_Client
      */
     private function uriFromResource($resource)
     {
-        return 'http://' . $this->host . ($this->port!=80 ? ':' . $this->port : '') . $resource;
+        $url = ($this->ssl) ? 'https://' : 'http://';
+        $url .= $this->host;
+
+        if ((!$this->ssl && $this->port != 80) || ($this->ssl && $this->port != 443)) {
+            $url .= ':' . $this->port;
+        }
+
+        $url .= $resource;
+
+        return $url;
+
     }
 
 

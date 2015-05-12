@@ -52,13 +52,18 @@ class Wolfnet_Views
             for($i=1; $i<=count($productKey); $i++) {
 
                 $key = $productKey[$i-1]->key;
-                $validKey = $GLOBALS['wolfnet']->productKeyIsValid($key);
+
+                try {
+                    $validKey = $GLOBALS['wolfnet']->productKeyIsValid($key);
+                } catch (Wolfnet_Api_ApiException $e) {
+                    $validKey = false;
+                }
 
                 if ($validKey) {
 
                     try {
                         $market = $GLOBALS['wolfnet']->getMarketName($key);
-                    } catch (Wolfnet_Exception $e) {
+                    } catch (Wolfnet_Api_ApiException $e) {
                         // Catch the error and display no market
                         // TODO: We may want to display an error about this.
                         $market = '';
@@ -74,13 +79,16 @@ class Wolfnet_Views
 
             }
 
+            $sslEnabled = $GLOBALS['wolfnet']->getSslEnabled();
+
             $out = $this->parseTemplate('adminSettings', array(
                 'formHeader' => $this->settingsFormHeaders(),
                 'productKey' => $productKey,
+                'sslEnabled' => $sslEnabled,
             ));
 
         } catch (Wolfnet_Exception $e) {
-            $out = $this->exceptionView($exception);
+            $out = $this->exceptionView($e);
         }
 
         echo $out;
@@ -102,7 +110,7 @@ class Wolfnet_Views
             ));
 
         } catch (Wolfnet_Exception $e) {
-            $out = $this->exceptionView($exception);
+            $out = $this->exceptionView($e);
         }
 
         echo $out;
@@ -154,7 +162,7 @@ class Wolfnet_Views
             ));
 
         } catch (Wolfnet_Exception $e) {
-            $out = $this->exceptionView($exception);
+            $out = $this->exceptionView($e);
         }
 
         echo $out;

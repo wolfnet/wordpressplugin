@@ -148,6 +148,7 @@ class Wolfnet_Admin extends Wolfnet_Plugin
 
         // Register Options
         register_setting($this->optionGroup, $this->productKeyOptionKey);
+        register_setting($this->optionGroup, Wolfnet_Plugin::SSL_WP_OPTION);
         register_setting($this->CssOptionGroup, $this->publicCssOptionKey);
         register_setting($this->CssOptionGroup, $this->adminCssOptionKey);
 
@@ -162,15 +163,22 @@ class Wolfnet_Admin extends Wolfnet_Plugin
          /* If we are serving up the search manager page we need to get the search manager HTML from
           * the MLSFinder server now so that we can set cookies. */
 
-        $key = (array_key_exists("keyid", $_REQUEST)) ? $_REQUEST["keyid"] : "1";
-        $productKey = $GLOBALS['wolfnet']->getProductKeyById($key);
         $pageKeyExists = array_key_exists('page', $_REQUEST);
         $pageIsSM = ($pageKeyExists) ? ($_REQUEST['page']=='wolfnet_plugin_search_manager') : false;
 
-        if ($pageKeyExists && $pageIsSM && $GLOBALS['wolfnet']->productKeyIsValid($productKey)) {
+        if ($pageKeyExists && $pageIsSM) {
 
             try {
-                $GLOBALS['wolfnet']->smHttp = $GLOBALS['wolfnet']->searchManagerHtml($productKey);
+
+                /* Now that we know we are dealing with a page that needs the search manager check
+                   if the key is valid. */
+                $key = (array_key_exists("keyid", $_REQUEST)) ? $_REQUEST["keyid"] : "1";
+                $productKey = $GLOBALS['wolfnet']->getProductKeyById($key);
+
+                if ($GLOBALS['wolfnet']->productKeyIsValid($productKey)) {
+                    $GLOBALS['wolfnet']->smHttp = $GLOBALS['wolfnet']->searchManagerHtml($productKey);
+                }
+
             } catch (Wolfnet_Exception $e) {
                 $GLOBALS['wolfnet']->smHttp = $GLOBALS['wolfnet']->displayException($e);
             }
