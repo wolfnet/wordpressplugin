@@ -500,9 +500,9 @@ class Wolfnet_Plugin
 
         $_GET['search_mode'] = 'form';
 
-        $url = $baseUrl
-             . ((!strstr($baseUrl, '?')) ? '?' : '')
-             . '&action=wpshortcodebuilder';
+        $url = $baseUrl . ((!strstr($baseUrl, '?')) ? '?' : '');
+
+        $url .= ((substr($url, -1) === '?') ? '' : '&' ) . 'action=wpshortcodebuilder';
 
         $resParams = array(
             'page',
