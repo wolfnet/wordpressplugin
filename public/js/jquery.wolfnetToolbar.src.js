@@ -113,14 +113,11 @@
         for (var i=0, l=data.length; i<l; i++) {
             var brokerLogo  = data[i].branding.logo  || null;
             var brandingType  = data[i].branding.type || '';
-            var brokerName  = data[i].branding.content || null;
             var cityState   = data[i].city + ', ' + data[i].state;
             var fullAddress = data[i].display_address + ', ' + cityState;
-            var hasBranding = (brokerLogo == null && brokerName == null) ? false : true ;
 
             var $listing = $('<div>')
                 .addClass('wolfnet_listing')
-                .addClass( (hasBranding) ? 'wolfnet_branded' : '' )
                 .attr('id', 'wolfnet_listing_' + data[i].property_id)
                 .appendTo($listings);
 
@@ -156,17 +153,17 @@
                 .addClass('wolfnet_bed_bath')
                 .attr('title', data[i].total_bedrooms + ' Bedrooms & ' + total_baths + ' Bathrooms')
                 .appendTo($link);
-                
-                if (data[i].total_bedrooms != '' ) {
-                    $bedBath.append(data[i].total_bedrooms + 'bd');
-                }
 
-                if ( total_baths > 0 ) {
-                    if ($bedBath.text() != '') {
-                        $bedBath.append('/');
-                    }
-                    $bedBath.append(total_baths + 'ba');
+            if (data[i].total_bedrooms !== '' ) {
+                $bedBath.append(data[i].total_bedrooms + 'bd');
+            }
+
+            if ( total_baths > 0 ) {
+                if ($bedBath.text() !== '') {
+                    $bedBath.append('/');
                 }
+                $bedBath.append(total_baths + 'ba');
+            }
 
             var $locationContainer = $('<span>')
                 .attr('title', fullAddress)
@@ -190,42 +187,72 @@
                 .html(fullAddress)
                 .appendTo($locationContainer);
 
-            if (hasBranding) {
+            var $brandingContainer = $('<div>')
+                .addClass('wolfnet_branding')
+                .insertAfter($locationContainer);
 
-                var $brandingContainer = $('<div>')
-                    .addClass('wolfnet_branding')
-                    .insertAfter($locationContainer);
+            if (data[i].branding.logo !== '') {
 
-                if (brokerLogo != null) {
+                var $brokerLogo = $('<span>')
+                    .addClass('wolfnet_brokerLogo')
+                    .append($('<img>').attr('src', data[i].branding.logo))
+                    .appendTo($brandingContainer);
 
-                    var $brokerLogo = $('<span>')
-                        .addClass('wolfnet_brokerLogo')
-                        .append($('<img>').attr('src',brokerLogo))
-                        .appendTo($brandingContainer);
-
-                    if (brandingType == 'idx') {
-                        $brokerLogo.addClass('wolfnet_idxLogo');
-                    }
-
+                if (brandingType == 'idx') {
+                    $brokerLogo.addClass('wolfnet_idxLogo');
                 }
 
-                if (brokerName != null) {
+            }
 
-                    var $brokerName = $('<span>')
-                        .addClass('wolfnet_brandingMessage')
-                        .html(brokerName)
-                        .appendTo($brandingContainer);
+            var $brokerName = $('<span>')
+                .addClass('wolfnet_brandingMessage')
+                .appendTo($brandingContainer);
 
-                }
+            if (data[i].branding.courtesy_text !== '') {
+                $('<span>').text(data[i].branding.courtesy_text)
+                    .addClass('wolfnet_brandingCourtesyText')
+                    .appendTo($brokerName);
+            }
 
+            if (data[i].branding.agent_name !== '') {
+                $('<span>').text(data[i].branding.agent_name)
+                    .addClass('wolfnet_brandingAgent')
+                    .addClass('wolfnet_brandingAgentName')
+                    .appendTo($brokerName);
+            }
+
+            if (data[i].branding.agent_phone !== '') {
+                $('<span>').text(data[i].branding.agent_phone)
+                    .addClass('wolfnet_brandingAgent')
+                    .addClass('wolfnet_brandingAgentPhone')
+                    .appendTo($brokerName);
+            }
+
+            if (data[i].branding.office_name !== '') {
+                $('<span>').text(data[i].branding.office_name)
+                    .addClass('wolfnet_brandingOffice')
+                    .addClass('wolfnet_brandingOfficeName')
+                    .appendTo($brokerName);
+            }
+
+            if (data[i].branding.office_phone !== '') {
+                $('<span>').text(data[i].branding.office_phone)
+                    .addClass('wolfnet_brandingOffice')
+                    .addClass('wolfnet_brandingOfficePhone')
+                    .appendTo($brokerName);
+            }
+
+            if (data[i].branding.toll_free_phone !== '') {
+                $('<span>').text(data[i].branding.toll_free_phone)
+                    .addClass('wolfnet_brandingTollFreePhone')
+                    .appendTo($brokerName);
             }
 
         }
 
         $container.find('.wolfnet_listings').replaceWith($listings);
 
-    }
-
+    };
 
     // var getBedBath = function(bath,bed)
     // {
