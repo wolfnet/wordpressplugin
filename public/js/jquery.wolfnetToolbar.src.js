@@ -58,12 +58,14 @@
         sortOptionsData  : [
             {value:'price_desc', label:'Descending by Price'},
             {value:'price', label:'Ascending by Price'}
-            ]
-        };
+        ]
+    };
 
     var renderPropertyList = function(data)
     {
-        var data = ($.isArray(data.responseData.data.listing)) ? data.responseData.data.listing : [];
+
+        data = ($.isArray(data.responseData.data.listing)) ? data.responseData.data.listing : [];
+
         var $container = this;
         var $listings = $('<div>').addClass('wolfnet_listings');
 
@@ -101,12 +103,13 @@
 
         $container.find('.wolfnet_listings').replaceWith($listings);
 
-    }
+    };
 
     var renderListingGrid = function(data)
-    {   
-        
-        var data = ($.isArray(data.responseData.data.listing)) ? data.responseData.data.listing : [];
+    {
+
+        data = ($.isArray(data.responseData.data.listing)) ? data.responseData.data.listing : [];
+
         var $container = this;
         var $listings = $('<div>').addClass('wolfnet_listings');
 
@@ -296,13 +299,13 @@
         // alert(concatHouseover);
 
         return concatHouseover;
-    }
 
+    };
 
     var populateMap = function(data)
     {
-        //var data = ($.isArray(data)) ? data : [];
-        var data = ($.isArray(data.responseData.data.listing)) ? data.responseData.data.listing : [];
+        data = ($.isArray(data.responseData.data.listing)) ? data.responseData.data.listing : [];
+
         var $container = this;
         var componentMap = $container.find('.wolfnet_wntMainMap').data('map');
         var houseIcon = wolfnet_ajax.houseoverIcon;
@@ -317,8 +320,8 @@
         }
 
         componentMap.bestFit();
-    }
 
+    };
 
     // Take the data returned from an Ajax request and use it to render listings.
     var renderListings = function(data)
@@ -354,7 +357,7 @@
         var options = $container.data(optionsKey);
 
         // If there is no dropdown and there should be, create one.
-        if ($itemsDropDown.length == 0 && $container.is('.wolfnet_withPagination')) {
+        if ($itemsDropDown.length === 0 && $container.is('.wolfnet_withPagination')) {
             var $select = $('<select>');
 
             // Register change event handler to trigger an update when the tool is changed.
@@ -393,7 +396,7 @@
         var options = $container.data(optionsKey);
 
         // If there is no dropdown and there should be, create one.
-        if ($sortDropDown.length == 0 && $container.is('.wolfnet_withSortOptions')) {
+        if ($sortDropDown.length === 0 && $container.is('.wolfnet_withSortOptions')) {
             var $select = $('<select>');
 
             // Register change event handler to trigger an update when the tool is changed.
