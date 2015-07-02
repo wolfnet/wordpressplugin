@@ -93,6 +93,9 @@ Please upgrade to the latest version of the plugin as we will be disabling our o
 
 == Changelog ==
 
+= 1.7.8 =
+* Fixes branding issue on paginated listing grid results
+
 = 1.7.7 =
 * Updates caching service to remove registry and add more reliable cache clean-up
 * Adds support for criteria that was missed during conversion to new API. (has_lakefront)
