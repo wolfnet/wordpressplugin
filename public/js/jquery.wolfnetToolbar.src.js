@@ -17,25 +17,6 @@
  *                along with this program; if not, write to the Free Software
  *                Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-
-// formating done in php
-// if ( typeof String.prototype.wolfnetPriceFormat !== 'function' ) {
-//     String.prototype.wolfnetPriceFormat = function() {
-//         var number = this.valueOf();
-//         var dollars = number.split('.')[0];
-//         var dollars = dollars
-//             .split('')
-//             .reverse()
-//             .join('')
-//             .replace(/(\d{3}(?!$))/g, '$1,')
-//             .split('')
-//             .reverse()
-//             .join('');
-
-//         return '$' + dollars;
-//     }
-// }
-
 (function($){
 
     var plugin = 'wolfnetToolbar';
@@ -257,31 +238,10 @@
 
     };
 
-    // var getBedBath = function(bath,bed)
-    // {
-    //     var bedBathString = '';
-
-    //     if (bed != '' && bed != 'n/a') {
-    //         bedBathString = bed + 'bd';
-    //     }
-    //     if (bath != '' && bath != 'n/a') {
-    //         if (bedBathString != '') {
-    //             bedBathString += '/';
-    //         }
-    //         bedBathString += bath + 'ba';
-    //     }
-
-    //     return bedBathString;
-    // }
-
-
     //replicating building of html dom in wolfnet.php, function: getHouseoverHtml
     var getHouseoverHtml = function(listing)
     {
         var concatHouseover = '';
-        //var bed_bath = getBedBath(listing.bathroom,listing.bedrooms);
-
-        // alert('listing in fetHouseoverHtml: ' + JSON.stringify(listing));
 
         concatHouseover += '<a style="display:block" rel="follow" href="' + listing.property_url + '">';
         concatHouseover += '<div class="wolfnet_wntHouseOverWrapper"><div data-property-id="' + listing.property_id;
@@ -295,8 +255,6 @@
         concatHouseover += listing.city + ', ' + listing.state + '</div><div style="text-align:left;">' + listing.bedsbaths;
         concatHouseover += '</div><div style="text-align:left;padding-top:20px;">' + listing.branding.courtesy_text + '</div>';
         concatHouseover += '</div></td></tr></tbody></table></div></div></a>';
-
-        // alert(concatHouseover);
 
         return concatHouseover;
 
@@ -480,9 +438,7 @@
             return this.each(function() {
                 var $container = $(this);
                 var opts = $.extend(true, {}, defaultOptions, options);
-                // alert('options in methods: ' + JSON.stringify(options));
                 var state = $.extend(true, {}, opts.criteria, opts, {page:1});
-                //alert('state in methods: ' + JSON.stringify(state));
 
                 delete opts.criteria;
                 delete state.criteria;
