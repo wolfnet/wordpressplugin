@@ -125,9 +125,10 @@
 
             // calculate total number of baths
             var total_baths = 0;
+
             if(data[i].total_partial_baths !== '') {
                 total_baths += parseInt(data[i].total_partial_baths);
-            } 
+            }
 
             if(data[i].total_full_baths !== '' ) {
                 total_baths += parseInt(data[i].total_full_baths);
@@ -505,7 +506,7 @@
                 var state = $container.data(stateKey);
 
                 var getData = function() {
-                
+
                     // alert(JSON.stringify(state));
                     var data = $.extend(state, {});
                     delete data.itemsPerPageData;
