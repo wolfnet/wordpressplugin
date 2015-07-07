@@ -1169,7 +1169,7 @@ class Wolfnet_Plugin
 
             $criteria = $this->prepareListingQuery($_REQUEST);
 
-            $keyid = $_REQUEST["keyid"];
+            $keyid = (array_key_exists('keyid', $_REQUEST)) ? $_REQUEST["keyid"] : null;
 
             $productKey = $this->getProductKeyById($keyid);
 
