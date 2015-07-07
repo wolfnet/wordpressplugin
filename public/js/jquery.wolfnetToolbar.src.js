@@ -17,25 +17,6 @@
  *                along with this program; if not, write to the Free Software
  *                Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-
-// formating done in php
-// if ( typeof String.prototype.wolfnetPriceFormat !== 'function' ) {
-//     String.prototype.wolfnetPriceFormat = function() {
-//         var number = this.valueOf();
-//         var dollars = number.split('.')[0];
-//         var dollars = dollars
-//             .split('')
-//             .reverse()
-//             .join('')
-//             .replace(/(\d{3}(?!$))/g, '$1,')
-//             .split('')
-//             .reverse()
-//             .join('');
-
-//         return '$' + dollars;
-//     }
-// }
-
 (function($){
 
     var plugin = 'wolfnetToolbar';
@@ -58,12 +39,14 @@
         sortOptionsData  : [
             {value:'price_desc', label:'Descending by Price'},
             {value:'price', label:'Ascending by Price'}
-            ]
-        };
+        ]
+    };
 
     var renderPropertyList = function(data)
     {
-        var data = ($.isArray(data.responseData.data.listing)) ? data.responseData.data.listing : [];
+
+        data = ($.isArray(data.responseData.data.listing)) ? data.responseData.data.listing : [];
+
         var $container = this;
         var $listings = $('<div>').addClass('wolfnet_listings');
 
@@ -101,26 +84,24 @@
 
         $container.find('.wolfnet_listings').replaceWith($listings);
 
-    }
+    };
 
     var renderListingGrid = function(data)
-    {   
-        
-        var data = ($.isArray(data.responseData.data.listing)) ? data.responseData.data.listing : [];
+    {
+
+        data = ($.isArray(data.responseData.data.listing)) ? data.responseData.data.listing : [];
+
         var $container = this;
         var $listings = $('<div>').addClass('wolfnet_listings');
 
         for (var i=0, l=data.length; i<l; i++) {
             var brokerLogo  = data[i].branding.logo  || null;
             var brandingType  = data[i].branding.type || '';
-            var brokerName  = data[i].branding.content || null;
             var cityState   = data[i].city + ', ' + data[i].state;
             var fullAddress = data[i].display_address + ', ' + cityState;
-            var hasBranding = (brokerLogo == null && brokerName == null) ? false : true ;
 
             var $listing = $('<div>')
                 .addClass('wolfnet_listing')
-                .addClass( (hasBranding) ? 'wolfnet_branded' : '' )
                 .attr('id', 'wolfnet_listing_' + data[i].property_id)
                 .appendTo($listings);
 
@@ -144,9 +125,10 @@
 
             // calculate total number of baths
             var total_baths = 0;
+
             if(data[i].total_partial_baths !== '') {
                 total_baths += parseInt(data[i].total_partial_baths);
-            } 
+            }
 
             if(data[i].total_full_baths !== '' ) {
                 total_baths += parseInt(data[i].total_full_baths);
@@ -156,17 +138,17 @@
                 .addClass('wolfnet_bed_bath')
                 .attr('title', data[i].total_bedrooms + ' Bedrooms & ' + total_baths + ' Bathrooms')
                 .appendTo($link);
-                
-                if (data[i].total_bedrooms != '' ) {
-                    $bedBath.append(data[i].total_bedrooms + 'bd');
-                }
 
-                if ( total_baths > 0 ) {
-                    if ($bedBath.text() != '') {
-                        $bedBath.append('/');
-                    }
-                    $bedBath.append(total_baths + 'ba');
+            if (data[i].total_bedrooms !== '' ) {
+                $bedBath.append(data[i].total_bedrooms + 'bd');
+            }
+
+            if ( total_baths > 0 ) {
+                if ($bedBath.text() !== '') {
+                    $bedBath.append('/');
                 }
+                $bedBath.append(total_baths + 'ba');
+            }
 
             var $locationContainer = $('<span>')
                 .attr('title', fullAddress)
@@ -190,68 +172,77 @@
                 .html(fullAddress)
                 .appendTo($locationContainer);
 
-            if (hasBranding) {
+            var $brandingContainer = $('<div>')
+                .addClass('wolfnet_branding')
+                .insertAfter($locationContainer);
 
-                var $brandingContainer = $('<div>')
-                    .addClass('wolfnet_branding')
-                    .insertAfter($locationContainer);
+            if (data[i].branding.logo !== '') {
 
-                if (brokerLogo != null) {
+                var $brokerLogo = $('<span>')
+                    .addClass('wolfnet_brokerLogo')
+                    .append($('<img>').attr('src', data[i].branding.logo))
+                    .appendTo($brandingContainer);
 
-                    var $brokerLogo = $('<span>')
-                        .addClass('wolfnet_brokerLogo')
-                        .append($('<img>').attr('src',brokerLogo))
-                        .appendTo($brandingContainer);
-
-                    if (brandingType == 'idx') {
-                        $brokerLogo.addClass('wolfnet_idxLogo');
-                    }
-
+                if (brandingType == 'idx') {
+                    $brokerLogo.addClass('wolfnet_idxLogo');
                 }
 
-                if (brokerName != null) {
+            }
 
-                    var $brokerName = $('<span>')
-                        .addClass('wolfnet_brandingMessage')
-                        .html(brokerName)
-                        .appendTo($brandingContainer);
+            var $brokerName = $('<span>')
+                .addClass('wolfnet_brandingMessage')
+                .appendTo($brandingContainer);
 
-                }
+            if (data[i].branding.courtesy_text !== '') {
+                $('<span>').text(data[i].branding.courtesy_text)
+                    .addClass('wolfnet_brandingCourtesyText')
+                    .appendTo($brokerName);
+            }
 
+            if (data[i].branding.agent_name !== '') {
+                $('<span>').text(data[i].branding.agent_name)
+                    .addClass('wolfnet_brandingAgent')
+                    .addClass('wolfnet_brandingAgentName')
+                    .appendTo($brokerName);
+            }
+
+            if (data[i].branding.agent_phone !== '') {
+                $('<span>').text(data[i].branding.agent_phone)
+                    .addClass('wolfnet_brandingAgent')
+                    .addClass('wolfnet_brandingAgentPhone')
+                    .appendTo($brokerName);
+            }
+
+            if (data[i].branding.office_name !== '') {
+                $('<span>').text(data[i].branding.office_name)
+                    .addClass('wolfnet_brandingOffice')
+                    .addClass('wolfnet_brandingOfficeName')
+                    .appendTo($brokerName);
+            }
+
+            if (data[i].branding.office_phone !== '') {
+                $('<span>').text(data[i].branding.office_phone)
+                    .addClass('wolfnet_brandingOffice')
+                    .addClass('wolfnet_brandingOfficePhone')
+                    .appendTo($brokerName);
+            }
+
+            if (data[i].branding.toll_free_phone !== '') {
+                $('<span>').text(data[i].branding.toll_free_phone)
+                    .addClass('wolfnet_brandingTollFreePhone')
+                    .appendTo($brokerName);
             }
 
         }
 
         $container.find('.wolfnet_listings').replaceWith($listings);
 
-    }
-
-
-    // var getBedBath = function(bath,bed)
-    // {
-    //     var bedBathString = '';
-
-    //     if (bed != '' && bed != 'n/a') {
-    //         bedBathString = bed + 'bd';
-    //     }
-    //     if (bath != '' && bath != 'n/a') {
-    //         if (bedBathString != '') {
-    //             bedBathString += '/';
-    //         }
-    //         bedBathString += bath + 'ba';
-    //     }
-
-    //     return bedBathString;
-    // }
-
+    };
 
     //replicating building of html dom in wolfnet.php, function: getHouseoverHtml
     var getHouseoverHtml = function(listing)
     {
         var concatHouseover = '';
-        //var bed_bath = getBedBath(listing.bathroom,listing.bedrooms);
-
-        // alert('listing in fetHouseoverHtml: ' + JSON.stringify(listing));
 
         concatHouseover += '<a style="display:block" rel="follow" href="' + listing.property_url + '">';
         concatHouseover += '<div class="wolfnet_wntHouseOverWrapper"><div data-property-id="' + listing.property_id;
@@ -266,16 +257,14 @@
         concatHouseover += '</div><div style="text-align:left;padding-top:20px;">' + listing.branding.courtesy_text + '</div>';
         concatHouseover += '</div></td></tr></tbody></table></div></div></a>';
 
-        // alert(concatHouseover);
-
         return concatHouseover;
-    }
 
+    };
 
     var populateMap = function(data)
     {
-        //var data = ($.isArray(data)) ? data : [];
-        var data = ($.isArray(data.responseData.data.listing)) ? data.responseData.data.listing : [];
+        data = ($.isArray(data.responseData.data.listing)) ? data.responseData.data.listing : [];
+
         var $container = this;
         var componentMap = $container.find('.wolfnet_wntMainMap').data('map');
         var houseIcon = wolfnet_ajax.houseoverIcon;
@@ -290,8 +279,8 @@
         }
 
         componentMap.bestFit();
-    }
 
+    };
 
     // Take the data returned from an Ajax request and use it to render listings.
     var renderListings = function(data)
@@ -327,7 +316,7 @@
         var options = $container.data(optionsKey);
 
         // If there is no dropdown and there should be, create one.
-        if ($itemsDropDown.length == 0 && $container.is('.wolfnet_withPagination')) {
+        if ($itemsDropDown.length === 0 && $container.is('.wolfnet_withPagination')) {
             var $select = $('<select>');
 
             // Register change event handler to trigger an update when the tool is changed.
@@ -366,7 +355,7 @@
         var options = $container.data(optionsKey);
 
         // If there is no dropdown and there should be, create one.
-        if ($sortDropDown.length == 0 && $container.is('.wolfnet_withSortOptions')) {
+        if ($sortDropDown.length === 0 && $container.is('.wolfnet_withSortOptions')) {
             var $select = $('<select>');
 
             // Register change event handler to trigger an update when the tool is changed.
@@ -450,9 +439,7 @@
             return this.each(function() {
                 var $container = $(this);
                 var opts = $.extend(true, {}, defaultOptions, options);
-                // alert('options in methods: ' + JSON.stringify(options));
                 var state = $.extend(true, {}, opts.criteria, opts, {page:1});
-                //alert('state in methods: ' + JSON.stringify(state));
 
                 delete opts.criteria;
                 delete state.criteria;
@@ -519,7 +506,7 @@
                 var state = $container.data(stateKey);
 
                 var getData = function() {
-                
+
                     // alert(JSON.stringify(state));
                     var data = $.extend(state, {});
                     delete data.itemsPerPageData;
