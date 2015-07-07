@@ -1167,19 +1167,13 @@ class Wolfnet_Plugin
                 $_REQUEST['maxrows'] = $_REQUEST['numrows'];
             }
 
-            // Convert 'zipcode' to 'zip_code' for new API
-            if (array_key_exists('zipcode', $args) && !array_key_exists('zip_code', $args)) {
-                $args['zip_code'] = $args['zipcode'];
-            }
-            unset($args['zipcode']);
-
-            $qdata = $this->prepareListingQuery($_REQUEST);
+            $criteria = $this->prepareListingQuery($_REQUEST);
 
             $keyid = $_REQUEST["keyid"];
 
             $productKey = $this->getProductKeyById($keyid);
 
-            $data = $this->apin->sendRequest($productKey, '/listing', 'GET', $qdata);
+            $data = $this->apin->sendRequest($productKey, '/listing', 'GET', $criteria);
 
             $this->augmentListingsData($data, $productKey);
 
@@ -1522,12 +1516,6 @@ class Wolfnet_Plugin
         if (!array_key_exists('numrows', $criteria)) {
             $criteria['maxrows'] = $criteria['maxresults'];
         }
-
-        // Convert 'zipcode' to 'zip_code' for new API
-        if (array_key_exists('zipcode', $criteria) && !array_key_exists('zip_code', $criteria)) {
-            $criteria['zip_code'] = $criteria['zipcode'];
-        }
-        unset($criteria['zipcode']);
 
         $qdata = $this->prepareListingQuery($criteria);
 
