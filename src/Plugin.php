@@ -839,10 +839,7 @@ class Wolfnet_Plugin
 
         }
 
-        header('Content-Type: application/json');
-        echo json_encode($response);
-
-        die;
+        wp_send_json($response);
 
     }
 
@@ -867,9 +864,7 @@ class Wolfnet_Plugin
 
         }
 
-        header('Content-Type: application/json');
-        echo json_encode($response);
-        die;
+        wp_send_json($response);
 
     }
 
@@ -912,9 +907,7 @@ class Wolfnet_Plugin
 
         }
 
-        header('Content-Type: application/json');
-        echo json_encode($response);
-        die;
+        wp_send_json($response);
 
     }
 
@@ -940,9 +933,7 @@ class Wolfnet_Plugin
 
         }
 
-        header('Content-Type: application/json');
-        echo json_encode($response);
-        die;
+        wp_send_json($response);
 
     }
 
@@ -1053,9 +1044,7 @@ class Wolfnet_Plugin
 
         }
 
-        header('Content-Type: application/json');
-        echo json_encode($response);
-        die;
+        wp_send_json($response);
 
     }
 
@@ -1187,8 +1176,7 @@ class Wolfnet_Plugin
             header('Content-Type: application/javascript');
             echo $callback . '(' . json_encode($data) . ');';
         } else {
-            header('Content-Type: application/json');
-            echo json_encode($data);
+            wp_send_json($data);
         }
 
         die;
@@ -1239,9 +1227,7 @@ class Wolfnet_Plugin
 
         }
 
-        header('Content-Type: application/json');
-        echo json_encode($response);
-        die;
+        wp_send_json($response);
 
     }
 
@@ -1266,9 +1252,7 @@ class Wolfnet_Plugin
 
         }
 
-        header('Content-Type: application/json');
-        echo json_encode($response);
-        die;
+        wp_send_json($response);
 
     }
 
@@ -1294,9 +1278,7 @@ class Wolfnet_Plugin
 
         }
 
-        header('Content-Type: application/json');
-        echo json_encode($response);
-        die;
+        wp_send_json($response);
 
     }
 
@@ -1320,9 +1302,7 @@ class Wolfnet_Plugin
 
         }
 
-        header('Content-Type: application/json');
-        echo json_encode($response);
-        die;
+        wp_send_json($response);
 
     }
 
