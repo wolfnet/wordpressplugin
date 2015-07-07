@@ -75,13 +75,13 @@ class Wolfnet_Service_CachingService
      * @param  boolean  $force  Should cached items be forced to renew.
      *
      */
-    public function __construct($force=false, $reap=false, $clear=false)
+    public function __construct($force = false, $reap = false, $clear = false)
     {
         $forceRenewal = $force;
 
         if ($clear) {
             $this->clearAll();
-        } else if ($reap) {
+        } elseif ($reap) {
             $this->clearExpired();
         }
 
@@ -131,7 +131,7 @@ class Wolfnet_Service_CachingService
      *                            successful. true=success, false=failure
      *
      */
-    public function cachePut($key, $data, $duration=null)
+    public function cachePut($key, $data, $duration = null)
     {
         $duration = ($duration !== null) ? $duration : self::DEFAULT_CACHE_SPAN;
 
@@ -249,7 +249,7 @@ class Wolfnet_Service_CachingService
      * @return null
      *
      */
-    private function clear($mode=self::CLEAR_EXPIRED)
+    private function clear($mode = self::CLEAR_EXPIRED)
     {
 
         // Delete transients from the database (if they are present)
@@ -275,7 +275,7 @@ class Wolfnet_Service_CachingService
      *
      * @return null
      */
-    private function deleteTransientRecordsFromDatabase($mode=self::CLEAR_EXPIRED)
+    private function deleteTransientRecordsFromDatabase($mode = self::CLEAR_EXPIRED)
     {
         global $wpdb;
 

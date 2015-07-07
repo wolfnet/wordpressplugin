@@ -104,10 +104,10 @@ class Wolfnet_Api_Client
      * @param boolean $ssl     Whether or not the client should use HTTPS
      */
     public function __construct(
-        $host=self::DEFAULT_HOST,
-        $port=self::DEFAULT_PORT,
-        $ssl=self::DEFAULT_SSL,
-        $version=self::DEFAULT_VERSION
+        $host = self::DEFAULT_HOST,
+        $port = self::DEFAULT_PORT,
+        $ssl = self::DEFAULT_SSL,
+        $version = self::DEFAULT_VERSION
     ) {
         $this->host = $host;
         $this->port = $port;
@@ -131,7 +131,7 @@ class Wolfnet_Api_Client
      * @return array         The API response structure.
      *
      */
-    public function authenticate($key, array $headers=array(), array $options=array())
+    public function authenticate($key, array $headers = array(), array $options = array())
     {
         $data = array(
             'key' => $key,
@@ -205,8 +205,7 @@ class Wolfnet_Api_Client
 
         try {
             $this->validateRequestData($data);
-        }
-        catch (Wolfnet_Api_ApiException $e) {
+        } catch (Wolfnet_Api_ApiException $e) {
             throw $e->appendDetails('While attempting request to (' . $uri . ').');
         }
 
@@ -229,8 +228,7 @@ class Wolfnet_Api_Client
 
         try {
             $this->validateResponse($response);
-        }
-        catch (Wolfnet_Api_ApiException $e) {
+        } catch (Wolfnet_Api_ApiException $e) {
             throw $e->appendDetails('While attempting request to (' . $uri . ').');
         }
 
@@ -258,7 +256,6 @@ class Wolfnet_Api_Client
 
         // Loop over each key in the data and check if they are scalar (simple) values.
         foreach ($data as $key => $value) {
-
             if ($value != null && !is_scalar($value)) {
                 $message = 'Tried to send invalid data to the API.';
                 $details = '[' . $key . '] is not a valid API argument. '
@@ -348,7 +345,6 @@ class Wolfnet_Api_Client
          *
          */
         if ($responseCode != 200) {
-
             $responseText = $wpResponse['message'];
             $responseBody = array_key_exists('body', $response) ? $response['body'] : '';
             $responseData = json_decode($response['body']);
@@ -438,7 +434,6 @@ class Wolfnet_Api_Client
             // The API returned a 400 Bad Response
             // There are several reasons why this might have happened so we should check for those
             if ($responseCode == 400) {
-
                 // If WordPress has provided a message use that for the exception
                 if ($message !== null) {
                     throw new Wolfnet_Api_ApiException($message, 'See data for details.', $response);

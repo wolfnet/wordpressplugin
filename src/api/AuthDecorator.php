@@ -92,12 +92,10 @@ class Wolfnet_Api_AuthDecorator extends Wolfnet_Api_Client
         $options['key'] = $key;
 
         try {
-
             // Forward the request on to the API Client.
             $result = $this->client->sendRequest($token, $resource, $method, $data, $headers, $options);
 
-        }
-        catch (Wolfnet_Api_ApiException $e) {
+        } catch (Wolfnet_Api_ApiException $e) {
 
             $e->append('Several attempts were made.');
             $e->append($e->getCode() === Wolfnet_Api_Client::AUTH_ERROR ? 'auth-code' : '!auth-code');
@@ -109,7 +107,7 @@ class Wolfnet_Api_AuthDecorator extends Wolfnet_Api_Client
 
                 $result = $this->sendRequest($key, $resource, $method, $data, $headers, $options);
 
-            } else if ($options['attempts'] > 1) {
+            } elseif ($options['attempts'] > 1) {
                 throw $e->append('Several attempts were made.');
 
             } else {
@@ -135,7 +133,7 @@ class Wolfnet_Api_AuthDecorator extends Wolfnet_Api_Client
      * @return array             The API response structure
      *
      */
-    public function authenticate($key, array $headers=array(), array $options=array())
+    public function authenticate($key, array $headers = array(), array $options = array())
     {
         return $this->client->authenticate($key, $headers, $options);
     }

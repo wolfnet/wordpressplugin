@@ -41,9 +41,8 @@ abstract class Wolfnet_Widget_AbstractWidget extends WP_Widget
         // If the plugin instance cannot be found in the global scope throw an exception.
         if (!array_key_exists('wolfnet', $GLOBALS)) {
             throw new Exception('Could not find the Wolfnet plugin in the global scope.');
-        }
-        // Else set a protected property equal to a reference to the instance.
-        else {
+        } else {
+            // Else set a protected property equal to a reference to the instance.
             $this->plugin = $GLOBALS['wolfnet'];
         }
 
@@ -67,7 +66,7 @@ abstract class Wolfnet_Widget_AbstractWidget extends WP_Widget
     }
 
 
-    abstract protected function getOptions($instance=null);
+    abstract protected function getOptions($instance = null);
 
 
     protected function prepOptions(array $options)
@@ -75,8 +74,7 @@ abstract class Wolfnet_Widget_AbstractWidget extends WP_Widget
         foreach ($options as $key => $value) {
             if (substr($key, -5) == '_wpid') {
                 $options[$key] = $this->get_field_id($value);
-            }
-            else if (substr($key, -7) == '_wpname') {
+            } elseif (substr($key, -7) == '_wpname') {
                 $options[$key] = $this->get_field_name($value);
             }
         }
