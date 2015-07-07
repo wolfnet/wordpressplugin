@@ -2699,11 +2699,17 @@
                 var content     = args[4];
                 var houseIcon   = args[5];
                 var mapId       = args[6];
-
-                var componentMap = $('#' + mapId).data('map');
-                var houseoverIcon = componentMap.mapIcon(houseIcon,30,30);
-                var houseover = componentMap.poi(lat, lng, houseoverIcon, content, propertyId, propertyUrl);
-                componentMap.addPoi(houseover);
+                // Only add the POI if the coordinates are valid
+                if (
+                    !isNaN(lat) && (lat >= -180) && (lat <= 180)
+                    !isNaN(lng) && (lng >= -180) && (lng <= 180)
+                    && ((lat !== 0) || (lng !== 0))
+                ) {
+                    var componentMap = $('#' + mapId).data('map');
+                    var houseoverIcon = componentMap.mapIcon(houseIcon,30,30);
+                    var houseover = componentMap.poi(lat, lng, houseoverIcon, content, propertyId, propertyUrl);
+                    componentMap.addPoi(houseover);
+                }
             });
         }
 
