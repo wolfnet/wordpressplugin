@@ -1927,12 +1927,15 @@ class Wolfnet_Plugin
             if (array_key_exists($bool, $criteria)) {
                 $criteria[$bool] = $this->convertBool($criteria[$bool]);
             }
+
         }
 
         // If multiple cities were selected we must set "exact_city" to false
-        if (array_key_exists('city', $criteria)
-            && array_key_exists('exact_city', $criteria)
-            && count(explode(',', $criteria['city'])) > 0) {
+        $hasCity = array_key_exists('city', $criteria);
+        $hasExactCity = array_key_exists('exact_city', $criteria);
+        $hasMultipleCities = ($hasCity && count(explode(',', $criteria['city'])) > 0);
+
+        if ($hasExactCity && $hasMultipleCities) {
             $criteria['exact_city'] = 0;
         }
 
@@ -2022,6 +2025,7 @@ class Wolfnet_Plugin
             if (array_key_exists($crit, $criteria)) {
                 unset($criteria[$crit]);
             }
+
         }
 
         return $criteria;
