@@ -1362,22 +1362,7 @@ class Wolfnet_Plugin
             $criteria['startrow'] = 1;
         }
 
-        $qdata = array(
-            'maxrows' => $criteria['maxresults'],
-            'startrow' => $criteria['startrow'],
-            );
-
-        if ($criteria['ownertype'] == 'agent_broker') {
-            $qdata['agent_office_only'] = true;
-        }
-
-        if ($criteria['ownertype'] == 'agent') {
-            $qdata['agent_only'] = true;
-        }
-
-        if ($criteria['ownertype'] == 'broker') {
-            $qdata['office_only'] = true;
-        }
+        $qdata = $this->prepareListingQuery($criteria);
 
         try {
             $data = $this->apin->sendRequest($criteria['key'], '/listing', 'GET', $qdata);
