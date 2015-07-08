@@ -83,7 +83,7 @@ class Wolfnet_Api_StatsDecorator extends Wolfnet_Api_Client
      * @return array             The API response structure
      *
      */
-    public function authenticate($key, array $headers=array(), array $options=array())
+    public function authenticate($key, array $headers = array(), array $options = array())
     {
         $this->injectStatHeaders($headers);
 

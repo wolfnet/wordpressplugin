@@ -40,7 +40,6 @@ class Wolfnet_Widget_QuickSearchWidget extends Wolfnet_Widget_AbstractWidget
     {
 
         try {
-
             $options = $this->getOptions($instance);
             $response = $this->plugin->quickSearch($options);
 
@@ -69,7 +68,7 @@ class Wolfnet_Widget_QuickSearchWidget extends Wolfnet_Widget_AbstractWidget
     }
 
 
-    protected function getOptions($instance=null)
+    protected function getOptions($instance = null)
     {
         $options = $this->plugin->getQuickSearchOptions($instance);
 

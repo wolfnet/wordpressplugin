@@ -10,7 +10,7 @@
 ?>
 
 <div class="wolfnet_error">
-    <p>An error has occured:</p>
+    <p>An error has occurred:</p>
     <strong>[<?php echo $exception->getCode(); ?>] <?php echo $exception->getMessage(); ?></strong>
     <a>More Info</a>
     <div class="wolfnet_more" style="display:none;">

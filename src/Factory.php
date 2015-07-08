@@ -13,7 +13,7 @@ class Wolfnet_Factory
 
     /* CONSTRUCTOR ****************************************************************************** */
 
-    public function __construct(array $args=array())
+    public function __construct(array $args = array())
     {
         $this->args = $args;
     }
@@ -21,7 +21,7 @@ class Wolfnet_Factory
 
     /* PUBLIC METHODS *************************************************************************** */
 
-    public function get($class, array $args=array())
+    public function get($class, array $args = array())
     {
 
         if (array_key_exists($class, $this->singletons)) {
@@ -114,7 +114,8 @@ class Wolfnet_Factory
             $this->args['cacheRenew'],
             $this->args['cacheReap'],
             $this->args['cacheClear']
-            );
+        );
+
     }
 
 

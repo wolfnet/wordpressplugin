@@ -136,12 +136,10 @@ class Wolfnet_Api_CachingDecorator extends Wolfnet_Api_Client
 
         // If we don't have any data yet perform the request.
         if ($options['force'] || $result === null) {
-
             try {
                 $result = $this->client->sendRequest($token, $resource, $method, $data, $headers, $options);
 
             } catch (Wolfnet_Api_ApiException $e) {
-
                 /* If the exception states that the API Token is invalid we should remove it from
                    the cache so that we retrieve a new one on the next request. */
                 if ($e->getCode() === Wolfnet_Api_Client::AUTH_ERROR) {
@@ -185,7 +183,7 @@ class Wolfnet_Api_CachingDecorator extends Wolfnet_Api_Client
      * @return array             The API response structure.
      *
      */
-    public function authenticate($key, array $headers=array(), array $options=array())
+    public function authenticate($key, array $headers = array(), array $options = array())
     {
         /* If the force key is present we should force the decorator to retrieve new data from the
          * API even if cached data was found. */

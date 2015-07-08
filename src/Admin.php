@@ -99,7 +99,7 @@ class Wolfnet_Admin extends Wolfnet_Plugin
      */
     public function adminScripts()
     {
-        do_action( $this->preHookPrefix. 'enqueueAdminResources');
+        do_action($this->preHookPrefix . 'enqueueAdminResources');
 
         // JavaScript
         $scripts = array(
@@ -167,9 +167,7 @@ class Wolfnet_Admin extends Wolfnet_Plugin
         $pageIsSM = ($pageKeyExists) ? ($_REQUEST['page']=='wolfnet_plugin_search_manager') : false;
 
         if ($pageKeyExists && $pageIsSM) {
-
             try {
-
                 /* Now that we know we are dealing with a page that needs the search manager check
                    if the key is valid. */
                 $key = (array_key_exists("keyid", $_REQUEST)) ? $_REQUEST["keyid"] : "1";
@@ -234,11 +232,11 @@ class Wolfnet_Admin extends Wolfnet_Plugin
             $pgs[0]['key'],
             null,
             $pgs[0]['icon']
-            );
+        );
 
         $l = count($pgs);
-        for ($i=1; $i<$l; $i++) {
 
+        for ($i=1; $i<$l; $i++) {
             add_submenu_page(
                 $pgs[0]['key'],
                 $pgs[$i]['title'],
@@ -246,7 +244,7 @@ class Wolfnet_Admin extends Wolfnet_Plugin
                 $lvl,
                 $pgs[$i]['key'],
                 $pgs[$i]['cb']
-                );
+            );
 
         }
 

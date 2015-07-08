@@ -49,7 +49,6 @@ class Wolfnet_Widget_FeaturedListingsWidget extends Wolfnet_Widget_AbstractWidge
     {
 
         try {
-
             $options = $this->getOptions($instance);
             $response = $this->plugin->featuredListings($options);
 
@@ -78,7 +77,7 @@ class Wolfnet_Widget_FeaturedListingsWidget extends Wolfnet_Widget_AbstractWidge
     }
 
 
-    protected function getOptions($instance=null)
+    protected function getOptions($instance = null)
     {
         $options = $this->plugin->getFeaturedListingsOptions($instance);
 

@@ -26,7 +26,7 @@ $codes = $error->get_error_codes()
 ?>
 
 <div class="wolfnet_error">
-    An error has occured:<br>
+    An error has occurred:<br>
     <?php
     foreach ($codes as $code) {
         $data = $error->get_error_data($code);

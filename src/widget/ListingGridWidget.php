@@ -45,7 +45,6 @@ class Wolfnet_Widget_ListingGridWidget extends Wolfnet_Widget_AbstractWidget
     {
 
         try {
-
             $instance['maxrows'] = $instance['maxresults'];
             $response = $this->plugin->listingGrid($this->collectData($args, $instance));
 
@@ -73,11 +72,10 @@ class Wolfnet_Widget_ListingGridWidget extends Wolfnet_Widget_AbstractWidget
         $saveData = parent::updateWithDefault($this->plugin->getListingGridDefaults(), $new_instance, $old_instance);
 
         /* Advanced Mode */
-        if ( $saveData['mode'] == 'advanced' ) {
-            if ( $saveData['savedsearch'] == 'deleted' ) {
+        if ($saveData['mode'] == 'advanced') {
+            if ($saveData['savedsearch'] == 'deleted') {
                 /* Maintain the existing search criteria */
-            }
-            else {
+            } else {
                 $criteria = $this->plugin->getSavedSearch($saveData['savedsearch']);
                 $saveData['criteria'] = json_encode($criteria);
             }
@@ -87,32 +85,37 @@ class Wolfnet_Widget_ListingGridWidget extends Wolfnet_Widget_AbstractWidget
             $saveData['minprice'] = '';
             $saveData['maxprice'] = '';
 
-            if ( $saveData['keyid'] != '' ) {
+            if ($saveData['keyid'] != '') {
                 $criteria['keyid'] = $saveData['keyid'];
             }
 
-        }
-
-        /* Basic Mode */
-        else {
+        } else {
+            /* Basic Mode */
             $criteria = array();
-            if ( $saveData['keyid'] != '' ) {
+
+            if ($saveData['keyid'] != '') {
                 $criteria['keyid'] = $saveData['keyid'];
             }
-            if ( $saveData['minprice'] != '' ) {
+
+            if ($saveData['minprice'] != '') {
                 $criteria['minprice'] = $saveData['minprice'];
             }
-            if ( $saveData['maxprice'] != '' ) {
+
+            if ($saveData['maxprice'] != '') {
                 $criteria['maxprice'] = $saveData['maxprice'];
             }
-            if ( $saveData['city'] != '' ) {
+
+            if ($saveData['city'] != '') {
                 $criteria['city'] = $saveData['city'];
             }
-            if ( $saveData['zipcode'] != '' ) {
+
+            if ($saveData['zipcode'] != '') {
                 $criteria['zipcode'] = $saveData['zipcode'];
             }
+
             $saveData['criteria'] = json_encode($criteria);
             $saveData['savedsearch'] = '';
+
         }
 
         return $saveData;
@@ -120,7 +123,7 @@ class Wolfnet_Widget_ListingGridWidget extends Wolfnet_Widget_AbstractWidget
     }
 
 
-    protected function getOptions($instance=null)
+    protected function getOptions($instance = null)
     {
         $options = $this->plugin->getListingGridOptions($instance);
 
