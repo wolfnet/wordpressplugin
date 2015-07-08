@@ -2038,7 +2038,7 @@ class Wolfnet_Plugin
      */
     private function convertBool($to_bool)
     {
-        $bool_true = array(true,'Y','y',1);
+        $bool_true = array(true,'Y','y',1,'true','yes');
 
         return (in_array($to_bool, $bool_true)) ? 1 : 0 ;
 
