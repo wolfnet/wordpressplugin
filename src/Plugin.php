@@ -1362,22 +1362,7 @@ class Wolfnet_Plugin
             $criteria['startrow'] = 1;
         }
 
-        $qdata = array(
-            'maxrows' => $criteria['maxresults'],
-            'startrow' => $criteria['startrow'],
-            );
-
-        if ($criteria['ownertype'] == 'agent_broker') {
-            $qdata['agent_office_only'] = true;
-        }
-
-        if ($criteria['ownertype'] == 'agent') {
-            $qdata['agent_only'] = true;
-        }
-
-        if ($criteria['ownertype'] == 'broker') {
-            $qdata['office_only'] = true;
-        }
+        $qdata = $this->prepareListingQuery($criteria);
 
         try {
             $data = $this->apin->sendRequest($criteria['key'], '/listing', 'GET', $qdata);
@@ -1855,6 +1840,7 @@ class Wolfnet_Plugin
      */
     public function prepareListingQuery(array $criteria)
     {
+
         // Array of aliased criteria
         $criteriaAlias = array(
             'priceReduced' => 'pricereduced',
@@ -1867,10 +1853,15 @@ class Wolfnet_Plugin
 
         // Translate aliases to their canonical version and then removed the alias from the array
         foreach ($criteriaAlias as $alias => $crit) {
-            if (!array_key_exists($crit, $criteria) && array_key_exists($alias, $criteria)) {
-                $criteria[$crit] = $criteria[$alias];
+            if (array_key_exists($alias, $criteria)) {
+                if (!array_key_exists($crit, $criteria)) {
+                    $criteria[$crit] = $criteria[$alias];
+                }
+
                 unset($criteria[$alias]);
+
             }
+
         }
 
         // Array of boolean criteria
@@ -1936,12 +1927,15 @@ class Wolfnet_Plugin
             if (array_key_exists($bool, $criteria)) {
                 $criteria[$bool] = $this->convertBool($criteria[$bool]);
             }
+
         }
 
         // If multiple cities were selected we must set "exact_city" to false
-        if (array_key_exists('city', $criteria)
-            && array_key_exists('exact_city', $criteria)
-            && count(explode(',', $criteria['city'])) > 0) {
+        $hasCity = array_key_exists('city', $criteria);
+        $hasExactCity = array_key_exists('exact_city', $criteria);
+        $hasMultipleCities = ($hasCity && count(explode(',', $criteria['city'])) > 0);
+
+        if ($hasExactCity && $hasMultipleCities) {
             $criteria['exact_city'] = 0;
         }
 
@@ -1989,6 +1983,51 @@ class Wolfnet_Plugin
 
         }
 
+        // Plugin specific criteria
+        $pluginCriteria = array(
+            'owner_type',
+            'ownertypes',
+            'paginated',
+            'criteria',
+            'mode',
+            'savedsearch',
+            'savedsearches',
+            'key',
+            'keyid',
+            'title',
+            'class',
+            'maptype',
+            'maptypes',
+            'mapEnabled',
+            'sortoptions',
+            'maxresults',
+            'autoplay',
+            'direction',
+            'speed',
+            'prices',
+        );
+
+        $pluginCriteriaPattern = array(
+            '/.*_wpid$/',
+            '/.*_wpname$/',
+            '/.*_wps$/',
+            '/.*_wpc$/',
+        );
+
+        $criteriaKeys = array_keys($criteria);
+
+        foreach ($pluginCriteriaPattern as $pattern) {
+            $pluginCriteria = array_merge($pluginCriteria, preg_grep($pattern, $criteriaKeys));
+        }
+
+        // Remove Plugin specific values
+        foreach ($pluginCriteria as $crit) {
+            if (array_key_exists($crit, $criteria)) {
+                unset($criteria[$crit]);
+            }
+
+        }
+
         return $criteria;
 
     }
@@ -2003,7 +2042,7 @@ class Wolfnet_Plugin
      */
     private function convertBool($to_bool)
     {
-        $bool_true = array(true,'Y','y',1);
+        $bool_true = array(true,'Y','y',1,'true','yes');
 
         return (in_array($to_bool, $bool_true)) ? 1 : 0 ;
 
