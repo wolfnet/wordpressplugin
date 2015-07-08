@@ -93,6 +93,9 @@ Please upgrade to the latest version of the plugin as we will be disabling our o
 
 == Changelog ==
 
+= 1.7.10 =
+* Fixes bug introduced with last version that impacted widgets
+
 = 1.7.9 =
 * Some code cleanup for consistency
 * Fix for potential PHP warning with a reference to undefined array key
