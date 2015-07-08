@@ -1838,7 +1838,7 @@ class Wolfnet_Plugin
      * other items not used by the API, these will be stripped out.
      * @return array            Return array containing only query parameters to be passed to the api
      */
-    public function prepareListingQuery(array $pluginCriteria)
+    public function prepareListingQuery(array $criteria)
     {
 
         // Array of aliased criteria
