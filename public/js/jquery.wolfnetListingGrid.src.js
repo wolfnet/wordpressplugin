@@ -30,69 +30,142 @@ if (typeof jQuery != 'undefined') {
 
     (function($, jQuery, window, document, undefined){
 
-        var name = 'wolfnetListingGrid';
+        var pluginName = 'wolfnetListingGrid';
 
         var defaultOptions = {
-            listingCls : '.wolfnet_listing'
+            containerClass: null,
+            itemClass: 'item',
+            appendClearfix: true,
+            clearfixClass: 'clearfix',
+            minColumnGap: 5,
+            minRowGap: 20
         };
 
-        /* This method calculates the ideal margins to use for grid items given the width of the
-         * container and the items within it. */
-        var calculateIdealMargin = function (containerWidth, itemWidth, minMargin, modifier)
+        var getGridItems = function(target)
         {
-            var numColumns = Math.floor(containerWidth / itemWidth) + modifier;
-            var leftOverSpace = containerWidth - (itemWidth * numColumns);
-            var marginPerItem = leftOverSpace / numColumns;
+            var $target = $(target);
+            var data = $target.data(pluginName);
+            var itemSelector = '.' + data.option.itemClass;
+            var clearFixSelector = '.' + data.option.clearfixClass;
 
-            /* Does work in <=IE8, but avoids single columns */
-            var idealMargin = marginPerItem / 2;
-
-            /* Works in every browser but has single columns */
-            //var idealMargin   = Math.ceil( marginPerItem / 2 );
-
-            if (idealMargin == -1) {
-                idealMargin = 0;
-            }
-
-            var itemsWithMargins = ((idealMargin * 2) + itemWidth) * numColumns;
-
-            var validMargins = (idealMargin < minMargin || itemsWithMargins > containerWidth);
-
-            if (validMargins && numColumns > 1) {
-                idealMargin = calculateIdealMargin(containerWidth, itemWidth, minMargin, modifier - 1);
-            }
-
-            return idealMargin;
+            return data.$container.find(itemSelector).not(clearFixSelector);
 
         };
 
-        /* This function loops over all images in a container and triggers an even on the container
-         * when all images have completed loading. */
-        var monitorImages = function(container)
+        var preparePluginData = function(target)
         {
-            var $container = $(container);
-            var $images = $container.find('img');
+            var $target = $(target);
+            var data = $target.data(pluginName);
+
+            if (data.option.containerClass === null) {
+                data.$container = $target;
+            } else {
+                data.$container = $target.find('.' + data.option.containerClass);
+            }
+
+            var $items = getGridItems(target);
+            // Capture the original item width for later comparison
+            data.itemWidth = $items.first().innerWidth();
+            // Remove any existing margins
+            $items.css('margin', 0);
+
+        };
+
+        var prepareDomElements = function(target)
+        {
+            var $target = $(target);
+            var data = $target.data(pluginName);
+            var $items = getGridItems(target);
+
+            if (data.option.appendClearfix) {
+                $('<div>').addClass(data.option.clearfixClass).insertAfter($items.last());
+            }
+
+        };
+
+        var updateColumnWidths = function(target)
+        {
+            var $target = $(target);
+            var data = $target.data(pluginName);
+            var $items = getGridItems(target);
+            var targetWidth = data.$container.innerWidth();
+            var minColumnWidth = data.itemWidth;
+            var columnWidth = minColumnWidth;
+            var columns = Math.floor(targetWidth / (columnWidth + data.option.minColumnGap));
+
+            if (columns > $items.length) {
+                columns = $items.length;
+            }
+
+            var remainingPixels = targetWidth - (columnWidth * columns);
+            var margin = Math.floor(remainingPixels / (columns + 1));
+            var extraMargin = remainingPixels - (margin * (columns + 1));
+
+            // console.log(targetWidth, columnWidth, columns, remainingPixels, margin, extraMargin);
+
+            $items.css('marginLeft', margin);
+            // data.$container.css('paddingRight', margin + extraMargin);
+
+            data.$container.trigger('columns-updated.' + pluginName);
+
+        };
+
+        /**
+         * This function loops over all images in the container and triggers an event on the target
+         * when all images have completed loading.
+         *
+         * @param  DOMElement  target  The plugin target element.
+         *
+         * @return null
+         */
+        var monitorImages = function(target)
+        {
+            var $target = $(target);
+            var data = $target.data(pluginName);
+            var $items = getGridItems(target);
+            var $images = $items.find('img');
             var imageCount = $images.length;
             var loadedImgs = 0;
 
+            // Loop over each image and increment for each image that is completely loaded
             $images.each(function(){
-
-                var $this = $(this);
-
-                if ($this.prop('complete') === true) {
+                if ($(this).prop('complete') === true) {
                     loadedImgs++;
                 }
 
             });
 
+            // If all of the images are loaded trigger the event
             if (loadedImgs >= imageCount) {
-                $(window).trigger('resize');
-                $container.trigger('allImagesLoaded.' + name);
+                $target.trigger('allImagesLoaded.' + pluginName);
+
+            // Otherwise run this function again after a brief delay
             } else {
-                setTimeout(function(){
-                    monitorImages(container);
-                }, 100);
+                setTimeout(function(){monitorImages(target);}, 100);
+
             }
+
+        };
+
+        var updateRowHeight = function(target)
+        {
+            var $target = $(target);
+            var data = $target.data(pluginName);
+            var $items = getGridItems(target);
+            var maxItemHeight = 0;
+            $items.height('auto');
+
+            // Loop over each item to determine what the height of the tallest one is.
+            $items.each(function(){
+                var itemHeight = this.scrollHeight;
+                maxItemHeight = (maxItemHeight < itemHeight) ? itemHeight : maxItemHeight;
+            });
+
+            // Set all items to the same height as the tallest.
+            $items.height(maxItemHeight);
+            $items.css('marginBottom', data.option.minRowGap);
+
+            $target.trigger('rows-updated.' + pluginName);
 
         };
 
@@ -104,41 +177,75 @@ if (typeof jQuery != 'undefined') {
             {
                 var plugin = this;
 
-                this.data(name, {
+                // Capture the instances' options in each element's local data storage.
+                this.data(pluginName, {
                     option: $.extend(defaultOptions, options || {})
                 });
 
+                // Initialized the plugin for each element that was selected.
                 return this.each(function(){
 
-                    var $this = $(this);
+                    var target = this;
+                    var $target = $(target);
+                    var data = $target.data(pluginName);
+                    var resizing = false;
 
-                    $this.append('<div class="wolfnet_clearfix" />');
+                    preparePluginData(target);
 
-                    //methods._calculateItemSize.apply( plugin );
+                    var targetWidth = data.$container.innerWidth();
 
-                    /* When the window is resized calculate the appropriate margins for the grid items to
-                     * ensure that the grid and its items are centered. */
-                    $(window).bind('resize', function(){
-                        methods.resizeWidth.apply(plugin);
+                    // Whenever the parent container changes size udpate the column for even spacing
+                    $(window).on('resize', function(event){
+                        var newContainerWidth = data.$container.innerWidth();
+
+                        // Only update when the browser resize has cause the container width to change
+                        if (targetWidth !== newContainerWidth) {
+                            targetWidth = newContainerWidth;
+
+                            // To help with performance only resize if the previous resize has completed
+                            if (!resizing) {
+                                resizing = true;
+                                methods.refresh.call(plugin, false);
+                            }
+
+                        }
+
                     });
-                    //methods.resize.apply( plugin );
 
-                    $this.bind('allImagesLoaded.' + name, function(){
-                        methods.resizeHeight.apply(plugin);
+                    $(window).on('columns-updated.' + pluginName, function(){
+                        resizing = false;
                     });
 
-                    monitorImages(this);
+                    // Once all images have been loaded update row heights to prevent stagger.
+                    $target.on('allImagesLoaded.' + pluginName, function(){
+                        updateRowHeight(target);
+                    });
+
+                    prepareDomElements(target);
+                    updateColumnWidths(target);
+                    monitorImages(target);
 
                 }); /* END: for each loop of elements the plugin has been applied to. */
 
             },
 
-            reload: function()
+            refresh: function(deep)
             {
-                $(window).trigger('resize');
+                deep = deep || false;
 
                 return this.each(function(){
-                    monitorImages($(this));
+                    var target = this;
+
+                    preparePluginData(target);
+                    prepareDomElements(target);
+                    updateColumnWidths(target);
+
+                    if (deep) {
+                        monitorImages(target);
+                    } else {
+                        updateRowHeight(target);
+                    }
+
                 });
 
             },
@@ -146,119 +253,23 @@ if (typeof jQuery != 'undefined') {
             /* This method provides a safe way for the plugin to be removed from elements on the page. */
             destroy: function()
             {
-                var data = this.data(name);
-                data[name].remove();
-                this.removeData(name);
-
-            },
-
-            /* TODO: determine if this function is still necessary. */
-            _calculateItemSize: function()
-            {
-                var option = this.data(name).option;
-
-                return this.each(function(){
-
-                    var $this = $(this);
-                    var maxHeight = -1;
-                    var maxWidth = -1;
-
-                    $this.height($this.height());
-                    $this.width($this.width());
-
-                    $this.find(option.listingCls).each(function(){
-                        var $this = $(this);
-                        maxHeight = maxHeight > $this.height() ? maxHeight : $this.height();
-                        maxWidth = maxWidth > $this.width() ? maxWidth : $this.width();
-                    });
-
-                    $this.find(option.listingCls).each(function(){
-                        var $this = $(this);
-                        $this.height(maxHeight);
-                        $this.width(maxWidth);
-                    });
-
-                });
-
-            },
-
-            /* This function uses the calculateIdealMargin function to resize the width of every
-             * item within the grid to provide a symmetrical output. */
-            resizeWidth: function ()
-            {
-                var option = this.data(name).option;
-
-                return this.each(function(){
-
-                    var $this = $(this);
-                    var containerWidth = $this.width();
-                    var firstItemWidth = $this.find(option.listingCls + ':first').width();
-                    var marginWidth = calculateIdealMargin(containerWidth, firstItemWidth, 2, 0);
-                    var items = $this.find(option.listingCls);
-
-                    items.each(function(){
-
-                        var $this = $(this);
-
-                        $this.css({
-                            marginRight: marginWidth,
-                            marginLeft: marginWidth
-                        });
-
-                    });
-
-                });
-
-            },
-
-            /* This function calculates the maximum height required for an item in the grid and
-             * applies that height to all items within the grid. */
-            resizeHeight: function()
-            {
-                var option = this.data(name).option;
-
-                return this.each(function(){
-
-                    var $this = $(this);
-                    var items = $this.find(option.listingCls);
-                    var originalHeight = items.first().height();
-                    var maxHeight = 0;
-
-                    items.css({
-                        height: 'auto',
-                        'float': 'none'
-                    });
-
-                    items.each(function(){
-
-                        var $this = $(this);
-
-                        if ($this.height() > maxHeight) {
-                            maxHeight = $this.height();
-                        }
-
-                    });
-
-                    items.height(maxHeight + 25);
-                    items.css({
-                        'float' : 'left'
-                    });
-
-                });
+                var data = this.data(pluginName);
+                data[pluginName].remove();
+                this.removeData(pluginName);
 
             }
 
         };
 
         // Register the plugin with jQuery
-        $.fn[name] = function (method) {
+        $.fn[pluginName] = function (method) {
 
             if (methods[method]) {
                 return methods[method].apply(this, Array.prototype.slice.call(arguments, 1));
             } else if (typeof method === 'object' || ! method) {
                 return methods.init.apply(this, arguments);
             } else {
-                $.error('Method ' + method + ' does not exist on jQuery.' + name);
+                $.error('Method ' + method + ' does not exist on jQuery.' + pluginName);
             }
 
         };
