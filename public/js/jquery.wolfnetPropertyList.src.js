@@ -26,75 +26,95 @@
  * code inside an immediately invoked function expression (IIFE) to avoid naming conflicts with the $
  * variable.
  */
-if ( typeof jQuery != 'undefined' ) {
+if (typeof jQuery != 'undefined') {
 
-	( function ( $ ) {
+    (function($){
 
-		$.fn.wolfnetPropertyList = function ( options ) {
+        var pluginName = 'wolfnetPropertyList';
 
-			var option = $.extend( {}, options );
+        var defaultOptions = {
 
-			return this.each( function () {
+        };
 
-				var $this      = $( this );
-				var listWidth  = $this.width();
-				var $items     = $this.find( 'div.wolfnet_listing' );
+        var methods = {
 
-				$this.css( {
-					'position' : 'absolute'
-				} );
+            init: function(options)
+            {
+                var option = $.extend({}, defaultOptions, options);
 
-				$items.find( '*:visible' ).css( {
-					'white-space' : 'nowrap',
-					'display'     : 'inline',
-					'float'       : 'none',
-					'overflow'    : 'visible'
-				} );
+                return this.each(function(){
+                    var $this      = $(this);
+                    var listWidth  = $this.width();
+                    var $items     = $this.find('div.wolfnet_listing');
 
-				$items.each( function () {
+                    $this.css({
+                        'position': 'absolute'
+                    });
 
-					var $item = $( this );
-					var $link = $item.find( 'a:first' );
-					var $addr = $item.find( '.wolfnet_full_address:first' );
-					var cont  = $addr.html();
-					var len   = cont.length;
-					var trim  = 1;
+                    $items.find('*:visible').css({
+                        'white-space': 'nowrap',
+                        'display': 'inline',
+                        'float': 'none',
+                        'overflow': 'visible'
+                    });
 
-					while ( $link.width() > listWidth - 5 ) {
+                    $items.each(function(){
+                        var $item = $(this);
+                        var $link = $item.find('a:first');
+                        var $addr = $item.find('.wolfnet_full_address:first');
+                        var cont  = $addr.html();
+                        var len   = cont.length;
+                        var trim  = 1;
 
-						$addr.html( $.trim(cont.substring( 0, ( len - trim ) )) + '... ' );
-						trim++;
+                        while ($link.width() > listWidth - 5) {
 
-					}
+                            $addr.html($.trim(cont.substring(0, (len - trim))) + '... ');
+                            trim++;
 
-				} );
+                        }
 
-				$this.css( {
-					'position' : 'static'
-				} );
+                    });
 
-				$this.find( '.wolfnet_listing' ).each( function () {
+                    $this.css({
+                        'position': 'static'
+                    });
 
-					$( this ).find( 'a' ).each( function () {
+                    $this.find('.wolfnet_listing').each(function(){
 
-						$( this ).append( '<div class="wolfnet_clearfix"></div>' );
+                        $(this).find('a').each(function(){
 
-						$( this ).find( 'span.wolfnet_full_address' ).css( {
-							'float' : 'left'
-						} );
+                            $(this).append('<div class="wolfnet_clearfix"></div>');
 
-						$this.find( 'span.wolfnet_price' ).css( {
-							'float' : 'right'
-						} );
+                            $(this).find('span.wolfnet_full_address').css({
+                                'float': 'left'
+                            });
 
-					} );
+                            $this.find('span.wolfnet_price').css({
+                                'float': 'right'
+                            });
 
-				} )
+                        });
 
-			} ); /* END: for each loop of elements the plugin has been applied to. */
+                    });
 
-		}; /* END: function $.fn.wolfnetPropertyList */
+                }); /* END: for each loop of elements the plugin has been applied to. */
 
-	} )( jQuery ); /* END: jQuery IIFE */
+            }
+
+        };
+
+        $.fn[pluginName] = function(method) {
+
+            if (methods[method]) {
+                return methods[method].apply(this, Array.prototype.slice.call(arguments, 1));
+            } else if (typeof method === 'object' || !method) {
+                return methods.init.apply(this, arguments);
+            } else {
+                $.error('Method ' + method + ' does not exist on jQuery.' + pluginName);
+            }
+
+        };
+
+    })(jQuery); /* END: jQuery IIFE */
 
 } /* END: If jQuery Exists */
