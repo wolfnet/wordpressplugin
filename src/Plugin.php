@@ -1992,6 +1992,7 @@ class Wolfnet_Plugin
             'mode',
             'savedsearch',
             'savedsearches',
+            'wntSavedSearches',
             'key',
             'keyid',
             'title',
