@@ -73,7 +73,6 @@ unset($wpMeta['key']);
             ,sortOptionsData  : <?php echo json_encode($sortOptions) . "\n"; ?>
         });
         $(instance).filter('.wolfnet_listingGrid').wolfnetListingGrid();
-        $(instance).filter('.wolfnet_propertyList').wolfnetPropertyList();
 
     });
 

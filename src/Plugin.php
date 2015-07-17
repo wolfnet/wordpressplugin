@@ -287,7 +287,6 @@ class Wolfnet_Plugin
             'wolfnet-quick-search',
             'wolfnet-listing-grid',
             'wolfnet-toolbar',
-            'wolfnet-property-list',
             'wolfnet-maptracks',
             'mapquest-api'
             );
@@ -2862,10 +2861,6 @@ class Wolfnet_Plugin
                 ),
             'wolfnet-toolbar' => array(
                 $this->url . 'js/jquery.wolfnetToolbar.src.js',
-                array('jquery', 'wolfnet'),
-                ),
-            'wolfnet-property-list' => array(
-                $this->url . 'js/jquery.wolfnetPropertyList.src.js',
                 array('jquery', 'wolfnet'),
                 ),
             'wolfnet-shortcode-builder' => array(
