@@ -30,144 +30,142 @@
  * code inside an immediately invoked function expression (IIFE) to avoid naming conflicts with the
  * $ variable.
  */
-if ( typeof jQuery != 'undefined' ) {
+if (typeof jQuery != 'undefined') {
 
-	( function ( $ ) {
+	(function($){
 
-		$.widget( "ui.wolfnetScrollingItems", $.thomaskahn.smoothDivScroll, {
+		$.widget("ui.wolfnetScrollingItems", $.thomaskahn.smoothDivScroll, {
 
 			options : {
-				autoPlay :                   false,
-				direction :                  'left',
-				speed :                      5,
-				minMargin :                  2,
-				manualContinuousScrolling :  true,
-				mousewheelScrolling :        true,
-				scrollingHotSpotLeftClass :  "scrollingHotSpotLeft",
-				scrollingHotSpotRightClass : "scrollingHotSpotRight",
-				scrollableAreaClass :        "scrollableArea",
-				scrollWrapperClass :         "scrollWrapper",
-				visibleHotSpotBackgrounds :  ""
+				autoPlay: false,
+				direction: 'left',
+				speed: 5,
+				minMargin: 2,
+				manualContinuousScrolling: true,
+				mousewheelScrolling: true,
+				scrollingHotSpotLeftClass: "scrollingHotSpotLeft",
+				scrollingHotSpotRightClass: "scrollingHotSpotRight",
+				scrollableAreaClass: "scrollableArea",
+				scrollWrapperClass: "scrollWrapper",
+				visibleHotSpotBackgrounds: ""
 			},
 
-			_create : function () {
-				var  widget    = this;
-				var  option    = this.options;
-				var  container = this.element;
-				var $container = $( container );
+			_create: function(){
+				var widget = this;
+				var option = this.options;
+				var container = this.element;
+				var $container = $(container);
 
 				widget.resizeDelay = 0;
 
-				option.autoScrollingMode      = ( option.autoPlay ) ? "always" : "";
+				option.autoScrollingMode = ( option.autoPlay ) ? "always" : "";
 				option.autoScrollingDirection = ( option.direction == 'right' ) ? 'endlessloopleft' : 'endlessloopright';
-				option.autoScrollingInterval  = option.speed;
+				option.autoScrollingInterval = option.speed;
 
 				widget._setup();
 
 				widget._establishEvents();
 
-				$.thomaskahn.smoothDivScroll.prototype._create.call( this );
+				$.thomaskahn.smoothDivScroll.prototype._create.call(this);
 
 				widget._recalculateItemMargins();
 
 			},
 
-			_setup : function () {
-				var  widget    = this;
-				var  option    = this.options;
-				var  container = this.element;
-				var $container = $( container );
-				var $items     = $container.children();
+			_setup: function(){
+				var widget = this;
+				var option = this.options;
+				var container = this.element;
+				var $container = $(container);
+				var $items = $container.children();
 
 				/* ****************************************************************************** */
 				/* ADD STYLES SPECIFIC TO THE WOLFNET WIDGET ************************************ */
 				/* ****************************************************************************** */
 
-				$container.css( {
+				$container.css({
 					'position':'relative',
 					'width':'100%',
 					'height':'100px'
-				} );
+				});
 
-				$container.children().css( {
+				$container.children().css({
 					'float':'left'
-				} );
+				});
 
 				/* ****************************************************************************** */
 				/* CALCULATE THE MAX ITEM HEIGHT AND WIDTH ************************************** */
 				/* ****************************************************************************** */
-				var maxItemHeight       = 0;
-				var maxItemWidth        = 0;
-				var maxItemMarginTop    = 0;
+				var maxItemHeight = 0;
+				var maxItemWidth = 0;
+				var maxItemMarginTop = 0;
 				var maxItemMarginBottom = 0;
 
-				$items.each( function () {
+				$items.each(function(){
 
-					var $this      = $( this );
+					var $this = $(this);
 
 					var itemHeight = $this.height();
-					var itemWidth  = $this.width();
+					var itemWidth = $this.width();
 
-					maxItemHeight  = ( itemHeight > maxItemHeight ) ? itemHeight : maxItemHeight;
-					maxItemWidth   = ( itemWidth  > maxItemWidth )  ? itemWidth  : maxItemWidth;
+					maxItemHeight = (itemHeight > maxItemHeight) ? itemHeight : maxItemHeight;
+					maxItemWidth = (itemWidth  > maxItemWidth) ? itemWidth  : maxItemWidth;
 
-					var itemMarginTop    = Number( $this.css( 'margin-top'    ).replace( 'px', '') );
-					var itemMarginBottom = Number( $this.css( 'margin-bottom' ).replace( 'px', '') );
+					var itemMarginTop = Number($this.css('margin-top').replace('px', ''));
+					var itemMarginBottom = Number($this.css('margin-bottom').replace('px', ''));
 
-					maxItemMarginTop    = ( itemMarginTop    > maxItemMarginTop )
-					                    ?   itemMarginTop    : maxItemMarginTop;
-					maxItemMarginBottom = ( itemMarginBottom > maxItemMarginBottom )
-					                    ?   itemMarginBottom : maxItemMarginBottom;
+					maxItemMarginTop = (itemMarginTop > maxItemMarginTop) ? itemMarginTop : maxItemMarginTop;
+					maxItemMarginBottom = (itemMarginBottom > maxItemMarginBottom) ? itemMarginBottom : maxItemMarginBottom;
 
-				} );
+				});
 
-				option.maxItemHeight       = maxItemHeight;
-				option.maxItemWidth        = maxItemWidth;
-				option.maxItemMarginTop    = maxItemMarginTop;
+				option.maxItemHeight = maxItemHeight;
+				option.maxItemWidth = maxItemWidth;
+				option.maxItemMarginTop = maxItemMarginTop;
 				option.maxItemMarginBottom = maxItemMarginBottom;
 
 				/* ****************************************************************************** */
 				/* UPDATE ITEM HEIGHT AND WIDTH BASED ON MAXIMUMS ******************************* */
 				/* ****************************************************************************** */
-				$items.height( maxItemHeight );
-				$items.width( maxItemWidth );
+				$items.height(maxItemHeight);
+				$items.width(maxItemWidth);
 
-				$container.height( maxItemHeight );
-				$container.width( $container.width() );
+				$container.height(maxItemHeight);
+				$container.width($container.width());
 
 			},
 
-			_establishEvents : function () {
-				var  widget    = this;
-				var  option    = this.options;
-				var  container = this.element;
-				var $container = $( container );
+			_establishEvents: function(){
+				var widget = this;
+				var option = this.options;
+				var container = this.element;
+				var $container = $(container);
 
-				$container.mouseover( function () {
-					if ( option.autoPlay ) {
+				$container.mouseover(function(){
+					if (option.autoPlay) {
 						widget.stopAutoScrolling();
 					}
 					widget.showHotSpotBackgrounds();
-				} );
+				});
 
-				$container.mouseleave( function () {
+				$container.mouseleave(function(){
 					widget.hideHotSpotBackgrounds();
-					if ( option.autoPlay ) {
+					if (option.autoPlay) {
 						widget.startAutoScrolling();
 					}
-				} );
+				});
 
 			},
 
-			_recalculateItemMargins : function () {
-				var  widget    = this;
-				var  option    = this.options;
-				var  container = this.element;
-				var $container = $( container );
-				var $items     = $container.find( '.scrollableArea:first' ).children();
+			_recalculateItemMargins: function(){
+				var widget = this;
+				var option = this.options;
+				var container = this.element;
+				var $container = $(container);
+				var $items = $container.find('.scrollableArea:first').children();
 
-				if ( option.autoPlay ) {
-					clearTimeout( widget.resizeDelay );
+				if (option.autoPlay) {
+					clearTimeout(widget.resizeDelay);
 					widget.stopAutoScrolling();
 				}
 
@@ -175,14 +173,15 @@ if ( typeof jQuery != 'undefined' ) {
 				/* CALCULATE IDEAL MARGINS TO FIT CONTAINER ************************************* */
 				/* ****************************************************************************** */
 
-				var numColumns               = 1;
-				var maxItemWidthWithMargins  = 0
+				var numColumns = 1;
+				var maxItemWidthWithMargins = 0;
 				var maxItemHeightWithMargins = 0;
 
-				var calculateIdealMargin = function ( container, item, minMargin, modifier )
+				var calculateIdealMargin = function(container, item, minMargin, modifier)
 				{
-					    numColumns    = Math.floor( container / item ) + modifier;
-					var leftOverSpace = container - ( item * numColumns );
+					numColumns = Math.floor(container / item) + modifier;
+
+                    var leftOverSpace = container - (item * numColumns);
 					var marginPerItem = leftOverSpace / numColumns;
 
 					/* Does work in <=IE8, but avoids single columns */
@@ -191,20 +190,21 @@ if ( typeof jQuery != 'undefined' ) {
 					/* Works in every browser but has single columns */
 					//var idealMargin   = Math.ceil( marginPerItem / 2 );
 
-					if ( idealMargin == -1 ) {
+					if (idealMargin == -1) {
 						idealMargin = 0;
 					}
 
-					var itemsWithMargins = ( ( idealMargin * 2 ) + item ) * numColumns;
+					var itemsWithMargins = ((idealMargin * 2) + item) * numColumns;
 
-					var validMargins = ( idealMargin < minMargin || itemsWithMargins > container );
+					var validMargins = (idealMargin < minMargin || itemsWithMargins > container);
 
-					if ( validMargins && numColumns > 1 ) {
-						idealMargin = calculateIdealMargin( container, item, minMargin, modifier - 1 );
+					if (validMargins && numColumns > 1) {
+						idealMargin = calculateIdealMargin(container, item, minMargin, modifier - 1);
 					}
 
 					return idealMargin;
-				}
+
+				};
 
 				var idealMargin = calculateIdealMargin(
 					$container.width(),
@@ -213,33 +213,31 @@ if ( typeof jQuery != 'undefined' ) {
 					0
 					);
 
-				$items.css( {
-					'margin-top' :    option.maxItemMarginTop,
-					'margin-right' :  idealMargin,
-					'margin-bottom' : option.maxItemMarginBottom,
-					'margin-left' :   idealMargin
-					} );
+				$items.css({
+					'margin-top': option.maxItemMarginTop,
+					'margin-right': idealMargin,
+					'margin-bottom': option.maxItemMarginBottom,
+					'margin-left': idealMargin
+					});
 
-				maxItemWidthWithMargins  = option.maxItemWidth + ( idealMargin * 2 );
-				maxItemHeightWithMargins = option.maxItemHeight
-				                         + option.maxItemMarginTop
-				                         + option.maxItemMarginBottom;
+				maxItemWidthWithMargins  = option.maxItemWidth + (idealMargin * 2);
+				maxItemHeightWithMargins = option.maxItemHeight + option.maxItemMarginTop + option.maxItemMarginBottom;
 
 				/* ****************************************************************************** */
 				/* UPDATE CONTAINER HEIGHT AND WIDTH BASED ON MAXIMUMS ************************** */
 				/* ****************************************************************************** */
-				$container.height(  maxItemHeightWithMargins );
+				$container.height(maxItemHeightWithMargins);
 
-				if ( option.autoPlay ) {
-					widget.resizeDelay = setTimeout( function () {
+				if (option.autoPlay) {
+					widget.resizeDelay = setTimeout(function(){
 						widget.startAutoScrolling();
-					}, 500 );
+					}, 500);
 				}
 
 			}
 
-		} );
+		});
 
-	} )( jQuery ); /* END: jQuery IIFE */
+	})(jQuery); /* END: jQuery IIFE */
 
 } /* END: If jQuery Exists */
