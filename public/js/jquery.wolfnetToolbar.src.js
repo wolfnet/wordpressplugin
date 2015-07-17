@@ -63,20 +63,15 @@
                 .attr({'href':data[i].property_url, 'title':fullAddress})
                 .appendTo($listing);
 
-            var $location = $('<span>')
-                .addClass('wolfnet_full_address')
-                .html(fullAddress)
-                .appendTo($link);
-
             var $price = $('<span>')
                 .addClass('wolfnet_price')
                 .attr('itemprop', 'price')
                 .html(data[i].listing_price.toString())
                 .appendTo($link);
 
-            var $streetAddress = $('<span>')
+            var $location = $('<span>')
+                .addClass('wolfnet_full_address')
                 .attr('itemprop', 'street-address')
-                .css('display', 'none')
                 .html(fullAddress)
                 .appendTo($link);
 
