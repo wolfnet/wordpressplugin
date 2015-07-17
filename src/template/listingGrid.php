@@ -72,7 +72,12 @@ unset($wpMeta['key']);
             ,itemsPerPageData : <?php echo json_encode($itemsPerPage) . "\n"; ?>
             ,sortOptionsData  : <?php echo json_encode($sortOptions) . "\n"; ?>
         });
-        $(instance).filter('.wolfnet_listingGrid').wolfnetListingGrid();
+
+        $(instance).filter('.wolfnet_listingGrid').wolfnetListingGrid({
+            containerClass: 'wolfnet_listings',
+            itemClass: 'wolfnet_listing',
+            clearfixClass: 'wolfnet_clearfix'
+        });
 
     });
 

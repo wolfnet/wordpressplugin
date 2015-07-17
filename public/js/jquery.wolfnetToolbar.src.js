@@ -291,7 +291,7 @@
         }
         else if ($container.is('.wolfnet_listingGrid')) {
             renderListingGrid.call($container, data);
-            $container.wolfnetListingGrid('reload');
+            $container.wolfnetListingGrid('refresh');
         }
 
         if ($container.find('.wolfnet_wntMainMap').length > 0) {
@@ -417,7 +417,7 @@
         $('html,body').scrollTop($container.closest('.wolfnet_widget').offset().top - 100);
 
         if ($container.is('.wolfnet_listingGrid') && $container.wolfnetListingGrid) {
-            $container.wolfnetListingGrid("resizeWidth");
+            $container.wolfnetListingGrid("refresh", true);
         }
 
         $container.removeClass('wolfnet_refreshing');
