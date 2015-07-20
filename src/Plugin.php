@@ -2029,6 +2029,13 @@ class Wolfnet_Plugin
 
         }
 
+        // Remove non-scalar values
+        foreach ($criteria as $crit => $value) {
+            if (!is_scalar($value)) {
+                unset($criteria[$crit]);
+            }
+        }
+
         return $criteria;
 
     }
