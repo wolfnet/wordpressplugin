@@ -2603,7 +2603,7 @@ class Wolfnet_Plugin
 
 
         $args['mapParams'] = array(
-    		'mapClient'    => 'mapquest',
+    		'mapProvider'  => 'mapquest',
     		'centerLat'    => $data['responseData']['data']['market']['maptracks']['map_start_lat'],
 			'centerLng'    => $data['responseData']['data']['market']['maptracks']['map_start_lng'],
 			'zoomLevel'    => $data['responseData']['data']['market']['maptracks']['map_start_scale'],
