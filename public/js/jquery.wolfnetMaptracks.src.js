@@ -5,7 +5,7 @@
     var MapTracks = function () {};
 
     MapTracks.prototype.createMap = function (mapNode) {
-      
+
         var params = {
             mapName:           $(mapNode).attr("data-wnt-map-name"),
             centerLat:         $(mapNode).attr("data-wnt-map-centerlat"),
@@ -47,7 +47,7 @@
 
         mapTracksGlobals.MAP_ID++;
 
-        var map = this;   
+        var map = this;
 
         // Parameters
         var mapNode                    = baseNode;
@@ -187,7 +187,7 @@
             $bindingFields.ulLat.change();
             $bindingFields.ulLng.change();
             $bindingFields.zoom.change();
-        };        
+        };
 
         this.setupMouseControls = function () {
             var br = $.browser;
@@ -413,13 +413,13 @@
         };
 
 
-        this.setMapView = function () {            
+        this.setMapView = function () {
             if (googleStreetView != null) {
                 googleStreetView.setVisible(false);
                 googleStreetView = null;
             }
             switch (provider) {
-                case "mapquest":                  
+                case "mapquest":
                     $(bingMapNode).hide();
                     $(mapquestNode).show();
                     mapquestMap.setMapType("map");
@@ -2190,7 +2190,7 @@
 
                 mapTrack();
             }
-           
+
         };
 
         // Track map usage
@@ -2208,7 +2208,7 @@
             }
         };
 
-        // Event Handlers 
+        // Event Handlers
         this.onZoomEnd = function (e) {
             map.setMapBindings();
             $(mapNode).trigger("zoomEnd");
@@ -2302,7 +2302,7 @@
 
         var bingHouseView = null;
 
-        if (provider == "mapquest") {         
+        if (provider == "mapquest") {
             mapquestMap = new MQA.TileMap({
                 elt: mapquestNode,
                 zoom: Number(mapZoomLevel) + mapquestZoomAdjust,
@@ -2524,7 +2524,7 @@
 
         // Bing
         isHouseViewAvailable = false;
- 
+
         this.setMapView();
 
 
