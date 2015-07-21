@@ -49,6 +49,13 @@ if (typeof jQuery != 'undefined') {
             itemClass: 'item'
         };
 
+        /**
+         * Retrieve the "state" data for the supplied target element.
+         *
+         * @param  DOMElement  target  The element for which to retrieve state data.
+         *
+         * @return Object              The state data that was retrieved.
+         */
         var getData = function(target)
         {
             return $(target).data(pluginName) || {};
@@ -61,6 +68,10 @@ if (typeof jQuery != 'undefined') {
 
         /**
          * This function is responsible for clearing whitespace which otherwise causes spacing issues.
+         *
+         * @param  DOMElement  target  The parent element within which whitespace should be removed.
+         *
+         * @return null
          */
         var removeWhitespaceBetweenTags = function(target)
         {
@@ -72,6 +83,15 @@ if (typeof jQuery != 'undefined') {
 
         };
 
+        /**
+         * Ensures there are enough items within the container so that the animation is not jerky
+         * or not possible to complete. If there are not enough items it will copy the items and
+         * append them to the parent element.
+         *
+         * @param  DOMElement  target  The element within which to ensure there are enough items.
+         *
+         * @return null
+         */
         var ensureThereAreEnoughItems = function(target)
         {
             var $target = $(target);
@@ -86,6 +106,13 @@ if (typeof jQuery != 'undefined') {
 
         };
 
+        /**
+         * Retrieves all child elements which match a specific class.
+         *
+         * @param  DOMElement  target  The element to look within for items.
+         *
+         * @return jQuery              A jQuery collection of items.
+         */
         var getItems = function(target)
         {
             var data = getData(target);
@@ -94,6 +121,14 @@ if (typeof jQuery != 'undefined') {
 
         };
 
+        /**
+         * Establishes the next frame event for animation. This method will use the most efficient
+         * process available in the browser to process animation frames.
+         *
+         * @param  DOMElement  target  The target element to animate.
+         *
+         * @return null
+         */
         var setNextFrame = function(target)
         {
             var data = getData(target);
@@ -122,6 +157,14 @@ if (typeof jQuery != 'undefined') {
 
         };
 
+        /**
+         * The callback which is executed for every animation frame. This method also determines
+         * whether or not the animation should actually be performed.
+         *
+         * @param  DOMElement  target  The element to be animated.
+         *
+         * @return null
+         */
         var executeFrame = function(target)
         {
             var data = getData(target);
@@ -144,6 +187,18 @@ if (typeof jQuery != 'undefined') {
 
         };
 
+        /**
+         * Perform the actual animation. This function advances or retreats the "scroll" position of
+         * the element which holds all of the items to be scrolled. This function uses "state" data
+         * to determine which direction and how far to move the scroll position. This function also
+         * facilitates the "infinite scrolling" functionality which makes it looks as if the items
+         * are scrolling by in an infinite loop. This is done by moving elements from one end of the
+         * container to the other while scrolling.
+         *
+         * @param  DOMElement  target  The element which contains items to animate.
+         *
+         * @return null
+         */
         var animate = function(target)
         {
             var $target = $(target);
@@ -187,6 +242,13 @@ if (typeof jQuery != 'undefined') {
 
         };
 
+        /**
+         * Determines whether or not animation should be performed.
+         *
+         * @param  DOMElement  target  The element to be animated.
+         *
+         * @return boolean
+         */
         var shouldAnimate = function(target)
         {
             var data = getData(target);
@@ -195,6 +257,14 @@ if (typeof jQuery != 'undefined') {
 
         };
 
+        /**
+         * This method builds control elements which can be used to control the animation of the
+         * component. This method also modifies the parent container to make room for the controls.
+         *
+         * @param  DOMElement  target  The element to add controls to.
+         *
+         * @return null
+         */
         var buildControls = function(target)
         {
             var $target = $(target);
@@ -211,6 +281,15 @@ if (typeof jQuery != 'undefined') {
 
         };
 
+        /**
+         * Creates a control element for a specified direction and returns it. The new element is
+         * not yet attached to the DOM.
+         *
+         * @param  DOMElement  target     The element the button will control.
+         * @param  String      direction  The direction the button should control.
+         *
+         * @return jQuery                 A jQuery representation of the new control element
+         */
         var createButton = function(target, direction)
         {
             var $target = $(target);
@@ -250,6 +329,13 @@ if (typeof jQuery != 'undefined') {
 
         var methods = {
 
+            /**
+             * Initializes a plugin instance.
+             *
+             * @param  Object  options  A collection of options for the new plugin instance.
+             *
+             * @return jQuery           The collection of elements the plugin was applied to.
+             */
             init: function(options)
             {
 
@@ -312,6 +398,11 @@ if (typeof jQuery != 'undefined') {
 
             },
 
+            /**
+             * Starts animation if it isn't already running.
+             *
+             * @return jQuery  The collection of elements the plugin was applied to.
+             */
             play: function()
             {
 
@@ -327,6 +418,11 @@ if (typeof jQuery != 'undefined') {
 
             },
 
+            /**
+             * Stops animation if it is already running.
+             *
+             * @return jQuery  The collection of elements the plugin was applied to.
+             */
             pause: function()
             {
 
