@@ -14,7 +14,7 @@
  *                but WITHOUT ANY WARRANTY; without even the implied warranty of
  *                MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *                GNU General Public License for more details.
- * 
+ *
  *                You should have received a copy of the GNU General Public License
  *                along with this program; if not, write to the Free Software
  *                Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
@@ -23,18 +23,7 @@
 ?>
 
 <?php
-// TODO
-// maptracks_map_provider is not provided by the new API. 
-// Should we remove the Bing stuff from
-// wordpressplugin/js/jquery.wolfnetMaptracks.src.js  
-// TODO remove bing stuff
-//if ($maptracks_map_provider == 'MapQuest') { 
-	$mapClient = 'mapquest';
-//}	
-//else {
-//	$mapClient = 'bing';
-//}
-
+$mapClient = 'mapquest';
 $centerLat = $map_start_lat;
 $centerLng = $map_start_lng;
 $zoomLevel = $map_start_scale;
@@ -55,7 +44,7 @@ $mapIcon   = $url . 'img/showmap.gif'
 	</a>
 </div>
 
-<div id="<?php echo $mapId; ?>" 
+<div id="<?php echo $mapId; ?>"
 	 class="wolfnet_wntMainMap"
 	 data-wnt-map
 	 data-wnt-map-name="pluginMap"
@@ -78,7 +67,7 @@ $mapIcon   = $url . 'img/showmap.gif'
 
 
 <script type="text/javascript">
-    
+
     jQuery(function($){
 		var mapId = '<?php echo $mapId; ?>';
 
