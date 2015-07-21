@@ -2711,7 +2711,21 @@
                     componentMap.addPoi(houseover);
                 }
             });
-        }
+		},
+
+
+		setSize: function (w, h) {
+			return this.each(function () {
+				var mapTracksMap = $(this).data('map');
+				mapTracksMap.setSize(w, h);
+			});
+		},
+
+
+		getSize: function () {
+			var mapTracksMap = $(this).first().data('map');
+			return mapTracksMap.getSize();
+		}
 
     }
 
