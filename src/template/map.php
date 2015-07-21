@@ -20,39 +20,29 @@
  *                Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
+$mapIcon   = $url . 'img/showmap.gif';
+
 ?>
 
-<?php
-$mapClient = 'mapquest';
-$centerLat = $map_start_lat;
-$centerLng = $map_start_lng;
-$zoomLevel = $map_start_scale;
-$mapId     = uniqid('wntMapTrack');
-$hideMapId = uniqid('hideMap');
-$showMapId = uniqid('showMap');
-$mapIcon   = $url . 'img/showmap.gif'
-?>
-
-<div id="<?php echo $hideMapId; ?>" class="wolfnet_showhide">
-	<a href="javascript:void(0)" onclick="wolfnet.hideMap('<?php echo $mapId; ?>','<?php echo $hideMapId; ?>','<?php echo $showMapId; ?>');">
+<div id="<?php echo $mapParams['hideMapId']; ?>" class="wolfnet_showhide">
+	<a href="javascript:void(0)" onclick="wolfnet.hideMap('<?php echo $mapParams['mapId']; ?>','<?php echo $mapParams['hideMapId']; ?>','<?php echo $mapParams['showMapId']; ?>');">
 		<img src="<?php echo $mapIcon; ?>" style="padding-right:10px;">Hide Map
 	</a>
 </div>
-<div id="<?php echo $showMapId; ?>" style="display:none;" class="wolfnet_showhide">
-	<a href="javascript:void(0)" onclick="wolfnet.showMap('<?php echo $mapId; ?>','<?php echo $hideMapId; ?>','<?php echo $showMapId; ?>');">
+<div id="<?php echo $mapParams['showMapId']; ?>" style="display:none;" class="wolfnet_showhide">
+	<a href="javascript:void(0)" onclick="wolfnet.showMap('<?php echo $mapParams['mapId']; ?>','<?php echo $mapParams['hideMapId']; ?>','<?php echo $mapParams['showMapId']; ?>');">
 		<img src="<?php echo $mapIcon; ?>" style="padding-right:10px;">Show these properties on a map
-	</a>
-</div>
+	</a></div>
 
-<div id="<?php echo $mapId; ?>"
+<div id="<?php echo $mapParams['mapId']; ?>"
 	 class="wolfnet_wntMainMap"
 	 data-wnt-map
 	 data-wnt-map-name="pluginMap"
 	 data-wnt-map-hasMiniMap="false"
-	 data-wnt-map-centerLat="<?php echo $centerLat; ?>"
-	 data-wnt-map-centerLng="<?php echo $centerLng; ?>"
-	 data-wnt-map-mapZoomLevel="<?php echo $zoomLevel; ?>"
-	 data-wnt-map-provider="<?php echo $mapClient; ?>"
+	 data-wnt-map-centerLat="<?php echo $mapParams['centerLat']; ?>"
+	 data-wnt-map-centerLng="<?php echo $mapParams['centerLng']; ?>"
+	 data-wnt-map-mapZoomLevel="<?php echo $mapParams['zoomLevel'] ?>"
+	 data-wnt-map-provider="<?php echo $mapParams['mapClient']; ?>"
 	 data-wnt-map-view="map"
 	 data-wnt-map-hasHouseView="false"
 	 data-wnt-map-hasStreetView="false"
@@ -69,12 +59,12 @@ $mapIcon   = $url . 'img/showmap.gif'
 <script type="text/javascript">
 
     jQuery(function($){
-		var mapId = '<?php echo $mapId; ?>';
+		var mapId = "<?php echo $mapParams['mapId']; ?>";
 
         $('#' + mapId).wolfnetMapTracks({
         	houseoverData : <?php echo json_encode($houseoverData); ?>,
-        	houseoverIcon : '<?php echo $houseoverIcon; ?>',
-        	mapId         : '<?php echo $mapId; ?>'
+        	houseoverIcon : "<?php echo $mapParams['houseoverIcon']; ?>",
+        	mapId         : "<?php echo $mapParams['mapId']; ?>"
     	});
     });
 

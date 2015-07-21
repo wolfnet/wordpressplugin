@@ -2601,10 +2601,18 @@ class Wolfnet_Plugin
             return $this->getWpError($data);
         }
 
-        $args['map_start_lat'] = $data['responseData']['data']['market']['maptracks']['map_start_lat'];
-        $args['map_start_lng'] = $data['responseData']['data']['market']['maptracks']['map_start_lng'];
-        $args['map_start_scale'] = $data['responseData']['data']['market']['maptracks']['map_start_scale'];
-        $args['houseoverIcon'] = $GLOBALS['wolfnet']->url . 'img/houseover.png';
+
+        $args['mapParams'] = array(
+    		'mapClient'    => 'mapquest',
+    		'centerLat'    => $data['responseData']['data']['market']['maptracks']['map_start_lat'],
+			'centerLng'    => $data['responseData']['data']['market']['maptracks']['map_start_lng'],
+			'zoomLevel'    => $data['responseData']['data']['market']['maptracks']['map_start_scale'],
+			'houseoverIcon'=> $GLOBALS['wolfnet']->url . 'img/houseover.png',
+			'mapId'        => uniqid('wntMapTrack'),
+			'hideMapId'    => uniqid('hideMap'),
+			'showMapId'    => uniqid('showMap'),
+		);
+
         $args['houseoverData'] = $this->getHouseoverData(
             $listingsData,
             $data['responseData']['data']['resource']['searchResults']['allLayouts']['showBrokerReciprocityLogo']
