@@ -32,212 +32,328 @@
  */
 if (typeof jQuery != 'undefined') {
 
-    (function($){
+    (function($, window){
 
-        $.widget("ui.wolfnetScrollingItems", $.thomaskahn.smoothDivScroll, {
+        var pluginName = 'wolfnetScrollingItems';
 
-            options : {
-                autoPlay: false,
-                direction: 'left',
-                speed: 5,
-                minMargin: 2,
-                manualContinuousScrolling: true,
-                mousewheelScrolling: true,
-                scrollingHotSpotLeftClass: "scrollingHotSpotLeft",
-                scrollingHotSpotRightClass: "scrollingHotSpotRight",
-                scrollableAreaClass: "scrollableArea",
-                scrollWrapperClass: "scrollWrapper",
-                visibleHotSpotBackgrounds: ""
-            },
+        var defaultOptions = {
+            autoPlay: false,
+            direction: 'left',
+            speed: 2,
+            showControls: true,
+            componentClass: 'scroller',
+            withControlsClass: 'with-controls',
+            controlClass: 'control',
+            controlLeftClass: 'left',
+            controlRightClass: 'right',
+            itemClass: 'item'
+        };
 
-            _create: function(){
-                var widget = this;
-                var option = this.options;
-                var container = this.element;
-                var $container = $(container);
+        var getData = function(target)
+        {
+            return $(target).data(pluginName) || {};
+        };
 
-                widget.resizeDelay = 0;
+        var ensureAllItemsAreEqualSize = function(target)
+        {
 
-                option.autoScrollingMode = ( option.autoPlay ) ? "always" : "";
-                option.autoScrollingDirection = ( option.direction == 'right' ) ? 'endlessloopleft' : 'endlessloopright';
-                option.autoScrollingInterval = option.speed;
+        };
 
-                widget._setup();
+        /**
+         * This function is responsible for clearing whitespace which otherwise causes spacing issues.
+         */
+        var removeWhitespaceBetweenTags = function(target)
+        {
+            var data = getData(target);
 
-                widget._establishEvents();
+            data.$itemContainer.contents().filter(function(){
+                return (this.nodeType == 3 && !/\S/.test(this.nodeValue));
+            }).remove();
 
-                $.thomaskahn.smoothDivScroll.prototype._create.call(this);
+        };
 
-                widget._recalculateItemMargins();
+        var ensureThereAreEnoughItems = function(target)
+        {
+            var $target = $(target);
+            var data = getData(target);
+            var containerWidth = data.$itemContainer.innerWidth();
+            var $items = getItems(target);
 
-            },
+            if (containerWidth >= (($items.length * data.itemWidth) / 2)) {
+                $items.clone().appendTo(data.$itemContainer);
+                ensureThereAreEnoughItems(target);
+            }
 
-            _setup: function(){
-                var widget = this;
-                var option = this.options;
-                var container = this.element;
-                var $container = $(container);
-                var $items = $container.children();
+        };
 
-                /* ****************************************************************************** */
-                /* ADD STYLES SPECIFIC TO THE WOLFNET WIDGET ************************************ */
-                /* ****************************************************************************** */
+        var getItems = function(target)
+        {
+            var data = getData(target);
 
-                $container.css({
-                    'position':'relative',
-                    'width':'100%',
-                    'height':'100px'
-                });
+            return data.$itemContainer.children().filter('.' + data.option.itemClass);
 
-                $container.children().css({
-                    'float':'left'
-                });
+        };
 
-                /* ****************************************************************************** */
-                /* CALCULATE THE MAX ITEM HEIGHT AND WIDTH ************************************** */
-                /* ****************************************************************************** */
-                var maxItemHeight = 0;
-                var maxItemWidth = 0;
-                var maxItemMarginTop = 0;
-                var maxItemMarginBottom = 0;
+        var setNextFrame = function(target)
+        {
+            var data = getData(target);
 
-                $items.each(function(){
+            if (!(data.nextFrameSet || false)) {
 
-                    var $this = $(this);
+                // If we can use the requestAnimationFrame event we should for performance
+                if (window.requestAnimationFrame) {
+                    window.requestAnimationFrame(function(){executeFrame(target);});
 
-                    var itemHeight = $this.height();
-                    var itemWidth = $this.width();
+                } else {
+                    if ((data.timeoutFlag || false) === false) {
+                        data.timeoutFlag = true;
 
-                    maxItemHeight = (itemHeight > maxItemHeight) ? itemHeight : maxItemHeight;
-                    maxItemWidth = (itemWidth  > maxItemWidth) ? itemWidth  : maxItemWidth;
+                        setTimeout(function(){
+                            executeFrame(target);
+                        }, 17); // targeted for 60fps
 
-                    var itemMarginTop = Number($this.css('margin-top').replace('px', ''));
-                    var itemMarginBottom = Number($this.css('margin-bottom').replace('px', ''));
-
-                    maxItemMarginTop = (itemMarginTop > maxItemMarginTop) ? itemMarginTop : maxItemMarginTop;
-                    maxItemMarginBottom = (itemMarginBottom > maxItemMarginBottom) ? itemMarginBottom : maxItemMarginBottom;
-
-                });
-
-                option.maxItemHeight = maxItemHeight;
-                option.maxItemWidth = maxItemWidth;
-                option.maxItemMarginTop = maxItemMarginTop;
-                option.maxItemMarginBottom = maxItemMarginBottom;
-
-                /* ****************************************************************************** */
-                /* UPDATE ITEM HEIGHT AND WIDTH BASED ON MAXIMUMS ******************************* */
-                /* ****************************************************************************** */
-                $items.height(maxItemHeight);
-                $items.width(maxItemWidth);
-
-                $container.height(maxItemHeight);
-                $container.width($container.width());
-
-            },
-
-            _establishEvents: function(){
-                var widget = this;
-                var option = this.options;
-                var container = this.element;
-                var $container = $(container);
-
-                $container.mouseover(function(){
-                    if (option.autoPlay) {
-                        widget.stopAutoScrolling();
                     }
-                    widget.showHotSpotBackgrounds();
-                });
 
-                $container.mouseleave(function(){
-                    widget.hideHotSpotBackgrounds();
-                    if (option.autoPlay) {
-                        widget.startAutoScrolling();
-                    }
-                });
-
-            },
-
-            _recalculateItemMargins: function(){
-                var widget = this;
-                var option = this.options;
-                var container = this.element;
-                var $container = $(container);
-                var $items = $container.find('.scrollableArea:first').children();
-
-                if (option.autoPlay) {
-                    clearTimeout(widget.resizeDelay);
-                    widget.stopAutoScrolling();
                 }
 
-                /* ****************************************************************************** */
-                /* CALCULATE IDEAL MARGINS TO FIT CONTAINER ************************************* */
-                /* ****************************************************************************** */
+                data.nextFrameSet = true;
 
-                var numColumns = 1;
-                var maxItemWidthWithMargins = 0;
-                var maxItemHeightWithMargins = 0;
+            }
 
-                var calculateIdealMargin = function(container, item, minMargin, modifier)
-                {
-                    numColumns = Math.floor(container / item) + modifier;
+        };
 
-                    var leftOverSpace = container - (item * numColumns);
-                    var marginPerItem = leftOverSpace / numColumns;
+        var executeFrame = function(target)
+        {
+            var data = getData(target);
 
-                    /* Does work in <=IE8, but avoids single columns */
-                    var idealMargin   = marginPerItem / 2;
+            if (canAnimate(target) && shouldAnimate(target)) {
+                // Trigger the animation
+                animate(target);
 
-                    /* Works in every browser but has single columns */
-                    //var idealMargin   = Math.ceil( marginPerItem / 2 );
+                data.timeoutFlag = false;
 
-                    if (idealMargin == -1) {
-                        idealMargin = 0;
-                    }
+                data.nextFrameSet = false;
 
-                    var itemsWithMargins = ((idealMargin * 2) + item) * numColumns;
+                // continue animating
+                setNextFrame(target);
 
-                    var validMargins = (idealMargin < minMargin || itemsWithMargins > container);
+            } else {
+                data.nextFrameSet = false;
 
-                    if (validMargins && numColumns > 1) {
-                        idealMargin = calculateIdealMargin(container, item, minMargin, modifier - 1);
-                    }
+            }
 
-                    return idealMargin;
+        };
 
-                };
+        var animate = function(target)
+        {
+            var $target = $(target);
+            var data = getData(target);
+            var pixelsPerFrame = data.speed || data.option.speed;
+            var scroll = data.$itemContainer.scrollLeft();
+            var containerWidth = data.$itemContainer.innerWidth();
+            var maxScroll = data.$itemContainer[0].scrollWidth - containerWidth;
+            var nextScroll;
 
-                var idealMargin = calculateIdealMargin(
-                    $container.width(),
-                    option.maxItemWidth,
-                    option.minMargin,
-                    0
-                    );
+            if (data.direction === 'right') {
 
-                $items.css({
-                    'margin-top': option.maxItemMarginTop,
-                    'margin-right': idealMargin,
-                    'margin-bottom': option.maxItemMarginBottom,
-                    'margin-left': idealMargin
-                    });
+                nextScroll = scroll - pixelsPerFrame;
 
-                maxItemWidthWithMargins  = option.maxItemWidth + (idealMargin * 2);
-                maxItemHeightWithMargins = option.maxItemHeight + option.maxItemMarginTop + option.maxItemMarginBottom;
+                if (scroll <= 0) {
+                    nextScroll = nextScroll + data.itemWidth;
+                    getItems(target).last().prependTo(data.$itemContainer);
+                }
 
-                /* ****************************************************************************** */
-                /* UPDATE CONTAINER HEIGHT AND WIDTH BASED ON MAXIMUMS ************************** */
-                /* ****************************************************************************** */
-                $container.height(maxItemHeightWithMargins);
+            } else {
 
-                if (option.autoPlay) {
-                    widget.resizeDelay = setTimeout(function(){
-                        widget.startAutoScrolling();
-                    }, 500);
+                nextScroll = scroll + pixelsPerFrame;
+
+                if (scroll >= maxScroll) {
+                    nextScroll = nextScroll - data.itemWidth;
+                    getItems(target).first().appendTo(data.$itemContainer);
                 }
 
             }
 
-        });
+            data.$itemContainer.scrollLeft(nextScroll);
 
-    })(jQuery); /* END: jQuery IIFE */
+        };
+
+        var canAnimate = function(target)
+        {
+            var data = getData(target);
+
+            // TODO: Check if there are enough items to animate
+            return true;
+
+        };
+
+        var shouldAnimate = function(target)
+        {
+            var data = getData(target);
+
+            return (data.animating || false);
+
+        };
+
+        var buildControls = function(target)
+        {
+            var $target = $(target);
+            var data = getData(target);
+            var $items = getItems(target);
+
+            $target.addClass(data.option.withControlsClass);
+
+            // Wrap the contents to make button placement easier
+            data.$itemContainer = $('<div>').append($items).appendTo($target);
+
+            createButton(target, 'left').prependTo($target);
+            createButton(target, 'right').prependTo($target);
+
+        };
+
+        var createButton = function(target, direction)
+        {
+            var $target = $(target);
+            var data = getData(target);
+
+            return $('<button>')
+                .addClass(data.option.controlClass)
+                .addClass(direction === 'right' ? data.option.controlRightClass : data.option.controlLeftClass)
+                .hover(function(){
+                    data.direction = direction;
+
+                    if (data.animating) {
+                        data.wasAnimatingBeforeDir = true;
+                    } else {
+                        data.wasAnimatingBeforeDir = false;
+                        methods.play.call($target);
+                    }
+
+                },function(){
+                    data.direction = data.option.direction;
+
+                    if (data.wasAnimatingBeforeDir) {
+                        data.wasAnimatingBeforeDir = false;
+                    } else {
+                        methods.pause.call($target);
+                    }
+
+                }).mousedown(function(){
+                    data.speed = data.option.speed * 3;
+
+                }).mouseup(function(){
+                    data.speed = data.option.speed;
+
+                });
+
+        };
+
+        var methods = {
+
+            init: function(options)
+            {
+
+                return this.each(function(){
+                    var target = this;
+                    var $target = $(this);
+
+                    $target.data(pluginName, {option:$.extend({}, defaultOptions, options)});
+
+                    var data = getData(target);
+
+                    data.$itemContainer = $target;
+                    data.direction = data.option.direction;
+
+                    if (!$target.hasClass(data.option.componentClass)) {
+                        $target.addClass(data.option.componentClass);
+                    }
+
+                    data.option.speed = Math.round(data.option.speed / 4);
+                    data.option.speed = (data.option.speed < 1) ? 1 : (data.option.speed > 5) ? 5 : data.option.speed;
+
+                    removeWhitespaceBetweenTags(target);
+                    ensureAllItemsAreEqualSize(target);
+                    data.itemWidth = getItems(target).first().outerWidth(true);
+                    ensureThereAreEnoughItems(target);
+
+                    if (data.option.showControls) {
+                        buildControls(target);
+                    }
+
+                    data.$itemContainer.css({
+                        overflowX: 'hidden'
+                    });
+
+                    if (data.option.autoPlay) {
+                        methods.play.call($target);
+                    }
+
+                    $target.hover(function(event){
+                        if (data.animating && !$(event.target).hasClass(data.option.controlClass)) {
+                            data.wasAnimating = true;
+                            methods.pause.call($target);
+                        }
+                    }, function(){
+                        if (data.wasAnimating) {
+                            data.wasAnimating = false;
+                            methods.play.call($target);
+                        }
+                    });
+
+                    $(window).resize(function(){
+                        if ((data.resizing || false) === false) {
+                            data.resizing = true;
+                            ensureThereAreEnoughItems(target);
+                            data.resizing = false;
+                        }
+                    });
+
+                });
+
+            },
+
+            play: function()
+            {
+
+                return this.each(function(){
+                    var data = getData(this);
+
+                    if (!data.animating) {
+                        data.animating = true;
+                        setNextFrame(this);
+                    }
+
+                });
+
+            },
+
+            pause: function()
+            {
+
+                return this.each(function(){
+                    var data = getData(this);
+
+                    data.animating = false;
+                    data.timeoutFlag = false;
+
+                });
+
+            }
+
+        };
+
+        $.fn[pluginName] = function(method) {
+
+            if (methods[method]) {
+                return methods[method].apply(this, Array.prototype.slice.call(arguments, 1));
+            } else if (typeof method === 'object' || ! method) {
+                return methods.init.apply( this, arguments);
+            } else {
+                $.error('Method ' + method + ' does not exist on jQuery.' + pluginName);
+            }
+
+        };
+
+    })(jQuery, window); /* END: jQuery IIFE */
 
 } /* END: If jQuery Exists */
