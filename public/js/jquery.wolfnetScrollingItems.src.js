@@ -61,11 +61,6 @@ if (typeof jQuery != 'undefined') {
             return $(target).data(pluginName) || {};
         };
 
-        var ensureAllItemsAreEqualSize = function(target)
-        {
-
-        };
-
         /**
          * This function is responsible for clearing whitespace which otherwise causes spacing issues.
          *
@@ -169,7 +164,7 @@ if (typeof jQuery != 'undefined') {
         {
             var data = getData(target);
 
-            if (canAnimate(target) && shouldAnimate(target)) {
+            if (shouldAnimate(target)) {
                 // Trigger the animation
                 animate(target);
 
@@ -230,15 +225,6 @@ if (typeof jQuery != 'undefined') {
             }
 
             data.$itemContainer.scrollLeft(nextScroll);
-
-        };
-
-        var canAnimate = function(target)
-        {
-            var data = getData(target);
-
-            // TODO: Check if there are enough items to animate
-            return true;
 
         };
 
@@ -358,7 +344,6 @@ if (typeof jQuery != 'undefined') {
                     data.option.speed = (data.option.speed < 1) ? 1 : (data.option.speed > 5) ? 5 : data.option.speed;
 
                     removeWhitespaceBetweenTags(target);
-                    ensureAllItemsAreEqualSize(target);
                     data.itemWidth = getItems(target).first().outerWidth(true);
                     ensureThereAreEnoughItems(target);
 
