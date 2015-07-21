@@ -425,8 +425,6 @@ We would like to thank the following projects as they have been a big part of cr
 * **[jQuery](http://jquery.com)**
 * **[Vagrant](http://vagrantup.com)**
 * **[Less CSS](http://lesscss.org)**
-* **jQuery SmoothDivScroll** by Thomas Kahn
 * **jQuery Tooltip** by Jörn Zaefferer
 * **jQuery imagesLoaded** by Paul Irish
-* **jQuery MouseWheel** by [Brandon Aaron](http://brandonaaron.net)
 * **[PHPUnit](http://phpunit.de)**
