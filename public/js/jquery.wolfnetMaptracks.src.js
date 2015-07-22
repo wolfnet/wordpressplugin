@@ -2671,7 +2671,7 @@
                 // build map
                 var wntMapTracksMap = new MapTracks();
                 wntMapTracksMap.createMap(this);
-                setWntMaptracksId(options.mapId);
+                setWntMapId(options.mapId);
 
                 // put houseovers on map
                 var houseoverData = options.houseoverData || [];
@@ -2714,8 +2714,8 @@
 				// only add pin if coordinates are valid
 				if (validLat && validLng && ((lat !== 0) || (lng !== 0))) {
 
-					var mapId = getWntMaptracksId()
-					var wntMap = $('#' + mapId).data('map');
+					var wntMapId = getWntMapId()
+					var wntMap = $('#' + wntMapId).data('map');
 
 					var houseoverIcon = wntMap.mapIcon(houseIcon,30,30);
 
@@ -2736,8 +2736,8 @@
 
 		autoSizeMap: function() {
 
-			var mapId = getWntMaptracksId()
-			var wntMapContainer = $('#' + mapId);
+			var wntMapId = getWntMapId()
+			var wntMapContainer = $('#' + wntMapId);
 
 			var parentWidth = wntMapContainer.parent().width();
 
@@ -2760,11 +2760,11 @@
 
     var wntMaptracksId = '';
 
-    var setWntMaptracksId = function(id) {
+    var setWntMapId = function(id) {
      	wntMaptracksId = id;
     };
 
-    var getWntMaptracksId = function() {
+    var getWntMapId = function() {
     	return wntMaptracksId;
     };
 
