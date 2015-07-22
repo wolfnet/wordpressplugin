@@ -282,7 +282,6 @@ class Wolfnet_Plugin
 
         // JavaScript
         $scripts = array(
-            'smooth-div-scroll',
             'wolfnet-scrolling-items',
             'wolfnet-quick-search',
             'wolfnet-listing-grid',
@@ -2840,14 +2839,6 @@ class Wolfnet_Plugin
                 $this->url . 'js/jquery.imagesloaded.src.js',
                 array('jquery'),
                 ),
-            'mousewheeljs' => array(
-                $this->url . 'js/jquery.mousewheel.src.js',
-                array('jquery'),
-                ),
-            'smooth-div-scroll' => array(
-                $this->url . 'js/jquery.smoothDivScroll-1.2.src.js',
-                array('mousewheeljs', 'jquery-ui-core', 'jquery-ui-widget', 'jquery-effects-core'),
-                ),
             'wolfnet' => array(
                 $this->url . 'js/wolfnet.src.js',
                 array('jquery', 'tooltipjs'),
@@ -2858,7 +2849,7 @@ class Wolfnet_Plugin
                 ),
             'wolfnet-scrolling-items' => array(
                 $this->url . 'js/jquery.wolfnetScrollingItems.src.js',
-                array('smooth-div-scroll', 'wolfnet'),
+                array('wolfnet'),
                 ),
             'wolfnet-quick-search' => array(
                 $this->url . 'js/jquery.wolfnetQuickSearch.src.js',
