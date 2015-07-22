@@ -2744,11 +2744,10 @@
 			var wntMap = wntMapContainer.data('map');
 			var mapWidth = wntMap.getSize().width;
 			var mapHeight = wntMap.getSize().height;
-			console.log(mapWidth);
 
 			// if mapWidth does not equal parentWidth, set size
 			if (mapWidth != parentWidth) {
-				wntMap.setSize(mapWidth,mapHeight);
+				wntMap.setSize(parentWidth,mapHeight);
 			}
 
 			// fit map to houseovers
