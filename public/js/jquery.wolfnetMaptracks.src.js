@@ -2655,96 +2655,132 @@
         return paramValue;
     };
 
+
     var mapTracksGlobals = {
         MAP_ID: 0,
         CONTROL_ID: 0
     };
 
+
     var methods = {
 
-        init : function(options) {
+        init: function(options) {
 
             return this.each(function() {
 
-                //beginning of execution
-                var wntMapTracks = new MapTracks();
-                wntMapTracks.createMap(this);
+                // build map
+                var wntMapTracksMap = new MapTracks();
+                wntMapTracksMap.createMap(this);
+                setWntMaptracksId(options.mapId);
 
+                // put houseovers on map
                 var houseoverData = options.houseoverData || [];
 
-                for (var i in houseoverData) {
-                    methods.addHouseOver.call( $(this), [
-                        houseoverData[i].lat,
-                        houseoverData[i].lng,
-                        houseoverData[i].propertyId,
-                        houseoverData[i].propertyUrl,
-                        houseoverData[i].content,
-                        options.houseoverIcon,
-                        options.mapId
-                        ]);
-                }
+				for (var i in houseoverData) {
+					methods.addHouseOver.call($(this),[
+						houseoverData[i].lat,
+						houseoverData[i].lng,
+						houseoverData[i].propertyId,
+						houseoverData[i].propertyUrl,
+						houseoverData[i].content,
+						options.houseoverIcon
+					]);
+				}
 
-                var builtMap = $('#' + options.mapId).data('map');
-                builtMap.bestFit();
+                // size and fit the map
+				methods.autoSizeMap();
+
+                // bind map auto resize to window resize
+				$(window).resize(methods.autoSizeMap)
+
             });
 
         },
 
-        addHouseOver : function(args) {
+
+		addHouseOver: function(args) {
             return this.each(function() {
+
                 var lat         = args[0];
                 var lng         = args[1];
                 var propertyId  = args[2];
                 var propertyUrl = args[3]
                 var content     = args[4];
                 var houseIcon   = args[5];
-                var mapId       = args[6];
 
                 var validLat = (!isNaN(lat) && (lat >= -180) && (lat <= 180));
                 var validLng = (!isNaN(lng) && (lng >= -180) && (lng <= 180));
 
-                // Only add the POI if the coordinates are valid
-                if (validLat && validLng && ((lat !== 0) || (lng !== 0))) {
-                    var componentMap = $('#' + mapId).data('map');
-                    var houseoverIcon = componentMap.mapIcon(houseIcon,30,30);
-                    var houseover = componentMap.poi(lat, lng, houseoverIcon, content, propertyId, propertyUrl);
-                    componentMap.addPoi(houseover);
+				// only add pin if coordinates are valid
+				if (validLat && validLng && ((lat !== 0) || (lng !== 0))) {
+
+					var mapId = getWntMaptracksId()
+					var wntMap = $('#' + mapId).data('map');
+
+					var houseoverIcon = wntMap.mapIcon(houseIcon,30,30);
+
+					var houseover = wntMap.poi(
+										lat,
+										lng,
+										houseoverIcon,
+										content,
+										propertyId,
+										propertyUrl
+									);
+
+                    wntMap.addPoi(houseover);
                 }
             });
 		},
 
 
-		setSize: function (w, h) {
-			return this.each(function () {
-				var mapTracksMap = $(this).data('map');
-				mapTracksMap.setSize(w, h);
-			});
-		},
+		autoSizeMap: function() {
 
+			var mapId = getWntMaptracksId()
+			var wntMapContainer = $('#' + mapId);
 
-		getSize: function () {
-			var mapTracksMap = $(this).first().data('map');
-			return mapTracksMap.getSize();
+			var parentWidth = wntMapContainer.parent().width();
+
+			var wntMap = wntMapContainer.data('map');
+			var mapWidth = wntMap.getSize().width;
+			var mapHeight = wntMap.getSize().height;
+			console.log(mapWidth);
+
+			// if mapWidth does not equal parentWidth, set size
+			if (mapWidth != parentWidth) {
+				wntMap.setSize(mapWidth,mapHeight);
+			}
+
+			// fit map to houseovers
+			wntMap.bestFit();
+
 		}
 
     }
 
+
+    var wntMaptracksId = '';
+
+    var setWntMaptracksId = function(id) {
+     	wntMaptracksId = id;
+    };
+
+    var getWntMaptracksId = function() {
+    	return wntMaptracksId;
+    };
+
+
     $.fn[pluginName] = function(method)
     {
+
         if (methods[method]) {
             return methods[method].apply(this, Array.prototype.slice.call(arguments, 1));
-
-        }
-        else if (typeof method === 'object' || !method) {
+        } else if (typeof method === 'object' || !method) {
             return methods.init.apply( this, arguments );
-
-        }
-        else {
+        } else {
             $.error( 'Method ' +  method + ' does not exist on jQuery.' + pluginName );
-
         }
 
     }
-
 
 })(jQuery);
