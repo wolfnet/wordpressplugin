@@ -2691,9 +2691,8 @@
 				// size and fit map instance
 				methods.autoSizeMap(wntMapContainer);
 
-			// TODO: on window resize call new fctn that queries for all maps and passes EACH to autosizeMap
 				// bind map auto resize to window resize for all maps
-				//$(window).resize(methods.autoSizeMap);
+				$(window).resize(methods.autoSizeMaps);
 
 			});
 
@@ -2733,6 +2732,13 @@
 
 					wntMap.addPoi(houseover);
 				}
+			});
+		},
+
+
+		autoSizeMaps: function() {
+			$('.wolfnet_wntMainMap').each(function() {
+				methods.autoSizeMap($(this));
 			});
 		},
 
