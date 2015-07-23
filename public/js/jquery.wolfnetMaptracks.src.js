@@ -2669,15 +2669,16 @@
 			return this.each(function() {
 
 				// build map
-				var wntMapTracksMap = new MapTracks();
-				wntMapTracksMap.createMap(this);
-				setWntMapId(options.mapId);
+				var wntMaptracksMap = new MapTracks();
+				wntMaptracksMap.createMap(this);
 
-				// put houseovers on map
+				var wntMapContainer = $('#' + options.mapId);
 				var houseoverData = options.houseoverData || [];
 
+				// loop houseover data and call method to pin to map instance
 				for (var i in houseoverData) {
 					methods.addHouseOver.call($(this),[
+						wntMapContainer,
 						houseoverData[i].lat,
 						houseoverData[i].lng,
 						houseoverData[i].propertyId,
@@ -2687,11 +2688,12 @@
 					]);
 				}
 
-				// size and fit the map
-				methods.autoSizeMap();
+				// size and fit map instance
+				methods.autoSizeMap(wntMapContainer);
 
-				// bind map auto resize to window resize
-				$(window).resize(methods.autoSizeMap);
+			// TODO: on window resize call new fctn that queries for all maps and passes EACH to autosizeMap
+				// bind map auto resize to window resize for all maps
+				//$(window).resize(methods.autoSizeMap);
 
 			});
 
@@ -2701,21 +2703,22 @@
 		addHouseOver: function(args) {
 			return this.each(function() {
 
-				var lat         = args[0];
-				var lng         = args[1];
-				var propertyId  = args[2];
-				var propertyUrl = args[3];
-				var content     = args[4];
-				var houseIcon   = args[5];
+			// TODO: handle this better (as args or json or something else)
+				var wntMapContainer= args[0];
+				var lat = args[1];
+				var lng = args[2];
+				var propertyId = args[3];
+				var propertyUrl = args[4];
+				var content = args[5];
+				var houseIcon = args[6];
+
+				var wntMap = wntMapContainer.data('map');
 
 				var validLat = (!isNaN(lat) && (lat >= -180) && (lat <= 180));
 				var validLng = (!isNaN(lng) && (lng >= -180) && (lng <= 180));
 
 				// only add pin if coordinates are valid
 				if (validLat && validLng && ((lat !== 0) || (lng !== 0))) {
-
-					var wntMapId = getWntMapId()
-					var wntMap = $('#' + wntMapId).data('map');
 
 					var houseoverIcon = wntMap.mapIcon(houseIcon,20,20);
 
@@ -2734,10 +2737,7 @@
 		},
 
 
-		autoSizeMap: function() {
-
-			var wntMapId = getWntMapId();
-			var wntMapContainer = $('#' + wntMapId);
+		autoSizeMap: function(wntMapContainer) {
 			var parentWidth = wntMapContainer.parent().width();
 			var wntMap = wntMapContainer.data('map');
 			var mapWidth = wntMap.getSize().width;
@@ -2750,7 +2750,6 @@
 
 			// fit map to houseovers
 			wntMap.bestFit();
-
 		}
 
 	}
