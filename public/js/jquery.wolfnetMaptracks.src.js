@@ -2652,29 +2652,29 @@
             }
         }
 
-        return paramValue;
-    };
+		return paramValue;
+	};
 
 
-    var mapTracksGlobals = {
-        MAP_ID: 0,
-        CONTROL_ID: 0
-    };
+	var mapTracksGlobals = {
+		MAP_ID: 0,
+		CONTROL_ID: 0
+	};
 
 
-    var methods = {
+	var methods = {
 
-        init: function(options) {
+		init: function(options) {
 
-            return this.each(function() {
+			return this.each(function() {
 
-                // build map
-                var wntMapTracksMap = new MapTracks();
-                wntMapTracksMap.createMap(this);
-                setWntMapId(options.mapId);
+				// build map
+				var wntMapTracksMap = new MapTracks();
+				wntMapTracksMap.createMap(this);
+				setWntMapId(options.mapId);
 
-                // put houseovers on map
-                var houseoverData = options.houseoverData || [];
+				// put houseovers on map
+				var houseoverData = options.houseoverData || [];
 
 				for (var i in houseoverData) {
 					methods.addHouseOver.call($(this),[
@@ -2687,29 +2687,29 @@
 					]);
 				}
 
-                // size and fit the map
+				// size and fit the map
 				methods.autoSizeMap();
 
-                // bind map auto resize to window resize
+				// bind map auto resize to window resize
 				$(window).resize(methods.autoSizeMap);
 
-            });
+			});
 
-        },
+		},
 
 
 		addHouseOver: function(args) {
-            return this.each(function() {
+			return this.each(function() {
 
-                var lat         = args[0];
-                var lng         = args[1];
-                var propertyId  = args[2];
-                var propertyUrl = args[3];
-                var content     = args[4];
-                var houseIcon   = args[5];
+				var lat         = args[0];
+				var lng         = args[1];
+				var propertyId  = args[2];
+				var propertyUrl = args[3];
+				var content     = args[4];
+				var houseIcon   = args[5];
 
-                var validLat = (!isNaN(lat) && (lat >= -180) && (lat <= 180));
-                var validLng = (!isNaN(lng) && (lng >= -180) && (lng <= 180));
+				var validLat = (!isNaN(lat) && (lat >= -180) && (lat <= 180));
+				var validLng = (!isNaN(lng) && (lng >= -180) && (lng <= 180));
 
 				// only add pin if coordinates are valid
 				if (validLat && validLng && ((lat !== 0) || (lng !== 0))) {
@@ -2728,9 +2728,9 @@
 										propertyUrl
 									);
 
-                    wntMap.addPoi(houseover);
-                }
-            });
+					wntMap.addPoi(houseover);
+				}
+			});
 		},
 
 
@@ -2753,31 +2753,31 @@
 
 		}
 
-    }
+	}
 
 
-    var wntMaptracksId = '';
+	var wntMaptracksId = '';
 
-    var setWntMapId = function(id) {
-     	wntMaptracksId = id;
-    };
+	var setWntMapId = function(id) {
+		wntMaptracksId = id;
+	};
 
-    var getWntMapId = function() {
-    	return wntMaptracksId;
-    };
+	var getWntMapId = function() {
+		return wntMaptracksId;
+	};
 
 
-    $.fn[pluginName] = function(method)
-    {
+	$.fn[pluginName] = function(method)
+	{
 
-        if (methods[method]) {
-            return methods[method].apply(this, Array.prototype.slice.call(arguments, 1));
-        } else if (typeof method === 'object' || !method) {
-            return methods.init.apply( this, arguments );
-        } else {
-            $.error( 'Method ' +  method + ' does not exist on jQuery.' + pluginName );
-        }
+		if (methods[method]) {
+			return methods[method].apply(this, Array.prototype.slice.call(arguments, 1));
+		} else if (typeof method === 'object' || !method) {
+			return methods.init.apply( this, arguments );
+		} else {
+			$.error( 'Method ' +  method + ' does not exist on jQuery.' + pluginName );
+		}
 
-    }
+	}
 
 })(jQuery);
