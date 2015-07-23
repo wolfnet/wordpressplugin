@@ -2675,70 +2675,65 @@
 				var wntMapContainer = $('#' + options.mapId);
 				var houseoverData = options.houseoverData || [];
 
-				// loop houseover data and call method to pin to map instance
-				for (var i in houseoverData) {
-					methods.addHouseOver.call($(this),[
-						wntMapContainer,
-						houseoverData[i].lat,
-						houseoverData[i].lng,
-						houseoverData[i].propertyId,
-						houseoverData[i].propertyUrl,
-						houseoverData[i].content,
-						options.houseoverIcon
-					]);
-				}
+				// pin houseovers to map
+				methods.pinHouseovers.call(
+					this,
+					wntMapContainer,
+					houseoverData,
+					options.houseoverIcon
+				);
 
 				// size and fit map instance
-				methods.autoSizeMap(wntMapContainer);
+				methods.autoSizeMap.call(this,wntMapContainer);
 
-				// bind map auto resize to window resize for all maps
-				$(window).resize(methods.autoSizeMaps);
+				// bind map auto size to window resize for all maps
+				$(window).resize(methods.responsiveMaps);
 
 			});
 
 		},
 
 
-		addHouseOver: function(args) {
-			return this.each(function() {
+		pinHouseovers: function(wntMapContainer,houseoverData,icon) {
 
-			// TODO: handle this better (as args or json or something else)
-				var wntMapContainer= args[0];
-				var lat = args[1];
-				var lng = args[2];
-				var propertyId = args[3];
-				var propertyUrl = args[4];
-				var content = args[5];
-				var houseIcon = args[6];
+			var wntMap = wntMapContainer.data('map');
 
-				var wntMap = wntMapContainer.data('map');
+			for (var i in houseoverData) {
 
+				var lat = houseoverData[i].lat;
+				var lng = houseoverData[i].lng;
 				var validLat = (!isNaN(lat) && (lat >= -180) && (lat <= 180));
 				var validLng = (!isNaN(lng) && (lng >= -180) && (lng <= 180));
 
 				// only add pin if coordinates are valid
 				if (validLat && validLng && ((lat !== 0) || (lng !== 0))) {
 
-					var houseoverIcon = wntMap.mapIcon(houseIcon,20,20);
+					// build houseover icon object
+					var houseoverIcon = wntMap.mapIcon(icon,20,20);
 
+					// build houseover as poi object
 					var houseover = wntMap.poi(
-										lat,
-										lng,
-										houseoverIcon,
-										content,
-										propertyId,
-										propertyUrl
-									);
+						lat,
+						lng,
+						houseoverIcon,
+						houseoverData[i].content,
+						houseoverData[i].propertyId,
+						houseoverData[i].propertyUrl
+					);
 
+					// pin houseover poi to map
 					wntMap.addPoi(houseover);
+
 				}
-			});
+			}
+
+
 		},
 
 
-		autoSizeMaps: function() {
+		responsiveMaps: function() {
 			$('.wolfnet_wntMainMap').each(function() {
-				methods.autoSizeMap($(this));
+				methods.autoSizeMap.call(this,$(this));
 			});
 		},
 
@@ -2749,12 +2744,12 @@
 			var mapWidth = wntMap.getSize().width;
 			var mapHeight = wntMap.getSize().height;
 
-			// if mapWidth does not equal parentWidth, set size
+			// if mapWidth does not equal parentWidth, reset size
 			if (mapWidth != parentWidth) {
 				wntMap.setSize(parentWidth,mapHeight);
 			}
 
-			// fit map to houseovers
+			// fit map to listings
 			wntMap.bestFit();
 		}
 
