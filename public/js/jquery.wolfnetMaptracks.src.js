@@ -2664,6 +2664,9 @@
 
 	var methods = {
 
+		/**
+		 * Initializes a map instance within a component.
+		 */
 		init: function(options) {
 
 			return this.each(function() {
@@ -2694,6 +2697,7 @@
 		},
 
 
+		// places houseover poi's on a map instance
 		pinHouseovers: function(wntMapContainer,houseoverData,icon) {
 
 			var wntMap = wntMapContainer.data('map');
@@ -2731,6 +2735,7 @@
 		},
 
 
+		// call autoSizeMap on each map instance
 		responsiveMaps: function() {
 			$('.wolfnet_wntMainMap').each(function() {
 				methods.autoSizeMap.call(this,$(this));
@@ -2738,6 +2743,7 @@
 		},
 
 
+		// resizes a map instance based on parent element width
 		autoSizeMap: function(wntMapContainer) {
 			var parentWidth = wntMapContainer.parent().width();
 			var wntMap = wntMapContainer.data('map');
