@@ -2691,7 +2691,7 @@
 				methods.autoSizeMap();
 
                 // bind map auto resize to window resize
-				$(window).resize(methods.autoSizeMap)
+				$(window).resize(methods.autoSizeMap);
 
             });
 
@@ -2704,7 +2704,7 @@
                 var lat         = args[0];
                 var lng         = args[1];
                 var propertyId  = args[2];
-                var propertyUrl = args[3]
+                var propertyUrl = args[3];
                 var content     = args[4];
                 var houseIcon   = args[5];
 
@@ -2717,7 +2717,7 @@
 					var wntMapId = getWntMapId()
 					var wntMap = $('#' + wntMapId).data('map');
 
-					var houseoverIcon = wntMap.mapIcon(houseIcon,30,30);
+					var houseoverIcon = wntMap.mapIcon(houseIcon,20,20);
 
 					var houseover = wntMap.poi(
 										lat,
@@ -2736,11 +2736,9 @@
 
 		autoSizeMap: function() {
 
-			var wntMapId = getWntMapId()
+			var wntMapId = getWntMapId();
 			var wntMapContainer = $('#' + wntMapId);
-
 			var parentWidth = wntMapContainer.parent().width();
-
 			var wntMap = wntMapContainer.data('map');
 			var mapWidth = wntMap.getSize().width;
 			var mapHeight = wntMap.getSize().height;
