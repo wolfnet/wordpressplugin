@@ -2755,17 +2755,6 @@
 	}
 
 
-	var wntMaptracksId = '';
-
-	var setWntMapId = function(id) {
-		wntMaptracksId = id;
-	};
-
-	var getWntMapId = function() {
-		return wntMaptracksId;
-	};
-
-
 	$.fn[pluginName] = function(method)
 	{
 
