@@ -5,7 +5,7 @@
     var MapTracks = function () {};
 
     MapTracks.prototype.createMap = function (mapNode) {
-      
+
         var params = {
             mapName:           $(mapNode).attr("data-wnt-map-name"),
             centerLat:         $(mapNode).attr("data-wnt-map-centerlat"),
@@ -47,7 +47,7 @@
 
         mapTracksGlobals.MAP_ID++;
 
-        var map = this;   
+        var map = this;
 
         // Parameters
         var mapNode                    = baseNode;
@@ -187,7 +187,7 @@
             $bindingFields.ulLat.change();
             $bindingFields.ulLng.change();
             $bindingFields.zoom.change();
-        };        
+        };
 
         this.setupMouseControls = function () {
             var br = $.browser;
@@ -413,13 +413,13 @@
         };
 
 
-        this.setMapView = function () {            
+        this.setMapView = function () {
             if (googleStreetView != null) {
                 googleStreetView.setVisible(false);
                 googleStreetView = null;
             }
             switch (provider) {
-                case "mapquest":                  
+                case "mapquest":
                     $(bingMapNode).hide();
                     $(mapquestNode).show();
                     mapquestMap.setMapType("map");
@@ -2190,7 +2190,7 @@
 
                 mapTrack();
             }
-           
+
         };
 
         // Track map usage
@@ -2208,7 +2208,7 @@
             }
         };
 
-        // Event Handlers 
+        // Event Handlers
         this.onZoomEnd = function (e) {
             map.setMapBindings();
             $(mapNode).trigger("zoomEnd");
@@ -2302,7 +2302,7 @@
 
         var bingHouseView = null;
 
-        if (provider == "mapquest") {         
+        if (provider == "mapquest") {
             mapquestMap = new MQA.TileMap({
                 elt: mapquestNode,
                 zoom: Number(mapZoomLevel) + mapquestZoomAdjust,
@@ -2524,7 +2524,7 @@
 
         // Bing
         isHouseViewAvailable = false;
- 
+
         this.setMapView();
 
 
@@ -2652,85 +2652,127 @@
             }
         }
 
-        return paramValue;
-    };
+		return paramValue;
+	};
 
-    var mapTracksGlobals = {
-        MAP_ID: 0,
-        CONTROL_ID: 0
-    };
 
-    var methods = {
+	var mapTracksGlobals = {
+		MAP_ID: 0,
+		CONTROL_ID: 0
+	};
 
-        init : function(options) {
 
-            return this.each(function() {
+	var methods = {
 
-                //beginning of execution
-                var wntMapTracks = new MapTracks();
-                wntMapTracks.createMap(this);
+		/**
+		 * Initializes a map instance within a component.
+		 */
+		init: function(options) {
 
-                var houseoverData = options.houseoverData || [];
+			return this.each(function() {
 
-                for (var i in houseoverData) {
-                    methods.addHouseOver.call( $(this), [
-                        houseoverData[i].lat,
-                        houseoverData[i].lng,
-                        houseoverData[i].propertyId,
-                        houseoverData[i].propertyUrl,
-                        houseoverData[i].content,
-                        options.houseoverIcon,
-                        options.mapId
-                        ]);
-                }
+				// build map
+				var wntMaptracksMap = new MapTracks();
+				wntMaptracksMap.createMap(this);
 
-                var builtMap = $('#' + options.mapId).data('map');
-                builtMap.bestFit();
-            });
+				var wntMapContainer = $('#' + options.mapId);
+				var houseoverData = options.houseoverData || [];
 
-        },
+				// pin houseovers to map
+				methods.pinHouseovers.call(
+					this,
+					wntMapContainer,
+					houseoverData,
+					options.houseoverIcon
+				);
 
-        addHouseOver : function(args) {
-            return this.each(function() {
-                var lat         = args[0];
-                var lng         = args[1];
-                var propertyId  = args[2];
-                var propertyUrl = args[3]
-                var content     = args[4];
-                var houseIcon   = args[5];
-                var mapId       = args[6];
+				// size and fit map instance
+				methods.autoSizeMap.call(this,wntMapContainer);
 
-                var validLat = (!isNaN(lat) && (lat >= -180) && (lat <= 180));
-                var validLng = (!isNaN(lng) && (lng >= -180) && (lng <= 180));
+				// bind map auto size to window resize for all maps
+				$(window).resize(methods.responsiveMaps);
 
-                // Only add the POI if the coordinates are valid
-                if (validLat && validLng && ((lat !== 0) || (lng !== 0))) {
-                    var componentMap = $('#' + mapId).data('map');
-                    var houseoverIcon = componentMap.mapIcon(houseIcon,30,30);
-                    var houseover = componentMap.poi(lat, lng, houseoverIcon, content, propertyId, propertyUrl);
-                    componentMap.addPoi(houseover);
-                }
-            });
-        }
+			});
 
-    }
+		},
 
-    $.fn[pluginName] = function(method)
-    {
-        if (methods[method]) {
-            return methods[method].apply(this, Array.prototype.slice.call(arguments, 1));
 
-        }
-        else if (typeof method === 'object' || !method) {
-            return methods.init.apply( this, arguments );
+		// places houseover poi's on a map instance
+		pinHouseovers: function(wntMapContainer,houseoverData,icon) {
 
-        }
-        else {
-            $.error( 'Method ' +  method + ' does not exist on jQuery.' + pluginName );
+			var wntMap = wntMapContainer.data('map');
 
-        }
+			for (var i in houseoverData) {
 
-    }
+				var lat = houseoverData[i].lat;
+				var lng = houseoverData[i].lng;
+				var validLat = (!isNaN(lat) && (lat >= -180) && (lat <= 180));
+				var validLng = (!isNaN(lng) && (lng >= -180) && (lng <= 180));
 
+				// only add pin if coordinates are valid
+				if (validLat && validLng && ((lat !== 0) || (lng !== 0))) {
+
+					// build houseover icon object
+					var houseoverIcon = wntMap.mapIcon(icon,20,20);
+
+					// build houseover as poi object
+					var houseover = wntMap.poi(
+						lat,
+						lng,
+						houseoverIcon,
+						houseoverData[i].content,
+						houseoverData[i].propertyId,
+						houseoverData[i].propertyUrl
+					);
+
+					// pin houseover poi to map
+					wntMap.addPoi(houseover);
+
+				}
+			}
+
+
+		},
+
+
+		// call autoSizeMap on each map instance
+		responsiveMaps: function() {
+			$('.wolfnet_wntMainMap').each(function() {
+				methods.autoSizeMap.call(this,$(this));
+			});
+		},
+
+
+		// resizes a map instance based on parent element width
+		autoSizeMap: function(wntMapContainer) {
+			var parentWidth = wntMapContainer.parent().width();
+			var wntMap = wntMapContainer.data('map');
+			var mapWidth = wntMap.getSize().width;
+			var mapHeight = wntMap.getSize().height;
+
+			// if mapWidth does not equal parentWidth, reset size
+			if (mapWidth != parentWidth) {
+				wntMap.setSize(parentWidth,mapHeight);
+			}
+
+			// fit map to listings
+			wntMap.bestFit();
+		}
+
+	}
+
+
+	$.fn[pluginName] = function(method)
+	{
+
+		if (methods[method]) {
+			return methods[method].apply(this, Array.prototype.slice.call(arguments, 1));
+		} else if (typeof method === 'object' || !method) {
+			return methods.init.apply( this, arguments );
+		} else {
+			$.error( 'Method ' +  method + ' does not exist on jQuery.' + pluginName );
+		}
+
+	}
 
 })(jQuery);

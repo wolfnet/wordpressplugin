@@ -268,7 +268,7 @@
 
         for (var i=0, l=data.length; i<l; i++) {
             houseoverHtml = getHouseoverHtml(data[i]);
-            var houseoverIcon = componentMap.mapIcon(houseIcon,30,30);
+            var houseoverIcon = componentMap.mapIcon(houseIcon,20,20);
             var houseover = componentMap.poi(data[i].geo.lat, data[i].geo.lng, houseoverIcon, houseoverHtml, data[i].property_id, data[i].property_url);
             componentMap.addPoi(houseover);
         }
