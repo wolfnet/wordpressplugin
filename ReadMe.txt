@@ -93,6 +93,9 @@ Please upgrade to the latest version of the plugin as we will be disabling our o
 
 == Changelog ==
 
+= 1.7.12 =
+* Fixes styling issue with property list widget
+
 = 1.7.11 =
 * Fixes issues with non-scalar values in API requests
 
