@@ -302,6 +302,9 @@ class Wolfnet_Views
             $args[$key] = apply_filters('wolfnet_propertyListView_' . $key, $item);
         }
 
+        // Ensure the styles for property list are used instead of listing grid styles.
+        $args['class'] = str_replace('wolfnet_listingGrid', 'wolfnet_propertyList', $args['class']);
+
         return apply_filters('wolfnet_propertyListView', $this->parseTemplate('propertyList', $args));
 
     }
