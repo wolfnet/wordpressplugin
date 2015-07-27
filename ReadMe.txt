@@ -102,6 +102,9 @@ Please upgrade to the latest version of the plugin as we will be disabling our o
 * Updates to better handle multiple map instances on a page
 * Fixes issue with chrome showing vertical scroll bar.
 
+= 1.7.12 =
+* Fixes styling issue with property list widget
+
 = 1.7.11 =
 * Fixes issues with non-scalar values in API requests
 
