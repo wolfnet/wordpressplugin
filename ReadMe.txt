@@ -93,6 +93,9 @@ Please upgrade to the latest version of the plugin as we will be disabling our o
 
 == Changelog ==
 
+= 1.7.11 =
+* Fixes issues with non-scalar values in API requests
+
 = 1.7.10 =
 * Fixes bug introduced with last version that impacted widgets
 
