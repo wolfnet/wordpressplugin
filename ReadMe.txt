@@ -93,6 +93,15 @@ Please upgrade to the latest version of the plugin as we will be disabling our o
 
 == Changelog ==
 
+= 1.8.0 =
+* Updates to make components more 'responsive'.
+* Improvements to the listing grid JS - These updates eliminate the "jump" bug that occurs when resizing the listing grid. This update also improves the overall performance of resizing the listing grid.
+* Updates style and structure of the Property List without changing any functionality. These updates removed the JS previously used to support the Property List and instead rely on CSS for everything.
+* Various JS improvements and optimizations
+* Various map improvements including updating resize functionality
+* Updates to better handle multiple map instances on a page
+* Fixes issue with chrome showing vertical scroll bar.
+
 = 1.7.11 =
 * Fixes issues with non-scalar values in API requests
 
