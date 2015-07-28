@@ -480,7 +480,7 @@
         {
             width:100%;
             clear:both;
-            height:2em;
+            line-height: 2em;
 
             &.wolfnet_toolbarTop {
                 margin:2em 0 1.75em 0;
@@ -493,8 +493,7 @@
 
             .wolfnet_page_nav
             {
-                display:inline-block;
-                width:20%;
+                display:block;
                 white-space:nowrap;
 
                 &.wolfnet_page_nav_prev
@@ -522,8 +521,8 @@
 
             .wolfnet_page_info
             {
-                display:inline-block;
-                float:left;
+                display:block;
+                width: 100%;
                 text-align:center;
 
                 .wolfnet_page_items
@@ -542,7 +541,11 @@
                 {
                     white-space:nowrap;
                     display:inline-block;
-                    padding-right:1em;
+
+                    select {
+                        margin-right:.25em;
+                    }
+
                 }
 
                 .wolfnet_sortoptions
@@ -550,24 +553,6 @@
                     display:inline-block;
                 }
 
-            }
-
-        }
-
-        &.wolfnet_withPagination {
-
-            .wolfnet_page_info
-            {
-                width:60%;
-            }
-
-        }
-
-        /* If the toolbar has both pagination and sorting tools give it a little extra height. */
-        &.wolfnet_withPagination.wolfnet_withSortOptions {
-
-            .wolfnet_toolbar {
-                height:3em;
             }
 
         }
