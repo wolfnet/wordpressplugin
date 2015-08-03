@@ -93,6 +93,11 @@ Please upgrade to the latest version of the plugin as we will be disabling our o
 
 == Changelog ==
 
+= 1.7.13 =
+* Fixes bug causing sort drop down to display when no listing are returned.
+* Fixes issue with agent/office display
+* Fixes issue with exact city defaults
+
 = 1.7.12 =
 * Fixes styling issue with property list widget
 
