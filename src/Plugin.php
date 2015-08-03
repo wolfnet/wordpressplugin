@@ -1317,7 +1317,7 @@ class Wolfnet_Plugin
             'direction'  => 'left',
             'autoplay'   => true,
             'speed'      => 5,
-            'ownertype'  => 'agent_broker', 'owner_type' => 'agent_broker',
+            'ownertype'  => 'agent_broker',
             'maxresults' => 50,
             'numrows'    => 50,
             'startrow'   => 1,
