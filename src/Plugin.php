@@ -1621,7 +1621,7 @@ class Wolfnet_Plugin
             'savedsearch' => '',
             'zipcode'     => '',
             'city'        => '',
-            'exactcity'   => 0,
+            'exactcity'   => null,
             'minprice'    => '',
             'maxprice'    => '',
             'keyid'       => 1,
@@ -1648,7 +1648,7 @@ class Wolfnet_Plugin
             'savedsearch' => '',
             'zipcode'     => '',
             'city'        => '',
-            'exactcity'   => 0,
+            'exactcity'   => null,
             'minprice'    => '',
             'maxprice'    => '',
             'keyid'       => 1,
@@ -1933,10 +1933,14 @@ class Wolfnet_Plugin
         // If multiple cities were selected we must set "exact_city" to false
         $hasCity = array_key_exists('city', $criteria);
         $hasExactCity = array_key_exists('exact_city', $criteria);
-        $hasMultipleCities = ($hasCity && count(explode(',', $criteria['city'])) > 0);
+        $hasMultipleCities = ($hasCity && count(explode(',', trim($criteria['city']))) > 1);
 
         if ($hasExactCity && $hasMultipleCities) {
             $criteria['exact_city'] = 0;
+        }
+
+        if ($criteria['exact_city'] === null || trim($criteria['exact_city']) === '') {
+            unset($criteria['exact_city']);
         }
 
         // Translate legacy "primary search type" criteria to API criteria
