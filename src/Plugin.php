@@ -1565,6 +1565,9 @@ class Wolfnet_Plugin
             $vars['wpMeta']['startrow'] = 1;
         }
 
+        $vars['wpMeta']['paginated'] = ($vars['wpMeta']['paginated'] === true || $vars['wpMeta']['paginated'] === 'true');
+        $vars['wpMeta']['sortoptions'] = ($vars['wpMeta']['sortoptions'] === true || $vars['wpMeta']['sortoptions'] === 'true');
+
         if ($vars['wpMeta']['paginated'] || $vars['wpMeta']['sortoptions']) {
             $vars['toolbarTop']    = $this->getToolbar($vars, 'wolfnet_toolbarTop ');
             $vars['toolbarBottom'] = $this->getToolbar($vars, 'wolfnet_toolbarBottom ');
