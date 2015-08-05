@@ -102,6 +102,15 @@ Please upgrade to the latest version of the plugin as we will be disabling our o
 * Updates to better handle multiple map instances on a page
 * Fixes issue with chrome showing vertical scroll bar.
 
+= 1.7.14 =
+* Prevents PHP notice from occurring on missing array key.
+* Fixes issue with very large branding images on listing grid.
+
+= 1.7.13 =
+* Fixes bug causing sort drop down to display when no listing are returned.
+* Fixes issue with agent/office display
+* Fixes issue with exact city defaults
+
 = 1.7.12 =
 * Fixes styling issue with property list widget
 

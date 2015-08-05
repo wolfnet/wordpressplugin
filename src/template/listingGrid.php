@@ -65,7 +65,7 @@ unset($wpMeta['key']);
     jQuery(function($){
         var instance = <?php echo "'#" . $instance_id . "';"; ?>
 
-        $(instance).wolfnetToolbar({
+        $(instance).filter('.wolfnet_withPagination,.wolfnet_withSortOptions').wolfnetToolbar({
              numrows          : <?php echo $wpMeta['maxrows'] . "\n"; ?>
             ,criteria         : <?php echo json_encode($wpMeta) . "\n"; ?>
             ,maxResults       : <?php echo $wpMeta['total_rows'] . "\n"; ?>
