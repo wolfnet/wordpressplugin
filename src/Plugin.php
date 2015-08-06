@@ -2367,7 +2367,7 @@ class Wolfnet_Plugin
             $listing['bedsbaths_full'] = '';
 
             if (is_numeric($listing['total_bedrooms'])) {
-                $listing['bedsbaths_full'] .= $listing['total_bedrooms'] . ' Bed Rooms';
+                $listing['bedsbaths_full'] .= $listing['total_bedrooms'] . ' Bedrooms';
             }
 
             if (is_numeric($listing['total_bedrooms']) && is_numeric($listing['total_baths'])) {
@@ -2375,7 +2375,7 @@ class Wolfnet_Plugin
             }
 
             if (is_numeric($listing['total_baths'])) {
-                $listing['bedsbaths_full'] .= $listing['total_baths'] . ' Bath Rooms';
+                $listing['bedsbaths_full'] .= $listing['total_baths'] . ' Bathrooms';
             }
 
             $listing['address'] = $listing['display_address'];

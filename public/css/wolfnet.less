@@ -349,20 +349,52 @@
                 font-size: 1.2em;
                 font-weight: bold;
                 display:     block;
+                white-space: nowrap;
+                text-overflow: ellipsis;
+                overflow: hidden;
             }
 
             .wolfnet_location,
             .wolfnet_address
             {
                 display: block;
+                line-height: 1.3em;
             }
 
             .wolfnet_bed_bath
             {
                 display: block;
-                position: absolute;
-                top:      @imageHeight + 30px;
-                right:    0;
+                font-size: .8em;
+                font-style: italic;
+                line-height: 1em;
+                margin-bottom: .75em;
+
+                .wolfnet_label
+                {
+                    display: none;
+                }
+
+                .wolfnet_beds
+                {
+                    display: inline-block;
+                    margin-right: 1em;
+
+                    &:before {
+                        content: "Beds: ";
+                    }
+
+                }
+
+                .wolfnet_baths
+                {
+                    display: inline-block;
+
+                    &:before {
+                        content: "Baths: ";
+                    }
+
+                }
+
             }
 
             .wolfnet_branding
@@ -649,7 +681,8 @@
             .wolfnet_branding
             {
                 display: block;
-                padding-top: 2em;
+                padding-top: 1.5em;
+                font-size: .8em;
 
                 .wolfnet_brokerLogo
                 {
