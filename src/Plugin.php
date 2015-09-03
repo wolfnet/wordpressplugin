@@ -1970,18 +1970,28 @@ class Wolfnet_Plugin
         }
 
         // Translate legacy "owner type" criteria to API criteria
+        // agent_only, office_only, and agent_office_only are legacy cases.
         if (array_key_exists('owner_type', $criteria)) {
             switch ($criteria['owner_type']) {
 
                 case 'agent':
                     $criteria['agent_only'] = 1;
                     break;
+                case 'agent_only':
+                    $criteria['agent_only'] = 1;
+                    break;
 
                 case 'broker':
                     $criteria['office_only'] = 1;
                     break;
+                case 'office_only':
+                    $criteria['office_only'] = 1;
+                    break;
 
                 case 'agent_broker':
+                    $criteria['agent_office_only'] = 1;
+                    break;
+                case 'agent_office_only':
                     $criteria['agent_office_only'] = 1;
                     break;
 
