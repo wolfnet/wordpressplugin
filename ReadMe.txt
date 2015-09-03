@@ -93,6 +93,15 @@ Please upgrade to the latest version of the plugin as we will be disabling our o
 
 == Changelog ==
 
+= 1.8.0 =
+* Updates to make components more 'responsive'.
+* Improvements to the listing grid JS - These updates eliminate the "jump" bug that occurs when resizing the listing grid. This update also improves the overall performance of resizing the listing grid.
+* Updates style and structure of the Property List without changing any functionality. These updates removed the JS previously used to support the Property List and instead rely on CSS for everything.
+* Various JS improvements and optimizations
+* Various map improvements including updating resize functionality
+* Updates to better handle multiple map instances on a page
+* Fixes issue with chrome showing vertical scroll bar.
+
 = 1.7.14 =
 * Prevents PHP notice from occurring on missing array key.
 * Fixes issue with very large branding images on listing grid.
@@ -440,8 +449,6 @@ We would like to thank the following projects as they have been a big part of cr
 * **[jQuery](http://jquery.com)**
 * **[Vagrant](http://vagrantup.com)**
 * **[Less CSS](http://lesscss.org)**
-* **jQuery SmoothDivScroll** by Thomas Kahn
 * **jQuery Tooltip** by Jörn Zaefferer
 * **jQuery imagesLoaded** by Paul Irish
-* **jQuery MouseWheel** by [Brandon Aaron](http://brandonaaron.net)
 * **[PHPUnit](http://phpunit.de)**

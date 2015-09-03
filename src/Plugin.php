@@ -282,12 +282,10 @@ class Wolfnet_Plugin
 
         // JavaScript
         $scripts = array(
-            'smooth-div-scroll',
             'wolfnet-scrolling-items',
             'wolfnet-quick-search',
             'wolfnet-listing-grid',
             'wolfnet-toolbar',
-            'wolfnet-property-list',
             'wolfnet-maptracks',
             'mapquest-api'
             );
@@ -1970,18 +1968,28 @@ class Wolfnet_Plugin
         }
 
         // Translate legacy "owner type" criteria to API criteria
+        // agent_only, office_only, and agent_office_only are legacy cases.
         if (array_key_exists('owner_type', $criteria)) {
             switch ($criteria['owner_type']) {
 
                 case 'agent':
                     $criteria['agent_only'] = 1;
                     break;
+                case 'agent_only':
+                    $criteria['agent_only'] = 1;
+                    break;
 
                 case 'broker':
                     $criteria['office_only'] = 1;
                     break;
+                case 'office_only':
+                    $criteria['office_only'] = 1;
+                    break;
 
                 case 'agent_broker':
+                    $criteria['agent_office_only'] = 1;
+                    break;
+                case 'agent_office_only':
                     $criteria['agent_office_only'] = 1;
                     break;
 
@@ -2369,7 +2377,7 @@ class Wolfnet_Plugin
             $listing['bedsbaths_full'] = '';
 
             if (is_numeric($listing['total_bedrooms'])) {
-                $listing['bedsbaths_full'] .= $listing['total_bedrooms'] . ' Bed Rooms';
+                $listing['bedsbaths_full'] .= $listing['total_bedrooms'] . ' Bedrooms';
             }
 
             if (is_numeric($listing['total_bedrooms']) && is_numeric($listing['total_baths'])) {
@@ -2377,7 +2385,7 @@ class Wolfnet_Plugin
             }
 
             if (is_numeric($listing['total_baths'])) {
-                $listing['bedsbaths_full'] .= $listing['total_baths'] . ' Bath Rooms';
+                $listing['bedsbaths_full'] .= $listing['total_baths'] . ' Bathrooms';
             }
 
             $listing['address'] = $listing['display_address'];
@@ -2617,10 +2625,18 @@ class Wolfnet_Plugin
             return $this->getWpError($data);
         }
 
-        $args['map_start_lat'] = $data['responseData']['data']['market']['maptracks']['map_start_lat'];
-        $args['map_start_lng'] = $data['responseData']['data']['market']['maptracks']['map_start_lng'];
-        $args['map_start_scale'] = $data['responseData']['data']['market']['maptracks']['map_start_scale'];
-        $args['houseoverIcon'] = $GLOBALS['wolfnet']->url . 'img/houseover.png';
+
+        $args['mapParams'] = array(
+    		'mapProvider'  => 'mapquest',
+    		'centerLat'    => $data['responseData']['data']['market']['maptracks']['map_start_lat'],
+			'centerLng'    => $data['responseData']['data']['market']['maptracks']['map_start_lng'],
+			'zoomLevel'    => $data['responseData']['data']['market']['maptracks']['map_start_scale'],
+			'houseoverIcon'=> $GLOBALS['wolfnet']->url . 'img/houseover.png',
+			'mapId'        => uniqid('wntMapTrack'),
+			'hideMapId'    => uniqid('hideMap'),
+			'showMapId'    => uniqid('showMap'),
+		);
+
         $args['houseoverData'] = $this->getHouseoverData(
             $listingsData,
             $data['responseData']['data']['resource']['searchResults']['allLayouts']['showBrokerReciprocityLogo']
@@ -2848,14 +2864,6 @@ class Wolfnet_Plugin
                 $this->url . 'js/jquery.imagesloaded.src.js',
                 array('jquery'),
                 ),
-            'mousewheeljs' => array(
-                $this->url . 'js/jquery.mousewheel.src.js',
-                array('jquery'),
-                ),
-            'smooth-div-scroll' => array(
-                $this->url . 'js/jquery.smoothDivScroll-1.2.src.js',
-                array('mousewheeljs', 'jquery-ui-core', 'jquery-ui-widget', 'jquery-effects-core'),
-                ),
             'wolfnet' => array(
                 $this->url . 'js/wolfnet.src.js',
                 array('jquery', 'tooltipjs'),
@@ -2866,7 +2874,7 @@ class Wolfnet_Plugin
                 ),
             'wolfnet-scrolling-items' => array(
                 $this->url . 'js/jquery.wolfnetScrollingItems.src.js',
-                array('smooth-div-scroll', 'wolfnet'),
+                array('wolfnet'),
                 ),
             'wolfnet-quick-search' => array(
                 $this->url . 'js/jquery.wolfnetQuickSearch.src.js',
@@ -2878,10 +2886,6 @@ class Wolfnet_Plugin
                 ),
             'wolfnet-toolbar' => array(
                 $this->url . 'js/jquery.wolfnetToolbar.src.js',
-                array('jquery', 'wolfnet'),
-                ),
-            'wolfnet-property-list' => array(
-                $this->url . 'js/jquery.wolfnetPropertyList.src.js',
                 array('jquery', 'wolfnet'),
                 ),
             'wolfnet-shortcode-builder' => array(
