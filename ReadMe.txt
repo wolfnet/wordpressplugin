@@ -93,6 +93,10 @@ Please upgrade to the latest version of the plugin as we will be disabling our o
 
 == Changelog ==
 
+= 1.7.15 =
+* Fixes missing legacy owner type values in featured listings requests.
+* Fixes empty geocode lat/lng issue on map.
+
 = 1.7.14 =
 * Prevents PHP notice from occurring on missing array key.
 * Fixes issue with very large branding images on listing grid.
