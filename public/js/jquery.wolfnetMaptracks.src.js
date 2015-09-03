@@ -2700,15 +2700,20 @@
                 var houseIcon   = args[5];
                 var mapId       = args[6];
 
-                var validLat = (!isNaN(lat) && (lat >= -180) && (lat <= 180));
-                var validLng = (!isNaN(lng) && (lng >= -180) && (lng <= 180));
+                // Only add pin if coordinates are valid
+				if (
+					((lat !== 0) || (lng !== 0)) &&
+					(!isNaN(lat) || !isNaN(lng)) &&
+					(lat !== '' || lng !== '') &&
+					((lat >= -180) && (lat <= 180)) &&
+					((lng >= -180) && (lng <= 180))
+				) {
 
-                // Only add the POI if the coordinates are valid
-                if (validLat && validLng && ((lat !== 0) || (lng !== 0))) {
                     var componentMap = $('#' + mapId).data('map');
                     var houseoverIcon = componentMap.mapIcon(houseIcon,30,30);
                     var houseover = componentMap.poi(lat, lng, houseoverIcon, content, propertyId, propertyUrl);
                     componentMap.addPoi(houseover);
+
                 }
             });
         }
