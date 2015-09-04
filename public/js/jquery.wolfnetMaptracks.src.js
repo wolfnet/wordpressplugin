@@ -2671,14 +2671,14 @@
 
 			return this.each(function() {
 
-				// build map
+				// Build map
 				var wntMaptracksMap = new MapTracks();
 				wntMaptracksMap.createMap(this);
 
 				var wntMapContainer = $('#' + options.mapId);
 				var houseoverData = options.houseoverData || [];
 
-				// pin houseovers to map
+				// Pin houseovers to map
 				methods.pinHouseovers.call(
 					this,
 					wntMapContainer,
@@ -2686,10 +2686,10 @@
 					options.houseoverIcon
 				);
 
-				// size and fit map instance
+				// Size and fit map instance
 				methods.autoSizeMap.call(this,wntMapContainer);
 
-				// bind map auto size to window resize for all maps
+				// Bind map auto size to window resize for all maps
 				$(window).resize(methods.responsiveMaps);
 
 			});
@@ -2697,7 +2697,7 @@
 		},
 
 
-		// places houseover poi's on a map instance
+		// Places houseover poi's on a map instance
 		pinHouseovers: function(wntMapContainer,houseoverData,icon) {
 
 			var wntMap = wntMapContainer.data('map');
@@ -2706,16 +2706,20 @@
 
 				var lat = houseoverData[i].lat;
 				var lng = houseoverData[i].lng;
-				var validLat = (!isNaN(lat) && (lat >= -180) && (lat <= 180));
-				var validLng = (!isNaN(lng) && (lng >= -180) && (lng <= 180));
 
-				// only add pin if coordinates are valid
-				if (validLat && validLng && ((lat !== 0) || (lng !== 0))) {
+                // Only add pin if coordinates are valid
+				if (
+					((lat !== 0) || (lng !== 0)) &&
+					(!isNaN(lat) || !isNaN(lng)) &&
+					(lat !== '' || lng !== '') &&
+					((lat >= -180) && (lat <= 180)) &&
+					((lng >= -180) && (lng <= 180))
+				) {
 
-					// build houseover icon object
+					// Build houseover icon object
 					var houseoverIcon = wntMap.mapIcon(icon,20,20);
 
-					// build houseover as poi object
+					// Build houseover as poi object
 					var houseover = wntMap.poi(
 						lat,
 						lng,
@@ -2725,7 +2729,7 @@
 						houseoverData[i].propertyUrl
 					);
 
-					// pin houseover poi to map
+					// Pin houseover poi to map
 					wntMap.addPoi(houseover);
 
 				}
@@ -2735,7 +2739,7 @@
 		},
 
 
-		// call autoSizeMap on each map instance
+		// Call autoSizeMap on each map instance
 		responsiveMaps: function() {
 			$('.wolfnet_wntMainMap').each(function() {
 				methods.autoSizeMap.call(this,$(this));
@@ -2743,19 +2747,19 @@
 		},
 
 
-		// resizes a map instance based on parent element width
+		// Resizes a map instance based on parent element width
 		autoSizeMap: function(wntMapContainer) {
 			var parentWidth = wntMapContainer.parent().width();
 			var wntMap = wntMapContainer.data('map');
 			var mapWidth = wntMap.getSize().width;
 			var mapHeight = wntMap.getSize().height;
 
-			// if mapWidth does not equal parentWidth, reset size
+			// If mapWidth does not equal parentWidth, reset size
 			if (mapWidth != parentWidth) {
 				wntMap.setSize(parentWidth,mapHeight);
 			}
 
-			// fit map to listings
+			// Fit map to listings
 			wntMap.bestFit();
 		}
 
