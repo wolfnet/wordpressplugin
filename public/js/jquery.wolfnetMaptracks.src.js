@@ -2706,11 +2706,15 @@
 
 				var lat = houseoverData[i].lat;
 				var lng = houseoverData[i].lng;
-				var validLat = (!isNaN(lat) && (lat >= -180) && (lat <= 180));
-				var validLng = (!isNaN(lng) && (lng >= -180) && (lng <= 180));
 
-				// only add pin if coordinates are valid
-				if (validLat && validLng && ((lat !== 0) || (lng !== 0))) {
+                // Only add pin if coordinates are valid
+				if (
+					((lat !== 0) || (lng !== 0)) &&
+					(!isNaN(lat) || !isNaN(lng)) &&
+					(lat !== '' || lng !== '') &&
+					((lat >= -180) && (lat <= 180)) &&
+					((lng >= -180) && (lng <= 180))
+				) {
 
 					// build houseover icon object
 					var houseoverIcon = wntMap.mapIcon(icon,20,20);
