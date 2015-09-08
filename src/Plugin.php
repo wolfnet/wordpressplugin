@@ -798,13 +798,17 @@ class Wolfnet_Plugin
     {
 
         try {
-            $defaultAttributes = $this->getQuickSearchDefaults();
+            if(isset($_POST['submit'])) {
+                $this->routeQuickSearch();
+            } else {
+                $defaultAttributes = $this->getQuickSearchDefaults();
 
-            $criteria = array_merge($defaultAttributes, (is_array($attrs)) ? $attrs : array());
+                $criteria = array_merge($defaultAttributes, (is_array($attrs)) ? $attrs : array());
 
-            $this->decodeCriteria($criteria);
+                $this->decodeCriteria($criteria);
 
-            $out = $this->quickSearch($criteria);
+                $out = $this->quickSearch($criteria);
+            }
 
         } catch (Wolfnet_Exception $e) {
             $out = $this->displayException($e);
@@ -1678,6 +1682,7 @@ class Wolfnet_Plugin
             'keyid'     => '',
             'keyids'    => '',
             'view'      => '',
+            'routing'   => '',
             );
 
     }
@@ -1690,6 +1695,50 @@ class Wolfnet_Plugin
         return $options;
 
     }
+
+
+    public function routeQuickSearch() {
+        /*
+         * Loop over each key and get the number of matching listings for each.
+         * We'll save the key with the highest number of matches so we can route
+         * to the site associated with that key.
+         */
+        $highestCount = 0;
+        $highestMatchKey = '';
+
+        foreach (explode(',', $_POST['keyids']) as $keyID) {
+            try {
+                $key = $this->getProductKeyById($keyID);
+
+                $listings = $this->apin->sendRequest($key, '/listing', 'GET', $_POST);
+                $count = $listings['responseData']['data']['total_rows'];
+
+                if($count > $highestCount) {
+                    $highestCount = $count;
+                    $highestMatchKey = $key;
+                }
+            } catch (Wolfnet_Exception $e) {
+                echo $this->displayException($e);
+            }
+        }
+
+        /*
+         * Route to the site associated with key determined above.
+        */
+        $baseUrl = $this->getBaseUrl($highestMatchKey);
+        $this->redirectQuickSearch($baseUrl, $_POST);
+    }
+
+
+    public function redirectQuickSearch($url, array $params = array()) {
+        $redirect = $url . "?";
+        foreach($params as $key => $param) {
+            $redirect .= $key . "=" . $param . "&";
+        }
+        
+        wp_redirect($redirect);
+        die;
+    }   
 
 
     /**

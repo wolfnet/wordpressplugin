@@ -68,6 +68,20 @@
                 </table>
         	</td>
         </tr>
+        <tr>
+            <td><label>Routing</label></td>
+            <td>
+                <select id="<?php echo $routing_wpid; ?>" name="<?php echo $routing_wpname; ?>" >
+                    <option value="auto" <?php echo ($routing == "auto" ? 'selected="selcted"': "") ?>>Auto</option>
+                    <option value="manual" <?php echo ($routing == "manual" ? 'selected="selcted"': "") ?>>Manual</option>
+                </select>
+                <span class="wolfnet_moreInfo">
+                    Auto routing will automatically send users to your IDX solution that has the most
+                    matching listings for their search criteria. Manual routing will require the 
+                    user to select which if your IDX solutions to search on.
+                </span>
+            </td>   
+        </tr>
     	<?php endif; ?>
     </table>
     <span class="validate_msg"></span>
@@ -126,27 +140,27 @@
         // add to .keyids of this form only
         //form.find(".keyids")
 
-        // $("button[type=submit]").click(function() {
-        <?php // if(count($markets) > 1): ?>
-        //     var productkeys = $(".productkey:checked");
-        //     if(productkeys.length == 0 && !$("#all").is(":checked")) {
-        //         alert("Please select a market for your quick search.");
-        //         return false;
-        //     } else {
-        //         if($("#all").is(":checked")) {
-        //             // Use all key IDs.
-        //            // $("#keyids").val('<?php // echo implode(",", $keyids); ?>');
-        //         } else {
-        //             // Get selected key IDs.
-        //             var idArray = [];
-        //             $(productkeys).each(function() {
-        //                 idArray.push($(this).val());
-        //             });
-        //             $("#keyids").val(idArray.join(","));
-        //         }
-        //     }
-        <?php // endif; ?>
-        // });
+        $("button[type=submit]").click(function() {
+        <?php if(count($markets) > 1): ?>
+            var productkeys = $(".productkey:checked");
+            if(productkeys.length == 0 && !$("#all").is(":checked")) {
+                alert("Please select a market for your quick search.");
+                return false;
+            } else {
+                if($("#all").is(":checked")) {
+                    // Use all key IDs.
+                   $("#keyids").val('<?php echo implode(",", $keyids); ?>');
+                } else {
+                    // Get selected key IDs.
+                    var idArray = [];
+                    $(productkeys).each(function() {
+                        idArray.push($(this).val());
+                    });
+                    $("#keyids").val(idArray.join(","));
+                }
+            }
+        <?php endif; ?>
+        });
     });
 
 </script>
