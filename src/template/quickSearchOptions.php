@@ -22,9 +22,17 @@
 
 ?>
 
+<?php
+    $keyids = [];
+    foreach($markets as $market) {
+        array_push($keyids, $market->id);
+    }
+    $jsKeyids = json_encode($keyids);
+?>
+
 <div id="<?php echo $instance_id; ?>" class="wolfnet_quickSearchOptions">
     <?php if(count($markets) > 1): ?>
-	<input type="hidden" id="<?php echo $keyids_wpid; ?>" class="keyids" name="<?php echo $keyids_wpname; ?>" value="<?php echo $keyids; ?><?php // echo $markets[0]->id; ?>" />
+	<input type="hidden" id="<?php echo $keyids_wpid; ?>" class="keyids" name="<?php echo $keyids_wpname; ?>" value="<?php echo implode(",", $keyids); ?>" />
     <?php endif; ?>
 
     <table class="form-table">
@@ -41,11 +49,8 @@
                 </select>
             </td>
         </tr>
-        <?php if(count($markets) > 1): 
-            $keyids = explode(",", $keyids); 
-            if ((count($keyids) < 1 ) || !$keyids[0]) $keyids[0] = 1;
-            $jsKeyids = json_encode($keyids);
-        ?>
+
+        <?php if(count($markets) > 1): ?>
         <tr>
         	<td><label>Market:</label></td>
         	<td>
@@ -137,8 +142,6 @@
             }
         }
         <?php endif; ?>
-        // add to .keyids of this form only
-        //form.find(".keyids")
 
         $("button[type=submit]").click(function() {
         <?php if(count($markets) > 1): ?>
