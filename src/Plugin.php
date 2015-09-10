@@ -798,17 +798,13 @@ class Wolfnet_Plugin
     {
 
         try {
-            if(isset($_POST['submit'])) {
-                $this->routeQuickSearch();
-            } else {
-                $defaultAttributes = $this->getQuickSearchDefaults();
+            $defaultAttributes = $this->getQuickSearchDefaults();
 
-                $criteria = array_merge($defaultAttributes, (is_array($attrs)) ? $attrs : array());
+            $criteria = array_merge($defaultAttributes, (is_array($attrs)) ? $attrs : array());
 
-                $this->decodeCriteria($criteria);
+            $this->decodeCriteria($criteria);
 
-                $out = $this->quickSearch($criteria);
-            }
+            $out = $this->quickSearch($criteria);
 
         } catch (Wolfnet_Exception $e) {
             $out = $this->displayException($e);
@@ -1305,6 +1301,24 @@ class Wolfnet_Plugin
     }
 
 
+    public function remoteRouteQuickSearch() 
+    {
+        try {
+            $response = $this->routeQuickSearch($_REQUEST['formData']);
+        } catch (Wolfnet_Exception $e) {
+            status_header(500);
+
+            $response = array(
+                'message' => $e->getMessage(),
+                'data' => $e->getData(),
+            );
+
+        }
+
+        wp_send_json($response);
+    }
+
+
     /* Data ************************************************************************************* */
     /*  _                                                                                         */
     /* | \  _. _|_  _.                                                                            */
@@ -1697,7 +1711,8 @@ class Wolfnet_Plugin
     }
 
 
-    public function routeQuickSearch() {
+    public function routeQuickSearch($formData) 
+    {
         /*
          * Loop over each key and get the number of matching listings for each.
          * We'll save the key with the highest number of matches so we can route
@@ -1706,11 +1721,11 @@ class Wolfnet_Plugin
         $highestCount = 0;
         $highestMatchKey = '';
 
-        foreach (explode(',', $_POST['keyids']) as $keyID) {
+        foreach (explode(',', $formData['keyids']) as $keyID) {
             try {
                 $key = $this->getProductKeyById($keyID);
 
-                $listings = $this->apin->sendRequest($key, '/listing', 'GET', $_POST);
+                $listings = $this->apin->sendRequest($key, '/listing', 'GET', $formData);
                 $count = $listings['responseData']['data']['total_rows'];
 
                 if($count > $highestCount) {
@@ -1726,19 +1741,14 @@ class Wolfnet_Plugin
          * Route to the site associated with key determined above.
         */
         $baseUrl = $this->getBaseUrl($highestMatchKey);
-        $this->redirectQuickSearch($baseUrl, $_POST);
-    }
-
-
-    public function redirectQuickSearch($url, array $params = array()) {
-        $redirect = $url . "?";
-        foreach($params as $key => $param) {
+        
+        $redirect = $baseUrl . "?";
+        foreach($formData as $key => $param) {
             $redirect .= $key . "=" . $param . "&";
         }
         
-        wp_redirect($redirect);
-        die;
-    }   
+        return $redirect;
+    } 
 
 
     /**
@@ -2241,10 +2251,9 @@ class Wolfnet_Plugin
             'wolfnet_listings'                => 'remoteListings',
             'wolfnet_get_listings'            => 'remoteListingsGet',
             'wolfnet_css'                     => 'remotePublicCss',
-            'wolfnet_price_range'             => 'remotePriceRange',
             'wolfnet_market_name'             => 'remoteGetMarketName',
             'wolfnet_map_enabled'             => 'remoteMapEnabled',
-            'wolfnet_base_url'                => 'remoteGetBaseUrl',
+            'wolfnet_price_range'             => 'remotePriceRange',
             );
 
         foreach ($ajxActions as $action => $method) {
@@ -2262,6 +2271,27 @@ class Wolfnet_Plugin
     /* |_|   |_|  |_| \_/ \__,_|\__\___| |_|  |_|\___|\__|_| |_|\___/ \__,_|___/                  */
     /*                                                                                            */
     /* ****************************************************************************************** */
+
+    private function registerAjaxActions()
+    {
+        $ajxActions = array(
+            'wolfnet_content'           => 'remoteContent',
+            'wolfnet_content_header'    => 'remoteContentHeader',
+            'wolfnet_content_footer'    => 'remoteContentFooter',
+            'wolfnet_listings'          => 'remoteListings',
+            'wolfnet_get_listings'      => 'remoteListingsGet',
+            'wolfnet_css'               => 'remotePublicCss',
+            'wolfnet_base_url'          => 'remoteGetBaseUrl',
+            'wolfnet_price_range'       => 'remotePriceRange',
+            'wolfnet_route_quicksearch' => 'remoteRouteQuickSearch',
+            );
+
+        foreach ($ajxActions as $action => $method) {
+            $this->addAction('wp_ajax_nopriv_' . $action, array(&$this, $method));
+        }
+
+    }
+
 
     private function isSavedKey($find)
     {
@@ -3007,24 +3037,6 @@ class Wolfnet_Plugin
 
             call_user_func_array('wp_register_style', $params);
 
-        }
-
-    }
-
-
-    private function registerAjaxActions()
-    {
-        $ajxActions = array(
-            'wolfnet_content'           => 'remoteContent',
-            'wolfnet_content_header'    => 'remoteContentHeader',
-            'wolfnet_content_footer'    => 'remoteContentFooter',
-            'wolfnet_listings'          => 'remoteListings',
-            'wolfnet_get_listings'      => 'remoteListingsGet',
-            'wolfnet_css'               => 'remotePublicCss',
-            );
-
-        foreach ($ajxActions as $action => $method) {
-            $this->addAction('wp_ajax_nopriv_' . $action, array(&$this, $method));
         }
 
     }

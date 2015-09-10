@@ -255,19 +255,46 @@ if ( typeof jQuery != 'undefined' ) {
 	                }
 	            },
 	            success: function ( data ) {
-	                var options = buildPriceDropdownOptions(data);
+	                var minOptions = buildPriceDropdownOptions(data['min_price']['options']);
+	                var maxOptions = buildPriceDropdownOptions(data['max_price']['options']);
 	                $('[name=min_price],[name=max_price]').html('');
 	                $('[name=max_price]').append($('<option />').attr('value', '').html('Max. Price'));
 	                $('[name=min_price]').append($('<option />').attr('value', '').html('Min. Price'));
-	                $(options).each(function() {
-	                    $('[name=min_price],[name=max_price]').append(this);
+	                $(minOptions).each(function() {
+	                    $('[name=min_price]').append(this);
+	                });
+	                $(maxOptions).each(function() {
+	                    $('[name=max_price]').append(this);
 	                });
 	            }
 	        } );
 		}
 
-		var buildPriceDropdownOptions = function(data) 
-        {
+		$.fn.routeQuickSearch = function(formData) {
+			var data = {};
+			for(var i = 0; i < formData.length; i++) {
+				data[formData[i]['name']] = formData[i]['value'];
+			}
+
+			$.ajax( {
+	            url: wolfnet_ajax.ajaxurl,
+	            data: { action:'wolfnet_route_quicksearch', formData:data },
+	            dataType: 'json',
+	            type: 'GET',
+	            cache: false,
+	            timeout: 2500,
+	            statusCode: {
+	                404: function () {
+	                    commFailure();
+	                }
+	            },
+	            success: function ( data ) {
+	            	window.location.href = data;
+	            }
+	        } );
+        }
+
+		var buildPriceDropdownOptions = function(data) {
             var options = [];
             $(data).each(function() {
                 options.push(

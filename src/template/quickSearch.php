@@ -32,20 +32,13 @@
     /*
         The form action below will get generated automatically upon market selection if
         the routing type == "manual" (eee JS at bottom of file). Otherwise, this page will 
-        need to post to itself and the plugin can handle routing to the correct search solution 
-        based on the number of search results. See scQuickSearch() in Plugin.php for details.
-        DO NOT add an action to the below form tag unless you're changing this functionality.
+        use an ajax call to get the correct action to post to. If there is only one market
+        then the action will get set to that.
     */
-
-    if($routing == 'manual') {
-        $method = "get";
-    } else {
-        $method = "post";
-    }
     ?>
     <form id="<?php echo $instance_id; ?>_quickSearchForm" class="wolfnet_quickSearch_form"
-        name="<?php echo $instance_id; ?>_quickSearchForm" method="<?php echo $method; ?>" 
-        action="">
+        name="<?php echo $instance_id; ?>_quickSearchForm" method="get" 
+        action="<?php echo $formAction; ?>">
 
         <input name="action" type="hidden" value="newsearchsession" />
         <input name="submit" type="hidden" value="Search" />
@@ -158,6 +151,7 @@
         $('#<?php echo $instance_id; ?>').wolfnetQuickSearch();
 
         <?php if(count($keyids) > 1 && $routing == 'manual'): ?>
+
         // Disable fields until market is selected.
         if(!$("[name=market]").is(':checked')) {
             $.fn.toggleQuickSearchFields(true);
@@ -167,6 +161,14 @@
             $.fn.toggleQuickSearchFields(false);
             $.fn.rebuildQuickSearchOptions($(this).val());
         });
+
+        <?php elseif(count($keyids) > 1 && $routing == 'auto'): ?>
+
+        $('#<?php echo $instance_id; ?>_quickSearchForm').submit(function(event) {
+            event.preventDefault();
+            $.fn.routeQuickSearch($(event.srcElement).serializeArray());
+        });
+
         <?php endif; ?>
     });
 
