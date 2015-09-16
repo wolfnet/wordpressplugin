@@ -1362,17 +1362,9 @@ class Wolfnet_Plugin
 
     public function featuredListings(array $criteria)
     {
+        $key = $this->getCriteriaKey($criteria);
 
-        // Maintain backwards compatibility if there is no keyid in the shortcode.
-        if (!array_key_exists('keyid', $criteria) || $criteria['keyid'] == '') {
-            $criteria['keyid'] = 1;
-        }
-
-        if (!array_key_exists('key', $criteria) || $criteria['key'] == '') {
-            $criteria['key'] = $this->getDefaultProductKey();
-        }
-
-        if (!$this->isSavedKey($this->getProductKeyById($criteria['keyid']))) {
+        if (!$this->isSavedKey($key)) {
             return false;
         }
 
@@ -1383,12 +1375,12 @@ class Wolfnet_Plugin
         $qdata = $this->prepareListingQuery($criteria);
 
         try {
-            $data = $this->apin->sendRequest($criteria['key'], '/listing', 'GET', $qdata);
+            $data = $this->apin->sendRequest($key, '/listing', 'GET', $qdata);
         } catch (Wolfnet_Exception $e) {
             return $this->displayException($e);
         }
 
-        $this->augmentListingsData($data, $criteria['key']);
+        $this->augmentListingsData($data, $key);
 
         $listingsData = array();
 
@@ -1409,7 +1401,7 @@ class Wolfnet_Plugin
         }
 
         $_REQUEST['wolfnet_includeDisclaimer'] = true;
-        $_REQUEST[$this->requestPrefix.'productkey'] = $this->getProductKeyById($criteria['keyid']);
+        $_REQUEST[$this->requestPrefix.'productkey'] = $key;
 
         // Keep a running array of product keys so we can output all necessary disclaimers
         if (!array_key_exists('keyList', $_REQUEST)) {
@@ -1469,17 +1461,9 @@ class Wolfnet_Plugin
      */
     public function listingGrid(array $criteria, $layout = 'grid')
     {
+        $key = $this->getCriteriaKey($criteria);
 
-        // Maintain backwards compatibility if there is no keyid in the shortcode.
-        if (!array_key_exists('keyid', $criteria) || $criteria['keyid'] == '') {
-            $criteria['keyid'] = 1;
-        }
-
-        if (!array_key_exists('key', $criteria) || $criteria['key'] == '') {
-            $criteria['key'] = $this->getDefaultProductKey();
-        }
-
-        if (!$this->isSavedKey($this->getProductKeyById($criteria['keyid']))) {
+        if (!$this->isSavedKey($key)) {
             return false;
         }
 
@@ -1490,18 +1474,18 @@ class Wolfnet_Plugin
         $qdata = $this->prepareListingQuery($criteria);
 
         try {
-            $data = $this->apin->sendRequest($criteria['key'], '/listing', 'GET', $qdata);
+            $data = $this->apin->sendRequest($key, '/listing', 'GET', $qdata);
         } catch (Wolfnet_Exception $e) {
             return $this->displayException($e);
         }
 
         // add some elements to the array returned by the API
         // wpMeta should contain any criteria or other setting which do not come from the API
-        $data['wpMeta']   = $criteria;
+        $data['wpMeta'] = $criteria;
 
         $data['wpMeta']['total_rows'] = $data['responseData']['data']['total_rows'];
 
-        $this->augmentListingsData($data, $criteria['key']);
+        $this->augmentListingsData($data, $key);
 
         $listingsData = array();
 
@@ -1532,7 +1516,7 @@ class Wolfnet_Plugin
             $_REQUEST['wolfnet_includeDisclaimer'] = true;
         }
 
-        $_REQUEST[$this->requestPrefix.'productkey'] = $this->getProductKeyById($criteria['keyid']);
+        $_REQUEST[$this->requestPrefix.'productkey'] = $key;
 
         // Keep a running array of product keys so we can output all necessary disclaimers
         if (!array_key_exists('keyList', $_REQUEST)) {
@@ -1552,7 +1536,7 @@ class Wolfnet_Plugin
             'wpMeta'             => $data['wpMeta'],
             'title'              => $data['wpMeta']['title'],
             'class'              => $criteria['class'],
-            'mapEnabled'         => $this->getMaptracksEnabled($data['wpMeta']['key']),
+            'mapEnabled'         => $this->getMaptracksEnabled($key),
             'map'                => '',
             'maptype'            => $data['wpMeta']['maptype'],
             'hideListingsTools'  => '',
@@ -2290,6 +2274,23 @@ class Wolfnet_Plugin
             $this->addAction('wp_ajax_nopriv_' . $action, array(&$this, $method));
         }
 
+    }
+
+
+    private function getCriteriaKey(&$criteria)
+    {
+        $key = '';
+
+        // Maintain backwards compatibility if there is no keyid in the shortcode.
+        if (!array_key_exists('keyid', $criteria) || $criteria['keyid'] == '') {
+            $key = $this->getDefaultProductKey();
+        } else {
+            $key = $this->getProductKeyById($criteria['keyid']);
+        }
+
+        $criteria['key'] = $key;
+
+        return $key;
     }
 
 
