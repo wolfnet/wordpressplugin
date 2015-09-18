@@ -2,7 +2,7 @@
 
 /**
  *
- * @title         agentPages.php
+ * @title         agentPagesListAgents.php
  * @copyright     Copyright (c) 2012, 2013, WolfNet Technologies, LLC
  *
  *                This program is free software; you can redistribute it and/or
@@ -22,10 +22,13 @@
 
 ?>
 
-<div id="<?php echo $instance_id; ?>" class="wolfnet_widget wolfnet_agentPages">
+<?php
+	foreach($agents as $agent) {
+		var_dump($agent);
+		die;
+	}
+?>
 
-    <?php if (trim($title) != '') { ?>
-        <h2 class="wolfnet_widgetTitle"><?php echo $title; ?></h2>
-    <?php } ?>
+<div id="<?php echo $instance_id; ?>" class="wolfnet_widget wolfnet_agentsList">
 
 </div>

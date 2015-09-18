@@ -740,7 +740,7 @@ class Wolfnet_Plugin
 
             $this->decodeCriteria($criteria);
 
-            $out = $this->agentPages($criteria);
+            $out = $this->agentPageHandler($criteria);
 
         } catch (Wolfnet_Exception $e) {
             $out = $this->displayException($e);
@@ -1387,7 +1387,7 @@ class Wolfnet_Plugin
     }
 
 
-    public function agentPages(array $criteria = array()) 
+    public function agentPageHandler(array $criteria = array()) 
     {
         $key = $this->getCriteriaKey($criteria);
 
@@ -1395,13 +1395,10 @@ class Wolfnet_Plugin
             return false;
         }
 
-        try {
-            $data = $this->apin->sendRequest($key, '/agent', 'GET', $criteria);
-            var_dump($data['responseData']['data']);
-            die;
-        } catch (Wolfnet_Exception $e) {
-            return $this->displayException($e);
-        }
+        $agentHandler = $this->ioc->get('Wolfnet_AgentPagesHandler');
+        $agentHandler->setKey($key);
+        $agentHandler->setCriteria($criteria);
+        $agentHandler->handleRequest();
     }
 
 

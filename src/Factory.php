@@ -119,6 +119,12 @@ class Wolfnet_Factory
     }
 
 
+    private function getWolfnet_AgentPagesHandler()
+    {
+        return new Wolfnet_AgentPagesHandler();
+    }
+
+
     private function getWolfnet_Views()
     {
         return new Wolfnet_Views();
