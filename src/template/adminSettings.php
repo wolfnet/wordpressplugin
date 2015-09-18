@@ -81,13 +81,11 @@
                     </td>
                 </tr>
 
-                <?php /*
                 <tr>
                     <td>
                         <input type="button" id="wolfnet_addKey" value="<?php _e('Add Product Key'); ?>" />
                     </td>
                 </tr>
-                */ ?>
 
                 <tr valign="top">
                     <td>
