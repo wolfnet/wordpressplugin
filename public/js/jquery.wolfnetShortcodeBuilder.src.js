@@ -43,34 +43,39 @@ jQuery(function($){
     var $currentPage   = null;
     var $loader        = null;
     var menuItems      = {
+        'agent' : {
+            title:'Agent Pages',
+            action:'wolfnet_scb_options_agent',
+            shortcode:'wnt_agent'
+        },
         'feat' : {
             title:'Featured Listings',
             action:'wolfnet_scb_options_featured',
             shortcode:'wnt_featured'
-            },
+        },
         'grid' : {
             title:'Listing Grid',
             action:'wolfnet_scb_options_grid',
             shortcode:'wnt_grid'
-            },
+        },
         'list' : {
             title:'Property List',
             action:'wolfnet_scb_options_list',
             shortcode:'wnt_list'
-            },
+        },
         /*  Removing until requirements for this component are better fleshed out
         'summ' : {
             title:'Results Summary',
             action:'wolfnet_scb_results_summary',
             shortcode:'wnt_results'
-            },
+        },
         */
         'srch' : {
             title:'Quick Search',
             action:'wolfnet_scb_options_quicksearch',
             shortcode:'wnt_search'
-            }
-        };
+        }
+    };
 
 
     var createBuilderDialog = function (options)

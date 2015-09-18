@@ -184,13 +184,35 @@ class Wolfnet_Views
     }
 
 
+    public function agentPagesOptionsFormView(array $args = array())
+    {
+        $markets = json_decode($GLOBALS['wolfnet']->getProductKey());
+        $keyids = array();
+
+        foreach ($markets as $market) {
+            array_push($keyids, $market->id);
+        }
+
+        $defaultArgs = array(
+            'instance_id'     => str_replace('.', '', uniqid('wolfnet_agentPages_')),
+            'markets'         => $markets,
+            'keyids'          => $keyids
+        );
+
+        $args = array_merge($defaultArgs, $args);
+
+        return $this->parseTemplate('agentPagesOptions', $args);
+
+    }
+
+
     public function featuredListingsOptionsFormView(array $args = array())
     {
         $defaultArgs = array(
             'instance_id'     => str_replace('.', '', uniqid('wolfnet_featuredListing_')),
             'markets'         => json_decode($GLOBALS['wolfnet']->getProductKey()),
             'selectedKey'     => (array_key_exists('keyid', $_REQUEST)) ? $_REQUEST['keyid'] : '1',
-            );
+        );
 
         $args = array_merge($defaultArgs, $args);
 
@@ -205,7 +227,7 @@ class Wolfnet_Views
             'instance_id'      => str_replace('.', '', uniqid('wolfnet_listingGrid_')),
             'markets'          => json_decode($GLOBALS['wolfnet']->getProductKey()),
             'keyid'            => ''
-            );
+        );
 
         $args = array_merge($defaultArgs, $args);
 
@@ -231,7 +253,7 @@ class Wolfnet_Views
             'markets'     => $markets,
             'keyids'      => $keyids,
             'view'        => $view,
-            );
+        );
 
 
         $args = array_merge($defaultArgs, $args);
@@ -270,6 +292,17 @@ class Wolfnet_Views
         }
 
         return apply_filters('wolfnet_listingResultsView', $this->parseTemplate('resultsListing', $args));
+
+    }
+
+
+    public function agentPagesView(array $args = array())
+    {
+        foreach ($args as $key => $item) {
+            $args[$key] = apply_filters('wolfnet_agentPagesView_' . $key, $item);
+        }
+
+        return apply_filters('wolfnet_agentPagesView', $this->parseTemplate('agentPages', $args));
 
     }
 

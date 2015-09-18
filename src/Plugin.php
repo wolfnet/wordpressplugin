@@ -731,6 +731,24 @@ class Wolfnet_Plugin
     /*                                                                                            */
     /* ****************************************************************************************** */
 
+    public function scAgentPages($attrs) 
+    {
+        try {
+            $defaultAttributes = $this->getAgentPagesDefaults();
+
+            $criteria = array_merge($defaultAttributes, (is_array($attrs)) ? $attrs : array());
+
+            $this->decodeCriteria($criteria);
+
+            $out = $this->agentPages($criteria);
+
+        } catch (Wolfnet_Exception $e) {
+            $out = $this->displayException($e);
+        }
+
+        return $out;
+    }
+
     public function scFeaturedListings($attrs, $content = '')
     {
         try {
@@ -934,6 +952,28 @@ class Wolfnet_Plugin
         }
 
         wp_send_json($response);
+
+    }
+
+
+    public function remoteShortcodeBuilderOptionsAgent()
+    {
+
+        try {
+            $args = $this->getAgentPagesOptions();
+
+            $response = $this->views->agentPagesOptionsFormView($args);
+
+        } catch (Wolfnet_Exception $e) {
+            status_header(500);
+
+            $response = $this->displayException($e);
+
+        }
+
+        echo $response;
+
+        die;
 
     }
 
@@ -1309,6 +1349,56 @@ class Wolfnet_Plugin
     /* ****************************************************************************************** */
 
 
+    public function getAgentPagesDefaults()
+    {
+
+        return array(
+            'title' => '',
+            'keyid' => '',
+        );
+
+    }
+
+
+    public function getAgentPagesOptions($instance = null)
+    {
+        $options = $this->getOptions($this->getAgentPagesDefaults(), $instance);
+
+        return $options;
+
+    }
+
+
+    public function agentPages(array $criteria = array()) 
+    {
+        $key = '';
+
+        // TODO - change this to use the getCriteriaKey function once the 
+        // multi-key functionality gets merged into master.
+
+        // Maintain backwards compatibility if there is no keyid in the shortcode.
+        if (!array_key_exists('keyid', $criteria) || $criteria['keyid'] == '') {
+            $key = $this->getDefaultProductKey();
+        } else {
+            $key = $this->getProductKeyById($criteria['keyid']);
+        }
+
+        $criteria['key'] = $key;
+
+        if (!$this->isSavedKey($key)) {
+            return false;
+        }
+
+        try {
+            $data = $this->apin->sendRequest($key, '/agent', 'GET', $criteria);
+            var_dump($data['responseData']['data']);
+            die;
+        } catch (Wolfnet_Exception $e) {
+            return $this->displayException($e);
+        }
+    }
+
+
     public function getFeaturedListingsDefaults()
     {
 
@@ -1321,7 +1411,7 @@ class Wolfnet_Plugin
             'maxresults' => 50,
             'numrows'    => 50,
             'startrow'   => 1,
-            'keyid' => '',
+            'keyid'      => '',
             );
 
     }
@@ -2181,6 +2271,7 @@ class Wolfnet_Plugin
             'wolfnet_saved_searches'          => 'remoteGetSavedSearches',
             'wolfnet_save_search'             => 'remoteSaveSearch',
             'wolfnet_delete_search'           => 'remoteDeleteSearch',
+            'wolfnet_scb_options_agent'       => 'remoteShortcodeBuilderOptionsAgent',
             'wolfnet_scb_options_featured'    => 'remoteShortcodeBuilderOptionsFeatured',
             'wolfnet_scb_options_grid'        => 'remoteShortcodeBuilderOptionsGrid',
             'wolfnet_scb_options_list'        => 'remoteShortcodeBuilderOptionsList',
@@ -2834,6 +2925,10 @@ class Wolfnet_Plugin
             'WolfNetQuickSearch'        => 'scQuickSearch',
             'wolfnetquicksearch'        => 'scQuickSearch',
             'WOLFNETQUICKSEARCH'        => 'scQuickSearch',
+            'wnt_agent'                 => 'scAgentPages',
+            'WolfNetAgentPages'         => 'scAgentPages',
+            'wolfnetagentpages'         => 'scAgentPages',
+            'WOLFNETAGENTPAGES'         => 'scAgentPages',
             );
 
         foreach ($shrtCodes as $code => $method) {
