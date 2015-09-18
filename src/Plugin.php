@@ -1389,19 +1389,7 @@ class Wolfnet_Plugin
 
     public function agentPages(array $criteria = array()) 
     {
-        $key = '';
-
-        // TODO - change this to use the getCriteriaKey function once the 
-        // multi-key functionality gets merged into master.
-
-        // Maintain backwards compatibility if there is no keyid in the shortcode.
-        if (!array_key_exists('keyid', $criteria) || $criteria['keyid'] == '') {
-            $key = $this->getDefaultProductKey();
-        } else {
-            $key = $this->getProductKeyById($criteria['keyid']);
-        }
-
-        $criteria['key'] = $key;
+        $key = $this->getCriteriaKey($criteria);
 
         if (!$this->isSavedKey($key)) {
             return false;
