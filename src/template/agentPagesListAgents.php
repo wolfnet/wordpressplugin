@@ -22,13 +22,23 @@
 
 ?>
 
-<?php
-	foreach($agents as $agent) {
-		var_dump($agent);
-		die;
-	}
-?>
-
 <div id="<?php echo $instance_id; ?>" class="wolfnet_widget wolfnet_agentsList">
+
+<?php
+foreach($agents as $agent) {
+?>
+	<div class="wolfnet_agentPreview">
+		<div class="wolfnet_agentImage">
+			<?php 
+			if(strlen($agent['thumbnail_url']) > 0) {
+				echo "<img src=\"{$agent['thumbnail_url']}\" />";
+			} 
+			?>
+		</div>
+	</div>
+
+<?php
+} // end foreach
+?>
 
 </div>

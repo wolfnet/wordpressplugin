@@ -141,7 +141,10 @@ class Wolfnet_Plugin
 
         $this->apin = $this->ioc->get('Wolfnet_Api_Client');
 
+        $this->ajax = $this->ioc->get('Wolfnet_Ajax');
+
         $this->views = $this->ioc->get('Wolfnet_Views');
+
 
         if (is_admin()) {
             $this->admin = $this->ioc->get('Wolfnet_Admin');
@@ -209,6 +212,31 @@ class Wolfnet_Plugin
     }
 
 
+    public function addAction($action, $callable = null, $priority = null)
+    {
+        if (is_array($action)) {
+            foreach ($action as $act) {
+                if (count($act) == 2) {
+                    $this->addAction($act[0], $act[1]);
+                } else {
+                    $this->addAction($act[0], $act[1], $act[2]);
+                }
+            }
+        } else {
+            if (is_callable($callable) && is_array($callable)) {
+                add_action($action, $callable, $priority);
+            } elseif (is_string($callable) && method_exists($this, $callable)) {
+                do_action($this->preHookPrefix . $callable);
+                add_action($action, array(&$this, $callable), $priority);
+                do_action($this->postHookPrefix . $callable);
+            }
+        }
+
+        return $this;
+
+    }
+
+
     /**
      * Callback helper
      */
@@ -246,7 +274,7 @@ class Wolfnet_Plugin
         $this->registerShortCodes();
 
         // Register Ajax Actions
-        $this->registerAjaxActions();
+        $this->ajax->registerAjaxActions();
 
         // Register Scripts
         $this->registerScripts();
@@ -428,15 +456,15 @@ class Wolfnet_Plugin
             switch ($pagename) {
 
                 case 'wolfnet_content':
-                    $this->remoteContent();
+                    $this->ajax->remoteContent();
                     break;
 
                 case 'wolfnet_content_header':
-                    $this->remoteContentHeader();
+                    $this->ajax->remoteContentHeader();
                     break;
 
                 case 'wolfnet_content_footer':
-                    $this->remoteContentFooter();
+                    $this->ajax->remoteContentFooter();
                     break;
 
             }
@@ -833,532 +861,6 @@ class Wolfnet_Plugin
     }
 
 
-    /* Ajax Actions ***************************************************************************** */
-    /*                                                                                            */
-    /*  /\  o  _.       /\   _ _|_ o  _  ._   _                                                   */
-    /* /--\ | (_| ><   /--\ (_  |_ | (_) | | _>                                                   */
-    /*     _|                                                                                     */
-    /* ****************************************************************************************** */
-
-    public function remoteValidateProductKey()
-    {
-        $productKey = (array_key_exists('key', $_REQUEST)) ? $_REQUEST['key'] : '';
-
-        try {
-            $response = ($this->productKeyIsValid($productKey)) ? 'true' : 'false';
-
-        } catch (Wolfnet_Exception $e) {
-            status_header(500);
-
-            $response = array(
-                'message' => $e->getMessage(),
-                'data' => $e->getData(),
-            );
-
-        }
-
-        wp_send_json($response);
-
-    }
-
-
-    public function remoteGetSavedSearches($keyid = null)
-    {
-
-        try {
-            if ($keyid == null) {
-                $keyid = (array_key_exists('keyid', $_REQUEST)) ? $_REQUEST['keyid'] : '1';
-            }
-
-            $response = $this->getSavedSearches(-1, $keyid);
-
-        } catch (Wolfnet_Exception $e) {
-            status_header(500);
-
-            $response = array(
-                'message' => $e->getMessage(),
-                'data' => $e->getData(),
-            );
-
-        }
-
-        wp_send_json($response);
-
-    }
-
-
-    public function remoteSaveSearch()
-    {
-
-        try {
-            if (array_key_exists('post_title', $_REQUEST)) {
-                // Create post object
-                $my_post = array(
-                    'post_title'  => $_REQUEST['post_title'],
-                    'post_status' => 'publish',
-                    'post_author' => wp_get_current_user()->ID,
-                    'post_type'   => $this->customPostTypeSearch
-                    );
-
-                // Insert the post into the database
-                $post_id = wp_insert_post($my_post);
-
-                foreach ($_REQUEST['custom_fields'] as $field => $value) {
-                    add_post_meta($post_id, $field, $value, true);
-                }
-
-                $key = $_REQUEST['custom_fields']['keyid'];
-
-            }
-
-            $this->remoteGetSavedSearches($key);
-
-            $response = null;
-
-        } catch (Wolfnet_Exception $e) {
-            status_header(500);
-
-            $response = array(
-                'message' => $e->getMessage(),
-                'data' => $e->getData(),
-            );
-
-        }
-
-        wp_send_json($response);
-
-    }
-
-
-    public function remoteDeleteSearch()
-    {
-
-        try {
-            if (array_key_exists('id', $_REQUEST)) {
-                wp_delete_post($_REQUEST['id'], true);
-            }
-
-            $this->remoteGetSavedSearches();
-            $response = null;
-
-        } catch (Wolfnet_Exception $e) {
-            status_header(500);
-
-            $response = array(
-                'message' => $e->getMessage(),
-                'data' => $e->getData(),
-            );
-
-        }
-
-        wp_send_json($response);
-
-    }
-
-
-    public function remoteShortcodeBuilderOptionsAgent()
-    {
-
-        try {
-            $args = $this->getAgentPagesOptions();
-
-            $response = $this->views->agentPagesOptionsFormView($args);
-
-        } catch (Wolfnet_Exception $e) {
-            status_header(500);
-
-            $response = $this->displayException($e);
-
-        }
-
-        echo $response;
-
-        die;
-
-    }
-
-
-    public function remoteShortcodeBuilderOptionsFeatured()
-    {
-
-        try {
-            $args = $this->getFeaturedListingsOptions();
-
-            $response = $this->views->featuredListingsOptionsFormView($args);
-
-        } catch (Wolfnet_Exception $e) {
-            status_header(500);
-
-            $response = $this->displayException($e);
-
-        }
-
-        echo $response;
-
-        die;
-
-    }
-
-
-    public function remoteShortcodeBuilderOptionsGrid()
-    {
-
-        try {
-            $args = $this->getListingGridOptions();
-
-            $response = $this->views->listingGridOptionsFormView($args);
-
-        } catch (Wolfnet_Exception $e) {
-            status_header(500);
-
-            $response = $this->displayException($e);
-
-        }
-
-        echo $response;
-
-        die;
-
-    }
-
-
-    public function remoteShortcodeBuilderOptionsList()
-    {
-
-        try {
-            $args = $this->getPropertyListOptions();
-
-            $response = $this->views->listingGridOptionsFormView($args);
-
-        } catch (Wolfnet_Exception $e) {
-            status_header(500);
-
-            $response = $this->displayException($e);
-
-        }
-
-        echo $response;
-
-        die;
-
-    }
-
-
-    public function remoteShortcodeBuilderOptionsQuickSearch()
-    {
-
-        try {
-            $args = $this->getQuickSearchOptions();
-
-            $response = $this->views->quickSearchOptionsFormView($args);
-
-        } catch (Wolfnet_Exception $e) {
-            status_header(500);
-
-            $response = $this->displayException($e);
-
-        }
-
-        echo $response;
-
-        die;
-
-    }
-
-
-    public function remoteShortcodeBuilderSavedSearch()
-    {
-
-        try {
-            $id = (array_key_exists('id', $_REQUEST)) ? $_REQUEST['id'] : 0;
-
-            $response = $this->getSavedSearch($id);
-
-        } catch (Wolfnet_Exception $e) {
-            status_header(500);
-
-            $response = array(
-                'message' => $e->getMessage(),
-                'data' => $e->getData(),
-            );
-
-        }
-
-        wp_send_json($response);
-
-    }
-
-
-    public function remoteContent()
-    {
-
-        try {
-            $response = $this->getWpHeader() . $this->getWpFooter();
-
-        } catch (Wolfnet_Exception $e) {
-            status_header(500);
-
-            $response = $this->displayException($e);
-
-        }
-
-        echo $response;
-
-        die;
-
-    }
-
-
-    public function remoteContentHeader()
-    {
-
-        try {
-            $response = $this->getWpHeader();
-
-        } catch (Wolfnet_Exception $e) {
-            status_header(500);
-
-            $response = $this->displayException($e);
-
-        }
-
-        echo $response;
-
-        die;
-
-    }
-
-
-    public function remoteContentFooter()
-    {
-
-        try {
-            $this->getWpHeader();
-
-            $response = $this->getWpFooter();
-
-        } catch (Wolfnet_Exception $e) {
-            status_header(500);
-
-            $response = $this->displayException($e);
-
-        }
-
-        echo $response;
-
-        die;
-
-    }
-
-
-    public function remoteListings()
-    {
-
-        try {
-            $args = $this->getListingGridOptions($_REQUEST);
-
-            $response = $this->getWpHeader() . $this->listingGrid($args) . $this->getWpFooter();
-
-        } catch (Wolfnet_Exception $e) {
-            status_header(500);
-
-            $response = $this->displayException($e);
-
-        }
-
-        echo $response;
-
-        die;
-
-    }
-
-
-    public function remoteListingsGet()
-    {
-
-        try {
-            $args = $this->getListingGridOptions($_REQUEST);
-
-            // used by pagination dropdown "per page"
-            if (!empty($_REQUEST['numrows'])) {
-                $_REQUEST['maxrows'] = $_REQUEST['numrows'];
-            }
-
-            $criteria = $this->prepareListingQuery($_REQUEST);
-
-            $keyid = (array_key_exists('keyid', $_REQUEST)) ? $_REQUEST["keyid"] : null;
-
-            $productKey = $this->getProductKeyById($keyid);
-
-            $data = $this->apin->sendRequest($productKey, '/listing', 'GET', $criteria);
-
-            $this->augmentListingsData($data, $productKey);
-
-        } catch (Wolfnet_Exception $e) {
-            status_header(500);
-            $data = array(
-                'message' => $e->getMessage(),
-                'data' => $e->getData(),
-            );
-
-        }
-
-        // TODO: Do we really need to support AjaxP here?
-        $callback = (array_key_exists('callback', $_REQUEST)) ? $_REQUEST['callback'] : false;
-
-        if ($callback !== false) {
-            header('Content-Type: application/javascript');
-            echo $callback . '(' . json_encode($data) . ');';
-        } else {
-            wp_send_json($data);
-        }
-
-        die;
-
-    }
-
-
-    public function remotePublicCss()
-    {
-
-        try {
-            $response = $this->views->getPublicCss();
-
-        } catch (Wolfnet_Exception $e) {
-            status_header(500);
-
-            echo $this->displayException($e);
-            die;
-
-        }
-
-        header('Content-type: text/css');
-        echo $response;
-
-        die;
-
-    }
-
-
-    public function remotePriceRange()
-    {
-
-        try {
-            // TODO: Assign default value.
-            $keyid = $_REQUEST["keyid"];
-
-            $productKey = $this->getProductKeyById($keyid);
-
-            $response = $this->getPrices($productKey);
-
-        } catch (Wolfnet_Exception $e) {
-            status_header(500);
-
-            $response = array(
-                'message' => $e->getMessage(),
-                'data' => $e->getData(),
-            );
-
-        }
-
-        wp_send_json($response);
-
-    }
-
-
-    public function remoteGetMarketName()
-    {
-
-        try {
-            // TODO: Assign default value.
-            $productKey = $_REQUEST["productkey"];
-
-            $marketName = $this->getMarketName($productKey);
-            $response = strtoupper($marketName);
-
-        } catch (Wolfnet_Exception $e) {
-            status_header(500);
-
-            $response = array(
-                'message' => $e->getMessage(),
-                'data' => $e->getData(),
-            );
-
-        }
-
-        wp_send_json($response);
-
-    }
-
-
-    public function remoteMapEnabled()
-    {
-
-        try {
-            // TODO: Assign default value.
-            $keyid = $_REQUEST["keyid"];
-
-            $productKey = $this->getProductKeyById($keyid);
-
-            $response = $this->getMaptracksEnabled($productKey);
-
-        } catch (Wolfnet_Exception $e) {
-            status_header(500);
-
-            $response = array(
-                'message' => $e->getMessage(),
-                'data' => $e->getData(),
-            );
-
-        }
-
-        wp_send_json($response);
-
-    }
-
-
-    public function remoteGetBaseUrl()
-    {
-
-        try {
-            // TODO: Assign default value.
-            $keyid = $_REQUEST["keyid"];
-            $productKey = $this->getProductKeyById($keyid);
-            $response = $this->getBaseUrl($productKey);
-
-        } catch (Wolfnet_Exception $e) {
-            status_header(500);
-
-            $response = array(
-                'message' => $e->getMessage(),
-                'data' => $e->getData(),
-            );
-
-        }
-
-        wp_send_json($response);
-
-    }
-
-
-    public function remoteRouteQuickSearch() 
-    {
-        try {
-            $response = $this->routeQuickSearch($_REQUEST['formData']);
-        } catch (Wolfnet_Exception $e) {
-            status_header(500);
-
-            $response = array(
-                'message' => $e->getMessage(),
-                'data' => $e->getData(),
-            );
-
-        }
-
-        wp_send_json($response);
-    }
-
-
     /* Data ************************************************************************************* */
     /*  _                                                                                         */
     /* | \  _. _|_  _.                                                                            */
@@ -1395,10 +897,18 @@ class Wolfnet_Plugin
             return false;
         }
 
+        $vars = array(
+            'instance_id' => str_replace('.', '', uniqid('wolfnet_featuredListing_')),
+            'criteria'    => $criteria,
+        );
+
+        $args = $this->convertDataType(array_merge($criteria, $vars));
+
         $agentHandler = $this->ioc->get('Wolfnet_AgentPagesHandler');
         $agentHandler->setKey($key);
-        $agentHandler->setCriteria($criteria);
-        $agentHandler->handleRequest();
+        $agentHandler->setArgs($args);
+
+        return $agentHandler->handleRequest();
     }
 
 
@@ -2246,31 +1756,6 @@ class Wolfnet_Plugin
     }
 
 
-    protected function addAction($action, $callable = null, $priority = null)
-    {
-        if (is_array($action)) {
-            foreach ($action as $act) {
-                if (count($act) == 2) {
-                    $this->addAction($act[0], $act[1]);
-                } else {
-                    $this->addAction($act[0], $act[1], $act[2]);
-                }
-            }
-        } else {
-            if (is_callable($callable) && is_array($callable)) {
-                add_action($action, $callable, $priority);
-            } elseif (is_string($callable) && method_exists($this, $callable)) {
-                do_action($this->preHookPrefix . $callable);
-                add_action($action, array(&$this, $callable), $priority);
-                do_action($this->postHookPrefix . $callable);
-            }
-        }
-
-        return $this;
-
-    }
-
-
     protected function addFilter($filter, $callable = null)
     {
         if (is_array($filter)) {
@@ -2292,37 +1777,6 @@ class Wolfnet_Plugin
     }
 
 
-    protected function registerAdminAjaxActions()
-    {
-        $ajxActions = array(
-            'wolfnet_validate_key'            => 'remoteValidateProductKey',
-            'wolfnet_saved_searches'          => 'remoteGetSavedSearches',
-            'wolfnet_save_search'             => 'remoteSaveSearch',
-            'wolfnet_delete_search'           => 'remoteDeleteSearch',
-            'wolfnet_scb_options_agent'       => 'remoteShortcodeBuilderOptionsAgent',
-            'wolfnet_scb_options_featured'    => 'remoteShortcodeBuilderOptionsFeatured',
-            'wolfnet_scb_options_grid'        => 'remoteShortcodeBuilderOptionsGrid',
-            'wolfnet_scb_options_list'        => 'remoteShortcodeBuilderOptionsList',
-            'wolfnet_scb_options_quicksearch' => 'remoteShortcodeBuilderOptionsQuickSearch',
-            'wolfnet_scb_savedsearch'         => 'remoteShortcodeBuilderSavedSearch',
-            'wolfnet_content'                 => 'remoteContent',
-            'wolfnet_content_header'          => 'remoteContentHeader',
-            'wolfnet_content_footer'          => 'remoteContentFooter',
-            'wolfnet_listings'                => 'remoteListings',
-            'wolfnet_get_listings'            => 'remoteListingsGet',
-            'wolfnet_css'                     => 'remotePublicCss',
-            'wolfnet_market_name'             => 'remoteGetMarketName',
-            'wolfnet_map_enabled'             => 'remoteMapEnabled',
-            'wolfnet_price_range'             => 'remotePriceRange',
-            );
-
-        foreach ($ajxActions as $action => $method) {
-            $this->addAction('wp_ajax_' . $action, array(&$this, $method));
-        }
-
-    }
-
-
     /* PRIVATE METHODS ************************************************************************** */
     /*  ____       _            _         __  __      _   _               _                       */
     /* |  _ \ _ __(_)_   ____ _| |_ ___  |  \/  | ___| |_| |__   ___   __| |___                   */
@@ -2331,26 +1785,6 @@ class Wolfnet_Plugin
     /* |_|   |_|  |_| \_/ \__,_|\__\___| |_|  |_|\___|\__|_| |_|\___/ \__,_|___/                  */
     /*                                                                                            */
     /* ****************************************************************************************** */
-
-    private function registerAjaxActions()
-    {
-        $ajxActions = array(
-            'wolfnet_content'           => 'remoteContent',
-            'wolfnet_content_header'    => 'remoteContentHeader',
-            'wolfnet_content_footer'    => 'remoteContentFooter',
-            'wolfnet_listings'          => 'remoteListings',
-            'wolfnet_get_listings'      => 'remoteListingsGet',
-            'wolfnet_css'               => 'remotePublicCss',
-            'wolfnet_base_url'          => 'remoteGetBaseUrl',
-            'wolfnet_price_range'       => 'remotePriceRange',
-            'wolfnet_route_quicksearch' => 'remoteRouteQuickSearch',
-            );
-
-        foreach ($ajxActions as $action => $method) {
-            $this->addAction('wp_ajax_nopriv_' . $action, array(&$this, $method));
-        }
-
-    }
 
 
     private function getCriteriaKey(&$criteria)

@@ -36,8 +36,9 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
         }
         
         // Run the function associated with the action.
-        $this->$action();
+        return $this->$action();
 	}
+
 
     protected function officeList()
     {
@@ -45,10 +46,11 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
         die;
     }
 
+
     protected function agentList()
     {
         try {
-            $data = $this->apin->sendRequest($this->key, '/agent', 'GET', $this->criteria);
+            $data = $this->apin->sendRequest($this->key, '/agent', 'GET', $this->args['criteria']);
         } catch (Wolfnet_Exception $e) {
             return $this->displayException($e);
         }
@@ -60,9 +62,11 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
         }
 
         $args = ['agents' => $agentsData];
+        $args = array_merge($args, $this->args);
 
-        $agentsHtml = $this->views->agentsListView($args);
+        return $this->views->agentsListView($args);
     }
+
 
     protected function agent()
     {
@@ -70,11 +74,12 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
         die;
     }
 
+
     public function setKey(&$key) {
         $this->key = $key;
     }
 
-    public function setCriteria(&$criteria) {
-        $this->criteria = $criteria;
+    public function setArgs(&$args) {
+        $this->args = $args;
     }
 }

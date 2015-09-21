@@ -158,7 +158,7 @@ class Wolfnet_Admin extends Wolfnet_Plugin
         $richEditing  = get_user_option('rich_editing');
 
         // Register Ajax Actions
-        $GLOBALS['wolfnet']->registerAdminAjaxActions();
+        $GLOBALS['wolfnet']->ajax->registerAdminAjaxActions();
 
          /* If we are serving up the search manager page we need to get the search manager HTML from
           * the MLSFinder server now so that we can set cookies. */

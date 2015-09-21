@@ -7,6 +7,7 @@
 return array(
     'Wolfnet_Admin' => '/Admin.php',
     'Wolfnet_AgentPagesHandler' => '/AgentPagesHandler.php',
+    'Wolfnet_Ajax' => '/Ajax.php',
     'Wolfnet_Autoloader' => '/Autoloader.php',
     'Wolfnet_Exception' => '/Exception.php',
     'Wolfnet_Factory' => '/Factory.php',
