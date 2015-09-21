@@ -23,7 +23,7 @@
 ?>
 
 <?php
-    $keyids = [];
+    $keyids = array();
     foreach($markets as $market) {
         array_push($keyids, $market->id);
     }
