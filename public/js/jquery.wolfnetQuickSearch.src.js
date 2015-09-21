@@ -289,7 +289,8 @@ if ( typeof jQuery != 'undefined' ) {
 	                }
 	            },
 	            success: function ( data ) {
-	            	window.location.href = data;
+	            	location.href = data;
+	            	return false;
 	            }
 	        } );
         }
