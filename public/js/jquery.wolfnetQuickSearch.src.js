@@ -289,7 +289,7 @@ if ( typeof jQuery != 'undefined' ) {
 	                }
 	            },
 	            success: function ( data ) {
-	            	location.href = data;
+	            	window.location.href = data;
 	            	return false;
 	            }
 	        } );
