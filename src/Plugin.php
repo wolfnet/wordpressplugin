@@ -2238,6 +2238,7 @@ class Wolfnet_Plugin
             'wolfnet_market_name'             => 'remoteGetMarketName',
             'wolfnet_map_enabled'             => 'remoteMapEnabled',
             'wolfnet_price_range'             => 'remotePriceRange',
+            'wolfnet_route_quicksearch'       => 'remoteRouteQuickSearch',
             );
 
         foreach ($ajxActions as $action => $method) {
