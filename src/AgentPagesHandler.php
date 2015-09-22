@@ -27,11 +27,18 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
 	public function handleRequest() 
     {
 		$action = '';
-        if(!array_key_exists('office_id', $_REQUEST) && !array_key_exists('agent_id', $_REQUEST)) {
+
+        if($this->getKeyCount() == 1 && !array_key_exists('agent_id', $_REQUEST)) {
+            // If there's only one key and agent_id is not passed, do this.
+            $action = 'agentList';
+        } else if(!array_key_exists('office_id', $_REQUEST) && !array_key_exists('agent_id', $_REQUEST)) {
+            // If there are multiple keys and office_id as well as agent_id are not passed, list offices.
             $action = 'officeList';
         } elseif(array_key_exists('office_id', $_REQUEST) && sizeof(trim($_REQUEST['office_id']) > 0)) {
+            // If there are multiple keys and office_id is passed, list their agents.
             $action = 'agentList';
         } elseif(array_key_exists('agent_id', $_REQUEST) && sizeof(trim($_REQUEST['agent_id']) > 0)) {
+            // If agent_id is passed through, show the agent detail.
             $action = 'agent';
         }
         

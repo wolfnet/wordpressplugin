@@ -640,6 +640,16 @@ class Wolfnet_Plugin
 
 
     /**
+     * This method returns the number of keys associated with the plugin.
+     * @return int Number of keys
+     */
+    public function getKeyCount()
+    {
+        return count(json_decode($this->getProductKey()));
+    }
+
+
+    /**
      * This method returns an array of integer values to be used as possible pagination item counts.
      * @return array An array of integers.
      */
@@ -898,7 +908,7 @@ class Wolfnet_Plugin
         }
 
         $vars = array(
-            'instance_id' => str_replace('.', '', uniqid('wolfnet_featuredListing_')),
+            'instance_id' => str_replace('.', '', uniqid('wolfnet_agentPages_')),
             'criteria'    => $criteria,
         );
 
