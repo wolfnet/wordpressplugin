@@ -349,7 +349,7 @@ if ( typeof jQuery != 'undefined' ) {
                 $wrapper.addClass(options.validClass);
                 $wrapper.removeClass(options.invalidClass);
 
-                if ($.trim($marketContainer.html()) !== '' || $.trim($marketLabel.val()) !== '') {
+                if ($.trim($marketContainer.html()) == '' || $.trim($marketLabel.val()) == '') {
 
                     // Update market name
                     $.ajax({
@@ -361,11 +361,11 @@ if ( typeof jQuery != 'undefined' ) {
                         timeout: 2500,
                         success: function(data) {
 
-                            if ($.trim($marketContainer.html()) === '') {
+                            if ($.trim($marketContainer.html()) == '') {
                                 $marketContainer.html(data);
                             }
 
-                            if ($.trim($marketLabel.val()) === '') {
+                            if ($.trim($marketLabel.val()) == '') {
                                 $marketLabel.val(data);
                             }
 
