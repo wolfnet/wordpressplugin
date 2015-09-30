@@ -758,6 +758,7 @@ class Wolfnet_Plugin
             $default_maxrows = '50';
             $criteria = array_merge($this->getListingGridDefaults(), (is_array($attrs)) ? $attrs : array());
 
+            // TODO: sort out all these max fields (also an alias in prepareListingQuery)
             if ($criteria['maxrows'] == $default_maxrows && $criteria['maxresults'] != $default_maxrows) {
                 $criteria['maxrows'] = $criteria['maxresults'];
             }
