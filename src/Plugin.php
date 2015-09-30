@@ -1852,6 +1852,7 @@ class Wolfnet_Plugin
             'minprice' => 'min_price',
             'zipcode' => 'zip_code',
             'ownertype' => 'owner_type',
+            'maxresults' => 'maxrows',
         );
 
         // Translate aliases to their canonical version and then removed the alias from the array
