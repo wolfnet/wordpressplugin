@@ -48,6 +48,7 @@ class Wolfnet_Ajax
             'wolfnet_market_name'             => 'remoteGetMarketName',
             'wolfnet_map_enabled'             => 'remoteMapEnabled',
             'wolfnet_price_range'             => 'remotePriceRange',
+            'wolfnet_base_url'                => 'remoteGetBaseUrl',
             'wolfnet_route_quicksearch'       => 'remoteRouteQuickSearch',
             );
 

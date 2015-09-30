@@ -31,7 +31,7 @@
     <?php 
     /*
         The form action below will get generated automatically upon market selection if
-        the routing type == "manual" (eee JS at bottom of file). Otherwise, this page will 
+        the routing type == "manual" (see JS at bottom of file). Otherwise, this page will 
         use an ajax call to get the correct action to post to. If there is only one market
         then the action will get set to that.
     */
