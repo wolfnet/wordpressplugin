@@ -47,20 +47,36 @@ Vagrant.configure("2") do |config|
     # The most up to date version of the 4.0
     config.vm.define "wp40" do |wp40|
         wp40.vm.network :private_network, ip: "192.168.50.40"
-        wp40.vm.provision :shell, :path => ".vagrant/wordpress.sh", :args => "4.0.1"
+        wp40.vm.provision :shell, :path => ".vagrant/wordpress.sh", :args => "4.0.7"
     end
 
     # The most up to date version of the 4.1
     config.vm.define "wp41" do |wp41|
-        wp41.vm.box = "ubuntu-14"
+        #wp41.vm.box = "ubuntu-14"
         wp41.vm.box_url = "https://github.com/kraksoft/vagrant-box-ubuntu/releases/download/14.04/ubuntu-14.04-amd64.box"
         wp41.vm.network :private_network, ip: "192.168.50.41"
-        wp41.vm.provision :shell, :path => ".vagrant/wordpress.sh", :args => "4.1.1"
+        wp41.vm.provision :shell, :path => ".vagrant/wordpress.sh", :args => "4.1.7"
     end
 
-    # The most up to date version of the 4.1
+    # The most up to date version of the 4.2
+    config.vm.define "wp42" do |wp42|
+        #wp42.vm.box = "ubuntu-14"
+        wp42.vm.box_url = "https://github.com/kraksoft/vagrant-box-ubuntu/releases/download/14.04/ubuntu-14.04-amd64.box"
+        wp42.vm.network :private_network, ip: "192.168.50.42"
+        wp42.vm.provision :shell, :path => ".vagrant/wordpress.sh", :args => "4.2.4"
+    end
+
+    # The most up to date version of the 4.3
+    config.vm.define "wp43" do |wp43|
+        #wp43.vm.box = "ubuntu-14"
+        wp43.vm.box_url = "https://github.com/kraksoft/vagrant-box-ubuntu/releases/download/14.04/ubuntu-14.04-amd64.box"
+        wp43.vm.network :private_network, ip: "192.168.50.43"
+        wp43.vm.provision :shell, :path => ".vagrant/wordpress.sh", :args => "4.3"
+    end
+
+    # Most up to date version from master
     config.vm.define "dev" do |dev|
-        dev.vm.box = "ubuntu-14"
+        #dev.vm.box = "ubuntu-14"
         dev.vm.box_url = "https://github.com/kraksoft/vagrant-box-ubuntu/releases/download/14.04/ubuntu-14.04-amd64.box"
         dev.vm.network :private_network, ip: "192.168.50.100"
         dev.vm.provision :shell, :path => ".vagrant/wordpress.sh", :args => "master"
