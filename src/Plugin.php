@@ -2239,6 +2239,7 @@ class Wolfnet_Plugin
             'wolfnet_map_enabled'             => 'remoteMapEnabled',
             'wolfnet_price_range'             => 'remotePriceRange',
             'wolfnet_route_quicksearch'       => 'remoteRouteQuickSearch',
+            'wolfnet_base_url'                => 'remoteGetBaseUrl',
             );
 
         foreach ($ajxActions as $action => $method) {
