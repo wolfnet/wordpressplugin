@@ -159,7 +159,7 @@
 
         $("#<?php echo $instance_id; ?>_quickSearchForm [name=market]").click(function() {
             $.fn.toggleQuickSearchFields('<?php echo $instance_id; ?>_quickSearchForm', false);
-            $.fn.rebuildQuickSearchOptions($(this).val());
+            $.fn.rebuildQuickSearchOptions('<?php echo $instance_id; ?>_quickSearchForm', $(this).val());
         });
 
         <?php elseif(count($keyids) > 1 && $routing == 'auto'): ?>

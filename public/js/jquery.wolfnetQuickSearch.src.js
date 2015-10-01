@@ -224,7 +224,7 @@ if ( typeof jQuery != 'undefined' ) {
 			}
 		}
 
-		$.fn.rebuildQuickSearchOptions = function(keyId) {
+		$.fn.rebuildQuickSearchOptions = function(baseElement, keyId) {
 			$.ajax( {
 	            url: wolfnet_ajax.ajaxurl,
 	            data: { action:'wolfnet_base_url', keyid:keyId },
@@ -238,7 +238,7 @@ if ( typeof jQuery != 'undefined' ) {
 	                }
 	            },
 	            success: function ( data ) {
-	                $('.wolfnet_quickSearch_form').attr('action', data);
+	                $('#' + baseElement).attr('action', data);
 	            }
 	        } );
 	        
@@ -257,14 +257,14 @@ if ( typeof jQuery != 'undefined' ) {
 	            success: function ( data ) {
 	                var minOptions = buildPriceDropdownOptions(data['min_price']['options']);
 	                var maxOptions = buildPriceDropdownOptions(data['max_price']['options']);
-	                $('[name=min_price],[name=max_price]').html('');
-	                $('[name=max_price]').append($('<option />').attr('value', '').html('Max. Price'));
-	                $('[name=min_price]').append($('<option />').attr('value', '').html('Min. Price'));
+	                $('#' + baseElement + ' [name=min_price], #' + baseElement + ' [name=max_price]').html('');
+	                $('#' + baseElement + ' [name=max_price]').append($('<option />').attr('value', '').html('Max. Price'));
+	                $('#' + baseElement + ' [name=min_price]').append($('<option />').attr('value', '').html('Min. Price'));
 	                $(minOptions).each(function() {
-	                    $('[name=min_price]').append(this);
+	                    $('#' + baseElement + ' [name=min_price]').append(this);
 	                });
 	                $(maxOptions).each(function() {
-	                    $('[name=max_price]').append(this);
+	                    $('#' + baseElement + ' [name=max_price]').append(this);
 	                });
 	            }
 	        } );
@@ -281,8 +281,9 @@ if ( typeof jQuery != 'undefined' ) {
 	            data: { action:'wolfnet_route_quicksearch', formData:data },
 	            dataType: 'json',
 	            type: 'GET',
+	            async: false,
 	            cache: false,
-	            timeout: 2500,
+	            timeout: 3500,
 	            statusCode: {
 	                404: function () {
 	                    commFailure();
