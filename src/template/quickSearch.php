@@ -153,12 +153,12 @@
         <?php if(count($keyids) > 1 && $routing == 'manual'): ?>
 
         // Disable fields until market is selected.
-        if(!$("[name=market]").is(':checked')) {
-            $.fn.toggleQuickSearchFields(true);
+        if(!$("#<?php echo $instance_id; ?>_quickSearchForm [name=market]").is(':checked')) {
+            $.fn.toggleQuickSearchFields('<?php echo $instance_id; ?>_quickSearchForm', true);
         }
 
-        $("[name=market]").click(function() {
-            $.fn.toggleQuickSearchFields(false);
+        $("#<?php echo $instance_id; ?>_quickSearchForm [name=market]").click(function() {
+            $.fn.toggleQuickSearchFields('<?php echo $instance_id; ?>_quickSearchForm', false);
             $.fn.rebuildQuickSearchOptions($(this).val());
         });
 
