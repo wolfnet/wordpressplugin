@@ -230,6 +230,7 @@ if ( typeof jQuery != 'undefined' ) {
 	            data: { action:'wolfnet_base_url', keyid:keyId },
 	            dataType: 'json',
 	            type: 'GET',
+	            async: false,
 	            cache: false,
 	            timeout: 2500,
 	            statusCode: {
