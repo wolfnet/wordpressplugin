@@ -93,6 +93,9 @@ Please upgrade to the latest version of the plugin as we will be disabling our o
 
 == Changelog ==
 
+= 1.7.16 =
+* Fixes a bug with max listings in the featured listings component.
+
 = 1.7.15 =
 * Fixes missing legacy owner type values in featured listings requests.
 * Fixes empty geocode lat/lng issue on map.
