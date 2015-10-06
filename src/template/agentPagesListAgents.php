@@ -25,51 +25,60 @@
 <div id="<?php echo $instance_id; ?>" class="wolfnet_widget wolfnet_agentsList">
 
 <?php
+
+if(array_key_exists("REDIRECT_URL", $_SERVER)) {
+	$linkBase = $_SERVER['REDIRECT_URL'];
+} else {
+	$linkBase = $_SERVER['PHP_SELF'];
+}
+
 foreach($agents as $agent) {
 	if($agent['display_agent']) {
-		$agentLink = $_SERVER['REQUEST_URI'] . '?agent_id=' . $agent['agent_id'];
+		$agentLink = $linkBase . '?agent=' . $agent['agent_office_guid'];
 ?>
 
 	<div class="wolfnet_agentPreview">
-		<div class="wolfnet_agentImage">
-			<?php 
-			if(strlen($agent['thumbnail_url']) > 0) {
-				echo '<a href="' . $agentLink . '">';
-				echo "<img src=\"{$agent['thumbnail_url']}\" />";
-				echo '</a>';
-			} 
-			?>
-		</div>
-
-		<div class="wolfnet_agentName">
-			<?php 
-				echo '<a href="' . $agentLink . '">';
-				echo $agent['first_name'] . " " . $agent['last_name']; 
-				echo '</a>';
-			?>
-		</div>
-
-		<?php if(strlen($agent['business_name']) > 0) {
-			echo '<div class="wolfnet_agentBusiness">';
-			echo $agent['business_name'];
+		<?php 
+		if(strlen($agent['thumbnail_url']) > 0) {
+			echo '<div class="wolfnet_agentImage">';
+			echo '<a href="' . $agentLink . '">';
+			echo "<img src=\"{$agent['thumbnail_url']}\" />";
+			echo '</a>';
 			echo '</div>';
-		}
+		} 
 		?>
 
-		<div class="wolfnet_agentContact">
-			<?php 
-			if(strlen($agent['office_phone_number']) > 0) {
-				echo '<div class="wolfnet_agentOfficePhone">';
-				echo "Office: " . $agent['office_phone_number'];
-				echo '</div>';
-			}
+		<div class="wolfnet_agentInfo">
+			<div class="wolfnet_agentName">
+				<?php 
+					echo '<a href="' . $agentLink . '">';
+					echo $agent['first_name'] . " " . $agent['last_name']; 
+					echo '</a>';
+				?>
+			</div>
 
-			if(strlen($agent['mobile_phone']) > 0) {
-				echo '<div class="wolfnet_agentMobilePhone">';
-				echo "Mobile: " . $agent['mobile_phone'];
+			<?php if(strlen($agent['business_name']) > 0) {
+				echo '<div class="wolfnet_agentBusiness">';
+				echo $agent['business_name'];
 				echo '</div>';
 			}
 			?>
+
+			<div class="wolfnet_agentContact">
+				<?php 
+				if(strlen($agent['office_phone_number']) > 0) {
+					echo '<div class="wolfnet_agentOfficePhone">';
+					echo "Office: " . $agent['office_phone_number'];
+					echo '</div>';
+				}
+
+				if(strlen($agent['mobile_phone']) > 0) {
+					echo '<div class="wolfnet_agentMobilePhone">';
+					echo "Mobile: " . $agent['mobile_phone'];
+					echo '</div>';
+				}
+				?>
+			</div>
 		</div>
 	</div>
 
@@ -82,7 +91,7 @@ foreach($agents as $agent) {
 
 <script type="text/javascript">
 jQuery(function($) {
-	$(document).ready(function() {
+	$(window).load(function() {
 		// Resize agent boxes to height of tallest one.
 		var $agents = $('.wolfnet_agentPreview');
 		var maxHeight = 0;

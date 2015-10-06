@@ -23,7 +23,7 @@
 ?>
 
 <?php
-    $keyids = [];
+    $keyids = array();
     foreach($markets as $market) {
         array_push($keyids, $market->id);
     }
@@ -32,7 +32,7 @@
 
 <div id="<?php echo $instance_id; ?>" class="wolfnet_agentPagesOptions">
     <?php if(count($markets) > 1): ?>
-	<input type="hidden" id="<?php echo $keyids_wpid; ?>" class="keyids" name="<?php echo $keyids_wpname; ?>" value="<?php echo $keyids; ?>" />
+	<input type="hidden" id="<?php echo $keyids_wpid; ?>" class="keyids" name="<?php echo $keyids_wpname; ?>" value="<?php echo implode(",", $keyids); ?>" />
     <?php endif; ?>
 
     <table class="form-table">

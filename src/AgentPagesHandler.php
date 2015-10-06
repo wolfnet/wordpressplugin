@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @title         Wolfnet_Plugin.php
+ * @title         Wolfnet_AgentPagesHandler.php
  * @copyright     Copyright (c) 2012, 2013, WolfNet Technologies, LLC
  *
  *                This program is free software; you can redistribute it and/or
@@ -28,16 +28,16 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
     {
 		$action = '';
 
-        if($this->getKeyCount() == 1 && !array_key_exists('agent_id', $_REQUEST)) {
+        if($this->getKeyCount() == 1 && !array_key_exists('agent', $_REQUEST)) {
             // If there's only one key and agent_id is not passed, do this.
             $action = 'agentList';
-        } else if(!array_key_exists('office_id', $_REQUEST) && !array_key_exists('agent_id', $_REQUEST)) {
+        } else if(!array_key_exists('office_id', $_REQUEST) && !array_key_exists('agent', $_REQUEST)) {
             // If there are multiple keys and office_id as well as agent_id are not passed, list offices.
             $action = 'officeList';
         } elseif(array_key_exists('office_id', $_REQUEST) && sizeof(trim($_REQUEST['office_id']) > 0)) {
             // If there are multiple keys and office_id is passed, list their agents.
             $action = 'agentList';
-        } elseif(array_key_exists('agent_id', $_REQUEST) && sizeof(trim($_REQUEST['agent_id']) > 0)) {
+        } elseif(array_key_exists('agent', $_REQUEST) && sizeof(trim($_REQUEST['agent']) > 0)) {
             // If agent_id is passed through, show the agent detail.
             $action = 'agent';
         }
@@ -68,7 +68,7 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
             $agentsData = $data['responseData']['data'];
         }
 
-        $args = ['agents' => $agentsData];
+        $args = array('agents' => $agentsData);
         $args = array_merge($args, $this->args);
 
         return $this->views->agentsListView($args);
@@ -77,8 +77,26 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
 
     protected function agent()
     {
-        echo "Agent";
-        die;
+        try {
+            $data = $this->apin->sendRequest(
+                $this->key, 
+                '/agent/' . $_REQUEST['agent'], 
+                'GET', 
+                $this->args['criteria']
+            );
+        } catch (Wolfnet_Exception $e) {
+            return $this->displayException($e);
+        }
+
+        $agentData = array();
+        if (is_array($data['responseData']['data'])) {
+            $agentData = $data['responseData']['data'][0];
+        }
+
+        $args = array('agent' => $agentData);
+        $args = array_merge($args, $this->args);
+
+        return $this->views->agentView($args);
     }
 
 

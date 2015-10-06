@@ -884,7 +884,7 @@ class Wolfnet_Plugin
 
         return array(
             'title' => '',
-            'keyid' => '',
+            'keyids' => '',
         );
 
     }
