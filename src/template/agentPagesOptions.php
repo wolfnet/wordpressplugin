@@ -40,6 +40,25 @@
             <td><label>Title:</label></td>
             <td><input id="<?php echo $title_wpid; ?>" name="<?php echo $title_wpname; ?>" value="<?php echo $title; ?>" type="text" /></td>
         </tr>
+        <tr>
+            <td><label>Show offices:</label></td>
+            <td>
+                <select id="<?php echo $showoffices_wpid; ?>" name="<?php echo $showoffices_wpname; ?>">
+                    <option value="true"<?php if($showoffices == true) echo ' selected="selected"'?>>Yes</option>
+                    <option value="false"<?php if($showoffices == false) echo ' selected="selected"'?>>No</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td><label>Agents per page:</label></td>
+            <td>
+                <select id="<?php echo $numperpage_wpid; ?>" name="<?php echo $numperpage_wpname; ?>">
+                    <option value="10"<?php if($numperpage == 10) echo ' selected="selected"'?>>10</option>
+                    <option value="20"<?php if($numperpage == 20) echo ' selected="selected"'?>>20</option>
+                    <option value="30"<?php if($numperpage == 30) echo ' selected="selected"'?>>30</option>
+                </select>
+            </td>
+        </tr>
         <?php if(count($markets) > 1): ?>
         <tr>
             <td><label>Market:</label></td>

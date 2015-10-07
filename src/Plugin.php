@@ -883,8 +883,10 @@ class Wolfnet_Plugin
     {
 
         return array(
-            'title' => '',
-            'keyids' => '',
+            'title'       => '',
+            'keyids'      => '',
+            'showoffices' => true,
+            'numperpage'  => 20,
         );
 
     }
