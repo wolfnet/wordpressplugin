@@ -86,8 +86,8 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
 
         $agentsData = array();
 
-        if (is_array($data['responseData']['data'])) {
-            $agentsData = $data['responseData']['data'];
+        if (is_array($data['responseData']['data']['agent'])) {
+            $agentsData = $data['responseData']['data']['agent'];
         }
         $agentsData = array_reverse($agentsData);
 
@@ -113,7 +113,7 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
 
         $agentData = array();
         if (is_array($data['responseData']['data'])) {
-            $agentData = $data['responseData']['data'][0];
+            $agentData = $data['responseData']['data'];
         }
 
         $args = array('agent' => $agentData);
@@ -123,11 +123,13 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
     }
 
 
-    public function setKey(&$key) {
+    public function setKey(&$key) 
+    {
         $this->key = $key;
     }
 
-    public function setArgs(&$args) {
+    public function setArgs(&$args) 
+    {
         $this->args = $args;
     }
 }
