@@ -48,7 +48,7 @@ class Wolfnet_Api_Client
     /**
      * @var  string  The default host name to use to connect to the WolfNet API.
      */
-    const DEFAULT_HOST = 'api1.michael.office.wolfnet.com:8888';
+    const DEFAULT_HOST = 'api.wolfnet.com';
 
     /**
      * @var  int  The default port to use to connect to the WolfNet API.
