@@ -22,19 +22,51 @@
 
 ?>
 
-<div id="<?php echo $instance_id; ?>" class="wolfnet_widget wolfnet_agentsList">
-
 <?php
-
 if(array_key_exists("REDIRECT_URL", $_SERVER)) {
 	$linkBase = $_SERVER['REDIRECT_URL'];
 } else {
 	$linkBase = $_SERVER['PHP_SELF'];
 }
 
+function paginate($page, $total, $numPerPage) 
+{
+	if($total <= $numPerPage) {
+		return '';
+	}
+	
+	$output = '<ul class="wolfnet_agentPagination">';
+	$iterate = ceil($total / $numPerPage);
+
+	if(($page * $numPerPage) > $numPerPage) {
+		$output .= '<li><a href="?page=' . ($page - 1) . '">';
+		$output .= 'Previous</a>';
+	}
+
+	for($i = 1; $i <= $iterate; $i++) {
+		if($i == $page) {
+			$output .= '<li class="wolfnet_selected">' . $i . '</li>';
+		} else {
+			$output .= '<li><a href="?page=' . $i . '">' . $i . '</a></li>';
+		}
+	}
+
+	if(($page * $numPerPage) < $total) {
+		$output .= '<li><a href="?page=' . ($page + 1) . '">';
+		$output .= 'Next</a>';
+	}
+
+	$output .= "</ul>";
+	return $output;
+}
+?>
+
+<div id="<?php echo $instance_id; ?>" class="wolfnet_widget wolfnet_agentsList">
+
+<?php
 foreach($agents as $agent) {
 	if($agent['display_agent']) {
-		$agentLink = $linkBase . '?agent=' . $agent['agent_office_guid'];
+		$agentLink = $linkBase . '?agent=' . $agent['agent_id'];
 ?>
 
 	<div class="wolfnet_agentPreview">
@@ -85,6 +117,9 @@ foreach($agents as $agent) {
 <?php
 	} // end if display_agent
 } // end foreach
+
+echo paginate($page, $totalrows, $numperpage); 
+
 ?>
 
 </div>

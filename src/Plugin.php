@@ -886,7 +886,7 @@ class Wolfnet_Plugin
             'title'       => '',
             'keyids'      => '',
             'showoffices' => true,
-            'numperpage'  => 20,
+            'numperpage'  => 10,
         );
 
     }

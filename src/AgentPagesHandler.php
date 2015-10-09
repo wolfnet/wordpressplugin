@@ -24,9 +24,9 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
 
     protected $key;
 
-	public function handleRequest() 
+    public function handleRequest() 
     {
-		$action = '';
+        $action = '';
 
         if(array_key_exists('agent', $_REQUEST) && sizeof(trim($_REQUEST['agent']) > 0)) {
             // If agent is passed through, show the agent detail.
@@ -56,8 +56,8 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
 
         $officeData = array();
 
-        if (is_array($data['responseData']['data'])) {
-            $officeData = $data['responseData']['data'];
+        if (is_array($data['responseData']['data']['office'])) {
+            $officeData = $data['responseData']['data']['office'];
         }
 
         // If there is only one office then just display its agents.
@@ -74,10 +74,26 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
 
     protected function agentList()
     {
+        if(array_key_exists("page", $_REQUEST) && $_REQUEST['page'] > 1) {
+            /*
+             * $startrow needs to be calculated based on the requested page. If $page == 2
+             * and numPerPage is 10, for example, we would need to get agents 11 through 20. 
+             * The below equation will set the starting row accordingly.
+             */
+            $startrow = $this->args['criteria']['numperpage'] * ($_REQUEST['page'] - 1) + 1;
+        } else {
+            $startrow = 1;
+        }
+
         $endpoint = '/agent';
+        $separator = "?";
         if(array_key_exists('office_id', $_REQUEST)) {
             $endpoint .= '?office_id=' . $_REQUEST['office_id'];
+            $separator = "&";
         }
+        $endpoint .= $separator . "startrow=" . $startrow;
+        $endpoint .= "&maxrows=" . $this->args['criteria']['numperpage'];
+
         try {
             $data = $this->apin->sendRequest($this->key, $endpoint, 'GET', $this->args['criteria']);
         } catch (Wolfnet_Exception $e) {
@@ -89,9 +105,12 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
         if (is_array($data['responseData']['data']['agent'])) {
             $agentsData = $data['responseData']['data']['agent'];
         }
-        $agentsData = array_reverse($agentsData);
 
-        $args = array('agents' => $agentsData);
+        $args = array(
+            'agents' => $agentsData,
+            'totalrows' => $data['responseData']['data']['total_rows'],
+            'page' => $_REQUEST['page'],
+        );
         $args = array_merge($args, $this->args);
 
         return $this->views->agentsListView($args);
