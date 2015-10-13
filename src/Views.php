@@ -401,6 +401,12 @@ class Wolfnet_Views
     }
 
 
+	public function smartSearchView(array $args = array())
+	{
+		return apply_filters('wolfnet_quickSearchView', $this->parseTemplate('smartSearch'));
+	}
+
+
     public function mapView($listingsData, $productKey = null)
     {
         $args = $GLOBALS['wolfnet']->getMapParameters($listingsData, $productKey);

@@ -769,7 +769,7 @@ class Wolfnet_Plugin
     /*                                                                                            */
     /* ****************************************************************************************** */
 
-    public function scAgentPages($attrs) 
+    public function scAgentPages($attrs)
     {
         try {
             $defaultAttributes = $this->getAgentPagesDefaults();
@@ -901,7 +901,7 @@ class Wolfnet_Plugin
     }
 
 
-    public function agentPageHandler(array $criteria = array()) 
+    public function agentPageHandler(array $criteria = array())
     {
         $key = $this->getCriteriaKey($criteria);
 
@@ -1292,7 +1292,7 @@ class Wolfnet_Plugin
     }
 
 
-    public function routeQuickSearch($formData) 
+    public function routeQuickSearch($formData)
     {
         /*
          * Loop over each key and get the number of matching listings for each.
@@ -1322,14 +1322,14 @@ class Wolfnet_Plugin
          * Route to the site associated with key determined above.
         */
         $baseUrl = $this->getBaseUrl($highestMatchKey);
-        
+
         $redirect = $baseUrl . "?";
         foreach($formData as $key => $param) {
             $redirect .= $key . "=" . $param . "&";
         }
-        
+
         return $redirect;
-    } 
+    }
 
 
     /**
@@ -1396,8 +1396,9 @@ class Wolfnet_Plugin
 
         $args = $this->convertDataType(array_merge($criteria, $vars));
 
-        return $this->views->quickSearchView($args);
-
+		// TODO: conditionally render smartsearch vs quicksearch
+        //return $this->views->quickSearchView($args);
+        return $this->views->smartSearchView($args);
     }
 
 
