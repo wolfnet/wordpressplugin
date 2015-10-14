@@ -47,15 +47,15 @@ foreach($offices as $office) {
 		} 
 		?>
 
-		<div class="wolfnet_officeName">
-			<?php 
-				echo '<a href="' . $officeLink . '">';
-				echo $office['name']; 
-				echo '</a>';
-			?>
-		</div>
-
 		<div class="wolfnet_officeContact">
+			<div class="wolfnet_officeName">
+				<?php 
+					echo '<a href="' . $officeLink . '">';
+					echo $office['name'];
+					echo '</a>';
+				?>
+			</div>
+
 			<?php 
 			if(strlen($office['mailing_address']) > 0) {
 				echo '<div class="wolfnet_officeAddress">';
@@ -85,7 +85,6 @@ foreach($offices as $office) {
 
 <?php
 } // end foreach
-var_dump($offices);
 ?>
 
 </div>

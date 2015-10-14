@@ -83,6 +83,7 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
             $startrow = $this->args['criteria']['numperpage'] * ($_REQUEST['page'] - 1) + 1;
         } else {
             $startrow = 1;
+            $_REQUEST['page'] = 1;
         }
 
         $endpoint = '/agent';
