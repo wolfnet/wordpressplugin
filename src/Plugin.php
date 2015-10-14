@@ -57,7 +57,7 @@ class Wolfnet_Plugin
      * searches are saved.
      * @var string
      */
-    protected $customPostTypeSearch = 'wolfnet_search';
+    public $customPostTypeSearch = 'wolfnet_search';
 
     /**
      * This property is a unique idenitfier that is used to define a plugin option which saves the
@@ -2149,7 +2149,7 @@ class Wolfnet_Plugin
     }
 
 
-    private function getWpHeader()
+    public function getWpHeader()
     {
         $wntClass = 'wnt-wrapper';
 
@@ -2183,7 +2183,7 @@ class Wolfnet_Plugin
     }
 
 
-    private function getWpFooter()
+    public function getWpFooter()
     {
         ob_start();
         get_footer();
@@ -2275,7 +2275,7 @@ class Wolfnet_Plugin
      * @param  string $productKey
      * @return string             base URL of the Wolfnet search solution
      */
-    private function getBaseUrl($productKey = null)
+    public function getBaseUrl($productKey = null)
     {
         if ($productKey == null) {
             $productKey = $this->getDefaultProductKey();
@@ -2328,7 +2328,7 @@ class Wolfnet_Plugin
     }
 
 
-    private function getPrices($productKey)
+    public function getPrices($productKey)
     {
 
         $data = $this->apin->sendRequest($productKey, '/search_criteria/property_feature');
