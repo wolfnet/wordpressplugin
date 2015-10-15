@@ -93,6 +93,9 @@ Please upgrade to the latest version of the plugin as we will be disabling our o
 
 == Changelog ==
 
+= 1.7.17 =
+* Fixes a bug with the houseover popup on mobile touch events.
+
 = 1.7.16 =
 * Fixes a bug with max listings in the featured listings component.
 
