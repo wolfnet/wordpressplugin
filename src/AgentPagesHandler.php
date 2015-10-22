@@ -137,10 +137,13 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
         }
 
         $featuredListings = $this->agentFeaturedListings($agentData['mls_agent_id']);
+        $count = $featuredListings['totalRows'];
+        $listings = ($count > 0) ? $featuredListings['listings'] : null;
 
         $args = array(
             'agent' => $agentData,
-            'featuredListings' => $featuredListings,
+            'listingCount' => $count,
+            'listingHTML' => $listings,
         );
         $args = array_merge($args, $this->args);
 
@@ -149,19 +152,25 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
 
 
     protected function agentFeaturedListings($agentId) {
+        $criteria = $this->getListingGridDefaults();
+        $criteria['maxrows'] = 10;
+        $criteria['maxresults'] = 10;
+
+        $this->args['criteria'] = array_merge($this->args['criteria'], $criteria);
+
         $agentListings = $this->getListingsByAgentId($agentId);
 
-        $criteria = $this->getListingGridDefaults();
-        $default_maxrows = '50';
-
-        if ($criteria['maxrows'] == $default_maxrows && $criteria['maxresults'] != $default_maxrows) {
-            $criteria['maxrows'] = $criteria['maxresults'];
+        if(count($agentListings['responseData']['data']['listing']) == 0) {
+            return array('totalRows' => 0, 'listings' => '');
         }
 
         $this->decodeCriteria($criteria);
         $agentListings['requestData'] = array_merge($agentListings['requestData'], $criteria);
 
-        return $this->listingGrid($criteria, 'grid', $agentListings);
+        return array(
+            'totalRows' => $agentListings['responseData']['data']['total_rows'],
+            'listings' => $this->listingGrid($criteria, 'grid', $agentListings),
+        );
     }
 
 
