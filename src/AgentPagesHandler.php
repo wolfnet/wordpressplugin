@@ -136,10 +136,48 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
             $agentData = $data['responseData']['data'];
         }
 
-        $args = array('agent' => $agentData);
+        $featuredListings = $this->agentFeaturedListings($agentData['mls_agent_id']);
+
+        $args = array(
+            'agent' => $agentData,
+            'featuredListings' => $featuredListings,
+        );
         $args = array_merge($args, $this->args);
 
         return $this->views->agentView($args);
+    }
+
+
+    protected function agentFeaturedListings($agentId) {
+        $agentListings = $this->getListingsByAgentId($agentId);
+
+        $criteria = $this->getListingGridDefaults();
+        $default_maxrows = '50';
+
+        if ($criteria['maxrows'] == $default_maxrows && $criteria['maxresults'] != $default_maxrows) {
+            $criteria['maxrows'] = $criteria['maxresults'];
+        }
+
+        $this->decodeCriteria($criteria);
+        $agentListings['requestData'] = array_merge($agentListings['requestData'], $criteria);
+
+        return $this->listingGrid($criteria, 'grid', $agentListings);
+    }
+
+
+    protected function getListingsByAgentId($agentId) {
+        try {
+            $data = $this->apin->sendRequest(
+                $this->key, 
+                '/listing/?agent_id=' . $agentId, 
+                'GET', 
+                $this->args['criteria']
+            );
+        } catch (Wolfnet_Exception $e) {
+            return $this->displayException($e);
+        }
+
+        return $data;
     }
 
 

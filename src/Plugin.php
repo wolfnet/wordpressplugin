@@ -1052,29 +1052,39 @@ class Wolfnet_Plugin
 
     /**
      * Returns the markup for listings. generates both the listingGrid layout as well as the property list layout
-     * @param  array  $criteria the search criteria
-     * @param  string $layout   'grid' or 'list'
-     * @return string           listings markup
+     * @param  array  $criteria      the search criteria
+     * @param  string $layout        'grid' or 'list'
+     * @param  array  $dataOverride  listing data passed in to be used in place of the API request
+     * @return string                listings markup
      */
-    public function listingGrid(array $criteria, $layout = 'grid')
+    public function listingGrid(array $criteria, $layout = 'grid', $dataOverride = null)
     {
         $key = $this->getCriteriaKey($criteria);
 
         if (!$this->isSavedKey($key)) {
             return false;
         }
+        
+        if($dataOverride === null) {
+            if (!array_key_exists('numrows', $criteria)) {
+                $criteria['maxrows'] = $criteria['maxresults'];
+            }
 
-        if (!array_key_exists('numrows', $criteria)) {
-            $criteria['maxrows'] = $criteria['maxresults'];
+            $qdata = $this->prepareListingQuery($criteria);
+
+            try {
+                $data = $this->apin->sendRequest($key, '/listing', 'GET', $qdata);
+            } catch (Wolfnet_Exception $e) {
+                return $this->displayException($e);
+            }
+        } else {
+            // $dataOverride is passed in. As of writing this comment, this is data
+            // is coming from the AgentPagesHandler - we need to display a listing
+            // grid of an agent's featured listings. This is a vain attempt at 
+            // repurposing this code as-is.
+            $data = $dataOverride;
         }
-
-        $qdata = $this->prepareListingQuery($criteria);
-
-        try {
-            $data = $this->apin->sendRequest($key, '/listing', 'GET', $qdata);
-        } catch (Wolfnet_Exception $e) {
-            return $this->displayException($e);
-        }
+        
 
         // add some elements to the array returned by the API
         // wpMeta should contain any criteria or other setting which do not come from the API
@@ -2569,7 +2579,7 @@ class Wolfnet_Plugin
     }
 
 
-    private function decodeCriteria(array &$criteria)
+    protected function decodeCriteria(array &$criteria)
     {
 
         // Decode req parameters vals so they can be cleanly encoded before api req

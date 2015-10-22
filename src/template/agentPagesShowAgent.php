@@ -139,6 +139,8 @@ if($agent['display_agent']) {
 
 <?php
 } // end if display_agent
+
+echo $featuredListings;
 ?>
 
 </div>
