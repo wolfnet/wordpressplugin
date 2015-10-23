@@ -46,6 +46,13 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
 	}
 
 
+    /*
+     *
+     * ACTIONS
+     *
+     */
+
+
     protected function officeList()
     {
         try {
@@ -136,14 +143,24 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
             $agentData = $data['responseData']['data'];
         }
 
-        $featuredListings = $this->agentFeaturedListings($agentData['mls_agent_id']);
+        // We need to get a product key that we can pull this agent's listings with.
+        // Each key entered into the Settings page has a market name associated with it.
+        // We can get the appropriate key for this agent based on their market.
+        $agentKey = $this->getProductKeyByMarket($agentData['market']);
+
+        $featuredListings = $this->agentFeaturedListings($agentKey, $agentData['mls_agent_id']);
         $count = $featuredListings['totalRows'];
         $listings = ($count > 0) ? $featuredListings['listings'] : null;
+
+
+        $searchUrl = $this->getBaseUrl($agentKey);
+        $searchUrl .= "?action=newsearchsession&agent_id=" . $agentData['mls_agent_id'];
 
         $args = array(
             'agent' => $agentData,
             'listingCount' => $count,
             'listingHTML' => $listings,
+            'searchUrl' => $searchUrl,
         );
         $args = array_merge($args, $this->args);
 
@@ -151,14 +168,21 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
     }
 
 
-    protected function agentFeaturedListings($agentId) {
+    /*
+     *
+     * HELPER FUNCTIONS
+     *
+     */
+
+
+    protected function agentFeaturedListings($key, $agentId) {
         $criteria = $this->getListingGridDefaults();
         $criteria['maxrows'] = 10;
         $criteria['maxresults'] = 10;
 
         $this->args['criteria'] = array_merge($this->args['criteria'], $criteria);
 
-        $agentListings = $this->getListingsByAgentId($agentId);
+        $agentListings = $this->getListingsByAgentId($key, $agentId);
 
         if(count($agentListings['responseData']['data']['listing']) == 0) {
             return array('totalRows' => 0, 'listings' => '');
@@ -174,10 +198,10 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
     }
 
 
-    protected function getListingsByAgentId($agentId) {
+    protected function getListingsByAgentId($key, $agentId) {
         try {
             $data = $this->apin->sendRequest(
-                $this->key, 
+                $key, 
                 '/listing/?agent_id=' . $agentId, 
                 'GET', 
                 $this->args['criteria']

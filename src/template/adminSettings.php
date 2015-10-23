@@ -63,7 +63,13 @@
                                         value="<?php echo $productKey[$i-1]->key; ?>" class="wolfnet_productKey" size="50" />
                                 </td>
                                 <td><span class="wolfnet_keyMarket">
-                                <?php if ( isset($productKey[$i-1]->market) ) echo $productKey[$i-1]->market; ?>
+                                <?php 
+                                    if (isset($productKey[$i-1]->market)) {
+                                        echo $productKey[$i-1]->market;
+                                    }  
+                                ?>
+                                <input type="hidden" id="wolfnet_keyMarket_<?php echo $i; ?>" name="wolfnet_keyMarket_<?php echo $i; ?>" 
+                                    class="wolfnet_keyMarket_value" value="<?php echo $productKey[$i-1]->market; ?>" />
                                 </span></td>
                                 <td>
                                     <input id="wolfnet_keyLabel_<?php echo $i; ?>" class="wolfnet_keyLabel" name="wolfnet_keyLabel_<?php echo $i; ?>" type="text"
@@ -165,7 +171,8 @@
                         json.push({
                             "id" : itr,
                             "key" : $(this).val(),
-                            "label" : $(this).closest('tr').find('.wolfnet_keyLabel').val()
+                            "label" : $(this).closest('tr').find('.wolfnet_keyLabel').val(),
+                            "market" : $(this).closest('tr').find('.wolfnet_keyMarket_value').val()
                         });
                         itr++;
                     }

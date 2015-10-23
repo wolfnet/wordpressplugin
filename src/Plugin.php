@@ -601,6 +601,27 @@ class Wolfnet_Plugin
 
 
     /**
+     * This method retrieves a specific product key from the WordPress options table based on a
+     * provided market name.
+     * @param  string $market  The market name associated with the key to be retrieved.
+     * @return string          The key that was retrieved from the WP options table.
+     */
+    public function getProductKeyByMarket($market)
+    {
+        $keyList = json_decode($this->getProductKey());
+
+        foreach ($keyList as $key) {
+            if (strtoupper($key->market) == strtoupper($market)) {
+                return $key->key;
+            }
+        }
+
+        return null;
+
+    }
+
+
+    /**
      * This method retrieved the 'default' key (or first key on the stack) from the WP options table.
      * @return string The key that was retrieved from the WP options table.
      */
@@ -1064,7 +1085,7 @@ class Wolfnet_Plugin
         if (!$this->isSavedKey($key)) {
             return false;
         }
-        
+
         if($dataOverride === null) {
             if (!array_key_exists('numrows', $criteria)) {
                 $criteria['maxrows'] = $criteria['maxresults'];

@@ -144,8 +144,9 @@ if($listingCount > 0) {
 	echo '<p><strong>Featured Listings</strong></p>';
 	echo $listingHTML;
 }
+
 if($listingCount > 10) {
-	echo '<a href="#">';
+	echo '<a href="' . $searchUrl . '">';
 	echo "View all " . $listingCount . " of " . $agent['first_name'] . "'s listings.";
 	echo "</a>";
 }
