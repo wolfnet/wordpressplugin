@@ -77,8 +77,11 @@ if($agent['display_agent']) {
 				}
 
 				if(strlen($agent['email_address']) > 0) {
-					echo '<div class="wolfnet_agentOfficePhone">';
-					echo "<strong>Email:</strong> " . $agent['email_address'];
+					echo '<div class="wolfnet_agentOfficeEmail">';
+					echo '<strong>Email:</strong> <a href="?contact=' 
+						. $agent['agent_id'] . '">' 
+						. $agent['first_name'] . ' ' 
+						. $agent['last_name'] . '</a>';
 					echo '</div>';
 				}
 

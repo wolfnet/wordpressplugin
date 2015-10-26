@@ -28,7 +28,13 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
     {
         $action = '';
 
-        if(array_key_exists('agent', $_REQUEST) && sizeof(trim($_REQUEST['agent']) > 0)) {
+        if(array_key_exists('contact', $_REQUEST)) {
+            if($_SERVER['REQUEST_METHOD'] == 'POST') {
+                $action = 'contactProcess';
+            } else {
+                $action = 'contactForm';
+            }
+        } elseif(array_key_exists('agent', $_REQUEST) && sizeof(trim($_REQUEST['agent']) > 0)) {
             // If agent is passed through, show the agent detail.
             $action = 'agent';
         } elseif(array_key_exists('office_id', $_REQUEST) && sizeof(trim($_REQUEST['office_id']) > 0)) {
@@ -127,33 +133,19 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
 
     protected function agent()
     {
-        try {
-            $data = $this->apin->sendRequest(
-                $this->key, 
-                '/agent/' . $_REQUEST['agent'], 
-                'GET', 
-                $this->args['criteria']
-            );
-        } catch (Wolfnet_Exception $e) {
-            return $this->displayException($e);
-        }
-
-        $agentData = array();
-        if (is_array($data['responseData']['data'])) {
-            $agentData = $data['responseData']['data'];
-        }
+        $agentData = $this->getAgentById($_REQUEST['agent']);
 
         // We need to get a product key that we can pull this agent's listings with.
         // Each key entered into the Settings page has a market name associated with it.
         // We can get the appropriate key for this agent based on their market.
-        $agentKey = $this->getProductKeyByMarket($agentData['market']);
+        $this->key = $this->getProductKeyByMarket($agentData['market']);
 
-        $featuredListings = $this->agentFeaturedListings($agentKey, $agentData['mls_agent_id']);
+        $featuredListings = $this->agentFeaturedListings($this->key, $agentData['mls_agent_id']);
         $count = $featuredListings['totalRows'];
         $listings = ($count > 0) ? $featuredListings['listings'] : null;
 
 
-        $searchUrl = $this->getBaseUrl($agentKey);
+        $searchUrl = $this->getBaseUrl($this->key);
         $searchUrl .= "?action=newsearchsession&agent_id=" . $agentData['mls_agent_id'];
 
         $args = array(
@@ -168,6 +160,29 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
     }
 
 
+    protected function contactForm() 
+    {
+        $agentData = $this->getAgentById($_REQUEST['contact']);
+        
+        $args = array(
+            'agent' => $agentData,
+            'agentId' => $_REQUEST['contact'],
+        );
+        $args = array_merge($args, $this->args);
+
+        return $this->views->agentContact($args);
+    }
+
+
+    protected function contactProcess()
+    {
+        var_dump($_REQUEST);
+        die;
+
+        // pass agent_guid to API request so it can retrieve the agent email to send to.
+    }
+
+
     /*
      *
      * HELPER FUNCTIONS
@@ -175,7 +190,8 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
      */
 
 
-    protected function agentFeaturedListings($key, $agentId) {
+    protected function agentFeaturedListings($key, $agentId) 
+    {
         $criteria = $this->getListingGridDefaults();
         $criteria['maxrows'] = 10;
         $criteria['maxresults'] = 10;
@@ -198,7 +214,8 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
     }
 
 
-    protected function getListingsByAgentId($key, $agentId) {
+    protected function getListingsByAgentId($key, $agentId) 
+    {
         try {
             $data = $this->apin->sendRequest(
                 $key, 
@@ -211,6 +228,28 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
         }
 
         return $data;
+    }
+
+
+    protected function getAgentById($agentId) 
+    {
+        try {
+            $data = $this->apin->sendRequest(
+                $this->key, 
+                '/agent/' . $agentId, 
+                'GET', 
+                $this->args['criteria']
+            );
+        } catch (Wolfnet_Exception $e) {
+            return $this->displayException($e);
+        }
+
+        $agentData = array();
+        if (is_array($data['responseData']['data'])) {
+            $agentData = $data['responseData']['data'];
+        }
+
+        return $agentData;
     }
 
 

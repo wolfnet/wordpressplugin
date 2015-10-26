@@ -109,6 +109,12 @@ foreach($agents as $agent) {
 					echo "Mobile: " . $agent['mobile_phone'];
 					echo '</div>';
 				}
+
+				if(strlen($agent['fax_number']) > 0) {
+					echo '<div class="wolfnet_agentFax">';
+					echo "Fax: " . $agent['fax_number'];
+					echo '</div>';
+				}
 				?>
 			</div>
 		</div>
