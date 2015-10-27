@@ -3,7 +3,7 @@
  *
  * @package       css
  * @title         wolfnet.less
- * @copyright     Copyright (c) 2012, 2013, WolfNet Technologies, LLC
+ * @copyright     Copyright (c) 2012 - 2015, WolfNet Technologies, LLC
  *
  *                This program is free software; you can redistribute it and/or
  *                modify it under the terms of the GNU General Public License
@@ -290,6 +290,183 @@
 
     }
 
+    &.wolfnet_officesList 
+    {
+
+        .wolfnet_officePreview 
+        {
+            float: left;
+            border: 1px solid #ccc;
+            margin: 10px 10px 0 0;
+            padding-right: 10px;
+            width: 300px;
+        }
+
+        .wolfnet_officeImage 
+        {
+            float: left;
+            margin: 10px;
+            border: 1px solid #ccc;
+        }
+
+        .wolfnet_officeContact 
+        {
+            float: right;
+            width: 190px;
+            font-size: .8em;
+        }
+
+        .wolfnet_officeName 
+        {
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+
+    }
+
+    &.wolfnet_agentsList
+    {
+
+        .wolfnet_agentPreview 
+        {
+            float: left;
+            border: 1px solid #ccc;
+            margin: 10px 10px 0 0;
+            padding-right: 10px;
+            width: 300px;
+        }
+
+        .wolfnet_agentImage 
+        {
+            float: left;
+            margin: 10px;
+            border: 1px solid #ccc;
+        }
+
+        .wolfnet_agentInfo 
+        {
+            float: right;
+            width: 190px;
+            font-size: .8em;
+
+            .wolfnet_agentName 
+            {
+                font-weight: bold;
+                font-size: 1.2em;
+            }
+
+        }
+
+    }
+
+    &.wolfnet_agentShow 
+    {
+        width: 600px;
+
+        .wolfnet_agentImage 
+        {
+            float: left;
+            margin-right: 20px;
+            width: 200px;
+        }
+
+        .wolfnet_agentInfo 
+        {
+            float: right;
+            width: 380px;
+
+            .wolfnet_agentName 
+            {
+                font-weight: bold;
+                font-size: 1.2em;
+            }
+
+        }
+
+        .wolfnet_agentBio 
+        {
+            clear: both;
+            padding-top: 20px;
+
+            .wolfnet_agentSection 
+            {
+                padding: 10px 0;
+            }
+        }
+
+    }
+
+    .wolfnet_agentPagination 
+    {
+        list-style: none;
+        clear: both;
+
+        li {
+            display: inline-block;
+            margin-right: 10px;
+
+            .wolfnet_selected {
+                font-weight: bold;
+            }
+
+        }
+
+    }
+
+    &.wolfnet_contactAgent 
+    {
+        width: 600px;
+
+        .wolfnet_agentPreview 
+        {
+            border: 1px solid #ccc;
+            padding: 6px;
+
+            .wolfnet_agentImage 
+            {
+                float: left;
+                margin: 10px;
+                border: 1px solid #ccc;
+            }
+
+            .wolfnet_agentInfo
+            {
+                float: right;
+                width: 480px;
+                border: 1px solid #000;
+
+                .wolfnet_agentContact
+                {
+                    float: right;
+                    width: 200px;
+                }
+
+            }
+
+        }
+
+        .wolfnet_contactForm
+        {
+            label
+            {
+                display: block;
+                padding-top: 16px;
+            }
+
+            .wolfnet_asterisk
+            {
+                color: red;
+            }
+
+            #wolfnet_submit
+            {
+                margin-top: 16px;
+            }
+
+        }
+
+    }
+
     &.wolfnet_quickSearch_basic
     {
         z-index:    0;
@@ -547,6 +724,11 @@
                     white-space:nowrap;
                     display:inline-block;
                     padding-right:1em;
+
+                    select {
+                        margin-right:.25em;
+                        max-width: 3em;
+                    }
                 }
 
                 .wolfnet_sortoptions

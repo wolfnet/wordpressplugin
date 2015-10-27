@@ -2,7 +2,7 @@
 
 /**
  * @title         Wolfnet_Plugin.php
- * @copyright     Copyright (c) 2012, 2013, WolfNet Technologies, LLC
+ * @copyright     Copyright (c) 2012 - 2015, WolfNet Technologies, LLC
  *
  *                This program is free software; you can redistribute it and/or
  *                modify it under the terms of the GNU General Public License
@@ -57,7 +57,7 @@ class Wolfnet_Plugin
      * searches are saved.
      * @var string
      */
-    protected $customPostTypeSearch = 'wolfnet_search';
+    public $customPostTypeSearch = 'wolfnet_search';
 
     /**
      * This property is a unique idenitfier that is used to define a plugin option which saves the
@@ -601,6 +601,27 @@ class Wolfnet_Plugin
 
 
     /**
+     * This method retrieves a specific product key from the WordPress options table based on a
+     * provided market name.
+     * @param  string $market  The market name associated with the key to be retrieved.
+     * @return string          The key that was retrieved from the WP options table.
+     */
+    public function getProductKeyByMarket($market)
+    {
+        $keyList = json_decode($this->getProductKey());
+
+        foreach ($keyList as $key) {
+            if (strtoupper($key->market) == strtoupper($market)) {
+                return $key->key;
+            }
+        }
+
+        return null;
+
+    }
+
+
+    /**
      * This method retrieved the 'default' key (or first key on the stack) from the WP options table.
      * @return string The key that was retrieved from the WP options table.
      */
@@ -1052,11 +1073,12 @@ class Wolfnet_Plugin
 
     /**
      * Returns the markup for listings. generates both the listingGrid layout as well as the property list layout
-     * @param  array  $criteria the search criteria
-     * @param  string $layout   'grid' or 'list'
-     * @return string           listings markup
+     * @param  array  $criteria      the search criteria
+     * @param  string $layout        'grid' or 'list'
+     * @param  array  $dataOverride  listing data passed in to be used in place of the API request
+     * @return string                listings markup
      */
-    public function listingGrid(array $criteria, $layout = 'grid')
+    public function listingGrid(array $criteria, $layout = 'grid', $dataOverride = null)
     {
         $key = $this->getCriteriaKey($criteria);
 
@@ -1064,17 +1086,26 @@ class Wolfnet_Plugin
             return false;
         }
 
-        if (!array_key_exists('numrows', $criteria)) {
-            $criteria['maxrows'] = $criteria['maxresults'];
-        }
+        if($dataOverride === null) {
+            if (!array_key_exists('numrows', $criteria)) {
+                $criteria['maxrows'] = $criteria['maxresults'];
+            }
 
-        $qdata = $this->prepareListingQuery($criteria);
+            $qdata = $this->prepareListingQuery($criteria);
 
-        try {
-            $data = $this->apin->sendRequest($key, '/listing', 'GET', $qdata);
-        } catch (Wolfnet_Exception $e) {
-            return $this->displayException($e);
+            try {
+                $data = $this->apin->sendRequest($key, '/listing', 'GET', $qdata);
+            } catch (Wolfnet_Exception $e) {
+                return $this->displayException($e);
+            }
+        } else {
+            // $dataOverride is passed in. As of writing this comment, this is data
+            // is coming from the AgentPagesHandler - we need to display a listing
+            // grid of an agent's featured listings. This is a vain attempt at 
+            // repurposing this code as-is.
+            $data = $dataOverride;
         }
+        
 
         // add some elements to the array returned by the API
         // wpMeta should contain any criteria or other setting which do not come from the API
@@ -2150,7 +2181,7 @@ class Wolfnet_Plugin
     }
 
 
-    private function getWpHeader()
+    public function getWpHeader()
     {
         $wntClass = 'wnt-wrapper';
 
@@ -2184,7 +2215,7 @@ class Wolfnet_Plugin
     }
 
 
-    private function getWpFooter()
+    public function getWpFooter()
     {
         ob_start();
         get_footer();
@@ -2276,7 +2307,7 @@ class Wolfnet_Plugin
      * @param  string $productKey
      * @return string             base URL of the Wolfnet search solution
      */
-    private function getBaseUrl($productKey = null)
+    public function getBaseUrl($productKey = null)
     {
         if ($productKey == null) {
             $productKey = $this->getDefaultProductKey();
@@ -2329,7 +2360,7 @@ class Wolfnet_Plugin
     }
 
 
-    private function getPrices($productKey)
+    public function getPrices($productKey)
     {
 
         $data = $this->apin->sendRequest($productKey, '/search_criteria/property_feature');
@@ -2570,7 +2601,7 @@ class Wolfnet_Plugin
     }
 
 
-    private function decodeCriteria(array &$criteria)
+    protected function decodeCriteria(array &$criteria)
     {
 
         // Decode req parameters vals so they can be cleanly encoded before api req

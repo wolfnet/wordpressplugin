@@ -3,7 +3,7 @@
 /**
  *
  * @title         agentPagesShowAgent.php
- * @copyright     Copyright (c) 2012, 2013, WolfNet Technologies, LLC
+ * @copyright     Copyright (c) 2012 - 2015, WolfNet Technologies, LLC
  *
  *                This program is free software; you can redistribute it and/or
  *                modify it under the terms of the GNU General Public License
@@ -77,8 +77,11 @@ if($agent['display_agent']) {
 				}
 
 				if(strlen($agent['email_address']) > 0) {
-					echo '<div class="wolfnet_agentOfficePhone">';
-					echo "<strong>Email:</strong> " . $agent['email_address'];
+					echo '<div class="wolfnet_agentOfficeEmail">';
+					echo '<strong>Email:</strong> <a href="?contact=' 
+						. $agent['agent_id'] . '">' 
+						. $agent['first_name'] . ' ' 
+						. $agent['last_name'] . '</a>';
 					echo '</div>';
 				}
 
@@ -139,6 +142,17 @@ if($agent['display_agent']) {
 
 <?php
 } // end if display_agent
+
+if($listingCount > 0) {
+	echo '<p><strong>Featured Listings</strong></p>';
+	echo $listingHTML;
+}
+
+if($listingCount > 10) {
+	echo '<a href="' . $searchUrl . '">';
+	echo "View all " . $listingCount . " of " . $agent['first_name'] . "'s listings.";
+	echo "</a>";
+}
 ?>
 
 </div>

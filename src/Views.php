@@ -2,7 +2,7 @@
 
 /**
  * @title         Wolfnet_Views.php
- * @copyright     Copyright (c) 2012, 2013, WolfNet Technologies, LLC
+ * @copyright     Copyright (c) 2012 - 2015, WolfNet Technologies, LLC
  *
  *                This program is free software; you can redistribute it and/or
  *                modify it under the terms of the GNU General Public License
@@ -316,12 +316,23 @@ class Wolfnet_Views
     }
 
 
-    public function agentView(array $args = array()) {
+    public function agentView(array $args = array()) 
+    {
         foreach ($args as $key => $item) {
             $args[$key] = apply_filters('wolfnet_agentPagesView_' . $key, $item);
         }
 
         return apply_filters('wolfnet_agentPagesView', $this->parseTemplate('agentPagesShowAgent', $args));
+    }
+
+
+    public function agentContact(array $args = array()) 
+    {
+        foreach ($args as $key => $item) {
+            $args[$key] = apply_filters('wolfnet_agentPagesView_' . $key, $item);
+        }
+
+        return apply_filters('wolfnet_agentPagesView', $this->parseTemplate('agentPagesContactAgent', $args));
     }
 
 

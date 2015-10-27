@@ -2,7 +2,7 @@
 
 /**
  * @title         Wolfnet_AgentPagesHandler.php
- * @copyright     Copyright (c) 2012, 2013, WolfNet Technologies, LLC
+ * @copyright     Copyright (c) 2012 - 2015, WolfNet Technologies, LLC
  *
  *                This program is free software; you can redistribute it and/or
  *                modify it under the terms of the GNU General Public License
@@ -28,7 +28,13 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
     {
         $action = '';
 
-        if(array_key_exists('agent', $_REQUEST) && sizeof(trim($_REQUEST['agent']) > 0)) {
+        if(array_key_exists('contact', $_REQUEST)) {
+            if($_SERVER['REQUEST_METHOD'] == 'POST') {
+                $action = 'contactProcess';
+            } else {
+                $action = 'contactForm';
+            }
+        } elseif(array_key_exists('agent', $_REQUEST) && sizeof(trim($_REQUEST['agent']) > 0)) {
             // If agent is passed through, show the agent detail.
             $action = 'agent';
         } elseif(array_key_exists('office_id', $_REQUEST) && sizeof(trim($_REQUEST['office_id']) > 0)) {
@@ -44,6 +50,13 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
         // Run the function associated with the action.
         return $this->$action();
 	}
+
+
+    /*
+     *
+     * ACTIONS
+     *
+     */
 
 
     protected function officeList()
@@ -83,6 +96,7 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
             $startrow = $this->args['criteria']['numperpage'] * ($_REQUEST['page'] - 1) + 1;
         } else {
             $startrow = 1;
+            $_REQUEST['page'] = 1;
         }
 
         $endpoint = '/agent';
@@ -119,10 +133,110 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
 
     protected function agent()
     {
+        $agentData = $this->getAgentById($_REQUEST['agent']);
+
+        // We need to get a product key that we can pull this agent's listings with.
+        // Each key entered into the Settings page has a market name associated with it.
+        // We can get the appropriate key for this agent based on their market.
+        $this->key = $this->getProductKeyByMarket($agentData['market']);
+
+        $featuredListings = $this->agentFeaturedListings($this->key, $agentData['mls_agent_id']);
+        $count = $featuredListings['totalRows'];
+        $listings = ($count > 0) ? $featuredListings['listings'] : null;
+
+
+        $searchUrl = $this->getBaseUrl($this->key);
+        $searchUrl .= "?action=newsearchsession&agent_id=" . $agentData['mls_agent_id'];
+
+        $args = array(
+            'agent' => $agentData,
+            'listingCount' => $count,
+            'listingHTML' => $listings,
+            'searchUrl' => $searchUrl,
+        );
+        $args = array_merge($args, $this->args);
+
+        return $this->views->agentView($args);
+    }
+
+
+    protected function contactForm() 
+    {
+        $agentData = $this->getAgentById($_REQUEST['contact']);
+        
+        $args = array(
+            'agent' => $agentData,
+            'agentId' => $_REQUEST['contact'],
+        );
+        $args = array_merge($args, $this->args);
+
+        return $this->views->agentContact($args);
+    }
+
+
+    protected function contactProcess()
+    {
+        var_dump($_REQUEST);
+        die;
+
+        // pass agent_guid to API request so it can retrieve the agent email to send to.
+    }
+
+
+    /*
+     *
+     * HELPER FUNCTIONS
+     *
+     */
+
+
+    protected function agentFeaturedListings($key, $agentId) 
+    {
+        $criteria = $this->getListingGridDefaults();
+        $criteria['maxrows'] = 10;
+        $criteria['maxresults'] = 10;
+
+        $this->args['criteria'] = array_merge($this->args['criteria'], $criteria);
+
+        $agentListings = $this->getListingsByAgentId($key, $agentId);
+
+        if(count($agentListings['responseData']['data']['listing']) == 0) {
+            return array('totalRows' => 0, 'listings' => '');
+        }
+
+        $this->decodeCriteria($criteria);
+        $agentListings['requestData'] = array_merge($agentListings['requestData'], $criteria);
+
+        return array(
+            'totalRows' => $agentListings['responseData']['data']['total_rows'],
+            'listings' => $this->listingGrid($criteria, 'grid', $agentListings),
+        );
+    }
+
+
+    protected function getListingsByAgentId($key, $agentId) 
+    {
+        try {
+            $data = $this->apin->sendRequest(
+                $key, 
+                '/listing/?agent_id=' . $agentId, 
+                'GET', 
+                $this->args['criteria']
+            );
+        } catch (Wolfnet_Exception $e) {
+            return $this->displayException($e);
+        }
+
+        return $data;
+    }
+
+
+    protected function getAgentById($agentId) 
+    {
         try {
             $data = $this->apin->sendRequest(
                 $this->key, 
-                '/agent/' . $_REQUEST['agent'], 
+                '/agent/' . $agentId, 
                 'GET', 
                 $this->args['criteria']
             );
@@ -135,10 +249,7 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
             $agentData = $data['responseData']['data'];
         }
 
-        $args = array('agent' => $agentData);
-        $args = array_merge($args, $this->args);
-
-        return $this->views->agentView($args);
+        return $agentData;
     }
 
 

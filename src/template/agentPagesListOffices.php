@@ -3,7 +3,7 @@
 /**
  *
  * @title         agentPagesListOffices.php
- * @copyright     Copyright (c) 2012, 2013, WolfNet Technologies, LLC
+ * @copyright     Copyright (c) 2012 - 2015, WolfNet Technologies, LLC
  *
  *                This program is free software; you can redistribute it and/or
  *                modify it under the terms of the GNU General Public License
@@ -47,15 +47,15 @@ foreach($offices as $office) {
 		} 
 		?>
 
-		<div class="wolfnet_officeName">
-			<?php 
-				echo '<a href="' . $officeLink . '">';
-				echo $office['name']; 
-				echo '</a>';
-			?>
-		</div>
-
 		<div class="wolfnet_officeContact">
+			<div class="wolfnet_officeName">
+				<?php 
+					echo '<a href="' . $officeLink . '">';
+					echo $office['name'];
+					echo '</a>';
+				?>
+			</div>
+
 			<?php 
 			if(strlen($office['mailing_address']) > 0) {
 				echo '<div class="wolfnet_officeAddress">';
@@ -85,7 +85,6 @@ foreach($offices as $office) {
 
 <?php
 } // end foreach
-var_dump($offices);
 ?>
 
 </div>
