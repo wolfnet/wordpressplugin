@@ -38,7 +38,10 @@
 				<?php
 				echo $agent['first_name'] . ' ' . $agent['last_name'];
 				echo "<br>";
-				echo $agent['address_1'] . '<br>' . $agent['address_2'] . '<br>';
+				echo $agent['address_1'] . '<br>';
+				if(array_key_exists('address_2', $agent) && $agent['address_2'] != '') {
+					echo $agent['address_2'] . '<br>';
+				}
 				echo $agent['city'] . ', ' . $agent['state'] . ' ' . $agent['zip_code']
 				?>
 			</div>
