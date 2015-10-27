@@ -417,6 +417,15 @@
     {
         width: 600px;
 
+        .wolfnet_contactThanks
+        {
+            width: 600px;
+            border: 1px solid #ccc;
+            text-align: center;
+            margin-top: 20px;
+            padding: 20px 0;
+        }
+
         .wolfnet_agentPreview 
         {
             border: 1px solid #ccc;
@@ -433,7 +442,12 @@
             {
                 float: right;
                 width: 480px;
-                border: 1px solid #000;
+
+                .wolfnet_agentName
+                {
+                    float: left;
+                    width: 270px;
+                }
 
                 .wolfnet_agentContact
                 {
@@ -447,15 +461,22 @@
 
         .wolfnet_contactForm
         {
+            padding-top: 16px; 
+
             label
             {
                 display: block;
                 padding-top: 16px;
             }
 
-            .wolfnet_asterisk
+            .wolfnet_red
             {
                 color: red;
+            }
+
+            .wolfnet_errorMessage
+            {
+                font-size: .9em;
             }
 
             #wolfnet_submit
@@ -463,6 +484,10 @@
                 margin-top: 16px;
             }
 
+            .wolfnet_required
+            {
+                border: 1px solid red;
+            }
         }
 
     }

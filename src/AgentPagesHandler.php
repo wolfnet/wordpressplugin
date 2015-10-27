@@ -176,10 +176,54 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
 
     protected function contactProcess()
     {
-        var_dump($_REQUEST);
-        die;
+        // Do basic validation to check if fields are populated before
+        // trying to do an API call.
+        $_REQUEST['errorField'] = '';
 
-        // pass agent_guid to API request so it can retrieve the agent email to send to.
+        if($_REQUEST['wolfnet_name'] == '') {
+            $_REQUEST['errorField'] = 'wolfnet_name';
+        } elseif($_REQUEST['wolfnet_email'] == '') {
+            $_REQUEST['errorField'] = 'wolfnet_email';
+        }
+
+        if($_REQUEST['errorField'] != '') {
+            // Show contact form again.
+            return $this->contactForm();
+        }
+
+        // Translate form fields into request args. Using field name prefixes
+        // on form fields since Wordpress has reserved field names.
+        $this->args['criteria']['name'] = $_REQUEST['wolfnet_name'];
+        $this->args['criteria']['email'] = $_REQUEST['wolfnet_email'];
+        $this->args['criteria']['phone'] = $_REQUEST['wolfnet_phone'];
+        $this->args['criteria']['contact_by'] = $_REQUEST['wolfnet_contacttype'];
+        $this->args['criteria']['message'] = $_REQUEST['wolfnet_comments'];
+        $this->args['criteria']['agent_guid'] = $_REQUEST['contact'];
+
+        try {
+            $data = $this->apin->sendRequest(
+                $this->key,
+                '/agent_inquire',
+                'POST',
+                $this->args['criteria']
+            );
+        } catch (Wolfnet_Exception $e) {
+            $errorInfo = json_decode($e->getData()['body'])->metadata->status->extendedInfo;
+            
+            if(strpos($errorInfo, 'email')) {
+                $_REQUEST['errorField'] = 'wolfnet_email';
+            } elseif(strpos($errorInfo, 'phone')) {
+                $_REQUEST['errorField'] = 'wolfnet_phone';
+            }
+
+            // Show contact form again.
+            return $this->contactForm();
+        }
+
+        if($data['responseStatusCode'] == 200) {
+            $_REQUEST['thanks'] = true;
+            return $this->contactForm();
+        }
     }
 
 
