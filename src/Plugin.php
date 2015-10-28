@@ -317,6 +317,7 @@ class Wolfnet_Plugin
             'wolfnet-toolbar',
             'wolfnet-property-list',
             'wolfnet-maptracks',
+            'wolfnet-smartsearch',
             'mapquest-api'
             );
 
@@ -2547,6 +2548,9 @@ class Wolfnet_Plugin
             'wolfnet-maptracks' => array(
                 $this->url . 'js/jquery.wolfnetMaptracks.src.js',
                 array('jquery', 'migrate', 'mapquest-api'),
+                ),
+            'wolfnet-smartsearch' => array(
+                $this->url . 'js/jquery.wntSmartsearch.src.js'
                 )
             );
 
