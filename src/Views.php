@@ -316,7 +316,7 @@ class Wolfnet_Views
     }
 
 
-    public function agentView(array $args = array()) 
+    public function agentView(array $args = array())
     {
         foreach ($args as $key => $item) {
             $args[$key] = apply_filters('wolfnet_agentPagesView_' . $key, $item);
@@ -326,7 +326,7 @@ class Wolfnet_Views
     }
 
 
-    public function agentContact(array $args = array()) 
+    public function agentContact(array $args = array())
     {
         foreach ($args as $key => $item) {
             $args[$key] = apply_filters('wolfnet_agentPagesView_' . $key, $item);
