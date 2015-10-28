@@ -35,34 +35,34 @@
 	<input type="hidden" id="<?php echo $keyids_wpid; ?>" class="keyids" name="<?php echo $keyids_wpname; ?>" value="<?php echo implode(",", $keyids); ?>" />
     <?php endif; ?>
 
-    <table class="form-table">
+	<table class="form-table">
 
-        <tr>
-            <td><label>Title:</label></td>
-            <td><input id="<?php echo $title_wpid; ?>" name="<?php echo $title_wpname; ?>" value="<?php echo $title; ?>" type="text" /></td>
-        </tr>
+		<tr>
+			<td><label>Title:</label></td>
+			<td><input id="<?php echo $title_wpid; ?>" name="<?php echo $title_wpname; ?>" value="<?php echo $title; ?>" type="text" /></td>
+		</tr>
 
-        <tr>
-            <td><label>Layout:</label></td>
-            <td>
-                <select id="<?php echo $view_wpid; ?>" name="<?php echo $view_wpname; ?>" >
-                    <option value="basic" <?php echo ($view == "basic" ? 'selected="selcted"': "") ?>>Basic</option>
-                    <option value="legacy" <?php echo ($view == "legacy" ? 'selected="selcted"': "") ?>>Legacy</option>
-                </select>
-            </td>
-        </tr>
+		<tr>
+			<td><label>Layout:</label></td>
+			<td>
+				<select id="<?php echo $view_wpid; ?>" name="<?php echo $view_wpname; ?>" >
+					<option value="basic" <?php echo ($view == "basic" ? 'selected="selcted"': "") ?>>Basic</option>
+					<option value="legacy" <?php echo ($view == "legacy" ? 'selected="selcted"': "") ?>>Legacy</option>
+				</select>
+			</td>
+		</tr>
 
-        <tr>
-            <td><label>SmartSearch:</label></td>
-            <td>
-                <select id="<?php echo $smartsearch_wpid; ?>" name="<?php echo $smartsearch_wpname; ?>" >
-                    <option value="1">Enabled</option>
-                    <option value="0" selected>Disabled</option>
-                </select>
-            </td>
-        </tr>
+		<tr>
+			<td><label>SmartSearch:</label></td>
+			<td>
+				<select id="<?php echo $smartsearch_wpid; ?>" name="<?php echo $smartsearch_wpname; ?>" >
+					<option value="1">Enabled</option>
+					<option value="0" selected>Disabled</option>
+				</select>
+			</td>
+		</tr>
 
-        <?php if(count($markets) > 1): ?>
+		<?php if(count($markets) > 1): ?>
         <tr>
         	<td><label>Market:</label></td>
         	<td>
@@ -100,7 +100,8 @@
             </td>
         </tr>
     	<?php endif; ?>
-    </table>
+
+	</table>
     <span class="validate_msg"></span>
 </div>
 
