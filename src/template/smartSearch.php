@@ -2,7 +2,7 @@
 
 /**
  *
- * @title         quickSearch.php
+ * @title         smartSearch.php
  * @copyright     Copyright (c) 2012, 2013, WolfNet Technologies, LLC
  *
  *                This program is free software; you can redistribute it and/or
@@ -41,6 +41,9 @@
 				name="search_text"
 				type="text" />
 		</div>
+
+		<!--TODO: Move Price/Bed/Baths widget to its own modularized view/template-->
+		<!-- and call from both quicksearch and smartsearch views.-->
 
 		<!-- Price form fields -->
 		<div class="wolfnet_widgetPrice">
