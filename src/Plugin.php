@@ -298,34 +298,34 @@ class Wolfnet_Plugin
     }
 
 
-    /**
-     * This method is a callback for the 'wp_enqueue_scripts' hook. Any JavaScript files (and their
-     * dependencies) which are needed by the plugin for public interfaces are registered in this
-     * method.
-     * @return void
-     */
-    public function scripts()
-    {
-        do_action($this->preHookPrefix . 'enqueueResources'); // Legacy hook
+	/**
+	 * This method is a callback for the 'wp_enqueue_scripts' hook. Any JavaScript files (and their
+	 * dependencies) which are needed by the plugin for public interfaces are registered in this
+	 * method.
+	 * @return void
+	 */
+	public function scripts()
+	{
+		do_action($this->preHookPrefix . 'enqueueResources'); // Legacy hook
 
-        // JavaScript
-        $scripts = array(
-            'smooth-div-scroll',
-            'wolfnet-scrolling-items',
-            'wolfnet-quick-search',
-            'wolfnet-listing-grid',
-            'wolfnet-toolbar',
-            'wolfnet-property-list',
-            'wolfnet-maptracks',
-            'wolfnet-smartsearch',
-            'mapquest-api'
-            );
+		// JavaScript
+		$scripts = array(
+			'smooth-div-scroll',
+			'wolfnet-scrolling-items',
+			'wolfnet-quick-search',
+			'wolfnet-listing-grid',
+			'wolfnet-toolbar',
+			'wolfnet-property-list',
+			'wolfnet-maptracks',
+			'wolfnet-smartsearch',
+			'mapquest-api'
+		);
 
-        foreach ($scripts as $script) {
-            wp_enqueue_script($script);
-        }
+		foreach ($scripts as $script) {
+			wp_enqueue_script($script);
+		}
 
-    }
+	}
 
 
     /**
@@ -2487,92 +2487,93 @@ class Wolfnet_Plugin
     }
 
 
-    private function registerScripts()
-    {
-        $scripts = array(
-            'migrate' => array(
-                $this->url . 'js/jquery.migrate.src.js',
-                array('jquery'),
-                ),
-            'tooltipjs' => array(
-                $this->url . 'js/jquery.tooltip.src.js',
-                array('jquery', 'migrate'),
-                ),
-            'imagesloadedjs' => array(
-                $this->url . 'js/jquery.imagesloaded.src.js',
-                array('jquery'),
-                ),
-            'mousewheeljs' => array(
-                $this->url . 'js/jquery.mousewheel.src.js',
-                array('jquery'),
-                ),
-            'smooth-div-scroll' => array(
-                $this->url . 'js/jquery.smoothDivScroll-1.2.src.js',
-                array('mousewheeljs', 'jquery-ui-core', 'jquery-ui-widget', 'jquery-effects-core'),
-                ),
-            'wolfnet' => array(
-                $this->url . 'js/wolfnet.src.js',
-                array('jquery', 'tooltipjs'),
-                ),
-            'wolfnet-admin' => array(
-                $this->url . 'js/wolfnetAdmin.src.js',
-                array('jquery-ui-dialog', 'jquery-ui-tabs', 'jquery-ui-datepicker', 'wolfnet'),
-                ),
-            'wolfnet-scrolling-items' => array(
-                $this->url . 'js/jquery.wolfnetScrollingItems.src.js',
-                array('smooth-div-scroll', 'wolfnet'),
-                ),
-            'wolfnet-quick-search' => array(
-                $this->url . 'js/jquery.wolfnetQuickSearch.src.js',
-                array('jquery', 'wolfnet'),
-                ),
-            'wolfnet-listing-grid' => array(
-                $this->url . 'js/jquery.wolfnetListingGrid.src.js',
-                array('jquery', 'tooltipjs', 'imagesloadedjs', 'wolfnet'),
-                ),
-            'wolfnet-toolbar' => array(
-                $this->url . 'js/jquery.wolfnetToolbar.src.js',
-                array('jquery', 'wolfnet'),
-                ),
-            'wolfnet-property-list' => array(
-                $this->url . 'js/jquery.wolfnetPropertyList.src.js',
-                array('jquery', 'wolfnet'),
-                ),
-            'wolfnet-shortcode-builder' => array(
-                $this->url . 'js/jquery.wolfnetShortcodeBuilder.src.js',
-                array('jquery-ui-widget', 'jquery-effects-core', 'wolfnet-admin'),
-                ),
-            'mapquest-api' => array(
-                '//www.mapquestapi.com/sdk/js/v7.0.s/mqa.toolkit.js?key=Gmjtd%7Clu6znua2n9%2C7l%3Do5-la70q',
-                ),
-            'wolfnet-maptracks' => array(
-                $this->url . 'js/jquery.wolfnetMaptracks.src.js',
-                array('jquery', 'migrate', 'mapquest-api'),
-                ),
-            'wolfnet-smartsearch' => array(
-                $this->url . 'js/jquery.wntSmartsearch.src.js'
-                )
-            );
+	private function registerScripts()
+	{
 
-        foreach ($scripts as $script => $data) {
-            $params   = array($script);
-            if (is_array($data) && count($data) > 0) {
-                $params[] = $data[0];
-                $params[] = (count($data) > 1) ? $data[1] : array();
-                $params[] = (count($data) > 2) ? $data[2] : $this->version;
-                $params[] = (count($data) > 3) ? $data[3] : false;
+		$scripts = array(
+			'migrate' => array(
+				$this->url . 'js/jquery.migrate.src.js',
+				array('jquery'),
+			),
+			'tooltipjs' => array(
+				$this->url . 'js/jquery.tooltip.src.js',
+				array('jquery', 'migrate'),
+			),
+			'imagesloadedjs' => array(
+				$this->url . 'js/jquery.imagesloaded.src.js',
+				array('jquery'),
+			),
+			'mousewheeljs' => array(
+				$this->url . 'js/jquery.mousewheel.src.js',
+				array('jquery'),
+			),
+			'smooth-div-scroll' => array(
+				$this->url . 'js/jquery.smoothDivScroll-1.2.src.js',
+				array('mousewheeljs', 'jquery-ui-core', 'jquery-ui-widget', 'jquery-effects-core'),
+			),
+			'wolfnet' => array(
+				$this->url . 'js/wolfnet.src.js',
+				array('jquery', 'tooltipjs'),
+			),
+			'wolfnet-admin' => array(
+				$this->url . 'js/wolfnetAdmin.src.js',
+				array('jquery-ui-dialog', 'jquery-ui-tabs', 'jquery-ui-datepicker', 'wolfnet'),
+			),
+			'wolfnet-scrolling-items' => array(
+				$this->url . 'js/jquery.wolfnetScrollingItems.src.js',
+				array('smooth-div-scroll', 'wolfnet'),
+			),
+			'wolfnet-quick-search' => array(
+				$this->url . 'js/jquery.wolfnetQuickSearch.src.js',
+				array('jquery', 'wolfnet'),
+			),
+			'wolfnet-listing-grid' => array(
+				$this->url . 'js/jquery.wolfnetListingGrid.src.js',
+				array('jquery', 'tooltipjs', 'imagesloadedjs', 'wolfnet'),
+			),
+			'wolfnet-toolbar' => array(
+				$this->url . 'js/jquery.wolfnetToolbar.src.js',
+				array('jquery', 'wolfnet'),
+			),
+			'wolfnet-property-list' => array(
+				$this->url . 'js/jquery.wolfnetPropertyList.src.js',
+				array('jquery', 'wolfnet'),
+			),
+			'wolfnet-shortcode-builder' => array(
+				$this->url . 'js/jquery.wolfnetShortcodeBuilder.src.js',
+				array('jquery-ui-widget', 'jquery-effects-core', 'wolfnet-admin'),
+			),
+			'mapquest-api' => array(
+				'//www.mapquestapi.com/sdk/js/v7.0.s/mqa.toolkit.js?key=Gmjtd%7Clu6znua2n9%2C7l%3Do5-la70q',
+			),
+			'wolfnet-maptracks' => array(
+				$this->url . 'js/jquery.wolfnetMaptracks.src.js',
+				array('jquery', 'migrate', 'mapquest-api'),
+			),
+			'wolfnet-smartsearch' => array(
+				$this->url . 'js/jquery.wntSmartsearch.src.js'
+			)
+		);
 
-                call_user_func_array('wp_register_script', $params);
+		foreach ($scripts as $script => $data) {
+			$params   = array($script);
+			if (is_array($data) && count($data) > 0) {
+				$params[] = $data[0];
+				$params[] = (count($data) > 1) ? $data[1] : array();
+				$params[] = (count($data) > 2) ? $data[2] : $this->version;
+				$params[] = (count($data) > 3) ? $data[3] : false;
 
-                if ($script == 'wolfnet') {
-                    wp_localize_script('wolfnet', 'wolfnet_ajax', $this->localizedScriptData());
-                }
+				call_user_func_array('wp_register_script', $params);
 
-            }
+				if ($script == 'wolfnet') {
+					wp_localize_script('wolfnet', 'wolfnet_ajax', $this->localizedScriptData());
+				}
 
-        }
+			}
 
-    }
+		}
+
+	}
 
 
     private function registerStyles()
