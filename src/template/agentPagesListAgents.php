@@ -29,17 +29,28 @@ if(array_key_exists("REDIRECT_URL", $_SERVER)) {
 	$linkBase = $_SERVER['PHP_SELF'];
 }
 
-function paginate($page, $total, $numPerPage) 
+function paginate($page, $total, $numPerPage, $search = '') 
 {
+	/*
+	 * Note: We're using "agentpage" instead of just "page" as out URL variable
+	 * here because Wordpress uses page internally for their own pagination
+	 * and causes things to not work for us if we try to coopt it.
+	 */
+
 	if($total <= $numPerPage) {
 		return '';
 	}
 	
 	$output = '<ul class="wolfnet_agentPagination">';
 	$iterate = ceil($total / $numPerPage);
+	if(strlen($search) > 0) {
+		$linkBase = "?agentCriteria=" . $search . "&";
+	} else {
+		$linkBase = "?";
+	}
 
 	if(($page * $numPerPage) > $numPerPage) {
-		$output .= '<li><a href="?page=' . ($page - 1) . '">';
+		$output .= '<li><a href="' . $linkBase . 'agentpage=' . ($page - 1) . '">';
 		$output .= 'Previous</a>';
 	}
 
@@ -47,12 +58,12 @@ function paginate($page, $total, $numPerPage)
 		if($i == $page) {
 			$output .= '<li class="wolfnet_selected">' . $i . '</li>';
 		} else {
-			$output .= '<li><a href="?page=' . $i . '">' . $i . '</a></li>';
+			$output .= '<li><a href="' . $linkBase . 'agentpage=' . $i . '">' . $i . '</a></li>';
 		}
 	}
 
 	if(($page * $numPerPage) < $total) {
-		$output .= '<li><a href="?page=' . ($page + 1) . '">';
+		$output .= '<li><a href="' . $linkBase . 'agentpage=' . ($page + 1) . '">';
 		$output .= 'Next</a>';
 	}
 
@@ -62,6 +73,20 @@ function paginate($page, $total, $numPerPage)
 ?>
 
 <div id="<?php echo $instance_id; ?>" class="wolfnet_widget wolfnet_agentsList">
+
+<form name="wolfnet_agentSearch" class="wolfnet_agentSearch" method="POST" 
+	action="<?php echo $linkBase . "?search"; ?>">
+	<?php
+	if($officeId != '') {
+		echo "<input type=\"hidden\" name=\"office_id\" value=\"$officeId\" />";
+	}
+	?>
+
+	<input type="text" name="agentCriteria" class="wolfnet_agentCriteria"
+		value="<?php echo (strlen($agentCriteria) > 0) ? $agentCriteria : ''; ?>" /> 
+	<input type="submit" name="agentSearch" class="wolfnet_agentSearchButton" value="Search" />
+	<div class="wolfnet_clearfix"></div>
+</form>
 
 <?php
 foreach($agents as $agent) {
@@ -124,7 +149,7 @@ foreach($agents as $agent) {
 	} // end if display_agent
 } // end foreach
 
-echo paginate($page, $totalrows, $numperpage); 
+echo paginate($page, $totalrows, $numperpage, $agentCriteria); 
 
 ?>
 

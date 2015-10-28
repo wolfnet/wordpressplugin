@@ -28,7 +28,11 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
     {
         $action = '';
 
-        if(array_key_exists('contact', $_REQUEST)) {
+        if(array_key_exists('search', $_REQUEST)) {
+            // All of the logic for searching is in the agentList function since
+            // we're just passing more criteria to the API call.
+            $action = 'agentList';
+        } elseif(array_key_exists('contact', $_REQUEST)) {
             if($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $action = 'contactProcess';
             } else {
@@ -78,7 +82,10 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
             return $this->agentList();
         }
 
-        $args = array('offices' => $officeData);
+        $args = array(
+            'offices' => $officeData,
+            'agentCriteria' => (array_key_exists('agentCriteria', $_REQUEST)) ? $_REQUEST['agentCriteria'] : '',
+        );
         $args = array_merge($args, $this->args);
 
         return $this->views->officesListView($args);
@@ -87,16 +94,16 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
 
     protected function agentList()
     {
-        if(array_key_exists("page", $_REQUEST) && $_REQUEST['page'] > 1) {
+        if(array_key_exists("agentpage", $_REQUEST) && $_REQUEST['agentpage'] > 1) {
             /*
              * $startrow needs to be calculated based on the requested page. If $page == 2
              * and numPerPage is 10, for example, we would need to get agents 11 through 20. 
              * The below equation will set the starting row accordingly.
              */
-            $startrow = $this->args['criteria']['numperpage'] * ($_REQUEST['page'] - 1) + 1;
+            $startrow = $this->args['criteria']['numperpage'] * ($_REQUEST['agentpage'] - 1) + 1;
         } else {
             $startrow = 1;
-            $_REQUEST['page'] = 1;
+            $_REQUEST['agentpage'] = 1;
         }
 
         $endpoint = '/agent';
@@ -107,6 +114,11 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
         }
         $endpoint .= $separator . "startrow=" . $startrow;
         $endpoint .= "&maxrows=" . $this->args['criteria']['numperpage'];
+
+        // This will be populated if an agent search is being performed.
+        if(array_key_exists('agentCriteria', $_REQUEST) && strlen($_REQUEST['agentCriteria']) > 0) {
+            $this->args['criteria']['name'] = $_REQUEST['agentCriteria'];
+        }
 
         try {
             $data = $this->apin->sendRequest($this->key, $endpoint, 'GET', $this->args['criteria']);
@@ -123,7 +135,9 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
         $args = array(
             'agents' => $agentsData,
             'totalrows' => $data['responseData']['data']['total_rows'],
-            'page' => $_REQUEST['page'],
+            'page' => $_REQUEST['agentpage'],
+            'officeId' => (array_key_exists('office_id', $_REQUEST)) ? $_REQUEST['office_id'] : '',
+            'agentCriteria' => (array_key_exists('agentCriteria', $_REQUEST)) ? $_REQUEST['agentCriteria'] : '',
         );
         $args = array_merge($args, $this->args);
 
