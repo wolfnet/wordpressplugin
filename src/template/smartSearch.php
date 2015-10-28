@@ -33,6 +33,15 @@
 		name="<?php echo $instance_id; ?>_quickSearchForm" method="get"
 		action="<?php echo $formAction; ?>">
 
+		<!-- SmartSearch -->
+		<div class="wolfnet_searchTypeField">
+			<input
+				id="<?php echo $instance_id; ?>_search_text"
+				class="wolfnet_smartsearch"
+				name="search_text"
+				type="text" />
+		</div>
+
 		<!-- Price form fields -->
 		<div class="wolfnet_widgetPrice">
 			<label>Price</label>
