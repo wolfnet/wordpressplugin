@@ -22,4 +22,74 @@
 
 ?>
 
+<div id="<?php echo $instance_id; ?>" class="wolfnet_widget wolfnet_quickSearch <?php echo $viewclass; ?>">
 
+	<?php if (trim($title) != '') { ?>
+		<h2 class="wolfnet_widgetTitle"><?php echo $title; ?></h2>
+	<?php } ?>
+
+	<form
+		id="<?php echo $instance_id; ?>_quickSearchForm" class="wolfnet_quickSearch_form"
+		name="<?php echo $instance_id; ?>_quickSearchForm" method="get"
+		action="<?php echo $formAction; ?>">
+
+		<!-- Price form fields -->
+		<div class="wolfnet_widgetPrice">
+			<label>Price</label>
+			<div>
+				<select id="<?php echo $instance_id; ?>_min_price" name="min_price">
+					<option value="">Min. Price</option>
+					<?php
+					if (is_array($prices) && array_key_exists('min_price', $prices)) {
+						foreach ($prices['min_price']['options'] as $price) { ?>
+							<option value="<?php echo $price['value']; ?>"><?php echo $price['label']; ?></option>
+						<?php
+						}
+					}
+					?>
+				</select>
+			</div>
+			<div>
+				<select id="<?php echo $instance_id; ?>_max_price" name="max_price">
+					<option value="">Max. Price</option>
+					<?php
+					if (is_array($prices) && array_key_exists('max_price', $prices)) {
+						foreach ($prices['max_price']['options'] as $price) { ?>
+							<option value="<?php echo $price['value']; ?>"><?php echo $price['label']; ?></option>
+						<?php
+						}
+					}
+					?>
+				</select>
+			</div>
+			<div class="wolfnet_clearfix"></div>
+		</div>
+
+		<!-- Beds/Baths form fields -->
+		<div class="wolfnet_widgetBedBath">
+			<div class="wolfnet_widgetBeds">
+				<label for="<?php echo $instance_id; ?>_min_beds">Beds</label>
+				<select id="<?php echo $instance_id; ?>_min_beds" name="min_bedrooms">
+					<option value="">Any</option>
+					<?php foreach ($beds as $bed) { ?>
+					<option value="<?php echo $bed['value']; ?>"><?php echo $bed['label']; ?></option>
+					<?php } ?>
+				</select>
+			</div>
+			<div class="wolfnet_widgetBaths">
+				<label for="<?php echo $instance_id; ?>_min_baths">Baths</label>
+				<select id="<?php echo $instance_id; ?>_min_baths" name="min_bathrooms">
+					<option value="">Any</option>
+					<?php foreach ($baths as $bath) { ?>
+					<option value="<?php echo $bath['value']; ?>"><?php echo $bath['label']; ?></option>
+					<?php } ?>
+				</select>
+			</div>
+		</div>
+
+		<div class="wolfnet_quickSearchFormButton">
+			<button class="wolfnet_quickSearchForm_submitButton" name="search" type="submit">Search!</button>
+		</div>
+
+	</form>
+</div>

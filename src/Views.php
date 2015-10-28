@@ -414,7 +414,14 @@ class Wolfnet_Views
 
 	public function smartSearchView(array $args = array())
 	{
-		return apply_filters('wolfnet_quickSearchView', $this->parseTemplate('smartSearch'));
+
+		$args['viewclass'] = 'wolfnet_quickSearch_smartsearch';
+
+		foreach ($args as $key => $item) {
+			$args[$key] = apply_filters('wolfnet_quickSearchView_' . $key, $item);
+		}
+
+		return apply_filters('wolfnet_quickSearchView', $this->parseTemplate('smartSearch', $args));
 	}
 
 
