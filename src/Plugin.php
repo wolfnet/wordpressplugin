@@ -1428,10 +1428,14 @@ class Wolfnet_Plugin
 
         $args = $this->convertDataType(array_merge($criteria, $vars));
 
-		// TODO: conditionally render smartsearch vs quicksearch
-        //return $this->views->quickSearchView($args);
-        return $this->views->smartSearchView($args);
-    }
+		if ($args['smartsearch']) {
+			// SmartSearch view
+			return $this->views->smartSearchView($args);
+		} else {
+			// Basic QuickSearch
+			return $this->views->quickSearchView($args);
+		}
+	}
 
 
     /* Misc. Data ******************************************************************************* */
