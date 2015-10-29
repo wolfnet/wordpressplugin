@@ -29,9 +29,12 @@
 	<?php } ?>
 
 	<form
-		id="<?php echo $instance_id; ?>_quickSearchForm" class="wolfnet_quickSearch_form"
-		name="<?php echo $instance_id; ?>_quickSearchForm" method="get"
-		action="<?php echo $formAction; ?>">
+		id="<?php echo $smartSearchId; ?>"
+		class="wolfnet_smartsearch"
+		name="<?php echo $instance_id; ?>_quickSearchForm"
+		method="get"
+		action="<?php echo $formAction; ?>"
+	>
 
 		<!-- SmartSearch -->
 		<div class="wolfnet_searchTypeField">
@@ -105,3 +108,5 @@
 
 	</form>
 </div>
+
+<!--TODO: call smartsearch jquery plugin on new smartsearch input field-->

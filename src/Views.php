@@ -415,7 +415,8 @@ class Wolfnet_Views
 	public function smartSearchView(array $args = array())
 	{
 
-		$args['viewclass'] = 'wolfnet_quickSearch_smartsearch';
+		$args['viewclass'] = 'wolfnet_quickSearch_smart';
+		$args['smartSearchId'] = uniqid('wolfnet_smartsearch_');;
 
 		foreach ($args as $key => $item) {
 			$args[$key] = apply_filters('wolfnet_quickSearchView_' . $key, $item);
