@@ -117,7 +117,7 @@ jQuery(function($){
                 if(data == false) {
                     delete menuItems.agent;
                 }
-            },
+            }
         });
 
         var menuString = '';
