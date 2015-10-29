@@ -395,34 +395,26 @@ class Wolfnet_Views
     }
 
 
-    public function quickSearchView(array $args = array())
-    {
-        // array containing possible values for 'view' arg
-        $views = array('basic', 'legacy');
-
-        //set up a custom css class for the wrapper. default 'wolfnet_quickSearch_legacy'
-        $args['viewclass'] = 'wolfnet_quickSearch_' . (in_array($args['view'], $views) ? $args['view'] : 'legacy');
-
-        foreach ($args as $key => $item) {
-            $args[$key] = apply_filters('wolfnet_quickSearchView_' . $key, $item);
-        }
-
-        return apply_filters('wolfnet_quickSearchView', $this->parseTemplate('quickSearch', $args));
-
-    }
-
-
-	public function smartSearchView(array $args = array())
+	public function quickSearchView(array $args = array())
 	{
 
-		$args['viewclass'] = 'wolfnet_quickSearch_smart';
-		$args['smartSearchId'] = uniqid('wolfnet_smartsearch_');;
+		// array containing possible values for 'view' arg
+		$views = array('basic', 'legacy');
+
+		//set up a custom css class for the wrapper. default 'wolfnet_quickSearch_legacy'
+		$args['viewclass'] = 'wolfnet_quickSearch_' . (in_array($args['view'], $views) ? $args['view'] : 'legacy');
 
 		foreach ($args as $key => $item) {
 			$args[$key] = apply_filters('wolfnet_quickSearchView_' . $key, $item);
 		}
 
-		return apply_filters('wolfnet_quickSearchView', $this->parseTemplate('smartSearch', $args));
+		if ($args['smartsearch']) {
+			$args['smartsearchInput'] = uniqid('wolfnet_smartsearch_');
+			return apply_filters('wolfnet_quickSearchView', $this->parseTemplate('smartSearch', $args));
+		} else {
+			return apply_filters('wolfnet_quickSearchView', $this->parseTemplate('quickSearch', $args));
+		}
+
 	}
 
 

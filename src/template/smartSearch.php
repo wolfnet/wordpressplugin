@@ -28,19 +28,15 @@
 		<h2 class="wolfnet_widgetTitle"><?php echo $title; ?></h2>
 	<?php } ?>
 
-	<form
-		id="<?php echo $smartSearchId; ?>"
-		class="wolfnet_smartsearch"
-		name="<?php echo $instance_id; ?>_quickSearchForm"
-		method="get"
-		action="<?php echo $formAction; ?>"
-	>
+    <form id="<?php echo $instance_id; ?>_quickSearchForm" class="wolfnet_quickSearch_form"
+        name="<?php echo $instance_id; ?>_quickSearchForm" method="get"
+        action="<?php echo $formAction; ?>" >
 
 		<!-- SmartSearch -->
 		<div class="wolfnet_searchTypeField">
 			<input
 				id="<?php echo $instance_id; ?>_search_text"
-				class="wolfnet_smartsearch"
+				class="<?php echo $smartsearchInput; ?>_search_text"
 				name="search_text"
 				type="text" />
 		</div>
