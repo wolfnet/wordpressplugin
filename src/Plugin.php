@@ -1784,6 +1784,28 @@ class Wolfnet_Plugin
     }
 
 
+    public function showAgentFeature()
+    {
+        try {
+            $data = $this->apin->sendRequest(
+                $this->getDefaultProductKey(), 
+                '/settings', 
+                'GET'
+            );
+        } catch (Wolfnet_Exception $e) {
+            return $this->displayException($e);
+        }
+
+        $leadsEnabled = $data['responseData']['data']['site']['agent_leads_enabled'];
+
+        if($leadsEnabled == 'N' || $leadsEnabled == 'false' || $leadsEnabled == '0') {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+
     /* PROTECTED METHODS ************************************************************************ */
     /*  ____            _            _           _   __  __      _   _               _            */
     /* |  _ \ _ __ ___ | |_ ___  ___| |_ ___  __| | |  \/  | ___| |_| |__   ___   __| |___        */
