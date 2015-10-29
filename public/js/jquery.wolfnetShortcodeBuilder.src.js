@@ -114,7 +114,6 @@ jQuery(function($){
             async: false,
             data: {action:'wolfnet_scb_showagentfeature'},
             success: function (data) {
-                console.log(data);
                 if(data == false) {
                     delete menuItems.agent;
                 }
