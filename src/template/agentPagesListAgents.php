@@ -29,7 +29,7 @@ if(array_key_exists("REDIRECT_URL", $_SERVER)) {
 	$linkBase = $_SERVER['PHP_SELF'];
 }
 
-function paginate($page, $total, $numPerPage, $search = '') 
+function paginate($page, $total, $numPerPage, $search = null, $sort = 'name') 
 {
 	/*
 	 * Note: We're using "agentpage" instead of just "page" as out URL variable
@@ -43,11 +43,14 @@ function paginate($page, $total, $numPerPage, $search = '')
 	
 	$output = '<ul class="wolfnet_agentPagination">';
 	$iterate = ceil($total / $numPerPage);
-	if(strlen($search) > 0) {
-		$linkBase = "?agentCriteria=" . $search . "&";
+
+	if(!is_null($search)) {
+		$linkBase = '?search&agentCriteria=' . $search . '&';
 	} else {
-		$linkBase = "?";
+		$linkBase = '?';
 	}
+
+	$linkBase .= 'agentSort=' . $sort . '&';
 
 	if(($page * $numPerPage) > $numPerPage) {
 		$output .= '<li><a href="' . $linkBase . 'agentpage=' . ($page - 1) . '">';
@@ -74,19 +77,28 @@ function paginate($page, $total, $numPerPage, $search = '')
 
 <div id="<?php echo $instance_id; ?>" class="wolfnet_widget wolfnet_agentsList">
 
-<form name="wolfnet_agentSearch" class="wolfnet_agentSearch" method="POST" 
-	action="<?php echo $linkBase . "?search"; ?>">
-	<?php
-	if($officeId != '') {
-		echo "<input type=\"hidden\" name=\"office_id\" value=\"$officeId\" />";
-	}
-	?>
+	<form name="wolfnet_agentSearch" class="wolfnet_agentSearch" method="POST" 
+		action="<?php echo $linkBase . "?search"; ?>">
+		<?php
+		if($officeId != '') {
+			echo "<input type=\"hidden\" name=\"office_id\" value=\"$officeId\" />";
+		}
+		?>
 
-	<input type="text" name="agentCriteria" class="wolfnet_agentCriteria"
-		value="<?php echo (strlen($agentCriteria) > 0) ? $agentCriteria : ''; ?>" /> 
-	<input type="submit" name="agentSearch" class="wolfnet_agentSearchButton" value="Search" />
+		<input type="text" name="agentCriteria" class="wolfnet_agentCriteria"
+			value="<?php echo (strlen($agentCriteria) > 0) ? $agentCriteria : ''; ?>" /> 
+		<input type="submit" name="agentSearch" class="wolfnet_agentSearchButton" value="Search" />
+		<div class="wolfnet_clearfix"></div>
+	</form>
+
+	<?php if($officeCount > 1) { ?>
+	<label for="agentSort">Sort By:</label>
+	<select name="agentSort" class="wolfnet_agentSort">
+		<option value="name" <?php echo ($agentSort == 'name') ? 'selected="selected"' : ''; ?>>Name</option>
+		<option value="office_id" <?php echo ($agentSort == 'office_id') ? 'selected="selected"' : ''; ?>>Office</option>
+	</select>
 	<div class="wolfnet_clearfix"></div>
-</form>
+	<?php } ?>
 
 <?php
 foreach($agents as $agent) {
@@ -149,7 +161,7 @@ foreach($agents as $agent) {
 	} // end if display_agent
 } // end foreach
 
-echo paginate($page, $totalrows, $numperpage, $agentCriteria); 
+echo paginate($page, $totalrows, $numperpage, $agentCriteria, $agentSort); 
 
 ?>
 
@@ -167,6 +179,25 @@ jQuery(function($) {
 			}
 		});
 		$('.wolfnet_agentPreview').height(maxHeight);
+
+		<?php if($officeCount > 1) { ?>
+		$('.wolfnet_agentSort').change(function() {
+			var href = $(location).attr('href');
+			var sortPos = href.indexOf('agentSort');
+
+			if(sortPos > -1) {
+				if($(this).val() == 'name') {
+					href = href.replace('agentSort=office_id', 'agentSort=name');
+				} else {
+					href = href.replace('agentSort=name', 'agentSort=office_id');
+				}
+			} else {
+				href += '&agentSort=' + $(this).val();
+			}
+			
+			window.location = href;
+		});
+		<?php } ?>
 	});
 });
 </script>

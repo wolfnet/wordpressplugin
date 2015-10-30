@@ -65,28 +65,18 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
 
     protected function officeList()
     {
-        $this->args['criteria']['omit_office_id'] = $this->args['excludeoffices'];
-
-        try {
-            $data = $this->apin->sendRequest($this->key, '/office', 'GET', $this->args['criteria']);
-        } catch (Wolfnet_Exception $e) {
-            return $this->displayException($e);
-        }
-
-        $officeData = array();
-
-        if (is_array($data['responseData']['data']['office'])) {
-            $officeData = $data['responseData']['data']['office'];
-        }
+        $officeData = $this->getOfficeData();
 
         // If there is only one office then just display its agents.
         if(count($officeData) == 1) {
             return $this->agentList();
         }
 
+        // agentCriteria is set to null if not passed along. Do not change this
+        // or it will screw up agent pagination when running a search.
         $args = array(
             'offices' => $officeData,
-            'agentCriteria' => (array_key_exists('agentCriteria', $_REQUEST)) ? $_REQUEST['agentCriteria'] : '',
+            'agentCriteria' => (array_key_exists('agentCriteria', $_REQUEST)) ? $_REQUEST['agentCriteria'] : null,
         );
         $args = array_merge($args, $this->args);
 
@@ -109,6 +99,12 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
         }
 
         $this->args['criteria']['omit_office_id'] = $this->args['excludeoffices'];
+        if(array_key_exists('agentSort', $_REQUEST)) {
+            $agentSort = $_REQUEST['agentSort'];
+            $this->args['criteria']['sort'] = ($_REQUEST['agentSort'] == 'name') ? 'name' : 'office_id';
+        } else {
+            $agentSort = 'name';
+        }
 
         $endpoint = '/agent';
         $separator = "?";
@@ -130,6 +126,12 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
             return $this->displayException($e);
         }
 
+        if(!array_key_exists('office_id', $_REQUEST)) {
+            $officeCount = count($this->getOfficeData());
+        } else {
+            $officeCount = 1;
+        }
+
         $agentsData = array();
 
         if (is_array($data['responseData']['data']['agent'])) {
@@ -140,7 +142,9 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
             'agents' => $agentsData,
             'totalrows' => $data['responseData']['data']['total_rows'],
             'page' => $_REQUEST['agentpage'],
+            'agentSort' => $agentSort,
             'officeId' => (array_key_exists('office_id', $_REQUEST)) ? $_REQUEST['office_id'] : '',
+            'officeCount' => $officeCount,
             'agentCriteria' => (array_key_exists('agentCriteria', $_REQUEST)) ? $_REQUEST['agentCriteria'] : '',
         );
         $args = array_merge($args, $this->args);
@@ -250,6 +254,26 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
      * HELPER FUNCTIONS
      *
      */
+
+
+    protected function getOfficeData()
+    {
+        $this->args['criteria']['omit_office_id'] = $this->args['excludeoffices'];
+
+        try {
+            $data = $this->apin->sendRequest($this->key, '/office', 'GET', $this->args['criteria']);
+        } catch (Wolfnet_Exception $e) {
+            return $this->displayException($e);
+        }
+
+        $officeData = array();
+
+        if (is_array($data['responseData']['data']['office'])) {
+            $officeData = $data['responseData']['data']['office'];
+        }
+
+        return $officeData;
+    }
 
 
     protected function agentFeaturedListings($key, $agentId) 
