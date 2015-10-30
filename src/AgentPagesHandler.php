@@ -65,6 +65,8 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
 
     protected function officeList()
     {
+        $this->args['criteria']['omit_office_id'] = $this->args['excludeoffices'];
+
         try {
             $data = $this->apin->sendRequest($this->key, '/office', 'GET', $this->args['criteria']);
         } catch (Wolfnet_Exception $e) {
@@ -105,6 +107,8 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
             $startrow = 1;
             $_REQUEST['agentpage'] = 1;
         }
+
+        $this->args['criteria']['omit_office_id'] = $this->args['excludeoffices'];
 
         $endpoint = '/agent';
         $separator = "?";

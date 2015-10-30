@@ -23,11 +23,18 @@
 ?>
 
 <div id="<?php echo $instance_id; ?>" class="wolfnet_agentPagesOptions">
+    <?php if(count($offices) > 1): ?>
+    <input type="hidden" id="<?php echo $excludeoffices_wpid; ?>" class="officeids" name="<?php echo $excludeoffices_wpname; ?>" value="" />
+    <?php endif; ?>
+
     <table class="form-table">
         <tr>
             <td><label>Title:</label></td>
             <td><input id="<?php echo $title_wpid; ?>" name="<?php echo $title_wpname; ?>" value="<?php echo $title; ?>" type="text" /></td>
         </tr>
+        <?php
+        if(count($offices) > 1) {
+        ?>
         <tr>
             <td><label>Show offices:</label></td>
             <td>
@@ -37,6 +44,21 @@
                 </select>
             </td>
         </tr>
+        <tr>
+            <td><label>Exclude offices:</label></td>
+            <td>
+            <?php
+            foreach($offices as $office) {
+                echo '<input type="checkbox" class="officeexclude"';
+                echo 'value="' . $office['office_id'] . '" /> ' . $office['name'];
+                echo ' (' . $office['office_id'] . ')<br />';
+            }
+            ?>
+            </td>
+        </tr>
+        <?php
+        }
+        ?>
         <tr>
             <td><label>Agents per page:</label></td>
             <td>
@@ -50,3 +72,26 @@
     </table>
 </div>
 
+<?php if(count($offices) > 1): ?>
+<script type="text/javascript">
+
+    jQuery(function($){
+        $("button[type=submit]").click(function() {
+            var <?php echo $instance_id; ?> = [];
+            var array = <?php echo $instance_id; ?>;
+            
+            $('.officeexclude').each(function() {
+                if($(this).attr('checked')) {
+                    if(array.indexOf($(this).val()) == -1) {
+                        array.push($(this).val());
+                    }
+                }
+            });
+
+            $('#<?php echo $excludeoffices_wpid; ?>').val(array.join(','));
+
+        });
+    });
+
+</script>
+<?php endif; ?>

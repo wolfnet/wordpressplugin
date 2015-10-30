@@ -186,17 +186,14 @@ class Wolfnet_Views
 
     public function agentPagesOptionsFormView(array $args = array())
     {
-        $markets = json_decode($GLOBALS['wolfnet']->getProductKey());
+        $offices = $GLOBALS['wolfnet']->getOffices();
+        $offices = $offices['responseData']['data']['office'];
         $keyids = array();
-
-        foreach ($markets as $market) {
-            array_push($keyids, $market->id);
-        }
 
         $defaultArgs = array(
             'instance_id'     => str_replace('.', '', uniqid('wolfnet_agentPages_')),
-            'markets'         => $markets,
-            'keyids'          => $keyids
+            'offices'         => $offices,
+            'keyids'          => $keyids,
         );
 
         $args = array_merge($defaultArgs, $args);

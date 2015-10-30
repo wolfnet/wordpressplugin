@@ -904,10 +904,11 @@ class Wolfnet_Plugin
     {
 
         return array(
-            'title'       => '',
-            'keyids'      => '',
-            'showoffices' => true,
-            'numperpage'  => 10,
+            'title'          => '',
+            'keyids'         => '',
+            'showoffices'    => true,
+            'excludeoffices' => '',
+            'numperpage'     => 10,
         );
 
     }
@@ -1803,6 +1804,22 @@ class Wolfnet_Plugin
         } else {
             return true;
         }
+    }
+
+
+    public function getOffices()
+    {
+        try {
+            $data = $this->apin->sendRequest(
+                $this->getDefaultProductKey(), 
+                '/office', 
+                'GET'
+            );
+        } catch (Wolfnet_Exception $e) {
+            return $this->displayException($e);
+        }
+
+        return $data;
     }
 
 
