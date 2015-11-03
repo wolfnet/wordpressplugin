@@ -50,7 +50,11 @@ if($agent['display_agent']) {
 		<div class="wolfnet_agentInfo">
 			<div class="wolfnet_agentName">
 				<?php 
-					echo $agent['first_name'] . " " . $agent['last_name']; 
+					echo $agent['first_name'] . " " . $agent['last_name'];
+					if(strlen($agent['title']) > 0) {
+						echo '<br />';
+						echo $agent['title'];
+					}
 				?>
 			</div>
 
@@ -64,16 +68,22 @@ if($agent['display_agent']) {
 
 			<div class="wolfnet_agentContact">
 				<?php 
-				if(strlen($agent['office_phone_number']) > 0) {
-					echo '<div class="wolfnet_agentOfficePhone">';
-					echo "<strong>Office:</strong> " . $agent['office_phone_number'];
-					echo '</div>';
-				}
+				$agentContact = array(
+					'office_phone_number' => 'Office',
+					'primary_contact_phone' => 'Primary Phone',
+					'mobile_phone' => 'Mobile Phone',
+					'home_phone_number' => 'Home Phone',
+					'fax_number' => 'Fax',
+					'pager_number' => 'Pager',
+					'toll_free_phone_number' => 'Toll Free',
+				);
 
-				if(strlen($agent['mobile_phone']) > 0) {
-					echo '<div class="wolfnet_agentMobilePhone">';
-					echo "<strong>Mobile:</strong> " . $agent['mobile_phone'];
-					echo '</div>';
+				foreach($agentContact as $key => $label) {
+					if(strlen($agent[$key]) > 0) {
+						echo '<div class="wolfnet_$key">';
+						echo "<strong>$label:</strong> " . $agent[$key];
+						echo '</div>';
+					}
 				}
 
 				if(strlen($agent['email_address']) > 0) {
@@ -90,51 +100,79 @@ if($agent['display_agent']) {
 					echo "<strong>Website:</strong> " . formatUrl($agent['web_url']);
 					echo '</div>';
 				}
-
-				if(strlen($agent['facebook_url']) > 0) {
-					echo '<div class="wolfnet_agentFacebook">';
-					echo "<strong>Facebook:</strong> " . formatUrl($agent['facebook_url']);
-					echo '</div>';
-				}
-
-				if(strlen($agent['areas_served']) > 0) {
-					echo '<div class="wolfnet_agentAreasServed">';
-					echo "<strong>Areas Served:</strong> " . $agent['areas_served'];
-					echo '</div>';
-				}
 				?>
 			</div>
 		</div>
 		<div class="wolfnet_agentBio">
 			<?php
-			if(strlen($agent['bio']) > 0) {
+			
+			// Agent links
+			$agentLinks = array(
+				'facebook_url'    => 'Facebook',
+				'twitter_url'     => 'Twitter',
+				'linkedin_url'    => 'LinkedIn',
+				'google_plus_url' => 'Google+',
+				'youtube_url'     => 'YouTube',
+				'pinterest_url'   => 'Pinterest',
+				'instagram_url'   => 'Instagram',
+			);
+
+			echo '<ul class="wolfnet_agentLinks">';
+			foreach($agentLinks as $key => $label) {
+				if(strlen($agent[$key]) > 0) {
+					echo "<li><strong>$label:</strong> " . formatUrl($agent[$key]) . "</li>";
+				}
+			}
+			echo '</ul>';
+
+			// Agent text areas
+			$agentBio = array(
+				'bio'                => 'Bio',
+				'experience'         => 'Experience',
+				'education'          => 'Education',
+				'areas_served'       => 'Areas Served',
+				'services_available' => 'Services Available',
+				'awards'             => 'Awards',
+				'specialty'          => 'Speciality',
+				'motto_quote'        => 'Motto',
+				'designations'       => 'Designations',
+			);
+
+			foreach($agentBio as $key => $label) {
+				if(strlen($agent[$key]) > 0) {
+					echo '<span class="wolfnet_agentSection">';
+					echo '<p><strong>' . $label . '</strong><br />' . $agent['bio'] . '</p>';
+					echo '</span>';
+				}
+			}
+
+			if(strlen($agent['optional_field_label']) > 0 && 
+				strlen($agent['optional_field_value']) > 0) {
+
 				echo '<span class="wolfnet_agentSection">';
-				echo '<p><strong>Bio</strong><br />' . $agent['bio'] . '</p>';
+				echo '<p><strong>' . $agent['optional_field_label'] . '</strong><br />';
+				echo $agent['optional_field_value'] . '</p>';
 				echo '</span>';
 			}
 
-			if(strlen($agent['experience']) > 0) {
-				echo '<span class="wolfnet_agentSection">';
-				echo '<p><strong>Experience</strong><br />' . $agent['experience'] . '</p>';
-				echo '</span>';
+			// Favorite links
+			$showFavoriteLinks = false;
+			$favoriteLinks = '';
+			for($i = 1; $i <= 9; $i++) {
+				if(strlen($agent['favorite_link_name_' . $i]) > 0 && 
+					strlen($agent['favorite_link_url_' . $i]) > 0) {
+
+					$showFavoriteLinks = true;
+					$favoriteLinks .= "<li><strong>" . $agent['favorite_link_name_' . $i] . ":</strong> ";
+					$favoriteLinks .= formatUrl($agent['favorite_link_url_' . $i]) . "</li>";
+				}
 			}
 
-			if(strlen($agent['education']) > 0) {
-				echo '<span class="wolfnet_agentSection">';
-				echo '<p><strong>Education</strong><br />' . $agent['education'] . '</p>';
-				echo '</span>';
-			}
-
-			if(strlen($agent['services_available']) > 0) {
-				echo '<span class="wolfnet_agentSection">';
-				echo '<p><strong>Services</strong><br />' . $agent['services_available'] . '</p>';
-				echo '</span>';
-			}
-
-			if(strlen($agent['awards']) > 0) {
-				echo '<span class="wolfnet_agentSection">';
-				echo '<p><strong>Awards</strong><br />' . $agent['awards'] . '</p>';
-				echo '</span>';
+			if($showFavoriteLinks) {
+				echo '<strong>Favorite Links</strong>';
+				echo '<ul class="wolfnet_agentLinks">';
+				echo $favoriteLinks;
+				echo '</ul>';
 			}
 			?>
 		</div>
