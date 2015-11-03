@@ -109,7 +109,10 @@
 <script type="text/javascript">
 
 	jQuery(function($){
-		$('.<?php echo $smartsearchInput; ?>').wolfnetSmartSearch()
+		$('.<?php echo $smartsearchInput; ?>').wolfnetSmartSearch({
+			ajaxUrl    : wolfnet_ajax.ajaxurl,
+			ajaxAction : 'wolfnet_search_suggestion'
+		})
 	});
 
 </script>

@@ -19,7 +19,17 @@
 			/**
 			 * This function initializes the plugin.
 			 */
-			init: function() {
+			init: function(options) {
+
+				// Enforce required arguments.
+				if (!options.ajaxUrl) {
+					$.error('The "ajaxUrl" option must be included when initializing the plugin.');
+					return this;
+				}
+				if (!options.ajaxAction) {
+					$.error('The "ajaxAction" option must be included when initializing the plugin.');
+					return this;
+				}
 
 			}
 		},
@@ -28,24 +38,23 @@
 		},
 
 		/**
-		 * This function is a wrapper for the initialization of the plugin.
+		 * This function acts as a wrapper to the initialization of the plugin.
 		 * @param  {Object}  options  An object/map of options for the plugin.
 		 * @return {jQuery}  The jQuery selection object which the plugin is being applied to.
 		 */
-		init : function() {
-
-			methods.public.init();
-
+		wrapper : function(options) {
+			methods.public.init(options);
 		}
 
 	}
 
 	$.fn[pluginName] = function(method)
 	{
+
 		if (methods[method]) {
 			return methods[method].apply(this, Array.prototype.slice.call(arguments, 1));
 		} else if (typeof method === 'object' || !method) {
-			return methods.init.apply( this, arguments );
+			return methods.wrapper.apply( this, arguments );
 		} else {
 			$.error( 'Method ' +  method + ' does not exist on jQuery.' + pluginName );
 		}
