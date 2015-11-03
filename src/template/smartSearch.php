@@ -105,4 +105,11 @@
 	</form>
 </div>
 
-<!--TODO: call smartsearch jquery plugin on new smartsearch input field-->
+
+<script type="text/javascript">
+
+	jQuery(function($){
+		$('.<?php echo $smartsearchInput; ?>').wolfnetSmartSearch()
+	});
+
+</script>

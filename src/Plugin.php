@@ -2546,7 +2546,7 @@ class Wolfnet_Plugin
 				array('jquery', 'migrate', 'mapquest-api'),
 			),
 			'wolfnet-smartsearch' => array(
-				$this->url . 'js/jquery.wntSmartsearch.src.js'
+				$this->url . 'js/jquery.wolfnetSmartsearch.src.js'
 			)
 		);
 
