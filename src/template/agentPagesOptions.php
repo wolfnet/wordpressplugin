@@ -29,8 +29,28 @@
 
     <table class="form-table">
         <tr>
-            <td><label>Title:</label></td>
-            <td><input id="<?php echo $title_wpid; ?>" name="<?php echo $title_wpname; ?>" value="<?php echo $title; ?>" type="text" /></td>
+            <td><label>Office list title:</label></td>
+            <td>
+                <input id="<?php echo $officetitle_wpid; ?>" 
+                    name="<?php echo $officetitle_wpname; ?>" 
+                    value="<?php echo $officetitle; ?>" type="text" />
+            </td>
+        </tr>
+        <tr>
+            <td><label>Agent list title:</label></td>
+            <td>
+                <input id="<?php echo $agenttitle_wpid; ?>" 
+                    name="<?php echo $agenttitle_wpname; ?>" 
+                    value="<?php echo $agenttitle; ?>" type="text" />
+            </td>
+        </tr>
+        <tr>
+            <td><label>Agent detail title:</label></td>
+            <td>
+                <input id="<?php echo $detailtitle_wpid; ?>" 
+                    name="<?php echo $detailtitle_wpname; ?>" 
+                    value="<?php echo $detailtitle; ?>" type="text" />
+            </td>
         </tr>
         <?php
         if(count($offices) > 1) {

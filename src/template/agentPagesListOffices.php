@@ -30,6 +30,10 @@ if(array_key_exists("REDIRECT_URL", $_SERVER)) {
 } else {
 	$linkBase = $_SERVER['PHP_SELF'];
 }
+
+if(strlen($officetitle) > 0) {
+	echo '<h2>' . $officetitle . '</h2>';
+}
 ?>
 
 <form name="wolfnet_agentSearch" class="wolfnet_agentSearch" method="POST" 

@@ -77,6 +77,12 @@ function paginate($page, $total, $numPerPage, $search = null, $sort = 'name')
 
 <div id="<?php echo $instance_id; ?>" class="wolfnet_widget wolfnet_agentsList">
 
+	<?php
+	if(strlen($agenttitle) > 0) {
+		echo '<h2>' . $agenttitle . '</h2>';
+	}
+	?>
+
 	<form name="wolfnet_agentSearch" class="wolfnet_agentSearch" method="POST" 
 		action="<?php echo $linkBase . "?search"; ?>">
 		<?php

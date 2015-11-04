@@ -35,6 +35,10 @@ function formatUrl($url) {
 <div id="<?php echo $instance_id; ?>" class="wolfnet_widget wolfnet_agentShow">
 
 <?php
+if(strlen($detailtitle) > 0) {
+	echo '<h2>' . $detailtitle . '</h2>';
+}
+
 if($agent['display_agent']) {
 ?>
 
@@ -141,7 +145,7 @@ if($agent['display_agent']) {
 			foreach($agentBio as $key => $label) {
 				if(strlen($agent[$key]) > 0) {
 					echo '<span class="wolfnet_agentSection">';
-					echo '<p><strong>' . $label . '</strong><br />' . $agent['bio'] . '</p>';
+					echo '<p><strong>' . $label . '</strong><br />' . $agent[$key] . '</p>';
 					echo '</span>';
 				}
 			}

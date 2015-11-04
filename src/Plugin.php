@@ -906,7 +906,9 @@ class Wolfnet_Plugin
     {
 
         return array(
-            'title'          => '',
+            'officetitle'    => '',
+            'agenttitle'     => '',
+            'detailtitle'    => '',
             'keyids'         => '',
             'showoffices'    => true,
             'excludeoffices' => '',
