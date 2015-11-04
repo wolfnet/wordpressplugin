@@ -24,6 +24,9 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
 
     protected $key;
 
+    public function __construct($wolfnet)
+    {}
+
     public function handleRequest() 
     {
         $action = '';
@@ -80,7 +83,7 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
         );
         $args = array_merge($args, $this->args);
 
-        return $this->views->officesListView($args);
+        return $GLOBALS['wolfnet']->views->officesListView($args);
     }
 
 
@@ -121,9 +124,9 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
         }
 
         try {
-            $data = $this->apin->sendRequest($this->key, $endpoint, 'GET', $this->args['criteria']);
+            $data = $GLOBALS['wolfnet']->apin->sendRequest($this->key, $endpoint, 'GET', $this->args['criteria']);
         } catch (Wolfnet_Exception $e) {
-            return $this->displayException($e);
+            return $GLOBALS['wolfnet']->displayException($e);
         }
 
         if(!array_key_exists('office_id', $_REQUEST)) {
@@ -149,7 +152,7 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
         );
         $args = array_merge($args, $this->args);
 
-        return $this->views->agentsListView($args);
+        return $GLOBALS['wolfnet']->views->agentsListView($args);
     }
 
 
@@ -167,7 +170,7 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
         $listings = ($count > 0) ? $featuredListings['listings'] : null;
 
 
-        $searchUrl = $this->getBaseUrl($this->key);
+        $searchUrl = $GLOBALS['wolfnet']->getBaseUrl($this->key);
         $searchUrl .= "?action=newsearchsession&agent_id=" . $agentData['mls_agent_id'];
 
         $args = array(
@@ -178,7 +181,7 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
         );
         $args = array_merge($args, $this->args);
 
-        return $this->views->agentView($args);
+        return $GLOBALS['wolfnet']->views->agentView($args);
     }
 
 
@@ -192,7 +195,7 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
         );
         $args = array_merge($args, $this->args);
 
-        return $this->views->agentContact($args);
+        return $GLOBALS['wolfnet']->views->agentContact($args);
     }
 
 
@@ -223,15 +226,15 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
         $this->args['criteria']['agent_guid'] = $_REQUEST['contact'];
 
         try {
-            $data = $this->apin->sendRequest(
+            $data = $GLOBALS['wolfnet']->apin->sendRequest(
                 $this->key,
                 '/agent_inquire',
                 'POST',
                 $this->args['criteria']
             );
         } catch (Wolfnet_Exception $e) {
-            $errorInfo = json_decode($e->getData()['body'])->metadata->status->extendedInfo;
-            
+            $errorInfo = json_decode($e->getData()->body)->metadata->status->extendedInfo;
+
             if(strpos($errorInfo, 'email')) {
                 $_REQUEST['errorField'] = 'wolfnet_email';
             } elseif(strpos($errorInfo, 'phone')) {
@@ -261,9 +264,9 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
         $this->args['criteria']['omit_office_id'] = $this->args['excludeoffices'];
 
         try {
-            $data = $this->apin->sendRequest($this->key, '/office', 'GET', $this->args['criteria']);
+            $data = $GLOBALS['wolfnet']->apin->sendRequest($this->key, '/office', 'GET', $this->args['criteria']);
         } catch (Wolfnet_Exception $e) {
-            return $this->displayException($e);
+            return $GLOBALS['wolfnet']->displayException($e);
         }
 
         $officeData = array();
@@ -295,7 +298,7 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
 
         return array(
             'totalRows' => $agentListings['responseData']['data']['total_rows'],
-            'listings' => $this->listingGrid($criteria, 'grid', $agentListings),
+            'listings' => $GLOBALS['wolfnet']->listingGrid($criteria, 'grid', $agentListings),
         );
     }
 
@@ -303,14 +306,14 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
     protected function getListingsByAgentId($key, $agentId) 
     {
         try {
-            $data = $this->apin->sendRequest(
+            $data = $GLOBALS['wolfnet']->apin->sendRequest(
                 $key, 
                 '/listing/?agent_id=' . $agentId, 
                 'GET', 
                 $this->args['criteria']
             );
         } catch (Wolfnet_Exception $e) {
-            return $this->displayException($e);
+            return $GLOBALS['wolfnet']->displayException($e);
         }
 
         return $data;
@@ -320,14 +323,14 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
     protected function getAgentById($agentId) 
     {
         try {
-            $data = $this->apin->sendRequest(
+            $data = $GLOBALS['wolfnet']->apin->sendRequest(
                 $this->key, 
                 '/agent/' . $agentId, 
                 'GET', 
                 $this->args['criteria']
             );
         } catch (Wolfnet_Exception $e) {
-            return $this->displayException($e);
+            return $GLOBALS['wolfnet']->displayException($e);
         }
 
         $agentData = array();

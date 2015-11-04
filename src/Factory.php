@@ -121,7 +121,7 @@ class Wolfnet_Factory
 
     private function getWolfnet_AgentPagesHandler()
     {
-        return new Wolfnet_AgentPagesHandler();
+        return new Wolfnet_AgentPagesHandler($this->args['plugin']);
     }
 
 

@@ -145,6 +145,8 @@ class Wolfnet_Plugin
 
         $this->views = $this->ioc->get('Wolfnet_Views');
 
+        $this->agentHandler = $this->ioc->get('Wolfnet_AgentPagesHandler');
+
 
         if (is_admin()) {
             $this->admin = $this->ioc->get('Wolfnet_Admin');
@@ -938,11 +940,10 @@ class Wolfnet_Plugin
 
         $args = $this->convertDataType(array_merge($criteria, $vars));
 
-        $agentHandler = $this->ioc->get('Wolfnet_AgentPagesHandler');
-        $agentHandler->setKey($key);
-        $agentHandler->setArgs($args);
+        $this->agentHandler->setKey($key);
+        $this->agentHandler->setArgs($args);
 
-        return $agentHandler->handleRequest();
+        return $this->agentHandler->handleRequest();
     }
 
 
