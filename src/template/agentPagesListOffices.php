@@ -36,6 +36,10 @@ if(strlen($officetitle) > 0) {
 }
 ?>
 
+<div class="wolfnet_viewAll">
+	<a href="?search">Click here</a> to view all agents and staff.
+</div>
+
 <form name="wolfnet_agentSearch" class="wolfnet_agentSearch" method="POST" 
 	action="<?php echo $linkBase . "?search"; ?>">
 	<?php // No office ID as a hidden field. We want to search all offices ?>

@@ -83,6 +83,10 @@ function paginate($page, $total, $numPerPage, $search = null, $sort = 'name')
 	}
 	?>
 
+	<div class="wolfnet_viewAll">
+		<a href="?search">Click here</a> to view all agents and staff.
+	</div>
+
 	<form name="wolfnet_agentSearch" class="wolfnet_agentSearch" method="POST" 
 		action="<?php echo $linkBase . "?search"; ?>">
 		<?php
@@ -110,6 +114,9 @@ function paginate($page, $total, $numPerPage, $search = null, $sort = 'name')
 foreach($agents as $agent) {
 	if($agent['display_agent']) {
 		$agentLink = $linkBase . '?agent=' . $agent['agent_id'];
+		if(array_key_exists('agentCriteria', $_REQUEST)) {
+			$agentLink .= '&agentCriteria=' . $_REQUEST['agentCriteria'];
+		}
 ?>
 
 	<div class="wolfnet_agentPreview">

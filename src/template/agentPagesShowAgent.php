@@ -35,8 +35,29 @@ function formatUrl($url) {
 <div id="<?php echo $instance_id; ?>" class="wolfnet_widget wolfnet_agentShow">
 
 <?php
+
 if(strlen($detailtitle) > 0) {
 	echo '<h2>' . $detailtitle . '</h2>';
+}
+
+if(array_key_exists('HTTP_REFERER', $_SERVER)) {
+	if(strpos($_SERVER['HTTP_REFERER'], '?search') !== false
+		|| strpos($_SERVER['HTTP_REFERER'], 'office_id') !== false) {
+
+		$link = $_SERVER['HTTP_REFERER'];
+		if(array_key_exists('agentCriteria', $_REQUEST)) {
+			$link .= '&agentCriteria=' . $_REQUEST['agentCriteria'];
+		}
+		echo '<div class="wolfnet_back"><a href="' . $link . '">Back</a></div>';
+	}
+} else {
+?>
+
+<div class="wolfnet_viewAll">
+	<a href="?search">Click here</a> to view all agents and staff.
+</div>
+
+<?php
 }
 
 if($agent['display_agent']) {
