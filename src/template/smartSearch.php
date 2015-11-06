@@ -28,18 +28,28 @@
 		<h2 class="wolfnet_widgetTitle"><?php echo $title; ?></h2>
 	<?php } ?>
 
-    <form id="<?php echo $instance_id; ?>_quickSearchForm" class="wolfnet_quickSearch_form"
-        name="<?php echo $instance_id; ?>_quickSearchForm" method="get"
-        action="<?php echo $formAction; ?>" >
+	<form
+		id="<?php echo $instance_id; ?>_quickSearchForm"
+		class="wolfnet_quickSearch_form"
+		name="<?php echo $instance_id; ?>_quickSearchForm"
+		method="get"
+		action="<?php echo $formAction; ?>"
+	>
 
-		<!-- SmartSearch -->
-		<div class="wolfnet_searchTypeField">
-			<input
-				id="<?php echo $instance_id; ?>_search_text"
-				class="<?php echo $smartsearchInput; ?>_search_text"
-				name="search_text"
-				type="text" />
-		</div>
+		<fieldset class="open-search">
+			<div class="form-group">
+				<div class="wolfnet_searchTypeField">
+					<input
+						id="<?php echo $instance_id; ?>_search_text"
+						class="<?php echo $smartsearchInput; ?>_search_text wnt-smart-search"
+						name="q"
+						type="text"
+						value=""
+						placeholder="Search by City, Address, Zip, Area, and more!"
+					/>
+				</div>
+			</div>
+		</fieldset>
 
 		<!--TODO: Move Price/Bed/Baths widget to its own modularized view/template-->
 		<!-- and call from both quicksearch and smartsearch views.-->
@@ -109,7 +119,10 @@
 <script type="text/javascript">
 
 	jQuery(function($){
-		$('.<?php echo $smartsearchInput; ?>').wolfnetSmartSearch({
+
+		var $form = $('#<?php echo $instance_id; ?>_quickSearchForm');
+
+		$form.find('.open-search input:first').wolfnetSmartSearch({
 			ajaxUrl    : wolfnet_ajax.ajaxurl,
 			ajaxAction : 'wolfnet_search_suggestion'
 		})
