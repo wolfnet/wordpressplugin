@@ -206,14 +206,25 @@ if($agent['display_agent']) {
 <?php
 } // end if display_agent
 
-if($listingCount > 0) {
+if($activeListingCount > 0) {
 	echo '<p><strong>Featured Listings</strong></p>';
-	echo $listingHTML;
+	echo $activeListingHTML;
 }
 
-if($listingCount > 10) {
+if($activeListingCount > 10) {
 	echo '<a href="' . $searchUrl . '">';
-	echo "View all " . $listingCount . " of " . $agent['first_name'] . "'s listings.";
+	echo "View all " . $activeListingCount . " of " . $agent['first_name'] . "'s listings.";
+	echo "</a>";
+}
+
+if($soldListingCount > 0) {
+	echo '<p><strong>Sold Listings</strong></p>';
+	echo $soldListingHTML;
+}
+
+if($soldListingCount > 10) {
+	echo '<a href="' . $soldSearchUrl . '">';
+	echo "View all " . $soldListingCount . " of " . $agent['first_name'] . "'s sold listings.";
 	echo "</a>";
 }
 ?>

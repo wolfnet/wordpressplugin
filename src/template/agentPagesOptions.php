@@ -83,12 +83,36 @@
             <td><label>Agents per page:</label></td>
             <td>
                 <select id="<?php echo $numperpage_wpid; ?>" name="<?php echo $numperpage_wpname; ?>">
-                    <option value="10"<?php if($numperpage == 10) echo ' selected="selected"'?>>10</option>
-                    <option value="20"<?php if($numperpage == 20) echo ' selected="selected"'?>>20</option>
-                    <option value="30"<?php if($numperpage == 30) echo ' selected="selected"'?>>30</option>
+                    <option value="10"<?php if($numperpage == 10) echo ' selected="selected"'; ?>>10</option>
+                    <option value="20"<?php if($numperpage == 20) echo ' selected="selected"'; ?>>20</option>
+                    <option value="30"<?php if($numperpage == 30) echo ' selected="selected"'; ?>>30</option>
                 </select>
             </td>
         </tr>
+        <tr>
+            <td><label>Show active listings:</label></td>
+            <td>
+                <select id="<?php echo $activelistings_wpid; ?>" name="<?php echo $activelistings_wpname; ?>">
+                    <option value="true"<?php if($activelistings == true) echo ' selected="selected"'; ?>>Yes</option>
+                    <option value="false"<?php if($activelistings == false) echo ' selected="selected"'; ?>>No</option>
+                </select>
+            </td>
+        </tr>
+        <?php
+        if($showSoldOption) {
+        ?>
+        <tr>
+            <td><label>Show sold listings:</label></td>
+            <td>
+                <select id="<?php echo $soldlistings_wpid; ?>" name="<?php echo $soldlistings_wpname; ?>">
+                    <option value="true"<?php if($soldlistings == true) echo ' selected="selected"'; ?>>Yes</option>
+                    <option value="false"<?php if($soldlistings == false) echo ' selected="selected"'; ?>>No</option>
+                </select>
+            </td>
+        </tr>
+        <?php
+        }
+        ?>
     </table>
 </div>
 

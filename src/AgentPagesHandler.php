@@ -165,19 +165,35 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
         // We can get the appropriate key for this agent based on their market.
         $this->key = $this->getProductKeyByMarket($agentData['market']);
 
-        $featuredListings = $this->agentFeaturedListings($this->key, $agentData['mls_agent_id']);
-        $count = $featuredListings['totalRows'];
-        $listings = ($count > 0) ? $featuredListings['listings'] : null;
+        if($this->args['criteria']['activelistings']) {
+            $featuredListings = $this->agentFeaturedListings($this->key, $agentData['mls_agent_id']);
+            $count = $featuredListings['totalRows'];
+            $listings = ($count > 0) ? $featuredListings['listings'] : null;
+        } else {
+            $count = 0;
+            $listings = null;
+        }
 
+        if($this->args['criteria']['soldlistings'] && $GLOBALS['wolfnet']->soldListingsEnabled()) {
+            $soldListings = $this->agentSoldListings($this->key, $agentData['mls_agent_id']);
+            $soldCount = $soldListings['totalRows'];
+            $soldListings = ($soldCount > 0) ? $soldListings['listings'] : null;
+        } else {
+            $soldCount = 0;
+            $soldListings = null;
+        }
 
         $searchUrl = $GLOBALS['wolfnet']->getBaseUrl($this->key);
         $searchUrl .= "?action=newsearchsession&agent_id=" . $agentData['mls_agent_id'];
 
         $args = array(
             'agent' => $agentData,
-            'listingCount' => $count,
-            'listingHTML' => $listings,
+            'activeListingCount' => $count,
+            'activeListingHTML' => $listings,
+            'soldListingCount' => $soldCount,
+            'soldListingHTML' => $soldListings,
             'searchUrl' => $searchUrl,
+            'soldSearchUrl' => $searchUrl . "&sold=y",
         );
         $args = array_merge($args, $this->args);
 
@@ -281,15 +297,28 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
 
     protected function agentFeaturedListings($key, $agentId) 
     {
+        return $this->getAgentListings($key, $agentId);
+    }
+
+
+    protected function agentSoldListings($key, $agentId)
+    {
+        return $this->getAgentListings($key, $agentId, 1);
+    }
+
+
+    protected function getAgentListings($key, $agentId, $sold = 0)
+    {
         $criteria = $this->getListingGridDefaults();
-        $criteria['maxrows'] = 10;
-        $criteria['maxresults'] = 10;
+        $count = ($sold) ? 6 : 10;
+        $criteria['maxrows'] = $count;
+        $criteria['maxresults'] = $count;
 
         $this->args['criteria'] = array_merge($this->args['criteria'], $criteria);
 
-        $agentListings = $this->getListingsByAgentId($key, $agentId);
+        $agentListings = $this->getListingsByAgentId($key, $agentId, $sold);
 
-        if(count($agentListings['responseData']['data']['listing']) == 0) {
+        if($agentListings == null || count($agentListings['responseData']['data']['listing']) == 0) {
             return array('totalRows' => 0, 'listings' => '');
         }
 
@@ -303,17 +332,22 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
     }
 
 
-    protected function getListingsByAgentId($key, $agentId) 
+    protected function getListingsByAgentId($key, $agentId, $sold = 0) 
     {
         try {
             $data = $GLOBALS['wolfnet']->apin->sendRequest(
                 $key, 
-                '/listing/?agent_id=' . $agentId, 
+                '/listing/?agent_id=' . $agentId . "&sold=" . $sold, 
                 'GET', 
                 $this->args['criteria']
             );
         } catch (Wolfnet_Exception $e) {
-            return $GLOBALS['wolfnet']->displayException($e);
+            $errorCode = json_decode($e->getData()['body'])->metadata->status->errorCode;
+            if($errorCode == 'Auth1004') {
+                $data = null;
+            } else {
+                $GLOBALS['wolfnet']->displayException($e);
+            }
         }
 
         return $data;

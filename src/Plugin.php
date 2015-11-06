@@ -911,6 +911,8 @@ class Wolfnet_Plugin
             'detailtitle'    => '',
             'keyids'         => '',
             'showoffices'    => true,
+            'activelistings' => true,
+            'soldlistings'   => false,
             'excludeoffices' => '',
             'numperpage'     => 10,
         );
@@ -1807,6 +1809,25 @@ class Wolfnet_Plugin
         } else {
             return true;
         }
+    }
+
+
+    public function soldListingsEnabled()
+    {
+        try {
+            $data = $this->apin->sendRequest(
+                $this->getDefaultProductKey(),
+                '/settings',
+                'GET'
+            );
+        } catch(Wolfnet_Exception $e) {
+            return $this->displayException($e);
+        }
+
+        $marketEnabled = $data['responseData']['data']['market']['has_sold_property'];
+        $siteEnabled = $data['responseData']['data']['site']['sold_property_enabled'];
+
+        return ($marketEnabled && $siteEnabled);
     }
 
 

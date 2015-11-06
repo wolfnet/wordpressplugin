@@ -207,6 +207,7 @@ class Wolfnet_Ajax
 
         try {
             $args = $GLOBALS['wolfnet']->getAgentPagesOptions();
+            $args['showSoldOption'] = $GLOBALS['wolfnet']->soldListingsEnabled();
 
             $response = $GLOBALS['wolfnet']->views->agentPagesOptionsFormView($args);
 
