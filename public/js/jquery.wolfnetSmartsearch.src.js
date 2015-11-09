@@ -33,25 +33,26 @@
 					return this;
 				}
 
-				//return this.each(function(){
+				return this.each(function(){
 
-				var $smartSearch = $(this);
-				var opts = $.extend(true, {}, defaultOptions, options);
+					var $smartSearch = $(this);
+					var opts = $.extend(true, {}, defaultOptions, options);
 
-				if (opts.fields.length === 0) {
-					opts.fields.push($smartSearch.attr('name'));
-				}
+					if (opts.fields.length === 0) {
+						opts.fields.push($smartSearch.attr('name'));
+					}
 
-				$smartSearch.data(stateKey, opts);
+					// Store the plugin options with the element.
+					$smartSearch.data(stateKey, opts);
 
-				// Create a container to hold the input as well as selected items.
-				methods.private.createInputControl($smartSearch);
+					// Create a container to hold the input as well as selected items.
+					methods.private.createInputControl($smartSearch);
 
-				//});
+				});
 
 			}
 
-		}, // end of collection of public methods
+		}, // END of public
 
 
 		private: {
@@ -63,18 +64,79 @@
 			 * @return {void}
 			 */
 			createInputControl: function($smartSearch) {
+				var $form = $($smartSearch[0].form);
+				var pluginData = $smartSearch.data(stateKey);
+
+				// Create a new input which will be used instead of the original
+				var $searchInput = $('<input>')
+					.attr({
+						autocomplete:'off',
+						name: $smartSearch.attr('name') == 'q' ? 'q' : '',
+						placeholder: $smartSearch.attr('placeholder'),
+						type: 'text'
+					})
+					.css({
+						border: 0,
+						padding:0,
+						outline:'none',
+						minWidth: '5em',
+						width: '100%'
+					})
+					.val($smartSearch.val());
+
+				// Create a place within the smart search container to hold the selected criteria
+				var $inputListItem = $('<span>')
+					.addClass('wnt-smart-search-input')
+					.css({
+						display: 'inline-block',
+						width: '100%'
+					})
+					.append($searchInput);
+
+				// Create a container to wrap the entire smart search component.
+				var $container = $('<span>')
+					.addClass($smartSearch.attr('class'))
+					.css({
+						display:'inline-block',
+						'text-align': 'left'
+					})
+					.append($inputListItem)
+					.click(function(){
+						$searchInput.focus();
+					})
+					.resize(function(){
+						methods.private.resizeSuggestionsList($smartSearch);
+					})
+					.insertBefore($smartSearch);
+
+				// If the original input field was in focus when we started creating the smart search
+				// bring focus to the new input container.
+				if ($smartSearch.is(':focus')) {
+					$searchInput.focus();
+				}
+
+				// Hide the original input element and move it to the beginning of the form.
+				$smartSearch.hide();
+				$smartSearch.prependTo($form);
+
+				// If the original input element has name "q" (the primary open text field) remove
+				// its name attribute to avoid issues later on.
+				if ($smartSearch.attr('name') == 'q') {
+					$smartSearch.removeAttr('name');
+					$searchInput.val($smartSearch.val());
+				}
+
+
+				// Store references to the new input and the outer smart search container.
+				pluginData.searchInput = $searchInput;
+				pluginData.listContainer = $container;
+
+				$smartSearch.data(stateKey, pluginData);
+
 			}
 
 
-		}, // end of collection of private methods
-
-
-		/**
-		 * This function acts as a wrapper to the initialization of the plugin.
-		 */
-		wrapper : function(options) {
-			methods.public.init(options);
-		}
+		}, // END of private
 
 
 	}
@@ -84,7 +146,7 @@
 		if (methods[method]) {
 			return methods[method].apply(this, Array.prototype.slice.call(arguments, 1));
 		} else if (typeof method === 'object' || !method) {
-			return methods.wrapper.apply( this, arguments );
+			return methods.public.init.apply( this, arguments );
 		} else {
 			$.error( 'Method ' +  method + ' does not exist on jQuery.' + pluginName );
 		}
