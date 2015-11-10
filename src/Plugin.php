@@ -613,6 +613,10 @@ class Wolfnet_Plugin
         $keyList = json_decode($this->getProductKey());
 
         foreach ($keyList as $key) {
+            if(!array_key_exists('market', $key)) {
+                $this->updateProductKeys();
+            }
+
             if (strtoupper($key->market) == strtoupper($market)) {
                 return $key->key;
             }
@@ -669,6 +673,26 @@ class Wolfnet_Plugin
     public function getKeyCount()
     {
         return count(json_decode($this->getProductKey()));
+    }
+
+
+    /**
+     * This method updates the product key structure to make sure it has all the
+     * necessary attributes.
+     */
+    public function updateProductKeys()
+    {
+        $keyStruct = json_decode($this->getProductKey());
+
+        for($i = 0; $i < count($keyStruct); $i++) {
+            if(!array_key_exists('market', $keyStruct[$i])) {
+                $market = $this->getMarketName($keyStruct[$i]->key);
+                $keyStruct[$i]->market = $market;
+            }
+        }
+
+        // Update key in Wordpress settings data.
+        update_option($this->productKeyOptionKey, json_encode($keyStruct));
     }
 
 

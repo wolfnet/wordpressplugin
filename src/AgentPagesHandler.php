@@ -23,9 +23,18 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
 {
 
     protected $key;
+    protected $apin;
 
     public function __construct($wolfnet)
-    {}
+    {
+        /* 
+         * This is here so the getProductKeyByMarket function doesn't blow up
+         * later down the stack when it runs a function from Wolfnet_Plugin.
+         * At some point we'll want to assess what I'm overlooking to
+         * necessitate this redundancy. 
+         */
+        $this->apin = $wolfnet->apin;
+    }
 
     public function handleRequest() 
     {
