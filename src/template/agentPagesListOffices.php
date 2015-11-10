@@ -107,6 +107,7 @@ foreach($offices as $office) {
 } // end foreach
 ?>
 
+	<div class="wolfnet_clearfix"></div>
 </div>
 
 <script type="text/javascript">
