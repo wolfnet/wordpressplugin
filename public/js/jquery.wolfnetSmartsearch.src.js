@@ -48,6 +48,9 @@
 					// Create a container to hold the input as well as selected items.
 					methods.private.createInputControl($smartSearch);
 
+					// Create a container for the suggestions list.
+					methods.private.createSuggestionControl($smartSearch);
+
 				});
 
 			}
@@ -133,8 +136,47 @@
 
 				$smartSearch.data(stateKey, pluginData);
 
-			}
+			},
 
+			/**
+			 * This function is responsible for creating a place to display and select suggested
+			 * search criteria for what was typed into the smart search input field.
+			 * @param  {jQuery}  $smartSearch [description]
+			 * @return {void}
+			 */
+			createSuggestionControl: function($smartSearch) {
+				var pluginData = $smartSearch.data(stateKey);
+				var $list = pluginData.listContainer;
+				var $searchInput = pluginData.searchInput;
+
+				// Create a container to hold the default placeholder text. This text is an
+				// indicator to the user that what they have typed has triggered an action.
+				var $searchingMessage = $('<div>')
+					.addClass('wnt-message-searching')
+					.text('Searching ...');
+
+				// Create an outer container for holding all of the smart search suggested criteria.
+				// This container will be hidden and empty by default.
+				// If a user's mouse enters the container and then leaves the container should hide.
+				var $suggestions = $('<div>')
+					.addClass('wnt-suggestions')
+					.css({
+						position: 'absolute',
+						left: 0,
+						width: $list.outerWidth() + 1,
+						backgroundColor: 'white',
+						zIndex: 9000000
+					})
+					.hide()
+					.append($searchingMessage)
+					.appendTo($('.wnt-search'));
+
+				// Store a reference to the suggestion container with the smart search element.
+				pluginData.suggestionContainer = $suggestions;
+
+				$smartSearch.data(stateKey, pluginData);
+
+			}
 
 		}, // END of private
 
