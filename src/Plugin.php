@@ -1429,6 +1429,13 @@ class Wolfnet_Plugin
 
         $args = $this->convertDataType(array_merge($criteria, $vars));
 
+		// Aggregate data necessary for SmartSearch plugin parameters
+		if ($args['smartsearch']) {
+			$smartSearchService = $this->ioc->get('Wolfnet_Smart_SearchService');
+			$args['fields'] = $smartSearchService->getFields();
+			$args['fieldMap'] = $smartSearchService->getFieldMap();
+		}
+
 		return $this->views->quickSearchView($args);
 
 	}

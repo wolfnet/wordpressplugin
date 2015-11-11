@@ -19,6 +19,7 @@ return array(
     'Wolfnet_Api_Client' => '/api/Client.php',
     'Wolfnet_Api_StatsDecorator' => '/api/StatsDecorator.php',
     'Wolfnet_Service_CachingService' => '/service/CachingService.php',
+    'Wolfnet_Smart_SearchService' => '/service/SmartSearchService.php',
     'Wolfnet_Widget_AbstractWidget' => '/widget/AbstractWidget.php',
     'Wolfnet_Widget_FeaturedListingsWidget' => '/widget/FeaturedListingsWidget.php',
     'Wolfnet_Widget_ListingGridWidget' => '/widget/ListingGridWidget.php',

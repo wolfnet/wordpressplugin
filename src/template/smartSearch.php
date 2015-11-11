@@ -124,7 +124,9 @@
 
 		$form.find('.open-search input:first').wolfnetSmartSearch({
 			ajaxUrl    : wolfnet_ajax.ajaxurl,
-			ajaxAction : 'wolfnet_search_suggestion'
+			ajaxAction : 'wolfnet_search_suggestion',
+			fields:[],
+			fieldMap:{}
 		})
 	});
 

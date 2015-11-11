@@ -409,10 +409,20 @@ class Wolfnet_Views
 		}
 
 		if ($args['smartsearch']) {
+
 			$args['smartsearchInput'] = uniqid('wolfnet_smartsearch_');
-			return apply_filters('wolfnet_quickSearchView', $this->parseTemplate('smartSearch', $args));
+
+			return apply_filters(
+				'wolfnet_quickSearchView',
+				$this->parseTemplate('smartSearch', $args)
+			);
+
 		} else {
-			return apply_filters('wolfnet_quickSearchView', $this->parseTemplate('quickSearch', $args));
+
+			return apply_filters(
+				'wolfnet_quickSearchView',
+				$this->parseTemplate('quickSearch', $args)
+			);
 		}
 
 	}

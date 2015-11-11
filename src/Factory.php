@@ -119,6 +119,12 @@ class Wolfnet_Factory
     }
 
 
+    private function getWolfnet_Smart_SearchService()
+    {
+        return new Wolfnet_Smart_SearchService();
+    }
+
+
     private function getWolfnet_AgentPagesHandler()
     {
         return new Wolfnet_AgentPagesHandler();
