@@ -9,23 +9,43 @@
  * @license GPLv2 or later (http://www.gnu.org/licenses/gpl-2.0.html)
  *
  */
-class Wolfnet_Smart_SearchService
+class Wolfnet_Smart_SearchService extends Wolfnet_Plugin
 {
 
-	/* CONSTRUCTOR 	****************************************************************************** */
+	protected $key;
 
-    /**
-     * This simple constructor method sets up the object.
-     *
-     */
-    //public function __construct()
-    //{
-    //}
+	/* CONSTRUCTOR ****************************************************************************** */
 
+	/**
+	 * This simple constructor method sets up the object.
+	 *
+	 * @param  string  $key  API Key to be used in API calls from this service.
+	 *
+	 */
+	public function __construct($key)
+	{
+		$this->setKey($key);
+	}
 
 	/* PUBLIC METHODS *************************************************************************** */
 	public function getFields() {
+
+		/* TODO
+		See UI code beginning at:  SearchService.getSmartSearchFields
+			|--- SearchService.getSmartSearchFieldNames
+				|--- SettingsApiDao.getSmartSearchCriteria (array)
+
+			var smartSearchData = performHttpRequest(path="/search_criteria/smart_search", cache=true);
+			var smartSearchCriteria = smartSearchData.data;
+		 */
+
 		$fields = array();
+
+		//$fieldsData = $this->apin->sendRequest(
+		//	$this->getKey(),
+		//	'/search_criteria/smart_search',
+		//	'GET'
+		//);
 
 		return $fields;
 	}
@@ -36,6 +56,17 @@ class Wolfnet_Smart_SearchService
 		return $fieldMap;
 	}
 
+
 	/* PRIVATE METHODS ************************************************************************** */
+	private function setKey(&$key)
+	{
+		$this->key = $key;
+	}
+
+	private function getKey()
+	{
+		return $this->key;
+	}
+
 
 }

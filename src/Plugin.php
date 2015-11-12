@@ -1431,7 +1431,12 @@ class Wolfnet_Plugin
 
 		// Aggregate data necessary for SmartSearch plugin parameters
 		if ($args['smartsearch']) {
-			$smartSearchService = $this->ioc->get('Wolfnet_Smart_SearchService');
+
+			$smartSearchService = $this->ioc->get(
+				'Wolfnet_Smart_SearchService',
+				array('key' => $this->getDefaultProductKey())
+			);
+
 			$args['fields'] = $smartSearchService->getFields();
 			$args['fieldMap'] = $smartSearchService->getFieldMap();
 		}
