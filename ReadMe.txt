@@ -93,6 +93,9 @@ Please upgrade to the latest version of the plugin as we will be disabling our o
 
 == Changelog ==
 
+= 1.7.18 =
+* Fixes a bug saving criteria in the Search Manager.
+
 = 1.7.17 =
 * Fixes a bug with the houseover popup on mobile touch events.
 
