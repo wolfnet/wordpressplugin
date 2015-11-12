@@ -9,13 +9,12 @@
  * @license GPLv2 or later (http://www.gnu.org/licenses/gpl-2.0.html)
  *
  */
-class Wolfnet_Smart_SearchService extends Wolfnet_Plugin
+class Wolfnet_Smart_SearchService
 {
 
 	protected $key;
 
 	/* CONSTRUCTOR ****************************************************************************** */
-
 	/**
 	 * This simple constructor method sets up the object.
 	 *
@@ -41,11 +40,12 @@ class Wolfnet_Smart_SearchService extends Wolfnet_Plugin
 
 		$fields = array();
 
-		//$fieldsData = $this->apin->sendRequest(
-		//	$this->getKey(),
-		//	'/search_criteria/smart_search',
-		//	'GET'
-		//);
+		// Retrieve available smart search criteria
+		$fieldsData = $GLOBALS['wolfnet']->apin->sendRequest(
+			$this->getKey(),
+			'/search_criteria/smart_search',
+			'GET'
+		);
 
 		return $fields;
 	}
