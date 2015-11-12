@@ -40,12 +40,16 @@ class Wolfnet_Smart_SearchService
 
 		$fields = array();
 
-		// Retrieve available smart search criteria
-		$fieldsData = $GLOBALS['wolfnet']->apin->sendRequest(
-			$this->getKey(),
-			'/search_criteria/smart_search',
-			'GET'
-		);
+		try {
+			// Retrieve available smart search criteria
+			$data = $GLOBALS['wolfnet']->apin->sendRequest(
+				$this->getKey(),
+				'/search_criteria/smart_search',
+				'GET'
+			);
+		} catch (Wolfnet_Api_ApiException $e) {
+			//TODO Handle error appropriately
+		}
 
 		return $fields;
 	}
