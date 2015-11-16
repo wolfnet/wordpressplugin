@@ -1707,7 +1707,12 @@ class Wolfnet_Plugin
             try {
                 $key = $this->getProductKeyById($keyID);
 
-                $listings = $this->apin->sendRequest($key, '/listing', 'GET', $formData);
+                $listings = $this->apin->sendRequest(
+                    $key, 
+                    '/listing?detaillevel=1&startrow=1&maxrows=1', 
+                    'GET',
+                    $formData
+                );
                 $count = $listings['responseData']['data']['total_rows'];
 
                 if($count > $highestCount) {

@@ -166,7 +166,7 @@
 
         $('#<?php echo $instance_id; ?>_quickSearchForm').submit(function(event) {
             event.preventDefault();
-            $.fn.routeQuickSearch($(this).serializeArray());
+            $.fn.routeQuickSearch($(this));
             return false;
         });
 
