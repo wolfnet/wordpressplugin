@@ -321,12 +321,11 @@ if ( typeof jQuery != 'undefined' ) {
 				loaderImage = $('<div/>');
 				loaderImage.append($('<img src="' + wolfnet_ajax.loaderimg + '" />'));
 				loaderImage.addClass(loaderClass);
-				//loaderImage.hide();
 
 				var overlay = $('<div/>')
-					.addClass(overlayClass)
-					.append(loaderImage);
-
+					.addClass(overlayClass);
+				
+				loaderImage.insertAfter('#' + $(root).attr('id') + ' .wolfnet_quickSearchFormButton');
 				overlay.appendTo(root);
 			}
 		}
