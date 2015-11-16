@@ -119,14 +119,15 @@
 <script type="text/javascript">
 
 	jQuery(function($){
-
+		var smartSearchFields = '<?php echo $fields; ?>';
+		var smartSearchFieldMap = {};
 		var $form = $('#<?php echo $instance_id; ?>_quickSearchForm');
 
 		$form.find('.open-search input:first').wolfnetSmartSearch({
 			ajaxUrl    : wolfnet_ajax.ajaxurl,
 			ajaxAction : 'wolfnet_search_suggestion',
-			fields:[],
-			fieldMap:{}
+			fields:smartSearchFields,
+			fieldMap:smartSearchFieldMap
 		})
 	});
 

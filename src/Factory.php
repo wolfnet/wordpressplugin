@@ -121,7 +121,10 @@ class Wolfnet_Factory
 
 	private function getWolfnet_Smart_SearchService($args)
 	{
-		return new Wolfnet_Smart_SearchService($args['key']);
+		return new Wolfnet_Smart_SearchService(
+			$args['key'],
+			$args['url']
+		);
 	}
 
 
