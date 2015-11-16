@@ -65,9 +65,21 @@ class Wolfnet_Smart_SearchService
 	 *
 	 */
 	public function getFieldMap() {
-		$fieldMap = array();
+		/*
+		See searchService.getParamFormNameAliasMap():
+		*/
+		$map = array();
+		$params = $this->getSearchParameters();
 
-		return $fieldMap;
+		foreach ($params as $param => $aliases) {
+			$formName = $aliases[0];
+
+			for ($i=0; $i < sizeof($aliases); $i++) {
+				$map[$aliases[$i]] = $formName;
+			}
+		}
+
+		return $map;
 	}
 
 
