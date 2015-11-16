@@ -119,7 +119,7 @@
 <script type="text/javascript">
 
 	jQuery(function($){
-		var smartSearchFields = '<?php echo $fields; ?>';
+		var smartSearchFields = '<?php echo $smartSearchFields; ?>';
 		var smartSearchFieldMap = {};
 		var $form = $('#<?php echo $instance_id; ?>_quickSearchForm');
 

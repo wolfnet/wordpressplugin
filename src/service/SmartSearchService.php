@@ -31,20 +31,21 @@ class Wolfnet_Smart_SearchService
 
 	/* PUBLIC METHODS *************************************************************************** */
 	/**
-     * Aggregates data required for SmartSearch plugin.
-     * Data built from consumed json and API request retrieving criteria.
-     *
-     * @return array  Array of fields.
-     *
-     */
+	 * Aggregates data required for a parameter for SmartSearch plugin.
+	 * (parameter: smartSearchFields)
+	 * Data built from consumed json and API request retrieving criteria.
+	 *
+	 * TODO: Move this to API endpoint so this data can be retrieved from anywhere.
+	 *
+	 * @return array  Array of fields.
+	 *
+	 */
 	public function getFields() {
 
 		$fields = $this->getSmartSearchCriteria();
 		$params = $this->getSearchParameters();
 
-		$l = sizeof($fields);
-
-		for ($i=0; $i < $l; $i++) {
+		for ($i=0; $i < sizeof($fields); $i++) {
 			$field = $fields[$i];
 			$fieldParams = $params->$field;
 			$fields[$i] = $fieldParams[0];
@@ -53,6 +54,16 @@ class Wolfnet_Smart_SearchService
 		return $fields;
 	}
 
+
+	/**
+	 * Aggregates data required for a parameter for SmartSearch plugin.
+	 * (parameter: smartSearchFieldMap)
+	 *
+	 * TODO: Move this to API endpoint so this data can be retrieved from anywhere.
+	 *
+	 * @return array  Array of fields.
+	 *
+	 */
 	public function getFieldMap() {
 		$fieldMap = array();
 

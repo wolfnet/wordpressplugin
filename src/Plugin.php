@@ -1441,7 +1441,7 @@ class Wolfnet_Plugin
 				)
 			);
 
-			$args['fields'] = json_encode($smartSearchService->getFields());
+			$args['smartSearchFields'] = json_encode($smartSearchService->getFields());
 			$args['fieldMap'] = $smartSearchService->getFieldMap();
 		}
 
