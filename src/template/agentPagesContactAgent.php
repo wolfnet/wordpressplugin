@@ -42,7 +42,9 @@
 				if(array_key_exists('address_2', $agent) && $agent['address_2'] != '') {
 					echo $agent['address_2'] . '<br>';
 				}
-				echo $agent['city'] . ', ' . $agent['state'] . ' ' . $agent['zip_code']
+				if(strlen($agent['city'] & $agent['state'] & $agent['zip_code']) > 0) {
+					echo $agent['city'] . ', ' . $agent['state'] . ' ' . $agent['zip_code'];
+				}
 				?>
 			</div>
 
