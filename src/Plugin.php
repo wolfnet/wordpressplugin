@@ -1433,6 +1433,7 @@ class Wolfnet_Plugin
 		if ($args['smartsearch']) {
 
 			// Instantiate SmartSearch Service
+			// TODO: fix OO so SmartSearchService can extend Plugin and data available
 			$smartSearchService = $this->ioc->get(
 				'Wolfnet_Smart_SearchService',
 				array(
@@ -1442,7 +1443,7 @@ class Wolfnet_Plugin
 			);
 
 			$args['smartSearchFields'] = json_encode($smartSearchService->getFields());
-			$args['fieldMap'] = $smartSearchService->getFieldMap();
+			$args['smartSearchFieldMap'] = json_encode($smartSearchService->getFieldMap());
 		}
 
 		return $this->views->quickSearchView($args);
