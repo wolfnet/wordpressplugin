@@ -35,9 +35,9 @@ class Wolfnet_Smart_SearchService
 	 * (parameter: smartSearchFields)
 	 * Data built from consumed json and API request retrieving criteria.
 	 *
-	 * TODO: Move this to API endpoint so this data can be retrieved from anywhere.
+	 * TODO: Move this to an API endpoint so data can be retrieved from any app.
 	 *
-	 * @return array  Array of fields.
+	 * @return array  Array of criteria params.
 	 *
 	 */
 	public function getFields() {
@@ -59,15 +59,13 @@ class Wolfnet_Smart_SearchService
 	 * Aggregates data required for a parameter for SmartSearch plugin.
 	 * (parameter: smartSearchFieldMap)
 	 *
-	 * TODO: Move this to API endpoint so this data can be retrieved from anywhere.
+	 * TODO: Move this to an API endpoint so data can be retrieved from any app.
 	 *
-	 * @return array  Array of fields.
+	 * @return array  Associative array (map).
 	 *
 	 */
 	public function getFieldMap() {
-		/*
-		See searchService.getParamFormNameAliasMap():
-		*/
+
 		$map = array();
 		$params = $this->getSearchParameters();
 
