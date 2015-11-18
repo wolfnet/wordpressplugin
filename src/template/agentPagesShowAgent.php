@@ -45,7 +45,7 @@ if(array_key_exists('HTTP_REFERER', $_SERVER)) {
 		if(array_key_exists('agentCriteria', $_REQUEST)) {
 			$link .= '&agentCriteria=' . $_REQUEST['agentCriteria'];
 		}
-		if($officeId != '') {
+		if($officeId != '' && strpos($link, 'officeId') === false) {
 			$link .= '&officeId=' . $officeId;
 		}
 		echo '<div class="wolfnet_back"><a href="' . $link . '">Back</a></div>';
