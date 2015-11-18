@@ -29,7 +29,7 @@ if(array_key_exists("REDIRECT_URL", $_SERVER)) {
 	$linkBase = $_SERVER['PHP_SELF'];
 }
 
-function paginate($page, $total, $numPerPage, $search = null, $sort = 'name') 
+function paginate($page, $total, $numPerPage, $officeId = null, $search = null, $sort = 'name') 
 {
 	/*
 	 * Note: We're using "agentpage" instead of just "page" as out URL variable
@@ -48,6 +48,10 @@ function paginate($page, $total, $numPerPage, $search = null, $sort = 'name')
 		$linkBase = '?search&agentCriteria=' . $search . '&';
 	} else {
 		$linkBase = '?';
+	}
+
+	if(!is_null($officeId)) {
+		$linkBase = 'officeId=' . $officeId . '&';
 	}
 
 	$linkBase .= 'agentSort=' . $sort . '&';
@@ -91,7 +95,7 @@ function paginate($page, $total, $numPerPage, $search = null, $sort = 'name')
 		action="<?php echo $linkBase . "?search"; ?>">
 		<?php
 		if($officeId != '') {
-			echo "<input type=\"hidden\" name=\"office_id\" value=\"$officeId\" />";
+			echo "<input type=\"hidden\" name=\"officeId\" value=\"$officeId\" />";
 		}
 		?>
 
@@ -105,7 +109,7 @@ function paginate($page, $total, $numPerPage, $search = null, $sort = 'name')
 	<label for="agentSort">Sort By:</label>
 	<select name="agentSort" class="wolfnet_agentSort">
 		<option value="name" <?php echo ($agentSort == 'name') ? 'selected="selected"' : ''; ?>>Name</option>
-		<option value="office_id" <?php echo ($agentSort == 'office_id') ? 'selected="selected"' : ''; ?>>Office</option>
+		<option value="officeId" <?php echo ($agentSort == 'officeId') ? 'selected="selected"' : ''; ?>>Office</option>
 	</select>
 	<div class="wolfnet_clearfix"></div>
 	<?php } ?>
@@ -116,6 +120,9 @@ foreach($agents as $agent) {
 		$agentLink = $linkBase . '?agent=' . $agent['agent_id'];
 		if(array_key_exists('agentCriteria', $_REQUEST)) {
 			$agentLink .= '&agentCriteria=' . $_REQUEST['agentCriteria'];
+		}
+		if($officeId != '') {
+			$agentLink .= '&officeId=' . $officeId;
 		}
 ?>
 
@@ -176,7 +183,7 @@ foreach($agents as $agent) {
 	} // end if display_agent
 } // end foreach
 
-echo paginate($page, $totalrows, $numperpage, $agentCriteria, $agentSort); 
+echo paginate($page, $totalrows, $numperpage, $officeId, $agentCriteria, $agentSort); 
 
 ?>
 
@@ -202,9 +209,9 @@ jQuery(function($) {
 
 			if(sortPos > -1) {
 				if($(this).val() == 'name') {
-					href = href.replace('agentSort=office_id', 'agentSort=name');
+					href = href.replace('agentSort=officeId', 'agentSort=name');
 				} else {
-					href = href.replace('agentSort=name', 'agentSort=office_id');
+					href = href.replace('agentSort=name', 'agentSort=officeId');
 				}
 			} else {
 				href += '&agentSort=' + $(this).val();

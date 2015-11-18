@@ -53,7 +53,8 @@ if(strlen($officetitle) > 0) {
 <?php
 
 foreach($offices as $office) {
-	$officeLink = $linkBase . '?office_id=' . $office['office_id'];
+	if($office['office_id'] != '') {
+		$officeLink = $linkBase . '?officeId=' . $office['office_id'];
 ?>
 
 	<div class="wolfnet_officePreview">
@@ -104,6 +105,7 @@ foreach($offices as $office) {
 	</div>
 
 <?php
+	}
 } // end foreach
 ?>
 

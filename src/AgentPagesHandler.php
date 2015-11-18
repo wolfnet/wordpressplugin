@@ -53,8 +53,8 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
         } elseif(array_key_exists('agent', $_REQUEST) && sizeof(trim($_REQUEST['agent']) > 0)) {
             // If agent is passed through, show the agent detail.
             $action = 'agent';
-        } elseif(array_key_exists('office_id', $_REQUEST) && sizeof(trim($_REQUEST['office_id']) > 0)) {
-            // office_id is passed in; list their agents.
+        } elseif(array_key_exists('officeId', $_REQUEST) && sizeof(trim($_REQUEST['officeId']) > 0)) {
+            // officeId is passed in; list their agents.
             $action = 'agentList';
         } elseif(!$this->args['showoffices']) {
             // if none of the above match and they don't want to show an office list, show all agents.
@@ -113,15 +113,15 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
         $this->args['criteria']['omit_office_id'] = $this->args['excludeoffices'];
         if(array_key_exists('agentSort', $_REQUEST)) {
             $agentSort = $_REQUEST['agentSort'];
-            $this->args['criteria']['sort'] = ($_REQUEST['agentSort'] == 'name') ? 'name' : 'office_id';
+            $this->args['criteria']['sort'] = ($_REQUEST['agentSort'] == 'name') ? 'name' : 'officeId';
         } else {
             $agentSort = 'name';
         }
 
         $endpoint = '/agent';
         $separator = "?";
-        if(array_key_exists('office_id', $_REQUEST)) {
-            $endpoint .= '?office_id=' . $_REQUEST['office_id'];
+        if(array_key_exists('officeId', $_REQUEST)) {
+            $endpoint .= '?office_id=' . $_REQUEST['officeId'];
             $separator = "&";
         }
         $endpoint .= $separator . "startrow=" . $startrow;
@@ -138,7 +138,7 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
             return $GLOBALS['wolfnet']->displayException($e);
         }
 
-        if(!array_key_exists('office_id', $_REQUEST)) {
+        if(!array_key_exists('officeId', $_REQUEST)) {
             $officeCount = count($this->getOfficeData());
         } else {
             $officeCount = 1;
@@ -155,7 +155,7 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
             'totalrows' => $data['responseData']['data']['total_rows'],
             'page' => $_REQUEST['agentpage'],
             'agentSort' => $agentSort,
-            'officeId' => (array_key_exists('office_id', $_REQUEST)) ? $_REQUEST['office_id'] : '',
+            'officeId' => (array_key_exists('officeId', $_REQUEST)) ? $_REQUEST['officeId'] : '',
             'officeCount' => $officeCount,
             'agentCriteria' => (array_key_exists('agentCriteria', $_REQUEST)) ? $_REQUEST['agentCriteria'] : '',
         );
@@ -197,6 +197,7 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
 
         $args = array(
             'agent' => $agentData,
+            'officeId' => (array_key_exists('officeId', $_REQUEST)) ? $_REQUEST['officeId'] : '',
             'activeListingCount' => $count,
             'activeListingHTML' => $listings,
             'soldListingCount' => $soldCount,

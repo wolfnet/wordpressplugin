@@ -41,15 +41,14 @@ if(strlen($detailtitle) > 0) {
 }
 
 if(array_key_exists('HTTP_REFERER', $_SERVER)) {
-	if(strpos($_SERVER['HTTP_REFERER'], '?search') !== false
-		|| strpos($_SERVER['HTTP_REFERER'], 'office_id') !== false) {
-
 		$link = $_SERVER['HTTP_REFERER'];
 		if(array_key_exists('agentCriteria', $_REQUEST)) {
 			$link .= '&agentCriteria=' . $_REQUEST['agentCriteria'];
 		}
+		if($officeId != '') {
+			$link .= '&officeId=' . $officeId;
+		}
 		echo '<div class="wolfnet_back"><a href="' . $link . '">Back</a></div>';
-	}
 } else {
 ?>
 
@@ -76,14 +75,16 @@ if($agent['display_agent']) {
 			<div class="wolfnet_agentName">
 				<?php 
 					echo $agent['first_name'] . " " . $agent['last_name'];
-					if(strlen($agent['title']) > 0) {
-						echo '<br />';
-						echo $agent['title'];
-					}
 				?>
 			</div>
 
 			<?php 
+			if(strlen($agent['title']) > 0) {
+				echo '<div class="wolfnet_agentTitle">';
+				echo $agent['title'];
+				echo '</div>';
+			}
+
 			if(strlen($agent['business_name']) > 0) {
 				echo '<div class="wolfnet_agentBusiness">';
 				echo $agent['business_name'];
