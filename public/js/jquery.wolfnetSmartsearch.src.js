@@ -51,6 +51,9 @@
 					// Create a container for the suggestions list.
 					methods.private.createSuggestionControl($smartSearch);
 
+					// Establish any events and event handlers for the input control.
+					methods.private.defineEvents($smartSearch);
+
 				});
 
 			}
@@ -138,6 +141,7 @@
 
 			},
 
+
 			/**
 			 * This function is responsible for creating a place to display and select suggested
 			 * search criteria for what was typed into the smart search input field.
@@ -176,9 +180,44 @@
 
 				$smartSearch.data(stateKey, pluginData);
 
-			}
+			},
 
-		}, // END of private
+
+			defineEvents: function($smartSearch) {
+				var pluginData = $smartSearch.data(stateKey);
+				var $searchInput = pluginData.searchInput;
+				var $list = pluginData.listContainer;
+				var $suggestions = pluginData.suggestionContainer;
+				var $form = $($smartSearch[0].form);
+
+				$smartSearch.on('wntFocus', function(event){
+					$searchInput.focus();
+				});
+
+				// Listen to each field for changes.
+				for (var i=0,l=pluginData.fields.length; i<l; i++) {
+					var $field = $form.find('input[name="' + pluginData.fields[i] + '"]');
+					$field.on('change', {$smartSearch:$smartSearch}, methods.private.eventHandler.fieldChange);
+				}
+
+			},
+
+
+			eventHandler: {
+
+				fieldChange: function(event) {
+					var $smartSearch = event.data.$smartSearch;
+
+					// If there was a change and "I" didn't make it take action.
+					if (event.relatedTarget != $smartSearch[0]) {
+						methods.private.refreshExistingValues($smartSearch, event);
+					}
+
+				}
+
+			} // END of eventHandler
+
+		} // END of private
 
 
 	}
