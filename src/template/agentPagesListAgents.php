@@ -29,7 +29,7 @@ if(array_key_exists("REDIRECT_URL", $_SERVER)) {
 	$linkBase = $_SERVER['PHP_SELF'];
 }
 
-function paginate($page, $total, $numPerPage, $officeId = null, $search = null, $sort = 'name') 
+function paginate($page, $total, $numPerPage, $officeId = '', $search = null, $sort = 'name') 
 {
 	/*
 	 * Note: We're using "agentpage" instead of just "page" as out URL variable
@@ -50,7 +50,7 @@ function paginate($page, $total, $numPerPage, $officeId = null, $search = null, 
 		$linkBase = '?';
 	}
 
-	if(!is_null($officeId)) {
+	if($officeId != '') {
 		$linkBase = 'officeId=' . $officeId . '&';
 	}
 
