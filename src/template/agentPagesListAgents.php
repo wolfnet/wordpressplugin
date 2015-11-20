@@ -177,11 +177,11 @@ foreach($agents as $agent) {
 		</div>
 	</div>
 
-	<div class="wolfnet_clearfix"></div>
-
 <?php
 	} // end if display_agent
 } // end foreach
+
+echo '<div class="wolfnet_clearfix"></div>';
 
 echo paginate($page, $totalrows, $numperpage, $officeId, $agentCriteria, $agentSort); 
 
