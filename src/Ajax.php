@@ -19,7 +19,7 @@
  *                Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-class Wolfnet_Ajax 
+class Wolfnet_Ajax
 {
 	/*
 	 *
@@ -78,7 +78,6 @@ class Wolfnet_Ajax
 
     }
 
-	
 
 	/*
 	 *
@@ -402,8 +401,8 @@ class Wolfnet_Ajax
         try {
             $args = $GLOBALS['wolfnet']->getListingGridOptions($_REQUEST);
 
-            $response = $GLOBALS['wolfnet']->getWpHeader() 
-            	. $GLOBALS['wolfnet']->listingGrid($args) 
+            $response = $GLOBALS['wolfnet']->getWpHeader()
+            	. $GLOBALS['wolfnet']->listingGrid($args)
             	. $GLOBALS['wolfnet']->getWpFooter();
 
         } catch (Wolfnet_Exception $e) {
@@ -588,7 +587,7 @@ class Wolfnet_Ajax
     }
 
 
-    public function remoteRouteQuickSearch() 
+    public function remoteRouteQuickSearch()
     {
         try {
             $response = $GLOBALS['wolfnet']->routeQuickSearch($_REQUEST['formData']);
