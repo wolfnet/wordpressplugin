@@ -50,6 +50,7 @@ class Wolfnet_Ajax
             'wolfnet_price_range'             => 'remotePriceRange',
             'wolfnet_base_url'                => 'remoteGetBaseUrl',
             'wolfnet_route_quicksearch'       => 'remoteRouteQuickSearch',
+            'wolfnet_smart_search'            => 'remoteGetSmartSearchCriteria',
             );
 
         foreach ($ajxActions as $action => $method) {
@@ -61,15 +62,15 @@ class Wolfnet_Ajax
     public function registerAjaxActions()
     {
         $ajxActions = array(
-            'wolfnet_content'           => 'remoteContent',
-            'wolfnet_content_header'    => 'remoteContentHeader',
-            'wolfnet_content_footer'    => 'remoteContentFooter',
-            'wolfnet_listings'          => 'remoteListings',
-            'wolfnet_get_listings'      => 'remoteListingsGet',
-            'wolfnet_css'               => 'remotePublicCss',
-            'wolfnet_base_url'          => 'remoteGetBaseUrl',
-            'wolfnet_price_range'       => 'remotePriceRange',
-            'wolfnet_route_quicksearch' => 'remoteRouteQuickSearch',
+            'wolfnet_content'        => 'remoteContent',
+            'wolfnet_content_header' => 'remoteContentHeader',
+            'wolfnet_content_footer' => 'remoteContentFooter',
+            'wolfnet_listings'       => 'remoteListings',
+            'wolfnet_get_listings'   => 'remoteListingsGet',
+            'wolfnet_css'            => 'remotePublicCss',
+            'wolfnet_base_url'       => 'remoteGetBaseUrl',
+            'wolfnet_price_range'    => 'remotePriceRange',
+            'wolfnet_smart_search'   => 'remoteGetSmartSearchCriteria',
             );
 
         foreach ($ajxActions as $action => $method) {
@@ -603,6 +604,31 @@ class Wolfnet_Ajax
 
         wp_send_json($response);
     }
+
+
+	public function remoteGetSuggestions()
+	{
+
+		try {
+
+			//$term = $_REQUEST['data']['term'];
+			$response = $GLOBALS['wolfnet']->getSuggestions(
+				$_REQUEST['data']['term']
+			);
+
+		} catch (Wolfnet_Exception $e) {
+
+			status_header(500);
+			$response = array(
+				'message' => $e->getMessage(),
+				'data' => $e->getData(),
+			);
+
+		}
+
+		wp_send_json($response);
+
+	}
 
 }
 

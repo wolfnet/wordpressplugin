@@ -1365,6 +1365,28 @@ class Wolfnet_Plugin
     }
 
 
+	public function getSuggestions($term)
+	{
+
+		try {
+
+			$key = $this->getDefaultProductKey();
+
+			$suggestions = $this->apin->sendRequest(
+				$key,
+				'/search_criteria/suggestion',
+				'GET',
+				$term
+			);
+
+		} catch (Wolfnet_Exception $e) {
+			echo $this->displayException($e);
+		}
+
+		return $suggestions;
+	}
+
+
     /**
      * Get markup for Quick Search form
      * @param  array  $criteria
@@ -1433,7 +1455,7 @@ class Wolfnet_Plugin
 		if ($args['smartsearch']) {
 
 			// Instantiate SmartSearch Service
-			// TODO: fix OO so SmartSearchService can extend Plugin and data available
+			// TODO: fix OO so SmartSearchService can extend Plugin and make data available
 			$smartSearchService = $this->ioc->get(
 				'Wolfnet_Smart_SearchService',
 				array(

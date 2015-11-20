@@ -331,15 +331,22 @@
 						data.field = pluginData.searchField;
 					}
 
+					// AJAX call to retrieve suggested criteria
 					pluginData.xhr = $.ajax({
-						url: pluginData.suggestionUrl,
-						data: data,
+						url: pluginData.ajaxUrl,
+						data: { action:pluginData.ajaxAction, data:data },
 						dataType: 'jsonp',
 						context: $smartSearch, // Make the context of this request the smart search element.
-						beforeSend: function(){methods.private.showSearchingMessage(this);}
+						beforeSend: function(){
+							methods.private.showSearchingMessage(this);
+						}
 					})
-					.done(function(data){methods.private.updateSuggestionsList(this, data);})
-					.always(function(data){methods.private.hideSearchingMessage(this);});
+					.done(function(data){
+						methods.private.updateSuggestionsList(this, data);
+					})
+					.always(function(data){
+						methods.private.hideSearchingMessage(this);
+					});
 
 					// Save any altered state data back to the data object.
 					$smartSearch.data(stateKey, pluginData);
