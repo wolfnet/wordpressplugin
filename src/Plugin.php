@@ -818,6 +818,10 @@ class Wolfnet_Plugin
 
     public function scAgentPages($attrs) 
     {
+        if(!$this->showAgentFeature()) {
+            return '';
+        }
+        
         try {
             $defaultAttributes = $this->getAgentPagesDefaults();
 
