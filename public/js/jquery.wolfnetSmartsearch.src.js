@@ -1,8 +1,7 @@
 (function($){
 
-	var pluginName = 'wolfnetSmartSearch';
-
-	var stateKey = pluginName + '.state';
+	var wntPlugin = 'wolfnetSmartSearch';
+	var stateKey = wntPlugin + '.state';
 
 	var defaultOptions = {
 		fields: [],
@@ -10,20 +9,20 @@
 		fieldMap: {},
 		searchField: null,
 		suggestionHoverClass: 'wnt-hover'
-		//suggestionHoverClass: 'wnt-hover'
 	};
 
 	var methods = {
 
 		public: {
+
 			/**
 			 * This function initializes the plugin.
-		 	 * @param  {Object} options: an object/map of options for the plugin.
-		 	 * @return {jQuery} The jQuery selection object which the plugin is being applied to.
+			 * @param  {Object}  options  An object/map of options for the plugin.
+			 * @return {jQuery}  The jQuery selection object which the plugin is being applied to.
 			 */
 			init: function(options) {
 
-				// Enforce required arguments.
+				/* Enforce required arguments. */
 				if (!options.ajaxUrl) {
 					$.error('The "ajaxUrl" option must be included when initializing the plugin.');
 					return this;
@@ -34,7 +33,6 @@
 				}
 
 				return this.each(function(){
-
 					var $smartSearch = $(this);
 					var opts = $.extend(true, {}, defaultOptions, options);
 
@@ -42,24 +40,80 @@
 						opts.fields.push($smartSearch.attr('name'));
 					}
 
-					// Store the plugin options with the element.
+					/* Store the plugin options with the element. */
 					$smartSearch.data(stateKey, opts);
 
-					// Create a container to hold the input as well as selected items.
+					/* Create a container to hold the input as well as selected items. */
 					methods.private.createInputControl($smartSearch);
 
-					// Create a container for the suggestions list.
+					/* Create a container for the suggestions list. */
 					methods.private.createSuggestionControl($smartSearch);
 
-					// Establish any events and event handlers for the input control.
+					/* Establish any events and event handlers for the input control. */
 					methods.private.defineEvents($smartSearch);
+
+					/* Look for existing input fields and add values to the smart search input. */
+					methods.private.refreshExistingValues($smartSearch, null, false);
 
 				});
 
+			},
+
+			/**
+			 * This function disables the smart search input field.
+			 * @return  {jQuery}  The jQuery selection object which the plugin is being applied to.
+			 */
+			disable: function() {
+				return this.each(function(){
+					var $smartSearch = $(this);
+					var pluginData = $smartSearch.data(stateKey);
+					var $list = pluginData.listContainer;
+
+					$smartSearch.prop('disabled', true);
+					$list.hide();
+
+				});
+
+			},
+
+			/**
+			 * This function enables the smart search input field.
+			 * @return  {jQuery}  The jQuery selection object which the plugin is being applied to.
+			 */
+			enable: function() {
+				return this.each(function(){
+					var $smartSearch = $(this);
+					var pluginData = $smartSearch.data(stateKey);
+					var $list = pluginData.listContainer;
+
+					$smartSearch.prop('disabled', false);
+					$list.show();
+
+				});
+
+			},
+
+			/**
+			 * This function retrieves the smart search container(s) for the selection.
+			 * @return  {jQuery}  The jQuery selection object which the plugin is being applied to.
+			 */
+			getContainer: function() {
+				var $container = $();
+
+				this.each(function(){
+					var $smartSearch = $(this);
+					var pluginData = $smartSearch.data(stateKey);
+					var $list = pluginData.listContainer;
+
+					$container = $container.add($list);
+
+				});
+
+				return $container;
+
 			}
 
-		}, // END of public
-
+		},
 
 		private: {
 
@@ -331,22 +385,15 @@
 						data.field = pluginData.searchField;
 					}
 
-					// AJAX call to retrieve suggested criteria
 					pluginData.xhr = $.ajax({
 						url: pluginData.ajaxUrl,
 						data: { action:pluginData.ajaxAction, data:data },
 						dataType: 'jsonp',
 						context: $smartSearch, // Make the context of this request the smart search element.
-						beforeSend: function(){
-							methods.private.showSearchingMessage(this);
-						}
+						beforeSend: function(){methods.private.showSearchingMessage(this);}
 					})
-					.done(function(data){
-						methods.private.updateSuggestionsList(this, data);
-					})
-					.always(function(data){
-						methods.private.hideSearchingMessage(this);
-					});
+					.done(function(data){methods.private.updateSuggestionsList(this, data);})
+					.always(function(data){methods.private.hideSearchingMessage(this);});
 
 					// Save any altered state data back to the data object.
 					$smartSearch.data(stateKey, pluginData);
@@ -999,13 +1046,13 @@
 
 				}
 
-			} //END eventHandler
+			}
 
-		} //END private
+		}
 
 	};
 
-	$.fn[pluginName] = function(method)
+	$.fn[wntPlugin] = function(method)
 	{
 		if (methods[method]) {
 			return methods[method].apply(this, Array.prototype.slice.call(arguments, 1));
