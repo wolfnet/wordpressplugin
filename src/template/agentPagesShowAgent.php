@@ -23,12 +23,15 @@
 ?>
 
 <?php
-function formatUrl($url) {
-	$cleanUrl = $url;
-	if(strpos($url, "http://") === false) {
-		$cleanUrl = "http://" . $cleanUrl;
+if(!function_exists('formatUrl')) {
+	function formatUrl($url) 
+	{
+		$cleanUrl = $url;
+		if(strpos($url, "http://") === false) {
+			$cleanUrl = "http://" . $cleanUrl;
+		}
+		return '<a href="' . $cleanUrl . '">' . str_replace("http://", "", $cleanUrl) . '</a>';
 	}
-	return '<a href="' . $cleanUrl . '">' . str_replace("http://", "", $cleanUrl) . '</a>';
 }
 ?>
 
@@ -42,12 +45,13 @@ if(strlen($detailtitle) > 0) {
 
 if(array_key_exists('HTTP_REFERER', $_SERVER)) {
 		$link = $_SERVER['HTTP_REFERER'];
-		if(array_key_exists('agentCriteria', $_REQUEST)) {
+		if(array_key_exists('agentCriteria', $_REQUEST) && strlen($_REQUEST['agentCriteria']) > 0) {
 			$link .= '&agentCriteria=' . $_REQUEST['agentCriteria'];
 		}
 		if($officeId != '' && strpos($link, 'officeId') === false) {
 			$link .= '&officeId=' . $officeId;
 		}
+		$link .= '#post-' . get_the_id();
 		echo '<div class="wolfnet_back"><a href="' . $link . '">Back</a></div>';
 } else {
 ?>
@@ -115,7 +119,7 @@ if($agent['display_agent']) {
 				if(strlen($agent['email_address']) > 0) {
 					echo '<div class="wolfnet_agentOfficeEmail">';
 					echo '<strong>Email:</strong> <a href="?contact=' 
-						. $agent['agent_id'] . '">' 
+						. $agent['agent_id'] . '#post-' . get_the_id() . '">' 
 						. $agent['first_name'] . ' ' 
 						. $agent['last_name'] . '</a>';
 					echo '</div>';
