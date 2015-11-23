@@ -50,7 +50,7 @@ class Wolfnet_Ajax
             'wolfnet_price_range'             => 'remotePriceRange',
             'wolfnet_base_url'                => 'remoteGetBaseUrl',
             'wolfnet_route_quicksearch'       => 'remoteRouteQuickSearch',
-            'wolfnet_smart_search'            => 'remoteGetSmartSearchCriteria',
+            'wolfnet_smart_search'            => 'remoteGetSuggestions',
             );
 
         foreach ($ajxActions as $action => $method) {
@@ -70,7 +70,7 @@ class Wolfnet_Ajax
             'wolfnet_css'            => 'remotePublicCss',
             'wolfnet_base_url'       => 'remoteGetBaseUrl',
             'wolfnet_price_range'    => 'remotePriceRange',
-            'wolfnet_smart_search'   => 'remoteGetSmartSearchCriteria',
+            'wolfnet_smart_search'   => 'remoteGetSuggestions',
             );
 
         foreach ($ajxActions as $action => $method) {
@@ -611,7 +611,6 @@ class Wolfnet_Ajax
 
 		try {
 
-			//$term = $_REQUEST['data']['term'];
 			$response = $GLOBALS['wolfnet']->getSuggestions(
 				$_REQUEST['data']['term']
 			);
@@ -627,7 +626,7 @@ class Wolfnet_Ajax
 		}
 
 		wp_send_json($response);
-
+		die;
 	}
 
 }

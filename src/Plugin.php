@@ -1367,16 +1367,13 @@ class Wolfnet_Plugin
 
 	public function getSuggestions($term)
 	{
-
 		try {
 
-			$key = $this->getDefaultProductKey();
-
 			$suggestions = $this->apin->sendRequest(
-				$key,
+				$this->getDefaultProductKey(),
 				'/search_criteria/suggestion',
 				'GET',
-				$term
+				array('term'=>$term)
 			);
 
 		} catch (Wolfnet_Exception $e) {
