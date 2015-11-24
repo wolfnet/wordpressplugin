@@ -37,11 +37,11 @@ if(strlen($officetitle) > 0) {
 ?>
 
 <div class="wolfnet_viewAll">
-	<a href="?search">Click here</a> to view all agents and staff.
+	<a href="?search#post-<?php echo get_the_id(); ?>">Click here</a> to view all agents and staff.
 </div>
 
 <form name="wolfnet_agentSearch" class="wolfnet_agentSearch" method="POST" 
-	action="<?php echo $linkBase . "?search"; ?>">
+	action="<?php echo $linkBase . "?search#post-" . get_the_id(); ?>">
 	<?php // No office ID as a hidden field. We want to search all offices ?>
 
 	<input type="text" name="agentCriteria" class="wolfnet_agentCriteria"
@@ -55,6 +55,7 @@ if(strlen($officetitle) > 0) {
 foreach($offices as $office) {
 	if($office['office_id'] != '') {
 		$officeLink = $linkBase . '?officeId=' . $office['office_id'];
+		$officeLink .= '#post-' . get_the_id();
 ?>
 
 	<div class="wolfnet_officePreview">
