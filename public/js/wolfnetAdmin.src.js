@@ -532,7 +532,7 @@ if ( typeof jQuery != 'undefined' ) {
                     $(container).find('.pricerange').each(function() {
                         $(this).prop('disabled', true);
                     });
-                },
+                }
 	        })
             .error(function(data) {
                 console.log(data);
