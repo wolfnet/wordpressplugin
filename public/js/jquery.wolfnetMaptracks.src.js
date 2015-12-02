@@ -2119,11 +2119,10 @@
                     }
                 });
 
-                if ((propertyId !== undefined) && (propertyId != null)) {
-                    MQA.EventManager.addListener(_mapquestPoi, "click", function (e) {
-                        map.houseOverClick(propertyId,propertyUrl);
-                    });
-                }
+				MQA.EventManager.addListener(_mapquestPoi, "touchstart", function (e) {
+					_mapquestPoi.toggleInfoWindowRollover();
+				});
+
                 return _mapquestPoi;
             };
 
@@ -2229,15 +2228,8 @@
         };
 
         this.houseOverClick = function (propertyId,propertyUrl) {
-            //alert(propertyUrl);
             window.location.href = propertyUrl;
-            //$(window).trigger('houseOverClick', [propertyId]);
         };
-
-
-        $(".wntHOItem").live("mouseup", function () {
-            map.houseOverClick($(this).attr("data-property-id"));
-        });
 
 
         // MapQuest TileMap Functions
