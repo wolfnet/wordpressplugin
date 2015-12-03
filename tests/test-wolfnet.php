@@ -46,7 +46,6 @@ class Test_Wolfnet extends WP_UnitTestCase
         //$GLOBALS['wolfnet']->scripts();
         $this->wolfnet->scripts(); 
         $scripts = array(
-            'smooth-div-scroll',
             'wolfnet-scrolling-items',
             'wolfnet-quick-search',
             'wolfnet-listing-grid',

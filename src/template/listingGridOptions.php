@@ -110,6 +110,7 @@
         <tr class="basic-option">
             <td><label>Price:</label></td>
             <td>
+                <div class="wolfnet_prices">
                 <select id="<?php echo $minprice_wpid; ?>" class="pricerange minprice" name="<?php echo $minprice_wpname; ?>">
                     <option value="">Min. Price</option>
 
@@ -140,6 +141,7 @@
                     }
                     ?>
                 </select>
+                </div>
             </td>
         </tr>
 

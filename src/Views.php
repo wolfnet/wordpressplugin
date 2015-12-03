@@ -121,8 +121,7 @@ class Wolfnet_Views
     {
 
         try {
-            $key = (array_key_exists("keyid", $_REQUEST)) ? $_REQUEST["keyid"] : "1";
-            $productKey = $GLOBALS['wolfnet']->getProductKeyById($key);
+            $productKey = $GLOBALS['wolfnet']->getProductKeyById($_SESSION['keyid']);
 
             if (!$GLOBALS['wolfnet']->productKeyIsValid($productKey)) {
                 $out = $this->parseTemplate('invalidProductKey');
@@ -130,7 +129,7 @@ class Wolfnet_Views
                 $out = $this->parseTemplate('adminSearchManager', array(
                     'searchForm' => ($GLOBALS['wolfnet']->smHttp !== null) ? $GLOBALS['wolfnet']->smHttp['body'] : '',
                     'markets' => json_decode($GLOBALS['wolfnet']->getProductKey()),
-                    'selectedKey' => $key,
+                    'selectedKey' => $_SESSION['keyid'],
                     'url' => $GLOBALS['wolfnet']->url,
                 ));
 

@@ -122,7 +122,6 @@
             </div>
 
             <div class="wolfnet_widgetBaths">
-
                 <label for="<?php echo $instance_id; ?>_min_baths">Baths</label>
                 <select id="<?php echo $instance_id; ?>_min_baths" name="min_bathrooms">
                     <option value="">Any</option>
@@ -130,16 +129,15 @@
                     <option value="<?php echo $bath['value']; ?>"><?php echo $bath['label']; ?></option>
                     <?php } ?>
                 </select>
-
             </div>
 
         </div>
 
         <div class="wolfnet_quickSearchFormButton">
-
             <button class="wolfnet_quickSearchForm_submitButton" name="search" type="submit">Search!</button>
-
         </div>
+
+        <div class="wolfnet_clearfix"></div>
 
     </form>
 
@@ -166,7 +164,7 @@
 
         $('#<?php echo $instance_id; ?>_quickSearchForm').submit(function(event) {
             event.preventDefault();
-            $.fn.routeQuickSearch($(this).serializeArray());
+            $.fn.routeQuickSearch($(this));
             return false;
         });
 

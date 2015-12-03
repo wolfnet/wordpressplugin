@@ -289,7 +289,19 @@ class Wolfnet_Plugin
 
     public function wolfnetActivation()
     {
-
+        // Check that key structure is formatted correctly and that the key 
+        // label gets set if it was not already. If there's no preexisting key, 
+        // ignore this.
+        $keyArray = json_decode($this->getProductKey());
+        if(count($keyArray) == 1 && $keyArray[0]->key != false) {
+            foreach($keyArray as $key) {
+                if(strlen($key->label) == 0) {
+                    $key->label = strtoupper($this->getMarketName($key->key));
+                }
+            }
+            $keyString = json_encode($keyArray);
+            update_option($this->productKeyOptionKey, $keyString);
+        }
     }
 
 
@@ -312,12 +324,10 @@ class Wolfnet_Plugin
 
         // JavaScript
         $scripts = array(
-            'smooth-div-scroll',
             'wolfnet-scrolling-items',
             'wolfnet-quick-search',
             'wolfnet-listing-grid',
             'wolfnet-toolbar',
-            'wolfnet-property-list',
             'wolfnet-maptracks',
             'mapquest-api'
             );
@@ -865,6 +875,7 @@ class Wolfnet_Plugin
             $default_maxrows = '50';
             $criteria = array_merge($this->getListingGridDefaults(), (is_array($attrs)) ? $attrs : array());
 
+            // TODO: sort out all these max fields (also an alias in prepareListingQuery)
             if ($criteria['maxrows'] == $default_maxrows && $criteria['maxresults'] != $default_maxrows) {
                 $criteria['maxrows'] = $criteria['maxresults'];
             }
@@ -1371,7 +1382,12 @@ class Wolfnet_Plugin
             try {
                 $key = $this->getProductKeyById($keyID);
 
-                $listings = $this->apin->sendRequest($key, '/listing', 'GET', $formData);
+                $listings = $this->apin->sendRequest(
+                    $key, 
+                    '/listing?detaillevel=1&startrow=1&maxrows=1', 
+                    'GET',
+                    $formData
+                );
                 $count = $listings['responseData']['data']['total_rows'];
 
                 if($count > $highestCount) {
@@ -1557,6 +1573,7 @@ class Wolfnet_Plugin
             'minprice' => 'min_price',
             'zipcode' => 'zip_code',
             'ownertype' => 'owner_type',
+            'maxresults' => 'maxrows',
         );
 
         // Translate aliases to their canonical version and then removed the alias from the array
@@ -2103,7 +2120,7 @@ class Wolfnet_Plugin
             $listing['bedsbaths_full'] = '';
 
             if (is_numeric($listing['total_bedrooms'])) {
-                $listing['bedsbaths_full'] .= $listing['total_bedrooms'] . ' Bed Rooms';
+                $listing['bedsbaths_full'] .= $listing['total_bedrooms'] . ' Bedrooms';
             }
 
             if (is_numeric($listing['total_bedrooms']) && is_numeric($listing['total_baths'])) {
@@ -2111,7 +2128,7 @@ class Wolfnet_Plugin
             }
 
             if (is_numeric($listing['total_baths'])) {
-                $listing['bedsbaths_full'] .= $listing['total_baths'] . ' Bath Rooms';
+                $listing['bedsbaths_full'] .= $listing['total_baths'] . ' Bathrooms';
             }
 
             $listing['address'] = $listing['display_address'];
@@ -2351,10 +2368,18 @@ class Wolfnet_Plugin
             return $this->getWpError($data);
         }
 
-        $args['map_start_lat'] = $data['responseData']['data']['market']['maptracks']['map_start_lat'];
-        $args['map_start_lng'] = $data['responseData']['data']['market']['maptracks']['map_start_lng'];
-        $args['map_start_scale'] = $data['responseData']['data']['market']['maptracks']['map_start_scale'];
-        $args['houseoverIcon'] = $GLOBALS['wolfnet']->url . 'img/houseover.png';
+
+        $args['mapParams'] = array(
+    		'mapProvider'  => 'mapquest',
+    		'centerLat'    => $data['responseData']['data']['market']['maptracks']['map_start_lat'],
+			'centerLng'    => $data['responseData']['data']['market']['maptracks']['map_start_lng'],
+			'zoomLevel'    => $data['responseData']['data']['market']['maptracks']['map_start_scale'],
+			'houseoverIcon'=> $GLOBALS['wolfnet']->url . 'img/houseover.png',
+			'mapId'        => uniqid('wntMapTrack'),
+			'hideMapId'    => uniqid('hideMap'),
+			'showMapId'    => uniqid('showMap'),
+		);
+
         $args['houseoverData'] = $this->getHouseoverData(
             $listingsData,
             $data['responseData']['data']['resource']['searchResults']['allLayouts']['showBrokerReciprocityLogo']
@@ -2586,14 +2611,6 @@ class Wolfnet_Plugin
                 $this->url . 'js/jquery.imagesloaded.src.js',
                 array('jquery'),
                 ),
-            'mousewheeljs' => array(
-                $this->url . 'js/jquery.mousewheel.src.js',
-                array('jquery'),
-                ),
-            'smooth-div-scroll' => array(
-                $this->url . 'js/jquery.smoothDivScroll-1.2.src.js',
-                array('mousewheeljs', 'jquery-ui-core', 'jquery-ui-widget', 'jquery-effects-core'),
-                ),
             'wolfnet' => array(
                 $this->url . 'js/wolfnet.src.js',
                 array('jquery', 'tooltipjs'),
@@ -2604,7 +2621,7 @@ class Wolfnet_Plugin
                 ),
             'wolfnet-scrolling-items' => array(
                 $this->url . 'js/jquery.wolfnetScrollingItems.src.js',
-                array('smooth-div-scroll', 'wolfnet'),
+                array('wolfnet'),
                 ),
             'wolfnet-quick-search' => array(
                 $this->url . 'js/jquery.wolfnetQuickSearch.src.js',
@@ -2616,10 +2633,6 @@ class Wolfnet_Plugin
                 ),
             'wolfnet-toolbar' => array(
                 $this->url . 'js/jquery.wolfnetToolbar.src.js',
-                array('jquery', 'wolfnet'),
-                ),
-            'wolfnet-property-list' => array(
-                $this->url . 'js/jquery.wolfnetPropertyList.src.js',
                 array('jquery', 'wolfnet'),
                 ),
             'wolfnet-shortcode-builder' => array(

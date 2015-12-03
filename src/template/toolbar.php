@@ -28,6 +28,11 @@
             <span>Previous</span>
         </a>
     <?php } ?>
+    <?php if ($paginated) { ?>
+        <a href="<?php echo $nextLink; ?>" title="Next Page" class="wolfnet_page_nav wolfnet_page_nav_next <?php echo $nextClass; ?>" rel="follow">
+            <span>Next</span>
+        </a>
+    <?php } ?>
     <span class="wolfnet_page_info">
         <?php if ($paginated) { ?>
             <span class="wolfnet_page_items">
@@ -37,9 +42,4 @@
             </span>
         <?php } ?>
     </span>
-    <?php if ($paginated) { ?>
-        <a href="<?php echo $nextLink; ?>" title="Next Page" class="wolfnet_page_nav wolfnet_page_nav_next <?php echo $nextClass; ?>" rel="follow">
-            <span>Next</span>
-        </a>
-    <?php } ?>
 </div>
