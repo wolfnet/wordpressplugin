@@ -262,9 +262,8 @@ class Wolfnet_Plugin
         // Check that key structure is formatted correctly and that the key 
         // label gets set if it was not already. If there's no preexisting key, 
         // ignore this.
-        $keyString = $this->getProductKey();
-        if(strlen($keyString) > 0) {
-            $keyArray = json_decode($keyString);
+        $keyArray = json_decode($this->getProductKey());
+        if(count($keyArray) == 1 && $keyArray[0]->key != false) {
             foreach($keyArray as $key) {
                 if(strlen($key->label) == 0) {
                     $key->label = strtoupper($this->getMarketName($key->key));
