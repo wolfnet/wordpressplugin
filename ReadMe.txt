@@ -101,6 +101,7 @@ Please upgrade to the latest version of the plugin as we will be disabling our o
 * Various map improvements including updating resize functionality
 * Updates to better handle multiple map instances on a page
 * Fixes issue with chrome showing vertical scroll bar.
+* Adding multi-market functionality.
 
 = 1.7.18 =
 * Fixes a bug saving criteria in the Search Manager.
