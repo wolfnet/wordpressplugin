@@ -3,7 +3,7 @@ Author:             WolfNet Technologies, LLC
 Contributors:       wolfnettech, ajmichels, asbaumgart, michaelpidde, blots
 Tags:               idx, mls, homes
 Requires at least:  3.5.1
-Tested up to:       4.2.1
+Tested up to:       4.3.1
 Stable tag:         {X.X.X-stable}
 License:            GPLv2 or later
 License URI:        http://www.gnu.org/licenses/gpl-2.0.html
@@ -101,6 +101,15 @@ Please upgrade to the latest version of the plugin as we will be disabling our o
 * Various map improvements including updating resize functionality
 * Updates to better handle multiple map instances on a page
 * Fixes issue with chrome showing vertical scroll bar.
+
+= 1.7.18 =
+* Fixes a bug saving criteria in the Search Manager.
+
+= 1.7.17 =
+* Fixes a bug with the houseover popup on mobile touch events.
+
+= 1.7.16 =
+* Fixes a bug with max listings in the featured listings component.
 
 = 1.7.15 =
 * Fixes missing legacy owner type values in featured listings requests.

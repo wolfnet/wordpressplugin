@@ -259,7 +259,20 @@ class Wolfnet_Plugin
 
     public function wolfnetActivation()
     {
-
+        // Check that key structure is formatted correctly and that the key 
+        // label gets set if it was not already. If there's no preexisting key, 
+        // ignore this.
+        $keyString = $this->getProductKey();
+        if(strlen($keyString) > 0) {
+            $keyArray = json_decode($keyString);
+            foreach($keyArray as $key) {
+                if(strlen($key->label) == 0) {
+                    $key->label = strtoupper($this->getMarketName($key->key));
+                }
+            }
+            $keyString = json_encode($keyArray);
+            update_option($this->productKeyOptionKey, $keyString);
+        }
     }
 
 
@@ -756,6 +769,7 @@ class Wolfnet_Plugin
             $default_maxrows = '50';
             $criteria = array_merge($this->getListingGridDefaults(), (is_array($attrs)) ? $attrs : array());
 
+            // TODO: sort out all these max fields (also an alias in prepareListingQuery)
             if ($criteria['maxrows'] == $default_maxrows && $criteria['maxresults'] != $default_maxrows) {
                 $criteria['maxrows'] = $criteria['maxresults'];
             }
@@ -1707,7 +1721,12 @@ class Wolfnet_Plugin
             try {
                 $key = $this->getProductKeyById($keyID);
 
-                $listings = $this->apin->sendRequest($key, '/listing', 'GET', $formData);
+                $listings = $this->apin->sendRequest(
+                    $key, 
+                    '/listing?detaillevel=1&startrow=1&maxrows=1', 
+                    'GET',
+                    $formData
+                );
                 $count = $listings['responseData']['data']['total_rows'];
 
                 if($count > $highestCount) {
@@ -1893,6 +1912,7 @@ class Wolfnet_Plugin
             'minprice' => 'min_price',
             'zipcode' => 'zip_code',
             'ownertype' => 'owner_type',
+            'maxresults' => 'maxrows',
         );
 
         // Translate aliases to their canonical version and then removed the alias from the array

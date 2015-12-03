@@ -175,6 +175,21 @@
                 margin: 0 20px 10px 0;
             }
 
+            .wolfnet_loaderOverlay {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0,0,0,0.1);
+            }
+
+            .wolfnet_loaderImage {
+                float: right;
+                margin-right: 20px;
+                padding-top: 16px;
+            }
+
         }
 
         &.wolfnet_wWide
@@ -274,6 +289,7 @@
                 {
                     height:     auto;
                     text-align: right;
+                    float: right;
 
                     button
                     {
@@ -580,8 +596,8 @@
 
                     select {
                         margin-right:.25em;
+                        max-width: 3em;
                     }
-
                 }
 
                 .wolfnet_sortoptions

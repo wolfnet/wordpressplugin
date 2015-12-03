@@ -94,7 +94,12 @@ if ( typeof jQuery != 'undefined' ) {
 						}
 
 						if ( typeof WNTWP != 'undefined' ) {
+							// Trigger form change in case there has been no trigger
+							// to update search criteria structure.
+							$( "#min_price" ).change();
+
 							var criteria = WNTWP.returnSearchParams();
+
 							// This gets set separately since the above function deals with search solutions params only.
 							criteria.keyid = $('#keyid').val();
 						}

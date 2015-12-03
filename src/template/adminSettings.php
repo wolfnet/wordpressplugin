@@ -139,6 +139,23 @@
 
 
             $( '#wolfnetSettings' ).submit( function() {
+                // Validate that all keys have labels.
+                var valid = true;
+                $('.wolfnet_keyLabel').each(function() {
+                    // Remove error class if it was there before.
+                    $(this).removeClass('error');
+
+                    if($(this).val() == '') {
+                        $(this).addClass('error');
+                        valid = false;
+                    }
+                });
+                if(!valid) {
+                    $('.error')[0].focus();
+                    alert('Please add a label for every product key.');
+                    return false;
+                }
+
                 /* We need to collect the keys and associated labels from the form into a JSON string,
                 then put that into a form variable to retain backwards compatibility. */
                 var json = [];
