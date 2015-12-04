@@ -69,9 +69,11 @@
             <td>
             <?php
             foreach($offices as $office) {
-                echo '<input type="checkbox" class="officeexclude"';
-                echo 'value="' . $office['office_id'] . '" /> ' . $office['name'];
-                echo ' (' . $office['office_id'] . ')<br />';
+                if(strlen($office['office_id']) > 0) {
+                    echo '<input type="checkbox" class="officeexclude"';
+                    echo 'value="' . $office['office_id'] . '" /> ' . $office['name'];
+                    echo ' (' . $office['office_id'] . ')<br />';
+                }
             }
             ?>
             </td>
