@@ -352,7 +352,8 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
                 $this->args['criteria']
             );
         } catch (Wolfnet_Exception $e) {
-            $errorCode = json_decode($e->getData()->body)->metadata->status->errorCode;
+            $data = $e->getData();
+            $errorCode = json_decode($data['body'])->metadata->status->errorCode;
             if($errorCode == 'Auth1004') {
                 $data = null;
             } else {
