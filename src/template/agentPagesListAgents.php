@@ -90,7 +90,7 @@ if(!function_exists('paginate')) {
 	?>
 
 	<div class="wolfnet_viewAll">
-		<a href="?search#post-<?php echo get_the_id(); ?>">Click here</a> to view all agents and staff.
+		<a href="?search&agentCriteria=#post-<?php echo get_the_id(); ?>">Click here</a> to view all agents and staff.
 	</div>
 
 	<form name="wolfnet_agentSearch" class="wolfnet_agentSearch" method="POST" 
