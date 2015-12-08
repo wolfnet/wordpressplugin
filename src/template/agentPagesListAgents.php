@@ -45,7 +45,7 @@ if(!function_exists('paginate')) {
 		$output = '<ul class="wolfnet_agentPagination">';
 		$iterate = ceil($total / $numPerPage);
 
-		if(!is_null($search) && strlen($search) > 0) {
+		if(!is_null($search)) {
 			$linkBase = '?search&agentCriteria=' . $search . '&';
 		} else {
 			$linkBase = '?';
@@ -217,13 +217,20 @@ jQuery(function($) {
 					href = href.replace('agentSort=name', 'agentSort=office_id');
 				}
 			} else {
-				// We need to put the sort param before the anchor
+				// We need to put the sort param before the anchor.
 				var hashPos = href.indexOf('#');
 				if(hashPos > -1) {
 					href = href.replace('#', '&agentSort=' + $(this).val() + '#');
 				} else {
 					href += '&agentSort=' + $(this).val();
 				}
+			}
+
+			// Remove page is there since the pages won't correlate between 
+			// offices and agents.
+			var pagePos = href.indexOf('agentpage');
+			if(pagePos > -1) {
+				href = href.replace(/&agentpage=[0-9]+/gi, '');
 			}
 			
 			window.location.href = href;
