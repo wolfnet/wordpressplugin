@@ -338,11 +338,36 @@
 
         .wolfnet_officePreview 
         {
+            position: relative;
+            font-size: .9em;
             float: left;
             border: 1px solid #ccc;
             margin: 10px 10px 0 0;
             padding-right: 10px;
             width: 280px;
+
+            .wolfnet_officeLinks
+            {
+                position: absolute;
+                bottom: 0;
+                left: 6px;
+                height: 80px;
+                width: 100%;
+                font-size: .75em !important;
+
+                .wolfnet_officeLink
+                {
+                    float: left;
+                    width: 50%;
+                    padding-bottom: 10px;
+                }
+                .wolfnet_officeLinkLeft
+                {
+                    float: left;
+                    width: 46%;
+                    padding-bottom: 10px;
+                }
+            }
         }
 
         .wolfnet_officeImage 

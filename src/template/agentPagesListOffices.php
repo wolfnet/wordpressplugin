@@ -56,6 +56,13 @@ foreach($offices as $office) {
 	if($office['office_id'] != '') {
 		$officeLink = $linkBase . '?officeId=' . $office['office_id'];
 		$officeLink .= '#post-' . get_the_id();
+
+		$searchLink = $office['search_solution_url'] . "/?action=newsearch";
+		$searchLink .= "&office_id=" . $office['office_id'];
+		$searchLink .= "&ld_action=find_office";
+
+		$searchResultLink = $office['search_solution_url'] . "/?action=newsearchsession";
+		$searchResultLink .= "&office_id=" . $office['office_id'];
 ?>
 
 	<div class="wolfnet_officePreview">
@@ -95,13 +102,24 @@ foreach($offices as $office) {
 				echo "Fax: " . $office['fax_number'];
 				echo '</div>';
 			}
-
-			if(strlen($office['fax_number']) > 0) {
-				echo '<div class="wolfnet_officeFax">';
-				echo "Fax: " . $office['fax_number'];
-				echo '</div>';
-			}
 			?>
+		</div>
+
+		<div class="wolfnet_clearfix"></div>
+
+		<div class="wolfnet_officeLinks">
+			<div class="wolfnet_officeLinkLeft">
+				<a href="<?php echo $officeLink; ?>">Meet Our Agents</a>
+			</div>
+			<div class="wolfnet_officeLink">
+				<a href="<?php echo $searchResultLink; ?>">Our Featured Listings</a>
+			</div>
+			<div class="wolfnet_officeLinkLeft">
+				<a href="<?php echo $searchLink; ?>">Search All Area<br />Listings</a>
+			</div>
+			<div class="wolfnet_officeLink">
+				<a href="#">Contact Us</a>
+			</div>
 		</div>
 	</div>
 
@@ -124,6 +142,10 @@ jQuery(function($) {
 				maxHeight = $(this).height();
 			}
 		});
+
+		// Increase height to account for absolute positioned links
+		maxHeight += 90;
+
 		$('.wolfnet_officePreview').height(maxHeight);
 	});
 });

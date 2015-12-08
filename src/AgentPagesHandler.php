@@ -113,7 +113,7 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
         $this->args['criteria']['omit_office_id'] = $this->args['excludeoffices'];
         if(array_key_exists('agentSort', $_REQUEST)) {
             $agentSort = $_REQUEST['agentSort'];
-            $this->args['criteria']['sort'] = ($_REQUEST['agentSort'] == 'name') ? 'name' : 'officeId';
+            $this->args['criteria']['sort'] = ($_REQUEST['agentSort'] == 'name') ? 'name' : 'office_id';
         } else {
             $agentSort = 'name';
         }
@@ -354,7 +354,8 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
         } catch (Wolfnet_Exception $e) {
             $data = $e->getData();
             $errorCode = json_decode($data['body'])->metadata->status->errorCode;
-            if($errorCode == 'Auth1004') {
+            var_dump($data);
+            if($errorCode == 'Auth1004' || $errorCode == 'Auth1001') {
                 $data = null;
             } else {
                 $GLOBALS['wolfnet']->displayException($e);

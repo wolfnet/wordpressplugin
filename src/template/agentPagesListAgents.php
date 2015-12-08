@@ -111,7 +111,7 @@ if(!function_exists('paginate')) {
 	<label for="agentSort">Sort By:</label>
 	<select name="agentSort" class="wolfnet_agentSort">
 		<option value="name" <?php echo ($agentSort == 'name') ? 'selected="selected"' : ''; ?>>Name</option>
-		<option value="officeId" <?php echo ($agentSort == 'officeId') ? 'selected="selected"' : ''; ?>>Office</option>
+		<option value="office_id" <?php echo ($agentSort == 'office_id') ? 'selected="selected"' : ''; ?>>Office</option>
 	</select>
 	<div class="wolfnet_clearfix"></div>
 	<?php } ?>
@@ -212,15 +212,21 @@ jQuery(function($) {
 
 			if(sortPos > -1) {
 				if($(this).val() == 'name') {
-					href = href.replace('agentSort=officeId', 'agentSort=name');
+					href = href.replace('agentSort=office_id', 'agentSort=name');
 				} else {
-					href = href.replace('agentSort=name', 'agentSort=officeId');
+					href = href.replace('agentSort=name', 'agentSort=office_id');
 				}
 			} else {
-				href += '&agentSort=' + $(this).val();
+				// We need to put the sort param before the anchor
+				var hashPos = href.indexOf('#');
+				if(hashPos > -1) {
+					href = href.replace('#', '&agentSort=' + $(this).val() + '#');
+				} else {
+					href += '&agentSort=' + $(this).val();
+				}
 			}
 			
-			window.location = href;
+			window.location.href = href;
 		});
 		<?php } ?>
 	});
