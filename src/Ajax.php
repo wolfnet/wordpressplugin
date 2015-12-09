@@ -39,6 +39,7 @@ class Wolfnet_Ajax
             'wolfnet_scb_options_list'        => 'remoteShortcodeBuilderOptionsList',
             'wolfnet_scb_options_quicksearch' => 'remoteShortcodeBuilderOptionsQuickSearch',
             'wolfnet_scb_savedsearch'         => 'remoteShortcodeBuilderSavedSearch',
+            'wolfnet_scb_showagentfeature'    => 'remoteShortcodeBuilderShowAgentFeature',
             'wolfnet_content'                 => 'remoteContent',
             'wolfnet_content_header'          => 'remoteContentHeader',
             'wolfnet_content_footer'          => 'remoteContentFooter',
@@ -206,6 +207,7 @@ class Wolfnet_Ajax
 
         try {
             $args = $GLOBALS['wolfnet']->getAgentPagesOptions();
+            $args['showSoldOption'] = $GLOBALS['wolfnet']->soldListingsEnabled();
 
             $response = $GLOBALS['wolfnet']->views->agentPagesOptionsFormView($args);
 
@@ -331,6 +333,23 @@ class Wolfnet_Ajax
 
         wp_send_json($response);
 
+    }
+
+
+    public function remoteShortcodeBuilderShowAgentFeature()
+    {
+        try {
+            $response = $GLOBALS['wolfnet']->showAgentFeature();
+        } catch (Wolfnet_Exception $e) {
+            status_header(500);
+
+            $response = array(
+                'message' => $e->getMessage(),
+                'data' => $e->getData(),
+            );
+        }
+
+        wp_send_json($response);
     }
 
 

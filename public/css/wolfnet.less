@@ -175,6 +175,21 @@
                 margin: 0 20px 10px 0;
             }
 
+            .wolfnet_loaderOverlay {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0,0,0,0.1);
+            }
+
+            .wolfnet_loaderImage {
+                float: right;
+                margin-right: 20px;
+                padding-top: 16px;
+            }
+
         }
 
         &.wolfnet_wWide
@@ -255,6 +270,7 @@
                         float:   none;
                         clear:   none;
                         margin:  0 0 0 1em;
+                        white-space: nowrap;
 
                         select
                         {
@@ -273,6 +289,7 @@
                 {
                     height:     auto;
                     text-align: right;
+                    float: right;
 
                     button
                     {
@@ -293,13 +310,39 @@
     &.wolfnet_officesList 
     {
 
+        h2
+        {
+            margin-top: 0;
+        }
+
+        .wolfnet_viewAll
+        {
+            margin-bottom: 10px;
+        }
+
+        .wolfnet_agentSearch
+        {
+            width: 500px;
+
+            input
+            {
+                float: left;
+            }
+
+            .wolfnet_agentCriteria
+            {
+                width: 300px;
+                margin-right: 10px;
+            }
+        }
+
         .wolfnet_officePreview 
         {
             float: left;
             border: 1px solid #ccc;
             margin: 10px 10px 0 0;
             padding-right: 10px;
-            width: 300px;
+            width: 280px;
         }
 
         .wolfnet_officeImage 
@@ -312,14 +355,14 @@
         .wolfnet_officeContact 
         {
             float: right;
-            width: 190px;
+            width: 170px;
             font-size: .8em;
         }
 
         .wolfnet_officeName 
         {
             font-weight: bold;
-            font-size: 1.2em;
+            font-size: 1.1em;
         }
 
     }
@@ -327,32 +370,59 @@
     &.wolfnet_agentsList
     {
 
+        h2
+        {
+            margin-top: 0;
+        }
+
+        .wolfnet_viewAll
+        {
+            margin-bottom: 10px;
+        }
+
+        .wolfnet_agentSearch
+        {
+            width: 500px;
+            margin-bottom: 10px;
+
+            input
+            {
+                float: left;
+            }
+
+            .wolfnet_agentCriteria
+            {
+                width: 300px;
+                margin-right: 10px;
+            }
+        }
+
         .wolfnet_agentPreview 
         {
             float: left;
             border: 1px solid #ccc;
             margin: 10px 10px 0 0;
             padding-right: 10px;
-            width: 300px;
+            width: 280px;
         }
 
         .wolfnet_agentImage 
         {
             float: left;
-            margin: 10px;
+            margin: 8px;
             border: 1px solid #ccc;
         }
 
         .wolfnet_agentInfo 
         {
             float: right;
-            width: 190px;
+            width: 170px;
             font-size: .8em;
 
             .wolfnet_agentName 
             {
                 font-weight: bold;
-                font-size: 1.2em;
+                font-size: 1.1em;
             }
 
         }
@@ -362,6 +432,17 @@
     &.wolfnet_agentShow 
     {
         width: 600px;
+
+        h2
+        {
+            margin-top: 0;
+        }
+
+        .wolfnet_viewAll,
+        .wolfnet_back
+        {
+            margin-bottom: 30px;
+        }
 
         .wolfnet_agentImage 
         {
@@ -379,6 +460,17 @@
             {
                 font-weight: bold;
                 font-size: 1.2em;
+                /* These next two lines are some stupid crap they wanted so the
+                text lines up with the top of the agent image... If it breaks
+                later, well... */
+                line-height:.7em;
+                padding-bottom:10px;
+            }
+
+            .wolfnet_agentTitle
+            {
+                font-weight: bold;
+                font-size: 1.2em;
             }
 
         }
@@ -387,6 +479,12 @@
         {
             clear: both;
             padding-top: 20px;
+
+            .wolfnet_agentLinks
+            {
+                padding-bottom: 10px;
+                list-style: none;
+            }
 
             .wolfnet_agentSection 
             {
@@ -417,6 +515,15 @@
     {
         width: 600px;
 
+        .wolfnet_contactThanks
+        {
+            width: 600px;
+            border: 1px solid #ccc;
+            text-align: center;
+            margin-top: 20px;
+            padding: 20px 0;
+        }
+
         .wolfnet_agentPreview 
         {
             border: 1px solid #ccc;
@@ -425,7 +532,7 @@
             .wolfnet_agentImage 
             {
                 float: left;
-                margin: 10px;
+                margin: 8px;
                 border: 1px solid #ccc;
             }
 
@@ -433,7 +540,12 @@
             {
                 float: right;
                 width: 480px;
-                border: 1px solid #000;
+
+                .wolfnet_agentName
+                {
+                    float: left;
+                    width: 270px;
+                }
 
                 .wolfnet_agentContact
                 {
@@ -447,15 +559,22 @@
 
         .wolfnet_contactForm
         {
+            padding-top: 16px; 
+
             label
             {
                 display: block;
                 padding-top: 16px;
             }
 
-            .wolfnet_asterisk
+            .wolfnet_red
             {
                 color: red;
+            }
+
+            .wolfnet_errorMessage
+            {
+                font-size: .9em;
             }
 
             #wolfnet_submit
@@ -463,6 +582,10 @@
                 margin-top: 16px;
             }
 
+            .wolfnet_required
+            {
+                border: 1px solid red;
+            }
         }
 
     }
@@ -470,7 +593,6 @@
     &.wolfnet_quickSearch_basic
     {
         z-index:    0;
-
     }
 
     &.wolfnet_featuredListings,
@@ -527,20 +649,52 @@
                 font-size: 1.2em;
                 font-weight: bold;
                 display:     block;
+                white-space: nowrap;
+                text-overflow: ellipsis;
+                overflow: hidden;
             }
 
             .wolfnet_location,
             .wolfnet_address
             {
                 display: block;
+                line-height: 1.3em;
             }
 
             .wolfnet_bed_bath
             {
                 display: block;
-                position: absolute;
-                top:      @imageHeight + 30px;
-                right:    0;
+                font-size: .8em;
+                font-style: italic;
+                line-height: 1em;
+                margin-bottom: .75em;
+
+                .wolfnet_label
+                {
+                    display: none;
+                }
+
+                .wolfnet_beds
+                {
+                    display: inline-block;
+                    margin-right: 1em;
+
+                    &:before {
+                        content: "Beds: ";
+                    }
+
+                }
+
+                .wolfnet_baths
+                {
+                    display: inline-block;
+
+                    &:before {
+                        content: "Baths: ";
+                    }
+
+                }
+
             }
 
             .wolfnet_branding
@@ -661,7 +815,7 @@
         {
             width:100%;
             clear:both;
-            height:2em;
+            line-height: 2em;
 
             &.wolfnet_toolbarTop {
                 margin:2em 0 1.75em 0;
@@ -674,8 +828,7 @@
 
             .wolfnet_page_nav
             {
-                display:inline-block;
-                width:20%;
+                display:block;
                 white-space:nowrap;
 
                 &.wolfnet_page_nav_prev
@@ -703,8 +856,8 @@
 
             .wolfnet_page_info
             {
-                display:inline-block;
-                float:left;
+                display:block;
+                width: 100%;
                 text-align:center;
 
                 .wolfnet_page_items
@@ -723,7 +876,6 @@
                 {
                     white-space:nowrap;
                     display:inline-block;
-                    padding-right:1em;
 
                     select {
                         margin-right:.25em;
@@ -740,104 +892,78 @@
 
         }
 
-        &.wolfnet_withPagination {
-
-            .wolfnet_page_info
-            {
-                width:60%;
-            }
-
-        }
-
-        /* If the toolbar has both pagination and sorting tools give it a little extra height. */
-        &.wolfnet_withPagination.wolfnet_withSortOptions {
-
-            .wolfnet_toolbar {
-                height:3em;
-            }
-
-        }
-
     }
 
 
-    &.wolfnet_featuredListings
-    {
-        overflow:    hidden;
+    &.wolfnet_featuredListings {
         white-space: nowrap;
-        height:      140px;
+        overflow-x: auto;
+        overflow-y: hidden;
+        text-align: center;
 
-        .scrollingHotSpotLeft,
-        .scrollingHotSpotRight
-        {
-            /* The hotspots have a minimum width of 100 pixels and if there is room the will grow
-            and occupy 15% of the scrollable area (30% combined). Adjust it to your own taste. */
-            min-width:           75px;
-            width:               10%;
-            height:              100%;
-            background-image:    url('@{imagesDir}big_transparent.gif');
-                                 /* There is a big background image and it's used to solve some
-                                  * problems I experienced in Internet Explorer 6. */
-            background-repeat:   repeat;
-            background-position: center center;
-            position:            absolute;
-            z-index:             200;
-        }
-
-        .scrollingHotSpotLeftVisible,
-        .scrollingHotSpotRightVisible
-        {
-            background-color:  #fff;
-            background-repeat: no-repeat;
-            opacity:           0.35; /* Standard CSS3 opacity setting */
-            -moz-opacity:      0.35; /* Opacity for really old versions of Mozilla Firefox (0.9 or older) */
-            /* filter:            alpha('opacity = 35'); /* Opacity for Internet Explorer. */
-            zoom:              1; /* Trigger "hasLayout" in Internet Explorer 6 or older versions */
-        }
-
-
-        /* You can alter this CSS in order to give Smooth Div Scroll your own look'n'feel */
-        /* Invisible left hotspot */
-        .scrollingHotSpotLeft
-        {
-            left:   0;
-        }
-
-        /* Visible left hotspot */
-        .scrollingHotSpotLeftVisible
-        {
-            background-image: url('@{imagesDir}arrow_left.gif');
-        }
-
-        /* Invisible right hotspot */
-        .scrollingHotSpotRight
-        {
-            right:  0;
-        }
-
-        /* Visible right hotspot */
-        .scrollingHotSpotRightVisible
-        {
-            background-image:  url('@{imagesDir}arrow_right.gif');
-        }
-
-        /* The scroll wrapper is always the same width and height as the containing element (div).
-           Overflow is hidden because you don't want to show all of the scrollable area.
-        */
-        .scrollWrapper
-        {
+        &.wolfnet_withControls {
+            white-space: normal;
+            overflow-x: visible;
+            text-align: inherit;
             position: relative;
-            overflow: hidden;
-            width:    100%;
-            height:   100%;
 
-            .scrollableArea
-            {
-                position: relative;
-                width:    auto;
-                height:   100%;
+            > div {
+                width: 100%;
+                white-space: nowrap;
+                overflow-x: auto;
+                overflow-y: hidden;
+                text-align: center;
             }
 
+        }
+
+        .wolfnet_control {
+            top: 0;
+            position: absolute;
+            background-color: transparent;
+            background-repeat: no-repeat;
+            background-position: center center;
+            border: none;
+            z-index: 200;
+
+            /* The hotspots have a minimum width of 100 pixels and if there is room the will grow
+            and occupy 15% of the scrollable area (30% combined). Adjust it to your own taste. */
+            min-width: 75px;
+            width: 10%;
+            height: 100%;
+
+            &.wolfnet_leftControl {
+                left: 0;
+            }
+
+            &.wolfnet_rightControl {
+                right: 0;
+            }
+
+            &:hover {
+                background-color:  #fff;
+                opacity: 0.35;
+
+                &.wolfnet_leftControl {
+                    background-image: url('@{imagesDir}arrow_left.gif');
+                }
+
+                &.wolfnet_rightControl {
+                    background-image: url('@{imagesDir}arrow_right.gif');
+                }
+
+            }
+
+        }
+
+        .wolfnet_listing {
+            display: inline-block;
+            margin: 0 0 10px 10px;
+            padding: 0;
+            text-align: left;
+            float: none;
+            white-space: normal;
+            vertical-align: top;
         }
 
     }
@@ -849,19 +975,14 @@
 
         .wolfnet_listing
         {
-            height:     @propertyHeight;
             text-align: left;
             position:   relative;
-
-            &.wolfnet_branded
-            {
-                height: @propertyHeightBranded;
-            }
 
             .wolfnet_branding
             {
                 display: block;
-                padding-top: 2em;
+                padding-top: 1.5em;
+                font-size: .8em;
 
                 .wolfnet_brokerLogo
                 {
@@ -891,7 +1012,10 @@
 
             .wolfnet_full_address
             {
-                float: left;
+                white-space: nowrap;
+                display: block;
+                text-overflow: ellipsis;
+                overflow: hidden;
             }
 
             .wolfnet_price

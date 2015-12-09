@@ -105,6 +105,21 @@ jQuery(function($){
     var createMenuPage = function ()
     {
 
+        // Figure out if we can display the Agent Pages option.
+        // Note: This needs to NOT be asyncronous. 
+        $.ajax( {
+            url: ajaxurl,
+            type: 'GET',
+            dataType: 'json',
+            async: false,
+            data: {action:'wolfnet_scb_showagentfeature'},
+            success: function (data) {
+                if(data == false) {
+                    delete menuItems.agent;
+                }
+            }
+        });
+
         var menuString = '';
 
         for (var id in menuItems) {

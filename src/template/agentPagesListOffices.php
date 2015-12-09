@@ -25,15 +25,37 @@
 <div id="<?php echo $instance_id; ?>" class="wolfnet_widget wolfnet_officesList">
 
 <?php
-
 if(array_key_exists("REDIRECT_URL", $_SERVER)) {
 	$linkBase = $_SERVER['REDIRECT_URL'];
 } else {
 	$linkBase = $_SERVER['PHP_SELF'];
 }
 
+if(strlen($officetitle) > 0) {
+	echo '<h2>' . $officetitle . '</h2>';
+}
+?>
+
+<div class="wolfnet_viewAll">
+	<a href="?search#post-<?php echo get_the_id(); ?>">Click here</a> to view all agents and staff.
+</div>
+
+<form name="wolfnet_agentSearch" class="wolfnet_agentSearch" method="POST" 
+	action="<?php echo $linkBase . "?search#post-" . get_the_id(); ?>">
+	<?php // No office ID as a hidden field. We want to search all offices ?>
+
+	<input type="text" name="agentCriteria" class="wolfnet_agentCriteria"
+		value="<?php echo (strlen($agentCriteria) > 0) ? $agentCriteria : ''; ?>" /> 
+	<input type="submit" name="agentSearch" class="wolfnet_agentSearchButton" value="Search" />
+	<div class="wolfnet_clearfix"></div>
+</form>
+
+<?php
+
 foreach($offices as $office) {
-	$officeLink = $linkBase . '?office_id=' . $office['office_id'];
+	if($office['office_id'] != '') {
+		$officeLink = $linkBase . '?officeId=' . $office['office_id'];
+		$officeLink .= '#post-' . get_the_id();
 ?>
 
 	<div class="wolfnet_officePreview">
@@ -84,9 +106,11 @@ foreach($offices as $office) {
 	</div>
 
 <?php
+	}
 } // end foreach
 ?>
 
+	<div class="wolfnet_clearfix"></div>
 </div>
 
 <script type="text/javascript">

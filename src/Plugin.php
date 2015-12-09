@@ -145,6 +145,8 @@ class Wolfnet_Plugin
 
         $this->views = $this->ioc->get('Wolfnet_Views');
 
+        $this->agentHandler = $this->ioc->get('Wolfnet_AgentPagesHandler');
+
 
         if (is_admin()) {
             $this->admin = $this->ioc->get('Wolfnet_Admin');
@@ -287,7 +289,19 @@ class Wolfnet_Plugin
 
     public function wolfnetActivation()
     {
-
+        // Check that key structure is formatted correctly and that the key
+        // label gets set if it was not already. If there's no preexisting key,
+        // ignore this.
+        $keyArray = json_decode($this->getProductKey());
+        if(count($keyArray) == 1 && $keyArray[0]->key != false) {
+            foreach($keyArray as $key) {
+                if(strlen($key->label) == 0) {
+                    $key->label = strtoupper($this->getMarketName($key->key));
+                }
+            }
+            $keyString = json_encode($keyArray);
+            update_option($this->productKeyOptionKey, $keyString);
+        }
     }
 
 
@@ -298,24 +312,22 @@ class Wolfnet_Plugin
     }
 
 
-	/**
-	 * This method is a callback for the 'wp_enqueue_scripts' hook. Any JavaScript files (and their
-	 * dependencies) which are needed by the plugin for public interfaces are registered in this
-	 * method.
-	 * @return void
-	 */
+    /**
+     * This method is a callback for the 'wp_enqueue_scripts' hook. Any JavaScript files (and their
+     * dependencies) which are needed by the plugin for public interfaces are registered in this
+     * method.
+     * @return void
+     */
 	public function scripts()
 	{
 		do_action($this->preHookPrefix . 'enqueueResources'); // Legacy hook
 
 		// JavaScript
 		$scripts = array(
-			'smooth-div-scroll',
 			'wolfnet-scrolling-items',
 			'wolfnet-quick-search',
 			'wolfnet-listing-grid',
 			'wolfnet-toolbar',
-			'wolfnet-property-list',
 			'wolfnet-maptracks',
 			'wolfnet-smartsearch',
 			'mapquest-api'
@@ -612,6 +624,10 @@ class Wolfnet_Plugin
         $keyList = json_decode($this->getProductKey());
 
         foreach ($keyList as $key) {
+            if(!array_key_exists('market', $key)) {
+                $this->updateProductKeys();
+            }
+
             if (strtoupper($key->market) == strtoupper($market)) {
                 return $key->key;
             }
@@ -668,6 +684,26 @@ class Wolfnet_Plugin
     public function getKeyCount()
     {
         return count(json_decode($this->getProductKey()));
+    }
+
+
+    /**
+     * This method updates the product key structure to make sure it has all the
+     * necessary attributes.
+     */
+    public function updateProductKeys()
+    {
+        $keyStruct = json_decode($this->getProductKey());
+
+        for($i = 0; $i < count($keyStruct); $i++) {
+            if(!array_key_exists('market', $keyStruct[$i])) {
+                $market = $this->getMarketName($keyStruct[$i]->key);
+                $keyStruct[$i]->market = $market;
+            }
+        }
+
+        // Update key in Wordpress settings data.
+        update_option($this->productKeyOptionKey, json_encode($keyStruct));
     }
 
 
@@ -793,6 +829,10 @@ class Wolfnet_Plugin
 
     public function scAgentPages($attrs)
     {
+        if(!$this->showAgentFeature()) {
+            return '';
+        }
+
         try {
             $defaultAttributes = $this->getAgentPagesDefaults();
 
@@ -836,6 +876,7 @@ class Wolfnet_Plugin
             $default_maxrows = '50';
             $criteria = array_merge($this->getListingGridDefaults(), (is_array($attrs)) ? $attrs : array());
 
+            // TODO: sort out all these max fields (also an alias in prepareListingQuery)
             if ($criteria['maxrows'] == $default_maxrows && $criteria['maxresults'] != $default_maxrows) {
                 $criteria['maxrows'] = $criteria['maxresults'];
             }
@@ -905,10 +946,15 @@ class Wolfnet_Plugin
     {
 
         return array(
-            'title'       => '',
-            'keyids'      => '',
-            'showoffices' => true,
-            'numperpage'  => 10,
+            'officetitle'    => '',
+            'agenttitle'     => '',
+            'detailtitle'    => '',
+            'keyids'         => '',
+            'showoffices'    => true,
+            'activelistings' => true,
+            'soldlistings'   => false,
+            'excludeoffices' => '',
+            'numperpage'     => 10,
         );
 
     }
@@ -938,11 +984,10 @@ class Wolfnet_Plugin
 
         $args = $this->convertDataType(array_merge($criteria, $vars));
 
-        $agentHandler = $this->ioc->get('Wolfnet_AgentPagesHandler');
-        $agentHandler->setKey($key);
-        $agentHandler->setArgs($args);
+        $this->agentHandler->setKey($key);
+        $this->agentHandler->setArgs($args);
 
-        return $agentHandler->handleRequest();
+        return $this->agentHandler->handleRequest();
     }
 
 
@@ -1339,7 +1384,12 @@ class Wolfnet_Plugin
             try {
                 $key = $this->getProductKeyById($keyID);
 
-                $listings = $this->apin->sendRequest($key, '/listing', 'GET', $formData);
+                $listings = $this->apin->sendRequest(
+                    $key,
+                    '/listing?detaillevel=1&startrow=1&maxrows=1',
+                    'GET',
+                    $formData
+                );
                 $count = $listings['responseData']['data']['total_rows'];
 
                 if($count > $highestCount) {
@@ -1561,6 +1611,7 @@ class Wolfnet_Plugin
             'minprice' => 'min_price',
             'zipcode' => 'zip_code',
             'ownertype' => 'owner_type',
+            'maxresults' => 'maxrows',
         );
 
         // Translate aliases to their canonical version and then removed the alias from the array
@@ -1822,6 +1873,63 @@ class Wolfnet_Plugin
     }
 
 
+    public function showAgentFeature()
+    {
+        try {
+            $data = $this->apin->sendRequest(
+                $this->getDefaultProductKey(),
+                '/settings',
+                'GET'
+            );
+        } catch (Wolfnet_Exception $e) {
+            return $this->displayException($e);
+        }
+
+        $leadsEnabled = $data['responseData']['data']['site']['agent_pages_enabled'];
+
+        if($leadsEnabled == 'N' || $leadsEnabled == 'false' || $leadsEnabled == '0') {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+
+    public function soldListingsEnabled()
+    {
+        try {
+            $data = $this->apin->sendRequest(
+                $this->getDefaultProductKey(),
+                '/settings',
+                'GET'
+            );
+        } catch(Wolfnet_Exception $e) {
+            return $this->displayException($e);
+        }
+
+        $marketEnabled = $data['responseData']['data']['market']['has_sold_property'];
+        $siteEnabled = $data['responseData']['data']['site']['sold_property_enabled'];
+
+        return ($marketEnabled && $siteEnabled);
+    }
+
+
+    public function getOffices()
+    {
+        try {
+            $data = $this->apin->sendRequest(
+                $this->getDefaultProductKey(),
+                '/office',
+                'GET'
+            );
+        } catch (Wolfnet_Exception $e) {
+            return $this->displayException($e);
+        }
+
+        return $data;
+    }
+
+
     /* PROTECTED METHODS ************************************************************************ */
     /*  ____            _            _           _   __  __      _   _               _            */
     /* |  _ \ _ __ ___ | |_ ___  ___| |_ ___  __| | |  \/  | ___| |_| |__   ___   __| |___        */
@@ -2050,7 +2158,7 @@ class Wolfnet_Plugin
             $listing['bedsbaths_full'] = '';
 
             if (is_numeric($listing['total_bedrooms'])) {
-                $listing['bedsbaths_full'] .= $listing['total_bedrooms'] . ' Bed Rooms';
+                $listing['bedsbaths_full'] .= $listing['total_bedrooms'] . ' Bedrooms';
             }
 
             if (is_numeric($listing['total_bedrooms']) && is_numeric($listing['total_baths'])) {
@@ -2058,7 +2166,7 @@ class Wolfnet_Plugin
             }
 
             if (is_numeric($listing['total_baths'])) {
-                $listing['bedsbaths_full'] .= $listing['total_baths'] . ' Bath Rooms';
+                $listing['bedsbaths_full'] .= $listing['total_baths'] . ' Bathrooms';
             }
 
             $listing['address'] = $listing['display_address'];
@@ -2298,10 +2406,18 @@ class Wolfnet_Plugin
             return $this->getWpError($data);
         }
 
-        $args['map_start_lat'] = $data['responseData']['data']['market']['maptracks']['map_start_lat'];
-        $args['map_start_lng'] = $data['responseData']['data']['market']['maptracks']['map_start_lng'];
-        $args['map_start_scale'] = $data['responseData']['data']['market']['maptracks']['map_start_scale'];
-        $args['houseoverIcon'] = $GLOBALS['wolfnet']->url . 'img/houseover.png';
+
+        $args['mapParams'] = array(
+    		'mapProvider'  => 'mapquest',
+    		'centerLat'    => $data['responseData']['data']['market']['maptracks']['map_start_lat'],
+			'centerLng'    => $data['responseData']['data']['market']['maptracks']['map_start_lng'],
+			'zoomLevel'    => $data['responseData']['data']['market']['maptracks']['map_start_scale'],
+			'houseoverIcon'=> $GLOBALS['wolfnet']->url . 'img/houseover.png',
+			'mapId'        => uniqid('wntMapTrack'),
+			'hideMapId'    => uniqid('hideMap'),
+			'showMapId'    => uniqid('showMap'),
+		);
+
         $args['houseoverData'] = $this->getHouseoverData(
             $listingsData,
             $data['responseData']['data']['resource']['searchResults']['allLayouts']['showBrokerReciprocityLogo']
@@ -2518,93 +2634,80 @@ class Wolfnet_Plugin
     }
 
 
-	private function registerScripts()
-	{
-
-		$scripts = array(
-			'migrate' => array(
-				$this->url . 'js/jquery.migrate.src.js',
-				array('jquery'),
-			),
-			'tooltipjs' => array(
-				$this->url . 'js/jquery.tooltip.src.js',
-				array('jquery', 'migrate'),
-			),
-			'imagesloadedjs' => array(
-				$this->url . 'js/jquery.imagesloaded.src.js',
-				array('jquery'),
-			),
-			'mousewheeljs' => array(
-				$this->url . 'js/jquery.mousewheel.src.js',
-				array('jquery'),
-			),
-			'smooth-div-scroll' => array(
-				$this->url . 'js/jquery.smoothDivScroll-1.2.src.js',
-				array('mousewheeljs', 'jquery-ui-core', 'jquery-ui-widget', 'jquery-effects-core'),
-			),
-			'wolfnet' => array(
-				$this->url . 'js/wolfnet.src.js',
-				array('jquery', 'tooltipjs'),
-			),
-			'wolfnet-admin' => array(
-				$this->url . 'js/wolfnetAdmin.src.js',
-				array('jquery-ui-dialog', 'jquery-ui-tabs', 'jquery-ui-datepicker', 'wolfnet'),
-			),
-			'wolfnet-scrolling-items' => array(
-				$this->url . 'js/jquery.wolfnetScrollingItems.src.js',
-				array('smooth-div-scroll', 'wolfnet'),
-			),
-			'wolfnet-quick-search' => array(
-				$this->url . 'js/jquery.wolfnetQuickSearch.src.js',
-				array('jquery', 'wolfnet'),
-			),
-			'wolfnet-listing-grid' => array(
-				$this->url . 'js/jquery.wolfnetListingGrid.src.js',
-				array('jquery', 'tooltipjs', 'imagesloadedjs', 'wolfnet'),
-			),
-			'wolfnet-toolbar' => array(
-				$this->url . 'js/jquery.wolfnetToolbar.src.js',
-				array('jquery', 'wolfnet'),
-			),
-			'wolfnet-property-list' => array(
-				$this->url . 'js/jquery.wolfnetPropertyList.src.js',
-				array('jquery', 'wolfnet'),
-			),
-			'wolfnet-shortcode-builder' => array(
-				$this->url . 'js/jquery.wolfnetShortcodeBuilder.src.js',
-				array('jquery-ui-widget', 'jquery-effects-core', 'wolfnet-admin'),
-			),
-			'mapquest-api' => array(
-				'//www.mapquestapi.com/sdk/js/v7.0.s/mqa.toolkit.js?key=Gmjtd%7Clu6znua2n9%2C7l%3Do5-la70q',
-			),
-			'wolfnet-maptracks' => array(
-				$this->url . 'js/jquery.wolfnetMaptracks.src.js',
-				array('jquery', 'migrate', 'mapquest-api'),
-			),
+    private function registerScripts()
+    {
+        $scripts = array(
+            'migrate' => array(
+                $this->url . 'js/jquery.migrate.src.js',
+                array('jquery'),
+                ),
+            'tooltipjs' => array(
+                $this->url . 'js/jquery.tooltip.src.js',
+                array('jquery', 'migrate'),
+                ),
+            'imagesloadedjs' => array(
+                $this->url . 'js/jquery.imagesloaded.src.js',
+                array('jquery'),
+                ),
+            'wolfnet' => array(
+                $this->url . 'js/wolfnet.src.js',
+                array('jquery', 'tooltipjs'),
+                ),
+            'wolfnet-admin' => array(
+                $this->url . 'js/wolfnetAdmin.src.js',
+                array('jquery-ui-dialog', 'jquery-ui-tabs', 'jquery-ui-datepicker', 'wolfnet'),
+                ),
+            'wolfnet-scrolling-items' => array(
+                $this->url . 'js/jquery.wolfnetScrollingItems.src.js',
+                array('wolfnet'),
+                ),
+            'wolfnet-quick-search' => array(
+                $this->url . 'js/jquery.wolfnetQuickSearch.src.js',
+                array('jquery', 'wolfnet'),
+                ),
+            'wolfnet-listing-grid' => array(
+                $this->url . 'js/jquery.wolfnetListingGrid.src.js',
+                array('jquery', 'tooltipjs', 'imagesloadedjs', 'wolfnet'),
+                ),
+            'wolfnet-toolbar' => array(
+                $this->url . 'js/jquery.wolfnetToolbar.src.js',
+                array('jquery', 'wolfnet'),
+                ),
+            'wolfnet-shortcode-builder' => array(
+                $this->url . 'js/jquery.wolfnetShortcodeBuilder.src.js',
+                array('jquery-ui-widget', 'jquery-effects-core', 'wolfnet-admin'),
+                ),
+            'mapquest-api' => array(
+                '//www.mapquestapi.com/sdk/js/v7.0.s/mqa.toolkit.js?key=Gmjtd%7Clu6znua2n9%2C7l%3Do5-la70q',
+                ),
+            'wolfnet-maptracks' => array(
+                $this->url . 'js/jquery.wolfnetMaptracks.src.js',
+                array('jquery', 'migrate', 'mapquest-api'),
+                ),
 			'wolfnet-smartsearch' => array(
 				$this->url . 'js/jquery.wolfnetSmartsearch.src.js'
-			)
-		);
+				)
+            );
 
-		foreach ($scripts as $script => $data) {
-			$params   = array($script);
-			if (is_array($data) && count($data) > 0) {
-				$params[] = $data[0];
-				$params[] = (count($data) > 1) ? $data[1] : array();
-				$params[] = (count($data) > 2) ? $data[2] : $this->version;
-				$params[] = (count($data) > 3) ? $data[3] : false;
+        foreach ($scripts as $script => $data) {
+            $params   = array($script);
+            if (is_array($data) && count($data) > 0) {
+                $params[] = $data[0];
+                $params[] = (count($data) > 1) ? $data[1] : array();
+                $params[] = (count($data) > 2) ? $data[2] : $this->version;
+                $params[] = (count($data) > 3) ? $data[3] : false;
 
-				call_user_func_array('wp_register_script', $params);
+                call_user_func_array('wp_register_script', $params);
 
-				if ($script == 'wolfnet') {
-					wp_localize_script('wolfnet', 'wolfnet_ajax', $this->localizedScriptData());
-				}
+                if ($script == 'wolfnet') {
+                    wp_localize_script('wolfnet', 'wolfnet_ajax', $this->localizedScriptData());
+                }
 
-			}
+            }
 
-		}
+        }
 
-	}
+    }
 
 
     private function registerStyles()

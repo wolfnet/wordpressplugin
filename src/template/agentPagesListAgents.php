@@ -29,44 +29,104 @@ if(array_key_exists("REDIRECT_URL", $_SERVER)) {
 	$linkBase = $_SERVER['PHP_SELF'];
 }
 
-function paginate($page, $total, $numPerPage) 
-{
-	if($total <= $numPerPage) {
-		return '';
-	}
-	
-	$output = '<ul class="wolfnet_agentPagination">';
-	$iterate = ceil($total / $numPerPage);
+if(!function_exists('paginate')) {
+	function paginate($page, $total, $numPerPage, $officeId = '', $search = null, $sort = 'name') 
+	{
+		/*
+		 * Note: We're using "agentpage" instead of just "page" as out URL variable
+		 * here because Wordpress uses page internally for their own pagination
+		 * and causes things to not work for us if we try to coopt it.
+		 */
 
-	if(($page * $numPerPage) > $numPerPage) {
-		$output .= '<li><a href="?page=' . ($page - 1) . '">';
-		$output .= 'Previous</a>';
-	}
-
-	for($i = 1; $i <= $iterate; $i++) {
-		if($i == $page) {
-			$output .= '<li class="wolfnet_selected">' . $i . '</li>';
-		} else {
-			$output .= '<li><a href="?page=' . $i . '">' . $i . '</a></li>';
+		if($total <= $numPerPage) {
+			return '';
 		}
-	}
+		
+		$output = '<ul class="wolfnet_agentPagination">';
+		$iterate = ceil($total / $numPerPage);
 
-	if(($page * $numPerPage) < $total) {
-		$output .= '<li><a href="?page=' . ($page + 1) . '">';
-		$output .= 'Next</a>';
-	}
+		if(!is_null($search) && strlen($search) > 0) {
+			$linkBase = '?search&agentCriteria=' . $search . '&';
+		} else {
+			$linkBase = '?';
+		}
 
-	$output .= "</ul>";
-	return $output;
+		if($officeId != '') {
+			$linkBase = 'officeId=' . $officeId . '&';
+		}
+
+		$linkBase .= 'agentSort=' . $sort . '&';
+
+		if(($page * $numPerPage) > $numPerPage) {
+			$output .= '<li><a href="' . $linkBase . 'agentpage=' . ($page - 1) . '">';
+			$output .= 'Previous</a>';
+		}
+
+		for($i = 1; $i <= $iterate; $i++) {
+			if($i == $page) {
+				$output .= '<li class="wolfnet_selected">' . $i . '</li>';
+			} else {
+				$output .= '<li><a href="' . $linkBase . 'agentpage=' . $i . '#post-' . get_the_id() . '">' . $i . '</a></li>';
+			}
+		}
+
+		if(($page * $numPerPage) < $total) {
+			$output .= '<li><a href="' . $linkBase . 'agentpage=' . ($page + 1) . '#post-' . get_the_id() . '">';
+			$output .= 'Next</a>';
+		}
+
+		$output .= "</ul>";
+		return $output;
+	}
 }
 ?>
 
 <div id="<?php echo $instance_id; ?>" class="wolfnet_widget wolfnet_agentsList">
 
+	<?php
+	if(strlen($agenttitle) > 0) {
+		echo '<h2>' . $agenttitle . '</h2>';
+	}
+	?>
+
+	<div class="wolfnet_viewAll">
+		<a href="?search#post-<?php echo get_the_id(); ?>">Click here</a> to view all agents and staff.
+	</div>
+
+	<form name="wolfnet_agentSearch" class="wolfnet_agentSearch" method="POST" 
+		action="<?php echo $linkBase . "?search#post-" . get_the_id(); ?>">
+		<?php
+		if($officeId != '') {
+			echo "<input type=\"hidden\" name=\"officeId\" value=\"$officeId\" />";
+		}
+		?>
+
+		<input type="text" name="agentCriteria" class="wolfnet_agentCriteria"
+			value="<?php echo (strlen($agentCriteria) > 0) ? $agentCriteria : ''; ?>" /> 
+		<input type="submit" name="agentSearch" class="wolfnet_agentSearchButton" value="Search" />
+		<div class="wolfnet_clearfix"></div>
+	</form>
+
+	<?php if($officeCount > 1) { ?>
+	<label for="agentSort">Sort By:</label>
+	<select name="agentSort" class="wolfnet_agentSort">
+		<option value="name" <?php echo ($agentSort == 'name') ? 'selected="selected"' : ''; ?>>Name</option>
+		<option value="officeId" <?php echo ($agentSort == 'officeId') ? 'selected="selected"' : ''; ?>>Office</option>
+	</select>
+	<div class="wolfnet_clearfix"></div>
+	<?php } ?>
+
 <?php
 foreach($agents as $agent) {
 	if($agent['display_agent']) {
 		$agentLink = $linkBase . '?agent=' . $agent['agent_id'];
+		if(array_key_exists('agentCriteria', $_REQUEST) && strlen($_REQUEST['agentCriteria']) > 0) {
+			$agentLink .= '&agentCriteria=' . $_REQUEST['agentCriteria'];
+		}
+		if($officeId != '') {
+			$agentLink .= '&officeId=' . $officeId;
+		}
+		$agentLink .= '#post-' . get_the_id();
 ?>
 
 	<div class="wolfnet_agentPreview">
@@ -124,7 +184,9 @@ foreach($agents as $agent) {
 	} // end if display_agent
 } // end foreach
 
-echo paginate($page, $totalrows, $numperpage); 
+echo '<div class="wolfnet_clearfix"></div>';
+
+echo paginate($page, $totalrows, $numperpage, $officeId, $agentCriteria, $agentSort); 
 
 ?>
 
@@ -142,6 +204,25 @@ jQuery(function($) {
 			}
 		});
 		$('.wolfnet_agentPreview').height(maxHeight);
+
+		<?php if($officeCount > 1) { ?>
+		$('.wolfnet_agentSort').change(function() {
+			var href = $(location).attr('href');
+			var sortPos = href.indexOf('agentSort');
+
+			if(sortPos > -1) {
+				if($(this).val() == 'name') {
+					href = href.replace('agentSort=officeId', 'agentSort=name');
+				} else {
+					href = href.replace('agentSort=name', 'agentSort=officeId');
+				}
+			} else {
+				href += '&agentSort=' + $(this).val();
+			}
+			
+			window.location = href;
+		});
+		<?php } ?>
 	});
 });
 </script>

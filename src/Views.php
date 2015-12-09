@@ -121,8 +121,7 @@ class Wolfnet_Views
     {
 
         try {
-            $key = (array_key_exists("keyid", $_REQUEST)) ? $_REQUEST["keyid"] : "1";
-            $productKey = $GLOBALS['wolfnet']->getProductKeyById($key);
+            $productKey = $GLOBALS['wolfnet']->getProductKeyById($_SESSION['keyid']);
 
             if (!$GLOBALS['wolfnet']->productKeyIsValid($productKey)) {
                 $out = $this->parseTemplate('invalidProductKey');
@@ -130,7 +129,7 @@ class Wolfnet_Views
                 $out = $this->parseTemplate('adminSearchManager', array(
                     'searchForm' => ($GLOBALS['wolfnet']->smHttp !== null) ? $GLOBALS['wolfnet']->smHttp['body'] : '',
                     'markets' => json_decode($GLOBALS['wolfnet']->getProductKey()),
-                    'selectedKey' => $key,
+                    'selectedKey' => $_SESSION['keyid'],
                     'url' => $GLOBALS['wolfnet']->url,
                 ));
 
@@ -186,17 +185,14 @@ class Wolfnet_Views
 
     public function agentPagesOptionsFormView(array $args = array())
     {
-        $markets = json_decode($GLOBALS['wolfnet']->getProductKey());
+        $offices = $GLOBALS['wolfnet']->getOffices();
+        $offices = $offices['responseData']['data']['office'];
         $keyids = array();
-
-        foreach ($markets as $market) {
-            array_push($keyids, $market->id);
-        }
 
         $defaultArgs = array(
             'instance_id'     => str_replace('.', '', uniqid('wolfnet_agentPages_')),
-            'markets'         => $markets,
-            'keyids'          => $keyids
+            'offices'         => $offices,
+            'keyids'          => $keyids,
         );
 
         $args = array_merge($defaultArgs, $args);
