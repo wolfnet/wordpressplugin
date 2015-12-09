@@ -627,7 +627,6 @@ class Wolfnet_Ajax
 
 	public function remoteGetSuggestions()
 	{
-
 		try {
 
 			$response = $GLOBALS['wolfnet']->getSuggestions(
@@ -645,7 +644,6 @@ class Wolfnet_Ajax
 		}
 
 		wp_send_json($response);
-		die;
 	}
 
 }
