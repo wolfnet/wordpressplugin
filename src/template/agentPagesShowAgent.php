@@ -57,7 +57,7 @@ if(array_key_exists('HTTP_REFERER', $_SERVER)) {
 ?>
 
 <div class="wolfnet_viewAll">
-	<a href="?search">Click here</a> to view all agents and staff.
+	<a href="?search&agentCriteria=#post-<?php echo get_the_id(); ?>">Click here</a> to view all agents and staff.
 </div>
 
 <?php

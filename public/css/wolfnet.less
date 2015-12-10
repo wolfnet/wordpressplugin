@@ -338,11 +338,36 @@
 
         .wolfnet_officePreview 
         {
+            position: relative;
+            font-size: .9em;
             float: left;
             border: 1px solid #ccc;
             margin: 10px 10px 0 0;
             padding-right: 10px;
             width: 280px;
+
+            .wolfnet_officeLinks
+            {
+                position: absolute;
+                bottom: 0;
+                left: 6px;
+                height: 80px;
+                width: 100%;
+                font-size: .75em !important;
+
+                .wolfnet_officeLink
+                {
+                    float: left;
+                    width: 50%;
+                    padding-bottom: 10px;
+                }
+                .wolfnet_officeLinkLeft
+                {
+                    float: left;
+                    width: 46%;
+                    padding-bottom: 10px;
+                }
+            }
         }
 
         .wolfnet_officeImage 
@@ -511,7 +536,8 @@
 
     }
 
-    &.wolfnet_contactAgent 
+    &.wolfnet_contactAgent,
+    &.wolfnet_contactOffice
     {
         width: 600px;
 
@@ -524,12 +550,12 @@
             padding: 20px 0;
         }
 
-        .wolfnet_agentPreview 
+        .wolfnet_agentPreview
         {
             border: 1px solid #ccc;
             padding: 6px;
 
-            .wolfnet_agentImage 
+            .wolfnet_agentImage
             {
                 float: left;
                 margin: 8px;
@@ -553,6 +579,19 @@
                     width: 200px;
                 }
 
+            }
+
+        }
+
+        .wolfnet_officePreview
+        {
+            border: 1px solid #ccc;
+            padding: 6px;
+            text-align: center;
+
+            .wolfnet_officeName
+            {
+                font-weight: bold;
             }
 
         }

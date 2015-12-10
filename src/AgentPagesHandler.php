@@ -50,6 +50,12 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
             } else {
                 $action = 'contactForm';
             }
+        } elseif(array_key_exists('contactOffice', $_REQUEST)) {
+            if($_SERVER['REQUEST_METHOD'] == 'POST') {
+                $action = 'contactProcess';
+            } else {
+                $action = 'contactFormOffice';
+            }
         } elseif(array_key_exists('agent', $_REQUEST) && sizeof(trim($_REQUEST['agent']) > 0)) {
             // If agent is passed through, show the agent detail.
             $action = 'agent';
@@ -113,7 +119,7 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
         $this->args['criteria']['omit_office_id'] = $this->args['excludeoffices'];
         if(array_key_exists('agentSort', $_REQUEST)) {
             $agentSort = $_REQUEST['agentSort'];
-            $this->args['criteria']['sort'] = ($_REQUEST['agentSort'] == 'name') ? 'name' : 'officeId';
+            $this->args['criteria']['sort'] = ($_REQUEST['agentSort'] == 'name') ? 'name' : 'office_id';
         } else {
             $agentSort = 'name';
         }
@@ -225,8 +231,37 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
     }
 
 
+    protected function contactFormOffice()
+    {
+        $officeData = $this->getOfficeByOfficeId($_REQUEST['contactOffice']);
+        
+        $args = array(
+            'office' => $officeData,
+            'officeId' => $_REQUEST['contactOffice'],
+        );
+        $args = array_merge($args, $this->args);
+
+        return $GLOBALS['wolfnet']->views->officeContact($args);
+    }
+
+
+    protected function getForm($formType = 'agent') {
+        if($formType == 'agent') {
+            return $this->contactForm();
+        } else {
+            return $this->contactFormOffice();
+        }
+    }
+
+
     protected function contactProcess()
     {
+        // Get form type.
+        $formType = 'agent';
+        if(array_key_exists('contactOffice', $_REQUEST)) {
+            $formType = 'office';
+        }
+
         // Do basic validation to check if fields are populated before
         // trying to do an API call.
         $_REQUEST['errorField'] = '';
@@ -239,7 +274,7 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
 
         if($_REQUEST['errorField'] != '') {
             // Show contact form again.
-            return $this->contactForm();
+            return $this->getForm($formType);
         }
 
         // Translate form fields into request args. Using field name prefixes
@@ -249,7 +284,14 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
         $this->args['criteria']['phone'] = $_REQUEST['wolfnet_phone'];
         $this->args['criteria']['contact_by'] = $_REQUEST['wolfnet_contacttype'];
         $this->args['criteria']['message'] = $_REQUEST['wolfnet_comments'];
-        $this->args['criteria']['agent_guid'] = $_REQUEST['contact'];
+
+        // If this is the agent contact page, agent_guid will be passed along, otherwise
+        // this was submitted via the office contact and we'll pass office_id.
+        if($formType == 'agent') {
+            $this->args['criteria']['agent_guid'] = $_REQUEST['contact'];
+        } else {
+            $this->args['criteria']['office_id'] = $_REQUEST['contactOffice'];
+        }
 
         try {
             $data = $GLOBALS['wolfnet']->apin->sendRequest(
@@ -259,7 +301,8 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
                 $this->args['criteria']
             );
         } catch (Wolfnet_Exception $e) {
-            $errorInfo = json_decode($e->getData()->body)->metadata->status->extendedInfo;
+            $data = $e->getData();
+            $errorInfo = json_decode($data['body'])->metadata->status->extendedInfo;
 
             if(strpos($errorInfo, 'email')) {
                 $_REQUEST['errorField'] = 'wolfnet_email';
@@ -268,12 +311,12 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
             }
 
             // Show contact form again.
-            return $this->contactForm();
+            return $this->getForm($formType);
         }
 
         if($data['responseStatusCode'] == 200) {
             $_REQUEST['thanks'] = true;
-            return $this->contactForm();
+            return $this->getForm($formType);
         }
     }
 
@@ -352,8 +395,10 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
                 $this->args['criteria']
             );
         } catch (Wolfnet_Exception $e) {
-            $errorCode = json_decode($e->getData()->body)->metadata->status->errorCode;
-            if($errorCode == 'Auth1004') {
+            $data = $e->getData();
+            $errorCode = json_decode($data['body'])->metadata->status->errorCode;
+            
+            if($errorCode == 'Auth1004' || $errorCode == 'Auth1001') {
                 $data = null;
             } else {
                 $GLOBALS['wolfnet']->displayException($e);
@@ -378,11 +423,36 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
         }
 
         $agentData = array();
-        if (is_array($data['responseData']['data'])) {
+        if(is_array($data['responseData']['data'])) {
             $agentData = $data['responseData']['data'];
         }
 
         return $agentData;
+    }
+
+
+    protected function getOfficeByOfficeId($officeId)
+    {
+        try {
+            $data = $GLOBALS['wolfnet']->apin->sendRequest(
+                $this->key,
+                '/office?office_id=' . $officeId,
+                'GET',
+                $this->args['criteria']
+            );
+        } catch(Wolfnet_Exception $e) {
+            return $GLOBALS['wolfnet']->displayException($e);
+        }
+
+        $officeData = array();
+        if(is_array($data['responseData']['data'])) {
+            $matches = count($data['responseData']['data']['office']);
+            // Due to possible data duplication, get the last result... There
+            // will only be one office returned for most implementations.
+            $officeData = $data['responseData']['data']['office'][$matches-1];
+        }
+
+        return $officeData;
     }
 
 

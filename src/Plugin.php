@@ -1885,13 +1885,9 @@ class Wolfnet_Plugin
             return $this->displayException($e);
         }
 
-        $leadsEnabled = $data['responseData']['data']['site']['agent_pages_enabled'];
+        $leadsEnabled = $data['responseData']['data']['site']['my_agents_leads'];
 
-        if($leadsEnabled == 'N' || $leadsEnabled == 'false' || $leadsEnabled == '0') {
-            return false;
-        } else {
-            return true;
-        }
+        return $leadsEnabled;
     }
 
 

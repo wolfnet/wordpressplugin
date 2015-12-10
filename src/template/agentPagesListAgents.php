@@ -45,7 +45,7 @@ if(!function_exists('paginate')) {
 		$output = '<ul class="wolfnet_agentPagination">';
 		$iterate = ceil($total / $numPerPage);
 
-		if(!is_null($search) && strlen($search) > 0) {
+		if(!is_null($search)) {
 			$linkBase = '?search&agentCriteria=' . $search . '&';
 		} else {
 			$linkBase = '?';
@@ -90,7 +90,7 @@ if(!function_exists('paginate')) {
 	?>
 
 	<div class="wolfnet_viewAll">
-		<a href="?search#post-<?php echo get_the_id(); ?>">Click here</a> to view all agents and staff.
+		<a href="?search&agentCriteria=#post-<?php echo get_the_id(); ?>">Click here</a> to view all agents and staff.
 	</div>
 
 	<form name="wolfnet_agentSearch" class="wolfnet_agentSearch" method="POST" 
@@ -111,7 +111,7 @@ if(!function_exists('paginate')) {
 	<label for="agentSort">Sort By:</label>
 	<select name="agentSort" class="wolfnet_agentSort">
 		<option value="name" <?php echo ($agentSort == 'name') ? 'selected="selected"' : ''; ?>>Name</option>
-		<option value="officeId" <?php echo ($agentSort == 'officeId') ? 'selected="selected"' : ''; ?>>Office</option>
+		<option value="office_id" <?php echo ($agentSort == 'office_id') ? 'selected="selected"' : ''; ?>>Office</option>
 	</select>
 	<div class="wolfnet_clearfix"></div>
 	<?php } ?>
@@ -212,15 +212,28 @@ jQuery(function($) {
 
 			if(sortPos > -1) {
 				if($(this).val() == 'name') {
-					href = href.replace('agentSort=officeId', 'agentSort=name');
+					href = href.replace('agentSort=office_id', 'agentSort=name');
 				} else {
-					href = href.replace('agentSort=name', 'agentSort=officeId');
+					href = href.replace('agentSort=name', 'agentSort=office_id');
 				}
 			} else {
-				href += '&agentSort=' + $(this).val();
+				// We need to put the sort param before the anchor.
+				var hashPos = href.indexOf('#');
+				if(hashPos > -1) {
+					href = href.replace('#', '&agentSort=' + $(this).val() + '#');
+				} else {
+					href += '&agentSort=' + $(this).val();
+				}
+			}
+
+			// Remove page is there since the pages won't correlate between 
+			// offices and agents.
+			var pagePos = href.indexOf('agentpage');
+			if(pagePos > -1) {
+				href = href.replace(/&agentpage=[0-9]+/gi, '');
 			}
 			
-			window.location = href;
+			window.location.href = href;
 		});
 		<?php } ?>
 	});
