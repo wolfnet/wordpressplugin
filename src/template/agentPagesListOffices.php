@@ -63,6 +63,9 @@ foreach($offices as $office) {
 
 		$searchResultLink = $office['search_solution_url'] . "/?action=newsearchsession";
 		$searchResultLink .= "&office_id=" . $office['office_id'];
+
+		$contactLink = "?contactOffice=" . $office['office_id'];
+		$contactLink .= "#post-" . get_the_id();
 ?>
 
 	<div class="wolfnet_officePreview">
@@ -118,7 +121,7 @@ foreach($offices as $office) {
 				<a href="<?php echo $searchLink; ?>">Search All Area<br />Listings</a>
 			</div>
 			<div class="wolfnet_officeLink">
-				<a href="#">Contact Us</a>
+				<a href="<?php echo $contactLink; ?>">Contact Us</a>
 			</div>
 		</div>
 	</div>

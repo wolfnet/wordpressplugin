@@ -536,7 +536,8 @@
 
     }
 
-    &.wolfnet_contactAgent 
+    &.wolfnet_contactAgent,
+    &.wolfnet_contactOffice
     {
         width: 600px;
 
@@ -549,12 +550,12 @@
             padding: 20px 0;
         }
 
-        .wolfnet_agentPreview 
+        .wolfnet_agentPreview
         {
             border: 1px solid #ccc;
             padding: 6px;
 
-            .wolfnet_agentImage 
+            .wolfnet_agentImage
             {
                 float: left;
                 margin: 8px;
@@ -578,6 +579,19 @@
                     width: 200px;
                 }
 
+            }
+
+        }
+
+        .wolfnet_officePreview
+        {
+            border: 1px solid #ccc;
+            padding: 6px;
+            text-align: center;
+
+            .wolfnet_officeName
+            {
+                font-weight: bold;
             }
 
         }

@@ -332,6 +332,16 @@ class Wolfnet_Views
     }
 
 
+    public function officeContact(array $args = array())
+    {
+        foreach ($args as $key => $item) {
+            $args[$key] = apply_filters('wolfnet_agentPagesView_' . $key, $item);
+        }
+
+        return apply_filters('wolfnet_agentPagesView', $this->parseTemplate('agentPagesContactOffice', $args));
+    }
+
+
     public function featuredListingView(array $args = array())
     {
         foreach ($args as $key => $item) {
