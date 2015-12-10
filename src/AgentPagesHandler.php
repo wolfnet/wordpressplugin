@@ -288,7 +288,7 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
         // If this is the agent contact page, agent_guid will be passed along, otherwise
         // this was submitted via the office contact and we'll pass office_id.
         if($formType == 'agent') {
-            $this->args['criteria']['agent_guid'] = $_REQUEST['contact'];
+            $this->args['criteria']['agent_id'] = $_REQUEST['contact'];
         } else {
             $this->args['criteria']['office_id'] = $_REQUEST['contactOffice'];
         }
