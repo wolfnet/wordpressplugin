@@ -196,17 +196,17 @@ echo paginate($page, $totalrows, $numperpage, $officeId, $agentCriteria, $agentS
 jQuery(function($) {
 	$(window).load(function() {
 		// Resize agent boxes to height of tallest one.
-		var $agents = $('.wolfnet_agentPreview');
-		var maxHeight = 0;
+		var $agents = $('#<?php echo $instance_id; ?> .wolfnet_agentPreview');
+		var maxHeight<?php echo $instance_id; ?> = 0;
 		$agents.each(function() {
-			if($(this).height() > maxHeight) {
-				maxHeight = $(this).height();
+			if($(this).height() > maxHeight<?php echo $instance_id; ?>) {
+				maxHeight<?php echo $instance_id; ?> = $(this).height();
 			}
 		});
-		$('.wolfnet_agentPreview').height(maxHeight);
+		$('#<?php echo $instance_id; ?> .wolfnet_agentPreview').height(maxHeight<?php echo $instance_id; ?>);
 
 		<?php if($officeCount > 1) { ?>
-		$('.wolfnet_agentSort').change(function() {
+		$('#<?php echo $instance_id; ?> .wolfnet_agentSort').change(function() {
 			var href = $(location).attr('href');
 			var sortPos = href.indexOf('agentSort');
 

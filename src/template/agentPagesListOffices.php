@@ -138,18 +138,20 @@ foreach($offices as $office) {
 jQuery(function($) {
 	$(window).load(function() {
 		// Resize office boxes to height of tallest one.
-		var $offices = $('.wolfnet_officePreview');
-		var maxHeight = 0;
+		var $offices = $('#<?php echo $instance_id; ?> .wolfnet_officePreview');
+		var maxHeight<?php echo $instance_id; ?> = 0;
 		$offices.each(function() {
-			if($(this).height() > maxHeight) {
-				maxHeight = $(this).height();
+			if($(this).height() > maxHeight<?php echo $instance_id; ?>) {
+				maxHeight<?php echo $instance_id; ?> = $(this).height();
 			}
 		});
 
 		// Increase height to account for absolute positioned links
-		maxHeight += 90;
+		maxHeight<?php echo $instance_id; ?> += 90;
 
-		$('.wolfnet_officePreview').height(maxHeight);
+		$('#<?php echo $instance_id; ?> .wolfnet_officePreview').height(
+			maxHeight<?php echo $instance_id; ?>
+		);
 	});
 });
 </script>
