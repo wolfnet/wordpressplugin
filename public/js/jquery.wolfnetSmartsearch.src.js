@@ -136,8 +136,6 @@
 						type: 'text'
 					})
 					.css({
-						border: 0,
-						padding:0,
 						outline:'none',
 						minWidth: '5em',
 						width: '100%'
@@ -157,7 +155,6 @@
 				var $container = $('<span>')
 					.addClass($smartSearch.attr('class'))
 					.css({
-						display:'inline-block',
 						'text-align': 'left'
 					})
 					.append($inputListItem)
