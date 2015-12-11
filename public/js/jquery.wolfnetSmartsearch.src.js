@@ -851,23 +851,13 @@
 					var $smartSearch = event.data.$smartSearch;
 					var $container = $searchInput.parent().parent();
 					var $form = $($smartSearch[0].form);
-					var newWidth = ($searchInput.val().length + 1) * 8;
-					var maxWidth = $container.innerWidth() - 30;
+					//var newWidth = ($searchInput.val().length + 1) * 8;
+					//var maxWidth = $container.innerWidth() - 30;
 
 					// If the original input has name "q" (primary open text search) perform the same
 					// event on it.
 					if ($smartSearch.attr('name') == 'q') {
 						$smartSearch.trigger(event);
-					}
-
-
-					// As the user is typing update the size of the input to optimize how it fits
-					// within the smart search container.
-					if (newWidth < maxWidth) {
-						$searchInput.width(newWidth);
-					}
-					else {
-						$searchInput.width(maxWidth);
 					}
 
 					switch (event.keyCode) {
