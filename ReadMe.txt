@@ -93,6 +93,9 @@ Please upgrade to the latest version of the plugin as we will be disabling our o
 
 == Changelog ==
 
+= 1.8.1 =
+* Fixes a saved search view error after Wordpress 4.4 update.
+
 = 1.8.0 =
 * Updates to make components more 'responsive'.
 * Improvements to the listing grid JS - These updates eliminate the "jump" bug that occurs when resizing the listing grid. This update also improves the overall performance of resizing the listing grid.

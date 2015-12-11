@@ -2892,7 +2892,10 @@ class Wolfnet_Plugin
 
         register_post_type($this->customPostTypeSearch, array(
             'public'    => false,
-            'show_ui'   => false,
+            'show_ui'   => true,
+            'show_in_nav_menus' => false,
+            'show_in_menu' => false,
+            'show_in_admin_bar' => false,
             'query_var' => 'wolfnet_search',
             'rewrite'   => array(
                 'slug'       => 'wolfnet/search',
