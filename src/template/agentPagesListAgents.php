@@ -52,7 +52,7 @@ if(!function_exists('paginate')) {
 		}
 
 		if($officeId != '') {
-			$linkBase = 'officeId=' . $officeId . '&';
+			$linkBase .= 'officeId=' . $officeId . '&';
 		}
 
 		$linkBase .= 'agentSort=' . $sort . '&';
