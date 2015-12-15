@@ -30,7 +30,7 @@
 
 	<form
 		id="<?php echo $instance_id; ?>_quickSearchForm"
-		class="wolfnet_quickSearch_form"
+		class="wnt-search wolfnet_quickSearch_form"
 		name="<?php echo $instance_id; ?>_quickSearchForm"
 		method="get"
 		action="<?php echo $formAction; ?>"
