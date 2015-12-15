@@ -21,13 +21,66 @@
  *
  */
 
+
+//
+// Variables
+// -------------------------------------------- //
+
+
+//== Paths
+
 @imagesDir:             '../img/';
-@imageHeight:           95px;
-@propertyWidth:         150px;
-@propertyHeight:        185px;
-@propertyHeightBranded: 300px;
-@gradientColor1:        #FFFFFF;
-@gradientColor2:        #E2E2E2;
+
+
+//== Listing dimensions
+
+@listingWidth:          312px;
+@listingHeight:         312px;
+@listingPadding:        20px;
+@listingImgWidth:       (@listingWidth - (@listingPadding * 2));
+@listingImgHeight:      200px;
+@brandingWidth:         100px;
+@listingLocationWidth:  (@listingImgWidth - @brandingWidth);
+
+
+//== Colors
+
+@gray-darker:           lighten(#000, 13.5%); // #222
+@gray-dark:             lighten(#000, 20%);   // #333
+@gray:                  lighten(#000, 33.5%); // #555
+@gray-light:            lighten(#000, 60%);   // #999
+@gray-lighter:          lighten(#000, 93.5%); // #eee
+
+@quickSearchGrad1:      #FFFFFF;
+@quickSearchGrad2:      #E2E2E2;
+
+
+//
+// Mixins
+// -------------------------------------------- //
+
+
+//== Vertical Gradient
+
+.gradient(@startColor, @endColor) {
+    @startARGB: argb(@startColor);
+    @endARGB:   argb(@endColor);
+    /* FF3.6-15 */
+    background: -moz-linear-gradient(top, @startColor 0%, @endColor 100%);
+    /* Chrome10-25,Safari5.1-6 */
+    background: -webkit-linear-gradient(top, @startColor 0%, @endColor 100%);
+    /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    background: linear-gradient(to bottom, @startColor 0%, @endColor 100%);
+    /* IE6-9 */
+    -ms-filter: ~"progid:DXImageTransform.Microsoft.gradient(startColorstr='@{startARGB}', endColorstr='@{endARGB}', GradientType=0)";
+    filter: ~"progid:DXImageTransform.Microsoft.gradient(startColorstr='@{startARGB}', endColorstr='@{endARGB}', GradientType=0)";
+}
+
+
+//
+// Styles
+// -------------------------------------------- //
+
 
 .wolfnet_widget
 {
@@ -41,13 +94,13 @@
     &.wolfnet_quickSearch_legacy
     {
         z-index:    10;
-        background: -moz-linear-gradient(top,  @gradientColor1 60%, @gradientColor2 100%); /* FF3.6+ */
-        background: -webkit-gradient(linear, left top, left bottom, color-stop(60%,@gradientColor1), color-stop(100%,@gradientColor2)); /* Chrome,Safari4+ */
-        background: -webkit-linear-gradient(top,  @gradientColor1 60%,@gradientColor2 100%); /* Chrome10+,Safari5.1+ */
-        background: -o-linear-gradient(top,  @gradientColor1 60%,@gradientColor2 100%); /* Opera 11.10+ */
-        background: -ms-linear-gradient(top,  @gradientColor1 60%,@gradientColor2 100%); /* IE10+ */
-        background: linear-gradient(to bottom,  @gradientColor1 60%,@gradientColor2 100%); /* W3C */
-        filter:     ~'progid:DXImageTransform.Microsoft.gradient(startColorstr="@{gradientColor1}",endColorstr="@{gradientColor2}",GradientType=0)'; /* IE6-9 */
+        background: -moz-linear-gradient(top,  @quickSearchGrad1 60%, @quickSearchGrad2 100%); /* FF3.6+ */
+        background: -webkit-gradient(linear, left top, left bottom, color-stop(60%,@quickSearchGrad1), color-stop(100%,@quickSearchGrad2)); /* Chrome,Safari4+ */
+        background: -webkit-linear-gradient(top,  @quickSearchGrad1 60%,@quickSearchGrad2 100%); /* Chrome10+,Safari5.1+ */
+        background: -o-linear-gradient(top,  @quickSearchGrad1 60%,@quickSearchGrad2 100%); /* Opera 11.10+ */
+        background: -ms-linear-gradient(top,  @quickSearchGrad1 60%,@quickSearchGrad2 100%); /* IE10+ */
+        background: linear-gradient(to bottom,  @quickSearchGrad1 60%,@quickSearchGrad2 100%); /* W3C */
+        filter:     ~'progid:DXImageTransform.Microsoft.gradient(startColorstr="@{quickSearchGrad1}",endColorstr="@{quickSearchGrad2}",GradientType=0)'; /* IE6-9 */
     }
 
     &.wolfnet_quickSearch
@@ -318,13 +371,15 @@
 
         .wolfnet_listing
         {
-            width:      @propertyWidth;
+            width:      @listingWidth;
+            height:     @listingHeight;
             float:      left;
-            margin:     0 auto 1em auto;
+            margin:     0 0 0 0;
+            padding:    0 0 0 0;
             position:   relative;
             text-align: left;
-            font-size:  .8em;
-            margin:     0 5px 0 5px;
+            font-size:  0.9em;
+            color:      @gray-dark;
 
             a
             {
@@ -337,38 +392,84 @@
                 display:block;
             }
 
+            .wolfnet_listingMain
+            {
+                background-image: url('@{imagesDir}/hrgreytall.png') !important;
+                background-position: right center !important;
+                background-repeat: no-repeat !important;
+            }
+
             .wolfnet_listingImage
             {
-                width:      100%;
-                height:     auto;
+                position:   relative;
                 display:    block;
+                width:      @listingImgWidth;
+                height:     @listingImgHeight;
+                min-height: @listingImgHeight;
                 overflow:   hidden;
-                margin:     0;
-                text-align: center;
-                margin-bottom:    .5em;
-                border:           1px solid hsl(0, 0%, 87%);
-                background-color: #F5F5F5;
-                padding:          10px 0 10px 0;
+                margin:     0 @listingPadding 5px @listingPadding;
+                padding:    0 0 0 0;
+                text-align: left;
+                color:      #fff;
+                border:     1px solid @gray-lighter;
+                background-repeat:   no-repeat;
+                background-position: center;
+                background-size:     cover;
 
                 img
                 {
-                    height: @imageHeight;
-                    box-shadow:   0 5px 10px hsla(0, 0%, 60%, 0.25);
-                    margin: auto;
-                    border: 1px solid #EBEBEB;
-                    max-width:100%;
+                    display:   none;
+                    max-width: 100%;
+                    height:    auto;
+                    margin:    auto;
+                    border:    1px solid @gray-lighter;
+                }
+
+                .wolfnet_listingInfo
+                {
+                    position: absolute;
+                    bottom: 0;
+                    padding: 0 0 0.3em 0.5em;
+                    width: 100%;
+                    text-align: left !important;
+                    text-shadow: 0 0 5px #000;
+                    .gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.5));
                 }
 
             }
 
             .wolfnet_price
             {
-                font-size: 1.2em;
-                font-weight: bold;
-                display:     block;
                 white-space: nowrap;
                 text-overflow: ellipsis;
                 overflow: hidden;
+                display: inline !important;
+                text-align: left !important;
+                font-size: 1.5em;
+                font-weight: bold;
+            }
+
+            .wolfnet_bed_bath
+            {
+                display: inline !important;
+                text-align: left !important;
+                position: relative;
+                right: inherit;
+                top: 0;
+                left: 0;
+            }
+
+            .wolfnet_locationInfo {
+                margin: 0 @listingPadding 0 @listingPadding;
+                float: left;
+
+                span
+                {
+                    text-align: left !important;
+                    max-width: @listingLocationWidth;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                }
             }
 
             .wolfnet_location,
@@ -378,45 +479,12 @@
                 line-height: 1.3em;
             }
 
-            .wolfnet_bed_bath
-            {
-                display: block;
-                font-size: .8em;
-                font-style: italic;
-                line-height: 1em;
-                margin-bottom: .75em;
-
-                .wolfnet_label
-                {
-                    display: none;
-                }
-
-                .wolfnet_beds
-                {
-                    display: inline-block;
-                    margin-right: 1em;
-
-                    &:before {
-                        content: "Beds: ";
-                    }
-
-                }
-
-                .wolfnet_baths
-                {
-                    display: inline-block;
-
-                    &:before {
-                        content: "Baths: ";
-                    }
-
-                }
-
-            }
-
             .wolfnet_branding
             {
                 display: none;
+                float: right;
+                max-width: @brandingWidth;
+                margin-right: @listingPadding;
 
                 .wolfnet_brokerLogo
                 {
@@ -428,8 +496,8 @@
                         border: 0;
                         border-radius: 0;
                         box-shadow: none;
-                        max-width:100%;
-                        max-height:95px;
+                        max-width: 100%;
+                        max-height: 35px;
                     }
 
                     &.wolfnet_idxLogo {
@@ -489,11 +557,11 @@
             position:relative;
             width:110px;
             margin-bottom:5px!important;
-            color:##888888;
+            color:#888888;
         }
         .wolfnet_wntHOBrokerLogo
         {
-            max-width:100px;
+            max-width: @brandingWidth;
             height:auto;
         }
         .wolfnet_wntHOContentContainer
@@ -637,6 +705,7 @@
         .wolfnet_control {
             top: 0;
             position: absolute;
+            background: inherit;
             background-color: transparent;
             background-repeat: no-repeat;
             background-position: center center;
@@ -675,7 +744,7 @@
 
         .wolfnet_listing {
             display: inline-block;
-            margin: 0 0 10px 10px;
+            margin: 0 0 10px 0;
             padding: 0;
             text-align: left;
             float: none;
@@ -699,7 +768,6 @@
             {
                 display: block;
                 padding-top: 1.5em;
-                font-size: .8em;
 
                 .wolfnet_brokerLogo
                 {
