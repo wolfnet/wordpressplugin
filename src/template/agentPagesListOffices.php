@@ -89,9 +89,12 @@ foreach($offices as $office) {
 			</div>
 
 			<?php 
-			if(strlen($office['mailing_address']) > 0) {
+			if(strlen($office['address_1']) > 0) {
 				echo '<div class="wolfnet_officeAddress">';
-				echo $office['mailing_address'];
+				echo $office['address_1'] . ' ' . $office['address_2'];
+				echo '<br>';
+				echo $office['city'] . ', ' . $office['state'] . ' ';
+				echo $office ['postal_code'];
 				echo '</div>';
 			}
 			if(strlen($office['phone_number']) > 0) {
