@@ -61,6 +61,11 @@ class Wolfnet_Api_Client
     const DEFAULT_SSL = true;
 
     /**
+     * @var  boolean  The default verification for SSL connecting to the Wolfnet API.
+     */
+    const DEFAULT_VERIFYSSL = true;
+
+    /**
      * @var  int  The default API version to connect to.
      */
     const DEFAULT_VERSION = 1;
@@ -88,6 +93,11 @@ class Wolfnet_Api_Client
      */
     private $ssl;
 
+    /**
+     * @var  boolean  Whether or not to verify SSL
+     */
+    private $verifySSL;
+
 
     /* CONSTRUCTOR ****************************************************************************** */
 
@@ -114,6 +124,13 @@ class Wolfnet_Api_Client
         $this->ssl = $ssl;
         $this->version = $version;
 
+    }
+
+
+    /* ACCESSOR METHODS ************************************************************************* */
+
+    public function setVerifySSL($val) {
+        $this->verifySSL = $val;
     }
 
 
@@ -223,6 +240,9 @@ class Wolfnet_Api_Client
 
         // Adding HTTP Encoding header.
         $requestArgs['headers']['Accept-Encoding'] = 'gzip, deflate';
+        if($this->verifySSL == false) {
+            $requestArgs['sslverify'] = false;
+        }
 
         $response = wp_remote_request($uri, $requestArgs);
 

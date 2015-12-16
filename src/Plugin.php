@@ -105,6 +105,8 @@ class Wolfnet_Plugin
 
     const SSL_WP_OPTION = 'wolfnet_sslEnabled';
 
+    const VERIFYSSL_WP_OPTION = 'wolfnet_verifySSL';
+
 
     /* Constructor Method *********************************************************************** */
     /*   ____                _                   _                                                */
@@ -140,6 +142,7 @@ class Wolfnet_Plugin
         $this->cachingService = $this->ioc->get('Wolfnet_Service_CachingService');
 
         $this->apin = $this->ioc->get('Wolfnet_Api_Client');
+        $this->apin->setVerifySSL($this->getSslVerify());
 
         $this->views = $this->ioc->get('Wolfnet_Views');
 
@@ -259,18 +262,16 @@ class Wolfnet_Plugin
 
     public function wolfnetActivation()
     {
-        // Check that key structure is formatted correctly and that the key 
-        // label gets set if it was not already. If there's no preexisting key, 
-        // ignore this.
-        $keyArray = json_decode($this->getProductKey());
-        if(count($keyArray) == 1 && $keyArray[0]->key != false) {
-            foreach($keyArray as $key) {
-                if(strlen($key->label) == 0) {
-                    $key->label = strtoupper($this->getMarketName($key->key));
-                }
-            }
-            $keyString = json_encode($keyArray);
-            update_option($this->productKeyOptionKey, $keyString);
+        /*
+         * Note - functionality here has been moved to AFTER the activation
+         * redirect. In the unforunate event that the activation code fails,
+         * we want the activation to at least have succeeded and not thrown 
+         * a fatal error. Problems related to SSL and API connectivity should
+         * not destroy the activation process.
+         */
+        if(!get_option(self::VERIFYSSL_WP_OPTION)) {
+            // See Wolfnet_Admin->adminInit for this usage.
+            add_option('wolfnet_activatedPlugin181', '1.8.1');
         }
     }
 
@@ -1330,6 +1331,29 @@ class Wolfnet_Plugin
     }
 
 
+    public function remoteSetSslVerify()
+    {
+        /*
+        $productKey = (array_key_exists('key', $_REQUEST)) ? $_REQUEST['key'] : '';
+
+        try {
+            $response = ($this->productKeyIsValid($productKey)) ? 'true' : 'false';
+
+        } catch (Wolfnet_Exception $e) {
+            status_header(500);
+
+            $response = array(
+                'message' => $e->getMessage(),
+                'data' => $e->getData(),
+            );
+
+        }
+
+        wp_send_json($response);
+        */
+    }
+
+
     /* Data ************************************************************************************* */
     /*  _                                                                                         */
     /* | \  _. _|_  _.                                                                            */
@@ -2257,6 +2281,7 @@ class Wolfnet_Plugin
             'wolfnet_price_range'             => 'remotePriceRange',
             'wolfnet_route_quicksearch'       => 'remoteRouteQuickSearch',
             'wolfnet_base_url'                => 'remoteGetBaseUrl',
+            'wolfnet_set_sslverify'           => 'remoteSetSslVerify',
             );
 
         foreach ($ajxActions as $action => $method) {
@@ -3095,6 +3120,36 @@ class Wolfnet_Plugin
         // Attempt to read value from the options, but default to Client default
         return get_option(self::SSL_WP_OPTION, Wolfnet_Api_Client::DEFAULT_SSL);
 
+    }
+
+
+    public function getSslVerify()
+    {
+        return get_option(self::VERIFYSSL_WP_OPTION, Wolfnet_Api_Client::DEFAULT_VERIFYSSL);
+    }
+
+
+    public function setSslVerifyOption($key)
+    {
+        // Hit an API endpoint so we can verify SSL.
+        try {
+            $data = $this->apin->sendRequest($key, '/settings');
+        } catch(Exception $e) {
+            // And exception at this point is PROBABLY due to SSL verification.
+            // Try again without.
+            $this->apin->setVerifySSL(false);
+            try {
+                $data = $this->apin->sendRequest($key, '/settings');
+                add_option(self::VERIFYSSL_WP_OPTION, false);
+            } catch(Exception $e) {
+                // If we're at this point then something else is fubarred.
+                // Catch it and move on, but there's no auto-fixing of it...
+            }
+        }
+        // If we made it to this point we can set SSL verification to true.
+        if(!get_option(self::VERIFYSSL_WP_OPTION)) {
+            add_option(self::VERIFYSSL_WP_OPTION, true);
+        }
     }
 
 
