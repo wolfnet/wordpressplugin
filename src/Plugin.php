@@ -1333,12 +1333,10 @@ class Wolfnet_Plugin
 
     public function remoteSetSslVerify()
     {
-        /*
         $productKey = (array_key_exists('key', $_REQUEST)) ? $_REQUEST['key'] : '';
 
         try {
-            $response = ($this->productKeyIsValid($productKey)) ? 'true' : 'false';
-
+            $response = ($this->setSslVerifyOption($productKey)) ? 'true' : 'false';
         } catch (Wolfnet_Exception $e) {
             status_header(500);
 
@@ -1350,7 +1348,6 @@ class Wolfnet_Plugin
         }
 
         wp_send_json($response);
-        */
     }
 
 
