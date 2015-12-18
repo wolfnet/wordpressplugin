@@ -3133,8 +3133,7 @@ class Wolfnet_Plugin
             $data = $this->apin->sendRequest($key, '/settings');
         } catch(Wolfnet_Api_ApiException $e) {
             // And exception at this point is PROBABLY due to SSL verification.
-            // Try again without. If the API request then works, set the verify
-            // SSL option to false.
+            // Set the verify SSL option to false if so.
             if(strpos($e->getDetails(), 'SSL certificate problem') >= 0) {
                 $this->apin->setVerifySSL(0);
                 update_option(self::VERIFYSSL_WP_OPTION, 0);
