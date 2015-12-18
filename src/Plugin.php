@@ -269,7 +269,7 @@ class Wolfnet_Plugin
          * a fatal error. Problems related to SSL and API connectivity should
          * not destroy the activation process.
          */
-        if(!get_option(self::VERIFYSSL_WP_OPTION)) {
+        if(get_option(self::VERIFYSSL_WP_OPTION) === false) {
             // See Wolfnet_Admin->adminInit for this usage.
             add_option('wolfnet_activatedPlugin181', '1.8.1');
         }
@@ -3131,22 +3131,22 @@ class Wolfnet_Plugin
         // Hit an API endpoint so we can verify SSL.
         try {
             $data = $this->apin->sendRequest($key, '/settings');
-        } catch(Wolfnet_Exception $e) {
+        } catch(Wolfnet_Api_ApiException $e) {
             // And exception at this point is PROBABLY due to SSL verification.
             // Try again without. If the API request then works, set the verify
             // SSL option to false.
-            $this->apin->setVerifySSL(false);
-            try {
-                $data = $this->apin->sendRequest($key, '/settings');
-                add_option(self::VERIFYSSL_WP_OPTION, false);
-            } catch(Wolfnet_Exception $e) {
-                // If we're at this point then something else is fubarred.
-                // Catch it and move on, but there's no auto-fixing of it...
+            if(strpos($e->getDetails(), 'SSL certificate problem') >= 0) {
+                $this->apin->setVerifySSL(0);
+                update_option(self::VERIFYSSL_WP_OPTION, 0);
+                return false;
             }
         }
         // If we made it to this point we can set SSL verification to true.
-        if(!get_option(self::VERIFYSSL_WP_OPTION)) {
-            add_option(self::VERIFYSSL_WP_OPTION, true);
+        if(get_option(self::VERIFYSSL_WP_OPTION) === false) {
+            update_option(self::VERIFYSSL_WP_OPTION, 1);
+            return true;
+        } else {
+            return false;
         }
     }
 
