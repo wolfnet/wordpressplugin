@@ -137,16 +137,16 @@ class Wolfnet_Plugin
             'cacheClear' => ($cacheParamExists) ? ($_REQUEST[$cacheFlag] == 'clear') : false,
             'cacheReap' => ($cacheParamExists) ? ($_REQUEST[$cacheFlag] == 'reap') : false,
             'sslEnabled' => $this->getSslEnabled(),
+            'verifySsl' => $this->getSslVerify(),
         ));
 
         $this->cachingService = $this->ioc->get('Wolfnet_Service_CachingService');
 
         $this->apin = $this->ioc->get('Wolfnet_Api_Client');
-        $this->apin->setVerifySSL($this->getSslVerify());
 
         $this->views = $this->ioc->get('Wolfnet_Views');
 
-        if (is_admin()) {
+        if(is_admin()) {
             $this->admin = $this->ioc->get('Wolfnet_Admin');
         }
 
@@ -161,7 +161,7 @@ class Wolfnet_Plugin
             array(self::CACHE_CRON_HOOK, array($this->cachingService, 'clearExpired')),
             ));
 
-        if ($this->getDefaultProductKey()) {
+        if($this->getDefaultProductKey()) {
             $this->addAction(array(
                 array('widgets_init',      'widgetInit'),
             ));
@@ -3131,14 +3131,15 @@ class Wolfnet_Plugin
         // Hit an API endpoint so we can verify SSL.
         try {
             $data = $this->apin->sendRequest($key, '/settings');
-        } catch(Exception $e) {
+        } catch(Wolfnet_Exception $e) {
             // And exception at this point is PROBABLY due to SSL verification.
-            // Try again without.
+            // Try again without. If the API request then works, set the verify
+            // SSL option to false.
             $this->apin->setVerifySSL(false);
             try {
                 $data = $this->apin->sendRequest($key, '/settings');
                 add_option(self::VERIFYSSL_WP_OPTION, false);
-            } catch(Exception $e) {
+            } catch(Wolfnet_Exception $e) {
                 // If we're at this point then something else is fubarred.
                 // Catch it and move on, but there's no auto-fixing of it...
             }
