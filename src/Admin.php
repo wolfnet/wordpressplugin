@@ -148,6 +148,27 @@ class Wolfnet_Admin extends Wolfnet_Plugin
     public function adminInit()
     {
 
+        // Do activation updates.
+        if(is_admin() && get_option('wolfnet_activatedPlugin181') == '1.8.1') {
+            delete_option('wolfnet_activatedPlugin181');
+
+            $keyArray = json_decode($GLOBALS['wolfnet']->getProductKey());
+            if(is_array($keyArray) && $keyArray[0]->key != false) {
+                $GLOBALS['wolfnet']->setSslVerifyOption($keyArray[0]->key);
+
+                // Check that key structure is formatted correctly and that the key 
+                // label gets set if it was not already. If there's no preexisting key, 
+                // ignore this.
+                foreach($keyArray as $key) {
+                    if(strlen($key->label) == 0) {
+                        $key->label = strtoupper($GLOBALS['wolfnet']->getMarketName($key->key));
+                    }
+                }
+                $keyString = json_encode($keyArray);
+                update_option($GLOBALS['wolfnet']->productKeyOptionKey, $keyString);
+            }
+        }
+
         // Register Options
         register_setting($this->optionGroup, $this->productKeyOptionKey);
         register_setting($this->optionGroup, Wolfnet_Plugin::SSL_WP_OPTION);

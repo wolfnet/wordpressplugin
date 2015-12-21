@@ -32,6 +32,7 @@
 
         <?php echo $formHeader; ?>
 
+        <input type="hidden" id="wolfnet_setSslVerify" value="<?php echo $setSslVerify; ?>" />
         <input type="hidden" id="wolfnet_keyCount" value="<?php echo count($productKey); ?>" />
 
         <fieldset>
@@ -134,7 +135,8 @@
         ( function ( $ ) {
 
             $( '.wolfnet_productKey' ).wolfnetValidateProductKey( {
-                rootUri: '<?php echo site_url(); ?>?pagename=wolfnet-admin-validate-key'
+                rootUri: '<?php echo site_url(); ?>?pagename=wolfnet-admin-validate-key',
+                setSslVerify: $('#wolfnet_setSslVerify').val()
             } );
 
 

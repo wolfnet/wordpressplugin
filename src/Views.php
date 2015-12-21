@@ -83,6 +83,7 @@ class Wolfnet_Views
                 'formHeader' => $this->settingsFormHeaders(),
                 'productKey' => $productKey,
                 'sslEnabled' => $sslEnabled,
+                'setSslVerify' => (!get_option($GLOBALS['wolfnet']::VERIFYSSL_WP_OPTION)) ? 'true' : 'false',
             ));
 
         } catch (Wolfnet_Exception $e) {
