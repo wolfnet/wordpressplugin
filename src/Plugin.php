@@ -95,9 +95,9 @@ class Wolfnet_Plugin
 
     public $url;
 
-    protected $pluginFile;
-
     public $smHttp = null;
+
+    protected $pluginFile;
 
     private $cachingService;
 
@@ -764,7 +764,6 @@ class Wolfnet_Plugin
 
     public function sclistingGrid($attrs)
     {
-
         try {
             $default_maxrows = '50';
             $criteria = array_merge($this->getListingGridDefaults(), (is_array($attrs)) ? $attrs : array());
@@ -789,7 +788,6 @@ class Wolfnet_Plugin
 
     public function scPropertyList($attrs = array())
     {
-
         try {
             $criteria = array_merge($this->getPropertyListDefaults(), (is_array($attrs)) ? $attrs : array());
 
@@ -2981,51 +2979,56 @@ class Wolfnet_Plugin
             'migrate' => array(
                 $this->url . 'js/jquery.migrate.src.js',
                 array('jquery'),
-                ),
+            ),
             'tooltipjs' => array(
                 $this->url . 'js/jquery.tooltip.src.js',
                 array('jquery', 'migrate'),
-                ),
+            ),
             'imagesloadedjs' => array(
                 $this->url . 'js/jquery.imagesloaded.src.js',
                 array('jquery'),
-                ),
+            ),
             'wolfnet' => array(
                 $this->url . 'js/wolfnet.src.js',
                 array('jquery', 'tooltipjs'),
-                ),
+            ),
             'wolfnet-admin' => array(
                 $this->url . 'js/wolfnetAdmin.src.js',
                 array('jquery-ui-dialog', 'jquery-ui-tabs', 'jquery-ui-datepicker', 'wolfnet'),
-                ),
+            ),
             'wolfnet-scrolling-items' => array(
                 $this->url . 'js/jquery.wolfnetScrollingItems.src.js',
                 array('wolfnet'),
-                ),
+            ),
             'wolfnet-quick-search' => array(
                 $this->url . 'js/jquery.wolfnetQuickSearch.src.js',
                 array('jquery', 'wolfnet'),
-                ),
+            ),
             'wolfnet-listing-grid' => array(
                 $this->url . 'js/jquery.wolfnetListingGrid.src.js',
                 array('jquery', 'tooltipjs', 'imagesloadedjs', 'wolfnet'),
-                ),
+            ),
             'wolfnet-toolbar' => array(
                 $this->url . 'js/jquery.wolfnetToolbar.src.js',
                 array('jquery', 'wolfnet'),
-                ),
+            ),
             'wolfnet-shortcode-builder' => array(
                 $this->url . 'js/jquery.wolfnetShortcodeBuilder.src.js',
                 array('jquery-ui-widget', 'jquery-effects-core', 'wolfnet-admin'),
-                ),
+            ),
             'mapquest-api' => array(
                 '//www.mapquestapi.com/sdk/js/v7.0.s/mqa.toolkit.js?key=Gmjtd%7Clu6znua2n9%2C7l%3Do5-la70q',
-                ),
+                array(),
+                $this->version,
+                true,
+            ),
             'wolfnet-maptracks' => array(
                 $this->url . 'js/jquery.wolfnetMaptracks.src.js',
                 array('jquery', 'migrate', 'mapquest-api'),
-                )
-            );
+                $this->version,
+                true,
+            )
+        );
 
         foreach ($scripts as $script => $data) {
             $params   = array($script);
