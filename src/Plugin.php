@@ -987,9 +987,6 @@ class Wolfnet_Plugin
         return $this->agentHandler->handleRequest();
     }
 
-
-<<<<<<< HEAD
-=======
     public function remoteSetSslVerify()
     {
         $productKey = (array_key_exists('key', $_REQUEST)) ? $_REQUEST['key'] : '';
@@ -1017,8 +1014,6 @@ class Wolfnet_Plugin
     /*                                                                                            */
     /* ****************************************************************************************** */
 
-
->>>>>>> origin/master
     public function getFeaturedListingsDefaults()
     {
 
@@ -1953,42 +1948,6 @@ class Wolfnet_Plugin
     }
 
 
-<<<<<<< HEAD
-=======
-    protected function registerAdminAjaxActions()
-    {
-        $ajxActions = array(
-            'wolfnet_validate_key'            => 'remoteValidateProductKey',
-            'wolfnet_saved_searches'          => 'remoteGetSavedSearches',
-            'wolfnet_save_search'             => 'remoteSaveSearch',
-            'wolfnet_delete_search'           => 'remoteDeleteSearch',
-            'wolfnet_scb_options_featured'    => 'remoteShortcodeBuilderOptionsFeatured',
-            'wolfnet_scb_options_grid'        => 'remoteShortcodeBuilderOptionsGrid',
-            'wolfnet_scb_options_list'        => 'remoteShortcodeBuilderOptionsList',
-            'wolfnet_scb_options_quicksearch' => 'remoteShortcodeBuilderOptionsQuickSearch',
-            'wolfnet_scb_savedsearch'         => 'remoteShortcodeBuilderSavedSearch',
-            'wolfnet_content'                 => 'remoteContent',
-            'wolfnet_content_header'          => 'remoteContentHeader',
-            'wolfnet_content_footer'          => 'remoteContentFooter',
-            'wolfnet_listings'                => 'remoteListings',
-            'wolfnet_get_listings'            => 'remoteListingsGet',
-            'wolfnet_css'                     => 'remotePublicCss',
-            'wolfnet_market_name'             => 'remoteGetMarketName',
-            'wolfnet_map_enabled'             => 'remoteMapEnabled',
-            'wolfnet_price_range'             => 'remotePriceRange',
-            'wolfnet_route_quicksearch'       => 'remoteRouteQuickSearch',
-            'wolfnet_base_url'                => 'remoteGetBaseUrl',
-            'wolfnet_set_sslverify'           => 'remoteSetSslVerify',
-            );
-
-        foreach ($ajxActions as $action => $method) {
-            $this->addAction('wp_ajax_' . $action, array(&$this, $method));
-        }
-
-    }
-
-
->>>>>>> origin/master
     /* PRIVATE METHODS ************************************************************************** */
     /*  ____       _            _         __  __      _   _               _                       */
     /* |  _ \ _ __(_)_   ____ _| |_ ___  |  \/  | ___| |_| |__   ___   __| |___                   */
