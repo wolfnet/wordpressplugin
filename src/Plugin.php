@@ -95,15 +95,17 @@ class Wolfnet_Plugin
 
     public $url;
 
-    protected $pluginFile;
-
     public $smHttp = null;
+
+    protected $pluginFile;
 
     private $cachingService;
 
     const CACHE_CRON_HOOK = 'wntCronCacheDaily';
 
     const SSL_WP_OPTION = 'wolfnet_sslEnabled';
+
+    const VERIFYSSL_WP_OPTION = 'wolfnet_verifySSL';
 
 
     /* Constructor Method *********************************************************************** */
@@ -135,6 +137,7 @@ class Wolfnet_Plugin
             'cacheClear' => ($cacheParamExists) ? ($_REQUEST[$cacheFlag] == 'clear') : false,
             'cacheReap' => ($cacheParamExists) ? ($_REQUEST[$cacheFlag] == 'reap') : false,
             'sslEnabled' => $this->getSslEnabled(),
+            'verifySsl' => $this->getSslVerify(),
         ));
 
         $this->cachingService = $this->ioc->get('Wolfnet_Service_CachingService');
@@ -147,8 +150,7 @@ class Wolfnet_Plugin
 
         $this->agentHandler = $this->ioc->get('Wolfnet_AgentPagesHandler');
 
-
-        if (is_admin()) {
+        if(is_admin()) {
             $this->admin = $this->ioc->get('Wolfnet_Admin');
         }
 
@@ -163,7 +165,7 @@ class Wolfnet_Plugin
             array(self::CACHE_CRON_HOOK, array($this->cachingService, 'clearExpired')),
             ));
 
-        if ($this->getDefaultProductKey()) {
+        if($this->getDefaultProductKey()) {
             $this->addAction(array(
                 array('widgets_init',      'widgetInit'),
             ));
@@ -289,18 +291,16 @@ class Wolfnet_Plugin
 
     public function wolfnetActivation()
     {
-        // Check that key structure is formatted correctly and that the key 
-        // label gets set if it was not already. If there's no preexisting key, 
-        // ignore this.
-        $keyArray = json_decode($this->getProductKey());
-        if(count($keyArray) == 1 && $keyArray[0]->key != false) {
-            foreach($keyArray as $key) {
-                if(strlen($key->label) == 0) {
-                    $key->label = strtoupper($this->getMarketName($key->key));
-                }
-            }
-            $keyString = json_encode($keyArray);
-            update_option($this->productKeyOptionKey, $keyString);
+        /*
+         * Note - functionality here has been moved to AFTER the activation
+         * redirect. In the unforunate event that the activation code fails,
+         * we want the activation to at least have succeeded and not thrown 
+         * a fatal error. Problems related to SSL and API connectivity should
+         * not destroy the activation process.
+         */
+        if(get_option(self::VERIFYSSL_WP_OPTION) === false) {
+            // See Wolfnet_Admin->adminInit for this usage.
+            add_option('wolfnet_activatedPlugin181', '1.8.1');
         }
     }
 
@@ -870,7 +870,6 @@ class Wolfnet_Plugin
 
     public function sclistingGrid($attrs)
     {
-
         try {
             $default_maxrows = '50';
             $criteria = array_merge($this->getListingGridDefaults(), (is_array($attrs)) ? $attrs : array());
@@ -895,7 +894,6 @@ class Wolfnet_Plugin
 
     public function scPropertyList($attrs = array())
     {
-
         try {
             $criteria = array_merge($this->getPropertyListDefaults(), (is_array($attrs)) ? $attrs : array());
 
@@ -990,6 +988,37 @@ class Wolfnet_Plugin
     }
 
 
+<<<<<<< HEAD
+=======
+    public function remoteSetSslVerify()
+    {
+        $productKey = (array_key_exists('key', $_REQUEST)) ? $_REQUEST['key'] : '';
+
+        try {
+            $response = ($this->setSslVerifyOption($productKey)) ? 'true' : 'false';
+        } catch (Wolfnet_Exception $e) {
+            status_header(500);
+
+            $response = array(
+                'message' => $e->getMessage(),
+                'data' => $e->getData(),
+            );
+
+        }
+
+        wp_send_json($response);
+    }
+
+
+    /* Data ************************************************************************************* */
+    /*  _                                                                                         */
+    /* | \  _. _|_  _.                                                                            */
+    /* |_/ (_|  |_ (_|                                                                            */
+    /*                                                                                            */
+    /* ****************************************************************************************** */
+
+
+>>>>>>> origin/master
     public function getFeaturedListingsDefaults()
     {
 
@@ -1924,6 +1953,42 @@ class Wolfnet_Plugin
     }
 
 
+<<<<<<< HEAD
+=======
+    protected function registerAdminAjaxActions()
+    {
+        $ajxActions = array(
+            'wolfnet_validate_key'            => 'remoteValidateProductKey',
+            'wolfnet_saved_searches'          => 'remoteGetSavedSearches',
+            'wolfnet_save_search'             => 'remoteSaveSearch',
+            'wolfnet_delete_search'           => 'remoteDeleteSearch',
+            'wolfnet_scb_options_featured'    => 'remoteShortcodeBuilderOptionsFeatured',
+            'wolfnet_scb_options_grid'        => 'remoteShortcodeBuilderOptionsGrid',
+            'wolfnet_scb_options_list'        => 'remoteShortcodeBuilderOptionsList',
+            'wolfnet_scb_options_quicksearch' => 'remoteShortcodeBuilderOptionsQuickSearch',
+            'wolfnet_scb_savedsearch'         => 'remoteShortcodeBuilderSavedSearch',
+            'wolfnet_content'                 => 'remoteContent',
+            'wolfnet_content_header'          => 'remoteContentHeader',
+            'wolfnet_content_footer'          => 'remoteContentFooter',
+            'wolfnet_listings'                => 'remoteListings',
+            'wolfnet_get_listings'            => 'remoteListingsGet',
+            'wolfnet_css'                     => 'remotePublicCss',
+            'wolfnet_market_name'             => 'remoteGetMarketName',
+            'wolfnet_map_enabled'             => 'remoteMapEnabled',
+            'wolfnet_price_range'             => 'remotePriceRange',
+            'wolfnet_route_quicksearch'       => 'remoteRouteQuickSearch',
+            'wolfnet_base_url'                => 'remoteGetBaseUrl',
+            'wolfnet_set_sslverify'           => 'remoteSetSslVerify',
+            );
+
+        foreach ($ajxActions as $action => $method) {
+            $this->addAction('wp_ajax_' . $action, array(&$this, $method));
+        }
+
+    }
+
+
+>>>>>>> origin/master
     /* PRIVATE METHODS ************************************************************************** */
     /*  ____       _            _         __  __      _   _               _                       */
     /* |  _ \ _ __(_)_   ____ _| |_ ___  |  \/  | ___| |_| |__   ___   __| |___                   */
@@ -2530,7 +2595,10 @@ class Wolfnet_Plugin
 
         register_post_type($this->customPostTypeSearch, array(
             'public'    => false,
-            'show_ui'   => false,
+            'show_ui'   => true,
+            'show_in_nav_menus' => false,
+            'show_in_menu' => false,
+            'show_in_admin_bar' => false,
             'query_var' => 'wolfnet_search',
             'rewrite'   => array(
                 'slug'       => 'wolfnet/search',
@@ -2598,51 +2666,56 @@ class Wolfnet_Plugin
             'migrate' => array(
                 $this->url . 'js/jquery.migrate.src.js',
                 array('jquery'),
-                ),
+            ),
             'tooltipjs' => array(
                 $this->url . 'js/jquery.tooltip.src.js',
                 array('jquery', 'migrate'),
-                ),
+            ),
             'imagesloadedjs' => array(
                 $this->url . 'js/jquery.imagesloaded.src.js',
                 array('jquery'),
-                ),
+            ),
             'wolfnet' => array(
                 $this->url . 'js/wolfnet.src.js',
                 array('jquery', 'tooltipjs'),
-                ),
+            ),
             'wolfnet-admin' => array(
                 $this->url . 'js/wolfnetAdmin.src.js',
                 array('jquery-ui-dialog', 'jquery-ui-tabs', 'jquery-ui-datepicker', 'wolfnet'),
-                ),
+            ),
             'wolfnet-scrolling-items' => array(
                 $this->url . 'js/jquery.wolfnetScrollingItems.src.js',
                 array('wolfnet'),
-                ),
+            ),
             'wolfnet-quick-search' => array(
                 $this->url . 'js/jquery.wolfnetQuickSearch.src.js',
                 array('jquery', 'wolfnet'),
-                ),
+            ),
             'wolfnet-listing-grid' => array(
                 $this->url . 'js/jquery.wolfnetListingGrid.src.js',
                 array('jquery', 'tooltipjs', 'imagesloadedjs', 'wolfnet'),
-                ),
+            ),
             'wolfnet-toolbar' => array(
                 $this->url . 'js/jquery.wolfnetToolbar.src.js',
                 array('jquery', 'wolfnet'),
-                ),
+            ),
             'wolfnet-shortcode-builder' => array(
                 $this->url . 'js/jquery.wolfnetShortcodeBuilder.src.js',
                 array('jquery-ui-widget', 'jquery-effects-core', 'wolfnet-admin'),
-                ),
+            ),
             'mapquest-api' => array(
                 '//www.mapquestapi.com/sdk/js/v7.0.s/mqa.toolkit.js?key=Gmjtd%7Clu6znua2n9%2C7l%3Do5-la70q',
-                ),
+                array(),
+                $this->version,
+                true,
+            ),
             'wolfnet-maptracks' => array(
                 $this->url . 'js/jquery.wolfnetMaptracks.src.js',
                 array('jquery', 'migrate', 'mapquest-api'),
-                )
-            );
+                $this->version,
+                true,
+            )
+        );
 
         foreach ($scripts as $script => $data) {
             $params   = array($script);
@@ -2734,6 +2807,36 @@ class Wolfnet_Plugin
         // Attempt to read value from the options, but default to Client default
         return get_option(self::SSL_WP_OPTION, Wolfnet_Api_Client::DEFAULT_SSL);
 
+    }
+
+
+    public function getSslVerify()
+    {
+        return get_option(self::VERIFYSSL_WP_OPTION, Wolfnet_Api_Client::DEFAULT_VERIFYSSL);
+    }
+
+
+    public function setSslVerifyOption($key)
+    {
+        // Hit an API endpoint so we can verify SSL.
+        try {
+            $data = $this->apin->sendRequest($key, '/settings');
+        } catch(Wolfnet_Api_ApiException $e) {
+            // And exception at this point is PROBABLY due to SSL verification.
+            // Set the verify SSL option to false if so.
+            if(strpos($e->getDetails(), 'SSL certificate problem') >= 0) {
+                $this->apin->setVerifySSL(0);
+                update_option(self::VERIFYSSL_WP_OPTION, 0);
+                return false;
+            }
+        }
+        // If we made it to this point we can set SSL verification to true.
+        if(get_option(self::VERIFYSSL_WP_OPTION) === false) {
+            update_option(self::VERIFYSSL_WP_OPTION, 1);
+            return true;
+        } else {
+            return false;
+        }
     }
 
 

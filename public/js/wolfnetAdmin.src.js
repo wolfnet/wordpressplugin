@@ -283,6 +283,17 @@ if ( typeof jQuery != 'undefined' ) {
             var validateViaApi = function($input) {
                 var key = $input.val();
 
+                if(clientOptions.setSslVerify) {
+                    $.ajax({
+                        url: wolfnet_ajax.ajaxurl,
+                        data: {action:'wolfnet_set_sslverify', key:key},
+                        dataType: 'json',
+                        type: 'GET',
+                        cache: false,
+                        timeout: 3500
+                    });
+                }
+
                 $.ajax({
                     url: wolfnet_ajax.ajaxurl,
                     data: {action:'wolfnet_validate_key', key:key},
@@ -500,7 +511,8 @@ if ( typeof jQuery != 'undefined' ) {
             $('#wolfnet_keyCount').val(nextIteration);
 
             $('#wolfnet_productKey_' + nextIteration).wolfnetValidateProductKey( {
-                rootUri: '<?php echo site_url(); ?>?pagename=wolfnet-admin-validate-key'
+                rootUri: '<?php echo site_url(); ?>?pagename=wolfnet-admin-validate-key',
+                setSslVerify: $('#wolfnet_setSslVerify').val()
             } );
 
         }
