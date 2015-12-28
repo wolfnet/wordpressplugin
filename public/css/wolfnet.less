@@ -29,6 +29,40 @@
 @gradientColor1:        #FFFFFF;
 @gradientColor2:        #E2E2E2;
 
+@media screen and (max-width: 480px) {
+    .wolfnet_widget
+    {
+        &.wolfnet_officesList,
+        &.wolfnet_agentsList
+        {
+            .wolfnet_agentSearch
+            {
+                .wolfnet_agentCriteria
+                {
+                    width: 37% !important;
+                    margin-right: 10px;
+                }
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 520px) {
+    .wolfnet_widget
+    {
+        &.wolfnet_agentShow
+        {
+            .wolfnet_agentInfo
+            {
+                float: none !important;
+                clear: both;
+                padding-top: 20px;
+                width: 100% !important;
+            }
+        }
+    }
+}
+
 .wolfnet_widget
 {
     margin: 1em auto 2em auto;
@@ -331,7 +365,7 @@
 
             .wolfnet_agentCriteria
             {
-                width: 300px;
+                width: 280px;
                 margin-right: 10px;
             }
         }
@@ -417,7 +451,7 @@
 
             .wolfnet_agentCriteria
             {
-                width: 300px;
+                width: 280px;
                 margin-right: 10px;
             }
         }
@@ -442,7 +476,7 @@
         {
             float: right;
             width: 170px;
-            font-size: .8em;
+            font-size: .75em;
 
             .wolfnet_agentName 
             {
@@ -456,7 +490,7 @@
 
     &.wolfnet_agentShow 
     {
-        width: 600px;
+        width: 100%;
 
         h2
         {
@@ -479,7 +513,7 @@
         .wolfnet_agentInfo 
         {
             float: right;
-            width: 380px;
+            width: 50%;
 
             .wolfnet_agentName 
             {
@@ -539,7 +573,7 @@
     &.wolfnet_contactAgent,
     &.wolfnet_contactOffice
     {
-        width: 600px;
+        width: 100%;
 
         .wolfnet_contactThanks
         {
@@ -564,21 +598,9 @@
 
             .wolfnet_agentInfo
             {
-                float: right;
-                width: 480px;
-
-                .wolfnet_agentName
-                {
-                    float: left;
-                    width: 270px;
-                }
-
-                .wolfnet_agentContact
-                {
-                    float: right;
-                    width: 200px;
-                }
-
+                float: left;
+                margin-left: 10px;
+                width: 60%;
             }
 
         }
@@ -1166,4 +1188,3 @@
     float:none !important;
     clear:both;
 }
-
