@@ -623,8 +623,9 @@ class Wolfnet_Plugin
         $keyList = json_decode($this->getProductKey());
 
         foreach ($keyList as $key) {
-            if(!array_key_exists('market', $key)) {
+            if(!array_key_exists('market', $key) || strlen($key->market) == 0) {
                 $this->updateProductKeys();
+                $keyList = json_decode($this->getProductKey());
             }
 
             if (strtoupper($key->market) == strtoupper($market)) {
@@ -695,7 +696,8 @@ class Wolfnet_Plugin
         $keyStruct = json_decode($this->getProductKey());
 
         for($i = 0; $i < count($keyStruct); $i++) {
-            if(!array_key_exists('market', $keyStruct[$i])) {
+            if(!array_key_exists('market', $keyStruct[$i])
+                || strlen($keyStruct[$i]->market) == 0) {
                 $market = $this->getMarketName($keyStruct[$i]->key);
                 $keyStruct[$i]->market = $market;
             }
