@@ -3,7 +3,7 @@ Author:             WolfNet Technologies, LLC
 Contributors:       wolfnettech, ajmichels, asbaumgart, michaelpidde, blots
 Tags:               idx, mls, homes
 Requires at least:  3.5.1
-Tested up to:       4.2.1
+Tested up to:       4.3.1
 Stable tag:         {X.X.X-stable}
 License:            GPLv2 or later
 License URI:        http://www.gnu.org/licenses/gpl-2.0.html
@@ -92,6 +92,25 @@ Please upgrade to the latest version of the plugin as we will be disabling the i
 Please upgrade to the latest version of the plugin as we will be disabling our old API servers. This means that plugin versions 0.1.0 - 1.6.4 will no longer function.
 
 == Changelog ==
+
+= 1.8.0 =
+* Updates to make components more 'responsive'.
+* Improvements to the listing grid JS - These updates eliminate the "jump" bug that occurs when resizing the listing grid. This update also improves the overall performance of resizing the listing grid.
+* Updates style and structure of the Property List without changing any functionality. These updates removed the JS previously used to support the Property List and instead rely on CSS for everything.
+* Various JS improvements and optimizations
+* Various map improvements including updating resize functionality
+* Updates to better handle multiple map instances on a page
+* Fixes issue with chrome showing vertical scroll bar.
+* Adding multi-market functionality.
+
+= 1.7.18 =
+* Fixes a bug saving criteria in the Search Manager.
+
+= 1.7.17 =
+* Fixes a bug with the houseover popup on mobile touch events.
+
+= 1.7.16 =
+* Fixes a bug with max listings in the featured listings component.
 
 = 1.7.15 =
 * Fixes missing legacy owner type values in featured listings requests.
@@ -444,8 +463,6 @@ We would like to thank the following projects as they have been a big part of cr
 * **[jQuery](http://jquery.com)**
 * **[Vagrant](http://vagrantup.com)**
 * **[Less CSS](http://lesscss.org)**
-* **jQuery SmoothDivScroll** by Thomas Kahn
 * **jQuery Tooltip** by Jörn Zaefferer
 * **jQuery imagesLoaded** by Paul Irish
-* **jQuery MouseWheel** by [Brandon Aaron](http://brandonaaron.net)
 * **[PHPUnit](http://phpunit.de)**

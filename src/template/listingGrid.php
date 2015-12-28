@@ -3,7 +3,7 @@
 /**
  *
  * @title         listingGrid.php
- * @copyright     Copyright (c) 2012, 2013, WolfNet Technologies, LLC
+ * @copyright     Copyright (c) 2012 - 2015, WolfNet Technologies, LLC
  *
  *                This program is free software; you can redistribute it and/or
  *                modify it under the terms of the GNU General Public License
@@ -72,8 +72,12 @@ unset($wpMeta['key']);
             ,itemsPerPageData : <?php echo json_encode($itemsPerPage) . "\n"; ?>
             ,sortOptionsData  : <?php echo json_encode($sortOptions) . "\n"; ?>
         });
-        $(instance).filter('.wolfnet_listingGrid').wolfnetListingGrid();
-        $(instance).filter('.wolfnet_propertyList').wolfnetPropertyList();
+
+        $(instance).filter('.wolfnet_listingGrid').wolfnetListingGrid({
+            containerClass: 'wolfnet_listings',
+            itemClass: 'wolfnet_listing',
+            clearfixClass: 'wolfnet_clearfix'
+        });
 
     });
 

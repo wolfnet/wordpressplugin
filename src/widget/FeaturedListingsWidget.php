@@ -3,7 +3,7 @@
 /**
  *
  * @title         FeaturedListingsWidget.php
- * @copyright     Copyright (c) 2012, 2013, WolfNet Technologies, LLC
+ * @copyright     Copyright (c) 2012 - 2015, WolfNet Technologies, LLC
  *
  *                This program is free software; you can redistribute it and/or
  *                modify it under the terms of the GNU General Public License

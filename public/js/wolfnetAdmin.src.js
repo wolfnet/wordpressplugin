@@ -2,7 +2,7 @@
  * This script is a general container for JavaScript code sepcific to the WordPress admin interface.
  *
  * @title         wolfnetAdmin.js
- * @copyright     Copyright (c) 2012, 2013, WolfNet Technologies, LLC
+ * @copyright     Copyright (c) 2012 - 2015, WolfNet Technologies, LLC
  *
  *                This program is free software; you can redistribute it and/or
  *                modify it under the terms of the GNU General Public License
@@ -369,6 +369,8 @@ if ( typeof jQuery != 'undefined' ) {
                                 $marketLabel.val(data);
                             }
 
+                            $wrapper.closest('tr').find('.wolfnet_keyMarket_value').val(data);
+
                         },
                         error: function() {
                             $input.trigger(options.invalidEvent);
@@ -463,7 +465,16 @@ if ( typeof jQuery != 'undefined' ) {
                     .attr('size', '50')
                 )
             );
-            valueRow.append(cell.clone().html($('<span/>').attr('class', 'wolfnet_keyMarket')));
+            valueRow.append(cell.clone().html(
+                $('<span/>').attr('class', 'wolfnet_keyMarket'))
+                .append(
+                    $('<input/>').attr('id', 'wolfnet_keyMarket_'  + nextIteration)
+                    .attr('name', 'wolfnet_keyMarket_' + nextIteration)
+                    .attr('class', 'wolfnet_keyMarket_value')
+                    .attr('type', 'hidden')
+                    .attr('value', '')
+                )
+            );
             valueRow.append(cell.clone().html(
                     $('<input />').attr('id', 'wolfnet_keyLabel_' + nextIteration)
                     .attr('name', 'wolfnet_keyLabel_' + nextIteration)
@@ -498,29 +509,68 @@ if ( typeof jQuery != 'undefined' ) {
 	    {
 
 	        var keyid = $(container).find('.keyid').val();
+            var loaderClass = 'wolfnet_loaderImage';
 
-	        $.ajax( {
+            var createLoaderImage = function(root)
+            {
+                var loaderImage = $(root).find('div.' + loaderClass + ':first');
+
+                /* If the current element doesn't already have a loader add it. */
+                if (loaderImage.length == 0) {
+                    loaderImage = $('<div/>');
+                    loaderImage.append($('<img src="' + wolfnet_ajax.loaderimg + '" />'));
+                    loaderImage.addClass(loaderClass);
+                    loaderImage.appendTo('#' + $(root).attr('id') + ' .wolfnet_prices');
+                } else {
+                    loaderImage.show();
+                }
+            };
+
+	        $.ajax({
 	            url: wolfnet_ajax.ajaxurl,
 	            data: { action:'wolfnet_price_range', keyid:keyid },
 	            dataType: 'json',
 	            type: 'GET',
 	            cache: false,
-	            timeout: 2500,
+	            timeout: 10000,
 	            statusCode: {
 	                404: function () {
 	                    commFailure();
 	                }
 	            },
-	            success: function ( data ) {
-	                var options = buildPriceDropdownOptions(data);
-	                $(container).find('.pricerange').html('');
-	                $(container).find('.maxprice').append($('<option />').attr('value', '').html('Max. Price'));
-	                $(container).find('.minprice').append($('<option />').attr('value', '').html('Min. Price'));
-	                $(options).each(function() {
-	                    $(container).find('.pricerange').append(this);
-	                });
-	            }
-	        } );
+                beforeSend: function() {
+                    createLoaderImage($(container));
+                    $(container).find('.pricerange').each(function() {
+                        $(this).prop('disabled', true);
+                    });
+                }
+	        })
+            .error(function(data) {
+                console.log(data);
+            })
+            .success(function(data) {
+                $(container).find('.pricerange').html('');
+                
+                $(container).find('.minprice').append($('<option />').attr('value', '').html('Min. Price'));
+                $(data.min_price.options).each(function() {
+                    $(container).find('.minprice').append(
+                        $('<option />').attr('value', this.value).html(this.label)
+                    );
+                });
+                
+                $(container).find('.maxprice').append($('<option />').attr('value', '').html('Max. Price'));
+                $(data.max_price.options).each(function() {
+                    $(container).find('.maxprice').append(
+                        $('<option />').attr('value', this.value).html(this.label)
+                    );
+                });
+            })
+            .always(function() {
+                $(container).find('.pricerange').each(function() {
+                        $(this).prop('disabled', false);
+                    });
+                $('.' + loaderClass).hide();
+            });
 
 	        $.ajax( {
 	            url: wolfnet_ajax.ajaxurl,
@@ -567,17 +617,6 @@ if ( typeof jQuery != 'undefined' ) {
 	            }
 	        } );
 
-	        var buildPriceDropdownOptions = function(data) 
-	        {
-	            var options = [];
-	            $(data).each(function() {
-	                options.push(
-	                    $('<option />').attr('value', this.value).html(this.label)
-	                );
-	            });
-	            return options;
-	        }
-
 	        var buildSavedSearchDropdownOptions = function(data)
 	        {
 	            var options = [];
@@ -587,7 +626,7 @@ if ( typeof jQuery != 'undefined' ) {
 	                );
 	            });
 	            return options;
-	        }
+	        };
 
 	    }
 

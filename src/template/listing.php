@@ -3,7 +3,7 @@
 /**
  *
  * @title         listing.php
- * @copyright     Copyright (c) 2012, 2013, WolfNet Technologies, LLC
+ * @copyright     Copyright (c) 2012 - 2015, WolfNet Technologies, LLC
  *
  *                This program is free software; you can redistribute it and/or
  *                modify it under the terms of the GNU General Public License
@@ -25,9 +25,18 @@
 <div id="wolfnet_listing_<?php echo $listing['property_id']; ?>" class="wolfnet_listing" itemscope>
     <a href="<?php echo $listing['property_url']; ?>" rel="follow">
         <span class="wolfnet_listingImage"><img src="<?php echo $listing['thumbnail_url']; ?>" alt="Property for sale at <?php echo $listing['address']; ?>" /></span>
-        <span class="wolfnet_price" itemprop="price"><?php echo $listing['listing_price']; ?></span>
-        <span class="wolfnet_bed_bath" title="<?php echo $listing['bedsbaths_full']; ?>"><?php echo $listing['bedsbaths']; ?></span>
-        <span title="<?php echo $listing['address']; ?>">
+        <span class="wolfnet_price" title="<?php echo htmlspecialchars($listing['listing_price']); ?>" itemprop="price"><?php echo $listing['listing_price']; ?></span>
+        <?php if (trim($listing['total_bedrooms']) || trim($listing['total_baths'])) { ?>
+        <span class="wolfnet_bed_bath" title="<?php echo htmlspecialchars($listing['bedsbaths_full']); ?>">
+            <?php if (trim($listing['total_bedrooms'])) { ?>
+            <span class="wolfnet_beds"><?php echo $listing['total_bedrooms']; ?> <span class="wolfnet_label">Bedrooms</span></span>
+            <?php } ?>
+            <?php if (trim($listing['total_baths'])) { ?>
+            <span class="wolfnet_baths"><?php echo $listing['total_baths']; ?> <span class="wolfnet_label">Bathrooms</span></span>
+            <?php } ?>
+        </span>
+        <?php } ?>
+        <span title="<?php echo htmlspecialchars($listing['address']); ?>">
             <span class="wolfnet_address"><?php echo $listing['display_address']; ?></span>
             <span class="wolfnet_location" itemprop="locality"><?php echo $listing['location']; ?></span>
             <span class="wolfnet_full_address" itemprop="street-address" style="display:none;"><?php echo $listing['address']; ?></span>

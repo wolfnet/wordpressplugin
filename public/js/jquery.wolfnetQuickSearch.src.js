@@ -2,7 +2,7 @@
  * This jQuery plugin can be applied to a Quick Search form with appropriate fields.
  *
  * @title         jquery.wolfnetQuickSearch.js
- * @copyright     Copyright (c) 2012, 2013, WolfNet Technologies, LLC
+ * @copyright     Copyright (c) 2012 - 2015, WolfNet Technologies, LLC
  *
  *                This program is free software; you can redistribute it and/or
  *                modify it under the terms of the GNU General Public License
@@ -271,24 +271,37 @@ if ( typeof jQuery != 'undefined' ) {
 	        } );
 		}
 
-		$.fn.routeQuickSearch = function(formData) {
+		$.fn.routeQuickSearch = function(form) {
 			var data = {};
+			var formData = $(form).serializeArray();
 			for(var i = 0; i < formData.length; i++) {
 				data[formData[i]['name']] = formData[i]['value'];
 			}
+
+			disabledFormFields(form);
 
 			$.ajax( {
 	            url: wolfnet_ajax.ajaxurl,
 	            data: { action:'wolfnet_route_quicksearch', formData:data },
 	            dataType: 'json',
 	            type: 'GET',
-	            async: false,
+	            async: true,
+	            tryCount: 0,
+	            retryLimit: 3,
 	            cache: false,
-	            timeout: 3500,
 	            statusCode: {
 	                404: function () {
 	                    commFailure();
 	                }
+	            },
+	            error: function(jqXHR, textStatus, errorThrown) {
+	            	if(textStatus == 'timeout') {
+	            		this.tryCount++;
+	            		if(this.tryCount < this.retryLimit) {
+	            			$.ajax(this);
+	            			return;
+	            		}
+	            	}
 	            },
 	            success: function ( data ) {
 	            	window.location.href = data;
@@ -296,6 +309,32 @@ if ( typeof jQuery != 'undefined' ) {
 	            }
 	        } );
         }
+
+        var _createLoaderImage = function(root)
+		{
+			var loaderClass = 'wolfnet_loaderImage';
+			var overlayClass = 'wolfnet_loaderOverlay';
+			var loaderImage = $(root).find('div.' + loaderClass + ':first');
+
+			/* If the current element doesn't already have a loader add it. */
+			if (loaderImage.length == 0) {
+				loaderImage = $('<div/>');
+				loaderImage.append($('<img src="' + wolfnet_ajax.loaderimg + '" />'));
+				loaderImage.addClass(loaderClass);
+
+				var overlay = $('<div/>')
+					.addClass(overlayClass);
+				
+				loaderImage.insertAfter('#' + $(root).attr('id') + ' .wolfnet_quickSearchFormButton');
+				overlay.appendTo(root);
+			}
+		}
+
+		var disabledFormFields = function(root)
+		{
+			_createLoaderImage(root);
+			$(root).find(':input').prop('disabled', true);
+		}
 
 		var buildPriceDropdownOptions = function(data) {
             var options = [];

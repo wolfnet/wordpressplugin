@@ -3,7 +3,7 @@
 /**
  *
  * @title         quickSearchOptions.php
- * @copyright     Copyright (c) 2012, 2013, WolfNet Technologies, LLC
+ * @copyright     Copyright (c) 2012 - 2015, WolfNet Technologies, LLC
  *
  *                This program is free software; you can redistribute it and/or
  *                modify it under the terms of the GNU General Public License
@@ -35,22 +35,34 @@
 	<input type="hidden" id="<?php echo $keyids_wpid; ?>" class="keyids" name="<?php echo $keyids_wpname; ?>" value="<?php echo implode(",", $keyids); ?>" />
     <?php endif; ?>
 
-    <table class="form-table">
-        <tr>
-            <td><label>Title:</label></td>
-            <td><input id="<?php echo $title_wpid; ?>" name="<?php echo $title_wpname; ?>" value="<?php echo $title; ?>" type="text" /></td>
-        </tr>
-        <tr>
-            <td><label>Layout:</label></td>
-            <td>
-                <select id="<?php echo $view_wpid; ?>" name="<?php echo $view_wpname; ?>" >
-                    <option value="basic" <?php echo ($view == "basic" ? 'selected="selcted"': "") ?>>Basic</option>
-                    <option value="legacy" <?php echo ($view == "legacy" ? 'selected="selcted"': "") ?>>Legacy</option>
-                </select>
-            </td>
-        </tr>
+	<table class="form-table">
 
-        <?php if(count($markets) > 1): ?>
+		<tr>
+			<td><label>Title:</label></td>
+			<td><input id="<?php echo $title_wpid; ?>" name="<?php echo $title_wpname; ?>" value="<?php echo $title; ?>" type="text" /></td>
+		</tr>
+
+		<tr>
+			<td><label>Layout:</label></td>
+			<td>
+				<select id="<?php echo $view_wpid; ?>" name="<?php echo $view_wpname; ?>" >
+					<option value="basic" <?php echo ($view == "basic" ? 'selected="selcted"': "") ?>>Basic</option>
+					<option value="legacy" <?php echo ($view == "legacy" ? 'selected="selcted"': "") ?>>Legacy</option>
+				</select>
+			</td>
+		</tr>
+
+		<tr>
+			<td><label>SmartSearch:</label></td>
+			<td>
+				<select id="<?php echo $smartsearch_wpid; ?>" name="<?php echo $smartsearch_wpname; ?>" >
+					<option value="1">Enabled</option>
+					<option value="0" selected>Disabled</option>
+				</select>
+			</td>
+		</tr>
+
+		<?php if(count($markets) > 1): ?>
         <tr>
         	<td><label>Market:</label></td>
         	<td>
@@ -65,7 +77,7 @@
                         <td>
         	                <input type="checkbox" class="productkey" value="<?php echo $markets[$i]->id; ?>"
                                 <?php if( in_array($markets[$i]->id, $keyids) ) echo ' checked'; ?>
-        	                    > 
+        	                    >
                                 <?php echo $markets[$i]->label; ?>
                         </td>
                     </tr>
@@ -82,13 +94,14 @@
                 </select>
                 <span class="wolfnet_moreInfo">
                     Auto routing will automatically send users to your IDX solution that has the most
-                    matching listings for their search criteria. Manual routing will require the 
+                    matching listings for their search criteria. Manual routing will require the
                     user to select which if your IDX solutions to search on.
                 </span>
-            </td>   
+            </td>
         </tr>
     	<?php endif; ?>
-    </table>
+
+	</table>
     <span class="validate_msg"></span>
 </div>
 
@@ -114,15 +127,15 @@
             }
 
             setValidate();
-            
+
         });
 
         $(".allproductkeys").click(function(){
             if($(this).prop('checked')) {
                 form.find(".productkey").attr("checked", true);
                 // add all the keys to the array
-                <?php echo $instance_id; ?> = form.find(".productkey").map(function() { return $(this).val() }).get(); 
-                 
+                <?php echo $instance_id; ?> = form.find(".productkey").map(function() { return $(this).val() }).get();
+
             } else {
                 // uncheckthem and remove everything from the array
                 form.find(".productkey").attr("checked", false);
@@ -130,7 +143,7 @@
             }
 
             setValidate();
-            
+
         });
 
         function setValidate() {

@@ -2,7 +2,7 @@
 
 /**
  * @title         Wolfnet_Ajax.php
- * @copyright     Copyright (c) 2012, 2013, WolfNet Technologies, LLC
+ * @copyright     Copyright (c) 2012 - 2015, WolfNet Technologies, LLC
  *
  *                This program is free software; you can redistribute it and/or
  *                modify it under the terms of the GNU General Public License
@@ -19,7 +19,7 @@
  *                Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-class Wolfnet_Ajax 
+class Wolfnet_Ajax
 {
 	/*
 	 *
@@ -39,6 +39,7 @@ class Wolfnet_Ajax
             'wolfnet_scb_options_list'        => 'remoteShortcodeBuilderOptionsList',
             'wolfnet_scb_options_quicksearch' => 'remoteShortcodeBuilderOptionsQuickSearch',
             'wolfnet_scb_savedsearch'         => 'remoteShortcodeBuilderSavedSearch',
+            'wolfnet_scb_showagentfeature'    => 'remoteShortcodeBuilderShowAgentFeature',
             'wolfnet_content'                 => 'remoteContent',
             'wolfnet_content_header'          => 'remoteContentHeader',
             'wolfnet_content_footer'          => 'remoteContentFooter',
@@ -50,6 +51,7 @@ class Wolfnet_Ajax
             'wolfnet_price_range'             => 'remotePriceRange',
             'wolfnet_base_url'                => 'remoteGetBaseUrl',
             'wolfnet_route_quicksearch'       => 'remoteRouteQuickSearch',
+            'wolfnet_smart_search'            => 'remoteGetSuggestions',
             );
 
         foreach ($ajxActions as $action => $method) {
@@ -61,15 +63,15 @@ class Wolfnet_Ajax
     public function registerAjaxActions()
     {
         $ajxActions = array(
-            'wolfnet_content'           => 'remoteContent',
-            'wolfnet_content_header'    => 'remoteContentHeader',
-            'wolfnet_content_footer'    => 'remoteContentFooter',
-            'wolfnet_listings'          => 'remoteListings',
-            'wolfnet_get_listings'      => 'remoteListingsGet',
-            'wolfnet_css'               => 'remotePublicCss',
-            'wolfnet_base_url'          => 'remoteGetBaseUrl',
-            'wolfnet_price_range'       => 'remotePriceRange',
-            'wolfnet_route_quicksearch' => 'remoteRouteQuickSearch',
+            'wolfnet_content'        => 'remoteContent',
+            'wolfnet_content_header' => 'remoteContentHeader',
+            'wolfnet_content_footer' => 'remoteContentFooter',
+            'wolfnet_listings'       => 'remoteListings',
+            'wolfnet_get_listings'   => 'remoteListingsGet',
+            'wolfnet_css'            => 'remotePublicCss',
+            'wolfnet_base_url'       => 'remoteGetBaseUrl',
+            'wolfnet_price_range'    => 'remotePriceRange',
+            'wolfnet_smart_search'   => 'remoteGetSuggestions',
             );
 
         foreach ($ajxActions as $action => $method) {
@@ -78,7 +80,6 @@ class Wolfnet_Ajax
 
     }
 
-	
 
 	/*
 	 *
@@ -206,6 +207,7 @@ class Wolfnet_Ajax
 
         try {
             $args = $GLOBALS['wolfnet']->getAgentPagesOptions();
+            $args['showSoldOption'] = $GLOBALS['wolfnet']->soldListingsEnabled();
 
             $response = $GLOBALS['wolfnet']->views->agentPagesOptionsFormView($args);
 
@@ -334,6 +336,23 @@ class Wolfnet_Ajax
     }
 
 
+    public function remoteShortcodeBuilderShowAgentFeature()
+    {
+        try {
+            $response = $GLOBALS['wolfnet']->showAgentFeature();
+        } catch (Wolfnet_Exception $e) {
+            status_header(500);
+
+            $response = array(
+                'message' => $e->getMessage(),
+                'data' => $e->getData(),
+            );
+        }
+
+        wp_send_json($response);
+    }
+
+
     public function remoteContent()
     {
 
@@ -402,8 +421,8 @@ class Wolfnet_Ajax
         try {
             $args = $GLOBALS['wolfnet']->getListingGridOptions($_REQUEST);
 
-            $response = $GLOBALS['wolfnet']->getWpHeader() 
-            	. $GLOBALS['wolfnet']->listingGrid($args) 
+            $response = $GLOBALS['wolfnet']->getWpHeader()
+            	. $GLOBALS['wolfnet']->listingGrid($args)
             	. $GLOBALS['wolfnet']->getWpFooter();
 
         } catch (Wolfnet_Exception $e) {
@@ -588,7 +607,7 @@ class Wolfnet_Ajax
     }
 
 
-    public function remoteRouteQuickSearch() 
+    public function remoteRouteQuickSearch()
     {
         try {
             $response = $GLOBALS['wolfnet']->routeQuickSearch($_REQUEST['formData']);
@@ -604,6 +623,28 @@ class Wolfnet_Ajax
 
         wp_send_json($response);
     }
+
+
+	public function remoteGetSuggestions()
+	{
+		try {
+
+			$response = $GLOBALS['wolfnet']->getSuggestions(
+				$_REQUEST['data']['term']
+			);
+
+		} catch (Wolfnet_Exception $e) {
+
+			status_header(500);
+			$response = array(
+				'message' => $e->getMessage(),
+				'data' => $e->getData(),
+			);
+
+		}
+
+		wp_send_json($response);
+	}
 
 }
 

@@ -2,7 +2,7 @@
 
 /**
  * @title         Wolfnet_Admin.php
- * @copyright     Copyright (c) 2012, 2013, WolfNet Technologies, LLC
+ * @copyright     Copyright (c) 2012 - 2015, WolfNet Technologies, LLC
  *
  *                This program is free software; you can redistribute it and/or
  *                modify it under the terms of the GNU General Public License
@@ -70,6 +70,8 @@ class Wolfnet_Admin extends Wolfnet_Plugin
             array('admin_enqueue_scripts', 'adminScripts'),
             array('admin_enqueue_scripts', 'adminStyles'),
             array('admin_print_styles',    'adminPrintStyles',  1000),
+            array('wp_logout',             'adminEndSession'),
+            array('wp_login',              'adminEndSession'),
             ));
 
         // Register admin only filters.
@@ -160,6 +162,16 @@ class Wolfnet_Admin extends Wolfnet_Plugin
         // Register Ajax Actions
         $GLOBALS['wolfnet']->ajax->registerAdminAjaxActions();
 
+        $this->adminStartSession();
+
+        // Set the key properly in session. This is mainly for the search manager.
+        if(!array_key_exists('keyid', $_SESSION) && !array_key_exists('keyid', $_REQUEST)) {
+            $_SESSION['keyid'] = 1;
+        }
+        if(array_key_exists('keyid', $_REQUEST)) {
+            $_SESSION['keyid'] = $_REQUEST['keyid'];
+        }
+
          /* If we are serving up the search manager page we need to get the search manager HTML from
           * the MLSFinder server now so that we can set cookies. */
 
@@ -170,8 +182,7 @@ class Wolfnet_Admin extends Wolfnet_Plugin
             try {
                 /* Now that we know we are dealing with a page that needs the search manager check
                    if the key is valid. */
-                $key = (array_key_exists("keyid", $_REQUEST)) ? $_REQUEST["keyid"] : "1";
-                $productKey = $GLOBALS['wolfnet']->getProductKeyById($key);
+                $productKey = $GLOBALS['wolfnet']->getProductKeyById($_SESSION['keyid']);
 
                 if ($GLOBALS['wolfnet']->productKeyIsValid($productKey)) {
                     $GLOBALS['wolfnet']->smHttp = $GLOBALS['wolfnet']->searchManagerHtml($productKey);
@@ -268,6 +279,20 @@ class Wolfnet_Admin extends Wolfnet_Plugin
     public function getAdminCss()
     {
         return get_option($this->adminCssOptionKey);
+    }
+
+
+    public function adminStartSession()
+    {
+        if(!session_id()) {
+            session_start();
+        }
+    }
+
+
+    public function adminEndSession()
+    {
+        session_destroy();
     }
 
 

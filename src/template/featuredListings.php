@@ -3,7 +3,7 @@
 /**
  *
  * @title         featuredListings.php
- * @copyright     Copyright (c) 2012, 2013, WolfNet Technologies, LLC
+ * @copyright     Copyright (c) 2012 - 2015, WolfNet Technologies, LLC
  *
  *                This program is free software; you can redistribute it and/or
  *                modify it under the terms of the GNU General Public License
@@ -34,9 +34,15 @@
 
     jQuery(function($){
         $('#<?php echo $instance_id; ?>').wolfnetScrollingItems({
-              autoPlay  : <?php echo ($autoplay) ? 'true' : 'false'; ?>
-            , direction : <?php echo "'" . $direction . "'"; ?>
-            , speed     : <?php echo $speed; ?>
+            autoPlay : <?php echo ($autoplay) ? 'true' : 'false'; ?>,
+            direction : <?php echo "'" . $direction . "'"; ?>,
+            speed : <?php echo $speed; ?>,
+            componentClass: 'wolfnet_featuredListings',
+            withControlsClass: 'wolfnet_withControls',
+            controlClass: 'wolfnet_control',
+            controlLeftClass: 'wolfnet_leftControl',
+            controlRightClass: 'wolfnet_rightControl',
+            itemClass: 'wolfnet_listing'
         });
     });
 
