@@ -39,7 +39,7 @@ if (typeof jQuery != 'undefined') {
             clearfixClass: 'clearfix',
             minColumnGap: 5,
             minRowGap: 20,
-            gridAlign: 'center',
+            gridAlign: 'center'
         };
 
         var getGridItems = function(target)
