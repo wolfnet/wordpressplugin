@@ -94,9 +94,15 @@ class Wolfnet_Factory
     private function getWolfnet_Api_Client()
     {
         $ssl = $this->args['sslEnabled'];
+        $verifySsl = $this->args['verifySsl'];
         $port = $ssl ? 443 : 80;
 
-        $apiClient = new Wolfnet_Api_Client(Wolfnet_Api_Client::DEFAULT_HOST, $port, $ssl);
+        $apiClient = new Wolfnet_Api_Client(
+            Wolfnet_Api_Client::DEFAULT_HOST, 
+            $port, 
+            $ssl,
+            $verifySsl
+        );
 
         $apiClient = new Wolfnet_Api_StatsDecorator($apiClient);
         $cachingService = $this->get('Wolfnet_Service_CachingService');
