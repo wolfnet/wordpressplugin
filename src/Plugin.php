@@ -1245,6 +1245,7 @@ class Wolfnet_Plugin
             'toolbarTop'         => '',
             'toolbarBottom'      => '',
             'maxrows'            => ((count($listingsData) > 0) ? $data['requestData']['maxrows'] : 0),
+            'gridalign'          => (array_key_exists('gridalign', $criteria)) ? $criteria['gridalign'] : 'center',
         );
 
         if (count($listingsData) && is_array($listingsData)) {

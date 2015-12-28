@@ -366,6 +366,7 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
         $count = ($sold) ? 6 : 10;
         $criteria['maxrows'] = $count;
         $criteria['maxresults'] = $count;
+        $criteria['gridalign'] = 'left';
 
         $this->args['criteria'] = array_merge($this->args['criteria'], $criteria);
 

@@ -20,7 +20,6 @@
  *                Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-
 // HACK: Make sure the API key does not get included in the criteria
 unset($wpMeta['key']);
 
@@ -76,7 +75,8 @@ unset($wpMeta['key']);
         $(instance).filter('.wolfnet_listingGrid').wolfnetListingGrid({
             containerClass: 'wolfnet_listings',
             itemClass: 'wolfnet_listing',
-            clearfixClass: 'wolfnet_clearfix'
+            clearfixClass: 'wolfnet_clearfix',
+            gridAlign: '<?php echo $gridalign; ?>'
         });
 
     });
