@@ -119,9 +119,18 @@ class Wolfnet_Factory
     }
 
 
+	private function getWolfnet_Smart_SearchService($args)
+	{
+		return new Wolfnet_Smart_SearchService(
+			$args['key'],
+			$args['url']
+		);
+	}
+
+
     private function getWolfnet_AgentPagesHandler()
     {
-        return new Wolfnet_AgentPagesHandler();
+        return new Wolfnet_AgentPagesHandler($this->args['plugin']);
     }
 
 

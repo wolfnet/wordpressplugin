@@ -1,7 +1,7 @@
 /**
  *
  * @title         wolfnetToolbar.src.js
- * @copyright     Copyright (c) 2012, 2013, WolfNet Technologies, LLC
+ * @copyright     Copyright (c) 2012 - 2015, WolfNet Technologies, LLC
  *
  *                This program is free software; you can redistribute it and/or
  *                modify it under the terms of the GNU General Public License
@@ -63,20 +63,15 @@
                 .attr({'href':data[i].property_url, 'title':fullAddress})
                 .appendTo($listing);
 
-            var $location = $('<span>')
-                .addClass('wolfnet_full_address')
-                .html(fullAddress)
-                .appendTo($link);
-
             var $price = $('<span>')
                 .addClass('wolfnet_price')
                 .attr('itemprop', 'price')
                 .html(data[i].listing_price.toString())
                 .appendTo($link);
 
-            var $streetAddress = $('<span>')
+            var $location = $('<span>')
+                .addClass('wolfnet_full_address')
                 .attr('itemprop', 'street-address')
-                .css('display', 'none')
                 .html(fullAddress)
                 .appendTo($link);
 
@@ -273,7 +268,7 @@
 
         for (var i=0, l=data.length; i<l; i++) {
             houseoverHtml = getHouseoverHtml(data[i]);
-            var houseoverIcon = componentMap.mapIcon(houseIcon,30,30);
+            var houseoverIcon = componentMap.mapIcon(houseIcon,20,20);
             var houseover = componentMap.poi(data[i].geo.lat, data[i].geo.lng, houseoverIcon, houseoverHtml, data[i].property_id, data[i].property_url);
             componentMap.addPoi(houseover);
         }
@@ -296,7 +291,7 @@
         }
         else if ($container.is('.wolfnet_listingGrid')) {
             renderListingGrid.call($container, data);
-            $container.wolfnetListingGrid('reload');
+            $container.wolfnetListingGrid('refresh');
         }
 
         if ($container.find('.wolfnet_wntMainMap').length > 0) {
@@ -422,7 +417,7 @@
         $('html,body').scrollTop($container.closest('.wolfnet_widget').offset().top - 100);
 
         if ($container.is('.wolfnet_listingGrid') && $container.wolfnetListingGrid) {
-            $container.wolfnetListingGrid("resizeWidth");
+            $container.wolfnetListingGrid("refresh", true);
         }
 
         $container.removeClass('wolfnet_refreshing');

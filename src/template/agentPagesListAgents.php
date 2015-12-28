@@ -3,7 +3,7 @@
 /**
  *
  * @title         agentPagesListAgents.php
- * @copyright     Copyright (c) 2012, 2013, WolfNet Technologies, LLC
+ * @copyright     Copyright (c) 2012 - 2015, WolfNet Technologies, LLC
  *
  *                This program is free software; you can redistribute it and/or
  *                modify it under the terms of the GNU General Public License
@@ -29,44 +29,104 @@ if(array_key_exists("REDIRECT_URL", $_SERVER)) {
 	$linkBase = $_SERVER['PHP_SELF'];
 }
 
-function paginate($page, $total, $numPerPage) 
-{
-	if($total <= $numPerPage) {
-		return '';
-	}
-	
-	$output = '<ul class="wolfnet_agentPagination">';
-	$iterate = ceil($total / $numPerPage);
+if(!function_exists('paginate')) {
+	function paginate($page, $total, $numPerPage, $officeId = '', $search = null, $sort = 'name') 
+	{
+		/*
+		 * Note: We're using "agentpage" instead of just "page" as out URL variable
+		 * here because Wordpress uses page internally for their own pagination
+		 * and causes things to not work for us if we try to coopt it.
+		 */
 
-	if(($page * $numPerPage) > $numPerPage) {
-		$output .= '<li><a href="?page=' . ($page - 1) . '">';
-		$output .= 'Previous</a>';
-	}
-
-	for($i = 1; $i <= $iterate; $i++) {
-		if($i == $page) {
-			$output .= '<li class="wolfnet_selected">' . $i . '</li>';
-		} else {
-			$output .= '<li><a href="?page=' . $i . '">' . $i . '</a></li>';
+		if($total <= $numPerPage) {
+			return '';
 		}
-	}
+		
+		$output = '<ul class="wolfnet_agentPagination">';
+		$iterate = ceil($total / $numPerPage);
 
-	if(($page * $numPerPage) < $total) {
-		$output .= '<li><a href="?page=' . ($page + 1) . '">';
-		$output .= 'Next</a>';
-	}
+		if(!is_null($search)) {
+			$linkBase = '?search&agentCriteria=' . $search . '&';
+		} else {
+			$linkBase = '?';
+		}
 
-	$output .= "</ul>";
-	return $output;
+		if($officeId != '') {
+			$linkBase .= 'officeId=' . $officeId . '&';
+		}
+
+		$linkBase .= 'agentSort=' . $sort . '&';
+
+		if(($page * $numPerPage) > $numPerPage) {
+			$output .= '<li><a href="' . $linkBase . 'agentpage=' . ($page - 1) . '">';
+			$output .= 'Previous</a>';
+		}
+
+		for($i = 1; $i <= $iterate; $i++) {
+			if($i == $page) {
+				$output .= '<li class="wolfnet_selected">' . $i . '</li>';
+			} else {
+				$output .= '<li><a href="' . $linkBase . 'agentpage=' . $i . '#post-' . get_the_id() . '">' . $i . '</a></li>';
+			}
+		}
+
+		if(($page * $numPerPage) < $total) {
+			$output .= '<li><a href="' . $linkBase . 'agentpage=' . ($page + 1) . '#post-' . get_the_id() . '">';
+			$output .= 'Next</a>';
+		}
+
+		$output .= "</ul>";
+		return $output;
+	}
 }
 ?>
 
 <div id="<?php echo $instance_id; ?>" class="wolfnet_widget wolfnet_agentsList">
 
+	<?php
+	if(strlen($agenttitle) > 0) {
+		echo '<h2>' . $agenttitle . '</h2>';
+	}
+	?>
+
+	<div class="wolfnet_viewAll">
+		<a href="?search&agentCriteria=#post-<?php echo get_the_id(); ?>">Click here</a> to view all agents and staff.
+	</div>
+
+	<form name="wolfnet_agentSearch" class="wolfnet_agentSearch" method="POST" 
+		action="<?php echo $linkBase . "?search#post-" . get_the_id(); ?>">
+		<?php
+		if($officeId != '') {
+			echo "<input type=\"hidden\" name=\"officeId\" value=\"$officeId\" />";
+		}
+		?>
+
+		<input type="text" name="agentCriteria" class="wolfnet_agentCriteria"
+			value="<?php echo (strlen($agentCriteria) > 0) ? $agentCriteria : ''; ?>" /> 
+		<input type="submit" name="agentSearch" class="wolfnet_agentSearchButton" value="Search" />
+		<div class="wolfnet_clearfix"></div>
+	</form>
+
+	<?php if($officeCount > 1) { ?>
+	<label for="agentSort">Sort By:</label>
+	<select name="agentSort" class="wolfnet_agentSort">
+		<option value="name" <?php echo ($agentSort == 'name') ? 'selected="selected"' : ''; ?>>Name</option>
+		<option value="office_id" <?php echo ($agentSort == 'office_id') ? 'selected="selected"' : ''; ?>>Office</option>
+	</select>
+	<div class="wolfnet_clearfix"></div>
+	<?php } ?>
+
 <?php
 foreach($agents as $agent) {
 	if($agent['display_agent']) {
 		$agentLink = $linkBase . '?agent=' . $agent['agent_id'];
+		if(array_key_exists('agentCriteria', $_REQUEST) && strlen($_REQUEST['agentCriteria']) > 0) {
+			$agentLink .= '&agentCriteria=' . $_REQUEST['agentCriteria'];
+		}
+		if($officeId != '') {
+			$agentLink .= '&officeId=' . $officeId;
+		}
+		$agentLink .= '#post-' . get_the_id();
 ?>
 
 	<div class="wolfnet_agentPreview">
@@ -109,6 +169,12 @@ foreach($agents as $agent) {
 					echo "Mobile: " . $agent['mobile_phone'];
 					echo '</div>';
 				}
+
+				if(strlen($agent['fax_number']) > 0) {
+					echo '<div class="wolfnet_agentFax">';
+					echo "Fax: " . $agent['fax_number'];
+					echo '</div>';
+				}
 				?>
 			</div>
 		</div>
@@ -118,7 +184,9 @@ foreach($agents as $agent) {
 	} // end if display_agent
 } // end foreach
 
-echo paginate($page, $totalrows, $numperpage); 
+echo '<div class="wolfnet_clearfix"></div>';
+
+echo paginate($page, $totalrows, $numperpage, $officeId, $agentCriteria, $agentSort); 
 
 ?>
 
@@ -128,14 +196,46 @@ echo paginate($page, $totalrows, $numperpage);
 jQuery(function($) {
 	$(window).load(function() {
 		// Resize agent boxes to height of tallest one.
-		var $agents = $('.wolfnet_agentPreview');
-		var maxHeight = 0;
+		var $agents = $('#<?php echo $instance_id; ?> .wolfnet_agentPreview');
+		var maxHeight<?php echo $instance_id; ?> = 0;
 		$agents.each(function() {
-			if($(this).height() > maxHeight) {
-				maxHeight = $(this).height();
+			if($(this).height() > maxHeight<?php echo $instance_id; ?>) {
+				maxHeight<?php echo $instance_id; ?> = $(this).height();
 			}
 		});
-		$('.wolfnet_agentPreview').height(maxHeight);
+		$('#<?php echo $instance_id; ?> .wolfnet_agentPreview').height(maxHeight<?php echo $instance_id; ?>);
+
+		<?php if($officeCount > 1) { ?>
+		$('#<?php echo $instance_id; ?> .wolfnet_agentSort').change(function() {
+			var href = $(location).attr('href');
+			var sortPos = href.indexOf('agentSort');
+
+			if(sortPos > -1) {
+				if($(this).val() == 'name') {
+					href = href.replace('agentSort=office_id', 'agentSort=name');
+				} else {
+					href = href.replace('agentSort=name', 'agentSort=office_id');
+				}
+			} else {
+				// We need to put the sort param before the anchor.
+				var hashPos = href.indexOf('#');
+				if(hashPos > -1) {
+					href = href.replace('#', '&agentSort=' + $(this).val() + '#');
+				} else {
+					href += '&agentSort=' + $(this).val();
+				}
+			}
+
+			// Remove page is there since the pages won't correlate between 
+			// offices and agents.
+			var pagePos = href.indexOf('agentpage');
+			if(pagePos > -1) {
+				href = href.replace(/&agentpage=[0-9]+/gi, '');
+			}
+			
+			window.location.href = href;
+		});
+		<?php } ?>
 	});
 });
 </script>

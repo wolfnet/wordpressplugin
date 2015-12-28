@@ -2,7 +2,7 @@
  * This jQuery script defines the functionality of the WolfNet Shortcode Builder tinyMCE button.
  *
  * @title         jquery.wolfnetShortcodeBuilder.src.js
- * @copyright     Copyright (c) 2012, 2013, WolfNet Technologies, LLC
+ * @copyright     Copyright (c) 2012 - 2015, WolfNet Technologies, LLC
  *
  *                This program is free software; you can redistribute it and/or
  *                modify it under the terms of the GNU General Public License
@@ -104,6 +104,21 @@ jQuery(function($){
 
     var createMenuPage = function ()
     {
+
+        // Figure out if we can display the Agent Pages option.
+        // Note: This needs to NOT be asyncronous. 
+        $.ajax( {
+            url: ajaxurl,
+            type: 'GET',
+            dataType: 'json',
+            async: false,
+            data: {action:'wolfnet_scb_showagentfeature'},
+            success: function (data) {
+                if(data == false) {
+                    delete menuItems.agent;
+                }
+            }
+        });
 
         var menuString = '';
 

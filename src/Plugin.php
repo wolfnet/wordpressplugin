@@ -2,7 +2,7 @@
 
 /**
  * @title         Wolfnet_Plugin.php
- * @copyright     Copyright (c) 2012, 2013, WolfNet Technologies, LLC
+ * @copyright     Copyright (c) 2012 - 2015, WolfNet Technologies, LLC
  *
  *                This program is free software; you can redistribute it and/or
  *                modify it under the terms of the GNU General Public License
@@ -144,6 +144,8 @@ class Wolfnet_Plugin
         $this->ajax = $this->ioc->get('Wolfnet_Ajax');
 
         $this->views = $this->ioc->get('Wolfnet_Views');
+
+        $this->agentHandler = $this->ioc->get('Wolfnet_AgentPagesHandler');
 
 
         if (is_admin()) {
@@ -287,7 +289,19 @@ class Wolfnet_Plugin
 
     public function wolfnetActivation()
     {
-
+        // Check that key structure is formatted correctly and that the key
+        // label gets set if it was not already. If there's no preexisting key,
+        // ignore this.
+        $keyArray = json_decode($this->getProductKey());
+        if(count($keyArray) == 1 && $keyArray[0]->key != false) {
+            foreach($keyArray as $key) {
+                if(strlen($key->label) == 0) {
+                    $key->label = strtoupper($this->getMarketName($key->key));
+                }
+            }
+            $keyString = json_encode($keyArray);
+            update_option($this->productKeyOptionKey, $keyString);
+        }
     }
 
 
@@ -304,27 +318,26 @@ class Wolfnet_Plugin
      * method.
      * @return void
      */
-    public function scripts()
-    {
-        do_action($this->preHookPrefix . 'enqueueResources'); // Legacy hook
+	public function scripts()
+	{
+		do_action($this->preHookPrefix . 'enqueueResources'); // Legacy hook
 
-        // JavaScript
-        $scripts = array(
-            'smooth-div-scroll',
-            'wolfnet-scrolling-items',
-            'wolfnet-quick-search',
-            'wolfnet-listing-grid',
-            'wolfnet-toolbar',
-            'wolfnet-property-list',
-            'wolfnet-maptracks',
-            'mapquest-api'
-            );
+		// JavaScript
+		$scripts = array(
+			'wolfnet-scrolling-items',
+			'wolfnet-quick-search',
+			'wolfnet-listing-grid',
+			'wolfnet-toolbar',
+			'wolfnet-maptracks',
+			'wolfnet-smartsearch',
+			'mapquest-api'
+		);
 
-        foreach ($scripts as $script) {
-            wp_enqueue_script($script);
-        }
+		foreach ($scripts as $script) {
+			wp_enqueue_script($script);
+		}
 
-    }
+	}
 
 
     /**
@@ -601,6 +614,31 @@ class Wolfnet_Plugin
 
 
     /**
+     * This method retrieves a specific product key from the WordPress options table based on a
+     * provided market name.
+     * @param  string $market  The market name associated with the key to be retrieved.
+     * @return string          The key that was retrieved from the WP options table.
+     */
+    public function getProductKeyByMarket($market)
+    {
+        $keyList = json_decode($this->getProductKey());
+
+        foreach ($keyList as $key) {
+            if(!array_key_exists('market', $key)) {
+                $this->updateProductKeys();
+            }
+
+            if (strtoupper($key->market) == strtoupper($market)) {
+                return $key->key;
+            }
+        }
+
+        return null;
+
+    }
+
+
+    /**
      * This method retrieved the 'default' key (or first key on the stack) from the WP options table.
      * @return string The key that was retrieved from the WP options table.
      */
@@ -646,6 +684,26 @@ class Wolfnet_Plugin
     public function getKeyCount()
     {
         return count(json_decode($this->getProductKey()));
+    }
+
+
+    /**
+     * This method updates the product key structure to make sure it has all the
+     * necessary attributes.
+     */
+    public function updateProductKeys()
+    {
+        $keyStruct = json_decode($this->getProductKey());
+
+        for($i = 0; $i < count($keyStruct); $i++) {
+            if(!array_key_exists('market', $keyStruct[$i])) {
+                $market = $this->getMarketName($keyStruct[$i]->key);
+                $keyStruct[$i]->market = $market;
+            }
+        }
+
+        // Update key in Wordpress settings data.
+        update_option($this->productKeyOptionKey, json_encode($keyStruct));
     }
 
 
@@ -769,8 +827,12 @@ class Wolfnet_Plugin
     /*                                                                                            */
     /* ****************************************************************************************** */
 
-    public function scAgentPages($attrs) 
+    public function scAgentPages($attrs)
     {
+        if(!$this->showAgentFeature()) {
+            return '';
+        }
+
         try {
             $defaultAttributes = $this->getAgentPagesDefaults();
 
@@ -814,6 +876,7 @@ class Wolfnet_Plugin
             $default_maxrows = '50';
             $criteria = array_merge($this->getListingGridDefaults(), (is_array($attrs)) ? $attrs : array());
 
+            // TODO: sort out all these max fields (also an alias in prepareListingQuery)
             if ($criteria['maxrows'] == $default_maxrows && $criteria['maxresults'] != $default_maxrows) {
                 $criteria['maxrows'] = $criteria['maxresults'];
             }
@@ -883,10 +946,15 @@ class Wolfnet_Plugin
     {
 
         return array(
-            'title'       => '',
-            'keyids'      => '',
-            'showoffices' => true,
-            'numperpage'  => 10,
+            'officetitle'    => '',
+            'agenttitle'     => '',
+            'detailtitle'    => '',
+            'keyids'         => '',
+            'showoffices'    => true,
+            'activelistings' => true,
+            'soldlistings'   => false,
+            'excludeoffices' => '',
+            'numperpage'     => 10,
         );
 
     }
@@ -901,7 +969,7 @@ class Wolfnet_Plugin
     }
 
 
-    public function agentPageHandler(array $criteria = array()) 
+    public function agentPageHandler(array $criteria = array())
     {
         $key = $this->getCriteriaKey($criteria);
 
@@ -916,11 +984,10 @@ class Wolfnet_Plugin
 
         $args = $this->convertDataType(array_merge($criteria, $vars));
 
-        $agentHandler = $this->ioc->get('Wolfnet_AgentPagesHandler');
-        $agentHandler->setKey($key);
-        $agentHandler->setArgs($args);
+        $this->agentHandler->setKey($key);
+        $this->agentHandler->setArgs($args);
 
-        return $agentHandler->handleRequest();
+        return $this->agentHandler->handleRequest();
     }
 
 
@@ -1052,11 +1119,12 @@ class Wolfnet_Plugin
 
     /**
      * Returns the markup for listings. generates both the listingGrid layout as well as the property list layout
-     * @param  array  $criteria the search criteria
-     * @param  string $layout   'grid' or 'list'
-     * @return string           listings markup
+     * @param  array  $criteria      the search criteria
+     * @param  string $layout        'grid' or 'list'
+     * @param  array  $dataOverride  listing data passed in to be used in place of the API request
+     * @return string                listings markup
      */
-    public function listingGrid(array $criteria, $layout = 'grid')
+    public function listingGrid(array $criteria, $layout = 'grid', $dataOverride = null)
     {
         $key = $this->getCriteriaKey($criteria);
 
@@ -1064,17 +1132,26 @@ class Wolfnet_Plugin
             return false;
         }
 
-        if (!array_key_exists('numrows', $criteria)) {
-            $criteria['maxrows'] = $criteria['maxresults'];
+        if($dataOverride === null) {
+            if (!array_key_exists('numrows', $criteria)) {
+                $criteria['maxrows'] = $criteria['maxresults'];
+            }
+
+            $qdata = $this->prepareListingQuery($criteria);
+
+            try {
+                $data = $this->apin->sendRequest($key, '/listing', 'GET', $qdata);
+            } catch (Wolfnet_Exception $e) {
+                return $this->displayException($e);
+            }
+        } else {
+            // $dataOverride is passed in. As of writing this comment, this is data
+            // is coming from the AgentPagesHandler - we need to display a listing
+            // grid of an agent's featured listings. This is a vain attempt at
+            // repurposing this code as-is.
+            $data = $dataOverride;
         }
 
-        $qdata = $this->prepareListingQuery($criteria);
-
-        try {
-            $data = $this->apin->sendRequest($key, '/listing', 'GET', $qdata);
-        } catch (Wolfnet_Exception $e) {
-            return $this->displayException($e);
-        }
 
         // add some elements to the array returned by the API
         // wpMeta should contain any criteria or other setting which do not come from the API
@@ -1273,11 +1350,12 @@ class Wolfnet_Plugin
     {
 
         return array(
-            'title'     => 'QuickSearch',
-            'keyid'     => '',
-            'keyids'    => '',
-            'view'      => '',
-            'routing'   => '',
+            'title'      => 'QuickSearch',
+            'keyid'      => '',
+            'keyids'     => '',
+            'view'       => '',
+            'smartsearch'=> 0,
+            'routing'    => '',
             );
 
     }
@@ -1292,7 +1370,7 @@ class Wolfnet_Plugin
     }
 
 
-    public function routeQuickSearch($formData) 
+    public function routeQuickSearch($formData)
     {
         /*
          * Loop over each key and get the number of matching listings for each.
@@ -1306,7 +1384,12 @@ class Wolfnet_Plugin
             try {
                 $key = $this->getProductKeyById($keyID);
 
-                $listings = $this->apin->sendRequest($key, '/listing', 'GET', $formData);
+                $listings = $this->apin->sendRequest(
+                    $key,
+                    '/listing?detaillevel=1&startrow=1&maxrows=1',
+                    'GET',
+                    $formData
+                );
                 $count = $listings['responseData']['data']['total_rows'];
 
                 if($count > $highestCount) {
@@ -1322,14 +1405,33 @@ class Wolfnet_Plugin
          * Route to the site associated with key determined above.
         */
         $baseUrl = $this->getBaseUrl($highestMatchKey);
-        
+
         $redirect = $baseUrl . "?";
         foreach($formData as $key => $param) {
             $redirect .= $key . "=" . $param . "&";
         }
-        
+
         return $redirect;
-    } 
+    }
+
+
+	public function getSuggestions($term)
+	{
+		try {
+
+			$suggestions = $this->apin->sendRequest(
+				$this->getDefaultProductKey(),
+				'/search_criteria/suggestion',
+				'GET',
+				array('term'=>$term)
+			);
+
+		} catch (Wolfnet_Exception $e) {
+			echo $this->displayException($e);
+		}
+
+		return $suggestions;
+	}
 
 
     /**
@@ -1396,9 +1498,26 @@ class Wolfnet_Plugin
 
         $args = $this->convertDataType(array_merge($criteria, $vars));
 
-        return $this->views->quickSearchView($args);
+		// If Smartsearch, aggregate data necessary for SS plugin parameters
+		if ($args['smartsearch']) {
 
-    }
+			// Instantiate SmartSearch Service
+			// TODO: fix OO so SmartSearchService can extend Plugin and make data available
+			$smartSearchService = $this->ioc->get(
+				'Wolfnet_Smart_SearchService',
+				array(
+					'key' => $this->getDefaultProductKey(),
+					'url' => $this->url
+				)
+			);
+
+			$args['smartSearchFields'] = json_encode($smartSearchService->getFields());
+			$args['smartSearchFieldMap'] = json_encode($smartSearchService->getFieldMap());
+		}
+
+		return $this->views->quickSearchView($args);
+
+	}
 
 
     /* Misc. Data ******************************************************************************* */
@@ -1492,6 +1611,7 @@ class Wolfnet_Plugin
             'minprice' => 'min_price',
             'zipcode' => 'zip_code',
             'ownertype' => 'owner_type',
+            'maxresults' => 'maxrows',
         );
 
         // Translate aliases to their canonical version and then removed the alias from the array
@@ -1753,6 +1873,59 @@ class Wolfnet_Plugin
     }
 
 
+    public function showAgentFeature()
+    {
+        try {
+            $data = $this->apin->sendRequest(
+                $this->getDefaultProductKey(),
+                '/settings',
+                'GET'
+            );
+        } catch (Wolfnet_Exception $e) {
+            return $this->displayException($e);
+        }
+
+        $leadsEnabled = $data['responseData']['data']['site']['my_agents_leads'];
+
+        return $leadsEnabled;
+    }
+
+
+    public function soldListingsEnabled()
+    {
+        try {
+            $data = $this->apin->sendRequest(
+                $this->getDefaultProductKey(),
+                '/settings',
+                'GET'
+            );
+        } catch(Wolfnet_Exception $e) {
+            return $this->displayException($e);
+        }
+
+        $marketEnabled = $data['responseData']['data']['market']['has_sold_property'];
+        $siteEnabled = $data['responseData']['data']['site']['sold_property_enabled'];
+
+        return ($marketEnabled && $siteEnabled);
+    }
+
+
+    public function getOffices()
+    {
+        try {
+            $data = $this->apin->sendRequest(
+                $this->getDefaultProductKey(),
+                '/office',
+                'GET'
+            );
+        } catch (Wolfnet_Exception $e) {
+            return $this->displayException($e);
+        }
+
+        return $data;
+    }
+
+
     /* PROTECTED METHODS ************************************************************************ */
     /*  ____            _            _           _   __  __      _   _               _            */
     /* |  _ \ _ __ ___ | |_ ___  ___| |_ ___  __| | |  \/  | ___| |_| |__   ___   __| |___        */
@@ -1981,7 +2154,7 @@ class Wolfnet_Plugin
             $listing['bedsbaths_full'] = '';
 
             if (is_numeric($listing['total_bedrooms'])) {
-                $listing['bedsbaths_full'] .= $listing['total_bedrooms'] . ' Bed Rooms';
+                $listing['bedsbaths_full'] .= $listing['total_bedrooms'] . ' Bedrooms';
             }
 
             if (is_numeric($listing['total_bedrooms']) && is_numeric($listing['total_baths'])) {
@@ -1989,7 +2162,7 @@ class Wolfnet_Plugin
             }
 
             if (is_numeric($listing['total_baths'])) {
-                $listing['bedsbaths_full'] .= $listing['total_baths'] . ' Bath Rooms';
+                $listing['bedsbaths_full'] .= $listing['total_baths'] . ' Bathrooms';
             }
 
             $listing['address'] = $listing['display_address'];
@@ -2229,10 +2402,18 @@ class Wolfnet_Plugin
             return $this->getWpError($data);
         }
 
-        $args['map_start_lat'] = $data['responseData']['data']['market']['maptracks']['map_start_lat'];
-        $args['map_start_lng'] = $data['responseData']['data']['market']['maptracks']['map_start_lng'];
-        $args['map_start_scale'] = $data['responseData']['data']['market']['maptracks']['map_start_scale'];
-        $args['houseoverIcon'] = $GLOBALS['wolfnet']->url . 'img/houseover.png';
+
+        $args['mapParams'] = array(
+    		'mapProvider'  => 'mapquest',
+    		'centerLat'    => $data['responseData']['data']['market']['maptracks']['map_start_lat'],
+			'centerLng'    => $data['responseData']['data']['market']['maptracks']['map_start_lng'],
+			'zoomLevel'    => $data['responseData']['data']['market']['maptracks']['map_start_scale'],
+			'houseoverIcon'=> $GLOBALS['wolfnet']->url . 'img/houseover.png',
+			'mapId'        => uniqid('wntMapTrack'),
+			'hideMapId'    => uniqid('hideMap'),
+			'showMapId'    => uniqid('showMap'),
+		);
+
         $args['houseoverData'] = $this->getHouseoverData(
             $listingsData,
             $data['responseData']['data']['resource']['searchResults']['allLayouts']['showBrokerReciprocityLogo']
@@ -2464,14 +2645,6 @@ class Wolfnet_Plugin
                 $this->url . 'js/jquery.imagesloaded.src.js',
                 array('jquery'),
                 ),
-            'mousewheeljs' => array(
-                $this->url . 'js/jquery.mousewheel.src.js',
-                array('jquery'),
-                ),
-            'smooth-div-scroll' => array(
-                $this->url . 'js/jquery.smoothDivScroll-1.2.src.js',
-                array('mousewheeljs', 'jquery-ui-core', 'jquery-ui-widget', 'jquery-effects-core'),
-                ),
             'wolfnet' => array(
                 $this->url . 'js/wolfnet.src.js',
                 array('jquery', 'tooltipjs'),
@@ -2482,7 +2655,7 @@ class Wolfnet_Plugin
                 ),
             'wolfnet-scrolling-items' => array(
                 $this->url . 'js/jquery.wolfnetScrollingItems.src.js',
-                array('smooth-div-scroll', 'wolfnet'),
+                array('wolfnet'),
                 ),
             'wolfnet-quick-search' => array(
                 $this->url . 'js/jquery.wolfnetQuickSearch.src.js',
@@ -2496,10 +2669,6 @@ class Wolfnet_Plugin
                 $this->url . 'js/jquery.wolfnetToolbar.src.js',
                 array('jquery', 'wolfnet'),
                 ),
-            'wolfnet-property-list' => array(
-                $this->url . 'js/jquery.wolfnetPropertyList.src.js',
-                array('jquery', 'wolfnet'),
-                ),
             'wolfnet-shortcode-builder' => array(
                 $this->url . 'js/jquery.wolfnetShortcodeBuilder.src.js',
                 array('jquery-ui-widget', 'jquery-effects-core', 'wolfnet-admin'),
@@ -2510,7 +2679,10 @@ class Wolfnet_Plugin
             'wolfnet-maptracks' => array(
                 $this->url . 'js/jquery.wolfnetMaptracks.src.js',
                 array('jquery', 'migrate', 'mapquest-api'),
-                )
+                ),
+			'wolfnet-smartsearch' => array(
+				$this->url . 'js/jquery.wolfnetSmartsearch.src.js'
+				)
             );
 
         foreach ($scripts as $script => $data) {
@@ -2569,7 +2741,7 @@ class Wolfnet_Plugin
     }
 
 
-    private function decodeCriteria(array &$criteria)
+    protected function decodeCriteria(array &$criteria)
     {
 
         // Decode req parameters vals so they can be cleanly encoded before api req

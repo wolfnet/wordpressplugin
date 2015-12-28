@@ -2,7 +2,7 @@
 
 /**
  * @title         Wolfnet_Views.php
- * @copyright     Copyright (c) 2012, 2013, WolfNet Technologies, LLC
+ * @copyright     Copyright (c) 2012 - 2015, WolfNet Technologies, LLC
  *
  *                This program is free software; you can redistribute it and/or
  *                modify it under the terms of the GNU General Public License
@@ -121,8 +121,7 @@ class Wolfnet_Views
     {
 
         try {
-            $key = (array_key_exists("keyid", $_REQUEST)) ? $_REQUEST["keyid"] : "1";
-            $productKey = $GLOBALS['wolfnet']->getProductKeyById($key);
+            $productKey = $GLOBALS['wolfnet']->getProductKeyById($_SESSION['keyid']);
 
             if (!$GLOBALS['wolfnet']->productKeyIsValid($productKey)) {
                 $out = $this->parseTemplate('invalidProductKey');
@@ -130,7 +129,7 @@ class Wolfnet_Views
                 $out = $this->parseTemplate('adminSearchManager', array(
                     'searchForm' => ($GLOBALS['wolfnet']->smHttp !== null) ? $GLOBALS['wolfnet']->smHttp['body'] : '',
                     'markets' => json_decode($GLOBALS['wolfnet']->getProductKey()),
-                    'selectedKey' => $key,
+                    'selectedKey' => $_SESSION['keyid'],
                     'url' => $GLOBALS['wolfnet']->url,
                 ));
 
@@ -186,17 +185,14 @@ class Wolfnet_Views
 
     public function agentPagesOptionsFormView(array $args = array())
     {
-        $markets = json_decode($GLOBALS['wolfnet']->getProductKey());
+        $offices = $GLOBALS['wolfnet']->getOffices();
+        $offices = $offices['responseData']['data']['office'];
         $keyids = array();
-
-        foreach ($markets as $market) {
-            array_push($keyids, $market->id);
-        }
 
         $defaultArgs = array(
             'instance_id'     => str_replace('.', '', uniqid('wolfnet_agentPages_')),
-            'markets'         => $markets,
-            'keyids'          => $keyids
+            'offices'         => $offices,
+            'keyids'          => $keyids,
         );
 
         $args = array_merge($defaultArgs, $args);
@@ -316,12 +312,33 @@ class Wolfnet_Views
     }
 
 
-    public function agentView(array $args = array()) {
+    public function agentView(array $args = array())
+    {
         foreach ($args as $key => $item) {
             $args[$key] = apply_filters('wolfnet_agentPagesView_' . $key, $item);
         }
 
         return apply_filters('wolfnet_agentPagesView', $this->parseTemplate('agentPagesShowAgent', $args));
+    }
+
+
+    public function agentContact(array $args = array())
+    {
+        foreach ($args as $key => $item) {
+            $args[$key] = apply_filters('wolfnet_agentPagesView_' . $key, $item);
+        }
+
+        return apply_filters('wolfnet_agentPagesView', $this->parseTemplate('agentPagesContactAgent', $args));
+    }
+
+
+    public function officeContact(array $args = array())
+    {
+        foreach ($args as $key => $item) {
+            $args[$key] = apply_filters('wolfnet_agentPagesView_' . $key, $item);
+        }
+
+        return apply_filters('wolfnet_agentPagesView', $this->parseTemplate('agentPagesContactOffice', $args));
     }
 
 
@@ -384,21 +401,37 @@ class Wolfnet_Views
     }
 
 
-    public function quickSearchView(array $args = array())
-    {
-        // array containing possible values for 'view' arg
-        $views = array('basic', 'legacy');
+	public function quickSearchView(array $args = array())
+	{
 
-        //set up a custom css class for the wrapper. default 'wolfnet_quickSearch_legacy'
-        $args['viewclass'] = 'wolfnet_quickSearch_' . (in_array($args['view'], $views) ? $args['view'] : 'legacy');
+		// array containing possible values for 'view' arg
+		$views = array('basic', 'legacy');
 
-        foreach ($args as $key => $item) {
-            $args[$key] = apply_filters('wolfnet_quickSearchView_' . $key, $item);
-        }
+		//set up a custom css class for the wrapper. default 'wolfnet_quickSearch_legacy'
+		$args['viewclass'] = 'wolfnet_quickSearch_' . (in_array($args['view'], $views) ? $args['view'] : 'legacy');
 
-        return apply_filters('wolfnet_quickSearchView', $this->parseTemplate('quickSearch', $args));
+		foreach ($args as $key => $item) {
+			$args[$key] = apply_filters('wolfnet_quickSearchView_' . $key, $item);
+		}
 
-    }
+		if ($args['smartsearch']) {
+
+			$args['smartsearchInput'] = uniqid('wolfnet_smartsearch_');
+
+			return apply_filters(
+				'wolfnet_quickSearchView',
+				$this->parseTemplate('smartSearch', $args)
+			);
+
+		} else {
+
+			return apply_filters(
+				'wolfnet_quickSearchView',
+				$this->parseTemplate('quickSearch', $args)
+			);
+		}
+
+	}
 
 
     public function mapView($listingsData, $productKey = null)
