@@ -389,8 +389,17 @@
 						context: $smartSearch, // Make the context of this request the smart search element.
 						beforeSend: function(){methods.private.showSearchingMessage(this);}
 					})
-					.done(function(data){methods.private.updateSuggestionsList(this, data);})
-					.always(function(data){methods.private.hideSearchingMessage(this);});
+					.done(function(){
+						methods.private.updateSuggestionsList(this, data);
+					})
+					.always(function(data){
+						methods.private.hideSearchingMessage(this);
+					})
+					// TODO: remove fail handler once stable
+					.fail(function(xhr, status, error){
+						console.log("Status: " + status + " Error: " + error);
+						console.log(xhr);
+					});
 
 					// Save any altered state data back to the data object.
 					$smartSearch.data(stateKey, pluginData);
