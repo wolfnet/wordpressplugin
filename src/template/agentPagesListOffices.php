@@ -70,13 +70,13 @@ foreach($offices as $office) {
 
 	<div class="wolfnet_officePreview">
 		<?php 
-		if(strlen($office['photo_url']) > 0) {
 			echo '<div class="wolfnet_officeImage">';
-			echo '<a href="' . $officeLink . '">';
-			echo "<img src=\"{$office['photo_url']}\" />";
-			echo '</a>';
-			echo '</div>';
-		} 
+			if(strlen($office['photo_url']) > 0) {
+				echo '<a href="' . $officeLink . '">';
+				echo "<img src=\"{$office['photo_url']}\" />";
+				echo '</a>';
+			}
+			echo '</div>'; 
 		?>
 
 		<div class="wolfnet_officeContact">
