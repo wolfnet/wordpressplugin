@@ -131,13 +131,13 @@ foreach($agents as $agent) {
 
 	<div class="wolfnet_agentPreview">
 		<?php 
-		if(strlen($agent['thumbnail_url']) > 0) {
 			echo '<div class="wolfnet_agentImage">';
-			echo '<a href="' . $agentLink . '">';
-			echo "<img src=\"{$agent['thumbnail_url']}\" />";
-			echo '</a>';
+			if(strlen($agent['thumbnail_url']) > 0) {
+				echo '<a href="' . $agentLink . '">';
+				echo "<img src=\"{$agent['thumbnail_url']}\" />";
+				echo '</a>';
+			}
 			echo '</div>';
-		} 
 		?>
 
 		<div class="wolfnet_agentInfo">

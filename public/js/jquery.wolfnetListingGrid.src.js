@@ -38,7 +38,8 @@ if (typeof jQuery != 'undefined') {
             appendClearfix: true,
             clearfixClass: 'clearfix',
             minColumnGap: 5,
-            minRowGap: 20
+            minRowGap: 20,
+            gridAlign: 'center'
         };
 
         var getGridItems = function(target)
@@ -92,6 +93,7 @@ if (typeof jQuery != 'undefined') {
             var minColumnWidth = data.itemWidth;
             var columnWidth = minColumnWidth;
             var columns = Math.floor(targetWidth / (columnWidth + data.option.minColumnGap));
+            var gridAlign = data.option.gridAlign;
 
             if (columns > $items.length) {
                 columns = $items.length;
@@ -103,7 +105,11 @@ if (typeof jQuery != 'undefined') {
 
             // console.log(targetWidth, columnWidth, columns, remainingPixels, margin, extraMargin);
 
-            $items.css('marginLeft', margin);
+            if(gridAlign == 'center') {
+                $items.css('marginLeft', margin);
+            } else {
+                $items.css('marginRight', 15);
+            }
             // data.$container.css('paddingRight', margin + extraMargin);
 
             data.$container.trigger('columns-updated.' + pluginName);
