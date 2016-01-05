@@ -629,9 +629,15 @@ class Wolfnet_Ajax
 	{
 		try {
 
-			$response = $GLOBALS['wolfnet']->getSuggestions(
-				$_REQUEST['data']['term']
-			);
+			// Retrieve user's search term from request
+			$term = $_REQUEST['data']['term'];
+
+			// TODO: Check for field in request and set if it exists
+
+			$response = $GLOBALS['wolfnet']->getSuggestions($term);
+
+			// TODO: Callback function, JSON/JSONP
+
 
 		} catch (Wolfnet_Exception $e) {
 
