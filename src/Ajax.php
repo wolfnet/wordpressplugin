@@ -631,13 +631,11 @@ class Wolfnet_Ajax
 
 			// Retrieve user's search term from request
 			$term = $_REQUEST['data']['term'];
+			$isCallback = isset($_REQUEST['callback']);
 
 			// TODO: Check for field in request and set if it exists
 
 			$response = $GLOBALS['wolfnet']->getSuggestions($term);
-
-			// TODO: Callback function, JSON/JSONP
-
 
 		} catch (Wolfnet_Exception $e) {
 
@@ -649,7 +647,13 @@ class Wolfnet_Ajax
 
 		}
 
-		wp_send_json($response);
+		if ($isCallback) {
+			// TODO: Send JSONP here
+			wp_send_json($response);
+		} else {
+			wp_send_json($response);
+		}
+
 	}
 
 }

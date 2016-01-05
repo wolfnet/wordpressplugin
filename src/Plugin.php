@@ -1447,6 +1447,8 @@ class Wolfnet_Plugin
 	{
 		try {
 
+			$suggestionsObject = array();
+
 			$response = $this->apin->sendRequest(
 				$this->getDefaultProductKey(),
 				'/search_criteria/suggestion',
@@ -1454,7 +1456,12 @@ class Wolfnet_Plugin
 				array('term'=>$term)
 			);
 
-			$suggestions = $this->buildSuggestionsJson($response['responseData']['data']);
+			$suggestions = $response['responseData']['data'];
+
+			//$suggestions = $this->buildSuggestions($response['responseData']['data']);
+			foreach ($suggestions as &$suggestion) {
+				array_push(&$suggestionsObject,$suggestion);
+			}
 
 		} catch (Wolfnet_Exception $e) {
 			throw new Exception(displayException($e));
@@ -2141,18 +2148,6 @@ class Wolfnet_Plugin
         }
 
     }
-
-
-	private function buildSuggestionsJson($suggestions)
-	{
-		$suggestionsJson = array();
-		foreach ($suggestions as &$suggestion) {
-			array_push(&$suggestionsJson,$suggestion);
-		}
-
-		return json_encode($suggestionsJson);
-
-	}
 
 
     /**
