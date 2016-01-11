@@ -52,9 +52,15 @@
             </div>
         </div>
         <span class="wolfnet_locationInfo" title="<?php echo htmlspecialchars($listing['address']); ?>">
-            <span class="wolfnet_address"><?php echo $listing['display_address']; ?></span>
-            <span class="wolfnet_location" itemprop="locality"><?php echo $listing['location']; ?></span>
-            <span class="wolfnet_full_address" itemprop="street-address" style="display:none;"><?php echo $listing['address']; ?></span>
+            <span class="wolfnet_address">
+                <?php echo $listing['display_address']; ?>
+            </span>
+            <span class="wolfnet_location" itemprop="locality">
+                <?php echo $listing['location']; ?>
+            </span>
+            <span class="wolfnet_full_address" itemprop="street-address" style="display: none;">
+                <?php echo $listing['address']; ?>
+            </span>
         </span>
         <div class="wolfnet_branding">
             <?php if (trim($listing['branding']['logo']) !== '') { ?>
@@ -64,22 +70,34 @@
             <?php } ?>
             <span class="wolfnet_brandingMessage">
                 <?php if (trim($listing['branding']['courtesy_text']) !== '') { ?>
-                    <span class="wolfnet_brandingCourtesyText"><?php echo $listing['branding']['courtesy_text']; ?></span>
+                    <span class="wolfnet_brandingCourtesyText">
+                        <?php echo $listing['branding']['courtesy_text']; ?>
+                    </span>
                 <?php } ?>
                 <?php if (trim($listing['branding']['agent_name']) !== '') { ?>
-                    <span class="wolfnet_brandingAgent wolfnet_brandingAgentName"><?php echo $listing['branding']['agent_name']; ?></span>
+                    <span class="wolfnet_brandingAgent wolfnet_brandingAgentName">
+                        <?php echo $listing['branding']['agent_name']; ?>
+                    </span>
                 <?php } ?>
                 <?php if (trim($listing['branding']['agent_phone']) !== '') { ?>
-                    <span class="wolfnet_brandingAgent wolfnet_brandingAgentPhone"><?php echo $listing['branding']['agent_phone']; ?></span>
+                    <span class="wolfnet_brandingAgent wolfnet_brandingAgentPhone">
+                        <?php echo $listing['branding']['agent_phone']; ?>
+                    </span>
                 <?php } ?>
                 <?php if (trim($listing['branding']['office_name']) !== '') { ?>
-                    <span class="wolfnet_brandingOffice wolfnet_brandingOfficeName"><?php echo $listing['branding']['office_name']; ?></span>
+                    <span class="wolfnet_brandingOffice wolfnet_brandingOfficeName">
+                        <?php echo $listing['branding']['office_name']; ?>
+                    </span>
                 <?php } ?>
                 <?php if (trim($listing['branding']['office_phone']) !== '') { ?>
-                    <span class="wolfnet_brandingOffice wolfnet_brandingOfficePhone"><?php echo $listing['branding']['office_phone']; ?></span>
+                    <span class="wolfnet_brandingOffice wolfnet_brandingOfficePhone">
+                        <?php echo $listing['branding']['office_phone']; ?>
+                    </span>
                 <?php } ?>
                 <?php if (trim($listing['branding']['toll_free_phone']) !== '') { ?>
-                    <span class="wolfnet_brandingTollFreePhone"><?php echo $listing['branding']['toll_free_phone']; ?></span>
+                    <span class="wolfnet_brandingTollFreePhone">
+                        <?php echo $listing['branding']['toll_free_phone']; ?>
+                    </span>
                 <?php } ?>
             </span>
         </div>
