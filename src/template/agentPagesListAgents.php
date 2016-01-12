@@ -170,9 +170,12 @@ foreach($agents as $agent) {
 					echo '</div>';
 				}
 
-				if(strlen($agent['fax_number']) > 0) {
-					echo '<div class="wolfnet_agentFax">';
-					echo "Fax: " . $agent['fax_number'];
+				if(strlen($agent['email_address']) > 0) {
+					echo '<div class="wolfnet_agentOfficeEmail">';
+					echo '<strong>Email:</strong> <a href="?contact=' 
+						. $agent['agent_id'] . '#post-' . get_the_id() . '">' 
+						. $agent['first_name'] . ' ' 
+						. $agent['last_name'] . '</a>';
 					echo '</div>';
 				}
 				?>

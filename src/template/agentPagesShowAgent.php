@@ -94,15 +94,26 @@ if($agent['display_agent']) {
 				echo $agent['business_name'];
 				echo '</div>';
 			}
+
+			if(strlen($agent['address_1']) > 0) {
+				echo '<div class="wolfnet_agentAddress">';
+				echo $agent['address_1'] . ' ' . $agent['address_2'];
+				echo '<br />';
+				if(strlen($agent['city']) > 0) {
+					echo $agent['city'] . ', ';
+				}
+				echo $agent['state'] . ' ' . $agent['zip_code'];
+				echo '</div>';
+			}
 			?>
 
 			<div class="wolfnet_agentContact">
 				<?php 
 				$agentContact = array(
 					'office_phone_number' => 'Office',
-					'primary_contact_phone' => 'Primary Phone',
-					'mobile_phone' => 'Mobile Phone',
-					'home_phone_number' => 'Home Phone',
+					'primary_contact_phone' => 'Primary',
+					'mobile_phone' => 'Mobile',
+					'home_phone_number' => 'Home',
 					'fax_number' => 'Fax',
 					'pager_number' => 'Pager',
 					'toll_free_phone_number' => 'Toll Free',
