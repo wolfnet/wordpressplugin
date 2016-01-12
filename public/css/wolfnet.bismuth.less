@@ -1,0 +1,211 @@
+/**
+ * CSS Document
+ *
+ * @package       css
+ * @title         wolfnet.bismuth.less
+ * @copyright     Copyright (c) 2016 WolfNet Technologies, LLC
+ *
+ *                This program is free software; you can redistribute it and/or
+ *                modify it under the terms of the GNU General Public License
+ *                as published by the Free Software Foundation; either version 2
+ *                of the License, or (at your option) any later version.
+ *
+ *                This program is distributed in the hope that it will be useful,
+ *                but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *                MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *                GNU General Public License for more details.
+ *
+ *                You should have received a copy of the GNU General Public License
+ *                along with this program; if not, write to the Free Software
+ *                Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ *
+ */
+
+@import 'public/css/wolfnet';
+
+
+//
+// Variables
+// -------------------------------------------- //
+
+
+//== Listing dimensions
+
+@listingWidth:          312px;
+@listingHeight:         312px;
+@listingPadding:        20px;
+@listingImgWidth:       (@listingWidth - (@listingPadding * 2));
+@listingImgHeight:      200px;
+@brandingWidth:         100px;
+@listingLocationWidth:  (@listingImgWidth - @brandingWidth);
+
+
+//== Colors
+
+@gray-darker:           lighten(#000, 13.5%); // #222
+@gray-dark:             lighten(#000, 20%);   // #333
+@gray:                  lighten(#000, 33.5%); // #555
+@gray-light:            lighten(#000, 60%);   // #999
+@gray-lighter:          lighten(#000, 93.5%); // #eee
+
+@quickSearchGrad1:      #FFFFFF;
+@quickSearchGrad2:      #E2E2E2;
+
+
+//
+// Styles
+// -------------------------------------------- //
+
+
+.wolfnet_widget {
+
+    &.wolfnet_featuredListings,
+    &.wolfnet_listingGrid {
+
+        font-family: 'Roboto', sans-serif;
+        font-size: 16px;
+        line-height: 1.5em;
+
+        .wolfnet_listing {
+            height:     @listingHeight;
+            margin:     0 0 0 0;
+            padding:    0 0 0 0;
+            color:      @gray-dark;
+
+            .wolfnet_info_separator:after {
+                content: '/';
+            }
+
+            .wolfnet_listingMain {
+                background-image: url('@{imagesDir}/hrgreytall.png') !important;
+                background-position: right center !important;
+                background-repeat: no-repeat !important;
+            }
+
+            .wolfnet_listingHead {
+                position:   relative;
+                width:      @listingImgWidth;
+                height:     @listingImgHeight;
+                min-height: @listingImgHeight;
+                margin:     0 @listingPadding 5px @listingPadding;
+                padding:    0 0 0 0;
+                text-align: left;
+                color:      #fff;
+                border:     1px solid @gray-lighter;
+                background-repeat:   no-repeat;
+                background-position: center;
+                background-size:     cover;
+
+                img {
+                    display:   none;
+                    height:    auto;
+                    border:    1px solid @gray-lighter;
+                }
+
+                .wolfnet_listingInfo {
+                    position: absolute;
+                    bottom: 0;
+                    padding: 0 0 0.3em 0.5em;
+                    width: 100%;
+                    text-align: left !important;
+                    text-shadow: 0 0 5px #000;
+                    .gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.5));
+                }
+
+            }
+
+            .wolfnet_price {
+                display: inline !important;
+                text-align: left !important;
+                font-size: 1.5em;
+                font-weight: bold;
+            }
+
+            .wolfnet_bed_bath {
+                display: inline !important;
+                font-size: 1em;
+                font-style: normal;
+                text-align: left !important;
+                line-height: inherit;
+                margin-bottom: inherit;
+                position: relative;
+                right: inherit;
+                top: 0;
+                left: 0;
+
+                .wolfnet_label {
+                    display: none;
+                }
+
+                .wolfnet_beds {
+                    display: inline-block;
+                    margin-right: inherit;
+
+                    &:before {
+                        content: none;
+                    }
+
+                    &:after {
+                        content: ' Beds';
+                    }
+
+                }
+
+                .wolfnet_baths {
+                    display: inline-block;
+
+                    &:before {
+                        content: none;
+                    }
+
+                    &:after {
+                        content: ' Baths';
+                    }
+
+                }
+
+            }
+
+            .wolfnet_location,
+            .wolfnet_address {
+                display: block;
+                line-height: 1.3em;
+            }
+
+            .wolfnet_locationInfo {
+                margin: 0 @listingPadding 0 @listingPadding;
+                float: left;
+
+                span {
+                    text-align: left !important;
+                    max-width: @listingLocationWidth;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                }
+            }
+
+            .wolfnet_branding {
+                float: right;
+                max-width: @brandingWidth;
+                margin-right: @listingPadding;
+
+                .wolfnet_brokerLogo img {
+                    max-height: 35px;
+                }
+
+            }
+
+        }
+
+    }
+
+
+    &.wolfnet_featuredListings .wolfnet_listing {
+        margin: 0 0 10px 0;
+    }
+
+    &.wolfnet_listingGrid .wolfnet_listing .wolfnet_branding {
+        font-size: 1em;
+    }
+
+}
