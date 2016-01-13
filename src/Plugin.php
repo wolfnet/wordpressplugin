@@ -272,8 +272,8 @@ class Wolfnet_Plugin
 
     public function wolfnetActivation()
     {
-        // Check that key structure is formatted correctly and that the key 
-        // label gets set if it was not already. If there's no preexisting key, 
+        // Check that key structure is formatted correctly and that the key
+        // label gets set if it was not already. If there's no preexisting key,
         // ignore this.
         $keyArray = json_decode($this->getProductKey());
         if(count($keyArray) == 1 && $keyArray[0]->key != false) {
@@ -1325,7 +1325,7 @@ class Wolfnet_Plugin
     }
 
 
-    public function remoteRouteQuickSearch() 
+    public function remoteRouteQuickSearch()
     {
         try {
             $response = $this->routeQuickSearch($_REQUEST['formData']);
@@ -1719,7 +1719,7 @@ class Wolfnet_Plugin
     }
 
 
-    public function routeQuickSearch($formData) 
+    public function routeQuickSearch($formData)
     {
         /*
          * Loop over each key and get the number of matching listings for each.
@@ -1734,8 +1734,8 @@ class Wolfnet_Plugin
                 $key = $this->getProductKeyById($keyID);
 
                 $listings = $this->apin->sendRequest(
-                    $key, 
-                    '/listing?detaillevel=1&startrow=1&maxrows=1', 
+                    $key,
+                    '/listing?detaillevel=1&startrow=1&maxrows=1',
                     'GET',
                     $formData
                 );
@@ -1754,14 +1754,14 @@ class Wolfnet_Plugin
          * Route to the site associated with key determined above.
         */
         $baseUrl = $this->getBaseUrl($highestMatchKey);
-        
+
         $redirect = $baseUrl . "?";
         foreach($formData as $key => $param) {
             $redirect .= $key . "=" . $param . "&";
         }
-        
+
         return $redirect;
-    } 
+    }
 
 
     /**
