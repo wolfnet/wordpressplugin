@@ -89,6 +89,12 @@ if(!function_exists('paginate')) {
 	}
 	?>
 
+	<?php
+	if($showoffices && array_key_exists("REDIRECT_URL", $_SERVER)) {
+		echo '<a href="' . $linkBase . '#post-' . get_the_id() . '">Back</a> to offices.';
+	}
+	?>
+
 	<div class="wolfnet_viewAll">
 		<a href="?search&agentCriteria=#post-<?php echo get_the_id(); ?>">Click here</a> to view all agents and staff.
 	</div>

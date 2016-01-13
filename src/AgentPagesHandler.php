@@ -224,6 +224,7 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
         $args = array(
             'agent' => $agentData,
             'agentId' => $_REQUEST['contact'],
+            'officeId' => $_REQUEST['officeId'],
         );
         $args = array_merge($args, $this->args);
 

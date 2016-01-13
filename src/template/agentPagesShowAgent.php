@@ -43,16 +43,16 @@ if(strlen($detailtitle) > 0) {
 	echo '<h2>' . $detailtitle . '</h2>';
 }
 
-if(array_key_exists('HTTP_REFERER', $_SERVER)) {
-		$link = $_SERVER['HTTP_REFERER'];
-		if(array_key_exists('agentCriteria', $_REQUEST) && strlen($_REQUEST['agentCriteria']) > 0) {
-			$link .= '&agentCriteria=' . $_REQUEST['agentCriteria'];
-		}
-		if($officeId != '' && strpos($link, 'officeId') === false) {
-			$link .= '&officeId=' . $officeId;
-		}
-		$link .= '#post-' . get_the_id();
-		echo '<div class="wolfnet_back"><a href="' . $link . '">Back</a></div>';
+if(array_key_exists('REDIRECT_URL', $_SERVER) && $officeId != '') {
+	$link = $_SERVER['REDIRECT_URL'] . "?";
+	if(array_key_exists('agentCriteria', $_REQUEST) && strlen($_REQUEST['agentCriteria']) > 0) {
+		$link .= 'agentCriteria=' . $_REQUEST['agentCriteria'] . '&';
+	}
+	if($officeId != '' && strpos($link, 'officeId') === false) {
+		$link .= 'officeId=' . $officeId;
+	}
+	$link .= '#post-' . get_the_id();
+	echo '<div class="wolfnet_back"><a href="' . $link . '">Back</a></div>';
 } else {
 ?>
 
@@ -130,7 +130,9 @@ if($agent['display_agent']) {
 				if(strlen($agent['email_address']) > 0) {
 					echo '<div class="wolfnet_agentOfficeEmail">';
 					echo '<strong>Email:</strong> <a href="?contact=' 
-						. $agent['agent_id'] . '#post-' . get_the_id() . '">' 
+						. $agent['agent_id']
+						. '&officeId=' . $officeId
+						. '#post-' . get_the_id() . '">' 
 						. $agent['first_name'] . ' ' 
 						. $agent['last_name'] . '</a>';
 					echo '</div>';
