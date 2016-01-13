@@ -73,6 +73,17 @@ class Test_Wolfnet_Views extends WP_UnitTestCase
     }
 
 
+    function  testAmStylePage(){
+
+        ob_start();
+        $this->wolfnet->views->amStylePage();
+        $html = ob_get_clean();
+
+        $this->assertRegExp($this->wnt_html_regex, $html, $this->wnt_html_msg);
+
+    }
+
+
     function  testAmEditCssPage(){
 
         ob_start();
