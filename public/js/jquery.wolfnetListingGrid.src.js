@@ -103,10 +103,10 @@ if (typeof jQuery != 'undefined') {
 
             $items.css({
                 'padding-left': columns === 1 ? 0 : Math.floor(margin / 2),
-                'margin-left': columns === 1 ? Math.floor(margin) : 0,
+                'margin-left': columns === 1 ? Math.floor(margin) : 0
             });
             $items.find('.wolfnet_listingMain').css({
-                'padding-right': columns === 1 ? 0 : Math.floor(margin / 2),
+                'padding-right': columns === 1 ? 0 : Math.floor(margin / 2)
             });
 
             for (var i=0, l=$items.length; i<l; i++) {
