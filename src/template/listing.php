@@ -55,17 +55,17 @@
                 </div>
             </div>
         </div>
-        <span class="wolfnet_locationInfo" title="<?php echo htmlspecialchars($listing['address']); ?>">
-            <span class="wolfnet_address">
+        <div class="wolfnet_locationInfo" title="<?php echo htmlspecialchars($listing['address']); ?>">
+            <div class="wolfnet_address">
                 <?php echo $listing['display_address']; ?>
-            </span>
-            <span class="wolfnet_location" itemprop="locality">
+            </div>
+            <div class="wolfnet_location" itemprop="locality">
                 <?php echo $listing['location']; ?>
-            </span>
-            <span class="wolfnet_full_address" itemprop="street-address" style="display: none;">
+            </div>
+            <div class="wolfnet_full_address" itemprop="street-address" style="display: none;">
                 <?php echo $listing['address']; ?>
-            </span>
-        </span>
+            </div>
+        </div>
         <div class="wolfnet_branding">
             <?php if (trim($listing['branding']['logo']) !== '') { ?>
                 <span class="wolfnet_brokerLogo<?php echo ($listing['branding']['type']=='idx') ? ' wolfnet_idxLogo' : ''; ?>">
