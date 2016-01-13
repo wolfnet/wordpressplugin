@@ -3,13 +3,13 @@
  * Unit tests for the Wolfnet_Views functions WolfNet IDX for WordPress plugin
  */
 
-class Test_Wolfnet_Views extends WP_UnitTestCase 
+class Test_Wolfnet_Views extends WP_UnitTestCase
 {
 
     /**
-     * Performs WordPress setup and pre test cleanup. add to this method as needed. 
+     * Performs WordPress setup and pre test cleanup. add to this method as needed.
      */
-    function setUp() 
+    function setUp()
     {
         parent::setUp();
         $GLOBALS['wp_tests_options'] = array(
@@ -29,8 +29,8 @@ class Test_Wolfnet_Views extends WP_UnitTestCase
         // $key = $this->wolfnet->setJsonProductKey($GLOBALS['wnt_tests_options']['api_key_good1']);
         // $option = $wolfnet_productKey->wolfnet->productKeyOptionKey;
         // update_option($key);
-         
-        // set a product key in the wordpress setting. 
+
+        // set a product key in the wordpress setting.
         // there is a test for this in test-wolfnet.php
         $this->wolfnet_reflection = new ReflectionClass("wolfnet");
         $method = $this->wolfnet_reflection->getMethod("setJsonProductKey");
@@ -41,17 +41,17 @@ class Test_Wolfnet_Views extends WP_UnitTestCase
         $key_json = $method->invoke( $this->wolfnet, $GLOBALS['wnt_tests_options']['api_key_good1'] );
         update_option( $key, $key_json );
 
-        // this will match any <tag>. 
+        // this will match any <tag>.
         $this->wnt_html_regex = '/<[^>]*>/';
         $this->wnt_html_msg = "Method returned nothing that looks like an HTML tag";
 
     }
 
-    
+
     /**
      * Cleans up after tests, removing any options, posts, etc. we may have added as part of a test.
      */
-    function tearDown() 
+    function tearDown()
     {
         parent::tearDown();
     }
@@ -74,11 +74,11 @@ class Test_Wolfnet_Views extends WP_UnitTestCase
 
 
     function  testAmEditCssPage(){
-            
+
         ob_start();
         $this->wolfnet->views->amEditCssPage();
         $html = ob_get_clean();
-        
+
         $this->assertRegExp($this->wnt_html_regex, $html, $this->wnt_html_msg);
 
     }
@@ -89,7 +89,7 @@ class Test_Wolfnet_Views extends WP_UnitTestCase
         ob_start();
         $this->wolfnet->views->amSearchManagerPage();
         $html = ob_get_clean();
-        
+
         $this->assertRegExp($this->wnt_html_regex, $html, $this->wnt_html_msg);
 
     }
@@ -100,7 +100,7 @@ class Test_Wolfnet_Views extends WP_UnitTestCase
         ob_start();
         $this->wolfnet->views->amSearchManagerPage();
         $html = ob_get_clean();
-        
+
         $this->assertRegExp($this->wnt_html_regex, $html, $this->wnt_html_msg);
 
     }
@@ -109,7 +109,7 @@ class Test_Wolfnet_Views extends WP_UnitTestCase
 
         $args = $this->wolfnet->getFeaturedListingsOptions();
         $html = $this->wolfnet->views->featuredListingsOptionsFormView($args);
-        
+
         $this->assertRegExp($this->wnt_html_regex, $html, $this->wnt_html_msg);
 
     }
@@ -118,28 +118,28 @@ class Test_Wolfnet_Views extends WP_UnitTestCase
     function  testListingGridOptionsFormView(){
         $args = $this->wolfnet->getListingGridOptions();
         $html = $this->wolfnet->views->listingGridOptionsFormView( $args );
-        
+
         $this->assertRegExp($this->wnt_html_regex, $html, $this->wnt_html_msg);
 
     }
 
    function  testFeaturedListingView(){
 
-        // This view is tested indirectly though because of all the setup that happens in 
+        // This view is tested indirectly though because of all the setup that happens in
         // wolfnet->featuredListings
 
         // $html = $this->wolfnet->views->featuredListingView();
         $defaultAttributes = $this->wolfnet->getFeaturedListingsDefaults();
-        
+
         $html = $this->wolfnet->featuredListings($defaultAttributes);
         $this->assertRegExp($this->wnt_html_regex, $html, $this->wnt_html_msg);
 
     }
 
-    
+
     function  testPropertyListView(){
 
-        // This view is tested indirectly because of all the setup that happens in 
+        // This view is tested indirectly because of all the setup that happens in
         // wolfnet->propertyList
 
         $criteria = $this->wolfnet->getPropertyListDefaults();
@@ -151,7 +151,7 @@ class Test_Wolfnet_Views extends WP_UnitTestCase
 
     function  testListingGridView(){
 
-        // This view is tested indirectly though because of all the setup that happens in 
+        // This view is tested indirectly though because of all the setup that happens in
         // wolfnet->listingGrid
 
         $defaultAttributes = $this->wolfnet->getListingGridDefaults();
