@@ -46,6 +46,13 @@ class Wolfnet_Plugin
     public $optionGroup = 'wolfnet';
 
     /**
+     * This property is used to set the option group for the Appearance page. It creates a namespaced
+     * collection of variables which are used in saving page settings.
+     * @var string
+     */
+    public $StyleOptionGroup = 'wolfnetStyle';
+
+    /**
      * This property is used to set the option group for the Edit Css page. It creates a namespaced
      * collection of variables which are used in saving page settings.
      * @var string
@@ -65,6 +72,12 @@ class Wolfnet_Plugin
      * @var string
      */
     protected $productKeyOptionKey = 'wolfnet_productKey';
+
+    /**
+     * This property is used to identify which widget theme to use.
+     * @var string
+     */
+    public $widgetThemeOptionKey = 'wolfnet_widgetTheme';
 
     /**
      * This property contains the public CSS as defined in the Edit CSS page.

@@ -96,6 +96,26 @@ class Wolfnet_Views
     }
 
 
+    public function amStylePage()
+    {
+
+        try {
+            $out = $this->parseTemplate('adminStyle', array(
+                'formHeader' => $this->styleFormHeaders(),
+                'widgetTheme' => $this->getWidgetTheme(),
+            ));
+
+        } catch (Wolfnet_Exception $e) {
+            $out = $this->exceptionView($e);
+        }
+
+        echo $out;
+
+        return $out;
+
+    }
+
+
     public function amEditCssPage()
     {
 
@@ -168,6 +188,12 @@ class Wolfnet_Views
     public function getPublicCss()
     {
         return get_option(trim($GLOBALS['wolfnet']->publicCssOptionKey));
+    }
+
+
+    public function getWidgetTheme()
+    {
+        return get_option(trim($GLOBALS['wolfnet']->widgetThemeOptionKey));
     }
 
 
@@ -409,6 +435,17 @@ class Wolfnet_Views
         ob_start();
 
         include $this->templateDir . '/' . $template . '.php';
+
+        return trim(ob_get_clean());
+
+    }
+
+
+    private function styleFormHeaders()
+    {
+        ob_start();
+
+        settings_fields($GLOBALS['wolfnet']->StyleOptionGroup);
 
         return trim(ob_get_clean());
 
