@@ -395,8 +395,8 @@
 					.always(function(data){
 						methods.private.hideSearchingMessage(this);
 					})
-					// TODO: remove fail handler once stable
 					.fail(function(xhr, status, error){
+						// TODO: remove fail debug when finished
 						console.log("Status: " + status + " Error: " + error);
 						console.log(xhr);
 					});
