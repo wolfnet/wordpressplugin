@@ -26,48 +26,14 @@
 // Variables
 // -------------------------------------------- //
 
-
-//== Paths
-
-@imagesDir:             '../img/';
-
-
-//== Listing dimensions
-
-@listingWidth:          150px;
-@listingHeight:         185px;
-@listingPadding:        20px;
-@listingImgWidth:       100%;
-@listingImgHeight:      95px;
-@brandingWidth:         100px;
-
-
-//== Colors
-
-@quickSearchGrad1:      #FFFFFF;
-@quickSearchGrad2:      #E2E2E2;
+@import 'public/css/_variables.inc';
 
 
 //
 // Mixins
 // -------------------------------------------- //
 
-
-//== Vertical Gradient
-
-.gradient(@startColor, @endColor) {
-    @startARGB: argb(@startColor);
-    @endARGB:   argb(@endColor);
-    /* FF3.6-15 */
-    background: -moz-linear-gradient(top, @startColor 0%, @endColor 100%);
-    /* Chrome10-25,Safari5.1-6 */
-    background: -webkit-linear-gradient(top, @startColor 0%, @endColor 100%);
-    /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-    background: linear-gradient(to bottom, @startColor 0%, @endColor 100%);
-    /* IE6-9 */
-    -ms-filter: ~"progid:DXImageTransform.Microsoft.gradient(startColorstr='@{startARGB}', endColorstr='@{endARGB}', GradientType=0)";
-    filter: ~"progid:DXImageTransform.Microsoft.gradient(startColorstr='@{startARGB}', endColorstr='@{endARGB}', GradientType=0)";
-}
+@import 'public/css/_mixins.inc';
 
 
 //
