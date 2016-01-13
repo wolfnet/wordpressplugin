@@ -33,7 +33,7 @@
 //== Listing dimensions
 
 @listingWidth:          312px;
-@listingHeight:         312px;
+@listingHeight:         auto;
 @listingPadding:        20px;
 @listingImgWidth:       (@listingWidth - (@listingPadding * 2));
 @listingImgHeight:      200px;
@@ -92,15 +92,21 @@
                 padding:    0 0 0 0;
                 text-align: left;
                 color:      #fff;
-                border:     1px solid @gray-lighter;
+                border:     none;
                 background-repeat:   no-repeat;
                 background-position: center;
                 background-size:     cover;
 
-                img {
-                    display:   none;
-                    height:    auto;
-                    border:    1px solid @gray-lighter;
+                .wolfnet_listingImage {
+                    border: none;
+                    padding: 0 0 0 0;
+                    max-height: 100%;
+
+                    img {
+                        height:    auto;
+                        border:    none;
+                    }
+
                 }
 
                 .wolfnet_listingInfo {
