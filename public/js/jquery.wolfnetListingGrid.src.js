@@ -91,15 +91,16 @@ if (typeof jQuery != 'undefined') {
             var targetWidth = data.$container.innerWidth();
             var minColumnWidth = data.itemWidth;
             var columnWidth = minColumnWidth;
-            var columns = Math.floor(targetWidth / (columnWidth + data.option.minColumnGap));
+            var columns = Math.max(Math.floor(targetWidth / (columnWidth + data.option.minColumnGap)), 1);
 
             if (columns > $items.length) {
                 columns = $items.length;
             }
 
             var remainingPixels = targetWidth - (columnWidth * columns);
-            var rawMargin = remainingPixels / (columns + 1);
-            var margin = Math.floor(rawMargin);
+            var margin = remainingPixels / (columns + 1);
+
+            console.log('targetWidth: ' + targetWidth, 'columnWidth: ' + columnWidth, 'columns: ' + columns, 'remainingPixels: ' + remainingPixels, 'margin: ' + margin, 'rounded margin: ' + Math.floor(margin), '1/2 margin: ' + Math.floor(margin/2));
 
             $items.css({
                 'padding-left': columns === 1 ? 0 : Math.floor(margin / 2),
@@ -209,7 +210,7 @@ if (typeof jQuery != 'undefined') {
                 });
 
                 // Initialized the plugin for each element that was selected.
-                return this.each(function(){
+                this.each(function(){
 
                     var target = this;
                     var $target = $(target);
@@ -252,6 +253,12 @@ if (typeof jQuery != 'undefined') {
                     monitorImages(target);
 
                 }); /* END: for each loop of elements the plugin has been applied to. */
+
+                setTimeout(function () {
+                    methods.refresh.call(plugin, false);
+                }, 100);
+
+                return this;
 
             },
 

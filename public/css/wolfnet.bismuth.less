@@ -111,9 +111,6 @@
 
             .wolfnet_listingHead {
                 position:   relative;
-                width:      @listingImgWidth;
-                height:     @listingImgHeight;
-                min-height: @listingImgHeight;
                 margin:     0 @listingPadding 5px @listingPadding;
                 padding:    0 0 0 0;
                 text-align: left;
@@ -140,6 +137,8 @@
                     bottom: 0;
                     padding: 0 0 0.3em 0.5em;
                     width: 100%;
+                    min-height: 24px;
+                    line-height: 1.25em;
                     text-align: left !important;
                     text-shadow: 0 0 5px #000;
                     .gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.5));
@@ -160,6 +159,7 @@
                 font-style: normal;
                 text-align: left !important;
                 line-height: inherit;
+                white-space: nowrap;
                 margin-bottom: inherit;
                 position: relative;
                 right: inherit;
