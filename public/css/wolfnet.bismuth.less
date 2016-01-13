@@ -47,7 +47,7 @@
 @gray-dark:             lighten(#000, 20%);   // #333
 @gray:                  lighten(#000, 33.5%); // #555
 @gray-light:            lighten(#000, 60%);   // #999
-@gray-lighter:          lighten(#000, 93.5%); // #eee
+@gray-lighter:          lighten(#000, 80%);   // #ccc
 
 @quickSearchGrad1:      #FFFFFF;
 @quickSearchGrad2:      #E2E2E2;
@@ -78,9 +78,35 @@
             }
 
             .wolfnet_listingMain {
-                background-image: url('@{imagesDir}/hrgreytall.png') !important;
-                background-position: right center !important;
-                background-repeat: no-repeat !important;
+                background: none !important;
+                border-width: 0 1px 0 0;
+                border-style: solid;
+                border-color: transparent;
+                -moz-border-image: -moz-linear-gradient(
+                    top,
+                    transparent,
+                    transparent,
+                    @gray-lighter,
+                    transparent,
+                    transparent
+                );
+                -webkit-border-image: -webkit-gradient(
+                    linear, left top, left bottom,
+                    from(transparent),
+                    color-stop(25%, transparent),
+                    color-stop(50%, @gray-lighter),
+                    color-stop(75%, transparent),
+                    to(transparent)
+                );
+                border-image: linear-gradient(
+                    to bottom,
+                    transparent,
+                    transparent,
+                    @gray-lighter,
+                    transparent,
+                    transparent
+                );
+                border-image-slice: 1;
             }
 
             .wolfnet_listingHead {
