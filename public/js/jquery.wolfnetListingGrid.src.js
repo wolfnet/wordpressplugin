@@ -98,13 +98,39 @@ if (typeof jQuery != 'undefined') {
             }
 
             var remainingPixels = targetWidth - (columnWidth * columns);
-            var margin = Math.floor(remainingPixels / (columns + 1));
-            var extraMargin = remainingPixels - (margin * (columns + 1));
+            var rawMargin = remainingPixels / (columns + 1);
+            var margin = Math.floor(rawMargin);
 
-            // console.log(targetWidth, columnWidth, columns, remainingPixels, margin, extraMargin);
+            $items.css({
+                'padding-left': columns === 1 ? 0 : Math.floor(margin / 2),
+                'margin-left': columns === 1 ? Math.floor(margin) : 0,
+            });
+            $items.find('.wolfnet_listingMain').css({
+                'padding-right': columns === 1 ? 0 : Math.floor(margin / 2),
+            });
 
-            $items.css('marginLeft', margin);
-            // data.$container.css('paddingRight', margin + extraMargin);
+            for (var i=0, l=$items.length; i<l; i++) {
+
+                var $item = $($items[i]);
+                $item.removeClass('wolfnet_colFirst wolfnet_colLast');
+
+                if ((i - 1) % columns === 0) {
+                    $item.addClass('wolfnet_colLast');
+                    if ((i + 1) < l) {
+                        var $nextItem = $($items[i + 1]);
+                        $nextItem.addClass('wolfnet_colFirst');
+                    }
+                }
+
+                if (i === 0) {
+                    $item.addClass('wolfnet_colFirst');
+                }
+
+                if (i == (l - 1)) {
+                    $item.addClass('wolfnet_colLast');
+                }
+
+            }
 
             data.$container.trigger('columns-updated.' + pluginName);
 
