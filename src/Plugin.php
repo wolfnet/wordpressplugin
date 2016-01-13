@@ -335,6 +335,11 @@ class Wolfnet_Plugin
             'wolfnet',
             );
 
+        $widgetTheme = $this->views->getWidgetTheme();
+        if (strlen($widgetTheme)) {
+            array_push($styles, 'wolfnet-' . $widgetTheme);
+        }
+
         foreach ($styles as $style) {
             wp_enqueue_style($style);
         }
@@ -3053,6 +3058,12 @@ class Wolfnet_Plugin
                 ),
             'wolfnet-custom' => array(
                 admin_url('admin-ajax.php') . '?action=wolfnet_css',
+                ),
+            'wolfnet-acanthite' => array(
+                $this->url . 'css/wolfnet.acanthite.src.css'
+                ),
+            'wolfnet-bismuth' => array(
+                $this->url . 'css/wolfnet.bismuth.src.css'
                 ),
             'jquery-ui' => array(
                 'http://ajax.googleapis.com/ajax/libs/jqueryui/' . $jquery_ui->ver
