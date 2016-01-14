@@ -101,6 +101,7 @@ class Wolfnet_Views
 
         try {
             $out = $this->parseTemplate('adminStyle', array(
+                'imgdir' => $this->remoteImages,
                 'formHeader' => $this->styleFormHeaders(),
                 'widgetTheme' => $this->getWidgetTheme(),
             ));

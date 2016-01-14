@@ -10,42 +10,44 @@
 
         <?php echo $formHeader; ?>
 
+        <h2>Widget Theme</h2>
+
         <fieldset>
-
-            <table class="form-table">
-
-                <tr>
-                    <th>Widget Theme</th>
-                    <td>
-                        <fieldset>
-                            <legend class="screen-reader-text"><span>Widget Theme</span></legend>
-                            <label for="wolfnet_widgetTheme_acanthite">
-                                <input type="radio" name="wolfnet_widgetTheme"
-                                 id="wolfnet_widgetTheme_acanthite" value="acanthite"
-                                 <?php if (($widgetTheme == 'acanthite') || ($widgetTheme == '')) echo 'checked="checked"'; ?> />
-                                Original
-                            </label>
-                            <br />
-                            <label for="wolfnet_widgetTheme_bismuth">
-                                <input type="radio" name="wolfnet_widgetTheme"
-                                 id="wolfnet_widgetTheme_bismuth" value="bismuth"
-                                 <?php checked($widgetTheme, "bismuth"); ?> />
-                                Larger
-                            </label>
-                        </fieldset>
-                    </td>
-                </td>
-
-                <tr>
-                    <td colspan="2" class="submit">
-                        <input type="submit" name="submit" id="submit" class="button button-primary"
-                         value="<?php _e('Save Changes') ?>" />
-                    </td>
-                </tr>
-
-            </table>
-
+            <legend class="screen-reader-text"><span>Widget Theme</span></legend>
+            <div class="wolfnet_widget_themes">
+                <div class="wolfnet_widget_theme">
+                    <label for="wolfnet_widgetTheme_acanthite">
+                        <div class="wolfnet_widget_theme_thumb">
+                            <img src="<?php echo $imgdir; ?>support-acanthite-listing.png" />
+                        </div>
+                        <div class="wolfnet_widget_theme_label">
+                            <input type="radio" name="wolfnet_widgetTheme"
+                             id="wolfnet_widgetTheme_acanthite" value="acanthite"
+                             <?php if (($widgetTheme == 'acanthite') || ($widgetTheme == '')) echo 'checked="checked"'; ?> />
+                            Original
+                        </div>
+                    </label>
+                </div>
+                <div class="wolfnet_widget_theme">
+                    <label for="wolfnet_widgetTheme_bismuth">
+                        <div class="wolfnet_widget_theme_thumb">
+                            <img src="<?php echo $imgdir; ?>support-bismuth-listing.png" />
+                        </div>
+                        <div class="wolfnet_widget_theme_label">
+                            <input type="radio" name="wolfnet_widgetTheme"
+                             id="wolfnet_widgetTheme_bismuth" value="bismuth"
+                             <?php checked($widgetTheme, "bismuth"); ?> />
+                            Larger
+                        </div>
+                    </label>
+                </div>
+            </div>
         </fieldset>
+
+        <p style="clear: both;">
+            <input type="submit" name="submit" id="submit" class="button button-primary"
+             value="<?php _e('Save Changes') ?>" />
+        </p>
 
     </form>
 
