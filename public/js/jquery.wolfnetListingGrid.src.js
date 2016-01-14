@@ -100,7 +100,7 @@ if (typeof jQuery != 'undefined') {
             var remainingPixels = targetWidth - (columnWidth * columns);
             var margin = remainingPixels / (columns + 1);
 
-            console.log('targetWidth: ' + targetWidth, 'columnWidth: ' + columnWidth, 'columns: ' + columns, 'remainingPixels: ' + remainingPixels, 'margin: ' + margin, 'rounded margin: ' + Math.floor(margin), '1/2 margin: ' + Math.floor(margin/2));
+            //console.log('targetWidth: ' + targetWidth, 'columnWidth: ' + columnWidth, 'columns: ' + columns, 'remainingPixels: ' + remainingPixels, 'margin: ' + margin, 'rounded margin: ' + Math.floor(margin), '1/2 margin: ' + Math.floor(margin/2));
 
             $items.css({
                 'padding-left': columns === 1 ? 0 : Math.floor(margin / 2),
