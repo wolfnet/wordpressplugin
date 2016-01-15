@@ -208,7 +208,6 @@ class Wolfnet_Views
         $defaultArgs = array(
             'instance_id'     => str_replace('.', '', uniqid('wolfnet_featuredListing_')),
             'markets'         => json_decode($GLOBALS['wolfnet']->getProductKey()),
-            'selectedKey'     => (array_key_exists('keyid', $_REQUEST)) ? $_REQUEST['keyid'] : '1',
         );
 
         $args = array_merge($defaultArgs, $args);
