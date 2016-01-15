@@ -36,7 +36,7 @@
     &.wolfnet_listingGrid {
 
         .wolfnet_listing {
-            width: @listingWidth;
+            min-width: @listingWidth;
 
             .wolfnet_listingImage {
 
@@ -45,6 +45,12 @@
                     box-shadow: 0 5px 10px hsla(0, 0%, 60%, 0.25);
                 }
 
+            }
+
+            .wolfnet_listingHead,
+            .wolfnet_locationInfo,
+            .wolfnet_branding {
+                width: 150px;
             }
 
         }
