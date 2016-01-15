@@ -2625,13 +2625,9 @@ class Wolfnet_Plugin
     private function registerScripts()
     {
         $scripts = array(
-            'migrate' => array(
-                $this->url . 'js/jquery.migrate.src.js',
-                array('jquery'),
-            ),
             'tooltipjs' => array(
                 $this->url . 'js/jquery.tooltip.src.js',
-                array('jquery', 'migrate'),
+                array('jquery'),
             ),
             'imagesloadedjs' => array(
                 $this->url . 'js/jquery.imagesloaded.src.js',
@@ -2673,7 +2669,7 @@ class Wolfnet_Plugin
             ),
             'wolfnet-maptracks' => array(
                 $this->url . 'js/jquery.wolfnetMaptracks.src.js',
-                array('jquery', 'migrate', 'mapquest-api'),
+                array('jquery', 'mapquest-api'),
                 $this->version,
                 true,
             )
