@@ -239,7 +239,7 @@ if (typeof jQuery != 'undefined') {
 
                     });
 
-                    $(window).on('columns-updated.' + pluginName, function(){
+                    $(window).on('columns-updated.' + pluginName, function () {
                         resizing = false;
                     });
 
@@ -266,7 +266,7 @@ if (typeof jQuery != 'undefined') {
             {
                 deep = deep || false;
 
-                return this.each(function(){
+                return this.each(function () {
                     var target = this;
 
                     preparePluginData(target);
