@@ -66,6 +66,9 @@ if (typeof jQuery != 'undefined') {
             var $items = getGridItems(target);
             // Capture the original item width for later comparison
             data.itemWidth = $items.first().innerWidth();
+            if (data.hasOwnProperty('itemPadding') && !isNaN(data.itemPadding)) {
+                data.itemWidth -= data.itemPadding;
+            }
             // Remove any existing margins
             $items.css('margin', 0);
 
@@ -102,12 +105,18 @@ if (typeof jQuery != 'undefined') {
 
             //console.log('targetWidth: ' + targetWidth, 'columnWidth: ' + columnWidth, 'columns: ' + columns, 'remainingPixels: ' + remainingPixels, 'margin: ' + margin, 'rounded margin: ' + Math.floor(margin), '1/2 margin: ' + Math.floor(margin/2));
 
+            var leftMargin   = columns === 1 ? Math.floor(margin) : 0;
+            var leftPadding  = columns === 1 ? 0 : Math.floor(margin / 2);
+            var rightPadding = columns === 1 ? 0 : Math.floor(margin / 2);
+
+            data.itemPadding = leftPadding + rightPadding;
+
             $items.css({
-                'padding-left': columns === 1 ? 0 : Math.floor(margin / 2),
-                'margin-left': columns === 1 ? Math.floor(margin) : 0
+                'margin-left': leftMargin,
+                'padding-left': leftPadding
             });
             $items.find('.wolfnet_listingMain').css({
-                'padding-right': columns === 1 ? 0 : Math.floor(margin / 2)
+                'padding-right': rightPadding
             });
 
             for (var i=0, l=$items.length; i<l; i++) {
@@ -210,7 +219,7 @@ if (typeof jQuery != 'undefined') {
                 });
 
                 // Initialized the plugin for each element that was selected.
-                this.each(function(){
+                return this.each(function () {
 
                     var target = this;
                     var $target = $(target);
@@ -221,22 +230,20 @@ if (typeof jQuery != 'undefined') {
 
                     var targetWidth = data.$container.innerWidth();
 
-                    // Whenever the parent container changes size udpate the column for even spacing
-                    $(window).on('resize', function(event){
-                        var newContainerWidth = data.$container.innerWidth();
+                    // Whenever the parent container changes size update the column for even spacing
+                    $(window).on('resize', function (event) {
 
-                        // Only update when the browser resize has cause the container width to change
-                        if (targetWidth !== newContainerWidth) {
-                            targetWidth = newContainerWidth;
-
-                            // To help with performance only resize if the previous resize has completed
-                            if (!resizing) {
-                                resizing = true;
-                                methods.refresh.call(plugin, false);
-                            }
-
+                        // To help with performance only resize if the previous resize has completed
+                        if (!resizing) {
+                            resizing = true;
+                            methods.refresh.call(plugin, false);
                         }
 
+                    });
+
+                    // Whenever the parent container gets new data, update the listing columns
+                    $target.on('wolfnet.updated', function (event) {
+                        methods.refresh.call(plugin, false);
                     });
 
                     $(window).on('columns-updated.' + pluginName, function () {
@@ -244,8 +251,8 @@ if (typeof jQuery != 'undefined') {
                     });
 
                     // Once all images have been loaded update row heights to prevent stagger.
-                    $target.on('allImagesLoaded.' + pluginName, function(){
-                        updateRowHeight(target);
+                    $target.on('allImagesLoaded.' + pluginName, function () {
+                        methods.refresh.call($target);
                     });
 
                     prepareDomElements(target);
@@ -253,12 +260,6 @@ if (typeof jQuery != 'undefined') {
                     monitorImages(target);
 
                 }); /* END: for each loop of elements the plugin has been applied to. */
-
-                setTimeout(function () {
-                    methods.refresh.call(plugin, false);
-                }, 100);
-
-                return this;
 
             },
 
