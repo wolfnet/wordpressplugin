@@ -389,7 +389,7 @@
 						context: $smartSearch, // Make the context of this request the smart search element.
 						beforeSend: function(){methods.private.showSearchingMessage(this);}
 					})
-					.done(function(){
+					.done(function(data){
 						methods.private.updateSuggestionsList(this, data);
 					})
 					.always(function(data){
