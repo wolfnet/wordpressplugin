@@ -1168,8 +1168,31 @@
 }
 
 .widget_wolfnet_agentpageswidget {
-    &.wolfnet_agentSearchButton {
-        float: left;
+    .wolfnet_widget {
+        .wolfnet_agentSearch {
+            width: inherit;
+
+            .wolfnet_agentSearchButton {
+                float: left;
+                margin-top: 4px;
+            }
+        }
+
+        .wolfnet_agent {
+            .wolfnet_agentInfo {
+                float: left;
+                width: inherit;
+                margin-top: 10px;
+            }
+        }
+
+        &.wolfnet_contactAgent {
+            .wolfnet_agentPreview {
+                .wolfnet_agentInfo {
+                    width: 100% !important;
+                }
+            }
+        }
     }
 }
 
