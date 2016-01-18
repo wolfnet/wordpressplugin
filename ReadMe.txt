@@ -95,6 +95,7 @@ Please upgrade to the latest version of the plugin as we will be disabling our o
 
 = 1.8.1 =
 * Fixes a saved search view error after Wordpress 4.4 update.
+* Removes bundled version of jQuery migrate; we will defer to the Wordpress bundled version.
 
 = 1.8.0 =
 * Updates to make components more 'responsive'.
