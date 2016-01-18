@@ -66,6 +66,9 @@ if (typeof jQuery != 'undefined') {
             var $items = getGridItems(target);
             // Capture the original item width for later comparison
             data.itemWidth = $items.first().innerWidth();
+            if (data.hasOwnProperty('itemPadding') && !isNaN(data.itemPadding)) {
+                data.itemWidth -= data.itemPadding;
+            }
             // Remove any existing margins
             $items.css('margin', 0);
 
@@ -91,20 +94,53 @@ if (typeof jQuery != 'undefined') {
             var targetWidth = data.$container.innerWidth();
             var minColumnWidth = data.itemWidth;
             var columnWidth = minColumnWidth;
-            var columns = Math.floor(targetWidth / (columnWidth + data.option.minColumnGap));
+            var columns = Math.max(Math.floor(targetWidth / (columnWidth + data.option.minColumnGap)), 1);
 
             if (columns > $items.length) {
                 columns = $items.length;
             }
 
             var remainingPixels = targetWidth - (columnWidth * columns);
-            var margin = Math.floor(remainingPixels / (columns + 1));
-            var extraMargin = remainingPixels - (margin * (columns + 1));
+            var margin = remainingPixels / (columns + 1);
 
-            // console.log(targetWidth, columnWidth, columns, remainingPixels, margin, extraMargin);
+            //console.log('targetWidth: ' + targetWidth, 'columnWidth: ' + columnWidth, 'columns: ' + columns, 'remainingPixels: ' + remainingPixels, 'margin: ' + margin, 'rounded margin: ' + Math.floor(margin), '1/2 margin: ' + Math.floor(margin/2));
 
-            $items.css('marginLeft', margin);
-            // data.$container.css('paddingRight', margin + extraMargin);
+            var leftMargin   = columns === 1 ? Math.floor(margin) : 0;
+            var leftPadding  = columns === 1 ? 0 : Math.floor(margin / 2);
+            var rightPadding = columns === 1 ? 0 : Math.floor(margin / 2);
+
+            data.itemPadding = leftPadding + rightPadding;
+
+            $items.css({
+                'margin-left': leftMargin,
+                'padding-left': leftPadding
+            });
+            $items.find('.wolfnet_listingMain').css({
+                'padding-right': rightPadding
+            });
+
+            for (var i=0, l=$items.length; i<l; i++) {
+
+                var $item = $($items[i]);
+                $item.removeClass('wolfnet_colFirst wolfnet_colLast');
+
+                if ((i - 1) % columns === 0) {
+                    $item.addClass('wolfnet_colLast');
+                    if ((i + 1) < l) {
+                        var $nextItem = $($items[i + 1]);
+                        $nextItem.addClass('wolfnet_colFirst');
+                    }
+                }
+
+                if (i === 0) {
+                    $item.addClass('wolfnet_colFirst');
+                }
+
+                if (i == (l - 1)) {
+                    $item.addClass('wolfnet_colLast');
+                }
+
+            }
 
             data.$container.trigger('columns-updated.' + pluginName);
 
@@ -183,7 +219,7 @@ if (typeof jQuery != 'undefined') {
                 });
 
                 // Initialized the plugin for each element that was selected.
-                return this.each(function(){
+                return this.each(function () {
 
                     var target = this;
                     var $target = $(target);
@@ -194,31 +230,29 @@ if (typeof jQuery != 'undefined') {
 
                     var targetWidth = data.$container.innerWidth();
 
-                    // Whenever the parent container changes size udpate the column for even spacing
-                    $(window).on('resize', function(event){
-                        var newContainerWidth = data.$container.innerWidth();
+                    // Whenever the parent container changes size update the column for even spacing
+                    $(window).on('resize', function (event) {
 
-                        // Only update when the browser resize has cause the container width to change
-                        if (targetWidth !== newContainerWidth) {
-                            targetWidth = newContainerWidth;
-
-                            // To help with performance only resize if the previous resize has completed
-                            if (!resizing) {
-                                resizing = true;
-                                methods.refresh.call(plugin, false);
-                            }
-
+                        // To help with performance only resize if the previous resize has completed
+                        if (!resizing) {
+                            resizing = true;
+                            methods.refresh.call(plugin, false);
                         }
 
                     });
 
-                    $(window).on('columns-updated.' + pluginName, function(){
+                    // Whenever the parent container gets new data, update the listing columns
+                    $target.on('wolfnet.updated', function (event) {
+                        methods.refresh.call(plugin, false);
+                    });
+
+                    $(window).on('columns-updated.' + pluginName, function () {
                         resizing = false;
                     });
 
                     // Once all images have been loaded update row heights to prevent stagger.
-                    $target.on('allImagesLoaded.' + pluginName, function(){
-                        updateRowHeight(target);
+                    $target.on('allImagesLoaded.' + pluginName, function () {
+                        methods.refresh.call($target);
                     });
 
                     prepareDomElements(target);
@@ -233,7 +267,7 @@ if (typeof jQuery != 'undefined') {
             {
                 deep = deep || false;
 
-                return this.each(function(){
+                return this.each(function () {
                     var target = this;
 
                     preparePluginData(target);

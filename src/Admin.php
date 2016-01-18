@@ -172,6 +172,7 @@ class Wolfnet_Admin extends Wolfnet_Plugin
         // Register Options
         register_setting($this->optionGroup, $this->productKeyOptionKey);
         register_setting($this->optionGroup, Wolfnet_Plugin::SSL_WP_OPTION);
+        register_setting($this->StyleOptionGroup, $this->widgetThemeOptionKey);
         register_setting($this->CssOptionGroup, $this->publicCssOptionKey);
         register_setting($this->CssOptionGroup, $this->adminCssOptionKey);
 
@@ -240,6 +241,11 @@ class Wolfnet_Admin extends Wolfnet_Plugin
                 'key'   => 'wolfnet_plugin_settings',
                 'cb'    => array(&$GLOBALS['wolfnet']->views, 'amSettingsPage')
                 ),
+            array(
+                'title' => 'Appearance',
+                'key'   => 'wolfnet_plugin_style',
+                'cb'    => array(&$GLOBALS['wolfnet']->views, 'amStylePage')
+            ),
             array(
                 'title' => 'Edit CSS',
                 'key'   => 'wolfnet_plugin_css',

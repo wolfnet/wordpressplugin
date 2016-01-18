@@ -21,7 +21,26 @@
  *
  */
 
-@imagesDir: '../img/';
+@import 'public/css/_variables.inc';
+@import 'public/css/_mixins.inc';
+
+
+//
+// Variables
+// -------------------------------------------- //
+
+
+//== Colors
+
+@gray-light:    lighten(#000, 80%);   // #ccc
+@gray-lighter:  lighten(#000, 86.7%); // #ddd
+@gray-lightest: lighten(#000, 93.3%); // #eee
+
+
+//
+// Styles
+// -------------------------------------------- //
+
 
 html
 {
@@ -158,6 +177,44 @@ html
 			box-shadow:         0px 0px 10px 1px red;
 		}
 	}
+}
+
+.wolfnet_widget_themes {
+
+    .wolfnet_widget_theme {
+        float: left;
+        margin-right: 1em;
+        border: 1px solid @gray-light;
+        border-radius: 0.5em;
+        background-color: @gray-lighter;
+
+        &:hover,
+        &:active {
+            border-color: @gray-lighter;
+            background-color: @gray-lightest;
+        }
+
+        .wolfnet_widget_theme_thumb {
+            height: 275px;
+            padding: 0.75em;
+            border-top-left-radius: 0.5em;
+            border-top-right-radius: 0.5em;
+
+            img {
+                box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.25);
+            }
+
+        }
+
+        .wolfnet_widget_theme_label {
+            background-color: #fff;
+            padding: 0.75em;
+            border-bottom-left-radius: 0.5em;
+            border-bottom-right-radius: 0.5em;
+        }
+
+    }
+
 }
 
 html.ie .wolfnetProductKeyValidationWrapper.valid input
