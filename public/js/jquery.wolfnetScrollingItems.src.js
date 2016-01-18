@@ -87,11 +87,11 @@ if (typeof jQuery != 'undefined') {
          *
          * @return null
          */
-        var ensureThereAreEnoughItems = function(target)
+        var ensureThereAreEnoughItems = function(target, containerWidth)
         {
             var $target = $(target);
             var data = getData(target);
-            var containerWidth = data.$itemContainer.innerWidth();
+            containerWidth = containerWidth || data.$itemContainer.innerWidth();
             var $items = getItems(target);
 
             if (
@@ -101,7 +101,7 @@ if (typeof jQuery != 'undefined') {
 				containerWidth >= (($items.length * data.itemWidth) / 2)
 			) {
                	$items.clone().appendTo(data.$itemContainer);
-               	ensureThereAreEnoughItems(target);
+               	ensureThereAreEnoughItems(target, containerWidth);
             }
 
         };
