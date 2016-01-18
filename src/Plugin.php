@@ -402,6 +402,8 @@ class Wolfnet_Plugin
 
         register_widget('Wolfnet_Widget_QuickSearchWidget');
 
+        register_widget('Wolfnet_Widget_AgentPagesWidget');
+
         do_action($this->postHookPrefix . 'registerWidgets'); // Legacy hook
 
     }
@@ -948,7 +950,6 @@ class Wolfnet_Plugin
             'officetitle'    => '',
             'agenttitle'     => '',
             'detailtitle'    => '',
-            'keyids'         => '',
             'showoffices'    => true,
             'activelistings' => true,
             'soldlistings'   => false,
