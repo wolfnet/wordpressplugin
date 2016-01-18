@@ -254,11 +254,11 @@
 
 						var $valueLabel = $('<span>')
 							.text(data[i].value)
-							.addClass('value-label');
+							.addClass('wolfnet-suggestion-label');
 
 						var $fieldLabel = $('<span>')
 							.text(data[i].label)
-							.addClass('field-label');
+							.addClass('wolfnet-suggestion-field');
 
 						var $clearFix = $('<span>')
 							.css('clear', 'both');
@@ -598,10 +598,10 @@
 
 			showSuggestionsList: function($smartSearch) {
 				var $container = $smartSearch.data(stateKey).suggestionContainer.show();
-				var widestFieldLabel = methods.private.widestElementWidth($container.find('.field-label'));
+				var widestFieldLabel = methods.private.widestElementWidth($container.find('.wolfnet-suggestion-field'));
 				var remainingContainerWidth = $container.find('.wnt-suggestion:first').width() - widestFieldLabel;
 
-				$container.find('.value-label').each(function(){
+				$container.find('.wolfnet-suggestion-label').each(function(){
 					var $label = $(this);
 
 					if ($label.width() > remainingContainerWidth - 10) {
