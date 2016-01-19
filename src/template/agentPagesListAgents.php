@@ -123,6 +123,18 @@ if(!function_exists('paginate')) {
 	<?php } ?>
 
 <?php
+if(count($agents) == 0) { 
+
+	if(array_key_exists("agentCriteria", $_REQUEST) && strlen($_REQUEST['agentCriteria']) > 0) {
+		echo '<p class="wolfnet_noResults">There are no matching agents. Please try your search again.</p>';
+	} elseif(strlen($officeId) > 0) {
+		$link = $linkBase . "#post-" . get_the_id();
+		echo '<p class="wolfnet_noResults">There are currently no agents in this office. Go ';
+		echo '<a href="' . $link . '">back</a> to see agents in our other offices.</p>';
+	}
+
+}
+
 foreach($agents as $agent) {
 	if($agent['display_agent']) {
 		$agentLink = $linkBase . '?agent=' . $agent['agent_id'];
