@@ -93,8 +93,13 @@ Please upgrade to the latest version of the plugin as we will be disabling our o
 
 == Changelog ==
 
+<<<<<<< HEAD
 = 1.9.0 =
 * Adds agent/office shortcode for those sites with sufficient data and privileges. 
+=======
+= 1.8.2 =
+* Fixes unexpected T_PAAMAYIM_NEKUDOTAYIM exception.
+>>>>>>> origin/master
 
 = 1.8.1 =
 * Fixes a bug where scrolling widget potentially crashes browser.

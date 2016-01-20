@@ -139,6 +139,9 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
         }
 
         try {
+            var_dump($this->key);
+            var_dump($endpoint);
+            var_dump($this->args['criteria']);
             $data = $GLOBALS['wolfnet']->apin->sendRequest($this->key, $endpoint, 'GET', $this->args['criteria']);
         } catch (Wolfnet_Exception $e) {
             return $GLOBALS['wolfnet']->displayException($e);
