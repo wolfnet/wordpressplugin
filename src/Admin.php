@@ -152,7 +152,7 @@ class Wolfnet_Admin extends Wolfnet_Plugin
         if(is_admin() && get_option('wolfnet_activatedPlugin181') == '1.8.1') {
             delete_option('wolfnet_activatedPlugin181');
 
-            $keyArray = json_decode($GLOBALS['wolfnet']->getProductKey());
+            $keyArray = json_decode($GLOBALS['wolfnet']->keyService->get());
             if(is_array($keyArray) && $keyArray[0]->key != false) {
                 $GLOBALS['wolfnet']->setSslVerifyOption($keyArray[0]->key);
 
@@ -165,12 +165,12 @@ class Wolfnet_Admin extends Wolfnet_Plugin
                     }
                 }
                 $keyString = json_encode($keyArray);
-                update_option($GLOBALS['wolfnet']->productKeyOptionKey, $keyString);
+                update_option(Wolfnet_Service_ProductKeyService::PRODUCT_KEY_OPTION, $keyString);
             }
         }
 
         // Register Options
-        register_setting($this->optionGroup, $this->productKeyOptionKey);
+        register_setting($this->optionGroup, Wolfnet_Service_ProductKeyService::PRODUCT_KEY_OPTION);
         register_setting($this->optionGroup, Wolfnet_Plugin::SSL_WP_OPTION);
         register_setting($this->CssOptionGroup, $this->publicCssOptionKey);
         register_setting($this->CssOptionGroup, $this->adminCssOptionKey);
@@ -203,9 +203,9 @@ class Wolfnet_Admin extends Wolfnet_Plugin
             try {
                 /* Now that we know we are dealing with a page that needs the search manager check
                    if the key is valid. */
-                $productKey = $GLOBALS['wolfnet']->getProductKeyById($_SESSION['keyid']);
+                $productKey = $GLOBALS['wolfnet']->keyService->getById($_SESSION['keyid']);
 
-                if ($GLOBALS['wolfnet']->productKeyIsValid($productKey)) {
+                if ($GLOBALS['wolfnet']->keyService->isValid($productKey)) {
                     $GLOBALS['wolfnet']->smHttp = $GLOBALS['wolfnet']->searchManagerHtml($productKey);
                 }
 

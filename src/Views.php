@@ -45,14 +45,14 @@ class Wolfnet_Views
     {
 
         try {
-            $productKey = json_decode($GLOBALS['wolfnet']->getProductKey());
+            $productKey = json_decode($GLOBALS['wolfnet']->keyService->get());
 
             // add the market name
             for ($i=1; $i<=count($productKey); $i++) {
                 $key = $productKey[$i-1]->key;
 
                 try {
-                    $validKey = $GLOBALS['wolfnet']->productKeyIsValid($key);
+                    $validKey = $GLOBALS['wolfnet']->keyService->isValid($key);
                 } catch (Wolfnet_Api_ApiException $e) {
                     $validKey = false;
                 }
@@ -122,14 +122,14 @@ class Wolfnet_Views
     {
 
         try {
-            $productKey = $GLOBALS['wolfnet']->getProductKeyById($_SESSION['keyid']);
+            $productKey = $GLOBALS['wolfnet']->keyService->getById($_SESSION['keyid']);
 
-            if (!$GLOBALS['wolfnet']->productKeyIsValid($productKey)) {
+            if (!$GLOBALS['wolfnet']->keyService->isValid($productKey)) {
                 $out = $this->parseTemplate('invalidProductKey');
             } else {
                 $out = $this->parseTemplate('adminSearchManager', array(
                     'searchForm' => ($GLOBALS['wolfnet']->smHttp !== null) ? $GLOBALS['wolfnet']->smHttp['body'] : '',
-                    'markets' => json_decode($GLOBALS['wolfnet']->getProductKey()),
+                    'markets' => json_decode($GLOBALS['wolfnet']->keyService->get()),
                     'selectedKey' => $_SESSION['keyid'],
                     'url' => $GLOBALS['wolfnet']->url,
                 ));
@@ -207,7 +207,7 @@ class Wolfnet_Views
     {
         $defaultArgs = array(
             'instance_id'     => str_replace('.', '', uniqid('wolfnet_featuredListing_')),
-            'markets'         => json_decode($GLOBALS['wolfnet']->getProductKey()),
+            'markets'         => json_decode($GLOBALS['wolfnet']->keyService->get()),
         );
 
         $args = array_merge($defaultArgs, $args);
@@ -221,7 +221,7 @@ class Wolfnet_Views
     {
         $defaultArgs = array(
             'instance_id'      => str_replace('.', '', uniqid('wolfnet_listingGrid_')),
-            'markets'          => json_decode($GLOBALS['wolfnet']->getProductKey()),
+            'markets'          => json_decode($GLOBALS['wolfnet']->keyService->get()),
             'keyid'            => ''
         );
 
@@ -236,7 +236,7 @@ class Wolfnet_Views
 
     public function quickSearchOptionsFormView(array $args = array())
     {
-        $markets = json_decode($GLOBALS['wolfnet']->getProductKey());
+        $markets = json_decode($GLOBALS['wolfnet']->keyService->get());
         $keyids = array();
         $view = '';
 
@@ -356,9 +356,9 @@ class Wolfnet_Views
     public function propertyListView(array $args = array())
     {
         if (!array_key_exists('keyid', $args)) {
-            $args['productkey'] = $GLOBALS['wolfnet']->getDefaultProductKey();
+            $args['productkey'] = $GLOBALS['wolfnet']->keyService->getDefault();
         } else {
-            $args['productkey'] = $GLOBALS['wolfnet']->getProductKeyById($args['keyid']);
+            $args['productkey'] = $GLOBALS['wolfnet']->keyService->getById($args['keyid']);
         }
 
         $args['itemsPerPage'] = $GLOBALS['wolfnet']->getItemsPerPage();
@@ -382,9 +382,9 @@ class Wolfnet_Views
     {
 
         if (!array_key_exists('keyid', $args)) {
-            $args['productkey'] = $GLOBALS['wolfnet']->getDefaultProductKey();
+            $args['productkey'] = $GLOBALS['wolfnet']->keyService->getDefault();
         } else {
-            $args['productkey'] = $GLOBALS['wolfnet']->getProductKeyById($args['keyid']);
+            $args['productkey'] = $GLOBALS['wolfnet']->keyService->getById($args['keyid']);
         }
 
         $args['itemsPerPage'] = $GLOBALS['wolfnet']->getItemsPerPage();

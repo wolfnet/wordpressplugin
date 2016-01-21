@@ -28,7 +28,7 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
     public function __construct($wolfnet)
     {
         /* 
-         * This is here so the getProductKeyByMarket function doesn't blow up
+         * This is here so the keyService->getByMarket function doesn't blow up
          * later down the stack when it runs a function from Wolfnet_Plugin.
          * At some point we'll want to assess what I'm overlooking to
          * necessitate this redundancy. 
@@ -139,9 +139,6 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
         }
 
         try {
-            var_dump($this->key);
-            var_dump($endpoint);
-            var_dump($this->args['criteria']);
             $data = $GLOBALS['wolfnet']->apin->sendRequest($this->key, $endpoint, 'GET', $this->args['criteria']);
         } catch (Wolfnet_Exception $e) {
             return $GLOBALS['wolfnet']->displayException($e);
@@ -181,7 +178,7 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
         // We need to get a product key that we can pull this agent's listings with.
         // Each key entered into the Settings page has a market name associated with it.
         // We can get the appropriate key for this agent based on their market.
-        $this->key = $this->getProductKeyByMarket($agentData['market']);
+        $this->key = $this->keyService->getByMarket($agentData['market']);
 
         if($this->args['criteria']['activelistings']) {
             $featuredListings = $this->agentFeaturedListings($this->key, $agentData['mls_agent_id']);

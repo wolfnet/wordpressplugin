@@ -125,6 +125,12 @@ class Wolfnet_Factory
     }
 
 
+    private function getWolfnet_Service_ProductKeyService()
+    {
+        return new Wolfnet_Service_ProductKeyService($this->args['plugin']);
+    }
+
+
     private function getWolfnet_AgentPagesHandler()
     {
         return new Wolfnet_AgentPagesHandler($this->args['plugin']);

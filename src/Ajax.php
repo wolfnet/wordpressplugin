@@ -91,7 +91,7 @@ class Wolfnet_Ajax
         $productKey = (array_key_exists('key', $_REQUEST)) ? $_REQUEST['key'] : '';
 
         try {
-            $response = ($GLOBALS['wolfnet']->productKeyIsValid($productKey)) ? 'true' : 'false';
+            $response = ($GLOBALS['wolfnet']->keyService->isValid($productKey)) ? 'true' : 'false';
 
         } catch (Wolfnet_Exception $e) {
             status_header(500);
@@ -454,7 +454,7 @@ class Wolfnet_Ajax
 
             $keyid = (array_key_exists('keyid', $_REQUEST)) ? $_REQUEST["keyid"] : null;
 
-            $productKey = $GLOBALS['wolfnet']->getProductKeyById($keyid);
+            $productKey = $GLOBALS['wolfnet']->keyService->getById($keyid);
 
             $data = $GLOBALS['wolfnet']->apin->sendRequest($productKey, '/listing', 'GET', $criteria);
 
@@ -513,7 +513,7 @@ class Wolfnet_Ajax
             // TODO: Assign default value.
             $keyid = $_REQUEST["keyid"];
 
-            $productKey = $GLOBALS['wolfnet']->getProductKeyById($keyid);
+            $productKey = $GLOBALS['wolfnet']->keyService->getById($keyid);
 
             $response = $GLOBALS['wolfnet']->getPrices($productKey);
 
@@ -564,7 +564,7 @@ class Wolfnet_Ajax
             // TODO: Assign default value.
             $keyid = $_REQUEST["keyid"];
 
-            $productKey = $GLOBALS['wolfnet']->getProductKeyById($keyid);
+            $productKey = $GLOBALS['wolfnet']->keyService->getById($keyid);
 
             $response = $GLOBALS['wolfnet']->getMaptracksEnabled($productKey);
 
@@ -589,7 +589,7 @@ class Wolfnet_Ajax
         try {
             // TODO: Assign default value.
             $keyid = $_REQUEST["keyid"];
-            $productKey = $GLOBALS['wolfnet']->getProductKeyById($keyid);
+            $productKey = $GLOBALS['wolfnet']->keyService->getById($keyid);
             $response = $GLOBALS['wolfnet']->getBaseUrl($productKey);
 
         } catch (Wolfnet_Exception $e) {

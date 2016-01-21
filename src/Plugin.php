@@ -60,13 +60,6 @@ class Wolfnet_Plugin
     public $customPostTypeSearch = 'wolfnet_search';
 
     /**
-     * This property is a unique idenitfier that is used to define a plugin option which saves the
-     * product key used by the plugin to retreive data from the WolfNet API.
-     * @var string
-     */
-    protected $productKeyOptionKey = 'wolfnet_productKey';
-
-    /**
      * This property contains the public CSS as defined in the Edit CSS page.
      * @var string
      */
@@ -141,6 +134,7 @@ class Wolfnet_Plugin
         ));
 
         $this->cachingService = $this->ioc->get('Wolfnet_Service_CachingService');
+        $this->keyService = $this->ioc->get('Wolfnet_Service_ProductKeyService');
 
         $this->apin = $this->ioc->get('Wolfnet_Api_Client');
 
@@ -165,7 +159,7 @@ class Wolfnet_Plugin
             array(self::CACHE_CRON_HOOK, array($this->cachingService, 'clearExpired')),
             ));
 
-        if($this->getDefaultProductKey()) {
+        if($this->keyService->getDefault()) {
             $this->addAction(array(
                 array('widgets_init',      'widgetInit'),
             ));
@@ -595,122 +589,6 @@ class Wolfnet_Plugin
 
 
     /**
-     * This method retrieves a specific product key from the WordPress options table based on a
-     * provided unique ID value.
-     * @param  integer $id The ID of the key to be retrieved.
-     * @return string      The key that was retrieved from the WP options table.
-     */
-    public function getProductKeyById($id)
-    {
-        $keyList = json_decode($this->getProductKey());
-
-        foreach ($keyList as $key) {
-            if ($key->id == $id) {
-                return $key->key;
-            }
-            // TODO: Add some sort of error throwing if no key is found for the given ID.
-        }
-
-    }
-
-
-    /**
-     * This method retrieves a specific product key from the WordPress options table based on a
-     * provided market name.
-     * @param  string $market  The market name associated with the key to be retrieved.
-     * @return string          The key that was retrieved from the WP options table.
-     */
-    public function getProductKeyByMarket($market)
-    {
-        $keyList = json_decode($this->getProductKey());
-
-        foreach ($keyList as $key) {
-            if(!array_key_exists('market', $key) || strlen($key->market) == 0) {
-                $this->updateProductKeys();
-                $keyList = json_decode($this->getProductKey());
-            }
-
-            if (strtoupper($key->market) == strtoupper($market)) {
-                return $key->key;
-            }
-        }
-
-        return null;
-
-    }
-
-
-    /**
-     * This method retrieved the 'default' key (or first key on the stack) from the WP options table.
-     * @return string The key that was retrieved from the WP options table.
-     */
-    public function getDefaultProductKey()
-    {
-
-        $productKey = json_decode($this->getProductKey());
-        // TODO: Add some sort of error throwing for if there are no keys.
-
-        if (is_array($productKey) && array_key_exists(0, $productKey)) {
-            return $productKey[0]->key;
-        } else {
-            return false;
-        }
-
-    }
-
-
-    /**
-     * This method retrieves a JSON representation of stored product keys from the WP options table.
-     * @return string JSON representation of the stored product keys.
-     */
-    public function getProductKey()
-    {
-        $key = get_option(trim($this->productKeyOptionKey));
-
-        // If the value stored in the options table is a legacy, single key value convert it to the
-        // newer JSON format.
-        if (!$this->isJsonEncoded($key)) {
-            $key = $this->setJsonProductKey($key);
-        }
-
-        // TODO: perhaps it would be better to decode the JSON here instead of multiple other places.
-        return $key;
-
-    }
-
-
-    /**
-     * This method returns the number of keys associated with the plugin.
-     * @return int Number of keys
-     */
-    public function getKeyCount()
-    {
-        return count(json_decode($this->getProductKey()));
-    }
-
-
-    /**
-     * This method updates the product key structure to make sure it has all the
-     * necessary attributes.
-     */
-    public function updateProductKeys()
-    {
-        $keyStruct = json_decode($this->getProductKey());
-
-        for($i = 0; $i < count($keyStruct); $i++) {
-            if(!array_key_exists('market', $keyStruct[$i])
-                || strlen($keyStruct[$i]->market) == 0) {
-                $market = $this->getMarketName($keyStruct[$i]->key);
-                $keyStruct[$i]->market = $market;
-            }
-        }
-
-        // Update key in Wordpress settings data.
-        update_option($this->productKeyOptionKey, json_encode($keyStruct));
-    }
-
-
-    /**
      * This method returns an array of integer values to be used as possible pagination item counts.
      * @return array An array of integers.
      */
@@ -971,9 +849,9 @@ class Wolfnet_Plugin
 
     public function agentPageHandler(array $criteria = array()) 
     {
-        $key = $this->getCriteriaKey($criteria);
+        $key = $this->keyService->getFromCriteria($criteria);
 
-        if (!$this->isSavedKey($key)) {
+        if (!$this->keyService->isSaved($key)) {
             return false;
         }
 
@@ -1052,9 +930,9 @@ class Wolfnet_Plugin
 
     public function featuredListings(array $criteria)
     {
-        $key = $this->getCriteriaKey($criteria);
+        $key = $this->keyService->getFromCriteria($criteria);
 
-        if (!$this->isSavedKey($key)) {
+        if (!$this->keyService->isSaved($key)) {
             return false;
         }
 
@@ -1133,9 +1011,9 @@ class Wolfnet_Plugin
         $options['sortoptions_false_wps'] = selected($options['sortoptions'], 'false', false);
         $options['sortoptions_true_wps']  = selected($options['sortoptions'], 'true', false);
         $options['ownertypes']            = $this->getOwnerTypes();
-        $options['prices']                = $this->getPrices($this->getProductKeyById($keyid));
+        $options['prices']                = $this->getPrices($this->keyService->getById($keyid));
         $options['savedsearches']         = $this->getSavedSearches(-1, $keyid);
-        $options['mapEnabled']            = $this->getMaptracksEnabled($this->getProductKeyById($keyid));
+        $options['mapEnabled']            = $this->getMaptracksEnabled($this->keyService->getById($keyid));
         $options['maptypes']              = $this->getMapTypes();
 
         return $options;
@@ -1152,9 +1030,9 @@ class Wolfnet_Plugin
      */
     public function listingGrid(array $criteria, $layout = 'grid', $dataOverride = null)
     {
-        $key = $this->getCriteriaKey($criteria);
+        $key = $this->keyService->getFromCriteria($criteria);
 
-        if (!$this->isSavedKey($key)) {
+        if (!$this->keyService->isSaved($key)) {
             return false;
         }
 
@@ -1331,7 +1209,7 @@ class Wolfnet_Plugin
             'minprice'    => '',
             'maxprice'    => '',
             'keyid'       => 1,
-            'key'         => $this->getDefaultProductKey(),
+            'key'         => $this->keyService->getDefault(),
             'startrow'    => 1,
             );
 
@@ -1358,7 +1236,7 @@ class Wolfnet_Plugin
             'minprice'    => '',
             'maxprice'    => '',
             'keyid'       => 1,
-            'key'         => $this->getDefaultProductKey(),
+            'key'         => $this->keyService->getDefault(),
             'startrow'    => 1,
             );
 
@@ -1408,7 +1286,7 @@ class Wolfnet_Plugin
 
         foreach (explode(',', $formData['keyids']) as $keyID) {
             try {
-                $key = $this->getProductKeyById($keyID);
+                $key = $this->keyService->getById($keyID);
 
                 $listings = $this->apin->sendRequest(
                     $key, 
@@ -1456,9 +1334,9 @@ class Wolfnet_Plugin
         }
 
         if (count($keyids) == 1) {
-            $productKey = $this->getProductKeyById($keyids[0]);
+            $productKey = $this->keyService->getById($keyids[0]);
         } else {
-            $productKey = $this->getDefaultProductKey();
+            $productKey = $this->keyService->getDefault();
         }
 
         if (is_wp_error($productKey)) {
@@ -1470,7 +1348,7 @@ class Wolfnet_Plugin
         $beds = $this->getBeds();
         $baths = $this->getBaths();
         $formAction = $this->getBaseUrl($productKey);
-        $markets = $this->getProductKey();
+        $markets = $this->keyService->get();
 
         if (is_wp_error($prices)) {
             return $this->getWpError($prices);
@@ -1867,7 +1745,7 @@ class Wolfnet_Plugin
     {
         try {
             $data = $this->apin->sendRequest(
-                $this->getDefaultProductKey(), 
+                $this->keyService->getDefault(), 
                 '/settings', 
                 'GET'
             );
@@ -1885,7 +1763,7 @@ class Wolfnet_Plugin
     {
         try {
             $data = $this->apin->sendRequest(
-                $this->getDefaultProductKey(),
+                $this->keyService->getDefault(),
                 '/settings',
                 'GET'
             );
@@ -1904,7 +1782,7 @@ class Wolfnet_Plugin
     {
         try {
             $data = $this->apin->sendRequest(
-                $this->getDefaultProductKey(), 
+                $this->keyService->getDefault(), 
                 '/office', 
                 'GET'
             );
@@ -1962,38 +1840,6 @@ class Wolfnet_Plugin
     /* ****************************************************************************************** */
 
 
-    private function getCriteriaKey(&$criteria)
-    {
-        $key = '';
-
-        // Maintain backwards compatibility if there is no keyid in the shortcode.
-        if (!array_key_exists('keyid', $criteria) || $criteria['keyid'] == '') {
-            $key = $this->getDefaultProductKey();
-        } else {
-            $key = $this->getProductKeyById($criteria['keyid']);
-        }
-
-        $criteria['key'] = $key;
-
-        return $key;
-    }
-
-
-    private function isSavedKey($find)
-    {
-        $keyList = json_decode($this->getProductKey());
-
-        foreach ($keyList as $key) {
-            if ($key->key == $find) {
-                return true;
-            }
-        }
-
-        return false;
-
-    }
-
-
     private function searchManagerCookies($cookies = null)
     {
         if (is_array($cookies)) {
@@ -2043,23 +1889,7 @@ class Wolfnet_Plugin
     }
 
 
-    protected function setJsonProductKey($keyString)
-    {
-        // This takes the old style single key string and returns a JSON formatted key array
-        $keyArray = array(
-            array(
-                "id" => "1",
-                "key" => $keyString,
-                "label" => ""
-            )
-        );
-
-        return json_encode($keyArray);
-
-    }
-
-
-    private function isJsonEncoded($str)
+    public function isJsonEncoded($str)
     {
         if (is_array(json_decode($str)) || is_object(json_decode($str))) {
             return true;
@@ -2263,7 +2093,7 @@ class Wolfnet_Plugin
     private function getMaxResults($productKey = null)
     {
         if ($productKey == null) {
-            $productKey = json_decode($this->getDefaultProductKey());
+            $productKey = json_decode($this->keyService->getDefault());
         }
 
         $data = $this->apin->sendRequest($productKey, '/settings');
@@ -2284,7 +2114,7 @@ class Wolfnet_Plugin
     {
 
         if ($productKey == null) {
-            $productKey = json_decode($this->getDefaultProductKey());
+            $productKey = json_decode($this->keyService->getDefault());
         }
 
         $data = $this->apin->sendRequest($productKey, '/settings');
@@ -2298,7 +2128,7 @@ class Wolfnet_Plugin
     {
 
         if ($productKey == null) {
-            $productKey = json_decode($this->getDefaultProductKey());
+            $productKey = json_decode($this->keyService->getDefault());
         }
 
         $data = $this->apin->sendRequest($productKey, '/settings');
@@ -2383,7 +2213,7 @@ class Wolfnet_Plugin
     public function getMapParameters($listingsData, $productKey = null)
     {
         if ($productKey == null) {
-            $productKey = $this->getDefaultProductKey();
+            $productKey = $this->keyService->getDefault();
         }
 
         $data  = $this->apin->sendRequest($productKey, '/settings');
@@ -2449,7 +2279,7 @@ class Wolfnet_Plugin
     public function getBaseUrl($productKey = null)
     {
         if ($productKey == null) {
-            $productKey = $this->getDefaultProductKey();
+            $productKey = $this->keyService->getDefault();
         }
 
         $data  = $this->apin->sendRequest($productKey, '/settings');
@@ -2459,42 +2289,6 @@ class Wolfnet_Plugin
         }
 
         return $data['responseData']['data']['site']['site_base_url'];
-
-    }
-
-
-    /**
-     * check if key is valid
-     * @param  string $key
-     * @return bool         true?
-     */
-    public function productKeyIsValid($key = null)
-    {
-        $valid = true;
-
-        if ($key != null) {
-            $productKey = $key;
-        } else {
-            $productKey = json_decode($GLOBALS['wolfnet']->getDefaultProductKey());
-        }
-
-        if (trim($productKey) !== '') {
-            try {
-                $http = $this->apin->authenticate($productKey, array('force'=>true));
-            } catch (Wolfnet_Api_ApiException $e) {
-                if ($e->getCode() == Wolfnet_Api_Client::NO_AUTH_ERROR) {
-                    $valid = false;
-                } else {
-                    throw $e;
-                }
-
-            }
-
-        } else {
-            $valid = false;
-        }
-
-        return $valid;
 
     }
 
