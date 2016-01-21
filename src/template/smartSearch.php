@@ -47,9 +47,11 @@
 						value=""
 						placeholder="Search by City, Address, Zip, Area, and more!"
 					/>
+						<!--TODO: echo placeholder as passed-in var -->
 				</div>
 			</div>
 		</fieldset>
+
 
 		<!--TODO: Move Price/Bed/Baths widget to its own modularized view/template-->
 		<!-- and call from both quicksearch and smartsearch views.-->
