@@ -251,7 +251,7 @@ class Wolfnet_Ajax
     {
 
         try {
-            $args = $GLOBALS['wolfnet']->getListingGridOptions();
+            $args = $GLOBALS['wolfnet']->listingGrid->getOptions();
 
             $response = $GLOBALS['wolfnet']->views->listingGridOptionsFormView($args);
 
@@ -419,7 +419,7 @@ class Wolfnet_Ajax
     {
 
         try {
-            $args = $GLOBALS['wolfnet']->getListingGridOptions($_REQUEST);
+            $args = $GLOBALS['wolfnet']->listingGrid->getOptions($_REQUEST);
 
             $response = $GLOBALS['wolfnet']->getWpHeader() 
             	. $GLOBALS['wolfnet']->listingGrid($args) 
@@ -443,7 +443,7 @@ class Wolfnet_Ajax
     {
 
         try {
-            $args = $GLOBALS['wolfnet']->getListingGridOptions($_REQUEST);
+            $args = $GLOBALS['wolfnet']->listingGrid->getOptions($_REQUEST);
 
             // used by pagination dropdown "per page"
             if (!empty($_REQUEST['numrows'])) {

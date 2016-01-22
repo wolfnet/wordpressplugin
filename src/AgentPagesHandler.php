@@ -363,7 +363,7 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
 
     protected function getAgentListings($key, $agentId, $sold = 0)
     {
-        $criteria = $this->getListingGridDefaults();
+        $criteria = $this->listingGrid->getDefaults();
         $count = ($sold) ? 6 : 10;
         $criteria['maxrows'] = $count;
         $criteria['maxresults'] = $count;

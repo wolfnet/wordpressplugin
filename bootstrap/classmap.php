@@ -21,6 +21,7 @@ return array(
     'Wolfnet_Api_StatsDecorator' => '/api/StatsDecorator.php',
 
     'Wolfnet_Module_FeaturedListings' => '/module/FeaturedListings.php',
+    'Wolfnet_Module_ListingGrid' => '/module/ListingGrid.php',
     'Wolfnet_Module_QuickSearch' => '/module/QuickSearch.php',
 
     'Wolfnet_Service_CachingService' => '/service/CachingService.php',
