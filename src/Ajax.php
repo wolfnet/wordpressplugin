@@ -295,7 +295,7 @@ class Wolfnet_Ajax
     {
 
         try {
-            $args = $GLOBALS['wolfnet']->getQuickSearchOptions();
+            $args = $GLOBALS['wolfnet']->quickSearch->getQuickSearchOptions();
 
             $response = $GLOBALS['wolfnet']->views->quickSearchOptionsFormView($args);
 
@@ -610,7 +610,7 @@ class Wolfnet_Ajax
     public function remoteRouteQuickSearch() 
     {
         try {
-            $response = $GLOBALS['wolfnet']->routeQuickSearch($_REQUEST['formData']);
+            $response = $GLOBALS['wolfnet']->quickSearch->routeQuickSearch($_REQUEST['formData']);
         } catch (Wolfnet_Exception $e) {
             status_header(500);
 

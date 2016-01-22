@@ -131,6 +131,12 @@ class Wolfnet_Factory
     }
 
 
+    private function getWolfnet_Module_QuickSearch()
+    {
+        return new Wolfnet_Module_QuickSearch($this->args['plugin']);
+    }
+
+
     private function getWolfnet_AgentPagesHandler()
     {
         return new Wolfnet_AgentPagesHandler($this->args['plugin']);

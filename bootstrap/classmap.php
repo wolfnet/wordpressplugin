@@ -20,6 +20,8 @@ return array(
     'Wolfnet_Api_Client' => '/api/Client.php',
     'Wolfnet_Api_StatsDecorator' => '/api/StatsDecorator.php',
 
+    'Wolfnet_Module_QuickSearch' => '/module/QuickSearch.php',
+
     'Wolfnet_Service_CachingService' => '/service/CachingService.php',
     'Wolfnet_Service_ProductKeyService' => '/service/ProductKeyService.php',
 

@@ -142,6 +142,9 @@ class Wolfnet_Plugin
 
         $this->views = $this->ioc->get('Wolfnet_Views');
 
+        // Modules
+        $this->quickSearch = $this->ioc->get('Wolfnet_Module_QuickSearch');
+
         $this->agentHandler = $this->ioc->get('Wolfnet_AgentPagesHandler');
 
         if(is_admin()) {
@@ -792,27 +795,6 @@ class Wolfnet_Plugin
     }
 
 
-    public function scQuickSearch($attrs, $content = '')
-    {
-
-        try {
-            $defaultAttributes = $this->getQuickSearchDefaults();
-
-            $criteria = array_merge($defaultAttributes, (is_array($attrs)) ? $attrs : array());
-
-            $this->decodeCriteria($criteria);
-
-            $out = $this->quickSearch($criteria);
-
-        } catch (Wolfnet_Exception $e) {
-            $out = $this->displayException($e);
-        }
-
-        return $out;
-
-    }
-
-
     /* Data ************************************************************************************* */
     /*  _                                                                                         */
     /* | \  _. _|_  _.                                                                            */
@@ -1246,145 +1228,6 @@ class Wolfnet_Plugin
     public function getPropertyListOptions($instance = null)
     {
         return $this->getListingGridOptions($instance);
-    }
-
-
-    /* Quick Search ***************************************************************************** */
-
-    public function getQuickSearchDefaults()
-    {
-
-        return array(
-            'title'     => 'QuickSearch',
-            'keyid'     => '',
-            'keyids'    => '',
-            'view'      => '',
-            'routing'   => '',
-            );
-
-    }
-
-
-    public function getQuickSearchOptions($instance = null)
-    {
-        $options = $this->getOptions($this->getQuickSearchDefaults(), $instance);
-
-        return $options;
-
-    }
-
-
-    public function routeQuickSearch($formData) 
-    {
-        /*
-         * Loop over each key and get the number of matching listings for each.
-         * We'll save the key with the highest number of matches so we can route
-         * to the site associated with that key.
-         */
-        $highestCount = 0;
-        $highestMatchKey = '';
-
-        foreach (explode(',', $formData['keyids']) as $keyID) {
-            try {
-                $key = $this->keyService->getById($keyID);
-
-                $listings = $this->apin->sendRequest(
-                    $key, 
-                    '/listing?detaillevel=1&startrow=1&maxrows=1', 
-                    'GET',
-                    $formData
-                );
-                $count = $listings['responseData']['data']['total_rows'];
-
-                if($count > $highestCount) {
-                    $highestCount = $count;
-                    $highestMatchKey = $key;
-                }
-            } catch (Wolfnet_Exception $e) {
-                echo $this->displayException($e);
-            }
-        }
-
-        /*
-         * Route to the site associated with key determined above.
-        */
-        $baseUrl = $this->getBaseUrl($highestMatchKey);
-        
-        $redirect = $baseUrl . "?";
-        foreach($formData as $key => $param) {
-            $redirect .= $key . "=" . $param . "&";
-        }
-        
-        return $redirect;
-    } 
-
-
-    /**
-     * Get markup for Quick Search form
-     * @param  array  $criteria
-     * @return string           form markup
-     */
-    public function quickSearch(array $criteria)
-    {
-
-        if (array_key_exists("keyids", $criteria) && !empty($criteria['keyids'])) {
-            $keyids = explode(",", $criteria["keyids"]);
-        } else {
-            $keyids[0] = 1;
-        }
-
-        if (count($keyids) == 1) {
-            $productKey = $this->keyService->getById($keyids[0]);
-        } else {
-            $productKey = $this->keyService->getDefault();
-        }
-
-        if (is_wp_error($productKey)) {
-            return $this->getWpError($productKey);
-        }
-
-        // Get data
-        $prices = $this->getPrices($productKey);
-        $beds = $this->getBeds();
-        $baths = $this->getBaths();
-        $formAction = $this->getBaseUrl($productKey);
-        $markets = $this->keyService->get();
-
-        if (is_wp_error($prices)) {
-            return $this->getWpError($prices);
-        }
-
-        if (is_wp_error($beds)) {
-            return $this->getWpError($beds);
-        }
-
-        if (is_wp_error($baths)) {
-            return $this->getWpError($baths);
-        }
-
-        if (is_wp_error($formAction)) {
-            return $this->getWpError($formAction);
-        }
-
-        if (is_wp_error($markets)) {
-            return $this->getWpError($markets);
-        }
-
-        $vars = array(
-            'instance_id'  => str_replace('.', '', uniqid('wolfnet_quickSearch_')),
-            'siteUrl'      => site_url(),
-            'keyids'       => $keyids,
-            'markets'      => json_decode($markets),
-            'prices'       => $prices,
-            'beds'         => $beds,
-            'baths'        => $baths,
-            'formAction'   => $formAction,
-            );
-
-        $args = $this->convertDataType(array_merge($criteria, $vars));
-
-        return $this->views->quickSearchView($args);
-
     }
 
 
@@ -2311,7 +2154,7 @@ class Wolfnet_Plugin
     }
 
 
-    private function getBeds()
+    public function getBeds()
     {
         $values = array(1,2,3,4,5,6,7);
         $data   = array();
@@ -2325,7 +2168,7 @@ class Wolfnet_Plugin
     }
 
 
-    private function getBaths()
+    public function getBaths()
     {
         return $this->getBeds();
     }
@@ -2379,6 +2222,15 @@ class Wolfnet_Plugin
 
         do_action($this->postHookPrefix . 'registerCustomPostTypes'); // Legacy hook
 
+    }
+
+
+    /*
+     * Shortcode helper functions for registering in registerShortCodes.
+     */
+    public function scQuickSearch($attrs, $content = '') 
+    {
+        return $this->quickSearch->scQuickSearch($attrs, $content);
     }
 
 
@@ -2526,7 +2378,7 @@ class Wolfnet_Plugin
     }
 
 
-    protected function decodeCriteria(array &$criteria)
+    public function decodeCriteria(array &$criteria)
     {
 
         // Decode req parameters vals so they can be cleanly encoded before api req
