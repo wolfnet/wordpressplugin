@@ -27,7 +27,7 @@ class Wolfnet_Module_QuickSearch
 	public function scQuickSearch($attrs, $content = '')
     {
         try {
-            $defaultAttributes = $this->getQuickSearchDefaults();
+            $defaultAttributes = $this->getDefaults();
 
             $criteria = array_merge($defaultAttributes, (is_array($attrs)) ? $attrs : array());
 
@@ -43,7 +43,7 @@ class Wolfnet_Module_QuickSearch
     }
 
 
-    public function getQuickSearchDefaults()
+    public function getDefaults()
     {
         return array(
             'title'     => 'QuickSearch',
@@ -55,9 +55,9 @@ class Wolfnet_Module_QuickSearch
     }
 
 
-    public function getQuickSearchOptions($instance = null)
+    public function getOptions($instance = null)
     {
-        $options = $this->plugin->getOptions($this->getQuickSearchDefaults(), $instance);
+        $options = $this->plugin->getOptions($this->getDefaults(), $instance);
 
         return $options;
     }

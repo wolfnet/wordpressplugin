@@ -144,6 +144,7 @@ class Wolfnet_Plugin
 
         // Modules
         $this->quickSearch = $this->ioc->get('Wolfnet_Module_QuickSearch');
+        $this->featuredListings = $this->ioc->get('Wolfnet_Module_FeaturedListings');
 
         $this->agentHandler = $this->ioc->get('Wolfnet_AgentPagesHandler');
 
@@ -733,25 +734,6 @@ class Wolfnet_Plugin
         return $out;
     }
 
-    public function scFeaturedListings($attrs, $content = '')
-    {
-        try {
-            $defaultAttributes = $this->getFeaturedListingsDefaults();
-
-            $criteria = array_merge($defaultAttributes, (is_array($attrs)) ? $attrs : array());
-
-            $this->decodeCriteria($criteria);
-
-            $out = $this->featuredListings($criteria);
-
-        } catch (Wolfnet_Exception $e) {
-            $out = $this->displayException($e);
-        }
-
-        return $out;
-
-    }
-
 
     public function sclistingGrid($attrs)
     {
@@ -876,104 +858,6 @@ class Wolfnet_Plugin
     /* |_/ (_|  |_ (_|                                                                            */
     /*                                                                                            */
     /* ****************************************************************************************** */
-
-    public function getFeaturedListingsDefaults()
-    {
-
-        return array(
-            'title'      => '',
-            'direction'  => 'left',
-            'autoplay'   => true,
-            'speed'      => 5,
-            'ownertype'  => 'agent_broker',
-            'maxresults' => 50,
-            'numrows'    => 50,
-            'startrow'   => 1,
-            'keyid'      => '',
-            );
-
-    }
-
-
-    public function getFeaturedListingsOptions($instance = null)
-    {
-        $options = $this->getOptions($this->getFeaturedListingsDefaults(), $instance);
-
-        $options['autoplay_false_wps']  = selected($options['autoplay'], 'false', false);
-        $options['autoplay_true_wps']   = selected($options['autoplay'], 'true', false);
-        $options['direction_left_wps']  = selected($options['direction'], 'left', false);
-        $options['direction_right_wps'] = selected($options['direction'], 'right', false);
-        $options['ownertypes']          = $this->getOwnerTypes();
-
-        return $options;
-
-    }
-
-
-    public function featuredListings(array $criteria)
-    {
-        $key = $this->keyService->getFromCriteria($criteria);
-
-        if (!$this->keyService->isSaved($key)) {
-            return false;
-        }
-
-        if (!array_key_exists('startrow', $criteria)) {
-            $criteria['startrow'] = 1;
-        }
-
-        $qdata = $this->prepareListingQuery($criteria);
-
-        try {
-            $data = $this->apin->sendRequest($key, '/listing', 'GET', $qdata);
-        } catch (Wolfnet_Exception $e) {
-            return $this->displayException($e);
-        }
-
-        $this->augmentListingsData($data, $key);
-
-        $listingsData = array();
-
-        if (is_array($data['responseData']['data'])) {
-            $listingsData = $data['responseData']['data']['listing'];
-        }
-
-        $listingsHtml = '';
-
-
-        foreach ($listingsData as &$listing) {
-            $vars = array(
-                'listing' => $listing
-                );
-
-            $listingsHtml .= $this->views->listingView($vars);
-
-        }
-
-        $_REQUEST['wolfnet_includeDisclaimer'] = true;
-        $_REQUEST[$this->requestPrefix.'productkey'] = $key;
-
-        // Keep a running array of product keys so we can output all necessary disclaimers
-        if (!array_key_exists('keyList', $_REQUEST)) {
-            $_REQUEST['keyList'] = array();
-        }
-
-        if (!in_array($_REQUEST[$this->requestPrefix.'productkey'], $_REQUEST['keyList'])) {
-            array_push($_REQUEST['keyList'], $_REQUEST[$this->requestPrefix.'productkey']);
-        }
-
-        $vars = array(
-            'instance_id'  => str_replace('.', '', uniqid('wolfnet_featuredListing_')),
-            'listingsHtml' => $listingsHtml,
-            'siteUrl'      => site_url(),
-            'criteria'     => json_encode($criteria)
-            );
-
-        $args = $this->convertDataType(array_merge($criteria, $vars));
-
-        return $this->views->featuredListingView($args);
-
-    }
 
 
     public function getListingGridOptions($instance = null)
@@ -2030,7 +1914,7 @@ class Wolfnet_Plugin
     }
 
 
-    private function getOwnerTypes()
+    public function getOwnerTypes()
     {
         return array(
             array('value'=>'agent_broker', 'label'=>'Agent Then Broker'),
@@ -2231,6 +2115,11 @@ class Wolfnet_Plugin
     public function scQuickSearch($attrs, $content = '') 
     {
         return $this->quickSearch->scQuickSearch($attrs, $content);
+    }
+
+    public function scFeaturedListings($attrs, $content = '')
+    {
+        return $this->featuredListings->scFeaturedListings($attrs, $content);
     }
 
 

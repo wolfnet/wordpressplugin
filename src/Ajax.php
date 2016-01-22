@@ -229,7 +229,7 @@ class Wolfnet_Ajax
     {
 
         try {
-            $args = $GLOBALS['wolfnet']->getFeaturedListingsOptions();
+            $args = $GLOBALS['wolfnet']->featuredListings->getOptions();
 
             $response = $GLOBALS['wolfnet']->views->featuredListingsOptionsFormView($args);
 
@@ -295,7 +295,7 @@ class Wolfnet_Ajax
     {
 
         try {
-            $args = $GLOBALS['wolfnet']->quickSearch->getQuickSearchOptions();
+            $args = $GLOBALS['wolfnet']->quickSearch->getOptions();
 
             $response = $GLOBALS['wolfnet']->views->quickSearchOptionsFormView($args);
 

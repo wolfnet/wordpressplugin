@@ -137,6 +137,12 @@ class Wolfnet_Factory
     }
 
 
+    private function getWolfnet_Module_FeaturedListings()
+    {
+        return new Wolfnet_Module_FeaturedListings($this->args['plugin']);
+    }
+
+
     private function getWolfnet_AgentPagesHandler()
     {
         return new Wolfnet_AgentPagesHandler($this->args['plugin']);
