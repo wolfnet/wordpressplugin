@@ -273,7 +273,7 @@ class Wolfnet_Ajax
     {
 
         try {
-            $args = $GLOBALS['wolfnet']->getPropertyListOptions();
+            $args = $GLOBALS['wolfnet']->propertyList->getOptions();
 
             $response = $GLOBALS['wolfnet']->views->listingGridOptionsFormView($args);
 

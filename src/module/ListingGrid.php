@@ -18,6 +18,12 @@ class Wolfnet_Module_ListingGrid
     */
     protected $plugin = null;
 
+    /**
+    * This property holds the current instance of the Wolfnet_Views.
+    * @var Wolfnet_Views
+    */
+    protected $views = null;
+
 
     public function __construct($plugin, $views) {
         $this->plugin = $plugin;

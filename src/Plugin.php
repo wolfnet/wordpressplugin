@@ -146,6 +146,7 @@ class Wolfnet_Plugin
         $this->quickSearch = $this->ioc->get('Wolfnet_Module_QuickSearch');
         $this->featuredListings = $this->ioc->get('Wolfnet_Module_FeaturedListings');
         $this->listingGrid = $this->ioc->get('Wolfnet_Module_ListingGrid');
+        $this->propertyList = $this->ioc->get('Wolfnet_Module_PropertyList');
 
         $this->agentHandler = $this->ioc->get('Wolfnet_AgentPagesHandler');
 
@@ -736,24 +737,6 @@ class Wolfnet_Plugin
     }
 
 
-    public function scPropertyList($attrs = array())
-    {
-        try {
-            $criteria = array_merge($this->getPropertyListDefaults(), (is_array($attrs)) ? $attrs : array());
-
-            $this->decodeCriteria($criteria);
-
-            $out = $this->listingGrid($criteria, 'list');
-
-        } catch (Wolfnet_Exception $e) {
-            $out = $this->displayException($e);
-        }
-
-        return $out;
-
-    }
-
-
     /* Data ************************************************************************************* */
     /*  _                                                                                         */
     /* | \  _. _|_  _.                                                                            */
@@ -850,39 +833,6 @@ class Wolfnet_Plugin
 
             );
 
-    }
-
-
-    public function getPropertyListDefaults()
-    {
-        return array(
-            'title'       => '',
-            'class'       => 'wolfnet_propertyList ',
-            'criteria'    => '',
-            'ownertype'   => 'all',
-            'maptype'     => 'disabled',
-            'paginated'   => false,
-            'sortoptions' => false,
-            'maxresults'  => 50, // needed??
-            'maxrows'     => 50,
-            'mode'        => 'advanced',
-            'savedsearch' => '',
-            'zipcode'     => '',
-            'city'        => '',
-            'exactcity'   => null,
-            'minprice'    => '',
-            'maxprice'    => '',
-            'keyid'       => 1,
-            'key'         => $this->keyService->getDefault(),
-            'startrow'    => 1,
-            );
-
-    }
-
-
-    public function getPropertyListOptions($instance = null)
-    {
-        return $this->listingGrid->getOptions($instance);
     }
 
 
@@ -1896,6 +1846,11 @@ class Wolfnet_Plugin
     public function sclistingGrid($attrs)
     {
         return $this->listingGrid->scListingGrid($attrs);
+    }
+
+    public function scPropertyList($attrs = array())
+    {
+        return $this->propertyList->scPropertyList($attrs);
     }
 
 

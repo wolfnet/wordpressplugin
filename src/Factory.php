@@ -152,6 +152,15 @@ class Wolfnet_Factory
     }
 
 
+    private function getWolfnet_Module_PropertyList()
+    {
+        return new Wolfnet_Module_PropertyList(
+            $this->args['plugin'],
+            $this->getWolfnet_Views()
+        );
+    }
+
+
     private function getWolfnet_AgentPagesHandler()
     {
         return new Wolfnet_AgentPagesHandler($this->args['plugin']);

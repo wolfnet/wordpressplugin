@@ -22,6 +22,7 @@ return array(
 
     'Wolfnet_Module_FeaturedListings' => '/module/FeaturedListings.php',
     'Wolfnet_Module_ListingGrid' => '/module/ListingGrid.php',
+    'Wolfnet_Module_PropertyList' => '/module/PropertyList.php',
     'Wolfnet_Module_QuickSearch' => '/module/QuickSearch.php',
 
     'Wolfnet_Service_CachingService' => '/service/CachingService.php',
