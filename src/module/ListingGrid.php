@@ -31,7 +31,7 @@ class Wolfnet_Module_ListingGrid
     }
 
 
-    public function sclistingGrid($attrs)
+    public function scListingGrid($attrs)
     {
         try {
             $default_maxrows = '50';

@@ -206,7 +206,7 @@ class Wolfnet_Ajax
     {
 
         try {
-            $args = $GLOBALS['wolfnet']->getAgentPagesOptions();
+            $args = $GLOBALS['wolfnet']->agentPages->getOptions();
             $args['showSoldOption'] = $GLOBALS['wolfnet']->soldListingsEnabled();
 
             $response = $GLOBALS['wolfnet']->views->agentPagesOptionsFormView($args);
@@ -339,7 +339,7 @@ class Wolfnet_Ajax
     public function remoteShortcodeBuilderShowAgentFeature()
     {
         try {
-            $response = $GLOBALS['wolfnet']->showAgentFeature();
+            $response = $GLOBALS['wolfnet']->agentPages->showAgentFeature();
         } catch (Wolfnet_Exception $e) {
             status_header(500);
 

@@ -147,8 +147,7 @@ class Wolfnet_Plugin
         $this->featuredListings = $this->ioc->get('Wolfnet_Module_FeaturedListings');
         $this->listingGrid = $this->ioc->get('Wolfnet_Module_ListingGrid');
         $this->propertyList = $this->ioc->get('Wolfnet_Module_PropertyList');
-
-        $this->agentHandler = $this->ioc->get('Wolfnet_AgentPagesHandler');
+        $this->agentPages = $this->ioc->get('Wolfnet_Module_AgentPages');
 
         if(is_admin()) {
             $this->admin = $this->ioc->get('Wolfnet_Admin');
@@ -707,36 +706,6 @@ class Wolfnet_Plugin
     }
 
 
-    /* Shortcodes ******************************************************************************* */
-    /*  __                                                                                        */
-    /* (_  |_   _  ._ _|_  _  _   _|  _   _                                                       */
-    /* __) | | (_) |   |_ (_ (_) (_| (/_ _>                                                       */
-    /*                                                                                            */
-    /* ****************************************************************************************** */
-
-    public function scAgentPages($attrs) 
-    {
-        if(!$this->showAgentFeature()) {
-            return '';
-        }
-        
-        try {
-            $defaultAttributes = $this->getAgentPagesDefaults();
-
-            $criteria = array_merge($defaultAttributes, (is_array($attrs)) ? $attrs : array());
-
-            $this->decodeCriteria($criteria);
-
-            $out = $this->agentPageHandler($criteria);
-
-        } catch (Wolfnet_Exception $e) {
-            $out = $this->displayException($e);
-        }
-
-        return $out;
-    }
-
-
     /* Data ************************************************************************************* */
     /*  _                                                                                         */
     /* | \  _. _|_  _.                                                                            */
@@ -744,53 +713,6 @@ class Wolfnet_Plugin
     /*                                                                                            */
     /* ****************************************************************************************** */
 
-
-    public function getAgentPagesDefaults()
-    {
-
-        return array(
-            'officetitle'    => '',
-            'agenttitle'     => '',
-            'detailtitle'    => '',
-            'showoffices'    => true,
-            'activelistings' => true,
-            'soldlistings'   => false,
-            'excludeoffices' => '',
-            'numperpage'     => 10,
-        );
-
-    }
-
-
-    public function getAgentPagesOptions($instance = null)
-    {
-        $options = $this->getOptions($this->getAgentPagesDefaults(), $instance);
-
-        return $options;
-
-    }
-
-
-    public function agentPageHandler(array $criteria = array()) 
-    {
-        $key = $this->keyService->getFromCriteria($criteria);
-
-        if (!$this->keyService->isSaved($key)) {
-            return false;
-        }
-
-        $vars = array(
-            'instance_id' => str_replace('.', '', uniqid('wolfnet_agentPages_')),
-            'criteria'    => $criteria,
-        );
-
-        $args = $this->convertDataType(array_merge($criteria, $vars));
-
-        $this->agentHandler->setKey($key);
-        $this->agentHandler->setArgs($args);
-
-        return $this->agentHandler->handleRequest();
-    }
 
     public function remoteSetSslVerify()
     {
@@ -1186,24 +1108,6 @@ class Wolfnet_Plugin
 
         return $value;
 
-    }
-
-
-    public function showAgentFeature()
-    {
-        try {
-            $data = $this->apin->sendRequest(
-                $this->keyService->getDefault(), 
-                '/settings', 
-                'GET'
-            );
-        } catch (Wolfnet_Exception $e) {
-            return $this->displayException($e);
-        }
-
-        $leadsEnabled = $data['responseData']['data']['site']['my_agents_leads'];
-
-        return $leadsEnabled;
     }
 
 
@@ -1833,9 +1737,9 @@ class Wolfnet_Plugin
     /*
      * Shortcode helper functions for registering in registerShortCodes.
      */
-    public function scQuickSearch($attrs, $content = '') 
+    public function scAgentPages($attrs) 
     {
-        return $this->quickSearch->scQuickSearch($attrs, $content);
+        return $this->agentPages->scAgentPages($attrs);
     }
 
     public function scFeaturedListings($attrs, $content = '')
@@ -1843,7 +1747,7 @@ class Wolfnet_Plugin
         return $this->featuredListings->scFeaturedListings($attrs, $content);
     }
 
-    public function sclistingGrid($attrs)
+    public function scListingGrid($attrs)
     {
         return $this->listingGrid->scListingGrid($attrs);
     }
@@ -1851,6 +1755,11 @@ class Wolfnet_Plugin
     public function scPropertyList($attrs = array())
     {
         return $this->propertyList->scPropertyList($attrs);
+    }
+
+    public function scQuickSearch($attrs, $content = '') 
+    {
+        return $this->quickSearch->scQuickSearch($attrs, $content);
     }
 
 

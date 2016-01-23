@@ -62,14 +62,18 @@ class Wolfnet_Widget_AgentPagesWidget extends Wolfnet_Widget_AbstractWidget
 
     public function update($new_instance, $old_instance)
     {
-        return parent::updateWithDefault($this->plugin->getAgentPagesDefaults(), $new_instance, $old_instance);
+        return parent::updateWithDefault(
+            $this->plugin->agentPages->getDefaults(), 
+            $new_instance, 
+            $old_instance
+        );
 
     }
 
 
     protected function getOptions($instance = null)
     {
-        $options = $this->plugin->getAgentPagesOptions($instance);
+        $options = $this->plugin->agentPages->getOptions($instance);
 
         return parent::prepOptions($options);
 

@@ -20,6 +20,7 @@ return array(
     'Wolfnet_Api_Client' => '/api/Client.php',
     'Wolfnet_Api_StatsDecorator' => '/api/StatsDecorator.php',
 
+    'Wolfnet_Module_AgentPages' => '/module/AgentPages.php',
     'Wolfnet_Module_FeaturedListings' => '/module/FeaturedListings.php',
     'Wolfnet_Module_ListingGrid' => '/module/ListingGrid.php',
     'Wolfnet_Module_PropertyList' => '/module/PropertyList.php',
