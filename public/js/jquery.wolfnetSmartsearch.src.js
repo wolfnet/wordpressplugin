@@ -391,11 +391,6 @@
 				})
 				.always(function(data){
 					methods.hideSearchingMessage(this);
-				})
-				.fail(function(xhr, status, error){
-					// TODO: remove fail debug when finished
-					console.log("Status: " + status + " Error: " + error);
-					console.log(xhr);
 				});
 
 				// Save any altered state data back to the data object.
