@@ -93,7 +93,11 @@ Please upgrade to the latest version of the plugin as we will be disabling our o
 
 == Changelog ==
 
+= 1.8.2 =
+* Fixes unexpected T_PAAMAYIM_NEKUDOTAYIM exception.
+
 = 1.8.1 =
+* Fixes a bug where scrolling widget potentially crashes browser.
 * Fixes a saved search view error after Wordpress 4.4 update.
 * Removes bundled version of jQuery migrate; we will defer to the Wordpress bundled version.
 
