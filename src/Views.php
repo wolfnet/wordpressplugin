@@ -195,7 +195,7 @@ class Wolfnet_Views
 
     public function getWidgetTheme()
     {
-        return get_option(trim($GLOBALS['wolfnet']->widgetThemeOptionKey), 'acanthite');
+        return get_option(trim($GLOBALS['wolfnet']->widgetThemeOptionKey), 'ash');
     }
 
 
