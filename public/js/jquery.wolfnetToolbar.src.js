@@ -234,7 +234,7 @@
                                     getBedBathHTML(data[i]) +
                                 '</div>' +
                             '</div>' +
-                        '</div> ',
+                        '</div> ' +
                         '<div class="wolfnet_locationInfo" title="' + escapeHtml(data[i].address) + '">' +
                             '<div class="wolfnet_address">' +
                                 data[i].display_address +
