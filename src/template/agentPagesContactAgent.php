@@ -32,7 +32,7 @@
 	}
 
 	$link = $linkBase;
-	$link .= '?agent=' . $agentId;
+	$link .= '?agentId=' . $agentId;
 	$link .= '&officeId=' . $officeId;
 	$link .= '#post-' . get_the_id();
 
