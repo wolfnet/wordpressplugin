@@ -22,22 +22,22 @@
 
 ?>
 
-<div id="<?php echo $instance_id; ?>" class="wolfnet_widget wolfnet_quickSearch <?php echo $viewclass; ?>">
+<div id="<?php echo $instance_id; ?>" class="wolfnet_widget wolfnet_quickSearch <?php echo $viewclass; ?> <?php echo $widgetThemeClass; ?>">
 
     <?php if (trim($title) != '') { ?>
         <h2 class="wolfnet_widgetTitle"><?php echo $title; ?></h2>
     <?php } ?>
 
-    <?php 
+    <?php
     /*
         The form action below will get generated automatically upon market selection if
-        the routing type == "manual" (see JS at bottom of file). Otherwise, this page will 
+        the routing type == "manual" (see JS at bottom of file). Otherwise, this page will
         use an ajax call to get the correct action to post to. If there is only one market
         then the action will get set to that.
     */
     ?>
     <form id="<?php echo $instance_id; ?>_quickSearchForm" class="wolfnet_quickSearch_form"
-        name="<?php echo $instance_id; ?>_quickSearchForm" method="get" 
+        name="<?php echo $instance_id; ?>_quickSearchForm" method="get"
         action="<?php echo $formAction; ?>">
 
         <input name="action" type="hidden" value="newsearchsession" />
@@ -45,7 +45,7 @@
         <input name="search_source" type="hidden" value="wp_plugin">
         <input name="routing" type="hidden" value="<?php echo $routing; ?>" />
 
-        <?php 
+        <?php
             if(count($keyids) > 1 && $routing == 'manual') {
                 foreach($markets as $market) {
                     foreach($keyids as $key) {
@@ -61,7 +61,7 @@
                 echo '<input name="keyids" type="hidden" value="' . implode(',', $keyids) . '" />';
             }
         ?>
-        
+
         <ul class="wolfnet_searchType">
             <li><a href="javascript:;" wolfnet:search_type="opentxt"><span>Location</span></a></li>
             <li><a href="javascript:;" wolfnet:search_type="mlsnum"><span>Listing Number</span></a></li>
@@ -80,12 +80,12 @@
             <div>
                 <select id="<?php echo $instance_id; ?>_min_price" name="min_price">
                     <option value="">Min. Price</option>
-                    <?php 
+                    <?php
                     if (is_array($prices) && array_key_exists('min_price', $prices)) {
                         foreach ($prices['min_price']['options'] as $price) { ?>
                             <option value="<?php echo $price['value']; ?>"><?php echo $price['label']; ?></option>
-                        <?php 
-                        } 
+                        <?php
+                        }
                     }
                     ?>
                 </select>
@@ -94,13 +94,13 @@
             <div>
                 <select id="<?php echo $instance_id; ?>_max_price" name="max_price">
                     <option value="">Max. Price</option>
-                    <?php 
+                    <?php
                     if (is_array($prices) && array_key_exists('max_price', $prices)) {
                         foreach ($prices['max_price']['options'] as $price) { ?>
                             <option value="<?php echo $price['value']; ?>"><?php echo $price['label']; ?></option>
-                        <?php 
+                        <?php
                         }
-                    } 
+                    }
                     ?>
                 </select>
             </div>

@@ -26,7 +26,7 @@ unset($wpMeta['key']);
 
 ?>
 
-<div id="<?php echo $instance_id; ?>" class="wolfnet_widget <?php echo $class; ?>">
+<div id="<?php echo $instance_id; ?>" class="wolfnet_widget <?php echo $class; ?> <?php echo $widgetThemeClass; ?>">
 
     <?php if (trim($title) != '') { ?>
         <h2 class="widget-title"><?php echo $title; ?></h2>
