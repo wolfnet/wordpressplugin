@@ -432,7 +432,7 @@ class Wolfnet_Views
 
     private function parseTemplate($template, array $vars = array())
     {
-        $vars['widgetThemeClass'] = 'wolfnet-theme-ash';
+        $vars['widgetThemeClass'] = 'wolfnet-theme-' . $this->getWidgetTheme();
 
         extract($vars, EXTR_OVERWRITE);
 
