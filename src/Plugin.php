@@ -278,7 +278,7 @@ class Wolfnet_Plugin
         /*
          * Note - functionality here has been moved to AFTER the activation
          * redirect. In the unforunate event that the activation code fails,
-         * we want the activation to at least have succeeded and not thrown 
+         * we want the activation to at least have succeeded and not thrown
          * a fatal error. Problems related to SSL and API connectivity should
          * not destroy the activation process.
          */
