@@ -26,7 +26,7 @@
     <h2><?php echo $title ?></h2>
 <?php } ?>
 
-<div id="<?php echo $instance_id; ?>" class="wolfnet_widget wolfnet_featuredListings">
+<div id="<?php echo $instance_id; ?>" class="wolfnet_widget wolfnet_featuredListings <?php echo $widgetThemeClass; ?>">
     <?php echo (isset($listingsHtml)) ? $listingsHtml : 'No Listings to Display.'; ?>
 </div>
 

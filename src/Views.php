@@ -405,6 +405,8 @@ class Wolfnet_Views
 
     private function parseTemplate($template, array $vars = array())
     {
+        $vars['widgetThemeClass'] = 'wolfnet-theme-ash';
+
         extract($vars, EXTR_OVERWRITE);
 
         ob_start();
