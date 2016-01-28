@@ -36,7 +36,7 @@
 		action="<?php echo $formAction; ?>"
 	>
 
-		<fieldset class="open-search">
+		<fieldset class="wnt-smartsearch-component">
 			<div class="form-group">
 				<div class="wolfnet_searchTypeField">
 					<input
@@ -126,7 +126,7 @@
 		var fields = JSON.parse('<?php echo $smartSearchFields; ?>');
 		var map = JSON.parse('<?php echo $smartSearchFieldMap; ?>');
 
-		$form.find('.open-search input:first').wolfnetSmartSearch({
+		$form.find('.wnt-smartsearch-component input:first').wolfnetSmartSearch({
 			ajaxUrl    : wolfnet_ajax.ajaxurl,
 			ajaxAction : 'wolfnet_smart_search',
 			fields     : fields,
