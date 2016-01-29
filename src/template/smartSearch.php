@@ -36,9 +36,9 @@
 		action="<?php echo $formAction; ?>"
 	>
 
-		<fieldset class="wnt-smartsearch-component">
+		<fieldset class="wnt-smartsearch">
 			<div class="form-group">
-				<div class="wolfnet_searchTypeField">
+				<div class="wnt-smartsearch-input-container">
 					<input
 						id="<?php echo $instance_id; ?>_search_text"
 						class="<?php echo $smartsearchInput; ?>_search_text wnt-smart-search"
@@ -47,11 +47,10 @@
 						value=""
 						placeholder="Search by City, Address, Zip, Area, and more!"
 					/>
-						<!--TODO: echo placeholder as passed-in var -->
 				</div>
 			</div>
 		</fieldset>
-
+		<!--TODO: echo placeholder dynamically ^^ -->
 
 		<!--TODO: Move Price/Bed/Baths widget to its own modularized view/template-->
 		<!-- and call from both quicksearch and smartsearch views.-->
@@ -126,7 +125,7 @@
 		var fields = JSON.parse('<?php echo $smartSearchFields; ?>');
 		var map = JSON.parse('<?php echo $smartSearchFieldMap; ?>');
 
-		$form.find('.wnt-smartsearch-component input:first').wolfnetSmartSearch({
+		$form.find('.wnt-smartsearch input:first').wolfnetSmartSearch({
 			ajaxUrl    : wolfnet_ajax.ajaxurl,
 			ajaxAction : 'wolfnet_smart_search',
 			fields     : fields,

@@ -341,51 +341,87 @@
 
     }
 
-    &.wolfnet_smartSearch
-    {
+	&.wolfnet_smartSearch
+	{
 
-    	span.wnt-smart-search {
-    		overflow: hidden;
-    		cursor: text;
-    		vertical-align: top;
-    		height: auto !important;
-    	}
+		&.wnt-smartsearch {
 
-    	/*  This is the primary label of the search entity
-    		in suggestion menu (on the left) */
-    	.wolfnet-suggestion-label
-    	{
-    		font-weight: bold;
-			padding-right: 10px;
-			font-size: 1.1em;
-    	}
+			.wnt-smartsearch-input-container {
+				width: 100%;
+			}
 
-    	/*  This is the secondary label for the search TYPE of the
-			search entity, in suggestion menu (on the right) */
-    	.wolfnet-suggestion-field
-    	{
-    		font-size: 0.9em;
-    	}
-
-		.wnt-ss-value {
-			border: 1px;
-			border-color: black;
-			border-style: double;
-			border-radius: 0;
-			background-color: @gradientColor2;
-			color: black;
-			font-size: 0.8em;
-			margin-right:.5em;
-			padding: 0 5px 0 5px;
 		}
-		.wnt-close-btn {
-				padding-left: 5px;
-				color: black;
-				cursor: pointer;
-				font-size: 15px;
-				font-weight: bold;
-		}
-    }
+
+		span.wnt-smart-search
+		{
+			//padding: $padding-base-vertical $padding-base-horizontal;
+			cursor: text;
+			overflow: hidden;
+			vertical-align: top;
+			//border: 1px solid $input-border;
+			//min-height: $input-height-small !important;
+			height: auto !important;
+			display: inline-block;
+			//border-radius: $input-border-radius;
+			padding-bottom: 0 !important;
+			text-align: left;
+			width: 100%;
+
+			&.focus
+			{
+			}
+
+			> span
+			{
+				//height: ceil($input-height-small * .65);
+				vertical-align: top;
+				// margin: 0 2px 2px 0;
+				// padding: 2px;
+				// line-height: 1em;
+				//margin-bottom: $padding-base-vertical;
+
+				&.wnt-ss-value
+				{
+					//border: 1px solid $gray-dark;
+					border-radius: 0;
+					//background-color: $gray-light;
+					//color: lighten($gray-light, 50%);
+					//font-size: $font-size-small;
+					margin-right:.5em;
+					padding: 0 5px 0 5px;
+
+					.wnt-close-btn
+					{
+						padding-left: 5px;
+						cursor: pointer;
+						//font-size: ceil($font-size-small * .8);
+
+						span
+						{
+							display: none;
+						}
+					}
+				}
+
+				input {
+					height: 100%;
+					border: 0 !important;
+					padding: 0 !important;
+					margin: 0 !important;
+					outline: none !important;
+					padding: 0 !important;
+					// width: 2em !important;
+				}
+
+				input[placeholder] { text-overflow: ellipsis; }
+				::-moz-placeholder { text-overflow: ellipsis; }
+				input:-moz-placeholder { text-overflow: ellipsis; }
+
+			} // > span
+
+		} // span.wnt-smart-search
+
+	} // &.wolfnet_smartSearch
 
     &.wolfnet_officesList
     {
