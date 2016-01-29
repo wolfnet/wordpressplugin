@@ -214,7 +214,7 @@ class Wolfnet_Views
     public function featuredListingsOptionsFormView(array $args = array())
     {
         $defaultArgs = array(
-            'instance_id'     => str_replace('.', '', uniqid('wolfnet_featuredListing_')),
+            'instance_id'     => str_replace('.', '', 'wolfnet_featuredListing_' . $GLOBALS['wolfnet']->createUUID()),
             'markets'         => json_decode($GLOBALS['wolfnet']->getProductKey()),
             'selectedKey'     => (array_key_exists('keyid', $_REQUEST)) ? $_REQUEST['keyid'] : '1',
             );
@@ -229,7 +229,7 @@ class Wolfnet_Views
     public function listingGridOptionsFormView(array $args = array())
     {
         $defaultArgs = array(
-            'instance_id'      => str_replace('.', '', uniqid('wolfnet_listingGrid_')),
+            'instance_id'      => str_replace('.', '', 'wolfnet_listingGrid_' . $GLOBALS['wolfnet']->createUUID()),
             'markets'          => json_decode($GLOBALS['wolfnet']->getProductKey()),
             'keyid'            => ''
             );
@@ -254,7 +254,7 @@ class Wolfnet_Views
         }
 
         $defaultArgs = array(
-            'instance_id' => str_replace('.', '', uniqid('wolfnet_quickSearch_')),
+            'instance_id' => str_replace('.', '', 'wolfnet_quickSearch_' . $GLOBALS['wolfnet']->createUUID()),
             'markets'     => $markets,
             'keyids'      => $keyids,
             'view'        => $view,

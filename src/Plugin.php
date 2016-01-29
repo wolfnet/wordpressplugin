@@ -239,6 +239,36 @@ class Wolfnet_Plugin
         return $this->chr_utf8($matches[1]);
     }
 
+    public function createUUID()
+    {
+        // Source: http://www.php.net/manual/en/function.uniqid.php#94959
+
+        return sprintf(
+
+            '%04x%04x-%04x-%04x-%04x-%04x%04x%04x',
+
+            // 32 bits for "time_low"
+            mt_rand(0, 0xffff), mt_rand(0, 0xffff),
+
+            // 16 bits for "time_mid"
+            mt_rand(0, 0xffff),
+
+            // 16 bits for "time_hi_and_version",
+            // four most significant bits holds version number 4
+            mt_rand(0, 0x0fff) | 0x4000,
+
+            // 16 bits, 8 bits for "clk_seq_hi_res",
+            // 8 bits for "clk_seq_low",
+            // two most significant bits holds zero and one for variant DCE1.1
+            mt_rand(0, 0x3fff) | 0x8000,
+
+            // 48 bits for "node"
+            mt_rand(0, 0xffff), mt_rand(0, 0xffff), mt_rand(0, 0xffff)
+
+        );
+
+    }
+
 
     /* Hooks ************************************************************************************ */
     /* |_|  _   _  |   _                                                                          */
@@ -1461,7 +1491,7 @@ class Wolfnet_Plugin
         }
 
         $vars = array(
-            'instance_id'  => str_replace('.', '', uniqid('wolfnet_featuredListing_')),
+            'instance_id'  => str_replace('.', '', 'wolfnet_featuredListing_' . $this->createUUID()),
             'listingsHtml' => $listingsHtml,
             'siteUrl'      => site_url(),
             'criteria'     => json_encode($criteria)
@@ -1576,7 +1606,7 @@ class Wolfnet_Plugin
         }
 
         $vars = array(
-            'instance_id'        => str_replace('.', '', uniqid('wolfnet_listingGrid_')),
+            'instance_id'        => str_replace('.', '', 'wolfnet_listingGrid_' . $this->createUUID()),
             // TODO: not needed?? we are merging $vars and listing data below.
             'listings'           => $listingsData,
             'listingsHtml'       => $listingsHtml,
@@ -1588,9 +1618,9 @@ class Wolfnet_Plugin
             'map'                => '',
             'maptype'            => $data['wpMeta']['maptype'],
             'hideListingsTools'  => '',
-            'hideListingsId'     => uniqid('hideListings'),
-            'showListingsId'     => uniqid('showListings'),
-            'collapseListingsId' => uniqid('collapseListings'),
+            'hideListingsId'     => 'hideListings' . $this->createUUID(),
+            'showListingsId'     => 'showListings' . $this->createUUID(),
+            'collapseListingsId' => 'collapseListings' . $this->createUUID(),
             'toolbarTop'         => '',
             'toolbarBottom'      => '',
             'maxrows'            => ((count($listingsData) > 0) ? $data['requestData']['maxrows'] : 0),
@@ -1840,7 +1870,7 @@ class Wolfnet_Plugin
         }
 
         $vars = array(
-            'instance_id'  => str_replace('.', '', uniqid('wolfnet_quickSearch_')),
+            'instance_id'  => str_replace('.', '', 'wolfnet_quickSearch_' . $this->createUUID()),
             'siteUrl'      => site_url(),
             'keyids'       => $keyids,
             'markets'      => json_decode($markets),
@@ -2771,10 +2801,10 @@ class Wolfnet_Plugin
 			'centerLng'    => $data['responseData']['data']['market']['maptracks']['map_start_lng'],
 			'zoomLevel'    => $data['responseData']['data']['market']['maptracks']['map_start_scale'],
 			'houseoverIcon'=> $GLOBALS['wolfnet']->url . 'img/houseover.png',
-			'mapId'        => uniqid('wntMapTrack'),
-			'hideMapId'    => uniqid('hideMap'),
-			'showMapId'    => uniqid('showMap'),
 		);
+            'mapId'        => 'wntMapTrack' . $this->createUUID(),
+            'hideMapId'    => 'hideMap' . $this->createUUID(),
+            'showMapId'    => 'showMap' . $this->createUUID(),
 
         $args['houseoverData'] = $this->getHouseoverData(
             $listingsData,
