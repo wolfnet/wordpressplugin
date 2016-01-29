@@ -345,12 +345,23 @@
 	{
 
 		&.wnt-smartsearch {
-
 			.wnt-smartsearch-input-container {
 				width: 100%;
 			}
 
 		}
+
+        .wolfnet-suggestion-label
+        {
+            font-weight: bold;
+            padding-right: 10px;
+            font-size: 1.1em;
+        }
+
+        .wolfnet-suggestion-field
+        {
+            font-size: 0.9em;
+        }
 
 		span.wnt-smart-search
 		{
@@ -359,11 +370,9 @@
 			overflow: hidden;
 			vertical-align: top;
 			border: 1px solid @gradientColor2;
-			//min-height: $input-height-small !important;
 			height: auto !important;
 			width: 100%;
 			display: inline-block;
-			//border-radius: $input-border-radius;
 			padding-bottom: 0 !important;
 			text-align: left;
 
@@ -371,37 +380,25 @@
 			{
 			}
 
+			.wnt-ss-value
+			{
+				background-color: @gradientColor2;
+				border: 1px solid black;
+				font-size: 1.1em;
+				margin-right:.5em;
+				padding: 0 5px 0 5px;
+
+				.wnt-close-btn
+				{
+					padding-left: 5px;
+					cursor: pointer;
+					font-weight: bold;
+				}
+			}
+
 			> span
 			{
-				//height: ceil($input-height-small * .65);
 				vertical-align: top;
-				// margin: 0 2px 2px 0;
-				// padding: 2px;
-				// line-height: 1em;
-				//margin-bottom: $padding-base-vertical;
-
-				&.wnt-ss-value
-				{
-					//border: 1px solid $gray-dark;
-					border-radius: 0;
-					//background-color: $gray-light;
-					//color: lighten($gray-light, 50%);
-					//font-size: $font-size-small;
-					margin-right:.5em;
-					padding: 0 5px 0 5px;
-
-					.wnt-close-btn
-					{
-						padding-left: 5px;
-						cursor: pointer;
-						//font-size: ceil($font-size-small * .8);
-
-						span
-						{
-							display: none;
-						}
-					}
-				}
 
 				input {
 					height: 100%;
@@ -410,18 +407,13 @@
 					margin: 0 !important;
 					outline: none !important;
 					padding: 0 !important;
-					// width: 2em !important;
 				}
+			}
 
-				input[placeholder] { text-overflow: ellipsis; }
-				::-moz-placeholder { text-overflow: ellipsis; }
-				input:-moz-placeholder { text-overflow: ellipsis; }
+		}
 
-			} // > span
+	}
 
-		} // span.wnt-smart-search
-
-	} // &.wolfnet_smartSearch
 
     &.wolfnet_officesList
     {
