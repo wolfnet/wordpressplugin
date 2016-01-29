@@ -2796,15 +2796,15 @@ class Wolfnet_Plugin
 
 
         $args['mapParams'] = array(
-    		'mapProvider'  => 'mapquest',
-    		'centerLat'    => $data['responseData']['data']['market']['maptracks']['map_start_lat'],
-			'centerLng'    => $data['responseData']['data']['market']['maptracks']['map_start_lng'],
-			'zoomLevel'    => $data['responseData']['data']['market']['maptracks']['map_start_scale'],
-			'houseoverIcon'=> $GLOBALS['wolfnet']->url . 'img/houseover.png',
-		);
+            'mapProvider'  => 'mapquest',
+            'centerLat'    => $data['responseData']['data']['market']['maptracks']['map_start_lat'],
+            'centerLng'    => $data['responseData']['data']['market']['maptracks']['map_start_lng'],
+            'zoomLevel'    => $data['responseData']['data']['market']['maptracks']['map_start_scale'],
+            'houseoverIcon'=> $GLOBALS['wolfnet']->url . 'img/houseover.png',
             'mapId'        => 'wntMapTrack' . $this->createUUID(),
             'hideMapId'    => 'hideMap' . $this->createUUID(),
             'showMapId'    => 'showMap' . $this->createUUID(),
+        );
 
         $args['houseoverData'] = $this->getHouseoverData(
             $listingsData,
