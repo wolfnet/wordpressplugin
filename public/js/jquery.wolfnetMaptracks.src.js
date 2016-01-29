@@ -2744,17 +2744,20 @@
             var parentWidth = wntMapContainer.parent().width();
             var wntMap = wntMapContainer.data('map');
 
+            if (typeof wntMap !== 'undefined') {
 
-            var mapWidth = wntMap.getSize().width;
-            var mapHeight = wntMap.getSize().height;
+                var mapWidth = wntMap.getSize().width;
+                var mapHeight = wntMap.getSize().height;
 
-            // If mapWidth does not equal parentWidth, reset size
-            if (mapWidth != parentWidth) {
-                wntMap.setSize(parentWidth,mapHeight);
+                // If mapWidth does not equal parentWidth, reset size
+                if (mapWidth != parentWidth) {
+                    wntMap.setSize(parentWidth,mapHeight);
+                }
+
+                // Fit map to listings
+                wntMap.bestFit();
+
             }
-
-            // Fit map to listings
-            wntMap.bestFit();
         }
 
     }
