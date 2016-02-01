@@ -126,7 +126,7 @@ if (typeof jQuery != 'undefined') {
             $items.css({
                 'margin-left': leftMargin,
                 'padding-left': leftPadding,
-                'max-width': columnWidth
+                'max-width': columnWidth + leftPadding + rightPadding
             });
             $items.find('.wolfnet_listingMain').css({
                 'padding-right': rightPadding
