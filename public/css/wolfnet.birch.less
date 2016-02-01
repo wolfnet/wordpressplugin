@@ -62,12 +62,25 @@
         font-family: 'Roboto', sans-serif;
         font-size: 16px;
         line-height: 1.5em;
+        // TODO: Remove if BrandCo stops targeting our class names:
+        height: auto !important;
 
         .wolfnet_listing {
-            height:     @listingHeight;
+            // TODO: Remove 'important' flag if BrandCo stops targeting our class names:
+            height:     @listingHeight !important;
             margin:     0 0 0 0;
             padding:    0 0 0 0;
             color:      @gray-dark;
+            // TODO: Remove if BrandCo stops targeting our class names:
+            font-weight: normal;
+            text-align: left;
+
+            a {
+                color:      @gray-dark;
+                // TODO: Remove if BrandCo stops targeting our class names:
+                font-weight: normal;
+                text-align: left;
+            }
 
             .wolfnet_info_separator:after {
                 content: '/';
