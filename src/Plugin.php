@@ -1550,7 +1550,7 @@ class Wolfnet_Plugin
 
 			$args['smartSearchFields'] = json_encode($smartSearchService->getFields());
 			$args['smartSearchFieldMap'] = json_encode($smartSearchService->getFieldMap());
-			$args['componentId'] = uniqid();
+			$args['componentId'] = uniqid('wnt-');
 		}
 
 		return $this->views->quickSearchView($args);
