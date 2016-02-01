@@ -64,8 +64,8 @@ if (typeof jQuery != 'undefined') {
             }
 
             var $items = getGridItems(target);
-            // Capture the original item width for later comparison
-            data.itemWidth = $items.first().innerWidth();
+            // Capture the original item width for later comparison, removing any applied max-width
+            data.itemWidth = $items.first().css('max-width', '').innerWidth();
             if (data.hasOwnProperty('itemPadding') && !isNaN(data.itemPadding)) {
                 data.itemWidth -= data.itemPadding;
             }
@@ -97,7 +97,19 @@ if (typeof jQuery != 'undefined') {
             var columns = Math.max(Math.floor(targetWidth / (columnWidth + data.option.minColumnGap)), 1);
 
             if (columns > $items.length) {
+
+                // If number of columns exceeds number of items, limit columns to number of items
                 columns = $items.length;
+
+            } else if (columns === 1) {
+
+                // If only 1 column can fit, try reducing column width to fit 2 columns
+                var reducedColumnWidth = (targetWidth - data.option.minColumnGap) / 2;
+                if (reducedColumnWidth >= columnWidth * 0.75) {
+                    columns = 2;
+                    columnWidth = reducedColumnWidth;
+                }
+
             }
 
             var remainingPixels = targetWidth - (columnWidth * columns);
@@ -113,7 +125,8 @@ if (typeof jQuery != 'undefined') {
 
             $items.css({
                 'margin-left': leftMargin,
-                'padding-left': leftPadding
+                'padding-left': leftPadding,
+                'max-width': columnWidth
             });
             $items.find('.wolfnet_listingMain').css({
                 'padding-right': rightPadding
