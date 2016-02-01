@@ -1521,20 +1521,21 @@ class Wolfnet_Plugin
             return $this->getWpError($markets);
         }
 
-        $vars = array(
-            'instance_id'  => str_replace('.', '', uniqid('wolfnet_quickSearch_')),
-            'siteUrl'      => site_url(),
-            'keyids'       => $keyids,
-            'markets'      => json_decode($markets),
-            'prices'       => $prices,
-            'beds'         => $beds,
-            'baths'        => $baths,
-            'formAction'   => $formAction,
-            );
 
-        $args = $this->convertDataType(array_merge($criteria, $vars));
+		$vars = array(
+			'instance_id'  => str_replace('.', '', uniqid('wolfnet_quickSearch_')),
+			'siteUrl'      => site_url(),
+			'keyids'       => $keyids,
+			'markets'      => json_decode($markets),
+			'prices'       => $prices,
+			'beds'         => $beds,
+			'baths'        => $baths,
+			'formAction'   => $formAction,
+		);
 
-		// If Smartsearch, aggregate data necessary for SS plugin parameters
+		$args = $this->convertDataType(array_merge($criteria, $vars));
+
+		// If Smartsearch - aggregate extra data necessary for plugin parameters
 		if ($args['smartsearch']) {
 
 			// Instantiate SmartSearch Service
@@ -1549,6 +1550,7 @@ class Wolfnet_Plugin
 
 			$args['smartSearchFields'] = json_encode($smartSearchService->getFields());
 			$args['smartSearchFieldMap'] = json_encode($smartSearchService->getFieldMap());
+			$args['componentId'] = uniqid();
 		}
 
 		return $this->views->quickSearchView($args);
