@@ -22,31 +22,25 @@
 
 ?>
 
-<div id="<?php echo $instance_id; echo ' '; echo $componentId; ?>" class="wolfnet_smartSearch wolfnet_widget wolfnet_quickSearch <?php echo $viewclass; ?>">
+<div id="<?php echo $instance_id; echo ' '; echo $componentId; ?>"
+	class="wolfnet_smartSearch wolfnet_widget wolfnet_quickSearch <?php echo $viewclass; ?>">
 
 	<?php if (trim($title) != '') { ?>
 		<h2 class="wolfnet_widgetTitle"><?php echo $title; ?></h2>
 	<?php } ?>
 
-	<form
-		id="<?php echo $instance_id; ?>_quickSearchForm"
+	<form id="<?php echo $instance_id; ?>_quickSearchForm"
 		class="wnt-search wolfnet_quickSearch_form"
 		name="<?php echo $instance_id; ?>_quickSearchForm"
-		method="get"
-		action="<?php echo $formAction; ?>"
-	>
+		method="get" action="<?php echo $formAction; ?>" >
 
 		<fieldset class="wnt-smartsearch">
 			<div class="form-group">
 				<div class="wnt-smartsearch-input-container">
-					<input
+					<input name="q" type="text" value=""
 						id="<?php echo $instance_id; ?>_search_text"
 						class="<?php echo $smartsearchInput; ?>_search_text wnt-smart-search"
-						name="q"
-						type="text"
-						value=""
-						placeholder="Search by City, Address, Zip, Area, and more!"
-					/>
+						placeholder="Search by City, Address, Zip, Area, and more!" />
 				</div>
 			</div>
 		</fieldset>
