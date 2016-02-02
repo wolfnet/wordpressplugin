@@ -200,11 +200,13 @@
 			var pluginData = $smartSearch.data(stateKey);
 			var $list = pluginData.listContainer;
 			var $searchInput = pluginData.searchInput;
+			pluginData['searchingClass'] = 'wnt-message-searching'+pluginData['componentId'];
 
 			// Create a container to hold the default placeholder text. This text is an
 			// indicator to the user that what they have typed has triggered an action.
 			var $searchingMessage = $('<div>')
-				.addClass('wnt-message-searching')
+				//.addClass('wnt-message-searching')
+				.addClass(pluginData['searchingClass'])
 				.text('Searching ...');
 
 			// Create an outer container for holding all of the smart search suggested criteria.
@@ -656,7 +658,7 @@
 		showSearchingMessage: function($smartSearch) {
 			var pluginData = $smartSearch.data(stateKey);
 
-			pluginData.suggestionContainer.children('.wnt-message-searching').show();
+			pluginData.suggestionContainer.children('.'+pluginData['searchingClass']).show();
 			methods.showSuggestionsList($smartSearch);
 
 		},
@@ -664,7 +666,7 @@
 		hideSearchingMessage: function($smartSearch) {
 			var pluginData = $smartSearch.data(stateKey);
 
-			pluginData.suggestionContainer.children('.wnt-message-searching').hide();
+			pluginData.suggestionContainer.children('.'+pluginData['searchingClass']).hide();
 
 		},
 
