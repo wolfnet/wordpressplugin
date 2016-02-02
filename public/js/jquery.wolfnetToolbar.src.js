@@ -264,18 +264,53 @@
     {
         var concatHouseover = '';
 
-        concatHouseover += '<a style="display:block" rel="follow" href="' + listing.property_url + '">';
-        concatHouseover += '<div class="wolfnet_wntHouseOverWrapper"><div data-property-id="' + listing.property_id;
-        concatHouseover += '" class="wntHOItem"><table class="wolfnet_wntHOTable"><tbody><tr>';
-        concatHouseover += '<td class="wntHOImgCol" valign="top" style="vertical-align:top;"><div class="wolfnet_wntHOImg">';
-        concatHouseover += '<img src="' + listing.thumbnail_url + '" style="max-height:100px;width:auto"></div><div class="wolfnet_wntHOBroker" style="text-align: center">';
-        concatHouseover += '<img class="wolfnet_wntHOBrokerLogo" src="' + listing.branding.logo + '" style="max-height:50px;width:auto" alt="Broker Reciprocity">';
-        concatHouseover += '</div></td><td valign="top" style="vertical-align:top;"><div class="wolfnet_wntHOContentContainer">';
-        concatHouseover += '<div style="text-align:left;font-weight:bold">' + listing.listing_price.toString() + '</div>';
-        concatHouseover += '<div style="text-align:left;">' + listing.display_address + '</div><div style="text-align:left;">';
-        concatHouseover += listing.city + ', ' + listing.state + '</div><div style="text-align:left;">' + listing.bedsbaths;
-        concatHouseover += '</div><div style="text-align:left;padding-top:20px;">' + listing.branding.courtesy_text + '</div>';
-        concatHouseover += '</div></td></tr></tbody></table></div></div></a>';
+        concatHouseover += '<div class="wolfnet_wntHouseOverWrapper">';
+        concatHouseover += '    <a rel="follow" href="' + listing.property_url + '">';
+        concatHouseover += '        <div data-property-id="' + listing.property_id + '" class="wntHOItem">';
+        concatHouseover += '            <table class="wolfnet_wntHOTable"><tbody><tr>';
+        concatHouseover += '                <td class="wntHOImgCol">';
+        concatHouseover += '                    <div class="wolfnet_wntHOImg wolfnet_listingImage">';
+        concatHouseover += '                        <img src="' + listing.thumbnail_url + '" />';
+        concatHouseover += '                    </div>';
+        if (listing.branding.logo !== '') {
+            concatHouseover += '<div class="wolfnet_wntHOBroker wolfnet_brokerLogo' + (listing.branding.type === 'idx' ? ' wolfnet_idxLogo' : '') + '">';
+            concatHouseover += '    <img src="' + listing.branding.logo + '" />';
+            concatHouseover += '</span>';
+        }
+        concatHouseover += '                </td>';
+        concatHouseover += '                <td>';
+        concatHouseover += '                    <div class="wolfnet_wntHOContentContainer">';
+        concatHouseover += '                        <div class="wolfnet_listingInfo">';
+        concatHouseover += '                            <div class="wolfnet_price">' + listing.listing_price.toString() + '</div>';
+        if (listing.total_bedrooms || listing.total_baths) {
+            concatHouseover += '<span class="wolfnet_bed_bath">';
+            if (listing.total_bedrooms) {
+                concatHouseover += '<span class="wolfnet_beds">' + listing.total_bedrooms + '<span class="wolfnet_label">Bedrooms</span></span>';
+                if (listing.total_baths) {
+                    concatHouseover += '<span class="wolfnet_info_separator"></span>';
+                }
+            }
+            if (listing.total_baths) {
+                concatHouseover += '<span class="wolfnet_baths">' + listing.total_baths + '<span class="wolfnet_label">Bathrooms</span></span>';
+            }
+            concatHouseover += '</span>';
+        }
+        concatHouseover += '                        </div>';
+        concatHouseover += '                        <div class="wolfnet_locationInfo">';
+        concatHouseover += '                            <div class="wolfnet_address">' + listing.display_address + '</div>';
+        concatHouseover += '                            <div class="wolfnet_location">' + listing.city + ', ' + listing.state + '</div>';
+        concatHouseover += '                        </div>';
+        concatHouseover += '                        <div class="wolfnet_branding" style="text-align: left; padding-top: 20px;">';
+        concatHouseover += '                            <span class="wolfnet_brandingMessage">';
+        concatHouseover += '                                <span class="wolfnet_brandingCourtesyText">' + listing.branding.courtesy_text + '</span>';
+        concatHouseover += '                            </span>';
+        concatHouseover += '                        </div>';
+        concatHouseover += '                    </div>';
+        concatHouseover += '                </td>';
+        concatHouseover += '            </tr></tbody></table>';
+        concatHouseover += '        </div>';
+        concatHouseover += '    </a>';
+        concatHouseover += '</div>';
 
         return concatHouseover;
 

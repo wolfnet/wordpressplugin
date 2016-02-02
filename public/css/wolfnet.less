@@ -471,16 +471,30 @@
         {
             height: 480px;
             position: relative;
+
+            .mqabasicwnd {
+                font-family: inherit;
+                font-size: inherit;
+                color: inherit;
+            }
+
         }
 
         .wolfnet_wntHouseOverWrapper
         {
+            display: block;
             position: relative;
-            max-height: 170px;
+            max-height: 200px;
             min-height: 150px;
             width: auto;
             overflow-x: hidden;
             overflow-y: auto;
+            font-size: 0.8em;
+            color: inherit;
+
+            a {
+                color: inherit;
+            }
 
             .wntHOItem
             {
@@ -492,6 +506,12 @@
                 {
                     padding: 0px;
                     width: auto;
+                    border: none;
+
+                    th, td {
+                        border: none;
+                        vertical-align: top;
+                    }
 
                     .wolfnet_wntHOImg
                     {
@@ -506,6 +526,9 @@
                         width: 110px;
                         margin-bottom: 5px !important;
                         color: #888;
+                        max-height: 50px;
+                        width: auto;
+                        text-align: center;
 
                         .wolfnet_wntHOBrokerLogo
                         {
@@ -519,8 +542,76 @@
                     {
                         position: relative;
                         min-width: 200px;
-                        line-height: 1.2;
                         top: 0;
+                    }
+
+                }
+
+                .wolfnet_listingImage
+                {
+                    display:    block;
+                    width:      100%;
+                    height:     auto;
+                    overflow:   hidden;
+                    margin:     0 0 0.5em 0;
+                    padding:    6px;
+                    text-align: center;
+                    border:     1px solid hsl(0, 0%, 87%);
+                    background-color: #f5f5f5;
+
+                    img
+                    {
+                        max-width:  100%;
+                        max-height: 100px;
+                        height:     @listingImgHeight;
+                        margin:     auto;
+                        border:     none;
+                    }
+
+                }
+
+                .wolfnet_price
+                {
+                    font-size: 1.2em;
+                    font-weight: bold;
+                    display:     block;
+                    white-space: nowrap;
+                    text-overflow: ellipsis;
+                    overflow: hidden;
+                }
+
+                .wolfnet_bed_bath
+                {
+                    display: block;
+                    font-size: 0.8em;
+                    font-style: italic;
+                    line-height: 1em;
+                    margin-bottom: 0.75em;
+
+                    .wolfnet_label
+                    {
+                        display: none;
+                    }
+
+                    .wolfnet_beds
+                    {
+                        display: inline-block;
+                        margin-right: 1em;
+
+                        &:before {
+                            content: "Beds: ";
+                        }
+
+                    }
+
+                    .wolfnet_baths
+                    {
+                        display: inline-block;
+
+                        &:before {
+                            content: "Baths: ";
+                        }
+
                     }
 
                 }

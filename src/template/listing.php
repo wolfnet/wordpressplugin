@@ -22,7 +22,7 @@
 
 ?>
 
-<div id="wolfnet_listing_<?php echo $listing['property_id']; ?>" class="wolfnet_listing" itemscope>
+<div id="wolfnet_listing_<?php echo $listing['property_id']; ?>" class="wolfnet_listing" itemscope="itemscope">
     <a href="<?php echo $listing['property_url']; ?>" rel="follow">
         <div class="wolfnet_listingMain">
             <div class="wolfnet_listingHead">
