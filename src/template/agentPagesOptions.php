@@ -59,8 +59,8 @@
             <td><label>Show offices:</label></td>
             <td>
                 <select id="<?php echo $showoffices_wpid; ?>" name="<?php echo $showoffices_wpname; ?>">
-                    <option value="true"<?php if($showoffices == true) echo ' selected="selected"'?>>Yes</option>
-                    <option value="false"<?php if($showoffices == false) echo ' selected="selected"'?>>No</option>
+                    <option value="true"<?php if($showoffices == 'true') echo ' selected="selected"'?>>Yes</option>
+                    <option value="false"<?php if($showoffices == 'false') echo ' selected="selected"'?>>No</option>
                 </select>
             </td>
         </tr>
@@ -68,10 +68,14 @@
             <td><label>Exclude offices:</label></td>
             <td>
             <?php
+            $selectedOffices = array_unique(explode(",", $excludeoffices), SORT_STRING);
             foreach($offices as $office) {
                 if(strlen($office['office_id']) > 0) {
                     echo '<input type="checkbox" class="officeexclude"';
-                    echo 'value="' . $office['office_id'] . '" /> ' . $office['name'];
+                    if(in_array($office['office_id'], $selectedOffices)) {
+                        echo ' checked="checked"';
+                    }
+                    echo ' value="' . $office['office_id'] . '" /> ' . $office['name'];
                     echo ' (' . $office['office_id'] . ')<br />';
                 }
             }
@@ -95,8 +99,8 @@
             <td><label>Show active listings:</label></td>
             <td>
                 <select id="<?php echo $activelistings_wpid; ?>" name="<?php echo $activelistings_wpname; ?>">
-                    <option value="true"<?php if($activelistings == true) echo ' selected="selected"'; ?>>Yes</option>
-                    <option value="false"<?php if($activelistings == false) echo ' selected="selected"'; ?>>No</option>
+                    <option value="true"<?php if($activelistings == 'true') echo ' selected="selected"'; ?>>Yes</option>
+                    <option value="false"<?php if($activelistings == 'false') echo ' selected="selected"'; ?>>No</option>
                 </select>
             </td>
         </tr>
@@ -107,8 +111,8 @@
             <td><label>Show sold listings:</label></td>
             <td>
                 <select id="<?php echo $soldlistings_wpid; ?>" name="<?php echo $soldlistings_wpname; ?>">
-                    <option value="true"<?php if($soldlistings == true) echo ' selected="selected"'; ?>>Yes</option>
-                    <option value="false"<?php if($soldlistings == false) echo ' selected="selected"'; ?>>No</option>
+                    <option value="true"<?php if($soldlistings == 'true') echo ' selected="selected"'; ?>>Yes</option>
+                    <option value="false"<?php if($soldlistings == 'false') echo ' selected="selected"'; ?>>No</option>
                 </select>
             </td>
         </tr>
@@ -122,12 +126,12 @@
 <script type="text/javascript">
 
     jQuery(function($){
-        $("button[type=submit]").click(function() {
+        $("button[type=submit],input[type=submit]").click(function() {
             var <?php echo $instance_id; ?> = [];
             var array = <?php echo $instance_id; ?>;
             
             $('.officeexclude').each(function() {
-                if($(this).attr('checked')) {
+                if($(this).prop('checked')) {
                     if(array.indexOf($(this).val()) == -1) {
                         array.push($(this).val());
                     }

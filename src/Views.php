@@ -83,7 +83,7 @@ class Wolfnet_Views
                 'formHeader' => $this->settingsFormHeaders(),
                 'productKey' => $productKey,
                 'sslEnabled' => $sslEnabled,
-                'setSslVerify' => (!get_option($GLOBALS['wolfnet']::VERIFYSSL_WP_OPTION)) ? 'true' : 'false',
+                'setSslVerify' => (!get_option(Wolfnet_Plugin::VERIFYSSL_WP_OPTION)) ? 'true' : 'false',
             ));
 
         } catch (Wolfnet_Exception $e) {
@@ -208,7 +208,6 @@ class Wolfnet_Views
         $defaultArgs = array(
             'instance_id'     => str_replace('.', '', uniqid('wolfnet_featuredListing_')),
             'markets'         => json_decode($GLOBALS['wolfnet']->getProductKey()),
-            'selectedKey'     => (array_key_exists('keyid', $_REQUEST)) ? $_REQUEST['keyid'] : '1',
         );
 
         $args = array_merge($defaultArgs, $args);

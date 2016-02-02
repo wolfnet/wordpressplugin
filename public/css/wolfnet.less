@@ -540,6 +540,10 @@
             margin-bottom: 10px;
         }
 
+        .wolfnet_noResults {
+            margin-top: 30px;
+        }
+
         .wolfnet_agentSearch
         {
             width: 500px;
@@ -1267,6 +1271,35 @@
         color: #3e3e3e;
     }
 
+}
+
+.widget_wolfnet_agentpageswidget {
+    .wolfnet_widget {
+        .wolfnet_agentSearch {
+            width: inherit;
+
+            .wolfnet_agentSearchButton {
+                float: left;
+                margin-top: 4px;
+            }
+        }
+
+        .wolfnet_agent {
+            .wolfnet_agentInfo {
+                float: left;
+                width: inherit;
+                margin-top: 10px;
+            }
+        }
+
+        &.wolfnet_contactAgent {
+            .wolfnet_agentPreview {
+                .wolfnet_agentInfo {
+                    width: 100% !important;
+                }
+            }
+        }
+    }
 }
 
 .wolfnet_clearfix:before,

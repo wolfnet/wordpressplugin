@@ -24,6 +24,22 @@
 
 <div id="<?php echo $instance_id; ?>" class="wolfnet_widget wolfnet_contactAgent">
 
+	<?php
+	if(array_key_exists("REDIRECT_URL", $_SERVER)) {
+		$linkBase = $_SERVER['REDIRECT_URL'];
+	} else {
+		$linkBase = $_SERVER['PHP_SELF'];
+	}
+
+	$link = $linkBase;
+	$link .= '?agentId=' . $agentId;
+	$link .= '&officeId=' . $officeId;
+	$link .= '#post-' . get_the_id();
+
+	echo '<p><a href="' . $link . '">Back</a> to agent.</p>';
+
+	?>
+
 	<div class="wolfnet_agentPreview">
 		<?php 
 		if(strlen($agent['thumbnail_url']) > 0) {
@@ -82,7 +98,9 @@
 	} else {
 	?>
 
-	<form class="wolfnet_contactForm" action="<?php echo $_SERVER['PHP_SELF'] . "?contact=" . $agentId; ?>" method="post">
+	<form class="wolfnet_contactForm" action="<?php echo $linkBase. "?contact=" 
+		. $agentId . "&officeId=" . $officeId . "#post-" . get_the_id(); ?>" method="post">
+
 		<?php 
 		if(array_key_exists('errorField', $_REQUEST)) {
 			echo '<span class="wolfnet_red">Please correct the errors below.</span><br />';

@@ -24,6 +24,19 @@
 
 <div id="<?php echo $instance_id; ?>" class="wolfnet_widget wolfnet_contactOffice">
 
+	<?php
+	if(array_key_exists("REDIRECT_URL", $_SERVER)) {
+		$linkBase = $_SERVER['REDIRECT_URL'];
+	} else {
+		$linkBase = $_SERVER['PHP_SELF'];
+	}
+
+	$link = $linkBase . '#post-' . get_the_id();
+
+	echo '<p><a href="' . $link . '">Back</a> to offices.</p>';
+
+	?>
+
 	<div class="wolfnet_officePreview">
 		<div class="wolfnet_officeName">
 			<?php echo $office['name']; ?>
@@ -31,7 +44,10 @@
 
 		<div class="wolfnet_officeContact">
 			<?php 
-			echo $office['mailing_address'];
+			echo $office['address_1'] . ' ' . $office['address_2'];
+			echo '<br>';
+			echo $office['city'] . ', ' . $office['state'] . ' ';
+			echo $office ['postal_code'];
 
 			if(strlen($office['phone_number']) > 0) {
 				echo '<div class="wolfnet_officePhone">';

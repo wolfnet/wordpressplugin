@@ -89,6 +89,12 @@ if(!function_exists('paginate')) {
 	}
 	?>
 
+	<?php
+	if($showoffices && array_key_exists("REDIRECT_URL", $_SERVER)) {
+		echo '<a href="' . $linkBase . '#post-' . get_the_id() . '">Back</a> to offices.';
+	}
+	?>
+
 	<div class="wolfnet_viewAll">
 		<a href="?search&agentCriteria=#post-<?php echo get_the_id(); ?>">Click here</a> to view all agents and staff.
 	</div>
@@ -117,9 +123,21 @@ if(!function_exists('paginate')) {
 	<?php } ?>
 
 <?php
+if(count($agents) == 0) { 
+
+	if(array_key_exists("agentCriteria", $_REQUEST) && strlen($_REQUEST['agentCriteria']) > 0) {
+		echo '<p class="wolfnet_noResults">There are no matching agents. Please try your search again.</p>';
+	} elseif(strlen($officeId) > 0) {
+		$link = $linkBase . "#post-" . get_the_id();
+		echo '<p class="wolfnet_noResults">There are currently no agents in this office. Go ';
+		echo '<a href="' . $link . '">back</a> to see agents in our other offices.</p>';
+	}
+
+}
+
 foreach($agents as $agent) {
 	if($agent['display_agent']) {
-		$agentLink = $linkBase . '?agent=' . $agent['agent_id'];
+		$agentLink = $linkBase . '?agentId=' . $agent['agent_id'];
 		if(array_key_exists('agentCriteria', $_REQUEST) && strlen($_REQUEST['agentCriteria']) > 0) {
 			$agentLink .= '&agentCriteria=' . $_REQUEST['agentCriteria'];
 		}
@@ -170,9 +188,12 @@ foreach($agents as $agent) {
 					echo '</div>';
 				}
 
-				if(strlen($agent['fax_number']) > 0) {
-					echo '<div class="wolfnet_agentFax">';
-					echo "Fax: " . $agent['fax_number'];
+				if(strlen($agent['email_address']) > 0) {
+					echo '<div class="wolfnet_agentOfficeEmail">';
+					echo '<strong>Email:</strong> <a href="?contact=' 
+						. $agent['agent_id'] . '#post-' . get_the_id() . '">' 
+						. $agent['first_name'] . ' ' 
+						. $agent['last_name'] . '</a>';
 					echo '</div>';
 				}
 				?>

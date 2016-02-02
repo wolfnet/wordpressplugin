@@ -198,7 +198,7 @@ if ( typeof jQuery != 'undefined' ) {
 				var onResize = function ()
 				{
 					var containerWidth = $quickSearch.width();
-					if ( containerWidth > 225 ) {
+					if ( containerWidth > 230 ) {
 						$quickSearch.removeClass( 'wolfnet_wNarrow' );
 						$quickSearch.addClass( 'wolfnet_wWide' );
 					}

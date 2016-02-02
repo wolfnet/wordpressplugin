@@ -215,7 +215,7 @@ jQuery(function($){
                 var $form = $('<form />')
                 .attr( 'wolfnet:sc', menuItems[pageId].shortcode )
                 .append(data)
-                .append($('<button type="submit" class="button button-primary" style="position:absolute;bottom:15px;right:15px;">Insert</button>'))
+                .append($('<button type="submit" class="button button-primary">Insert</button>'))
                 .submit(function(event) {
                     event.preventDefault();
                     insertShortCode.call($form);
