@@ -36,7 +36,8 @@ if (!is_null($listing['geo']['lat']) && !is_null($listing['geo']['lng'])) :
                                 </div>
                                 <?php if ($showBrokerImage) : ?>
                                     <div class="wolfnet_wntHOBroker" style="text-align: center">
-                                        <img src="<?php echo $listing['branding']['logo']; ?>"
+                                        <img class="wolfnet_wntHOBrokerLogo"
+                                         src="<?php echo $listing['branding']['logo']; ?>"
                                          style="max-height: 50px; width: auto" alt="Broker Reciprocity" />
                                     </div>
                                 <?php endif; ?>
