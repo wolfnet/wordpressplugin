@@ -56,18 +56,26 @@
 
 .wolfnet_widget {
 
+    &.wolfnet_featuredListings {
+        // TODO: Remove if BrandCo stops targeting our class names:
+        height: auto !important;
+
+        .wolfnet_listing {
+            // TODO: Remove if BrandCo stops targeting our class names:
+            height:     @listingHeight !important;
+        }
+
+    }
+
     &.wolfnet_featuredListings,
     &.wolfnet_listingGrid {
 
         font-family: 'Roboto', sans-serif;
         font-size: 16px;
         line-height: 1.5em;
-        // TODO: Remove if BrandCo stops targeting our class names:
-        height: auto !important;
 
         .wolfnet_listing {
-            // TODO: Remove 'important' flag if BrandCo stops targeting our class names:
-            height:     @listingHeight !important;
+            height:     @listingHeight;
             margin:     0 0 0 0;
             padding:    0 0 0 0;
             color:      @gray-dark;
