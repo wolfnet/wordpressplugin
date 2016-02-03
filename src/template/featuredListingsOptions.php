@@ -97,7 +97,7 @@
                                     value="<?php echo $speed; ?>" size="2" maxlength="2" />
                                 <span class="wolfnet_moreInfo">
                                     Set the speed for the scrolling animation. Enter a value between
-                                    1 and 99; the higher the number, the slower the speed.
+                                    1 and 99; the higher the number, the faster the scroll speed.
                                 </span>
                             </td>
                         </tr>
