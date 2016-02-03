@@ -223,7 +223,7 @@
 				})
 				.hide()
 				.append($searchingMessage)
-				.appendTo($('.wnt-search'));
+				.appendTo($('.wnt-smart-search'+pluginData['componentId']));
 
 			// Store a reference to the suggestion container with the smart search element.
 			pluginData.suggestionContainer = $suggestions;
