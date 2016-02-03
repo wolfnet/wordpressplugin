@@ -128,7 +128,7 @@ if (typeof jQuery != 'undefined') {
             if (gridAlign === 'center') {
                 $items.css('margin-left', margin);
             } else {
-                $items.css('margin-right': 15);
+                $items.css('margin-right', 15);
             }
 
             $items.css({
