@@ -50,8 +50,8 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
             } else {
                 $action = 'contactFormOffice';
             }
-        } elseif(array_key_exists('agent', $_REQUEST) && sizeof(trim($_REQUEST['agent']) > 0)) {
-            // If agent is passed through, show the agent detail.
+        } elseif(array_key_exists('agentId', $_REQUEST) && sizeof(trim($_REQUEST['agentId']) > 0)) {
+            // If agentId is passed through, show the agent detail.
             $action = 'agent';
         } elseif(array_key_exists('officeId', $_REQUEST) && sizeof(trim($_REQUEST['officeId']) > 0)) {
             // officeId is passed in; list their agents.
@@ -167,7 +167,7 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
 
     protected function agent()
     {
-        $agentData = $this->getAgentById($_REQUEST['agent']);
+        $agentData = $this->getAgentById($_REQUEST['agentId']);
 
         // We need to get a product key that we can pull this agent's listings with.
         // Each key entered into the Settings page has a market name associated with it.

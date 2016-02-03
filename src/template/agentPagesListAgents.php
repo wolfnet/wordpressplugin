@@ -137,7 +137,7 @@ if(count($agents) == 0) {
 
 foreach($agents as $agent) {
 	if($agent['display_agent']) {
-		$agentLink = $linkBase . '?agent=' . $agent['agent_id'];
+		$agentLink = $linkBase . '?agentId=' . $agent['agent_id'];
 		if(array_key_exists('agentCriteria', $_REQUEST) && strlen($_REQUEST['agentCriteria']) > 0) {
 			$agentLink .= '&agentCriteria=' . $_REQUEST['agentCriteria'];
 		}
