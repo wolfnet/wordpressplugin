@@ -93,8 +93,12 @@ Please upgrade to the latest version of the plugin as we will be disabling our o
 
 == Changelog ==
 
+= 1.9.1 =
+* Adding new class names to widgets.
+* Corrected some instructions in Shortcode Builder.
+
 = 1.9.0 =
-* Adds agent/office shortcode for those sites with sufficient data and privileges. 
+* Adds agent/office shortcode for those sites with sufficient data and privileges.
 
 = 1.8.2 =
 * Fixes unexpected T_PAAMAYIM_NEKUDOTAYIM exception.
