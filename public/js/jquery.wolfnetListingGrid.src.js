@@ -119,14 +119,14 @@ if (typeof jQuery != 'undefined') {
 
             //console.log('targetWidth: ' + targetWidth, 'columnWidth: ' + columnWidth, 'columns: ' + columns, 'remainingPixels: ' + remainingPixels, 'margin: ' + margin, 'rounded margin: ' + Math.floor(margin), '1/2 margin: ' + Math.floor(margin/2));
 
-            var margin       = columns === 1 ? Math.floor(margin) : 0;
+            var itemMargin   = columns === 1 ? Math.floor(margin) : 0;
             var leftPadding  = columns === 1 ? 0 : Math.floor(margin / 2);
             var rightPadding = columns === 1 ? 0 : Math.floor(margin / 2);
 
             data.itemPadding = leftPadding + rightPadding;
 
             if (gridAlign === 'center') {
-                $items.css('margin-left', margin);
+                $items.css('margin-left', itemMargin);
             } else {
                 $items.css('margin-right', 15);
             }
