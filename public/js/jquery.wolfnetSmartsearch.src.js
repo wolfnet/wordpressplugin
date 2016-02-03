@@ -223,7 +223,7 @@
 				})
 				.hide()
 				.append($searchingMessage)
-				.appendTo($('.wnt-smart-search'+pluginData['componentId']));
+				.appendTo($('.smart-menu'+pluginData['componentId']));
 
 			// Store a reference to the suggestion container with the smart search element.
 			pluginData.suggestionContainer = $suggestions;
@@ -743,8 +743,6 @@
 
 			// toggle input placeholder (prior to container positioning calculations)
 			methods.toggleInputPlaceholder($smartSearch);
-
-			var top = $list.innerHeight() + 1; //accounting for border
 
 			var left = 0;
 
