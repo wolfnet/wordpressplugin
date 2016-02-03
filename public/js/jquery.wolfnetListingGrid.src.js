@@ -107,7 +107,7 @@ if (typeof jQuery != 'undefined') {
 
                 // If only 1 column can fit, try reducing column width to fit 2 columns
                 var reducedColumnWidth = (targetWidth - data.option.minColumnGap) / 2;
-                if (reducedColumnWidth >= columnWidth * 0.75) {
+                if (reducedColumnWidth >= columnWidth * 0.7) {
                     columns = 2;
                     columnWidth = reducedColumnWidth;
                 }
