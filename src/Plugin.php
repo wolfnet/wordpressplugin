@@ -2,7 +2,7 @@
 
 /**
  * @title         Wolfnet_Plugin.php
- * @copyright     Copyright (c) 2012, 2013, WolfNet Technologies, LLC
+ * @copyright     Copyright (c) 2012 - 2015, WolfNet Technologies, LLC
  *
  *                This program is free software; you can redistribute it and/or
  *                modify it under the terms of the GNU General Public License
@@ -64,7 +64,7 @@ class Wolfnet_Plugin
      * searches are saved.
      * @var string
      */
-    protected $customPostTypeSearch = 'wolfnet_search';
+    public $customPostTypeSearch = 'wolfnet_search';
 
     /**
      * This property is a unique idenitfier that is used to define a plugin option which saves the
@@ -157,7 +157,11 @@ class Wolfnet_Plugin
 
         $this->apin = $this->ioc->get('Wolfnet_Api_Client');
 
+        $this->ajax = $this->ioc->get('Wolfnet_Ajax');
+
         $this->views = $this->ioc->get('Wolfnet_Views');
+
+        $this->agentHandler = $this->ioc->get('Wolfnet_AgentPagesHandler');
 
         if(is_admin()) {
             $this->admin = $this->ioc->get('Wolfnet_Admin');
@@ -221,6 +225,31 @@ class Wolfnet_Plugin
         $string = preg_replace_callback('~&#([0-9]+);~i', $nonHexCallback, $string);
 
         return $string;
+
+    }
+
+
+    public function addAction($action, $callable = null, $priority = null)
+    {
+        if (is_array($action)) {
+            foreach ($action as $act) {
+                if (count($act) == 2) {
+                    $this->addAction($act[0], $act[1]);
+                } else {
+                    $this->addAction($act[0], $act[1], $act[2]);
+                }
+            }
+        } else {
+            if (is_callable($callable) && is_array($callable)) {
+                add_action($action, $callable, $priority);
+            } elseif (is_string($callable) && method_exists($this, $callable)) {
+                do_action($this->preHookPrefix . $callable);
+                add_action($action, array(&$this, $callable), $priority);
+                do_action($this->postHookPrefix . $callable);
+            }
+        }
+
+        return $this;
 
     }
 
@@ -292,7 +321,7 @@ class Wolfnet_Plugin
         $this->registerShortCodes();
 
         // Register Ajax Actions
-        $this->registerAjaxActions();
+        $this->ajax->registerAjaxActions();
 
         // Register Scripts
         $this->registerScripts();
@@ -421,6 +450,8 @@ class Wolfnet_Plugin
 
         register_widget('Wolfnet_Widget_QuickSearchWidget');
 
+        register_widget('Wolfnet_Widget_AgentPagesWidget');
+
         do_action($this->postHookPrefix . 'registerWidgets'); // Legacy hook
 
     }
@@ -487,15 +518,15 @@ class Wolfnet_Plugin
             switch ($pagename) {
 
                 case 'wolfnet_content':
-                    $this->remoteContent();
+                    $this->ajax->remoteContent();
                     break;
 
                 case 'wolfnet_content_header':
-                    $this->remoteContentHeader();
+                    $this->ajax->remoteContentHeader();
                     break;
 
                 case 'wolfnet_content_footer':
-                    $this->remoteContentFooter();
+                    $this->ajax->remoteContentFooter();
                     break;
 
             }
@@ -632,6 +663,32 @@ class Wolfnet_Plugin
 
 
     /**
+     * This method retrieves a specific product key from the WordPress options table based on a
+     * provided market name.
+     * @param  string $market  The market name associated with the key to be retrieved.
+     * @return string          The key that was retrieved from the WP options table.
+     */
+    public function getProductKeyByMarket($market)
+    {
+        $keyList = json_decode($this->getProductKey());
+
+        foreach ($keyList as $key) {
+            if(!array_key_exists('market', $key) || strlen($key->market) == 0) {
+                $this->updateProductKeys();
+                $keyList = json_decode($this->getProductKey());
+            }
+
+            if (strtoupper($key->market) == strtoupper($market)) {
+                return $key->key;
+            }
+        }
+
+        return null;
+
+    }
+
+
+    /**
      * This method retrieved the 'default' key (or first key on the stack) from the WP options table.
      * @return string The key that was retrieved from the WP options table.
      */
@@ -667,6 +724,37 @@ class Wolfnet_Plugin
         // TODO: perhaps it would be better to decode the JSON here instead of multiple other places.
         return $key;
 
+    }
+
+
+    /**
+     * This method returns the number of keys associated with the plugin.
+     * @return int Number of keys
+     */
+    public function getKeyCount()
+    {
+        return count(json_decode($this->getProductKey()));
+    }
+
+
+    /**
+     * This method updates the product key structure to make sure it has all the
+     * necessary attributes.
+     */
+    public function updateProductKeys()
+    {
+        $keyStruct = json_decode($this->getProductKey());
+
+        for($i = 0; $i < count($keyStruct); $i++) {
+            if(!array_key_exists('market', $keyStruct[$i])
+                || strlen($keyStruct[$i]->market) == 0) {
+                $market = $this->getMarketName($keyStruct[$i]->key);
+                $keyStruct[$i]->market = $market;
+            }
+        }
+
+        // Update key in Wordpress settings data.
+        update_option($this->productKeyOptionKey, json_encode($keyStruct));
     }
 
 
@@ -790,6 +878,28 @@ class Wolfnet_Plugin
     /*                                                                                            */
     /* ****************************************************************************************** */
 
+    public function scAgentPages($attrs) 
+    {
+        if(!$this->showAgentFeature()) {
+            return '';
+        }
+        
+        try {
+            $defaultAttributes = $this->getAgentPagesDefaults();
+
+            $criteria = array_merge($defaultAttributes, (is_array($attrs)) ? $attrs : array());
+
+            $this->decodeCriteria($criteria);
+
+            $out = $this->agentPageHandler($criteria);
+
+        } catch (Wolfnet_Exception $e) {
+            $out = $this->displayException($e);
+        }
+
+        return $out;
+    }
+
     public function scFeaturedListings($attrs, $content = '')
     {
         try {
@@ -873,509 +983,60 @@ class Wolfnet_Plugin
     }
 
 
-    /* Ajax Actions ***************************************************************************** */
+    /* Data ************************************************************************************* */
+    /*  _                                                                                         */
+    /* | \  _. _|_  _.                                                                            */
+    /* |_/ (_|  |_ (_|                                                                            */
     /*                                                                                            */
-    /*  /\  o  _.       /\   _ _|_ o  _  ._   _                                                   */
-    /* /--\ | (_| ><   /--\ (_  |_ | (_) | | _>                                                   */
-    /*     _|                                                                                     */
     /* ****************************************************************************************** */
 
-    public function remoteValidateProductKey()
+
+    public function getAgentPagesDefaults()
     {
-        $productKey = (array_key_exists('key', $_REQUEST)) ? $_REQUEST['key'] : '';
 
-        try {
-            $response = ($this->productKeyIsValid($productKey)) ? 'true' : 'false';
-
-        } catch (Wolfnet_Exception $e) {
-            status_header(500);
-
-            $response = array(
-                'message' => $e->getMessage(),
-                'data' => $e->getData(),
-            );
-
-        }
-
-        wp_send_json($response);
+        return array(
+            'officetitle'    => '',
+            'agenttitle'     => '',
+            'detailtitle'    => '',
+            'showoffices'    => true,
+            'activelistings' => true,
+            'soldlistings'   => false,
+            'excludeoffices' => '',
+            'numperpage'     => 10,
+        );
 
     }
 
 
-    public function remoteGetSavedSearches($keyid = null)
+    public function getAgentPagesOptions($instance = null)
     {
+        $options = $this->getOptions($this->getAgentPagesDefaults(), $instance);
 
-        try {
-            if ($keyid == null) {
-                $keyid = (array_key_exists('keyid', $_REQUEST)) ? $_REQUEST['keyid'] : '1';
-            }
-
-            $response = $this->getSavedSearches(-1, $keyid);
-
-        } catch (Wolfnet_Exception $e) {
-            status_header(500);
-
-            $response = array(
-                'message' => $e->getMessage(),
-                'data' => $e->getData(),
-            );
-
-        }
-
-        wp_send_json($response);
+        return $options;
 
     }
 
 
-    public function remoteSaveSearch()
+    public function agentPageHandler(array $criteria = array()) 
     {
+        $key = $this->getCriteriaKey($criteria);
 
-        try {
-            if (array_key_exists('post_title', $_REQUEST)) {
-                // Create post object
-                $my_post = array(
-                    'post_title'  => $_REQUEST['post_title'],
-                    'post_status' => 'publish',
-                    'post_author' => wp_get_current_user()->ID,
-                    'post_type'   => $this->customPostTypeSearch
-                    );
-
-                // Insert the post into the database
-                $post_id = wp_insert_post($my_post);
-
-                foreach ($_REQUEST['custom_fields'] as $field => $value) {
-                    add_post_meta($post_id, $field, $value, true);
-                }
-
-                $key = $_REQUEST['custom_fields']['keyid'];
-
-            }
-
-            $this->remoteGetSavedSearches($key);
-
-            $response = null;
-
-        } catch (Wolfnet_Exception $e) {
-            status_header(500);
-
-            $response = array(
-                'message' => $e->getMessage(),
-                'data' => $e->getData(),
-            );
-
+        if (!$this->isSavedKey($key)) {
+            return false;
         }
 
-        wp_send_json($response);
+        $vars = array(
+            'instance_id' => str_replace('.', '', uniqid('wolfnet_agentPages_')),
+            'criteria'    => $criteria,
+        );
 
+        $args = $this->convertDataType(array_merge($criteria, $vars));
+
+        $this->agentHandler->setKey($key);
+        $this->agentHandler->setArgs($args);
+
+        return $this->agentHandler->handleRequest();
     }
-
-
-    public function remoteDeleteSearch()
-    {
-
-        try {
-            if (array_key_exists('id', $_REQUEST)) {
-                wp_delete_post($_REQUEST['id'], true);
-            }
-
-            $this->remoteGetSavedSearches();
-            $response = null;
-
-        } catch (Wolfnet_Exception $e) {
-            status_header(500);
-
-            $response = array(
-                'message' => $e->getMessage(),
-                'data' => $e->getData(),
-            );
-
-        }
-
-        wp_send_json($response);
-
-    }
-
-
-    public function remoteShortcodeBuilderOptionsFeatured()
-    {
-
-        try {
-            $args = $this->getFeaturedListingsOptions();
-
-            $response = $this->views->featuredListingsOptionsFormView($args);
-
-        } catch (Wolfnet_Exception $e) {
-            status_header(500);
-
-            $response = $this->displayException($e);
-
-        }
-
-        echo $response;
-
-        die;
-
-    }
-
-
-    public function remoteShortcodeBuilderOptionsGrid()
-    {
-
-        try {
-            $args = $this->getListingGridOptions();
-
-            $response = $this->views->listingGridOptionsFormView($args);
-
-        } catch (Wolfnet_Exception $e) {
-            status_header(500);
-
-            $response = $this->displayException($e);
-
-        }
-
-        echo $response;
-
-        die;
-
-    }
-
-
-    public function remoteShortcodeBuilderOptionsList()
-    {
-
-        try {
-            $args = $this->getPropertyListOptions();
-
-            $response = $this->views->listingGridOptionsFormView($args);
-
-        } catch (Wolfnet_Exception $e) {
-            status_header(500);
-
-            $response = $this->displayException($e);
-
-        }
-
-        echo $response;
-
-        die;
-
-    }
-
-
-    public function remoteShortcodeBuilderOptionsQuickSearch()
-    {
-
-        try {
-            $args = $this->getQuickSearchOptions();
-
-            $response = $this->views->quickSearchOptionsFormView($args);
-
-        } catch (Wolfnet_Exception $e) {
-            status_header(500);
-
-            $response = $this->displayException($e);
-
-        }
-
-        echo $response;
-
-        die;
-
-    }
-
-
-    public function remoteShortcodeBuilderSavedSearch()
-    {
-
-        try {
-            $id = (array_key_exists('id', $_REQUEST)) ? $_REQUEST['id'] : 0;
-
-            $response = $this->getSavedSearch($id);
-
-        } catch (Wolfnet_Exception $e) {
-            status_header(500);
-
-            $response = array(
-                'message' => $e->getMessage(),
-                'data' => $e->getData(),
-            );
-
-        }
-
-        wp_send_json($response);
-
-    }
-
-
-    public function remoteContent()
-    {
-
-        try {
-            $response = $this->getWpHeader() . $this->getWpFooter();
-
-        } catch (Wolfnet_Exception $e) {
-            status_header(500);
-
-            $response = $this->displayException($e);
-
-        }
-
-        echo $response;
-
-        die;
-
-    }
-
-
-    public function remoteContentHeader()
-    {
-
-        try {
-            $response = $this->getWpHeader();
-
-        } catch (Wolfnet_Exception $e) {
-            status_header(500);
-
-            $response = $this->displayException($e);
-
-        }
-
-        echo $response;
-
-        die;
-
-    }
-
-
-    public function remoteContentFooter()
-    {
-
-        try {
-            $this->getWpHeader();
-
-            $response = $this->getWpFooter();
-
-        } catch (Wolfnet_Exception $e) {
-            status_header(500);
-
-            $response = $this->displayException($e);
-
-        }
-
-        echo $response;
-
-        die;
-
-    }
-
-
-    public function remoteListings()
-    {
-
-        try {
-            $args = $this->getListingGridOptions($_REQUEST);
-
-            $response = $this->getWpHeader() . $this->listingGrid($args) . $this->getWpFooter();
-
-        } catch (Wolfnet_Exception $e) {
-            status_header(500);
-
-            $response = $this->displayException($e);
-
-        }
-
-        echo $response;
-
-        die;
-
-    }
-
-
-    public function remoteListingsGet()
-    {
-
-        try {
-            $args = $this->getListingGridOptions($_REQUEST);
-
-            // used by pagination dropdown "per page"
-            if (!empty($_REQUEST['numrows'])) {
-                $_REQUEST['maxrows'] = $_REQUEST['numrows'];
-            }
-
-            $criteria = $this->prepareListingQuery($_REQUEST);
-
-            $keyid = (array_key_exists('keyid', $_REQUEST)) ? $_REQUEST["keyid"] : null;
-
-            $productKey = $this->getProductKeyById($keyid);
-
-            $data = $this->apin->sendRequest($productKey, '/listing', 'GET', $criteria);
-
-            $this->augmentListingsData($data, $productKey);
-
-        } catch (Wolfnet_Exception $e) {
-            status_header(500);
-            $data = array(
-                'message' => $e->getMessage(),
-                'data' => $e->getData(),
-            );
-
-        }
-
-        // TODO: Do we really need to support AjaxP here?
-        $callback = (array_key_exists('callback', $_REQUEST)) ? $_REQUEST['callback'] : false;
-
-        if ($callback !== false) {
-            header('Content-Type: application/javascript');
-            echo $callback . '(' . json_encode($data) . ');';
-        } else {
-            wp_send_json($data);
-        }
-
-        die;
-
-    }
-
-
-    public function remotePublicCss()
-    {
-
-        try {
-            $response = $this->views->getPublicCss();
-
-        } catch (Wolfnet_Exception $e) {
-            status_header(500);
-
-            echo $this->displayException($e);
-            die;
-
-        }
-
-        header('Content-type: text/css');
-        echo $response;
-
-        die;
-
-    }
-
-
-    public function remotePriceRange()
-    {
-
-        try {
-            // TODO: Assign default value.
-            $keyid = $_REQUEST["keyid"];
-
-            $productKey = $this->getProductKeyById($keyid);
-
-            $response = $this->getPrices($productKey);
-
-        } catch (Wolfnet_Exception $e) {
-            status_header(500);
-
-            $response = array(
-                'message' => $e->getMessage(),
-                'data' => $e->getData(),
-            );
-
-        }
-
-        wp_send_json($response);
-
-    }
-
-
-    public function remoteGetMarketName()
-    {
-
-        try {
-            // TODO: Assign default value.
-            $productKey = $_REQUEST["productkey"];
-
-            $marketName = $this->getMarketName($productKey);
-            $response = strtoupper($marketName);
-
-        } catch (Wolfnet_Exception $e) {
-            status_header(500);
-
-            $response = array(
-                'message' => $e->getMessage(),
-                'data' => $e->getData(),
-            );
-
-        }
-
-        wp_send_json($response);
-
-    }
-
-
-    public function remoteMapEnabled()
-    {
-
-        try {
-            // TODO: Assign default value.
-            $keyid = $_REQUEST["keyid"];
-
-            $productKey = $this->getProductKeyById($keyid);
-
-            $response = $this->getMaptracksEnabled($productKey);
-
-        } catch (Wolfnet_Exception $e) {
-            status_header(500);
-
-            $response = array(
-                'message' => $e->getMessage(),
-                'data' => $e->getData(),
-            );
-
-        }
-
-        wp_send_json($response);
-
-    }
-
-
-    public function remoteGetBaseUrl()
-    {
-
-        try {
-            // TODO: Assign default value.
-            $keyid = $_REQUEST["keyid"];
-            $productKey = $this->getProductKeyById($keyid);
-            $response = $this->getBaseUrl($productKey);
-
-        } catch (Wolfnet_Exception $e) {
-            status_header(500);
-
-            $response = array(
-                'message' => $e->getMessage(),
-                'data' => $e->getData(),
-            );
-
-        }
-
-        wp_send_json($response);
-
-    }
-
-
-    public function remoteRouteQuickSearch()
-    {
-        try {
-            $response = $this->routeQuickSearch($_REQUEST['formData']);
-        } catch (Wolfnet_Exception $e) {
-            status_header(500);
-
-            $response = array(
-                'message' => $e->getMessage(),
-                'data' => $e->getData(),
-            );
-
-        }
-
-        wp_send_json($response);
-    }
-
 
     public function remoteSetSslVerify()
     {
@@ -1404,7 +1065,6 @@ class Wolfnet_Plugin
     /*                                                                                            */
     /* ****************************************************************************************** */
 
-
     public function getFeaturedListingsDefaults()
     {
 
@@ -1417,7 +1077,7 @@ class Wolfnet_Plugin
             'maxresults' => 50,
             'numrows'    => 50,
             'startrow'   => 1,
-            'keyid' => '',
+            'keyid'      => '',
             );
 
     }
@@ -1533,11 +1193,12 @@ class Wolfnet_Plugin
 
     /**
      * Returns the markup for listings. generates both the listingGrid layout as well as the property list layout
-     * @param  array  $criteria the search criteria
-     * @param  string $layout   'grid' or 'list'
-     * @return string           listings markup
+     * @param  array  $criteria      the search criteria
+     * @param  string $layout        'grid' or 'list'
+     * @param  array  $dataOverride  listing data passed in to be used in place of the API request
+     * @return string                listings markup
      */
-    public function listingGrid(array $criteria, $layout = 'grid')
+    public function listingGrid(array $criteria, $layout = 'grid', $dataOverride = null)
     {
         $key = $this->getCriteriaKey($criteria);
 
@@ -1545,17 +1206,26 @@ class Wolfnet_Plugin
             return false;
         }
 
-        if (!array_key_exists('numrows', $criteria)) {
-            $criteria['maxrows'] = $criteria['maxresults'];
-        }
+        if ($dataOverride === null) {
+            if (!array_key_exists('numrows', $criteria)) {
+                $criteria['maxrows'] = $criteria['maxresults'];
+            }
 
-        $qdata = $this->prepareListingQuery($criteria);
+            $qdata = $this->prepareListingQuery($criteria);
 
-        try {
-            $data = $this->apin->sendRequest($key, '/listing', 'GET', $qdata);
-        } catch (Wolfnet_Exception $e) {
-            return $this->displayException($e);
+            try {
+                $data = $this->apin->sendRequest($key, '/listing', 'GET', $qdata);
+            } catch (Wolfnet_Exception $e) {
+                return $this->displayException($e);
+            }
+        } else {
+            // $dataOverride is passed in. As of writing this comment, this is data
+            // is coming from the AgentPagesHandler - we need to display a listing
+            // grid of an agent's featured listings. This is a vain attempt at 
+            // repurposing this code as-is.
+            $data = $dataOverride;
         }
+        
 
         // add some elements to the array returned by the API
         // wpMeta should contain any criteria or other setting which do not come from the API
@@ -1624,6 +1294,7 @@ class Wolfnet_Plugin
             'toolbarTop'         => '',
             'toolbarBottom'      => '',
             'maxrows'            => ((count($listingsData) > 0) ? $data['requestData']['maxrows'] : 0),
+            'gridalign'          => (array_key_exists('gridalign', $criteria)) ? $criteria['gridalign'] : 'center',
         );
 
         if (count($listingsData) && is_array($listingsData)) {
@@ -2240,6 +1911,59 @@ class Wolfnet_Plugin
     }
 
 
+    public function showAgentFeature()
+    {
+        try {
+            $data = $this->apin->sendRequest(
+                $this->getDefaultProductKey(), 
+                '/settings', 
+                'GET'
+            );
+        } catch (Wolfnet_Exception $e) {
+            return $this->displayException($e);
+        }
+
+        $leadsEnabled = $data['responseData']['data']['site']['my_agents_leads'];
+
+        return $leadsEnabled;
+    }
+
+
+    public function soldListingsEnabled()
+    {
+        try {
+            $data = $this->apin->sendRequest(
+                $this->getDefaultProductKey(),
+                '/settings',
+                'GET'
+            );
+        } catch(Wolfnet_Exception $e) {
+            return $this->displayException($e);
+        }
+
+        $marketEnabled = $data['responseData']['data']['market']['has_sold_property'];
+        $siteEnabled = $data['responseData']['data']['site']['sold_property_enabled'];
+
+        return ($marketEnabled && $siteEnabled);
+    }
+
+
+    public function getOffices()
+    {
+        try {
+            $data = $this->apin->sendRequest(
+                $this->getDefaultProductKey(), 
+                '/office', 
+                'GET'
+            );
+        } catch (Wolfnet_Exception $e) {
+            return $this->displayException($e);
+        }
+
+        return $data;
+    }
+
+
     /* PROTECTED METHODS ************************************************************************ */
     /*  ____            _            _           _   __  __      _   _               _            */
     /* |  _ \ _ __ ___ | |_ ___  ___| |_ ___  __| | |  \/  | ___| |_| |__   ___   __| |___        */
@@ -2252,31 +1976,6 @@ class Wolfnet_Plugin
     protected function setUrl()
     {
         $this->url = plugin_dir_url($this->pluginFile) . 'public/';
-    }
-
-
-    protected function addAction($action, $callable = null, $priority = null)
-    {
-        if (is_array($action)) {
-            foreach ($action as $act) {
-                if (count($act) == 2) {
-                    $this->addAction($act[0], $act[1]);
-                } else {
-                    $this->addAction($act[0], $act[1], $act[2]);
-                }
-            }
-        } else {
-            if (is_callable($callable) && is_array($callable)) {
-                add_action($action, $callable, $priority);
-            } elseif (is_string($callable) && method_exists($this, $callable)) {
-                do_action($this->preHookPrefix . $callable);
-                add_action($action, array(&$this, $callable), $priority);
-                do_action($this->postHookPrefix . $callable);
-            }
-        }
-
-        return $this;
-
     }
 
 
@@ -2301,39 +2000,6 @@ class Wolfnet_Plugin
     }
 
 
-    protected function registerAdminAjaxActions()
-    {
-        $ajxActions = array(
-            'wolfnet_validate_key'            => 'remoteValidateProductKey',
-            'wolfnet_saved_searches'          => 'remoteGetSavedSearches',
-            'wolfnet_save_search'             => 'remoteSaveSearch',
-            'wolfnet_delete_search'           => 'remoteDeleteSearch',
-            'wolfnet_scb_options_featured'    => 'remoteShortcodeBuilderOptionsFeatured',
-            'wolfnet_scb_options_grid'        => 'remoteShortcodeBuilderOptionsGrid',
-            'wolfnet_scb_options_list'        => 'remoteShortcodeBuilderOptionsList',
-            'wolfnet_scb_options_quicksearch' => 'remoteShortcodeBuilderOptionsQuickSearch',
-            'wolfnet_scb_savedsearch'         => 'remoteShortcodeBuilderSavedSearch',
-            'wolfnet_content'                 => 'remoteContent',
-            'wolfnet_content_header'          => 'remoteContentHeader',
-            'wolfnet_content_footer'          => 'remoteContentFooter',
-            'wolfnet_listings'                => 'remoteListings',
-            'wolfnet_get_listings'            => 'remoteListingsGet',
-            'wolfnet_css'                     => 'remotePublicCss',
-            'wolfnet_market_name'             => 'remoteGetMarketName',
-            'wolfnet_map_enabled'             => 'remoteMapEnabled',
-            'wolfnet_price_range'             => 'remotePriceRange',
-            'wolfnet_route_quicksearch'       => 'remoteRouteQuickSearch',
-            'wolfnet_base_url'                => 'remoteGetBaseUrl',
-            'wolfnet_set_sslverify'           => 'remoteSetSslVerify',
-            );
-
-        foreach ($ajxActions as $action => $method) {
-            $this->addAction('wp_ajax_' . $action, array(&$this, $method));
-        }
-
-    }
-
-
     /* PRIVATE METHODS ************************************************************************** */
     /*  ____       _            _         __  __      _   _               _                       */
     /* |  _ \ _ __(_)_   ____ _| |_ ___  |  \/  | ___| |_| |__   ___   __| |___                   */
@@ -2342,26 +2008,6 @@ class Wolfnet_Plugin
     /* |_|   |_|  |_| \_/ \__,_|\__\___| |_|  |_|\___|\__|_| |_|\___/ \__,_|___/                  */
     /*                                                                                            */
     /* ****************************************************************************************** */
-
-    private function registerAjaxActions()
-    {
-        $ajxActions = array(
-            'wolfnet_content'           => 'remoteContent',
-            'wolfnet_content_header'    => 'remoteContentHeader',
-            'wolfnet_content_footer'    => 'remoteContentFooter',
-            'wolfnet_listings'          => 'remoteListings',
-            'wolfnet_get_listings'      => 'remoteListingsGet',
-            'wolfnet_css'               => 'remotePublicCss',
-            'wolfnet_base_url'          => 'remoteGetBaseUrl',
-            'wolfnet_price_range'       => 'remotePriceRange',
-            'wolfnet_route_quicksearch' => 'remoteRouteQuickSearch',
-            );
-
-        foreach ($ajxActions as $action => $method) {
-            $this->addAction('wp_ajax_nopriv_' . $action, array(&$this, $method));
-        }
-
-    }
 
 
     private function getCriteriaKey(&$criteria)
@@ -2714,7 +2360,7 @@ class Wolfnet_Plugin
     }
 
 
-    private function getWpHeader()
+    public function getWpHeader()
     {
         $wntClass = 'wnt-wrapper';
 
@@ -2748,7 +2394,7 @@ class Wolfnet_Plugin
     }
 
 
-    private function getWpFooter()
+    public function getWpFooter()
     {
         ob_start();
         get_footer();
@@ -2848,7 +2494,7 @@ class Wolfnet_Plugin
      * @param  string $productKey
      * @return string             base URL of the Wolfnet search solution
      */
-    private function getBaseUrl($productKey = null)
+    public function getBaseUrl($productKey = null)
     {
         if ($productKey == null) {
             $productKey = $this->getDefaultProductKey();
@@ -2901,7 +2547,7 @@ class Wolfnet_Plugin
     }
 
 
-    private function getPrices($productKey)
+    public function getPrices($productKey)
     {
 
         $data = $this->apin->sendRequest($productKey, '/search_criteria/property_feature');
@@ -3012,6 +2658,10 @@ class Wolfnet_Plugin
             'WolfNetQuickSearch'        => 'scQuickSearch',
             'wolfnetquicksearch'        => 'scQuickSearch',
             'WOLFNETQUICKSEARCH'        => 'scQuickSearch',
+            'wnt_agent'                 => 'scAgentPages',
+            'WolfNetAgentPages'         => 'scAgentPages',
+            'wolfnetagentpages'         => 'scAgentPages',
+            'WOLFNETAGENTPAGES'         => 'scAgentPages',
             );
 
         foreach ($shrtCodes as $code => $method) {
@@ -3136,7 +2786,7 @@ class Wolfnet_Plugin
     }
 
 
-    private function decodeCriteria(array &$criteria)
+    protected function decodeCriteria(array &$criteria)
     {
 
         // Decode req parameters vals so they can be cleanly encoded before api req

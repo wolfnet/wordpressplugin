@@ -3,7 +3,7 @@
 /**
  *
  * @title         featuredListingsOptions.php
- * @copyright     Copyright (c) 2012, 2013, WolfNet Technologies, LLC
+ * @copyright     Copyright (c) 2012 - 2015, WolfNet Technologies, LLC
  *
  *                This program is free software; you can redistribute it and/or
  *                modify it under the terms of the GNU General Public License
@@ -41,10 +41,10 @@
         <tr>
             <td><label>Market:</label></td>
             <td>
-                <select id="<?php echo $keyid_wpid; ?>" name="<?php echo $keyid_wpid; ?>">
+                <select id="<?php echo $keyid_wpid; ?>" name="<?php echo $keyid_wpname; ?>">
                     <?php for($i=0; $i<=count($markets)-1; $i++): ?>
                     <option value="<?php echo $markets[$i]->id; ?>"
-                        <?php if($markets[$i]->id == $selectedKey) echo ' selected="selected"'?>><?php echo $markets[$i]->label; ?></option>
+                        <?php if($markets[$i]->id == $keyid) echo ' selected="selected"'?>><?php echo $markets[$i]->label; ?></option>
                     <?php endfor; ?>
                 </select>
             </td>
@@ -97,7 +97,7 @@
                                     value="<?php echo $speed; ?>" size="2" maxlength="2" />
                                 <span class="wolfnet_moreInfo">
                                     Set the speed for the scrolling animation. Enter a value between
-                                    1 and 99; the higher the number, the slower the speed.
+                                    1 and 99; the higher the number, the faster the scroll speed.
                                 </span>
                             </td>
                         </tr>

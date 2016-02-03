@@ -2,7 +2,7 @@
  * This script is a general container for JavaScript code sepcific to the WordPress admin interface.
  *
  * @title         wolfnetAdmin.js
- * @copyright     Copyright (c) 2012, 2013, WolfNet Technologies, LLC
+ * @copyright     Copyright (c) 2012 - 2015, WolfNet Technologies, LLC
  *
  *                This program is free software; you can redistribute it and/or
  *                modify it under the terms of the GNU General Public License
@@ -380,6 +380,8 @@ if ( typeof jQuery != 'undefined' ) {
                                 $marketLabel.val(data);
                             }
 
+                            $wrapper.closest('tr').find('.wolfnet_keyMarket_value').val(data);
+
                         },
                         error: function() {
                             $input.trigger(options.invalidEvent);
@@ -474,7 +476,16 @@ if ( typeof jQuery != 'undefined' ) {
                     .attr('size', '50')
                 )
             );
-            valueRow.append(cell.clone().html($('<span/>').attr('class', 'wolfnet_keyMarket')));
+            valueRow.append(cell.clone().html(
+                $('<span/>').attr('class', 'wolfnet_keyMarket'))
+                .append(
+                    $('<input/>').attr('id', 'wolfnet_keyMarket_'  + nextIteration)
+                    .attr('name', 'wolfnet_keyMarket_' + nextIteration)
+                    .attr('class', 'wolfnet_keyMarket_value')
+                    .attr('type', 'hidden')
+                    .attr('value', '')
+                )
+            );
             valueRow.append(cell.clone().html(
                     $('<input />').attr('id', 'wolfnet_keyLabel_' + nextIteration)
                     .attr('name', 'wolfnet_keyLabel_' + nextIteration)

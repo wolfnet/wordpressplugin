@@ -125,6 +125,18 @@ class Wolfnet_Factory
     }
 
 
+    private function getWolfnet_AgentPagesHandler()
+    {
+        return new Wolfnet_AgentPagesHandler($this->args['plugin']);
+    }
+
+
+    private function getWolfnet_Ajax()
+    {
+        return new Wolfnet_Ajax($this->args['plugin']);
+    }
+
+
     private function getWolfnet_Views()
     {
         return new Wolfnet_Views();

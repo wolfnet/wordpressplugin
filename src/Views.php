@@ -2,7 +2,7 @@
 
 /**
  * @title         Wolfnet_Views.php
- * @copyright     Copyright (c) 2012, 2013, WolfNet Technologies, LLC
+ * @copyright     Copyright (c) 2012 - 2015, WolfNet Technologies, LLC
  *
  *                This program is free software; you can redistribute it and/or
  *                modify it under the terms of the GNU General Public License
@@ -211,13 +211,31 @@ class Wolfnet_Views
     }
 
 
+    public function agentPagesOptionsFormView(array $args = array())
+    {
+        $offices = $GLOBALS['wolfnet']->getOffices();
+        $offices = $offices['responseData']['data']['office'];
+        $keyids = array();
+
+        $defaultArgs = array(
+            'instance_id'     => str_replace('.', '', uniqid('wolfnet_agentPages_')),
+            'offices'         => $offices,
+            'keyids'          => $keyids,
+        );
+
+        $args = array_merge($defaultArgs, $args);
+
+        return $this->parseTemplate('agentPagesOptions', $args);
+
+    }
+
+
     public function featuredListingsOptionsFormView(array $args = array())
     {
         $defaultArgs = array(
             'instance_id'     => str_replace('.', '', 'wolfnet_featuredListing_' . $GLOBALS['wolfnet']->createUUID()),
             'markets'         => json_decode($GLOBALS['wolfnet']->getProductKey()),
-            'selectedKey'     => (array_key_exists('keyid', $_REQUEST)) ? $_REQUEST['keyid'] : '1',
-            );
+        );
 
         $args = array_merge($defaultArgs, $args);
 
@@ -232,7 +250,7 @@ class Wolfnet_Views
             'instance_id'      => str_replace('.', '', 'wolfnet_listingGrid_' . $GLOBALS['wolfnet']->createUUID()),
             'markets'          => json_decode($GLOBALS['wolfnet']->getProductKey()),
             'keyid'            => ''
-            );
+        );
 
         $args = array_merge($defaultArgs, $args);
 
@@ -258,7 +276,7 @@ class Wolfnet_Views
             'markets'     => $markets,
             'keyids'      => $keyids,
             'view'        => $view,
-            );
+        );
 
 
         $args = array_merge($defaultArgs, $args);
@@ -298,6 +316,56 @@ class Wolfnet_Views
 
         return apply_filters('wolfnet_listingResultsView', $this->parseTemplate('resultsListing', $args));
 
+    }
+
+
+    public function agentsListView(array $args = array())
+    {
+        foreach ($args as $key => $item) {
+            $args[$key] = apply_filters('wolfnet_agentPagesView_' . $key, $item);
+        }
+
+        return apply_filters('wolfnet_agentPagesView', $this->parseTemplate('agentPagesListAgents', $args));
+    }
+
+
+    public function officesListView(array $args = array())
+    {
+        foreach ($args as $key => $item) {
+            $args[$key] = apply_filters('wolfnet_agentPagesView_' . $key, $item);
+        }
+
+        return apply_filters('wolfnet_agentPagesView', $this->parseTemplate('agentPagesListOffices', $args));
+    }
+
+
+    public function agentView(array $args = array()) 
+    {
+        foreach ($args as $key => $item) {
+            $args[$key] = apply_filters('wolfnet_agentPagesView_' . $key, $item);
+        }
+
+        return apply_filters('wolfnet_agentPagesView', $this->parseTemplate('agentPagesShowAgent', $args));
+    }
+
+
+    public function agentContact(array $args = array()) 
+    {
+        foreach ($args as $key => $item) {
+            $args[$key] = apply_filters('wolfnet_agentPagesView_' . $key, $item);
+        }
+
+        return apply_filters('wolfnet_agentPagesView', $this->parseTemplate('agentPagesContactAgent', $args));
+    }
+
+
+    public function officeContact(array $args = array())
+    {
+        foreach ($args as $key => $item) {
+            $args[$key] = apply_filters('wolfnet_agentPagesView_' . $key, $item);
+        }
+
+        return apply_filters('wolfnet_agentPagesView', $this->parseTemplate('agentPagesContactOffice', $args));
     }
 
 

@@ -3,7 +3,7 @@
 /**
  *
  * @title         listingGrid.php
- * @copyright     Copyright (c) 2012, 2013, WolfNet Technologies, LLC
+ * @copyright     Copyright (c) 2012 - 2015, WolfNet Technologies, LLC
  *
  *                This program is free software; you can redistribute it and/or
  *                modify it under the terms of the GNU General Public License
@@ -19,7 +19,6 @@
  *                along with this program; if not, write to the Free Software
  *                Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-
 
 // HACK: Make sure the API key does not get included in the criteria
 unset($wpMeta['key']);
@@ -76,7 +75,8 @@ unset($wpMeta['key']);
         $(instance).filter('.wolfnet_listingGrid').wolfnetListingGrid({
             containerClass: 'wolfnet_listings',
             itemClass: 'wolfnet_listing',
-            clearfixClass: 'wolfnet_clearfix'
+            clearfixClass: 'wolfnet_clearfix',
+            gridAlign: '<?php echo $gridalign; ?>'
         });
 
     });

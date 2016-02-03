@@ -3,7 +3,7 @@
  * will then be displayed in a grid format.
  *
  * @title         jquery.wolfnetListingGrid.js
- * @copyright     Copyright (c) 2012, 2013, WolfNet Technologies, LLC
+ * @copyright     Copyright (c) 2012 - 2015, WolfNet Technologies, LLC
  *
  *                This program is free software; you can redistribute it and/or
  *                modify it under the terms of the GNU General Public License
@@ -38,7 +38,8 @@ if (typeof jQuery != 'undefined') {
             appendClearfix: true,
             clearfixClass: 'clearfix',
             minColumnGap: 5,
-            minRowGap: 20
+            minRowGap: 20,
+            gridAlign: 'center'
         };
 
         var getGridItems = function(target)
@@ -95,6 +96,7 @@ if (typeof jQuery != 'undefined') {
             var minColumnWidth = data.itemWidth;
             var columnWidth = minColumnWidth;
             var columns = Math.max(Math.floor(targetWidth / (columnWidth + data.option.minColumnGap)), 1);
+            var gridAlign = data.option.gridAlign;
 
             if (columns > $items.length) {
 
@@ -117,14 +119,19 @@ if (typeof jQuery != 'undefined') {
 
             //console.log('targetWidth: ' + targetWidth, 'columnWidth: ' + columnWidth, 'columns: ' + columns, 'remainingPixels: ' + remainingPixels, 'margin: ' + margin, 'rounded margin: ' + Math.floor(margin), '1/2 margin: ' + Math.floor(margin/2));
 
-            var leftMargin   = columns === 1 ? Math.floor(margin) : 0;
+            var margin       = columns === 1 ? Math.floor(margin) : 0;
             var leftPadding  = columns === 1 ? 0 : Math.floor(margin / 2);
             var rightPadding = columns === 1 ? 0 : Math.floor(margin / 2);
 
             data.itemPadding = leftPadding + rightPadding;
 
+            if (gridAlign === 'center') {
+                $items.css('margin-left', margin);
+            } else {
+                $items.css('margin-right: 15);
+            }
+
             $items.css({
-                'margin-left': leftMargin,
                 'padding-left': leftPadding,
                 'max-width': columnWidth + leftPadding + rightPadding
             });

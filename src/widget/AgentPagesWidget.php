@@ -2,7 +2,7 @@
 
 /**
  *
- * @title         QuickSearchWidget.php
+ * @title         AgentPagesWidget.php
  * @copyright     Copyright (c) 2012 - 2015, WolfNet Technologies, LLC
  *
  *                This program is free software; you can redistribute it and/or
@@ -22,17 +22,16 @@
 
 require_once dirname(__FILE__) . '/AbstractWidget.php';
 
-class Wolfnet_Widget_QuickSearchWidget extends Wolfnet_Widget_AbstractWidget
+class Wolfnet_Widget_AgentPagesWidget extends Wolfnet_Widget_AbstractWidget
 {
 
 
-    public $idBase = 'wolfnet_quickSearchWidget';
+    public $idBase = 'wolfnet_agentPagesWidget';
 
-    public $name = 'WolfNet Quick Search';
+    public $name = 'WolfNet Agent Pages';
 
     public $options = array(
-        'description'  => 'Configure a quick search to include on your website.  When executed,
-            the user is directed to matching properties within your WolfNet property search.'
+        'description'  => 'Configure agent and office pages to include on your website.'
         );
 
 
@@ -40,8 +39,7 @@ class Wolfnet_Widget_QuickSearchWidget extends Wolfnet_Widget_AbstractWidget
     {
 
         try {
-            $options = $this->getOptions($instance);
-            $response = $this->plugin->quickSearch($options);
+            $response = $this->plugin->agentPageHandler($instance);
 
         } catch (Wolfnet_Api_ApiException $e) {
             $response = $this->plugin->displayException($e);
@@ -55,22 +53,23 @@ class Wolfnet_Widget_QuickSearchWidget extends Wolfnet_Widget_AbstractWidget
     public function form($instance)
     {
         $options = $this->getOptions($instance);
+        $options['showSoldOption'] = $this->plugin->soldListingsEnabled();
 
-        echo $this->plugin->views->quickSearchOptionsFormView($options);
+        echo $this->plugin->views->agentPagesOptionsFormView($options);
 
     }
 
 
     public function update($new_instance, $old_instance)
     {
-        return parent::updateWithDefault($this->plugin->getQuickSearchDefaults(), $new_instance, $old_instance);
+        return parent::updateWithDefault($this->plugin->getAgentPagesDefaults(), $new_instance, $old_instance);
 
     }
 
 
     protected function getOptions($instance = null)
     {
-        $options = $this->plugin->getQuickSearchOptions($instance);
+        $options = $this->plugin->getAgentPagesOptions($instance);
 
         return parent::prepOptions($options);
 

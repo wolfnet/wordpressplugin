@@ -2,7 +2,7 @@
 
 /**
  * @title         Wolfnet_Admin.php
- * @copyright     Copyright (c) 2012, 2013, WolfNet Technologies, LLC
+ * @copyright     Copyright (c) 2012 - 2015, WolfNet Technologies, LLC
  *
  *                This program is free software; you can redistribute it and/or
  *                modify it under the terms of the GNU General Public License
@@ -182,7 +182,7 @@ class Wolfnet_Admin extends Wolfnet_Plugin
         $richEditing  = get_user_option('rich_editing');
 
         // Register Ajax Actions
-        $GLOBALS['wolfnet']->registerAdminAjaxActions();
+        $GLOBALS['wolfnet']->ajax->registerAdminAjaxActions();
 
         $this->adminStartSession();
 

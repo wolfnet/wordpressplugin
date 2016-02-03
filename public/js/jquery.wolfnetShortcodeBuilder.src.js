@@ -2,7 +2,7 @@
  * This jQuery script defines the functionality of the WolfNet Shortcode Builder tinyMCE button.
  *
  * @title         jquery.wolfnetShortcodeBuilder.src.js
- * @copyright     Copyright (c) 2012, 2013, WolfNet Technologies, LLC
+ * @copyright     Copyright (c) 2012 - 2015, WolfNet Technologies, LLC
  *
  *                This program is free software; you can redistribute it and/or
  *                modify it under the terms of the GNU General Public License
@@ -43,34 +43,39 @@ jQuery(function($){
     var $currentPage   = null;
     var $loader        = null;
     var menuItems      = {
+        'agent' : {
+            title:'Agent Pages',
+            action:'wolfnet_scb_options_agent',
+            shortcode:'wnt_agent'
+        },
         'feat' : {
             title:'Featured Listings',
             action:'wolfnet_scb_options_featured',
             shortcode:'wnt_featured'
-            },
+        },
         'grid' : {
             title:'Listing Grid',
             action:'wolfnet_scb_options_grid',
             shortcode:'wnt_grid'
-            },
+        },
         'list' : {
             title:'Property List',
             action:'wolfnet_scb_options_list',
             shortcode:'wnt_list'
-            },
+        },
         /*  Removing until requirements for this component are better fleshed out
         'summ' : {
             title:'Results Summary',
             action:'wolfnet_scb_results_summary',
             shortcode:'wnt_results'
-            },
+        },
         */
         'srch' : {
             title:'Quick Search',
             action:'wolfnet_scb_options_quicksearch',
             shortcode:'wnt_search'
-            }
-        };
+        }
+    };
 
 
     var createBuilderDialog = function (options)
@@ -99,6 +104,21 @@ jQuery(function($){
 
     var createMenuPage = function ()
     {
+
+        // Figure out if we can display the Agent Pages option.
+        // Note: This needs to NOT be asyncronous. 
+        $.ajax( {
+            url: ajaxurl,
+            type: 'GET',
+            dataType: 'json',
+            async: false,
+            data: {action:'wolfnet_scb_showagentfeature'},
+            success: function (data) {
+                if(data == false) {
+                    delete menuItems.agent;
+                }
+            }
+        });
 
         var menuString = '';
 
@@ -195,7 +215,7 @@ jQuery(function($){
                 var $form = $('<form />')
                 .attr( 'wolfnet:sc', menuItems[pageId].shortcode )
                 .append(data)
-                .append($('<button type="submit" class="button button-primary" style="position:absolute;bottom:15px;right:15px;">Insert</button>'))
+                .append($('<button type="submit" class="button button-primary">Insert</button>'))
                 .submit(function(event) {
                     event.preventDefault();
                     insertShortCode.call($form);
