@@ -43,7 +43,9 @@
 						placeholder="Search by City, Address, Zip, Area, and more!" />
 				</div>
 			</div>
+			<div class="wnt-smart-menu smart-menu<?php echo $componentId; ?>"></div>
 		</fieldset>
+
 		<!--TODO: echo placeholder dynamically ^^ -->
 
 		<!--TODO: Move Price/Bed/Baths widget to its own modularized view/template-->
