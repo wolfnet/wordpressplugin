@@ -1615,19 +1615,6 @@
 				});
 			$(baseNode).append(mouseWheelZoomNode);
 
-			var mouseWheelZoomCheckbox = document.createElement("img");
-			$(mouseWheelZoomCheckbox)
-				.attr({
-					id: "wntMouseWheelZoomCheckbox" + controlId,
-					src: "/2_5/images/map/box_unchecked.png"
-				})
-				.css({
-					height: "13px",
-					width: "13px",
-					marginTop: "-2px"
-				});
-			$(mouseWheelZoomNode).append(mouseWheelZoomCheckbox);
-
 			var mouseWheelZoomText = document.createElement("div");
 			$(mouseWheelZoomText)
 				.attr("id", "wntMouseWheelZoomText" + controlId)
@@ -1651,15 +1638,6 @@
 
             var _toggleMouseControl = function (controlType, status, persist) {
                 switch (controlType) {
-                    case "mouseWheelZoom":
-                        if (!status) {
-                            $(mouseWheelZoomNode).removeClass("selected");
-                            $(mouseWheelZoomCheckbox).attr("src", "/2_5/images/map/box_unchecked.png");
-                        } else {
-                            $(mouseWheelZoomNode).addClass("selected");
-                            $(mouseWheelZoomCheckbox).attr("src", "/2_5/images/map/box_checked.png");
-                        }
-                        break;
                     case "dragMove":
                         $(mouseMoveControl).addClass("selected");
                         $(mouseZoomControl).removeClass("selected");
