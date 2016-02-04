@@ -706,30 +706,6 @@ class Wolfnet_Plugin
     }
 
 
-    /* Data ************************************************************************************* */
-    /*  _                                                                                         */
-    /* | \  _. _|_  _.                                                                            */
-    /* |_/ (_|  |_ (_|                                                                            */
-    /*                                                                                            */
-    /* ****************************************************************************************** */
-
-
-    /* listings **************************************************************************** */
-
-    /**
-     * returns array containing all fields supported by the /listing queries to the API
-     * plus some legacy fields
-     * @return array all sported /listing query fields
-     */
-    public function getListingFields()
-    {
-        return array (
-
-            );
-
-    }
-
-
     /* Misc. Data ******************************************************************************* */
 
     public function getSavedSearches($count = -1, $keyid = null)
