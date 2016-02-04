@@ -714,34 +714,6 @@ class Wolfnet_Plugin
     /* ****************************************************************************************** */
 
 
-    public function remoteSetSslVerify()
-    {
-        $productKey = (array_key_exists('key', $_REQUEST)) ? $_REQUEST['key'] : '';
-
-        try {
-            $response = ($this->setSslVerifyOption($productKey)) ? 'true' : 'false';
-        } catch (Wolfnet_Exception $e) {
-            status_header(500);
-
-            $response = array(
-                'message' => $e->getMessage(),
-                'data' => $e->getData(),
-            );
-
-        }
-
-        wp_send_json($response);
-    }
-
-
-    /* Data ************************************************************************************* */
-    /*  _                                                                                         */
-    /* | \  _. _|_  _.                                                                            */
-    /* |_/ (_|  |_ (_|                                                                            */
-    /*                                                                                            */
-    /* ****************************************************************************************** */
-
-
     /* listings **************************************************************************** */
 
     /**
