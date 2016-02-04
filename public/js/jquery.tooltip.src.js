@@ -23,8 +23,6 @@
 		title,
 		// timeout id for delayed tooltips
 		tID,
-		// IE 5.5 or 6
-		IE = $.browser.msie && /MSIE\s(5\.5|6\.)/.test(navigator.userAgent),
 		// flag for mouse tracking
 		track = false;
 	
@@ -61,27 +59,6 @@
 				.mouseout(hide)
 				.click(hide);
 		},
-		fixPNG: IE ? function() {
-			return this.each(function () {
-				var image = $(this).css('backgroundImage');
-				if (image.match(/^url\(["']?(.*\.png)["']?\)$/i)) {
-					image = RegExp.$1;
-					$(this).css({
-						'backgroundImage': 'none',
-						'filter': "progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled=true, sizingMethod=crop, src='" + image + "')"
-					}).each(function () {
-						var position = $(this).css('position');
-						if (position != 'absolute' && position != 'relative')
-							$(this).css('position', 'relative');
-					});
-				}
-			});
-		} : function() { return this; },
-		unfixPNG: IE ? function() {
-			return this.each(function () {
-				$(this).css({'filter': '', backgroundImage: ''});
-			});
-		} : function() { return this; },
 		hideWhenEmpty: function() {
 			return this.each(function() {
 				$(this)[ $(this).html() ? "show" : "hide" ]();
@@ -175,10 +152,6 @@
 		
 		// add an optional class for this tip
 		helper.parent.addClass(settings(this).extraClass);
-
-		// fix PNG background for IE
-		if (settings(this).fixPNG )
-			helper.parent.fixPNG();
 			
 		handle.apply(this, arguments);
 	}
@@ -186,7 +159,7 @@
 	// delete timeout and show helper
 	function show() {
 		tID = null;
-		if ((!IE || !$.fn.bgiframe) && settings(current).fade) {
+		if ((!$.fn.bgiframe) && settings(current).fade) {
 			if (helper.parent.is(":animated"))
 				helper.parent.stop().show().fadeTo(settings(current).fade, current.tOpacity);
 			else
@@ -279,16 +252,13 @@
 		function complete() {
 			helper.parent.removeClass( tsettings.extraClass ).hide().css("opacity", "");
 		}
-		if ((!IE || !$.fn.bgiframe) && tsettings.fade) {
+		if ((!$.fn.bgiframe) && tsettings.fade) {
 			if (helper.parent.is(':animated'))
 				helper.parent.stop().fadeTo(tsettings.fade, 0, complete);
 			else
 				helper.parent.stop().fadeOut(tsettings.fade, complete);
 		} else
 			complete();
-		
-		if( settings(this).fixPNG )
-			helper.parent.unfixPNG();
 	}
 	
 })(jQuery);
