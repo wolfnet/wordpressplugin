@@ -1600,41 +1600,41 @@
             $(mouseMoveText).attr("id", "wntMouseMoveText" + controlId).addClass("wntMouseControlContent").html("Move");
             $(mouseMoveControl).append(mouseMoveText).addClass("selected");
 
-                // Spacer Node
-                var spacerNode = document.createElement("span");
-                $(spacerNode).attr("id", "spacerNode" + controlId).addClass("wntMouseMenuSpacer").html(" ");
-                $(baseNode).append(spacerNode);
+			// Spacer Node
+			var spacerNode = document.createElement("span");
+			$(spacerNode).attr("id", "spacerNode" + controlId).addClass("wntMouseMenuSpacer").html(" ");
+			$(baseNode).append(spacerNode);
 
-                // mouse wheel zoom control
-                var mouseWheelZoomNode = document.createElement("div");
-                $(mouseWheelZoomNode)
-                    .attr("id", "wntMouseWheelZoom" + controlId)
-                    .addClass("wntMouseMenuItem")
-                    .click(function () {
-                        map.toggleMouseWheelZoom();
-                    });
-                $(baseNode).append(mouseWheelZoomNode);
+			// mouse wheel zoom control
+			var mouseWheelZoomNode = document.createElement("div");
+			$(mouseWheelZoomNode)
+				.attr("id", "wntMouseWheelZoom" + controlId)
+				.addClass("wntMouseMenuItem")
+				.click(function () {
+					map.toggleMouseWheelZoom();
+				});
+			$(baseNode).append(mouseWheelZoomNode);
 
-                var mouseWheelZoomCheckbox = document.createElement("img");
-                $(mouseWheelZoomCheckbox)
-                    .attr({
-                        id: "wntMouseWheelZoomCheckbox" + controlId,
-                        src: "/2_5/images/map/box_unchecked.png"
-                    })
-                    .css({
-                        height: "13px",
-                        width: "13px",
-                        marginTop: "-2px"
-                    });
-                $(mouseWheelZoomNode).append(mouseWheelZoomCheckbox);
+			var mouseWheelZoomCheckbox = document.createElement("img");
+			$(mouseWheelZoomCheckbox)
+				.attr({
+					id: "wntMouseWheelZoomCheckbox" + controlId,
+					src: "/2_5/images/map/box_unchecked.png"
+				})
+				.css({
+					height: "13px",
+					width: "13px",
+					marginTop: "-2px"
+				});
+			$(mouseWheelZoomNode).append(mouseWheelZoomCheckbox);
 
-                var mouseWheelZoomText = document.createElement("div");
-                $(mouseWheelZoomText)
-                    .attr("id", "wntMouseWheelZoomText" + controlId)
-                    .addClass("wntMouseControlContent")
-                    .html(" Mouse Wheel Zoom");
-                $(mouseWheelZoomText).css({ paddingTop: "0px" });
-                $(mouseWheelZoomNode).append(mouseWheelZoomText);
+			var mouseWheelZoomText = document.createElement("div");
+			$(mouseWheelZoomText)
+				.attr("id", "wntMouseWheelZoomText" + controlId)
+				.addClass("wntMouseControlContent")
+				.html(" Mouse Wheel Zoom");
+			$(mouseWheelZoomText).css({ paddingTop: "0px" });
+			$(mouseWheelZoomNode).append(mouseWheelZoomText);
 
             var mouseControlEndNode = document.createElement("span");
             $(mouseControlEndNode)
