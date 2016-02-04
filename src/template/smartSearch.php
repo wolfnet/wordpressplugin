@@ -40,13 +40,12 @@
 					<input name="q" type="text" value=""
 						id="<?php echo $instance_id; ?>_search_text"
 						class="<?php echo $smartsearchInput; ?>_search_text wnt-smart-search"
-						placeholder="Search by City, Address, Zip, Area, and more!" />
+						placeholder="<?php echo $smartSearchPlaceholder; ?>" />
 				</div>
 			</div>
 			<div class="wnt-smart-menu smart-menu<?php echo $componentId; ?>"></div>
 		</fieldset>
 
-		<!--TODO: echo placeholder dynamically ^^ -->
 
 		<!--TODO: Move Price/Bed/Baths widget to its own modularized view/template-->
 		<!-- and call from both quicksearch and smartsearch views.-->

@@ -1551,6 +1551,7 @@ class Wolfnet_Plugin
 
 			$args['smartSearchFields'] = json_encode($smartSearchService->getFields());
 			$args['smartSearchFieldMap'] = json_encode($smartSearchService->getFieldMap());
+			$args['smartSearchPlaceholder'] = $smartSearchService->getPlaceholder();
 			$args['componentId'] = uniqid('-');
 		}
 

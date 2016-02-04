@@ -81,6 +81,15 @@ class Wolfnet_Smart_SearchService
 	}
 
 
+	public function getPlaceholder() {
+
+		$placeholder = 'Search by ';
+
+		return $placeholder;
+
+	}
+
+
 	/* PRIVATE METHODS ************************************************************************** */
 	private function getSmartSearchCriteria()
 	{
