@@ -95,12 +95,6 @@
         var startCenterLat       = centerLat;
         var startCenterLng       = centerLng;
         var startDragType        = dragType;
-
-        // Disable house view in IE6 - several bugs with bird's-eye view in bing maps.
-        if ($.browser.msie && $.browser.version.substring(0, 1) == 6) {
-            hasHouseView = false;
-        }
-
         var currentView           = "";
         var mapIsLoading          = "";
         var lastRolloverContent   = "";
@@ -190,13 +184,8 @@
         };
 
         this.setupMouseControls = function () {
-            var br = $.browser;
             var showMouseControls = false; // To_Release: default to true
             var map = this;
-
-            if ((br.msie != undefined) && (br.version.slice(0, 1) < 8)) {
-                showMouseControls = false;
-            }
 
             if (showMouseControls) {
                 $("[data-wnt-mouseControlContainer=][data-wnt-map-name=" + mapName + "]").each(function () {
@@ -442,7 +431,7 @@
 
         this.toggleMouseWheelZoom = function () {
             // only allow mousewheel zoom toggle when in drag/move mode
-            if ((dragType == "move") && !$.browser.msie) {
+            if (dragType == "move") {
                 if (!mouseWheelEnabled) {
                     MQA.withModule("mousewheel", function() {
                         mapquestMap.enableMouseWheelZoom();
@@ -1219,15 +1208,8 @@
 
                     var mapWidth = mapquestMap.getSize().width + 1;
                     var mapHeight = mapquestMap.getSize().height + 1;
-
                     var animateZoom = true;
-                    var br = $.browser;
-
                     this.setMapIsLoading(true);
-
-                    if ((br.msie != undefined) && (br.version.slice(0, 1) == "8")) {
-                        animateZoom = false;
-                    }
 
                     if (animateZoom) {
                         $(tmpBlockDiv).animate({
@@ -1618,9 +1600,6 @@
             $(mouseMoveText).attr("id", "wntMouseMoveText" + controlId).addClass("wntMouseControlContent").html("Move");
             $(mouseMoveControl).append(mouseMoveText).addClass("selected");
 
-            // If not IE, add mouse wheel zoom control
-            if (!$.browser.msie) {
-
                 // Spacer Node
                 var spacerNode = document.createElement("span");
                 $(spacerNode).attr("id", "spacerNode" + controlId).addClass("wntMouseMenuSpacer").html(" ");
@@ -1656,8 +1635,6 @@
                     .html(" Mouse Wheel Zoom");
                 $(mouseWheelZoomText).css({ paddingTop: "0px" });
                 $(mouseWheelZoomNode).append(mouseWheelZoomText);
-
-            }
 
             var mouseControlEndNode = document.createElement("span");
             $(mouseControlEndNode)
