@@ -80,6 +80,7 @@ class Wolfnet_Smart_SearchService
 		return $map;
 	}
 
+	// TODO: only call getSmartSearchCriteria; set in constructor
 
 	public function getPlaceholder() {
 
