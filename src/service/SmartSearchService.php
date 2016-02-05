@@ -97,7 +97,7 @@ class Wolfnet_Smart_SearchService
 
 			switch ($fields[$arrayCounter]) {
 				case 'area_name' :
-					$placeholder .= 'xArea, ';
+					$placeholder .= 'Area, ';
 					break;
 				case 'subdivision';
 					$placeholder .= 'Subdivision, ';
