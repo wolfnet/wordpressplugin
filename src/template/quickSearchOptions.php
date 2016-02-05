@@ -60,6 +60,8 @@
 					<option value="1">Enabled</option>
 					<option value="0" selected>Disabled</option>
 				</select>
+				<span class="wolfnet_moreInfo">
+				</span>
 			</td>
 		</tr>
 		<?php endif; ?>
