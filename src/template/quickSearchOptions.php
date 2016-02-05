@@ -52,6 +52,7 @@
 			</td>
 		</tr>
 
+		<?php if(count($markets) < 2): ?>
 		<tr>
 			<td><label>SmartSearch:</label></td>
 			<td>
@@ -61,6 +62,7 @@
 				</select>
 			</td>
 		</tr>
+		<?php endif; ?>
 
 		<?php if(count($markets) > 1): ?>
         <tr>
