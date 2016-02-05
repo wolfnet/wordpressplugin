@@ -1448,6 +1448,29 @@ class Wolfnet_Plugin
     }
 
 
+    public function sbMcePlugin(array $plugins)
+    {
+        $plugins['wolfnetShortcodeBuilder'] = $this->url . 'js/tinymce.wolfnetShortcodeBuilder.src.js';
+
+        return $plugins;
+
+    }
+
+
+    public function sbButton(array $buttons)
+    {
+
+        do_action($this->preHookPrefix . 'addShortcodeBuilderButton'); // Legacy hook
+
+        array_push($buttons, '|', 'wolfnetShortcodeBuilderButton');
+
+        do_action($this->postHookPrefix . 'addShortcodeBuilderButton'); // Legacy hook
+
+        return $buttons;
+
+    }
+
+
     /*
      * Shortcode helper functions for registering in registerShortCodes.
      */
