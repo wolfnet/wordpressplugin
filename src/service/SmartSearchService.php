@@ -14,6 +14,7 @@ class Wolfnet_Smart_SearchService
 
 	protected $key;
 	protected $url;
+	protected $smartSearchFields;
 
 	/* CONSTRUCTOR ****************************************************************************** */
 	/**
@@ -27,6 +28,7 @@ class Wolfnet_Smart_SearchService
 	{
 		$this->setKey($key);
 		$this->setUrl($url);
+		$this->setSearchFields();
 	}
 
 	/* PUBLIC METHODS *************************************************************************** */
@@ -42,7 +44,7 @@ class Wolfnet_Smart_SearchService
 	 */
 	public function getFields() {
 
-		$fields = $this->getSmartSearchCriteria();
+		$fields = $this->getSearchFields();
 		$params = $this->getSearchParameters();
 
 		for ($i=0; $i < sizeof($fields); $i++) {
@@ -86,7 +88,7 @@ class Wolfnet_Smart_SearchService
 
 		// TODO: canada "postal code" instead of zip
 		$placeholder = 'Search by City, Address, Zip, ';
-		$fields = $this->getSmartSearchCriteria();
+		$fields = $this->getSearchFields();
 		$customSearchTypes = 0;
 		$arrayCounter = 0;
 
@@ -160,11 +162,21 @@ class Wolfnet_Smart_SearchService
 	}
 
 
+	private function getSearchFields()
+	{
+		return $this->smartSearchFields;
+	}
+
+	private function setSearchFields()
+	{
+		$this->smartSearchFields = $this->getSmartSearchCriteria();
+	}
+
+
 	private function setKey(&$key)
 	{
 		$this->key = $key;
 	}
-
 
 	private function getKey()
 	{
@@ -176,7 +188,6 @@ class Wolfnet_Smart_SearchService
 	{
 		$this->url = $url;
 	}
-
 
 	private function getUrl()
 	{
