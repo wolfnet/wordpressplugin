@@ -143,11 +143,12 @@ class Wolfnet_Plugin
         $this->views = $this->ioc->get('Wolfnet_Views');
 
         // Modules
-        $this->quickSearch = $this->ioc->get('Wolfnet_Module_QuickSearch');
+        $this->agentPages = $this->ioc->get('Wolfnet_Module_AgentPages');
         $this->featuredListings = $this->ioc->get('Wolfnet_Module_FeaturedListings');
         $this->listingGrid = $this->ioc->get('Wolfnet_Module_ListingGrid');
         $this->propertyList = $this->ioc->get('Wolfnet_Module_PropertyList');
-        $this->agentPages = $this->ioc->get('Wolfnet_Module_AgentPages');
+        $this->quickSearch = $this->ioc->get('Wolfnet_Module_QuickSearch');
+        $this->searchManager = $this->ioc->get('Wolfnet_Module_SearchManager');
 
         if(is_admin()) {
             $this->admin = $this->ioc->get('Wolfnet_Admin');
@@ -510,90 +511,6 @@ class Wolfnet_Plugin
 
 
     /**
-     * This method is used to retrieve search solution HTML from an MLSFinder 2.5 search solution
-     * for use as a 'search manager' interface in the WordPress admin.
-     * @param  string $productKey The product key for the solution to be retrieved.
-     * @return string             The HTML retrieved from the MLSFinder server.
-     */
-    public function searchManagerHtml($productKey = null)
-    {
-        global $wp_version;
-        $http = array();
-
-        $baseUrl = $this->getBaseUrl($productKey);
-        //$maptracksEnabled = $this->getMaptracksEnabled($productKey);
-
-        if (is_wp_error($baseUrl)) {
-            $http['body'] = $this->getWpError($baseUrl);
-            return $http;
-        }
-
-        if (!strstr($baseUrl, 'index.cfm')) {
-            if (substr($baseUrl, strlen($baseUrl) - 1) != '/') {
-                $baseUrl .= '/';
-            }
-            $baseUrl .= 'index.cfm';
-        }
-
-
-        /* commenting out map mode in search manager until we better figure out session constraints..
-        if (!array_key_exists('search_mode', $_GET)) {
-            $_GET['search_mode'] = ($maptracksEnabled) ? 'map' : 'form';
-        } */
-
-        $_GET['search_mode'] = 'form';
-
-        $url = $baseUrl . ((!strstr($baseUrl, '?')) ? '?' : '');
-
-        $url .= ((substr($url, -1) === '?') ? '' : '&' ) . 'action=wpshortcodebuilder';
-
-        $resParams = array(
-            'page',
-            'action',
-            'market_guid',
-            'reinit',
-            'show_header_footer'
-            );
-
-        foreach ($_GET as $param => $paramValue) {
-            if (!array_search($param, $resParams)) {
-                $paramValue = urlencode($this->htmlEntityDecodeNumeric($paramValue));
-                $url .= "&{$param}={$paramValue}";
-            }
-        }
-
-        $reqHeaders = array(
-            'cookies'    => $this->searchManagerCookies(),
-            'timeout'    => 180,
-            'user-agent' => 'WordPress/' . $wp_version,
-            );
-
-        $http = wp_remote_get($url, $reqHeaders);
-
-        if (!is_wp_error($http)) {
-            $http['request'] = array(
-                'url' => $url,
-                'headers' => $reqHeaders,
-                );
-
-            if ($http['response']['code'] == '200') {
-                $this->searchManagerCookies($http['cookies']);
-                $http['body'] = $this->removeJqueryFromHTML($http['body']);
-
-                return $http;
-            } else {
-                //null returned on non-200; wperrors returned in all other error handling in this fctn
-                return array('body' => '');
-            }
-        } else {
-            $http['body'] = $this->getWpError($http);
-            return $http;
-        }
-
-    }
-
-
-    /**
      * This method returns an array of integer values to be used as possible pagination item counts.
      * @return array An array of integers.
      */
@@ -676,108 +593,6 @@ class Wolfnet_Plugin
     }
 
 
-    /* Shortcode Builder ************************************************************************ */
-    /*  __                                  _                                                     */
-    /* (_  |_   _  ._ _|_  _  _   _|  _    |_)     o |  _|  _  ._                                 */
-    /* __) | | (_) |   |_ (_ (_) (_| (/_   |_) |_| | | (_| (/_ |                                  */
-    /*                                                                                            */
-    /* ****************************************************************************************** */
-
-    public function sbMcePlugin(array $plugins)
-    {
-        $plugins['wolfnetShortcodeBuilder'] = $this->url . 'js/tinymce.wolfnetShortcodeBuilder.src.js';
-
-        return $plugins;
-
-    }
-
-
-    public function sbButton(array $buttons)
-    {
-
-        do_action($this->preHookPrefix . 'addShortcodeBuilderButton'); // Legacy hook
-
-        array_push($buttons, '|', 'wolfnetShortcodeBuilderButton');
-
-        do_action($this->postHookPrefix . 'addShortcodeBuilderButton'); // Legacy hook
-
-        return $buttons;
-
-    }
-
-
-    /* Misc. Data ******************************************************************************* */
-
-    public function getSavedSearches($count = -1, $keyid = null)
-    {
-        // Cache the data in the request scope so that we only have to query for it once per request.
-        $cacheKey = 'wntSavedSearches';
-        $data = (array_key_exists($cacheKey, $_REQUEST)) ? $_REQUEST[$cacheKey] : null;
-
-        if ($keyid == null) {
-            $keyid = "1";
-        }
-
-        if ($data==null) {
-            $dataArgs = array(
-                'numberposts' => $count,
-                'post_type' => $this->customPostTypeSearch,
-                'post_status' => 'publish',
-                'meta_query' => array(
-                    array(
-                        'key' => 'keyid',
-                        'value' => $keyid,
-                    )
-                )
-            );
-
-            $data = get_posts($dataArgs);
-
-            if (count($data) == 0 && $keyid == 1) {
-                /*
-                 * This is for backwards compatibility - get posts without keyid meta query.
-                 * We will loop through these custom posts and add the keyid meta key.
-                 * Only do this on a keyid of 1 since that would be the default key back when we only allowed one.
-                 */
-                $dataArgs = array(
-                    'numberposts' => $count,
-                    'post_type' => $this->customPostTypeSearch,
-                    'post_status' => 'publish',
-                );
-
-                $data = get_posts($dataArgs);
-
-                foreach ($data as $post) {
-                    add_post_meta($post->ID, 'keyid', 1);
-                }
-
-            }
-
-            $_REQUEST[$cacheKey] = $data;
-
-        }
-
-        return $data;
-
-    }
-
-
-    public function getSavedSearch($id = 0)
-    {
-        $data = array();
-        $customFields = get_post_custom($id);
-
-        if ($customFields !== false) {
-            foreach ($customFields as $field => $value) {
-                if (substr($field, 0, 1) != '_') {
-                    $data[$field] = $value[0];
-                }
-            }
-        }
-
-        return $data;
-
-    }
 
 
     /**
@@ -1138,55 +953,6 @@ class Wolfnet_Plugin
     /* |_|   |_|  |_| \_/ \__,_|\__\___| |_|  |_|\___|\__|_| |_|\___/ \__,_|___/                  */
     /*                                                                                            */
     /* ****************************************************************************************** */
-
-
-    private function searchManagerCookies($cookies = null)
-    {
-        if (is_array($cookies)) {
-            foreach ($cookies as $name => $value) {
-                if ($value instanceof WP_Http_Cookie) {
-                    $cookieArgs = array(
-                        $value->name,
-                        $value->value,
-                        ($value->expires !== null && is_numeric($value->expires)) ? $value->expires : 0,
-                        );
-
-                    if ($value->path !== null) {
-                        array_push($cookieArgs, $value->path);
-
-                        if ($value->domain !== null) {
-                            array_push($cookieArgs, $value->domain);
-                        }
-
-                    }
-
-                    call_user_func_array('setcookie', $cookieArgs);
-
-                } else {
-                    setcookie($name, $value);
-                }
-            }
-
-        }
-
-        $cookies = array();
-
-        foreach ($_COOKIE as $name => $value) {
-            $cookie = new WP_Http_Cookie($name);
-            $cookie->name = $name;
-            $cookie->value = $value;
-            array_push($cookies, $cookie);
-        }
-
-        return $cookies;
-
-    }
-
-
-    private function removeJqueryFromHTML($string)
-    {
-        return preg_replace('/(<script)(.*)(jquery\.min\.js)(.*)(<\/script>)/i', '', $string);
-    }
 
 
     public function isJsonEncoded($str)

@@ -116,7 +116,7 @@ class Wolfnet_Ajax
                 $keyid = (array_key_exists('keyid', $_REQUEST)) ? $_REQUEST['keyid'] : '1';
             }
 
-            $response = $GLOBALS['wolfnet']->getSavedSearches(-1, $keyid);
+            $response = $GLOBALS['wolfnet']->searchManager->getSavedSearches(-1, $keyid);
 
         } catch (Wolfnet_Exception $e) {
             status_header(500);
@@ -319,7 +319,7 @@ class Wolfnet_Ajax
         try {
             $id = (array_key_exists('id', $_REQUEST)) ? $_REQUEST['id'] : 0;
 
-            $response = $GLOBALS['wolfnet']->getSavedSearch($id);
+            $response = $GLOBALS['wolfnet']->searchManager->getSavedSearch($id);
 
         } catch (Wolfnet_Exception $e) {
             status_header(500);

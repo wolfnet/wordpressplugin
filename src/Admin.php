@@ -206,7 +206,7 @@ class Wolfnet_Admin extends Wolfnet_Plugin
                 $productKey = $GLOBALS['wolfnet']->keyService->getById($_SESSION['keyid']);
 
                 if ($GLOBALS['wolfnet']->keyService->isValid($productKey)) {
-                    $GLOBALS['wolfnet']->smHttp = $GLOBALS['wolfnet']->searchManagerHtml($productKey);
+                    $GLOBALS['wolfnet']->smHttp = $GLOBALS['wolfnet']->searchManager->searchManagerHtml($productKey);
                 }
 
             } catch (Wolfnet_Exception $e) {

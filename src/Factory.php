@@ -140,12 +140,6 @@ class Wolfnet_Factory
     }
 
 
-    private function getWolfnet_Module_QuickSearch()
-    {
-        return new Wolfnet_Module_QuickSearch($this->args['plugin']);
-    }
-
-
     private function getWolfnet_Module_FeaturedListings()
     {
         return new Wolfnet_Module_FeaturedListings($this->args['plugin']);
@@ -167,6 +161,18 @@ class Wolfnet_Factory
             $this->args['plugin'],
             $this->getWolfnet_Views()
         );
+    }
+
+
+    private function getWolfnet_Module_QuickSearch()
+    {
+        return new Wolfnet_Module_QuickSearch($this->args['plugin']);
+    }
+
+
+    private function getWolfnet_Module_SearchManager()
+    {
+        return new Wolfnet_Module_SearchManager($this->args['plugin']);
     }
 
 

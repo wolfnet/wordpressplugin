@@ -100,7 +100,7 @@ class Wolfnet_Module_ListingGrid
         $options['sortoptions_true_wps']  = selected($options['sortoptions'], 'true', false);
         $options['ownertypes']            = $this->plugin->getOwnerTypes();
         $options['prices']                = $this->plugin->getPrices($this->plugin->keyService->getById($keyid));
-        $options['savedsearches']         = $this->plugin->getSavedSearches(-1, $keyid);
+        $options['savedsearches']         = $this->plugin->searchManager->getSavedSearches(-1, $keyid);
         $options['mapEnabled']            = $this->plugin->getMaptracksEnabled($this->plugin->keyService->getById($keyid));
         $options['maptypes']              = $this->plugin->getMapTypes();
 

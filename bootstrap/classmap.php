@@ -25,6 +25,7 @@ return array(
     'Wolfnet_Module_ListingGrid' => '/module/ListingGrid.php',
     'Wolfnet_Module_PropertyList' => '/module/PropertyList.php',
     'Wolfnet_Module_QuickSearch' => '/module/QuickSearch.php',
+    'Wolfnet_Module_SearchManager' => '/module/SearchManager.php',
 
     'Wolfnet_Service_CachingService' => '/service/CachingService.php',
     'Wolfnet_Service_ProductKeyService' => '/service/ProductKeyService.php',

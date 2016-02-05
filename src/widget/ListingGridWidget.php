@@ -80,7 +80,7 @@ class Wolfnet_Widget_ListingGridWidget extends Wolfnet_Widget_AbstractWidget
             if ($saveData['savedsearch'] == 'deleted') {
                 /* Maintain the existing search criteria */
             } else {
-                $criteria = $this->plugin->getSavedSearch($saveData['savedsearch']);
+                $criteria = $this->plugin->searchManager->getSavedSearch($saveData['savedsearch']);
                 $saveData['criteria'] = json_encode($criteria);
             }
 
