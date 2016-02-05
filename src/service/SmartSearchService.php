@@ -85,8 +85,8 @@ class Wolfnet_Smart_SearchService
 
 	public function getPlaceholder() {
 
-		// TODO: canada "postal code" instead of zip
-		$placeholder = 'Search by City, Address, Zip, ';
+		// TODO: Add "Zip" with logic for Canadian markets to be "Postal Code"
+		$placeholder = 'Search by City, Address, ';
 		$fields = $this->getSearchFields();
 		$customSearchTypes = 0;
 		$arrayCounter = 0;
