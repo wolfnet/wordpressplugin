@@ -367,6 +367,8 @@ class Wolfnet_Plugin
 
         // JavaScript
         $scripts = array(
+            'wolfnet-swipe',
+            'wolfnet-thumbnail-scroller',
             'wolfnet-scrolling-items',
             'wolfnet-quick-search',
             'wolfnet-listing-grid',
@@ -2701,6 +2703,14 @@ class Wolfnet_Plugin
             'wolfnet-listing-grid' => array(
                 $this->url . 'js/jquery.wolfnetListingGrid.src.js',
                 array('jquery', 'tooltipjs', 'imagesloadedjs', 'wolfnet'),
+            ),
+            'wolfnet-swipe' => array(
+                $this->url . 'js/wolfnetSwipe.src.js',
+                array('jquery'),
+            ),
+            'wolfnet-thumbnail-scroller' => array(
+                $this->url . 'js/jquery.wolfnetThumbnailScroller.src.js',
+                array('jquery', 'wolfnet-swipe', 'wolfnet'),
             ),
             'wolfnet-toolbar' => array(
                 $this->url . 'js/jquery.wolfnetToolbar.src.js',
