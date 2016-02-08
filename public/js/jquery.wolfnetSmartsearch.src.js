@@ -205,7 +205,6 @@
 			// Create a container to hold the default placeholder text. This text is an
 			// indicator to the user that what they have typed has triggered an action.
 			var $searchingMessage = $('<div>')
-				//.addClass('wnt-message-searching')
 				.addClass(pluginData['searchingClass'])
 				.text('Searching ...');
 
