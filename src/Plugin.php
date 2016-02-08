@@ -393,6 +393,7 @@ class Wolfnet_Plugin
         // CSS
         $styles = array(
             'wolfnet',
+            'icomoon'
             );
 
         $widgetTheme = $this->views->getWidgetTheme();
@@ -2769,6 +2770,9 @@ class Wolfnet_Plugin
             'jquery-ui' => array(
                 'http://ajax.googleapis.com/ajax/libs/jqueryui/' . $jquery_ui->ver
                     . '/themes/smoothness/jquery-ui.css'
+                ),
+            'icomoon' => array(
+                $this->url . 'lib/icomoon/style.css'
                 ),
             );
 
