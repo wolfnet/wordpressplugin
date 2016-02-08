@@ -224,7 +224,8 @@
                             '<div class="wolfnet_listingHead">' +
                                 '<div class="wolfnet_listingImage">' +
                                     '<img src="' + data[i].thumbnail_url + '"' +
-                                    ' alt="Property for sale at ' + data[i].address + '" />' +
+                                    ' alt="Property for sale at ' + data[i].address + '" ' +
+                                    ' data-photo-url="' + data[i].thumbnails_url + '" />' +
                                 '</div> ' +
                                 '<div class="wolfnet_listingInfo"' +
                                 ' title="' + escapeHtml(data[i].listing_price.toString()) + '">' +

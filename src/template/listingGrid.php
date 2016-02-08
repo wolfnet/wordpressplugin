@@ -61,10 +61,23 @@ unset($wpMeta['key']);
 
 <script type="text/javascript">
 
-    jQuery(function($){
-        var instance = <?php echo "'#" . $instance_id . "';"; ?>
+    jQuery(function ($) {
 
-        $(instance).filter('.wolfnet_withPagination,.wolfnet_withSortOptions').wolfnetToolbar({
+        var instance = <?php echo "'#" . $instance_id . "';"; ?>
+        var $listingGrid = $(instance);
+
+        var setupThumbnailScroller = function () {
+            $listingGrid.find('.wolfnet_listing').wolfnetThumbnailScroller({
+                //photoType: 'photo_url',
+                photoSelector: '.wolfnet_listingImage img',
+                hideControls: !wolfnet.hasFeature('touch') // If on a touch screen always show the controls
+                //photoUnavailable: photoUnavailable
+            });
+        };
+
+        $listingGrid.on('wolfnet.updated', setupThumbnailScroller);
+
+        $listingGrid.filter('.wolfnet_withPagination,.wolfnet_withSortOptions').wolfnetToolbar({
              numrows          : <?php echo $wpMeta['maxrows'] . "\n"; ?>
             ,criteria         : <?php echo json_encode($wpMeta) . "\n"; ?>
             ,maxResults       : <?php echo $wpMeta['total_rows'] . "\n"; ?>
@@ -72,12 +85,14 @@ unset($wpMeta['key']);
             ,sortOptionsData  : <?php echo json_encode($sortOptions) . "\n"; ?>
         });
 
-        $(instance).filter('.wolfnet_listingGrid').wolfnetListingGrid({
+        $listingGrid.filter('.wolfnet_listingGrid').wolfnetListingGrid({
             containerClass: 'wolfnet_listings',
             itemClass: 'wolfnet_listing',
             clearfixClass: 'wolfnet_clearfix',
             gridAlign: '<?php echo $gridalign; ?>'
         });
+
+        setupThumbnailScroller();
 
     });
 
