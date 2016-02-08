@@ -67,8 +67,8 @@ class Wolfnet_Plugin
     public $customPostTypeSearch = 'wolfnet_search';
 
     /**
-     * This property is a unique idenitfier that is used to define a plugin option which saves the
-     * product key used by the plugin to retreive data from the WolfNet API.
+     * This property is a unique identifier that is used to define a plugin option which saves the
+     * product key used by the plugin to retrieve data from the WolfNet API.
      * @var string
      */
     protected $productKeyOptionKey = 'wolfnet_productKey';
@@ -101,7 +101,7 @@ class Wolfnet_Plugin
 
     /**
      * This Property is use as a prefix to request scope variables to avoid conflicts with get,
-     * post, and other global variables used by wordpress and other plugins.
+     * post, and other global variables used by WordPress and other plugins.
      * @var string
      */
     public $requestPrefix = 'wolfnet_';
@@ -878,12 +878,12 @@ class Wolfnet_Plugin
     /*                                                                                            */
     /* ****************************************************************************************** */
 
-    public function scAgentPages($attrs) 
+    public function scAgentPages($attrs)
     {
         if(!$this->showAgentFeature()) {
             return '';
         }
-        
+
         try {
             $defaultAttributes = $this->getAgentPagesDefaults();
 
@@ -1017,7 +1017,7 @@ class Wolfnet_Plugin
     }
 
 
-    public function agentPageHandler(array $criteria = array()) 
+    public function agentPageHandler(array $criteria = array())
     {
         $key = $this->getCriteriaKey($criteria);
 
@@ -1221,11 +1221,11 @@ class Wolfnet_Plugin
         } else {
             // $dataOverride is passed in. As of writing this comment, this is data
             // is coming from the AgentPagesHandler - we need to display a listing
-            // grid of an agent's featured listings. This is a vain attempt at 
+            // grid of an agent's featured listings. This is a vain attempt at
             // repurposing this code as-is.
             $data = $dataOverride;
         }
-        
+
 
         // add some elements to the array returned by the API
         // wpMeta should contain any criteria or other setting which do not come from the API
@@ -1915,8 +1915,8 @@ class Wolfnet_Plugin
     {
         try {
             $data = $this->apin->sendRequest(
-                $this->getDefaultProductKey(), 
-                '/settings', 
+                $this->getDefaultProductKey(),
+                '/settings',
                 'GET'
             );
         } catch (Wolfnet_Exception $e) {
@@ -1952,8 +1952,8 @@ class Wolfnet_Plugin
     {
         try {
             $data = $this->apin->sendRequest(
-                $this->getDefaultProductKey(), 
-                '/office', 
+                $this->getDefaultProductKey(),
+                '/office',
                 'GET'
             );
         } catch (Wolfnet_Exception $e) {
