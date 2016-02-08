@@ -45,6 +45,7 @@ class Wolfnet_Ajax
             'wolfnet_content_footer'          => 'remoteContentFooter',
             'wolfnet_listings'                => 'remoteListings',
             'wolfnet_get_listings'            => 'remoteListingsGet',
+            'wolfnet_listing_photos'          => 'remoteListingPhotos',
             'wolfnet_css'                     => 'remotePublicCss',
             'wolfnet_market_name'             => 'remoteGetMarketName',
             'wolfnet_map_enabled'             => 'remoteMapEnabled',
@@ -67,6 +68,7 @@ class Wolfnet_Ajax
             'wolfnet_content_footer'    => 'remoteContentFooter',
             'wolfnet_listings'          => 'remoteListings',
             'wolfnet_get_listings'      => 'remoteListingsGet',
+            'wolfnet_listing_photos'    => 'remoteListingPhotos',
             'wolfnet_css'               => 'remotePublicCss',
             'wolfnet_base_url'          => 'remoteGetBaseUrl',
             'wolfnet_price_range'       => 'remotePriceRange',
@@ -480,6 +482,30 @@ class Wolfnet_Ajax
         }
 
         die;
+
+    }
+
+
+    public function remoteListingPhotos()
+    {
+        try {
+
+            $propertyId = (array_key_exists('property_id', $_REQUEST)) ? $_REQUEST['property_id'] : 0;
+
+            $response = $GLOBALS['wolfnet']->getListingPhotos($propertyId);
+
+        } catch (Wolfnet_Exception $e) {
+
+            status_header(500);
+
+            $response = array(
+                'message' => $e->getMessage(),
+                'data' => $e->getData(),
+            );
+
+        }
+
+        wp_send_json($response);
 
     }
 

@@ -1348,6 +1348,22 @@ class Wolfnet_Plugin
 
     /* listings **************************************************************************** */
 
+    public function getListingPhotos($propertyId)
+    {
+        try {
+            $data = $this->apin->sendRequest(
+                $this->getDefaultProductKey(),
+                '/listing/' . $propertyId . '/photos',
+                'GET'
+            );
+        } catch (Wolfnet_Exception $e) {
+            return $this->displayException($e);
+        }
+
+        return $data['responseData']['data'];
+
+    }
+
     /**
      * returns array containing all fields supported by the /listing queries to the API
      * plus some legacy fields
@@ -2158,6 +2174,10 @@ class Wolfnet_Plugin
                 $listing['property_url'] = $wnt_base_url . '/?action=listing_detail&property_id='
                     . $listing['property_id'];
             }
+
+            $scriptData = $this->localizedScriptData();
+            $listing['thumbnails_url'] = $scriptData['ajaxurl']
+                . '?action=wolfnet_listing_photos&property_id=' . $listing['property_id'];
 
             $listing['location'] = $listing['city'];
 
