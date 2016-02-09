@@ -2480,7 +2480,12 @@ class Wolfnet_Plugin
             return $data;
         }
 
-        return $data['responseData']['data']['site']['site_base_url'];
+		$baseUrl =
+			$data['responseData']['data']['site']['mlsfinder_web_root'] . '/' .
+			$data['responseData']['data']['market']['datasource_name'] . '/' .
+			$data['responseData']['data']['site']['site_directory_name'];
+
+		return $baseUrl;
 
     }
 
