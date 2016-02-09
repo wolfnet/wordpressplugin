@@ -521,7 +521,7 @@ class Wolfnet_Plugin
         global $wp_version;
         $http = array();
 
-        $baseUrl = $this->getBaseUrl($productKey);
+        $baseUrl = $this->getSearchManagerBaseUrl($productKey);
         //$maptracksEnabled = $this->getMaptracksEnabled($productKey);
 
         if (is_wp_error($baseUrl)) {
@@ -2461,6 +2461,29 @@ class Wolfnet_Plugin
         return $data['responseData']['data']['site']['site_base_url'];
 
     }
+
+
+    /**
+     * Get the wolfnet search url qssociated eith given procuct key
+     * @param  string $productKey
+     * @return string             base URL of the Wolfnet search solution
+     */
+    public function getSearchManagerBaseUrl($productKey = null)
+    {
+        if ($productKey == null) {
+            $productKey = $this->getDefaultProductKey();
+        }
+
+        $data  = $this->apin->sendRequest($productKey, '/settings');
+
+        if (is_wp_error($data)) {
+            return $data;
+        }
+
+        return $data['responseData']['data']['site']['site_base_url'];
+
+    }
+
 
     /**
      * check if key is valid
