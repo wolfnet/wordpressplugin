@@ -414,6 +414,8 @@ if (typeof jQuery !== 'undefined') {
 
                     });
 
+                },
+
                 controls: function ($thumbnails) {
 
                     if ($thumbnails.length > 1) {
