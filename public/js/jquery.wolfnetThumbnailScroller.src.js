@@ -59,7 +59,7 @@ if (typeof jQuery !== 'undefined') {
 
         var methods = {
 
-            public: {
+            'public': {
 
                 init: function(options) {
                     var opts = $.extend({}, defaultOptions, options);
@@ -67,9 +67,9 @@ if (typeof jQuery !== 'undefined') {
                     this.each(function(){
                         var $this = $(this);
                         if ($this.data(dataKey) === undefined) {
-                            methods.private.options($this, opts);
-                            methods.private.setupDomElements($this);
-                            methods.private.setupEventHandlers($this);
+                            methods['private'].options($this, opts);
+                            methods['private'].setupDomElements($this);
+                            methods['private'].setupEventHandlers($this);
                         }
                     });
 
@@ -78,11 +78,11 @@ if (typeof jQuery !== 'undefined') {
                 },
 
                 next: function() {
-                    return methods.public.changeImage.call(this, 'next');
+                    return methods['public'].changeImage.call(this, 'next');
                 },
 
                 previous: function() {
-                    return methods.public.changeImage.call(this, 'previous');
+                    return methods['public'].changeImage.call(this, 'previous');
                 },
 
                 changeImage: function (direction) {
@@ -96,15 +96,15 @@ if (typeof jQuery !== 'undefined') {
 
                     return this.each(function () {
                         var $this = $(this);
-                        var options = methods.private.options($this);
-                        var index = methods.private.state($this, 'index') || 0;
-                        var photos = methods.private.state($this, 'photoMetadata') || null;
-                        var $container = methods.private.state($this, '$container');
+                        var options = methods['private'].options($this);
+                        var index = methods['private'].state($this, 'index') || 0;
+                        var photos = methods['private'].state($this, 'photoMetadata') || null;
+                        var $container = methods['private'].state($this, '$container');
                         var containerHeight = $container.height();
 
-                        if (photos !== null && photos.length > 1 && !methods.private.state($this, 'transitioning')) {
+                        if (photos !== null && photos.length > 1 && !methods['private'].state($this, 'transitioning')) {
 
-                            methods.private.state($this, 'transitioning', true);
+                            methods['private'].state($this, 'transitioning', true);
 
                             var $currentPhoto = $container.find('img:visible:first');
                             var newIndex = 0;
@@ -130,7 +130,7 @@ if (typeof jQuery !== 'undefined') {
                                         $(this).attr('src', options.photoUnavailable);
                                     })
                                     .on('load', function () {
-                                        methods.private.transitionPhotos($this, $currentPhoto, $(this), newIndex);
+                                        methods['private'].transitionPhotos($this, $currentPhoto, $(this), newIndex);
                                     });
 
                                 if (direction == 'next' && newIndex === 0) {
@@ -142,13 +142,13 @@ if (typeof jQuery !== 'undefined') {
                                 }
 
                             } else {
-                                methods.private.transitionPhotos($this, $currentPhoto, $newPhoto, newIndex);
+                                methods['private'].transitionPhotos($this, $currentPhoto, $newPhoto, newIndex);
                             }
 
                         } else {
-                            if (!methods.private.state($this, 'photoMetadataLoaded')) {
-                                methods.private.loadPhotoMetadata($this, function(){
-                                    methods.public[direction].call($this);
+                            if (!methods['private'].state($this, 'photoMetadataLoaded')) {
+                                methods['private'].loadPhotoMetadata($this, function(){
+                                    methods['public'][direction].call($this);
                                 });
                             }
                         }
@@ -160,8 +160,8 @@ if (typeof jQuery !== 'undefined') {
                 showControls: function() {
                     return this.each(function(){
                         var $this = $(this);
-                        var options = methods.private.options($this);
-                        var $controls = methods.private.controls($this);
+                        var options = methods['private'].options($this);
+                        var $controls = methods['private'].controls($this);
 
                         $controls.removeClass(options.hideClass);
 
@@ -172,8 +172,8 @@ if (typeof jQuery !== 'undefined') {
                 hideControls: function() {
                     return this.each(function(){
                         var $this = $(this);
-                        var options = methods.private.options($this);
-                        var $controls = methods.private.controls($this);
+                        var options = methods['private'].options($this);
+                        var $controls = methods['private'].controls($this);
 
                         $controls.addClass(options.hideClass);
 
@@ -183,7 +183,7 @@ if (typeof jQuery !== 'undefined') {
 
             },
 
-            private: {
+            'private': {
 
                 state: function ($thumbnails, data, data2) {
                     if ($thumbnails.length > 1) {
@@ -224,32 +224,32 @@ if (typeof jQuery !== 'undefined') {
                         $.error('The options method can only operate on a single element.');
                     }
 
-                    var currentData = methods.private.state($thumbnails, 'options') || {};
+                    var currentData = methods['private'].state($thumbnails, 'options') || {};
 
                     if (data !== undefined) {
-                        currentData = methods.private.state($thumbnails, 'options', data);
+                        currentData = methods['private'].state($thumbnails, 'options', data);
                     }
 
                     return currentData;
 
                 },
 
-                setupDomElements: function ($thumbnails, options) {
-                    methods.private.wrapImageElement($thumbnails);
-                    methods.private.buildControls($thumbnails);
+                setupDomElements: function ($thumbnails) {
+                    methods['private'].wrapImageElement($thumbnails);
+                    methods['private'].buildControls($thumbnails);
 
                 },
 
-                setupEventHandlers: function ($thumbnails, options) {
+                setupEventHandlers: function ($thumbnails) {
 
                     $thumbnails.each(function () {
                         var $this = $(this);
-                        var options = methods.private.options($this);
+                        var options = methods['private'].options($this);
 
                         // Item resize-handling
-                        $this.on('wntResizeItem', methods.private.eventHandler.itemResize);
+                        $this.on('wntResizeItem', methods['private'].eventHandler.itemResize);
 
-                        if (wolfnet.hasFeature('touch')) {
+                        if ((typeof wolfnet !== 'undefined') && (wolfnet.hasFeature('touch'))) {
                             $this.addClass('has-swipe').wolfnetSwipe({
                                 direction: 'horizontal'
                             })
@@ -264,31 +264,31 @@ if (typeof jQuery !== 'undefined') {
                         // We only need these hover events if we are showing/hiding the controls.
                         if (options.hideControls) {
                             $this.hover(function () {
-                                methods.private.state($this, 'mouseover', true);
+                                methods['private'].state($this, 'mouseover', true);
                                 // If the photos aren't ready to be downloaded there is no point in showing
                                 // the controls.
-                                if (!methods.private.state($this, 'photoMetadataLoaded')) {
-                                    methods.private.loadPhotoMetadata($this, function(){
+                                if (!methods['private'].state($this, 'photoMetadataLoaded')) {
+                                    methods['private'].loadPhotoMetadata($this, function(){
                                         // If the mouse is still over the image when the data finishes loading show the controls.
-                                        if (methods.private.state($this, 'mouseover') && methods.private.state($this, 'photoMetadata').length > 1) {
-                                            methods.public.showControls.call($this);
+                                        if (methods['private'].state($this, 'mouseover') && methods['private'].state($this, 'photoMetadata').length > 1) {
+                                            methods['public'].showControls.call($this);
                                         }
                                     });
-                                } else if (methods.private.state($this, 'photoMetadata').length > 1) {
-                                    methods.public.showControls.call($this);
+                                } else if (methods['private'].state($this, 'photoMetadata').length > 1) {
+                                    methods['public'].showControls.call($this);
                                 }
                             }, function () {
-                                methods.private.state($this, 'mouseover', false);
+                                methods['private'].state($this, 'mouseover', false);
 
                                 if (options.hideControls) {
-                                    methods.public.hideControls.call($this);
+                                    methods['public'].hideControls.call($this);
                                 }
 
                             });
                         }
 
-                        methods.private.controls($this).click(function (event) {
-                            methods.private.eventHandler.controlClick.call(this, event, $this);
+                        methods['private'].controls($this).click(function (event) {
+                            methods['private'].eventHandler.controlClick.call(this, event, $this);
                         });
 
                     });
@@ -299,7 +299,7 @@ if (typeof jQuery !== 'undefined') {
 
                     $thumbnails.each(function () {
                         var $this = $(this);
-                        var options = methods.private.options($this);
+                        var options = methods['private'].options($this);
                         var $primaryPhoto = $this.find(options.photoSelector).first();
 
                         var $container = $('<span>')
@@ -308,7 +308,7 @@ if (typeof jQuery !== 'undefined') {
                             .insertBefore($primaryPhoto)
                             .append($primaryPhoto);
 
-                        methods.private.state($this, '$container', $container);
+                        methods['private'].state($this, '$container', $container);
 
                         $('<span>').addClass(options.loaderClass).appendTo($container);
 
@@ -319,11 +319,11 @@ if (typeof jQuery !== 'undefined') {
                 buildControls: function($thumbnails) {
                     $thumbnails.each(function(){
                         var $this = $(this);
-                        var state = methods.private.state($this);
-                        var options = methods.private.options($this);
+                        var state = methods['private'].state($this);
+                        var options = methods['private'].options($this);
                         var $container = state.$container;
-                        var $navNext = methods.private.buildNavBtn($this, 'next');
-                        var $navPrev = methods.private.buildNavBtn($this, 'prev');
+                        var $navNext = methods['private'].buildNavBtn($this, 'next');
+                        var $navPrev = methods['private'].buildNavBtn($this, 'prev');
 
                         $container.append([ $navNext, $navPrev ]);
 
@@ -331,7 +331,7 @@ if (typeof jQuery !== 'undefined') {
                         options.controlWidth = $navNext.width();
 
                         if (options.hideControls) {
-                            methods.public.hideControls.call($this);
+                            methods['public'].hideControls.call($this);
                         }
 
                     });
@@ -344,7 +344,7 @@ if (typeof jQuery !== 'undefined') {
                         $.error('The buildNavBtn method can only operate on a single element.');
                     }
 
-                    var options = methods.private.options($thumbnails);
+                    var options = methods['private'].options($thumbnails);
 
                     var $btnIcon = $('<span>').addClass(options.iconClass);
                     var btnClass = '';
@@ -371,11 +371,11 @@ if (typeof jQuery !== 'undefined') {
                 },
 
                 resizeControls: function ($thumbnails, newWidth) {
-                    var $controls = methods.private.controls($thumbnails);
+                    var $controls = methods['private'].controls($thumbnails);
 
                     $controls.each(function () {
                         var $control = $(this);
-                        var options = methods.private.options($thumbnails);
+                        var options = methods['private'].options($thumbnails);
 
                         if (!options.resizing) {
 
@@ -391,9 +391,9 @@ if (typeof jQuery !== 'undefined') {
                                 var newPosition = Math.max(
                                     newWidth,
                                     Math.floor(
-                                        (newWidth - options.controlMinWidth) / options.controlMinWidth
-                                        * (options.controlWidth - options.controlMinWidthOffset)
-                                        + options.controlMinWidthOffset
+                                        (newWidth - options.controlMinWidth) / options.controlMinWidth *
+                                        (options.controlWidth - options.controlMinWidthOffset) +
+                                        options.controlMinWidthOffset
                                     )
                                 );
 
@@ -422,8 +422,8 @@ if (typeof jQuery !== 'undefined') {
                         $.error('The controls method can only operate on a single element.');
                     }
 
-                    var state = methods.private.state($thumbnails);
-                    var options = methods.private.options($thumbnails);
+                    var state = methods['private'].state($thumbnails);
+                    var options = methods['private'].options($thumbnails);
 
                     return state.$container.find('.' + options.controlBtnClass);
 
@@ -437,13 +437,13 @@ if (typeof jQuery !== 'undefined') {
 
                     complete = complete || function(){};
 
-                    var state = methods.private.state($thumbnails);
-                    var options = methods.private.options($thumbnails);
+                    var state = methods['private'].state($thumbnails);
+                    var options = methods['private'].options($thumbnails);
 
                     // If there is already an attempt to load the photos in progress we don't want to
                     // start another request.
                     if (!state.loadingPhotos) {
-                        methods.private.state($thumbnails, 'loadingPhotos', true);
+                        methods['private'].state($thumbnails, 'loadingPhotos', true);
 
                         var photoUrl = $thumbnails.find(options.photoSelector).first().data('photo-url');
 
@@ -464,11 +464,11 @@ if (typeof jQuery !== 'undefined') {
                         })
                         .always(function () {
                             state.$container.removeClass(options.loadingClass);
-                            methods.private.state(this, 'loadingPhotos', false);
+                            methods['private'].state(this, 'loadingPhotos', false);
                         })
                         .done(function (data) {
-                            methods.private.state(this, 'photoMetadataLoaded', true);
-                            methods.private.state(this, 'photoMetadata', data);
+                            methods['private'].state(this, 'photoMetadataLoaded', true);
+                            methods['private'].state(this, 'photoMetadata', data);
                             complete();
                         });
 
@@ -479,8 +479,8 @@ if (typeof jQuery !== 'undefined') {
                 transitionPhotos: function ($thumbnails, $fromPhoto, $toPhoto, newIndex) {
                     $fromPhoto.fadeOut('fast', function(){
                         $toPhoto.fadeIn('fast', function(){
-                            methods.private.state($thumbnails, 'index', newIndex);
-                            methods.private.state($thumbnails, 'transitioning', false);
+                            methods['private'].state($thumbnails, 'index', newIndex);
+                            methods['private'].state($thumbnails, 'transitioning', false);
                         });
                     });
 
@@ -492,23 +492,23 @@ if (typeof jQuery !== 'undefined') {
                         event.preventDefault();
 
                         var $btn = $(this);
-                        var options = methods.private.options($thumbnails);
+                        var options = methods['private'].options($thumbnails);
 
                         if ($btn.is('.' + options.nextBtnClass)) {
-                            methods.public.next.call($thumbnails);
+                            methods['public'].next.call($thumbnails);
                         }
 
                         if ($btn.is('.' + options.prevBtnClass)) {
-                            methods.public.previous.call($thumbnails);
+                            methods['public'].previous.call($thumbnails);
                         }
 
                         return false; // We don't want any other click event being triggered.
 
                     },
 
-                    itemResize: function (event) {
+                    itemResize: function () {
                         var $this = $(this);
-                        var options = methods.private.options($this);
+                        var options = methods['private'].options($this);
 
                         clearTimeout(options.resizeTimeout);
                         options.resizeTimeout = setTimeout(function () {
@@ -519,7 +519,7 @@ if (typeof jQuery !== 'undefined') {
                                     (($this.outerWidth(true) - $this.find(options.photoSelector).width()) / 2)
                                 );
 
-                                methods.private.resizeControls($this, newWidth);
+                                methods['private'].resizeControls($this, newWidth);
 
                             }
 
@@ -535,10 +535,10 @@ if (typeof jQuery !== 'undefined') {
 
         // Register the plugin with jQuery.
         $.fn[pluginName] = function(method) {
-            if (methods.public[method]) {
-                return methods.public[method].apply(this, Array.prototype.slice.call(arguments, 1));
+            if (methods['public'][method]) {
+                return methods['public'][method].apply(this, Array.prototype.slice.call(arguments, 1));
             } else if (typeof method === 'object' || !method) {
-                return methods.public.init.apply(this, arguments);
+                return methods['public'].init.apply(this, arguments);
             } else {
                 $.error('Method ' + method + ' does not exist on jQuery.' + pluginName);
             }
