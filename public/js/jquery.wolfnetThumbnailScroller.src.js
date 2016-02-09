@@ -41,6 +41,9 @@ if (typeof jQuery !== 'undefined') {
             loadingClass: 'wnt-thumbnails-loading',
             photoType: 'thumb_url',
             hideControls: true,
+            controlWidth: 30,
+            controlMinWidth: 15,
+            controlMinWidthOffset: 2,
             controlsClass: 'wnt-controls',
             iconClass: 'wnt-icon',
             nextBtnClass: 'wnt-next',
@@ -49,7 +52,9 @@ if (typeof jQuery !== 'undefined') {
             prevIconClass: 'wnt-icon-triangle-left',
             photoSelector: '.primary-photo',
             extraButtonClass: '',
-            photoUnavailable: ''
+            photoUnavailable: '',
+            resizing: false,
+            resizeTimeout: null
         };
 
         var methods = {
@@ -241,6 +246,9 @@ if (typeof jQuery !== 'undefined') {
                         var $this = $(this);
                         var options = methods.private.options($this);
 
+                        // Item resize-handling
+                        $this.on('wntResizeItem', methods.private.eventHandler.itemResize);
+
                         if (wolfnet.hasFeature('touch')) {
                             $this.addClass('has-swipe').wolfnetSwipe({
                                 direction: 'horizontal'
@@ -319,6 +327,9 @@ if (typeof jQuery !== 'undefined') {
 
                         $container.append([ $navNext, $navPrev ]);
 
+                        // Get the original control size
+                        options.controlWidth = $navNext.width();
+
                         if (options.hideControls) {
                             methods.public.hideControls.call($this);
                         }
@@ -359,10 +370,49 @@ if (typeof jQuery !== 'undefined') {
 
                 },
 
+                resizeControls: function ($thumbnails, newWidth) {
+                    var $controls = methods.private.controls($thumbnails);
 
+                    $controls.each(function () {
+                        var $control = $(this);
+                        var options = methods.private.options($thumbnails);
 
+                        if (!options.resizing) {
 
+                            options.resizing = true;
 
+                            var isLeft = $control.is('.' + options.prevBtnClass);
+
+                            // Constrain the new width to the limits of the control
+                            newWidth = Math.min(Math.max(newWidth, options.controlMinWidth), options.controlWidth);
+
+                            if ($control.width() != newWidth) {
+
+                                var newPosition = Math.max(
+                                    newWidth,
+                                    Math.floor(
+                                        (newWidth - options.controlMinWidth) / options.controlMinWidth
+                                        * (options.controlWidth - options.controlMinWidthOffset)
+                                        + options.controlMinWidthOffset
+                                    )
+                                );
+
+                                $control.width(newWidth);
+                                $control.find('.' + options.iconClass).css('font-size', newWidth + 'px');
+
+                                if (isLeft) {
+                                    $control.css('left', '-' + newPosition + 'px');
+                                } else {
+                                    $control.css('right', '-' + newPosition + 'px');
+                                }
+
+                            }
+
+                            options.resizing = false;
+
+                        }
+
+                    });
 
                 controls: function ($thumbnails) {
 
@@ -451,6 +501,27 @@ if (typeof jQuery !== 'undefined') {
                         }
 
                         return false; // We don't want any other click event being triggered.
+
+                    },
+
+                    itemResize: function (event) {
+                        var $this = $(this);
+                        var options = methods.private.options($this);
+
+                        clearTimeout(options.resizeTimeout);
+                        options.resizeTimeout = setTimeout(function () {
+
+                            if (options.controlWidth > options.controlMinWidth) {
+
+                                var newWidth = Math.floor(
+                                    (($this.outerWidth(true) - $this.find(options.photoSelector).width()) / 2)
+                                );
+
+                                methods.private.resizeControls($this, newWidth);
+
+                            }
+
+                        }, 500);
 
                     }
 
