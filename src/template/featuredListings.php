@@ -32,8 +32,18 @@
 
 <script type="text/javascript">
 
-    jQuery(function($){
-        $('#<?php echo $instance_id; ?>').wolfnetScrollingItems({
+    jQuery(function ($) {
+
+        var $featured = $('#<?php echo $instance_id; ?>');
+
+        var setupThumbnailScroller = function () {
+            $featured.find('.wolfnet_listing').wolfnetThumbnailScroller({
+                photoSelector: '.wolfnet_listingImage img',
+                hideControls: !wolfnet.hasFeature('touch') // If on a touch screen, always show the controls
+            });
+        };
+
+        $featured.wolfnetScrollingItems({
             autoPlay : <?php echo ($autoplay) ? 'true' : 'false'; ?>,
             direction : <?php echo "'" . $direction . "'"; ?>,
             speed : <?php echo $speed; ?>,
@@ -44,6 +54,9 @@
             controlRightClass: 'wolfnet_rightControl',
             itemClass: 'wolfnet_listing'
         });
+
+        setupThumbnailScroller();
+
     });
 
 </script>
