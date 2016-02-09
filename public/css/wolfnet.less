@@ -714,27 +714,27 @@
                 }
 
                 .wnt-thumbnail-scroller {
-                    @control-width: 15px;
+                    @control-width: 30px;
+                    @control-height: 100%;
 
                     position: relative;
                     display: block;
-                    // padding-left: @control-width;
-                    // padding-right: @control-width;
                     text-align: center;
                     background-color: transparent;
                     width: 100%;
 
                     .wnt-nav-btn {
                         position: absolute;
-                        height: 100%;
-                        width: @control-width;
                         top: 0;
+                        width: @control-width;
+                        height: @control-height;
                         border: none;
                         outline: none;
+                        background: none;
                         background-color: transparent;
-                        background-repeat: no-repeat;
-                        background-position: center center;
-                        background-size: 90%;
+                        text-decoration: none;
+                        font-style: normal;
+                        font-weight: normal;
                         color: black;
                         padding: 0;
 

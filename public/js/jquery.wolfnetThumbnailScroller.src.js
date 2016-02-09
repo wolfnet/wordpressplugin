@@ -41,12 +41,8 @@ if (typeof jQuery !== 'undefined') {
             loadingClass: 'wnt-thumbnails-loading',
             photoType: 'thumb_url',
             hideControls: true,
-            withCount: false,
             controlsClass: 'wnt-controls',
             iconClass: 'wnt-icon',
-            countClass: 'wnt-count',
-            countIndexClass: 'wnt-count-index',
-            countTotalClass: 'wnt-count-total',
             nextBtnClass: 'wnt-next',
             prevBtnClass: 'wnt-prev',
             nextIconClass: 'wnt-icon-triangle-right',
@@ -320,7 +316,6 @@ if (typeof jQuery !== 'undefined') {
                         var $container = state.$container;
                         var $navNext = methods.private.buildNavBtn($this, 'next');
                         var $navPrev = methods.private.buildNavBtn($this, 'prev');
-                        var $countCtrl = (options.withCount ? methods.private.buildCountControl($this) : '');
 
                         $container.append([ $navNext, $navPrev ]);
 
@@ -364,23 +359,10 @@ if (typeof jQuery !== 'undefined') {
 
                 },
 
-                buildCountControl: function ($thumbnails) {
 
-                    if ($thumbnails.length > 1) {
-                        $.error('The buildCountControl method can only operate on a single element.');
-                    }
 
-                    var options = methods.private.options($thumbnails);
 
-                    var $countCtrl = $('<span>').addClass(options.countClass).append([
-                        $('<span>').addClass(options.countIndexClass),
-                        $('<span>').text(' of '),
-                        $('<span>').addClass(options.countTotalClass),
-                    ]);
 
-                    return $countCtrl;
-
-                },
 
                 controls: function ($thumbnails) {
 
