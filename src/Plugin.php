@@ -294,7 +294,7 @@ class Wolfnet_Plugin
         /*
          * Note - functionality here has been moved to AFTER the activation
          * redirect. In the unforunate event that the activation code fails,
-         * we want the activation to at least have succeeded and not thrown 
+         * we want the activation to at least have succeeded and not thrown
          * a fatal error. Problems related to SSL and API connectivity should
          * not destroy the activation process.
          */
@@ -521,7 +521,7 @@ class Wolfnet_Plugin
         global $wp_version;
         $http = array();
 
-        $baseUrl = $this->getBaseUrl($productKey);
+        $baseUrl = $this->getSearchManagerBaseUrl($productKey);
         //$maptracksEnabled = $this->getMaptracksEnabled($productKey);
 
         if (is_wp_error($baseUrl)) {
@@ -830,12 +830,12 @@ class Wolfnet_Plugin
     /*                                                                                            */
     /* ****************************************************************************************** */
 
-    public function scAgentPages($attrs) 
+    public function scAgentPages($attrs)
     {
         if(!$this->showAgentFeature()) {
             return '';
         }
-        
+
         try {
             $defaultAttributes = $this->getAgentPagesDefaults();
 
@@ -969,7 +969,7 @@ class Wolfnet_Plugin
     }
 
 
-    public function agentPageHandler(array $criteria = array()) 
+    public function agentPageHandler(array $criteria = array())
     {
         $key = $this->getCriteriaKey($criteria);
 
@@ -1173,11 +1173,11 @@ class Wolfnet_Plugin
         } else {
             // $dataOverride is passed in. As of writing this comment, this is data
             // is coming from the AgentPagesHandler - we need to display a listing
-            // grid of an agent's featured listings. This is a vain attempt at 
+            // grid of an agent's featured listings. This is a vain attempt at
             // repurposing this code as-is.
             $data = $dataOverride;
         }
-        
+
 
         // add some elements to the array returned by the API
         // wpMeta should contain any criteria or other setting which do not come from the API
@@ -1396,7 +1396,7 @@ class Wolfnet_Plugin
     }
 
 
-    public function routeQuickSearch($formData) 
+    public function routeQuickSearch($formData)
     {
         /*
          * Loop over each key and get the number of matching listings for each.
@@ -1411,8 +1411,8 @@ class Wolfnet_Plugin
                 $key = $this->getProductKeyById($keyID);
 
                 $listings = $this->apin->sendRequest(
-                    $key, 
-                    '/listing?detaillevel=1&startrow=1&maxrows=1', 
+                    $key,
+                    '/listing?detaillevel=1&startrow=1&maxrows=1',
                     'GET',
                     $formData
                 );
@@ -1431,14 +1431,14 @@ class Wolfnet_Plugin
          * Route to the site associated with key determined above.
         */
         $baseUrl = $this->getBaseUrl($highestMatchKey);
-        
+
         $redirect = $baseUrl . "?";
         foreach($formData as $key => $param) {
             $redirect .= $key . "=" . $param . "&";
         }
-        
+
         return $redirect;
-    } 
+    }
 
 
     /**
@@ -1867,8 +1867,8 @@ class Wolfnet_Plugin
     {
         try {
             $data = $this->apin->sendRequest(
-                $this->getDefaultProductKey(), 
-                '/settings', 
+                $this->getDefaultProductKey(),
+                '/settings',
                 'GET'
             );
         } catch (Wolfnet_Exception $e) {
@@ -1904,8 +1904,8 @@ class Wolfnet_Plugin
     {
         try {
             $data = $this->apin->sendRequest(
-                $this->getDefaultProductKey(), 
-                '/office', 
+                $this->getDefaultProductKey(),
+                '/office',
                 'GET'
             );
         } catch (Wolfnet_Exception $e) {
@@ -2442,7 +2442,7 @@ class Wolfnet_Plugin
 
 
     /**
-     * Get the wolfnet search url qssociated eith given procuct key
+     * Get the wolfnet search url associated eith given procuct key
      * @param  string $productKey
      * @return string             base URL of the Wolfnet search solution
      */
@@ -2459,6 +2459,33 @@ class Wolfnet_Plugin
         }
 
         return $data['responseData']['data']['site']['site_base_url'];
+
+    }
+
+
+    /**
+     * Dynamic url for the wolfnet search url to be used with Search Manager
+     * @param  string $productKey
+     * @return string             base URL of the Wolfnet search solution
+     */
+    public function getSearchManagerBaseUrl($productKey = null)
+    {
+        if ($productKey == null) {
+            $productKey = $this->getDefaultProductKey();
+        }
+
+        $data  = $this->apin->sendRequest($productKey, '/settings');
+
+        if (is_wp_error($data)) {
+            return $data;
+        }
+
+		$baseUrl =
+			$data['responseData']['data']['site']['mlsfinder_web_root'] . '/' .
+			$data['responseData']['data']['market']['datasource_name'] . '/' .
+			$data['responseData']['data']['site']['site_directory_name'];
+
+		return $baseUrl;
 
     }
 
