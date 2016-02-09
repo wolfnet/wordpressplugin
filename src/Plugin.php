@@ -2442,7 +2442,7 @@ class Wolfnet_Plugin
 
 
     /**
-     * Get the wolfnet search url qssociated eith given procuct key
+     * Get the wolfnet search url associated eith given procuct key
      * @param  string $productKey
      * @return string             base URL of the Wolfnet search solution
      */
@@ -2464,7 +2464,7 @@ class Wolfnet_Plugin
 
 
     /**
-     * Get the wolfnet search url qssociated eith given procuct key
+     * Dynamic url for the wolfnet search url to be used with Search Manager
      * @param  string $productKey
      * @return string             base URL of the Wolfnet search solution
      */
