@@ -154,7 +154,7 @@ class Wolfnet_Admin extends Wolfnet_Plugin
 
             $keyArray = json_decode($GLOBALS['wolfnet']->keyService->get());
             if(is_array($keyArray) && $keyArray[0]->key != false) {
-                $GLOBALS['wolfnet']->setSslVerifyOption($keyArray[0]->key);
+                $this->setSslVerifyOption($keyArray[0]->key);
 
                 // Check that key structure is formatted correctly and that the key 
                 // label gets set if it was not already. If there's no preexisting key, 
@@ -215,6 +215,30 @@ class Wolfnet_Admin extends Wolfnet_Plugin
 
         }
 
+    }
+
+
+    private function setSslVerifyOption($key)
+    {
+        // Hit an API endpoint so we can verify SSL.
+        try {
+            $data = $GLOBALS['wolfnet']->apin->sendRequest($key, '/settings');
+        } catch(Wolfnet_Api_ApiException $e) {
+            // And exception at this point is PROBABLY due to SSL verification.
+            // Set the verify SSL option to false if so.
+            if(strpos($e->getDetails(), 'SSL certificate problem') >= 0) {
+                $GLOBALS['wolfnet']->apin->setVerifySSL(0);
+                update_option(Wolfnet_Plugin::VERIFYSSL_WP_OPTION, 0);
+                return false;
+            }
+        }
+        // If we made it to this point we can set SSL verification to true.
+        if(get_option(Wolfnet_Plugin::VERIFYSSL_WP_OPTION) === false) {
+            update_option(Wolfnet_Plugin::VERIFYSSL_WP_OPTION, 1);
+            return true;
+        } else {
+            return false;
+        }
     }
 
 

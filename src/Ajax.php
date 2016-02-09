@@ -357,7 +357,8 @@ class Wolfnet_Ajax
     {
 
         try {
-            $response = $GLOBALS['wolfnet']->getWpHeader() . $GLOBALS['wolfnet']->getWpFooter();
+            $response = $GLOBALS['wolfnet']->template->getWpHeader() 
+            . $GLOBALS['wolfnet']->template->getWpFooter();
 
         } catch (Wolfnet_Exception $e) {
             status_header(500);
@@ -377,7 +378,7 @@ class Wolfnet_Ajax
     {
 
         try {
-            $response = $GLOBALS['wolfnet']->getWpHeader();
+            $response = $GLOBALS['wolfnet']->template->getWpHeader();
 
         } catch (Wolfnet_Exception $e) {
             status_header(500);
@@ -397,7 +398,7 @@ class Wolfnet_Ajax
     {
 
         try {
-            $GLOBALS['wolfnet']->getWpHeader();
+            $GLOBALS['wolfnet']->template->getWpHeader();
 
             $response = $GLOBALS['wolfnet']->getWpFooter();
 
@@ -421,9 +422,9 @@ class Wolfnet_Ajax
         try {
             $args = $GLOBALS['wolfnet']->listingGrid->getOptions($_REQUEST);
 
-            $response = $GLOBALS['wolfnet']->getWpHeader() 
+            $response = $GLOBALS['wolfnet']->template->getWpHeader() 
             	. $GLOBALS['wolfnet']->listingGrid($args) 
-            	. $GLOBALS['wolfnet']->getWpFooter();
+            	. $GLOBALS['wolfnet']->template->getWpFooter();
 
         } catch (Wolfnet_Exception $e) {
             status_header(500);

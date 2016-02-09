@@ -12,6 +12,7 @@ return array(
     'Wolfnet_Exception' => '/Exception.php',
     'Wolfnet_Factory' => '/Factory.php',
     'Wolfnet_Plugin' => '/Plugin.php',
+    'Wolfnet_Template' => '/Template.php',
     'Wolfnet_Views' => '/Views.php',
     
     'Wolfnet_Api_ApiException' => '/api/ApiException.php',
