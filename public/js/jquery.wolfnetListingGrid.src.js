@@ -120,10 +120,9 @@ if (typeof jQuery != 'undefined') {
             //console.log('targetWidth: ' + targetWidth, 'columnWidth: ' + columnWidth, 'columns: ' + columns, 'remainingPixels: ' + remainingPixels, 'margin: ' + margin, 'rounded margin: ' + Math.floor(margin), '1/2 margin: ' + Math.floor(margin/2));
 
             var itemMargin   = columns === 1 ? Math.floor(margin) : 0;
-            var leftPadding  = columns === 1 ? 0 : Math.floor(margin / 2);
-            var rightPadding = columns === 1 ? 0 : Math.floor(margin / 2);
+            var sidePadding  = columns === 1 ? 0 : Math.floor(margin / 2);
 
-            data.itemPadding = leftPadding + rightPadding;
+            data.itemPadding = sidePadding * 2;
 
             if (gridAlign === 'center') {
                 $items.css('margin-left', itemMargin);
@@ -132,11 +131,11 @@ if (typeof jQuery != 'undefined') {
             }
 
             $items.css({
-                'padding-left': leftPadding,
-                'max-width': columnWidth + leftPadding + rightPadding
-            });
+                'padding-left': sidePadding,
+                'max-width': columnWidth + data.itemPadding
+            }).trigger('wntResizeItem');
             $items.find('.wolfnet_listingMain').css({
-                'padding-right': rightPadding
+                'padding-right': sidePadding
             });
 
             for (var i=0, l=$items.length; i<l; i++) {
