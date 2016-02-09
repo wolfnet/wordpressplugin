@@ -97,7 +97,7 @@ class Wolfnet_Module_QuickSearch
         /*
          * Route to the site associated with key determined above.
         */
-        $baseUrl = $this->plugin->getBaseUrl($highestMatchKey);
+        $baseUrl = $this->plugin->data->getBaseUrl($highestMatchKey);
         
         $redirect = $baseUrl . "?";
         foreach($formData as $key => $param) {
@@ -132,10 +132,10 @@ class Wolfnet_Module_QuickSearch
         }
 
         // Get data
-        $prices = $this->plugin->getPrices($productKey);
-        $beds = $this->plugin->getBeds();
-        $baths = $this->plugin->getBaths();
-        $formAction = $this->plugin->getBaseUrl($productKey);
+        $prices = $this->plugin->data->getPrices($productKey);
+        $beds = $this->plugin->data->getBeds();
+        $baths = $this->plugin->data->getBaths();
+        $formAction = $this->plugin->data->getBaseUrl($productKey);
         $markets = $this->plugin->keyService->get();
 
         if (is_wp_error($prices)) {

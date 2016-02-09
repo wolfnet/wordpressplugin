@@ -98,11 +98,11 @@ class Wolfnet_Module_ListingGrid
         $options['paginated_true_wps']    = selected($options['paginated'], 'true', false);
         $options['sortoptions_false_wps'] = selected($options['sortoptions'], 'false', false);
         $options['sortoptions_true_wps']  = selected($options['sortoptions'], 'true', false);
-        $options['ownertypes']            = $this->plugin->getOwnerTypes();
-        $options['prices']                = $this->plugin->getPrices($this->plugin->keyService->getById($keyid));
+        $options['ownertypes']            = $this->plugin->data->getOwnerTypes();
+        $options['prices']                = $this->plugin->data->getPrices($this->plugin->keyService->getById($keyid));
         $options['savedsearches']         = $this->plugin->searchManager->getSavedSearches(-1, $keyid);
-        $options['mapEnabled']            = $this->plugin->getMaptracksEnabled($this->plugin->keyService->getById($keyid));
-        $options['maptypes']              = $this->plugin->getMapTypes();
+        $options['mapEnabled']            = $this->plugin->data->getMaptracksEnabled($this->plugin->keyService->getById($keyid));
+        $options['maptypes']              = $this->plugin->data->getMapTypes();
 
         return $options;
 
@@ -202,7 +202,7 @@ class Wolfnet_Module_ListingGrid
             'wpMeta'             => $data['wpMeta'],
             'title'              => $data['wpMeta']['title'],
             'class'              => $criteria['class'],
-            'mapEnabled'         => $this->plugin->getMaptracksEnabled($key),
+            'mapEnabled'         => $this->plugin->data->getMaptracksEnabled($key),
             'map'                => '',
             'maptype'            => $data['wpMeta']['maptype'],
             'hideListingsTools'  => '',
@@ -220,12 +220,12 @@ class Wolfnet_Module_ListingGrid
         }
 
         if ($vars['wpMeta']['maptype'] != "disabled") {
-            $vars['map'] = $this->plugin->getMap(
+            $vars['map'] = $this->plugin->data->getMap(
             	$listingsData, 
             	$_REQUEST[$this->plugin->requestPrefix.'productkey']
             );
             $vars['wpMeta']['maptype'] = $vars['maptype'];
-            $vars['hideListingsTools'] = $this->plugin->getHideListingTools(
+            $vars['hideListingsTools'] = $this->plugin->data->getHideListingTools(
                 $vars['hideListingsId'],
                 $vars['showListingsId'],
                 $vars['collapseListingsId'],
@@ -241,8 +241,8 @@ class Wolfnet_Module_ListingGrid
         $vars['wpMeta']['sortoptions'] = ($vars['wpMeta']['sortoptions'] === true || $vars['wpMeta']['sortoptions'] === 'true');
 
         if ($vars['wpMeta']['paginated'] || $vars['wpMeta']['sortoptions']) {
-            $vars['toolbarTop']    = $this->plugin->getToolbar($vars, 'wolfnet_toolbarTop ');
-            $vars['toolbarBottom'] = $this->plugin->getToolbar($vars, 'wolfnet_toolbarBottom ');
+            $vars['toolbarTop']    = $this->plugin->data->getToolbar($vars, 'wolfnet_toolbarTop ');
+            $vars['toolbarBottom'] = $this->plugin->data->getToolbar($vars, 'wolfnet_toolbarBottom ');
         }
 
         if ($vars['wpMeta']['paginated']) {

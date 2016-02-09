@@ -9,6 +9,7 @@ return array(
     'Wolfnet_AgentPagesHandler' => '/AgentPagesHandler.php',
     'Wolfnet_Ajax' => '/Ajax.php',
     'Wolfnet_Autoloader' => '/Autoloader.php',
+    'Wolfnet_Data' => '/Data.php',
     'Wolfnet_Exception' => '/Exception.php',
     'Wolfnet_Factory' => '/Factory.php',
     'Wolfnet_Plugin' => '/Plugin.php',

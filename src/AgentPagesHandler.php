@@ -183,7 +183,7 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
             $listings = null;
         }
 
-        if($this->args['criteria']['soldlistings'] && $this->plugin->soldListingsEnabled()) {
+        if($this->args['criteria']['soldlistings'] && $this->plugin->data->soldListingsEnabled()) {
             $soldListings = $this->agentSoldListings($this->key, $agentData['mls_agent_id']);
             $soldCount = $soldListings['totalRows'];
             $soldListings = ($soldCount > 0) ? $soldListings['listings'] : null;
@@ -192,7 +192,7 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
             $soldListings = null;
         }
 
-        $searchUrl = $this->plugin->getBaseUrl($this->key);
+        $searchUrl = $this->plugin->data->getBaseUrl($this->key);
         $searchUrl .= "?action=newsearchsession&agent_id=" . $agentData['mls_agent_id'];
 
         $args = array(

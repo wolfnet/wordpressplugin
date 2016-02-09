@@ -67,7 +67,7 @@ class Wolfnet_Module_FeaturedListings
         $options['autoplay_true_wps']   = selected($options['autoplay'], 'true', false);
         $options['direction_left_wps']  = selected($options['direction'], 'left', false);
         $options['direction_right_wps'] = selected($options['direction'], 'right', false);
-        $options['ownertypes']          = $this->plugin->getOwnerTypes();
+        $options['ownertypes']          = $this->plugin->data->getOwnerTypes();
 
         return $options;
     }

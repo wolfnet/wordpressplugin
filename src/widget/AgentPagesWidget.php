@@ -39,7 +39,7 @@ class Wolfnet_Widget_AgentPagesWidget extends Wolfnet_Widget_AbstractWidget
     {
 
         try {
-            $response = $this->plugin->agentPageHandler($instance);
+            $response = $this->plugin->agentPages->agentPageHandler($instance);
 
         } catch (Wolfnet_Api_ApiException $e) {
             $response = $this->plugin->displayException($e);
@@ -53,7 +53,7 @@ class Wolfnet_Widget_AgentPagesWidget extends Wolfnet_Widget_AbstractWidget
     public function form($instance)
     {
         $options = $this->getOptions($instance);
-        $options['showSoldOption'] = $this->plugin->soldListingsEnabled();
+        $options['showSoldOption'] = $this->plugin->data->soldListingsEnabled();
 
         echo $this->plugin->views->agentPagesOptionsFormView($options);
 

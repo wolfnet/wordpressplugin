@@ -207,7 +207,7 @@ class Wolfnet_Ajax
 
         try {
             $args = $GLOBALS['wolfnet']->agentPages->getOptions();
-            $args['showSoldOption'] = $GLOBALS['wolfnet']->soldListingsEnabled();
+            $args['showSoldOption'] = $GLOBALS['wolfnet']->data->soldListingsEnabled();
 
             $response = $GLOBALS['wolfnet']->views->agentPagesOptionsFormView($args);
 
@@ -516,7 +516,7 @@ class Wolfnet_Ajax
 
             $productKey = $GLOBALS['wolfnet']->keyService->getById($keyid);
 
-            $response = $GLOBALS['wolfnet']->getPrices($productKey);
+            $response = $GLOBALS['wolfnet']->data->getPrices($productKey);
 
         } catch (Wolfnet_Exception $e) {
             status_header(500);
@@ -540,7 +540,7 @@ class Wolfnet_Ajax
             // TODO: Assign default value.
             $productKey = $_REQUEST["productkey"];
 
-            $marketName = $GLOBALS['wolfnet']->getMarketName($productKey);
+            $marketName = $GLOBALS['wolfnet']->data->getMarketName($productKey);
             $response = strtoupper($marketName);
 
         } catch (Wolfnet_Exception $e) {
@@ -567,7 +567,7 @@ class Wolfnet_Ajax
 
             $productKey = $GLOBALS['wolfnet']->keyService->getById($keyid);
 
-            $response = $GLOBALS['wolfnet']->getMaptracksEnabled($productKey);
+            $response = $GLOBALS['wolfnet']->data->getMaptracksEnabled($productKey);
 
         } catch (Wolfnet_Exception $e) {
             status_header(500);
@@ -591,7 +591,7 @@ class Wolfnet_Ajax
             // TODO: Assign default value.
             $keyid = $_REQUEST["keyid"];
             $productKey = $GLOBALS['wolfnet']->keyService->getById($keyid);
-            $response = $GLOBALS['wolfnet']->getBaseUrl($productKey);
+            $response = $GLOBALS['wolfnet']->data->getBaseUrl($productKey);
 
         } catch (Wolfnet_Exception $e) {
             status_header(500);

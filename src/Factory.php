@@ -194,6 +194,12 @@ class Wolfnet_Factory
     }
 
 
+    private function getWolfnet_Data()
+    {
+        return new Wolfnet_Data($this->args['plugin']);
+    }
+
+
     private function getWolfnet_Template()
     {
         return new Wolfnet_Template($this->args['plugin']);

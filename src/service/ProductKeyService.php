@@ -137,7 +137,7 @@ class Wolfnet_Service_ProductKeyService
         for($i = 0; $i < count($keyStruct); $i++) {
             if(!array_key_exists('market', $keyStruct[$i])
                 || strlen($keyStruct[$i]->market) == 0) {
-                $market = $this->plugin->getMarketName($keyStruct[$i]->key);
+                $market = $this->plugin->data->getMarketName($keyStruct[$i]->key);
                 $keyStruct[$i]->market = $market;
             }
         }

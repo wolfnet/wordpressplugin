@@ -59,7 +59,7 @@ class Wolfnet_Views
 
                 if ($validKey) {
                     try {
-                        $market = $GLOBALS['wolfnet']->getMarketName($key);
+                        $market = $GLOBALS['wolfnet']->data->getMarketName($key);
 
                     } catch (Wolfnet_Api_ApiException $e) {
                         // Catch the error and display no market
@@ -186,7 +186,7 @@ class Wolfnet_Views
 
     public function agentPagesOptionsFormView(array $args = array())
     {
-        $offices = $GLOBALS['wolfnet']->getOffices();
+        $offices = $GLOBALS['wolfnet']->data->getOffices();
         $offices = $offices['responseData']['data']['office'];
         $keyids = array();
 
@@ -361,7 +361,7 @@ class Wolfnet_Views
             $args['productkey'] = $GLOBALS['wolfnet']->keyService->getById($args['keyid']);
         }
 
-        $args['itemsPerPage'] = $GLOBALS['wolfnet']->getItemsPerPage();
+        $args['itemsPerPage'] = $GLOBALS['wolfnet']->data->getItemsPerPage();
 
         $data = $GLOBALS['wolfnet']->apin->sendRequest($args['productkey'], '/search_criteria/sort_option');
         $args['sortOptions'] = $data['responseData']['data']['options'];
@@ -387,7 +387,7 @@ class Wolfnet_Views
             $args['productkey'] = $GLOBALS['wolfnet']->keyService->getById($args['keyid']);
         }
 
-        $args['itemsPerPage'] = $GLOBALS['wolfnet']->getItemsPerPage();
+        $args['itemsPerPage'] = $GLOBALS['wolfnet']->data->getItemsPerPage();
 
         $data = $GLOBALS['wolfnet']->apin->sendRequest($args['productkey'], '/search_criteria/sort_option');
         $args['sortOptions'] = $data['responseData']['data']['options'];
@@ -420,7 +420,7 @@ class Wolfnet_Views
 
     public function mapView($listingsData, $productKey = null)
     {
-        $args = $GLOBALS['wolfnet']->getMapParameters($listingsData, $productKey);
+        $args = $GLOBALS['wolfnet']->data->getMapParameters($listingsData, $productKey);
         $args['url'] = $GLOBALS['wolfnet']->url;
 
         return apply_filters('wolfnet_mapView', $this->parseTemplate('map', $args));

@@ -137,11 +137,9 @@ class Wolfnet_Plugin
         $this->keyService = $this->ioc->get('Wolfnet_Service_ProductKeyService');
 
         $this->apin = $this->ioc->get('Wolfnet_Api_Client');
-
         $this->ajax = $this->ioc->get('Wolfnet_Ajax');
-
+        $this->data = $this->ioc->get('Wolfnet_Data');
         $this->template = $this->ioc->get('Wolfnet_Template');
-
         $this->views = $this->ioc->get('Wolfnet_Views');
 
         // Modules
@@ -377,25 +375,6 @@ class Wolfnet_Plugin
         $wp->query_vars = array();
 
         return (substr($pagename, 0, strlen($prefix)) === $prefix) ? false : $req;
-
-    }
-
-
-    /**
-     * This method returns an array of integer values to be used as possible pagination item counts.
-     * @return array An array of integers.
-     */
-    public function getItemsPerPage()
-    {
-        return array(5,10,15,20,25,30,35,40,45,50);
-    }
-
-
-    public function getMarketName($apiKey)
-    {
-        $data = $this->apin->sendRequest($apiKey, '/settings');
-
-        return $data['responseData']['data']['market']['datasource_name'];
 
     }
 
@@ -690,152 +669,6 @@ class Wolfnet_Plugin
 
 
     /**
-     * The API expects boolean values to be passed as 0 or 1.
-     * shortcodes arguments from saved searches save boolean args in many non constant ways
-     * Y/N, y/n, true/false, 0/1. This method converts these to API friendly 0/1
-     * @param  string   to be converted to 1 or 0
-     * @return int      API friendly 1 or 0
-     */
-    private function convertBool($to_bool)
-    {
-        $bool_true = array(true,'Y','y',1,'true','yes');
-
-        return (in_array($to_bool, $bool_true)) ? 1 : 0 ;
-
-    }
-
-
-    public function getOptions(array $defaultOptions, $instance = null)
-    {
-        if (is_array($instance)) {
-            $options = array_merge($defaultOptions, $instance);
-        } else {
-            $options = $defaultOptions;
-        }
-
-        foreach ($options as $key => $value) {
-            $options[$key . '_wpid'] = esc_attr($key);
-            $options[$key . '_wpname'] = esc_attr($key);
-        }
-
-        return $options;
-
-    }
-
-
-    public function convertDataType($value)
-    {
-
-        if (is_array($value)) {
-            foreach ($value as $key => $val) {
-                $value[$key] = $this->convertDataType($val);
-            }
-        } elseif (is_string($value) && ($value==='true' || $value==='false')) {
-            return ($value==='true') ? true : false;
-        } elseif (is_string($value) && ctype_digit($value)) {
-            return (integer) $value;
-        } elseif (is_string($value) && is_numeric($value)) {
-            return (float) $value;
-        }
-
-        return $value;
-
-    }
-
-
-    public function soldListingsEnabled()
-    {
-        try {
-            $data = $this->apin->sendRequest(
-                $this->keyService->getDefault(),
-                '/settings',
-                'GET'
-            );
-        } catch(Wolfnet_Exception $e) {
-            return $this->displayException($e);
-        }
-
-        $marketEnabled = $data['responseData']['data']['market']['has_sold_property'];
-        $siteEnabled = $data['responseData']['data']['site']['sold_property_enabled'];
-
-        return ($marketEnabled && $siteEnabled);
-    }
-
-
-    public function getOffices()
-    {
-        try {
-            $data = $this->apin->sendRequest(
-                $this->keyService->getDefault(), 
-                '/office', 
-                'GET'
-            );
-        } catch (Wolfnet_Exception $e) {
-            return $this->displayException($e);
-        }
-
-        return $data;
-    }
-
-
-    /* PROTECTED METHODS ************************************************************************ */
-    /*  ____            _            _           _   __  __      _   _               _            */
-    /* |  _ \ _ __ ___ | |_ ___  ___| |_ ___  __| | |  \/  | ___| |_| |__   ___   __| |___        */
-    /* | |_) | '__/ _ \| __/ _ \/ __| __/ _ \/ _` | | |\/| |/ _ \ __| '_ \ / _ \ / _` / __|       */
-    /* |  __/| | | (_) | ||  __/ (__| ||  __/ (_| | | |  | |  __/ |_| | | | (_) | (_| \__ \       */
-    /* |_|   |_|  \___/ \__\___|\___|\__\___|\__,_| |_|  |_|\___|\__|_| |_|\___/ \__,_|___/       */
-    /*                                                                                            */
-    /* ****************************************************************************************** */
-
-    protected function setUrl()
-    {
-        $this->url = plugin_dir_url($this->pluginFile) . 'public/';
-    }
-
-
-    protected function addFilter($filter, $callable = null)
-    {
-        if (is_array($filter)) {
-            foreach ($filter as $flt) {
-                $this->addFilter($flt[0], $flt[1]);
-            }
-        } else {
-            if (is_callable($callable)) {
-                add_filter($filter, $callable);
-            } elseif (is_string($callable) && method_exists($this, $callable)) {
-                do_action($this->preHookPrefix . $callable);
-                add_filter($filter, array(&$this, $callable));
-                do_action($this->postHookPrefix . $callable);
-            }
-        }
-
-        return $this;
-
-    }
-
-
-    /* PRIVATE METHODS ************************************************************************** */
-    /*  ____       _            _         __  __      _   _               _                       */
-    /* |  _ \ _ __(_)_   ____ _| |_ ___  |  \/  | ___| |_| |__   ___   __| |___                   */
-    /* | |_) | '__| \ \ / / _` | __/ _ \ | |\/| |/ _ \ __| '_ \ / _ \ / _` / __|                  */
-    /* |  __/| |  | |\ V / (_| | ||  __/ | |  | |  __/ |_| | | | (_) | (_| \__ \                  */
-    /* |_|   |_|  |_| \_/ \__,_|\__\___| |_|  |_|\___|\__|_| |_|\___/ \__,_|___/                  */
-    /*                                                                                            */
-    /* ****************************************************************************************** */
-
-
-    public function isJsonEncoded($str)
-    {
-        if (is_array(json_decode($str)) || is_object(json_decode($str))) {
-            return true;
-        } else {
-            return false;
-        }
-
-    }
-
-
-    /**
      * Prepare the listings for display. Pass in the array returned from the api /listing method.
      * Format fields & add missing data items needed for displays
      * @param  array $data   the array as returned from the api /listing method
@@ -849,14 +682,14 @@ class Wolfnet_Plugin
             $listingsData = &$data['responseData']['data']['listing'];
         }
 
-        $br_logo = $this->getBrLogo($key);
+        $br_logo = $this->data->getBrLogo($key);
 
         if (array_key_exists('src', $br_logo)) {
             $br_logo_url =  $br_logo['src'];
         }
 
         $show_logo = $data['responseData']['metadata']['display_rules']['results']['display_broker_reciprocity_logo'];
-        $wnt_base_url = $this->getBaseUrl($key);
+        $wnt_base_url = $this->data->getBaseUrl($key);
 
         // loop over listings
         foreach ($listingsData as &$listing) {
@@ -942,68 +775,113 @@ class Wolfnet_Plugin
     }
 
 
-    public function getMap($listingsData, $productKey = null)
+    /**
+     * The API expects boolean values to be passed as 0 or 1.
+     * shortcodes arguments from saved searches save boolean args in many non constant ways
+     * Y/N, y/n, true/false, 0/1. This method converts these to API friendly 0/1
+     * @param  string   to be converted to 1 or 0
+     * @return int      API friendly 1 or 0
+     */
+    private function convertBool($to_bool)
     {
-        return $this->views->mapView($listingsData, $productKey);
+        $bool_true = array(true,'Y','y',1,'true','yes');
+
+        return (in_array($to_bool, $bool_true)) ? 1 : 0 ;
+
     }
 
 
-    public function getHideListingTools($hideId, $showId, $collapseId, $instance_id)
+    public function getOptions(array $defaultOptions, $instance = null)
     {
-        return $this->views->hideListingsToolsView($hideId, $showId, $collapseId, $instance_id);
+        if (is_array($instance)) {
+            $options = array_merge($defaultOptions, $instance);
+        } else {
+            $options = $defaultOptions;
+        }
+
+        foreach ($options as $key => $value) {
+            $options[$key . '_wpid'] = esc_attr($key);
+            $options[$key . '_wpname'] = esc_attr($key);
+        }
+
+        return $options;
+
     }
 
 
-    public function getToolbar($data, $class)
+    public function convertDataType($value)
     {
-        $args = array_merge($data['wpMeta'], array(
-            'toolbarClass' => $class . ' ',
-            'maxresults'   => $this->getMaxResults($data['wpMeta']['key']), // total results on all pages
-            'numrows'      => $data['wpMeta']['maxresults'], // total results per page
-            'prevClass'    => ($data['wpMeta']['startrow']<=1) ? 'wolfnet_disabled' : '',
-            'lastitem'     => $data['wpMeta']['startrow'] + $data['wpMeta']['maxresults'] - 1,
-            'action'       => 'wolfnet_listings'
-            ));
 
-        if ($args['total_rows'] < $args['maxresults']) {
-            $args['maxresults'] = $args['total_rows'];
+        if (is_array($value)) {
+            foreach ($value as $key => $val) {
+                $value[$key] = $this->convertDataType($val);
+            }
+        } elseif (is_string($value) && ($value==='true' || $value==='false')) {
+            return ($value==='true') ? true : false;
+        } elseif (is_string($value) && ctype_digit($value)) {
+            return (integer) $value;
+        } elseif (is_string($value) && is_numeric($value)) {
+            return (float) $value;
         }
 
-        $args['nextClass'] = ($args['lastitem']>=$args['maxresults']) ? 'wolfnet_disabled' : '';
+        return $value;
 
-        if ($args['lastitem'] > $args['total_rows']) {
-            $args['lastitem'] = $args['total_rows'];
+    }
+
+
+    /* PROTECTED METHODS ************************************************************************ */
+    /*  ____            _            _           _   __  __      _   _               _            */
+    /* |  _ \ _ __ ___ | |_ ___  ___| |_ ___  __| | |  \/  | ___| |_| |__   ___   __| |___        */
+    /* | |_) | '__/ _ \| __/ _ \/ __| __/ _ \/ _` | | |\/| |/ _ \ __| '_ \ / _ \ / _` / __|       */
+    /* |  __/| | | (_) | ||  __/ (__| ||  __/ (_| | | |  | |  __/ |_| | | | (_) | (_| \__ \       */
+    /* |_|   |_|  \___/ \__\___|\___|\__\___|\__,_| |_|  |_|\___|\__|_| |_|\___/ \__,_|___/       */
+    /*                                                                                            */
+    /* ****************************************************************************************** */
+
+    protected function setUrl()
+    {
+        $this->url = plugin_dir_url($this->pluginFile) . 'public/';
+    }
+
+
+    protected function addFilter($filter, $callable = null)
+    {
+        if (is_array($filter)) {
+            foreach ($filter as $flt) {
+                $this->addFilter($flt[0], $flt[1]);
+            }
+        } else {
+            if (is_callable($callable)) {
+                add_filter($filter, $callable);
+            } elseif (is_string($callable) && method_exists($this, $callable)) {
+                do_action($this->preHookPrefix . $callable);
+                add_filter($filter, array(&$this, $callable));
+                do_action($this->postHookPrefix . $callable);
+            }
         }
 
-        $prev = $args['startrow'] - $args['numrows'];
+        return $this;
 
-        if ($prev < 1) {
-            $prev = $prev - $args['numrows'] + 1;
+    }
+
+
+    /* PRIVATE METHODS ************************************************************************** */
+    /*  ____       _            _         __  __      _   _               _                       */
+    /* |  _ \ _ __(_)_   ____ _| |_ ___  |  \/  | ___| |_| |__   ___   __| |___                   */
+    /* | |_) | '__| \ \ / / _` | __/ _ \ | |\/| |/ _ \ __| '_ \ / _ \ / _` / __|                  */
+    /* |  __/| |  | |\ V / (_| | ||  __/ | |  | |  __/ |_| | | | (_) | (_| \__ \                  */
+    /* |_|   |_|  |_| \_/ \__,_|\__\___| |_|  |_|\___|\__|_| |_|\___/ \__,_|___/                  */
+    /*                                                                                            */
+    /* ****************************************************************************************** */
+
+
+    public function isJsonEncoded($str)
+    {
+        if (is_array(json_decode($str)) || is_object(json_decode($str))) {
+            return true;
+        } else {
+            return false;
         }
-
-        if ($prev < 1) {
-            $prev = $args['startrow'];
-        }
-
-        $args['prevLink'] = $this->buildUrl(
-            admin_url('admin-ajax.php'),
-            array_merge($args, array('startrow'=>$prev))
-        );
-
-        $next = $args['startrow'] + $args['numrows'];
-
-        if ($next >= $args['maxresults']) {
-            $next = 1;
-        }
-
-        $args['nextLink']  = $this->buildUrl(
-            admin_url('admin-ajax.php'),
-            array_merge($args, array('startrow'=>$next))
-        );
-
-        $args = $this->convertDataType($args);
-
-        return $this->views->toolbarView($args);
 
     }
 
@@ -1017,207 +895,6 @@ class Wolfnet_Plugin
     public function displayException(Wolfnet_Exception $exception)
     {
         return $this->views->exceptionView($exception);
-    }
-
-
-    /**
-     * get the api display setting for "Max Results". If it is not set use 250
-     * @param  string $productKey
-     * @return int
-     */
-    private function getMaxResults($productKey = null)
-    {
-        if ($productKey == null) {
-            $productKey = json_decode($this->keyService->getDefault());
-        }
-
-        $data = $this->apin->sendRequest($productKey, '/settings');
-
-        $maxResults = $data['responseData']['data']['market']['display_rules']['Max Results'];
-
-        return (is_numeric($maxResults) && $maxResults <= 250 ) ? $maxResults : 250;
-
-    }
-
-
-    /**
-     * Get the Broker Reciprocity Logo. returns array containing url, height, width $alt text
-     * @param  string $productKey
-     * @return array               keys: "SRC", "ALT", "HEIGHT", "WIDTH"
-     */
-    private function getBrLogo($productKey = null)
-    {
-
-        if ($productKey == null) {
-            $productKey = json_decode($this->keyService->getDefault());
-        }
-
-        $data = $this->apin->sendRequest($productKey, '/settings');
-
-        return $data['responseData']['data']['market']['broker_reciprocity_logo'];
-
-    }
-
-
-    public function getMaptracksEnabled($productKey = null)
-    {
-
-        if ($productKey == null) {
-            $productKey = json_decode($this->keyService->getDefault());
-        }
-
-        $data = $this->apin->sendRequest($productKey, '/settings');
-
-        if (is_wp_error($data)) {
-            return $data;
-        }
-
-        return ($data['responseData']['data']['site']['maptracks_enabled'] == 'Y');
-
-    }
-
-
-    public function getOwnerTypes()
-    {
-        return array(
-            array('value'=>'agent_broker', 'label'=>'Agent Then Broker'),
-            array('value'=>'agent', 'label'=>'Agent Only'),
-            array('value'=>'broker', 'label'=>'Broker Only')
-        );
-
-    }
-
-
-    public function getMapTypes()
-    {
-        return array(
-            array('value'=>'disabled', 'label'=>'No'),
-            array('value'=>'above',    'label'=>'Above Listings'),
-            array('value'=>'below',    'label'=>'Below Listings'),
-            array('value'=>'map_only', 'label'=>'Map Only')
-        );
-
-    }
-
-
-    public function getMapParameters($listingsData, $productKey = null)
-    {
-        if ($productKey == null) {
-            $productKey = $this->keyService->getDefault();
-        }
-
-        $data  = $this->apin->sendRequest($productKey, '/settings');
-
-        if (is_wp_error($data)) {
-            return $this->getWpError($data);
-        }
-
-
-        $args['mapParams'] = array(
-    		'mapProvider'  => 'mapquest',
-    		'centerLat'    => $data['responseData']['data']['market']['maptracks']['map_start_lat'],
-			'centerLng'    => $data['responseData']['data']['market']['maptracks']['map_start_lng'],
-			'zoomLevel'    => $data['responseData']['data']['market']['maptracks']['map_start_scale'],
-			'houseoverIcon'=> $GLOBALS['wolfnet']->url . 'img/houseover.png',
-			'mapId'        => uniqid('wntMapTrack'),
-			'hideMapId'    => uniqid('hideMap'),
-			'showMapId'    => uniqid('showMap'),
-		);
-
-        $args['houseoverData'] = $this->getHouseoverData(
-            $listingsData,
-            $data['responseData']['data']['resource']['searchResults']['allLayouts']['showBrokerReciprocityLogo']
-        );
-
-        return $args;
-
-    }
-
-
-    private function getHouseoverData($listingsData, $showBrokerImage)
-    {
-
-        $houseoverData = array();
-
-        foreach ($listingsData as $listing) {
-            $vars = array(
-                'listing' => $listing,
-                'showBrokerImage' => $showBrokerImage,
-            );
-
-            $concatHouseover = $this->views->houseOver($vars);
-
-            array_push($houseoverData, array(
-                'lat' => $listing['geo']['lat'],
-                'lng' => $listing['geo']['lng'],
-                'content' => $concatHouseover,
-                'propertyId' => $listing['property_id'],
-                'propertyUrl' => $listing['property_url'],
-                ));
-        }
-
-        return $houseoverData;
-
-    }
-
-
-    /**
-     * Get the wolfnet search url qssociated eith given procuct key
-     * @param  string $productKey
-     * @return string             base URL of the Wolfnet search solution
-     */
-    public function getBaseUrl($productKey = null)
-    {
-        if ($productKey == null) {
-            $productKey = $this->keyService->getDefault();
-        }
-
-        $data  = $this->apin->sendRequest($productKey, '/settings');
-
-        if (is_wp_error($data)) {
-            return $data;
-        }
-
-        return $data['responseData']['data']['site']['site_base_url'];
-
-    }
-
-
-    public function getPrices($productKey)
-    {
-
-        $data = $this->apin->sendRequest($productKey, '/search_criteria/property_feature');
-
-        if (is_wp_error($data)) {
-            return $data->get_error_message();
-        }
-
-        $prices = array();
-        $prices['max_price'] = $data['responseData']['data']['max_price'];
-        $prices['min_price'] = $data['responseData']['data']['min_price'];
-
-        return $prices;
-
-    }
-
-
-    public function getBeds()
-    {
-        $values = array(1,2,3,4,5,6,7);
-        $data   = array();
-
-        foreach ($values as $value) {
-            $data[] = array('value'=>$value, 'label'=>$value);
-        }
-
-        return $data;
-
-    }
-
-
-    public function getBaths()
-    {
-        return $this->getBeds();
     }
 
 
@@ -1385,6 +1062,4 @@ class Wolfnet_Plugin
     {
         return get_option(self::VERIFYSSL_WP_OPTION, Wolfnet_Api_Client::DEFAULT_VERIFYSSL);
     }
-
-
 }

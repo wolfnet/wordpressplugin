@@ -161,7 +161,7 @@ class Wolfnet_Admin extends Wolfnet_Plugin
                 // ignore this.
                 foreach($keyArray as $key) {
                     if(strlen($key->label) == 0) {
-                        $key->label = strtoupper($GLOBALS['wolfnet']->getMarketName($key->key));
+                        $key->label = strtoupper($GLOBALS['wolfnet']->data->getMarketName($key->key));
                     }
                 }
                 $keyString = json_encode($keyArray);
