@@ -120,16 +120,17 @@ if (typeof jQuery !== 'undefined') {
 
                             // If no photo was found we need to attempt to load it.
                             if ($newPhoto.length === 0) {
-                                $newPhoto = $('<img>').attr('src', photoUrl)
-                                .attr('alt', 'property image')
-                                .css({'max-height': containerHeight + 'px'})
-                                .hide()
-                                .on('error', function(){
-                                    $(this).attr('src', options.photoUnavailable);
-                                })
-                                .on('load', function(){
-                                    methods.private.transitionPhotos($this, $currentPhoto, $(this), newIndex);
-                                });
+                                $newPhoto = $('<img>')
+                                    .attr('src', photoUrl)
+                                    .attr('alt', 'property image')
+                                    .css('max-height', containerHeight + 'px')
+                                    .hide()
+                                    .on('error', function () {
+                                        $(this).attr('src', options.photoUnavailable);
+                                    })
+                                    .on('load', function () {
+                                        methods.private.transitionPhotos($this, $currentPhoto, $(this), newIndex);
+                                    });
 
                                 if (direction == 'next' && newIndex === 0) {
                                     $.error('Something when wrong. The 0 index photo should already be here.');
@@ -183,7 +184,7 @@ if (typeof jQuery !== 'undefined') {
 
             private: {
 
-                state: function($thumbnails, data, data2) {
+                state: function ($thumbnails, data, data2) {
                     if ($thumbnails.length > 1) {
                         $.error('The state method can only operate on a single element.');
                     }
@@ -216,7 +217,7 @@ if (typeof jQuery !== 'undefined') {
                  * @param  {Object} data Optional data to be set.
                  * @return {Object}      Data retrieved.
                  */
-                options: function($thumbnails, data) {
+                options: function ($thumbnails, data) {
 
                     if ($thumbnails.length > 1) {
                         $.error('The options method can only operate on a single element.');
@@ -232,15 +233,15 @@ if (typeof jQuery !== 'undefined') {
 
                 },
 
-                setupDomElements: function($thumbnails, options) {
+                setupDomElements: function ($thumbnails, options) {
                     methods.private.wrapImageElement($thumbnails);
                     methods.private.buildControls($thumbnails);
 
                 },
 
-                setupEventHandlers: function($thumbnails, options) {
+                setupEventHandlers: function ($thumbnails, options) {
 
-                    $thumbnails.each(function(){
+                    $thumbnails.each(function () {
                         var $this = $(this);
                         var options = methods.private.options($this);
 
@@ -248,17 +249,17 @@ if (typeof jQuery !== 'undefined') {
                             $this.addClass('has-swipe').wolfnetSwipe({
                                 direction: 'horizontal'
                             })
-                            .on('wntSwipeLeft', function(){
+                            .on('wntSwipeLeft', function () {
                                 $(this)[pluginName]('next');
                             })
-                            .on('wntSwipeRight', function(){
+                            .on('wntSwipeRight', function () {
                                 $(this)[pluginName]('previous');
                             });
                         }
 
                         // We only need these hover events if we are showing/hiding the controls.
                         if (options.hideControls) {
-                            $this.hover(function(){
+                            $this.hover(function () {
                                 methods.private.state($this, 'mouseover', true);
                                 // If the photos aren't ready to be downloaded there is no point in showing
                                 // the controls.
@@ -272,7 +273,7 @@ if (typeof jQuery !== 'undefined') {
                                 } else if (methods.private.state($this, 'photoMetadata').length > 1) {
                                     methods.public.showControls.call($this);
                                 }
-                            }, function(){
+                            }, function () {
                                 methods.private.state($this, 'mouseover', false);
 
                                 if (options.hideControls) {
@@ -282,7 +283,7 @@ if (typeof jQuery !== 'undefined') {
                             });
                         }
 
-                        methods.private.controls($this).click(function(event){
+                        methods.private.controls($this).click(function (event) {
                             methods.private.eventHandler.controlClick.call(this, event, $this);
                         });
 
@@ -381,7 +382,7 @@ if (typeof jQuery !== 'undefined') {
 
                 },
 
-                controls: function($thumbnails) {
+                controls: function ($thumbnails) {
 
                     if ($thumbnails.length > 1) {
                         $.error('The controls method can only operate on a single element.');
@@ -394,7 +395,7 @@ if (typeof jQuery !== 'undefined') {
 
                 },
 
-                loadPhotoMetadata: function($thumbnails, complete) {
+                loadPhotoMetadata: function ($thumbnails, complete) {
 
                     if ($thumbnails.length > 1) {
                         $.error('The loadPhotoMetadata method can only operate on a single element.');
@@ -423,18 +424,17 @@ if (typeof jQuery !== 'undefined') {
                                     commFailure();
                                 }
                             },
-                            beforeSend: function(){
+                            beforeSend: function () {
                                 state.$container.addClass(options.loadingClass);
                             }
                         })
-                        .always(function(){
+                        .always(function () {
                             state.$container.removeClass(options.loadingClass);
                             methods.private.state(this, 'loadingPhotos', false);
                         })
-                        .done(function(data){
+                        .done(function (data) {
                             methods.private.state(this, 'photoMetadataLoaded', true);
                             methods.private.state(this, 'photoMetadata', data);
-
                             complete();
                         });
 
@@ -442,7 +442,7 @@ if (typeof jQuery !== 'undefined') {
 
                 },
 
-                transitionPhotos: function($thumbnails, $fromPhoto, $toPhoto, newIndex) {
+                transitionPhotos: function ($thumbnails, $fromPhoto, $toPhoto, newIndex) {
                     $fromPhoto.fadeOut('fast', function(){
                         $toPhoto.fadeIn('fast', function(){
                             methods.private.state($thumbnails, 'index', newIndex);
@@ -454,7 +454,7 @@ if (typeof jQuery !== 'undefined') {
 
                 eventHandler: {
 
-                    controlClick: function(event, $thumbnails) {
+                    controlClick: function (event, $thumbnails) {
                         event.preventDefault();
 
                         var $btn = $(this);

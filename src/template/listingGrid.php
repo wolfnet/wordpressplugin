@@ -68,10 +68,8 @@ unset($wpMeta['key']);
 
         var setupThumbnailScroller = function () {
             $listingGrid.find('.wolfnet_listing').wolfnetThumbnailScroller({
-                //photoType: 'photo_url',
                 photoSelector: '.wolfnet_listingImage img',
-                hideControls: !wolfnet.hasFeature('touch') // If on a touch screen always show the controls
-                //photoUnavailable: photoUnavailable
+                hideControls: !wolfnet.hasFeature('touch') // If on a touch screen, always show the controls
             });
         };
 
