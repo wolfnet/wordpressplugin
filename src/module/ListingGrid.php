@@ -132,7 +132,7 @@ class Wolfnet_Module_ListingGrid
             $qdata = $this->plugin->prepareListingQuery($criteria);
 
             try {
-                $data = $this->plugin->apin->sendRequest($key, '/listing', 'GET', $qdata);
+                $data = $this->plugin->api->sendRequest($key, '/listing', 'GET', $qdata);
             } catch (Wolfnet_Exception $e) {
                 return $this->plugin->displayException($e);
             }

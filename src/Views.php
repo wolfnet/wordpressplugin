@@ -363,7 +363,7 @@ class Wolfnet_Views
 
         $args['itemsPerPage'] = $GLOBALS['wolfnet']->data->getItemsPerPage();
 
-        $data = $GLOBALS['wolfnet']->apin->sendRequest($args['productkey'], '/search_criteria/sort_option');
+        $data = $GLOBALS['wolfnet']->api->sendRequest($args['productkey'], '/search_criteria/sort_option');
         $args['sortOptions'] = $data['responseData']['data']['options'];
 
         foreach ($args as $key => $item) {
@@ -389,7 +389,7 @@ class Wolfnet_Views
 
         $args['itemsPerPage'] = $GLOBALS['wolfnet']->data->getItemsPerPage();
 
-        $data = $GLOBALS['wolfnet']->apin->sendRequest($args['productkey'], '/search_criteria/sort_option');
+        $data = $GLOBALS['wolfnet']->api->sendRequest($args['productkey'], '/search_criteria/sort_option');
         $args['sortOptions'] = $data['responseData']['data']['options'];
 
         foreach ($args as $key => $item) {

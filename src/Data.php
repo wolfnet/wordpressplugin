@@ -37,7 +37,7 @@ class Wolfnet_Data
 
     public function getMarketName($apiKey)
     {
-        $data = $this->plugin->apin->sendRequest($apiKey, '/settings');
+        $data = $this->plugin->api->sendRequest($apiKey, '/settings');
 
         return $data['responseData']['data']['market']['datasource_name'];
     }
@@ -46,7 +46,7 @@ class Wolfnet_Data
     public function soldListingsEnabled()
     {
         try {
-            $data = $this->plugin->apin->sendRequest(
+            $data = $this->plugin->api->sendRequest(
                 $this->plugin->keyService->getDefault(),
                 '/settings',
                 'GET'
@@ -65,7 +65,7 @@ class Wolfnet_Data
     public function getOffices()
     {
         try {
-            $data = $this->plugin->apin->sendRequest(
+            $data = $this->plugin->api->sendRequest(
                 $this->plugin->keyService->getDefault(), 
                 '/office', 
                 'GET'
@@ -157,7 +157,7 @@ class Wolfnet_Data
             $productKey = json_decode($this->plugin->keyService->getDefault());
         }
 
-        $data = $this->plugin->apin->sendRequest($productKey, '/settings');
+        $data = $this->plugin->api->sendRequest($productKey, '/settings');
 
         $maxResults = $data['responseData']['data']['market']['display_rules']['Max Results'];
 
@@ -178,7 +178,7 @@ class Wolfnet_Data
             $productKey = json_decode($this->plugin->keyService->getDefault());
         }
 
-        $data = $this->plugin->apin->sendRequest($productKey, '/settings');
+        $data = $this->plugin->api->sendRequest($productKey, '/settings');
 
         return $data['responseData']['data']['market']['broker_reciprocity_logo'];
 
@@ -192,7 +192,7 @@ class Wolfnet_Data
             $productKey = json_decode($this->plugin->keyService->getDefault());
         }
 
-        $data = $this->plugin->apin->sendRequest($productKey, '/settings');
+        $data = $this->plugin->api->sendRequest($productKey, '/settings');
 
         if (is_wp_error($data)) {
             return $data;
@@ -232,7 +232,7 @@ class Wolfnet_Data
             $productKey = $this->plugin->keyService->getDefault();
         }
 
-        $data  = $this->plugin->apin->sendRequest($productKey, '/settings');
+        $data  = $this->plugin->api->sendRequest($productKey, '/settings');
 
         if (is_wp_error($data)) {
             return $this->plugin->getWpError($data);
@@ -298,7 +298,7 @@ class Wolfnet_Data
             $productKey = $this->plugin->keyService->getDefault();
         }
 
-        $data  = $this->plugin->apin->sendRequest($productKey, '/settings');
+        $data  = $this->plugin->api->sendRequest($productKey, '/settings');
 
         if (is_wp_error($data)) {
             return $data;
@@ -312,7 +312,7 @@ class Wolfnet_Data
     public function getPrices($productKey)
     {
 
-        $data = $this->plugin->apin->sendRequest($productKey, '/search_criteria/property_feature');
+        $data = $this->plugin->api->sendRequest($productKey, '/search_criteria/property_feature');
 
         if (is_wp_error($data)) {
             return $data->get_error_message();

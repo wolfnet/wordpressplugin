@@ -457,7 +457,7 @@ class Wolfnet_Ajax
 
             $productKey = $GLOBALS['wolfnet']->keyService->getById($keyid);
 
-            $data = $GLOBALS['wolfnet']->apin->sendRequest($productKey, '/listing', 'GET', $criteria);
+            $data = $GLOBALS['wolfnet']->api->sendRequest($productKey, '/listing', 'GET', $criteria);
 
             $GLOBALS['wolfnet']->augmentListingsData($data, $productKey);
 

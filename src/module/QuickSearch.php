@@ -77,7 +77,7 @@ class Wolfnet_Module_QuickSearch
             try {
                 $key = $this->plugin->keyService->getById($keyID);
 
-                $listings = $this->plugin->apin->sendRequest(
+                $listings = $this->plugin->api->sendRequest(
                     $key, 
                     '/listing?detaillevel=1&startrow=1&maxrows=1', 
                     'GET',

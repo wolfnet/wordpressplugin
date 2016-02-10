@@ -133,7 +133,7 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
         }
 
         try {
-            $data = $this->plugin->apin->sendRequest($this->key, $endpoint, 'GET', $this->args['criteria']);
+            $data = $this->plugin->api->sendRequest($this->key, $endpoint, 'GET', $this->args['criteria']);
         } catch (Wolfnet_Exception $e) {
             return $this->plugin->displayException($e);
         }
@@ -289,7 +289,7 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
         }
 
         try {
-            $data = $this->plugin->apin->sendRequest(
+            $data = $this->plugin->api->sendRequest(
                 $this->key,
                 '/agent_inquire',
                 'POST',
@@ -328,7 +328,7 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
         $this->args['criteria']['omit_office_id'] = $this->args['excludeoffices'];
 
         try {
-            $data = $this->plugin->apin->sendRequest($this->key, '/office', 'GET', $this->args['criteria']);
+            $data = $this->plugin->api->sendRequest($this->key, '/office', 'GET', $this->args['criteria']);
         } catch (Wolfnet_Exception $e) {
             return $this->plugin->displayException($e);
         }
@@ -384,7 +384,7 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
     protected function getListingsByAgentId($key, $agentId, $sold = 0) 
     {
         try {
-            $data = $this->plugin->apin->sendRequest(
+            $data = $this->plugin->api->sendRequest(
                 $key, 
                 '/listing/?agent_id=' . $agentId . "&sold=" . $sold, 
                 'GET', 
@@ -408,7 +408,7 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
     protected function getAgentById($agentId) 
     {
         try {
-            $data = $this->plugin->apin->sendRequest(
+            $data = $this->plugin->api->sendRequest(
                 $this->key, 
                 '/agent/' . $agentId, 
                 'GET', 
@@ -430,7 +430,7 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
     protected function getOfficeByOfficeId($officeId)
     {
         try {
-            $data = $this->plugin->apin->sendRequest(
+            $data = $this->plugin->api->sendRequest(
                 $this->key,
                 '/office?office_id=' . $officeId,
                 'GET',

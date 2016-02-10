@@ -222,12 +222,12 @@ class Wolfnet_Admin extends Wolfnet_Plugin
     {
         // Hit an API endpoint so we can verify SSL.
         try {
-            $data = $GLOBALS['wolfnet']->apin->sendRequest($key, '/settings');
+            $data = $GLOBALS['wolfnet']->api->sendRequest($key, '/settings');
         } catch(Wolfnet_Api_ApiException $e) {
             // And exception at this point is PROBABLY due to SSL verification.
             // Set the verify SSL option to false if so.
             if(strpos($e->getDetails(), 'SSL certificate problem') >= 0) {
-                $GLOBALS['wolfnet']->apin->setVerifySSL(0);
+                $GLOBALS['wolfnet']->api->setVerifySSL(0);
                 update_option(Wolfnet_Plugin::VERIFYSSL_WP_OPTION, 0);
                 return false;
             }

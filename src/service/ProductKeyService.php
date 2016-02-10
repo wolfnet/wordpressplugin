@@ -164,7 +164,7 @@ class Wolfnet_Service_ProductKeyService
 
         if (trim($productKey) !== '') {
             try {
-                $http = $this->plugin->apin->authenticate($productKey, array('force'=>true));
+                $http = $this->plugin->api->authenticate($productKey, array('force'=>true));
             } catch (Wolfnet_Api_ApiException $e) {
                 if ($e->getCode() == Wolfnet_Api_Client::NO_AUTH_ERROR) {
                     $valid = false;

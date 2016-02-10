@@ -58,7 +58,7 @@ class Wolfnet_Module_AgentPages
     public function showAgentFeature()
     {
         try {
-            $data = $this->plugin->apin->sendRequest(
+            $data = $this->plugin->api->sendRequest(
                 $this->plugin->keyService->getDefault(), 
                 '/settings', 
                 'GET'

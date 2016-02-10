@@ -228,7 +228,7 @@ class Wolfnet_Template
             echo '<div class="wolfnet_marketDisclaimer">';
             foreach ($_REQUEST['keyList'] as $key) {
                 try {
-                    $disclaimer = $this->plugin->apin->sendRequest(
+                    $disclaimer = $this->plugin->api->sendRequest(
                     	$key, 
                     	'/core/disclaimer', 
                     	'GET', 

@@ -136,7 +136,7 @@ class Wolfnet_Plugin
         $this->cachingService = $this->ioc->get('Wolfnet_Service_CachingService');
         $this->keyService = $this->ioc->get('Wolfnet_Service_ProductKeyService');
 
-        $this->apin = $this->ioc->get('Wolfnet_Api_Client');
+        $this->api = $this->ioc->get('Wolfnet_Api_Client');
         $this->ajax = $this->ioc->get('Wolfnet_Ajax');
         $this->data = $this->ioc->get('Wolfnet_Data');
         $this->template = $this->ioc->get('Wolfnet_Template');
