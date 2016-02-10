@@ -114,6 +114,8 @@
 
     jQuery(function($){
 
+        wolfnet.initMoreInfo( $( '#<?php echo $instance_id; ?> .wolfnet_moreInfo' ) );
+
         <?php if(count($markets) > 1): ?>
 
         var <?php echo $instance_id; ?> = <?php echo $jsKeyids; ?>;
