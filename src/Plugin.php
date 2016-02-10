@@ -1464,7 +1464,7 @@ class Wolfnet_Plugin
 			}
 
 		} catch (Wolfnet_Exception $e) {
-			throw new Exception(displayException($e));
+			throw new Exception($this->displayException($e));
 		}
 
 		return $suggestionsObject;
