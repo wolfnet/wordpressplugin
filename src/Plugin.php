@@ -1378,14 +1378,14 @@ class Wolfnet_Plugin
     public function getQuickSearchDefaults()
     {
 
-        return array(
-            'title'      => 'QuickSearch',
-            'keyid'      => '',
-            'keyids'     => '',
-            'view'       => '',
-            'smartsearch'=> 0,
-            'routing'    => '',
-            );
+		return array(
+			'title'      => 'QuickSearch',
+			'keyid'      => '',
+			'keyids'     => '',
+			'view'       => '',
+			'smartsearch'=> false,
+			'routing'    => '',
+		);
 
     }
 
