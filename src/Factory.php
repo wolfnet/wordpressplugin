@@ -200,6 +200,12 @@ class Wolfnet_Factory
     }
 
 
+    private function getWolfnet_Listings()
+    {
+        return new Wolfnet_Listings($this->args['plugin']);
+    }
+
+
     private function getWolfnet_Template()
     {
         return new Wolfnet_Template($this->args['plugin']);

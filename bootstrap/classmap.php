@@ -12,6 +12,7 @@ return array(
     'Wolfnet_Data' => '/Data.php',
     'Wolfnet_Exception' => '/Exception.php',
     'Wolfnet_Factory' => '/Factory.php',
+    'Wolfnet_Listings' => '/Listings.php',
     'Wolfnet_Plugin' => '/Plugin.php',
     'Wolfnet_Template' => '/Template.php',
     'Wolfnet_Views' => '/Views.php',

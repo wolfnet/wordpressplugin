@@ -106,7 +106,7 @@ class Wolfnet_Service_ProductKeyService
 
         // If the value stored in the options table is a legacy, single key value convert it to the
         // newer JSON format.
-        if (!$this->plugin->isJsonEncoded($key)) {
+        if (!$this->isJsonEncoded($key)) {
             $key = $this->getAsJson($key);
         }
 
@@ -227,6 +227,17 @@ class Wolfnet_Service_ProductKeyService
         );
 
         return json_encode($keyArray);
+
+    }
+
+
+    public function isJsonEncoded($str)
+    {
+        if (is_array(json_decode($str)) || is_object(json_decode($str))) {
+            return true;
+        } else {
+            return false;
+        }
 
     }
 }

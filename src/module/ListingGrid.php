@@ -129,7 +129,7 @@ class Wolfnet_Module_ListingGrid
                 $criteria['maxrows'] = $criteria['maxresults'];
             }
 
-            $qdata = $this->plugin->prepareListingQuery($criteria);
+            $qdata = $this->plugin->listings->prepareListingQuery($criteria);
 
             try {
                 $data = $this->plugin->api->sendRequest($key, '/listing', 'GET', $qdata);
@@ -151,7 +151,7 @@ class Wolfnet_Module_ListingGrid
 
         $data['wpMeta']['total_rows'] = $data['responseData']['data']['total_rows'];
 
-        $this->plugin->augmentListingsData($data, $key);
+        $this->plugin->listings->augmentListingsData($data, $key);
 
         $listingsData = array();
 

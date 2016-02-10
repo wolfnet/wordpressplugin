@@ -85,7 +85,7 @@ class Wolfnet_Module_FeaturedListings
             $criteria['startrow'] = 1;
         }
 
-        $qdata = $this->plugin->prepareListingQuery($criteria);
+        $qdata = $this->plugin->listings->prepareListingQuery($criteria);
 
         try {
             $data = $this->plugin->api->sendRequest($key, '/listing', 'GET', $qdata);
@@ -93,7 +93,7 @@ class Wolfnet_Module_FeaturedListings
             return $this->plugin->displayException($e);
         }
 
-        $this->plugin->augmentListingsData($data, $key);
+        $this->plugin->listings->augmentListingsData($data, $key);
 
         $listingsData = array();
 

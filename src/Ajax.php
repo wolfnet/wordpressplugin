@@ -451,7 +451,7 @@ class Wolfnet_Ajax
                 $_REQUEST['maxrows'] = $_REQUEST['numrows'];
             }
 
-            $criteria = $GLOBALS['wolfnet']->prepareListingQuery($_REQUEST);
+            $criteria = $GLOBALS['wolfnet']->listings->prepareListingQuery($_REQUEST);
 
             $keyid = (array_key_exists('keyid', $_REQUEST)) ? $_REQUEST["keyid"] : null;
 
@@ -459,7 +459,7 @@ class Wolfnet_Ajax
 
             $data = $GLOBALS['wolfnet']->api->sendRequest($productKey, '/listing', 'GET', $criteria);
 
-            $GLOBALS['wolfnet']->augmentListingsData($data, $productKey);
+            $GLOBALS['wolfnet']->listings->augmentListingsData($data, $productKey);
 
         } catch (Wolfnet_Exception $e) {
             status_header(500);
