@@ -35,7 +35,7 @@ class Wolfnet_Module_SearchManager
         global $wp_version;
         $http = array();
 
-        $baseUrl = $this->plugin->data->getBaseUrl($productKey);
+        $baseUrl = $this->plugin->data->getSearchManagerBaseUrl($productKey);
         //$maptracksEnabled = $this->plugin->data->getMaptracksEnabled($productKey);
 
         if (is_wp_error($baseUrl)) {

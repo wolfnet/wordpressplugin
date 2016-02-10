@@ -142,7 +142,6 @@ class Wolfnet_Data
         $args = $this->plugin->convertDataType($args);
 
         return $this->plugin->views->toolbarView($args);
-
     }
 
 
@@ -162,7 +161,6 @@ class Wolfnet_Data
         $maxResults = $data['responseData']['data']['market']['display_rules']['Max Results'];
 
         return (is_numeric($maxResults) && $maxResults <= 250 ) ? $maxResults : 250;
-
     }
 
 
@@ -173,7 +171,6 @@ class Wolfnet_Data
      */
     public function getBrLogo($productKey = null)
     {
-
         if ($productKey == null) {
             $productKey = json_decode($this->plugin->keyService->getDefault());
         }
@@ -181,7 +178,6 @@ class Wolfnet_Data
         $data = $this->plugin->api->sendRequest($productKey, '/settings');
 
         return $data['responseData']['data']['market']['broker_reciprocity_logo'];
-
     }
 
 
@@ -199,7 +195,6 @@ class Wolfnet_Data
         }
 
         return ($data['responseData']['data']['site']['maptracks_enabled'] == 'Y');
-
     }
 
 
@@ -210,7 +205,6 @@ class Wolfnet_Data
             array('value'=>'agent', 'label'=>'Agent Only'),
             array('value'=>'broker', 'label'=>'Broker Only')
         );
-
     }
 
 
@@ -222,7 +216,6 @@ class Wolfnet_Data
             array('value'=>'below',    'label'=>'Below Listings'),
             array('value'=>'map_only', 'label'=>'Map Only')
         );
-
     }
 
 
@@ -256,7 +249,6 @@ class Wolfnet_Data
         );
 
         return $args;
-
     }
 
 
@@ -283,14 +275,13 @@ class Wolfnet_Data
         }
 
         return $houseoverData;
-
     }
 
 
     /**
-     * Get the wolfnet search url qssociated eith given procuct key
-     * @param  string $productKey
-     * @return string             base URL of the Wolfnet search solution
+     * Get the wolfnet search url associated with given procuct key
+     * @param  string   $productKey
+     * @return string   base URL of the Wolfnet search solution
      */
     public function getBaseUrl($productKey = null)
     {
@@ -305,13 +296,37 @@ class Wolfnet_Data
         }
 
         return $data['responseData']['data']['site']['site_base_url'];
+    }
 
+
+    /**
+     * Dynamic url for the wolfnet search url to be used with Search Manager
+     * @param  string   $productKey
+     * @return string   base URL of the Wolfnet search solution
+     */
+    public function getSearchManagerBaseUrl($productKey = null)
+    {
+        if ($productKey == null) {
+            $productKey = $this->plugin->keyService->getDefaultProductKey();
+        }
+ 
+        $data  = $this->plugin->api->sendRequest($productKey, '/settings');
+ 
+        if(is_wp_error($data)) {
+            return $data;
+        }
+ 
+        $baseUrl =
+            $data['responseData']['data']['site']['mlsfinder_web_root'] . '/' .
+            $data['responseData']['data']['market']['datasource_name'] . '/' .
+            $data['responseData']['data']['site']['site_directory_name'];
+ 
+        return $baseUrl;
     }
 
 
     public function getPrices($productKey)
     {
-
         $data = $this->plugin->api->sendRequest($productKey, '/search_criteria/property_feature');
 
         if (is_wp_error($data)) {
@@ -323,7 +338,6 @@ class Wolfnet_Data
         $prices['min_price'] = $data['responseData']['data']['min_price'];
 
         return $prices;
-
     }
 
 
@@ -337,7 +351,6 @@ class Wolfnet_Data
         }
 
         return $data;
-
     }
 
 
