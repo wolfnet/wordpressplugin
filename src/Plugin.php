@@ -186,6 +186,13 @@ class Wolfnet_Plugin
 
     }
 
+
+    /* Hooks ************************************************************************************ */
+    /* |_|  _   _  |   _                                                                          */
+    /* | | (_) (_) |< _>                                                                          */
+    /*                                                                                            */
+    /* ****************************************************************************************** */
+
     // Hook functions for addAction
     public function scripts()
     {
@@ -211,80 +218,6 @@ class Wolfnet_Plugin
     {
         return $this->template->templateRedirect();
     }
-
-
-    /* Public Methods *************************************************************************** */
-    /*  ____        _     _ _        __  __      _   _               _                            */
-    /* |  _ \ _   _| |__ | (_) ___  |  \/  | ___| |_| |__   ___   __| |___                        */
-    /* | |_) | | | | '_ \| | |/ __| | |\/| |/ _ \ __| '_ \ / _ \ / _` / __|                       */
-    /* |  __/| |_| | |_) | | | (__  | |  | |  __/ |_| | | | (_) | (_| \__ \                       */
-    /* |_|    \__,_|_.__/|_|_|\___| |_|  |_|\___|\__|_| |_|\___/ \__,_|___/                       */
-    /*                                                                                            */
-    /* ****************************************************************************************** */
-
-
-    /**
-     * Decodes all HTML entities, including numeric and hexadecimal ones.
-     *
-     * @param mixed $string
-     * @return string decoded HTML
-     */
-    public function htmlEntityDecodeNumeric($string, $quote_style = ENT_COMPAT, $charset = 'utf-8')
-    {
-        $hexCallback = array(&$this, 'chrUtf8HexCallback');
-        $nonHexCallback = array(&$this, 'chrUtf8NonhexCallback');
-
-        $string = html_entity_decode($string, $quote_style, $charset);
-        $string = preg_replace_callback('~&#x([0-9a-fA-F]+);~i', $hexCallback, $string);
-        $string = preg_replace_callback('~&#([0-9]+);~i', $nonHexCallback, $string);
-
-        return $string;
-
-    }
-
-
-    public function chrUtf8HexCallback($matches)
-    {
-        return $this->chr_utf8(hexdec($matches[1]));
-    }
-
-
-    public function chrUtf8NonhexCallback($matches)
-    {
-        return $this->chr_utf8($matches[1]);
-    }
-
-
-    public function addAction($action, $callable = null, $priority = null)
-    {
-        if (is_array($action)) {
-            foreach ($action as $act) {
-                if (count($act) == 2) {
-                    $this->addAction($act[0], $act[1]);
-                } else {
-                    $this->addAction($act[0], $act[1], $act[2]);
-                }
-            }
-        } else {
-            if (is_callable($callable) && is_array($callable)) {
-                add_action($action, $callable, $priority);
-            } elseif (is_string($callable) && method_exists($this, $callable)) {
-                do_action($this->preHookPrefix . $callable);
-                add_action($action, array(&$this, $callable), $priority);
-                do_action($this->postHookPrefix . $callable);
-            }
-        }
-
-        return $this;
-
-    }
-
-
-    /* Hooks ************************************************************************************ */
-    /* |_|  _   _  |   _                                                                          */
-    /* | | (_) (_) |< _>                                                                          */
-    /*                                                                                            */
-    /* ****************************************************************************************** */
 
 
     /**
@@ -414,6 +347,109 @@ class Wolfnet_Plugin
     }
 
 
+    private function registerCustomPostType()
+    {
+        do_action($this->preHookPrefix . 'registerCustomPostTypes'); // Legacy hook
+
+        register_post_type($this->customPostTypeSearch, array(
+            'public'    => false,
+            'show_ui'   => true,
+            'show_in_nav_menus' => false,
+            'show_in_menu' => false,
+            'show_in_admin_bar' => false,
+            'query_var' => 'wolfnet_search',
+            'rewrite'   => array(
+                'slug'       => 'wolfnet/search',
+                'with_front' => false
+                ),
+            'supports'  => array('title'),
+            'labels'    => array(
+                'name'               => 'Saved Searches',
+                'singular_name'      => 'Saved Search',
+                'add_new'            => 'Add Search',
+                'add_new_item'       => 'Add Search',
+                'edit_item'          => 'View Saved Search',
+                'new_item'           => 'New Saved Search',
+                'view_item'          => 'View Saved Searches',
+                'search_items'       => 'Find Saved Searches',
+                'not_found'          => 'No Saved Searches',
+                'not_found_in_trash' => 'No Saved Searches In Trash'
+                ),
+            'register_meta_box_cb' => array(&$this, 'cpSearchMetabox')
+            ));
+
+        do_action($this->postHookPrefix . 'registerCustomPostTypes'); // Legacy hook
+
+    }
+
+
+    /* Public Methods *************************************************************************** */
+    /*  ____        _     _ _        __  __      _   _               _                            */
+    /* |  _ \ _   _| |__ | (_) ___  |  \/  | ___| |_| |__   ___   __| |___                        */
+    /* | |_) | | | | '_ \| | |/ __| | |\/| |/ _ \ __| '_ \ / _ \ / _` / __|                       */
+    /* |  __/| |_| | |_) | | | (__  | |  | |  __/ |_| | | | (_) | (_| \__ \                       */
+    /* |_|    \__,_|_.__/|_|_|\___| |_|  |_|\___|\__|_| |_|\___/ \__,_|___/                       */
+    /*                                                                                            */
+    /* ****************************************************************************************** */
+
+
+    /**
+     * Decodes all HTML entities, including numeric and hexadecimal ones.
+     *
+     * @param mixed $string
+     * @return string decoded HTML
+     */
+    public function htmlEntityDecodeNumeric($string, $quote_style = ENT_COMPAT, $charset = 'utf-8')
+    {
+        $hexCallback = array(&$this, 'chrUtf8HexCallback');
+        $nonHexCallback = array(&$this, 'chrUtf8NonhexCallback');
+
+        $string = html_entity_decode($string, $quote_style, $charset);
+        $string = preg_replace_callback('~&#x([0-9a-fA-F]+);~i', $hexCallback, $string);
+        $string = preg_replace_callback('~&#([0-9]+);~i', $nonHexCallback, $string);
+
+        return $string;
+
+    }
+
+
+    public function chrUtf8HexCallback($matches)
+    {
+        return $this->chr_utf8(hexdec($matches[1]));
+    }
+
+
+    public function chrUtf8NonhexCallback($matches)
+    {
+        return $this->chr_utf8($matches[1]);
+    }
+
+
+    public function addAction($action, $callable = null, $priority = null)
+    {
+        if (is_array($action)) {
+            foreach ($action as $act) {
+                if (count($act) == 2) {
+                    $this->addAction($act[0], $act[1]);
+                } else {
+                    $this->addAction($act[0], $act[1], $act[2]);
+                }
+            }
+        } else {
+            if (is_callable($callable) && is_array($callable)) {
+                add_action($action, $callable, $priority);
+            } elseif (is_string($callable) && method_exists($this, $callable)) {
+                do_action($this->preHookPrefix . $callable);
+                add_action($action, array(&$this, $callable), $priority);
+                do_action($this->postHookPrefix . $callable);
+            }
+        }
+
+        return $this;
+
+    }
+
+
     public function getOptions(array $defaultOptions, $instance = null)
     {
         if (is_array($instance)) {
@@ -449,6 +485,84 @@ class Wolfnet_Plugin
 
         return $value;
 
+    }
+
+
+    public function getWpError($error)
+    {
+        return $this->views->errorView($error);
+    }
+
+
+    public function displayException(Wolfnet_Exception $exception)
+    {
+        return $this->views->exceptionView($exception);
+    }
+
+
+    public function sbMcePlugin(array $plugins)
+    {
+        $plugins['wolfnetShortcodeBuilder'] = $this->url . 'js/tinymce.wolfnetShortcodeBuilder.src.js';
+
+        return $plugins;
+
+    }
+
+
+    public function sbButton(array $buttons)
+    {
+
+        do_action($this->preHookPrefix . 'addShortcodeBuilderButton'); // Legacy hook
+
+        array_push($buttons, '|', 'wolfnetShortcodeBuilderButton');
+
+        do_action($this->postHookPrefix . 'addShortcodeBuilderButton'); // Legacy hook
+
+        return $buttons;
+
+    }
+
+
+    public function decodeCriteria(array &$criteria)
+    {
+
+        // Decode req parameters vals so they can be cleanly encoded before api req
+        foreach ($criteria as &$value) {
+            $value = html_entity_decode($value);
+        }
+
+    }
+
+
+    public function registerCronEvents()
+    {
+        // Schedule Cache Clearing event
+        if (!wp_next_scheduled(self::CACHE_CRON_HOOK)) {
+            wp_schedule_event(time(), 'daily', self::CACHE_CRON_HOOK);
+        }
+
+    }
+
+
+    public function removeCronEvents()
+    {
+        // Remove Cache Clearing event
+        wp_clear_scheduled_hook(self::CACHE_CRON_HOOK);
+
+    }
+
+
+    public function getSslEnabled()
+    {
+        // Attempt to read value from the options, but default to Client default
+        return get_option(self::SSL_WP_OPTION, Wolfnet_Api_Client::DEFAULT_SSL);
+
+    }
+
+
+    public function getSslVerify()
+    {
+        return get_option(self::VERIFYSSL_WP_OPTION, Wolfnet_Api_Client::DEFAULT_VERIFYSSL);
     }
 
 
@@ -497,107 +611,6 @@ class Wolfnet_Plugin
     /*                                                                                            */
     /* ****************************************************************************************** */
 
-
-    public function getWpError($error)
-    {
-        return $this->views->errorView($error);
-    }
-
-
-    public function displayException(Wolfnet_Exception $exception)
-    {
-        return $this->views->exceptionView($exception);
-    }
-
-
-    private function registerCustomPostType()
-    {
-        do_action($this->preHookPrefix . 'registerCustomPostTypes'); // Legacy hook
-
-        register_post_type($this->customPostTypeSearch, array(
-            'public'    => false,
-            'show_ui'   => true,
-            'show_in_nav_menus' => false,
-            'show_in_menu' => false,
-            'show_in_admin_bar' => false,
-            'query_var' => 'wolfnet_search',
-            'rewrite'   => array(
-                'slug'       => 'wolfnet/search',
-                'with_front' => false
-                ),
-            'supports'  => array('title'),
-            'labels'    => array(
-                'name'               => 'Saved Searches',
-                'singular_name'      => 'Saved Search',
-                'add_new'            => 'Add Search',
-                'add_new_item'       => 'Add Search',
-                'edit_item'          => 'View Saved Search',
-                'new_item'           => 'New Saved Search',
-                'view_item'          => 'View Saved Searches',
-                'search_items'       => 'Find Saved Searches',
-                'not_found'          => 'No Saved Searches',
-                'not_found_in_trash' => 'No Saved Searches In Trash'
-                ),
-            'register_meta_box_cb' => array(&$this, 'cpSearchMetabox')
-            ));
-
-        do_action($this->postHookPrefix . 'registerCustomPostTypes'); // Legacy hook
-
-    }
-
-
-    public function sbMcePlugin(array $plugins)
-    {
-        $plugins['wolfnetShortcodeBuilder'] = $this->url . 'js/tinymce.wolfnetShortcodeBuilder.src.js';
-
-        return $plugins;
-
-    }
-
-
-    public function sbButton(array $buttons)
-    {
-
-        do_action($this->preHookPrefix . 'addShortcodeBuilderButton'); // Legacy hook
-
-        array_push($buttons, '|', 'wolfnetShortcodeBuilderButton');
-
-        do_action($this->postHookPrefix . 'addShortcodeBuilderButton'); // Legacy hook
-
-        return $buttons;
-
-    }
-
-
-    /*
-     * Shortcode helper functions for registering in registerShortCodes.
-     */
-    public function scAgentPages($attrs) 
-    {
-        return $this->agentPages->scAgentPages($attrs);
-    }
-
-    public function scFeaturedListings($attrs, $content = '')
-    {
-        return $this->featuredListings->scFeaturedListings($attrs, $content);
-    }
-
-    public function scListingGrid($attrs)
-    {
-        return $this->listingGrid->scListingGrid($attrs);
-    }
-
-    public function scPropertyList($attrs = array())
-    {
-        return $this->propertyList->scPropertyList($attrs);
-    }
-
-    public function scQuickSearch($attrs, $content = '') 
-    {
-        return $this->quickSearch->scQuickSearch($attrs, $content);
-    }
-
-
     private function registerShortCodes()
     {
         $shrtCodes = array(
@@ -632,46 +645,31 @@ class Wolfnet_Plugin
 
     }
 
-
-    public function decodeCriteria(array &$criteria)
+    /*
+     * Shortcode helper functions for registering in registerShortCodes above.
+     */
+    public function scAgentPages($attrs) 
     {
-
-        // Decode req parameters vals so they can be cleanly encoded before api req
-        foreach ($criteria as &$value) {
-            $value = html_entity_decode($value);
-        }
-
+        return $this->agentPages->scAgentPages($attrs);
     }
 
-
-    public function registerCronEvents()
+    public function scFeaturedListings($attrs, $content = '')
     {
-        // Schedule Cache Clearing event
-        if (!wp_next_scheduled(self::CACHE_CRON_HOOK)) {
-            wp_schedule_event(time(), 'daily', self::CACHE_CRON_HOOK);
-        }
-
+        return $this->featuredListings->scFeaturedListings($attrs, $content);
     }
 
-
-    public function removeCronEvents()
+    public function scListingGrid($attrs)
     {
-        // Remove Cache Clearing event
-        wp_clear_scheduled_hook(self::CACHE_CRON_HOOK);
-
+        return $this->listingGrid->scListingGrid($attrs);
     }
 
-
-    public function getSslEnabled()
+    public function scPropertyList($attrs = array())
     {
-        // Attempt to read value from the options, but default to Client default
-        return get_option(self::SSL_WP_OPTION, Wolfnet_Api_Client::DEFAULT_SSL);
-
+        return $this->propertyList->scPropertyList($attrs);
     }
 
-
-    public function getSslVerify()
+    public function scQuickSearch($attrs, $content = '') 
     {
-        return get_option(self::VERIFYSSL_WP_OPTION, Wolfnet_Api_Client::DEFAULT_VERIFYSSL);
+        return $this->quickSearch->scQuickSearch($attrs, $content);
     }
 }
