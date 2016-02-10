@@ -1394,6 +1394,9 @@ class Wolfnet_Plugin
     {
         $options = $this->getOptions($this->getQuickSearchDefaults(), $instance);
 
+        $options['smartsearch_false_wps']   = selected($options['smartsearch'], 'false', false);
+        $options['smartsearch_true_wps']    = selected($options['smartsearch'], 'true', false);
+
         return $options;
 
     }
