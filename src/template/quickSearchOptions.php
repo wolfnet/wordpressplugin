@@ -61,7 +61,7 @@
 					<option value="true" <?php echo $smartsearch_true_wps; ?>>Enabled</option>
 				</select>
 				<span class="wolfnet_moreInfo">
-					Enabling SmartSearch on your WolfNet Quick Search will allow website visitors to select a specific search type from a drop-down of suggestions based on what they type into the search. The SmartSearch will present the search types available for the criteria they enter, for example: city, area, neighborhood or school district, thus allowing them to further customize their results.
+					Enabling SmartSearch on your WolfNet Quick Search will allow website visitors to search all available locale-based search types, including categories like ‘area,’ ‘body of water’ and ‘school district,’ while also being presented with search suggestions as they enter their search terms.
 				</span>
 			</td>
 		</tr>
