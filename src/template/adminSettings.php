@@ -52,37 +52,57 @@
                             }
                             for($i=1; $i<=$numrows; $i++):
                             ?>
-                            <tr class="row<?php echo $i; ?>">
-                                <th scope="row"><label for="wolfnet_productKey_<?php echo $i; ?>">Product Key</label></th>
-                                <th scope="row">Market Name</th>
-                                <th scope="row"><label for="wolfnet_keyLabel_<?php echo $i; ?>">Label<label></th>
-                                <th scope="row"></th>
-                            </tr>
-                            <tr class="row<?php echo $i; ?>">
-                                <td>
-                                    <input id="wolfnet_productKey_<?php echo $i; ?>" name="wolfnet_productKey_<?php echo $i; ?>" type="text"
-                                        value="<?php echo $productKey[$i-1]->key; ?>" class="wolfnet_productKey" size="50" />
-                                </td>
-                                <td><span class="wolfnet_keyMarket">
-                                <?php 
-                                    if (isset($productKey[$i-1]->market)) {
-                                        echo $productKey[$i-1]->market;
-                                    }  
-                                ?>
-                                <input type="hidden" id="wolfnet_keyMarket_<?php echo $i; ?>" name="wolfnet_keyMarket_<?php echo $i; ?>" 
-                                    class="wolfnet_keyMarket_value" value="<?php echo $productKey[$i-1]->market; ?>" />
-                                </span></td>
-                                <td>
-                                    <input id="wolfnet_keyLabel_<?php echo $i; ?>" class="wolfnet_keyLabel" name="wolfnet_keyLabel_<?php echo $i; ?>" type="text"
-                                        value="<?php echo $productKey[$i-1]->label; ?>" size="30" />
-                                </td>
-                                <td>
-                                    <?php if($i != 1): ?>
-                                        <input type="button" wnt-key="<?php echo $i; ?>" class="wolfnet_deleteKey"
-                                        value="<?php _e('Delete'); ?>" />
-                                    <?php endif; ?>
-                                </td>
-                            </tr>
+                                <tr class="row<?php echo $i; ?>">
+                                    <th scope="row">
+                                        <label for="wolfnet_productKey_<?php echo $i; ?>">Product Key</label>
+                                    </th>
+                                    <th scope="row">
+                                        Market Name
+                                    </th>
+                                    <th scope="row">
+                                        <label for="wolfnet_keyLabel_<?php echo $i; ?>">Label<label>
+                                    </th>
+                                    <th scope="row"></th>
+                                </tr>
+                                <tr class="row<?php echo $i; ?>">
+                                    <td>
+                                        <input class="wolfnet_productKey"
+                                         type="text" size="50"
+                                         id="wolfnet_productKey_<?php echo $i; ?>"
+                                         name="wolfnet_productKey_<?php echo $i; ?>"
+                                         value="<?php echo $productKey[$i-1]->key; ?>" />
+                                    </td>
+                                    <td>
+                                        <span class="wolfnet_keyMarket">
+                                            <?php
+                                                if (isset($productKey[$i-1]->market)) {
+                                                    echo $productKey[$i-1]->market;
+                                                }
+                                            ?>
+                                            <input class="wolfnet_keyMarket_value"
+                                             type="hidden"
+                                             id="wolfnet_keyMarket_<?php echo $i; ?>"
+                                             name="wolfnet_keyMarket_<?php echo $i; ?>"
+                                             value="<?php echo $productKey[$i-1]->market; ?>" />
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <input class="wolfnet_keyLabel"
+                                         type="text"
+                                         id="wolfnet_keyLabel_<?php echo $i; ?>"
+                                         name="wolfnet_keyLabel_<?php echo $i; ?>"
+                                         value="<?php echo $productKey[$i-1]->label; ?>" size="30" />
+                                    </td>
+                                    <td>
+                                        <?php if($i != 1): ?>
+                                            <button class="button action wolfnet_deleteKey wnt-text-danger"
+                                             type="button" data-wnt-key="<?php echo $i; ?>">
+                                                <span class="wnt-icon wnt-icon-bin wnt-text-danger"></span>
+                                                <?php _e('Delete'); ?>
+                                            </button>
+                                        <?php endif; ?>
+                                    </td>
+                                </tr>
                             <?php endfor; ?>
                         </table>
                     </td>
@@ -90,7 +110,10 @@
 
                 <tr>
                     <td>
-                        <input type="button" id="wolfnet_addKey" value="<?php _e('Add Product Key'); ?>" />
+                        <button type="button" class="button action" id="wolfnet_addKey">
+                            <span class="wnt-icon wnt-icon-plus"></span>
+                            <?php _e('Add Product Key'); ?>
+                        </button>
                     </td>
                 </tr>
 

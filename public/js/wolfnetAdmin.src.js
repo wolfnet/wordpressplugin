@@ -253,7 +253,12 @@ if ( typeof jQuery != 'undefined' ) {
                 wrapperClass    : 'wolfnetProductKeyValidationWrapper',
                 validEvent      : 'validProductKey',
                 invalidEvent    : 'invalidProductKey',
-                validationEvent : 'validateProductKey'
+                validationEvent : 'validateProductKey',
+                iconClass       : 'wnt-icon',
+                validIconClass  : 'wnt-icon-checkmark-circle',
+                invalidIconClass: 'wnt-icon wnt-icon-cancel-circle',
+                validIndicatorClass: 'wnt-indicator-valid',
+                invalidIndicatorClass: 'wnt-indicator-invalid'
             };
 
             $.extend(options, clientOptions);
@@ -411,12 +416,22 @@ if ( typeof jQuery != 'undefined' ) {
                 } else {
 
                     /* Create an element to wrap the input field with. ( this will make styling easier ) */
-                    var $wrapper = $('<span/>').addClass(options.wrapperClass);
+                    var $wrapper = $('<span>')
+                        .addClass(options.wrapperClass)
+                        .append([
+                            $('<span>')
+                                .addClass(options.validIndicatorClass)
+                                .addClass(options.validIconClass)
+                                .addClass(options.iconClass),
+                            $('<span>')
+                                .addClass(options.invalidIndicatorClass)
+                                .addClass(options.invalidIconClass)
+                                .addClass(options.iconClass)
+                        ]);
 
                     /* Add the wrapper element to the DOM immediately after the input field. Then
                      * move the input field inside of the wrapper. */
-                    $input.after($wrapper);
-                    $input.appendTo($wrapper);
+                    $input.after($wrapper).prependTo($wrapper);
 
                     /* Bind the some custom events to callback */
                     $input.bind(options.validationEvent, onValidateEvent);
@@ -441,7 +456,7 @@ if ( typeof jQuery != 'undefined' ) {
 
 
 		$.fn.wolfnetDeleteKeyRow = function (button) {
-            var key = $(button.srcElement).attr('wnt-key');
+            var key = $(button.srcElement).attr('data-wnt-key');
             $('.row' + key).remove();
         }
 
@@ -504,17 +519,23 @@ if ( typeof jQuery != 'undefined' ) {
                         .attr('size', '30')
                     )
             );
+            valueRow.append(
+                cell.clone()
+                    .html(
+                        $('<button />')
+                            .addClass('button action wolfnet_deleteKey')
+                            .attr('data-wnt-key', nextIteration)
+                            .attr('type', 'button')
+                            .click(function (button) {
+                                $.fn.wolfnetDeleteKeyRow(button);
+                            })
+                            .append([
+                                $('<span>').addClass('wnt-icon wnt-icon-bin wnt-text-danger'),
+                                ' ',
+                                $('<span>').addClass('wnt-text-danger').text('Delete')
+                            ])
+                    )
             );
-            valueRow.append(cell.clone().html(
-                    $('<input />').attr('class', 'wolfnet_deleteKey')
-                    .attr('wnt-key', nextIteration)
-                    .attr('type', 'button')
-                    .attr('value', 'Delete')
-                    .click(function(button) {
-                        $.fn.wolfnetDeleteKeyRow(button);
-                    })
-                )
-            )
 
             $('#wolfnet_keys').append(headRow).append(valueRow);
 

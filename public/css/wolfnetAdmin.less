@@ -118,34 +118,58 @@ html {
 .wolfnetProductKeyValidationWrapper {
 	display:        inline-block;
 	vertical-align: middle;
+    white-space:    nowrap;
 
 	input {
 		height:     25px;
 	}
 
-	&.valid
-	{
-		padding-right:    35px;
-		background: url('@{imagesDir}valid.png') no-repeat right;
+    .wnt-indicator-valid,
+    .wnt-indicator-invalid {
+        display: none;
+        margin-left: 0.5em;
+        font-size: 2em;
+        vertical-align: middle;
+    }
 
-		input
-		{
-			-moz-box-shadow:    0px 0px 10px 1px green;
-			-webkit-box-shadow: 0px 0px 10px 1px green;
-			box-shadow:         0px 0px 10px 1px green;
+    .wnt-indicator-valid {
+        color: @brand-success;
+    }
+
+    .wnt-indicator-invalid {
+        color: @brand-danger;
+    }
+
+	&.valid {
+		//padding-right:    35px;
+		//background: url('@{imagesDir}valid.png') no-repeat right;
+
+		input {
+			-moz-box-shadow:    0px 0px 10px 1px @brand-success;
+			-webkit-box-shadow: 0px 0px 10px 1px @brand-success;
+			box-shadow:         0px 0px 10px 1px @brand-success;
 		}
+
+        .wnt-indicator-valid {
+            display: inline-block;
+        }
+
 	}
-	&.invalid
-	{
-		padding-right:    35px;
-		background: url('@{imagesDir}invalid.png') no-repeat right;
 
-		input
-		{
-			-moz-box-shadow:    0px 0px 10px 1px red;
-			-webkit-box-shadow: 0px 0px 10px 1px red;
-			box-shadow:         0px 0px 10px 1px red;
+	&.invalid {
+		//padding-right:    35px;
+		//background: url('@{imagesDir}invalid.png') no-repeat right;
+
+		input {
+			-moz-box-shadow:    0px 0px 10px 1px @brand-danger;
+			-webkit-box-shadow: 0px 0px 10px 1px @brand-danger;
+			box-shadow:         0px 0px 10px 1px @brand-danger;
 		}
+
+        .wnt-indicator-invalid {
+            display: inline-block;
+        }
+
 	}
 }
 
@@ -390,4 +414,25 @@ input.input-placeholder {
     float: right;
     top: 25%;
 	left: -20px;
+}
+
+
+.wnt-text-primary {
+    color: @brand-primary;
+}
+
+.wnt-text-success {
+    color: @brand-success;
+}
+
+.wnt-text-info {
+    color: @brand-info;
+}
+
+.wnt-text-warning {
+    color: @brand-warning;
+}
+
+.wnt-text-danger {
+    color: @brand-danger;
 }

@@ -128,6 +128,7 @@ class Wolfnet_Admin extends Wolfnet_Plugin
         $styles = array(
             'jquery-ui',
             'wolfnet-admin',
+            'icomoon',
             );
 
         foreach ($styles as $style) {
