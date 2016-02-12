@@ -135,11 +135,21 @@
 
                 <tr valign="top">
                     <td>
-                        <input name="<?php echo Wolfnet_Plugin::SSL_WP_OPTION; ?>" <?php checked($sslEnabled, true); ?> type="checkbox" value="1">
-                        <label>SSL Enabled</label><br>
-                        <small>This option determines if the plugin will communicate with the API via
-                            a secure connection. In the near future this option will be deprecated
-                            and the API will only work over SSL.</small>
+                        <div>
+                            <input name="<?php echo Wolfnet_Plugin::SSL_WP_OPTION; ?>"
+                             id="wnt-<?php echo Wolfnet_Plugin::SSL_WP_OPTION; ?>"
+                             <?php checked($sslEnabled, true); ?> type="checkbox" value="1" />
+                            <label for="wnt-<?php echo Wolfnet_Plugin::SSL_WP_OPTION; ?>">
+                                SSL Enabled
+                            </label>
+                        </div>
+                        <div>
+                            <small>
+                                This option determines if the plugin will communicate with the API via
+                                a secure connection. In the near future this option will be deprecated
+                                and the API will only work over SSL.
+                            </small>
+                        </div>
                     </td>
                 </tr>
 
