@@ -55,7 +55,7 @@ if ( typeof jQuery != 'undefined' ) {
 					$thumbnailModal = $( '<div />' );
 					$thumbnailModal.css( 'text-align', 'center' );
 					$supportPage.append( $thumbnailModal );
-					$thumbnailModal.dialog( { autoOpen:false, modal:true, width:550, height:450 } );
+					$thumbnailModal.dialog( { autoOpen: false, modal: true, width: 550, height: 450 } );
 				}
 
 				$supportPage.find( 'a img.wolfnet_thumbnail' ).parent().click( function ( event ) {
@@ -64,7 +64,7 @@ if ( typeof jQuery != 'undefined' ) {
 					var maxWidth  = $thumbnailModal.width()  - 35;
 					$img.attr( 'src', $( this ).attr( 'href' ) );
 					$img.attr( 'align', 'center' );
-					$img.css( { 'max-height':maxHeight, 'max-width':maxWidth, 'margin':'0' } );
+					$img.css( { 'max-height': maxHeight, 'max-width': maxWidth, 'margin': '0' } );
 					$img.click( function () {
 						window.open( this.src );
 					} );
@@ -77,7 +77,7 @@ if ( typeof jQuery != 'undefined' ) {
 				var updateModalHeight = function () {
 					var windowHeight = $( window ).height();
 					var windowWidth  = $( window ).width();
-					$thumbnailModal.dialog( { height:( windowHeight * .8 ), width:( windowWidth * .8 ) } );
+					$thumbnailModal.dialog( { height: ( windowHeight * .8 ), width: ( windowWidth * .8 ) } );
 				}
 				updateModalHeight();
 
@@ -133,7 +133,7 @@ if ( typeof jQuery != 'undefined' ) {
 				$playMode.change( function () {
 
 					/* Automatic */
-					if ( $( this ).val() == 'true' ) {
+					if ( $( this ).val() === 'true' ) {
 						showAutoFields( $autoFields );
 					}
 					/* Manual */
@@ -217,7 +217,7 @@ if ( typeof jQuery != 'undefined' ) {
 					this.$fields = $fields;
 				} );
 
-				$key.change( function() {
+				$key.change( function () {
 					$(this).wolfnetUpdateShortcodeControls($form);
 				} );
 
@@ -245,7 +245,7 @@ if ( typeof jQuery != 'undefined' ) {
 		}
 
 
-        $.fn.wolfnetValidateProductKey = function(clientOptions) {
+        $.fn.wolfnetValidateProductKey = function (clientOptions) {
 
             var options = {
                 validClass      : 'valid',
@@ -258,7 +258,7 @@ if ( typeof jQuery != 'undefined' ) {
 
             $.extend(options, clientOptions);
 
-            var clearValidation = function($input) {
+            var clearValidation = function ($input) {
                 var $wrapper = $input.parent();
 
                 $wrapper.removeClass(options.validClass);
@@ -267,7 +267,7 @@ if ( typeof jQuery != 'undefined' ) {
             };
 
             /* Validate that the key is of an appropriate length. */
-            var validateLength = function(key) {
+            var validateLength = function (key) {
                 key = $.trim(key);
 
                 // Account for old keys with "wp_" and new keys without that prefix.
@@ -280,13 +280,13 @@ if ( typeof jQuery != 'undefined' ) {
             };
 
             /* Send the key to the API and validate that the key is active in mlsfinder.com */
-            var validateViaApi = function($input) {
+            var validateViaApi = function ($input) {
                 var key = $input.val();
 
-                if(clientOptions.setSslVerify) {
+                if (clientOptions.setSslVerify) {
                     $.ajax({
                         url: wolfnet_ajax.ajaxurl,
-                        data: {action:'wolfnet_set_sslverify', key:key},
+                        data: { action: 'wolfnet_set_sslverify', key: key },
                         dataType: 'json',
                         type: 'GET',
                         cache: false,
@@ -296,12 +296,12 @@ if ( typeof jQuery != 'undefined' ) {
 
                 $.ajax({
                     url: wolfnet_ajax.ajaxurl,
-                    data: {action:'wolfnet_validate_key', key:key},
+                    data: { action: 'wolfnet_validate_key', key: key },
                     dataType: 'json',
                     type: 'GET',
                     cache: false,
                     timeout: 2500,
-                    success: function(data) {
+                    success: function (data) {
                         if (data === 'true') {
                             $input.trigger(options.validEvent);
                         } else {
@@ -320,7 +320,7 @@ if ( typeof jQuery != 'undefined' ) {
 
             /* This callback function is called whenever the validation event is trigger and takes
              * any necessary action to notify the user if the key is valid or not. */
-            var onValidateEvent = function(event) {
+            var onValidateEvent = function (event) {
                 var $input = $(this);
                 var key = $input.val();
 
@@ -349,7 +349,7 @@ if ( typeof jQuery != 'undefined' ) {
 
             };
 
-            var onValidEvent = function(event) {
+            var onValidEvent = function (event) {
                 var $input = $(this);
                 var $wrapper = $input.parent();
                 var $marketContainer = $wrapper.closest('tr').find('.wolfnet_keyMarket');
@@ -360,30 +360,30 @@ if ( typeof jQuery != 'undefined' ) {
                 $wrapper.addClass(options.validClass);
                 $wrapper.removeClass(options.invalidClass);
 
-                if ($.trim($marketContainer.html()) == '' || $.trim($marketLabel.val()) == '') {
+                if ($.trim($marketContainer.html()) === '' || $.trim($marketLabel.val()) === '') {
 
                     // Update market name
                     $.ajax({
                         url: wolfnet_ajax.ajaxurl,
-                        data: {action:'wolfnet_market_name', productkey:key},
+                        data: {action: 'wolfnet_market_name', productkey: key},
                         dataType: 'json',
                         type: 'GET',
                         cache: false,
                         timeout: 2500,
-                        success: function(data) {
+                        success: function (data) {
 
-                            if ($.trim($marketContainer.html()) == '') {
+                            if ($.trim($marketContainer.html()) === '') {
                                 $marketContainer.html(data);
                             }
 
-                            if ($.trim($marketLabel.val()) == '') {
+                            if ($.trim($marketLabel.val()) === '') {
                                 $marketLabel.val(data);
                             }
 
                             $wrapper.closest('tr').find('.wolfnet_keyMarket_value').val(data);
 
                         },
-                        error: function() {
+                        error: function () {
                             $input.trigger(options.invalidEvent);
                         }
                     });
@@ -392,7 +392,7 @@ if ( typeof jQuery != 'undefined' ) {
 
             };
 
-            var onInvalidEvent = function(event) {
+            var onInvalidEvent = function (event) {
                 var $input = $(this);
                 var $wrapper = $input.parent();
 
@@ -401,7 +401,7 @@ if ( typeof jQuery != 'undefined' ) {
 
             };
 
-            return this.each(function() {
+            return this.each(function () {
 
                 var $input = $(this);
 
@@ -424,12 +424,12 @@ if ( typeof jQuery != 'undefined' ) {
                     $input.bind(options.invalidEvent, onInvalidEvent);
 
                     /* Trigger the validation even every time a key is pressed in input field. */
-                    $input.keyup(function() {
+                    $input.keyup(function () {
                         $input.trigger(options.validationEvent);
                     });
 
                     /* Trigger the validation event when the document is ready. */
-                    $(document).ready(function() {
+                    $(document).ready(function () {
                         $input.trigger(options.validationEvent);
                     });
 
@@ -454,12 +454,14 @@ if ( typeof jQuery != 'undefined' ) {
             // Row 1
             var row = $('<tr />').attr('class', 'row' + nextIteration);
             var headCell = $('<th />').attr('scope', 'row');
-            var headRow = row.clone().append(headCell.clone().html(
+            var headRow = row.clone().append(
+                headCell.clone().html(
                     $('<label />').attr('for', 'wolfnet_productKey_' + nextIteration).html('Product Key')
                 )
             );
             headRow.append(headCell.clone().html('Market Name'));
-            headRow.append(headCell.clone().html(
+            headRow.append(
+                headCell.clone().html(
                     $('<label />').attr('for', 'wolfnet_keyLabel_' + nextIteration).html('Label')
                 )
             );
@@ -467,33 +469,41 @@ if ( typeof jQuery != 'undefined' ) {
 
             // Row 2
             var cell = $('<td />');
-            var valueRow = row.clone().append(cell.clone().html(
-                    $('<input />').attr('id', 'wolfnet_productKey_' + nextIteration)
-                    .attr('class', 'wolfnet_productKey')
-                    .attr('name', 'wolfnet_productKey_' + nextIteration)
-                    .attr('type', 'text')
-                    .attr('value', '')
-                    .attr('size', '50')
-                )
+            var valueRow = row.clone().append(
+                cell.clone()
+                    .html(
+                        $('<input />').attr('id', 'wolfnet_productKey_' + nextIteration)
+                            .attr('class', 'wolfnet_productKey')
+                            .attr('name', 'wolfnet_productKey_' + nextIteration)
+                            .attr('type', 'text')
+                            .attr('value', '')
+                            .attr('size', '50')
+                    )
             );
-            valueRow.append(cell.clone().html(
-                $('<span/>').attr('class', 'wolfnet_keyMarket'))
-                .append(
-                    $('<input/>').attr('id', 'wolfnet_keyMarket_'  + nextIteration)
-                    .attr('name', 'wolfnet_keyMarket_' + nextIteration)
-                    .attr('class', 'wolfnet_keyMarket_value')
-                    .attr('type', 'hidden')
-                    .attr('value', '')
-                )
+            valueRow.append(
+                cell.clone()
+                    .html(
+                        $('<span/>').attr('class', 'wolfnet_keyMarket')
+                    )
+                    .append(
+                        $('<input/>').attr('id', 'wolfnet_keyMarket_'  + nextIteration)
+                        .attr('name', 'wolfnet_keyMarket_' + nextIteration)
+                        .attr('class', 'wolfnet_keyMarket_value')
+                        .attr('type', 'hidden')
+                        .attr('value', '')
+                    )
             );
-            valueRow.append(cell.clone().html(
+            valueRow.append(
+                cell.clone()
+                .html(
                     $('<input />').attr('id', 'wolfnet_keyLabel_' + nextIteration)
-                    .attr('name', 'wolfnet_keyLabel_' + nextIteration)
-                    .attr('class', 'wolfnet_keyLabel')
-                    .attr('type', 'text')
-                    .attr('value', '')
-                    .attr('size', '30')
-                )
+                        .attr('name', 'wolfnet_keyLabel_' + nextIteration)
+                        .attr('class', 'wolfnet_keyLabel')
+                        .attr('type', 'text')
+                        .attr('value', '')
+                        .attr('size', '30')
+                    )
+            );
             );
             valueRow.append(cell.clone().html(
                     $('<input />').attr('class', 'wolfnet_deleteKey')
@@ -523,7 +533,7 @@ if ( typeof jQuery != 'undefined' ) {
 	        var keyid = $(container).find('.keyid').val();
             var loaderClass = 'wolfnet_loaderImage';
 
-            var createLoaderImage = function(root)
+            var createLoaderImage = function (root)
             {
                 var loaderImage = $(root).find('div.' + loaderClass + ':first');
 
@@ -540,7 +550,7 @@ if ( typeof jQuery != 'undefined' ) {
 
 	        $.ajax({
 	            url: wolfnet_ajax.ajaxurl,
-	            data: { action:'wolfnet_price_range', keyid:keyid },
+	            data: { action: 'wolfnet_price_range', keyid: keyid },
 	            dataType: 'json',
 	            type: 'GET',
 	            cache: false,
@@ -550,35 +560,35 @@ if ( typeof jQuery != 'undefined' ) {
 	                    commFailure();
 	                }
 	            },
-                beforeSend: function() {
+                beforeSend: function () {
                     createLoaderImage($(container));
-                    $(container).find('.pricerange').each(function() {
+                    $(container).find('.pricerange').each(function () {
                         $(this).prop('disabled', true);
                     });
                 }
 	        })
-            .error(function(data) {
+            .error(function (data) {
                 console.log(data);
             })
-            .success(function(data) {
+            .success(function (data) {
                 $(container).find('.pricerange').html('');
-                
+
                 $(container).find('.minprice').append($('<option />').attr('value', '').html('Min. Price'));
-                $(data.min_price.options).each(function() {
+                $(data.min_price.options).each(function () {
                     $(container).find('.minprice').append(
                         $('<option />').attr('value', this.value).html(this.label)
                     );
                 });
-                
+
                 $(container).find('.maxprice').append($('<option />').attr('value', '').html('Max. Price'));
-                $(data.max_price.options).each(function() {
+                $(data.max_price.options).each(function () {
                     $(container).find('.maxprice').append(
                         $('<option />').attr('value', this.value).html(this.label)
                     );
                 });
             })
-            .always(function() {
-                $(container).find('.pricerange').each(function() {
+            .always(function () {
+                $(container).find('.pricerange').each(function () {
                         $(this).prop('disabled', false);
                     });
                 $('.' + loaderClass).hide();
@@ -586,7 +596,7 @@ if ( typeof jQuery != 'undefined' ) {
 
 	        $.ajax( {
 	            url: wolfnet_ajax.ajaxurl,
-	            data: { action:'wolfnet_saved_searches', keyid:keyid },
+	            data: { action: 'wolfnet_saved_searches', keyid: keyid },
 	            dataType: 'json',
 	            type: 'GET',
 	            cache: false,
@@ -600,7 +610,7 @@ if ( typeof jQuery != 'undefined' ) {
 	                var options = buildSavedSearchDropdownOptions(data);
 	                $(container).find('.savedsearch').html('');
 	                $(container).find('.savedsearch').append($('<option />').html('-- Saved Search --'));
-	                $(options).each(function() {
+	                $(options).each(function () {
 	                    $(container).find('.savedsearch').append(this);
 	                });
 	            }
@@ -608,7 +618,7 @@ if ( typeof jQuery != 'undefined' ) {
 
 	        $.ajax( {
 	            url: wolfnet_ajax.ajaxurl,
-	            data: { action:'wolfnet_map_enabled', keyid:keyid },
+	            data: { action: 'wolfnet_map_enabled', keyid: keyid },
 	            dataType: 'json',
 	            type: 'GET',
 	            cache: false,
@@ -619,7 +629,7 @@ if ( typeof jQuery != 'undefined' ) {
 	                }
 	            },
 	            success: function ( data ) {
-	                if(data == true) {
+	                if (data === true) {
 	                    $(container).find('.mapDisabled').css('display', 'none');
 	                    $(container).find('.maptype').removeAttr('disabled');
 	                } else {
@@ -629,10 +639,10 @@ if ( typeof jQuery != 'undefined' ) {
 	            }
 	        } );
 
-	        var buildSavedSearchDropdownOptions = function(data)
+	        var buildSavedSearchDropdownOptions = function (data)
 	        {
 	            var options = [];
-	            $(data).each(function() {
+	            $(data).each(function () {
 	                options.push(
 	                    $('<option />').attr('value', this.ID).html(this.post_title)
 	                );
