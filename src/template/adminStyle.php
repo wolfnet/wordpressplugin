@@ -12,6 +12,14 @@
 
         <h2>Widget Theme</h2>
 
+        <div class="notice notice-warning below-h2">
+            <p>
+                Updating to the 'Modern' widget theme may cause display conflicts on your website.
+                If you experience any conflicts, switch back to the 'Classic' widget theme
+                and contact your web developer to correct these issues.
+            </p>
+        </div>
+
         <fieldset>
             <legend class="screen-reader-text"><span>Widget Theme</span></legend>
             <div class="wolfnet_widget_themes">
@@ -24,7 +32,7 @@
                             <input type="radio" name="wolfnet_widgetTheme"
                              id="wolfnet_widgetTheme_ash" value="ash"
                              <?php if (($widgetTheme == 'ash') || ($widgetTheme == '')) echo 'checked="checked"'; ?> />
-                            Original
+                            Classic
                         </div>
                     </label>
                 </div>
@@ -37,7 +45,7 @@
                             <input type="radio" name="wolfnet_widgetTheme"
                              id="wolfnet_widgetTheme_birch" value="birch"
                              <?php checked($widgetTheme, 'birch'); ?> />
-                            Larger
+                            Modern
                         </div>
                     </label>
                 </div>
