@@ -26,6 +26,18 @@
 
 
 //
+// Variables
+// -------------------------------------------- //
+
+
+//== Listing dimensions
+
+@listingPadding:    10px;
+@control-width:     15px;
+@control-height:    100%;
+
+
+//
 // Styles
 // -------------------------------------------- //
 
@@ -40,10 +52,33 @@
             min-width: @listingWidth;
 
             .wolfnet_listingImage {
+                padding: @listingPadding 0 @listingPadding 0;
 
                 img {
                     border:     1px solid #ebebeb;
-                    box-shadow: 0 5px 10px hsla(0, 0%, 60%, 0.25);
+                    box-shadow: 0 5px @listingPadding hsla(0, 0%, 60%, 0.25);
+                }
+
+                .wnt-thumbnail-scroller {
+
+                    .wnt-nav-btn {
+                        width: @control-width;
+                        height: @control-height;
+
+                        .wnt-icon {
+                            font-size: @control-width;
+                        }
+
+                        &.wnt-next {
+                            right: -2px;
+                        }
+
+                        &.wnt-prev {
+                            left: -2px;
+                        }
+
+                    }
+
                 }
 
             }

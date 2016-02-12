@@ -19,7 +19,7 @@
  *                Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-class Wolfnet_Ajax 
+class Wolfnet_Ajax
 {
 	/*
 	 *
@@ -45,6 +45,7 @@ class Wolfnet_Ajax
             'wolfnet_content_footer'          => 'remoteContentFooter',
             'wolfnet_listings'                => 'remoteListings',
             'wolfnet_get_listings'            => 'remoteListingsGet',
+            'wolfnet_listing_photos'          => 'remoteListingPhotos',
             'wolfnet_css'                     => 'remotePublicCss',
             'wolfnet_market_name'             => 'remoteGetMarketName',
             'wolfnet_map_enabled'             => 'remoteMapEnabled',
@@ -67,6 +68,7 @@ class Wolfnet_Ajax
             'wolfnet_content_footer'    => 'remoteContentFooter',
             'wolfnet_listings'          => 'remoteListings',
             'wolfnet_get_listings'      => 'remoteListingsGet',
+            'wolfnet_listing_photos'    => 'remoteListingPhotos',
             'wolfnet_css'               => 'remotePublicCss',
             'wolfnet_base_url'          => 'remoteGetBaseUrl',
             'wolfnet_price_range'       => 'remotePriceRange',
@@ -79,7 +81,7 @@ class Wolfnet_Ajax
 
     }
 
-	
+
 
 	/*
 	 *
@@ -421,8 +423,8 @@ class Wolfnet_Ajax
         try {
             $args = $GLOBALS['wolfnet']->getListingGridOptions($_REQUEST);
 
-            $response = $GLOBALS['wolfnet']->getWpHeader() 
-            	. $GLOBALS['wolfnet']->listingGrid($args) 
+            $response = $GLOBALS['wolfnet']->getWpHeader()
+            	. $GLOBALS['wolfnet']->listingGrid($args)
             	. $GLOBALS['wolfnet']->getWpFooter();
 
         } catch (Wolfnet_Exception $e) {
@@ -480,6 +482,30 @@ class Wolfnet_Ajax
         }
 
         die;
+
+    }
+
+
+    public function remoteListingPhotos()
+    {
+        try {
+
+            $propertyId = (array_key_exists('property_id', $_REQUEST)) ? $_REQUEST['property_id'] : 0;
+
+            $response = $GLOBALS['wolfnet']->getListingPhotos($propertyId);
+
+        } catch (Wolfnet_Exception $e) {
+
+            status_header(500);
+
+            $response = array(
+                'message' => $e->getMessage(),
+                'data' => $e->getData(),
+            );
+
+        }
+
+        wp_send_json($response);
 
     }
 
@@ -607,7 +633,7 @@ class Wolfnet_Ajax
     }
 
 
-    public function remoteRouteQuickSearch() 
+    public function remoteRouteQuickSearch()
     {
         try {
             $response = $GLOBALS['wolfnet']->routeQuickSearch($_REQUEST['formData']);

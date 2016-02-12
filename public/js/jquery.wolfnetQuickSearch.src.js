@@ -242,7 +242,7 @@ if ( typeof jQuery != 'undefined' ) {
 	                $('#' + baseElement).attr('action', data);
 	            }
 	        } );
-	        
+
 			$.ajax( {
 	            url: wolfnet_ajax.ajaxurl,
 	            data: { action:'wolfnet_price_range', keyid:keyId },
@@ -324,7 +324,7 @@ if ( typeof jQuery != 'undefined' ) {
 
 				var overlay = $('<div/>')
 					.addClass(overlayClass);
-				
+
 				loaderImage.insertAfter('#' + $(root).attr('id') + ' .wolfnet_quickSearchFormButton');
 				overlay.appendTo(root);
 			}

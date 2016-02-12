@@ -27,7 +27,9 @@
         <div class="wolfnet_listingMain">
             <div class="wolfnet_listingHead">
                 <span class="wolfnet_listingImage">
-                    <img src="<?php echo $listing['thumbnail_url']; ?>" alt="Property for sale at <?php echo $listing['address']; ?>" />
+                    <img src="<?php echo $listing['thumbnail_url']; ?>"
+                     alt="Property for sale at <?php echo $listing['address']; ?>"
+                     data-photo-url="<?php echo $listing['thumbnails_url']; ?>" />
                 </span>
                 <div class="wolfnet_listingInfo">
                     <span class="wolfnet_price" title="<?php echo htmlspecialchars($listing['listing_price']); ?>" itemprop="price">
