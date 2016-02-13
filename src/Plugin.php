@@ -1270,6 +1270,7 @@ class Wolfnet_Plugin
 
         $vars['wpMeta']['paginated'] = ($vars['wpMeta']['paginated'] === true || $vars['wpMeta']['paginated'] === 'true');
         $vars['wpMeta']['sortoptions'] = ($vars['wpMeta']['sortoptions'] === true || $vars['wpMeta']['sortoptions'] === 'true');
+        $vars['maxresults'] = $this->getMaxResults($this->getDefaultProductKey());
 
         if ($vars['wpMeta']['paginated'] || $vars['wpMeta']['sortoptions']) {
             $vars['toolbarTop']    = $this->getToolbar($vars, 'wolfnet_toolbarTop ');
@@ -2191,14 +2192,15 @@ class Wolfnet_Plugin
 
     private function getToolbar($data, $class)
     {
+
         $args = array_merge($data['wpMeta'], array(
             'toolbarClass' => $class . ' ',
-            'maxresults'   => $this->getMaxResults($data['wpMeta']['key']), // total results on all pages
+            'maxresults'   => $data['maxresults'], // total results on all pages
             'numrows'      => $data['wpMeta']['maxresults'], // total results per page
             'prevClass'    => ($data['wpMeta']['startrow']<=1) ? 'wolfnet_disabled' : '',
             'lastitem'     => $data['wpMeta']['startrow'] + $data['wpMeta']['maxresults'] - 1,
             'action'       => 'wolfnet_listings'
-            ));
+        ));
 
         if ($args['total_rows'] < $args['maxresults']) {
             $args['maxresults'] = $args['total_rows'];
