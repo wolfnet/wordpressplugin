@@ -138,12 +138,13 @@ if (typeof jQuery != 'undefined') {
                 'padding-right': sidePadding
             });
 
+            $items.removeClass('wolfnet_colFirst wolfnet_colLast');
+
             for (var i=0, l=$items.length; i<l; i++) {
 
                 var $item = $($items[i]);
-                $item.removeClass('wolfnet_colFirst wolfnet_colLast');
 
-                if ((i - 1) % columns === 0) {
+                if ((i + 1 == columns) || (i + 1 % columns === 0)) {
                     $item.addClass('wolfnet_colLast');
                     if ((i + 1) < l) {
                         var $nextItem = $($items[i + 1]);
