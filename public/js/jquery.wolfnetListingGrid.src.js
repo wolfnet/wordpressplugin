@@ -144,7 +144,7 @@ if (typeof jQuery != 'undefined') {
 
                 var $item = $($items[i]);
 
-                if ((i + 1 == columns) || (i + 1 % columns === 0)) {
+                if (((i + 1) == columns) || ((i + 1) % columns === 0)) {
                     $item.addClass('wolfnet_colLast');
                     if ((i + 1) < l) {
                         var $nextItem = $($items[i + 1]);

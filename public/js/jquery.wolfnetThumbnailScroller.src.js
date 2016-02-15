@@ -325,7 +325,7 @@ if (typeof jQuery !== 'undefined') {
                         var $navNext = methods['private'].buildNavBtn($this, 'next');
                         var $navPrev = methods['private'].buildNavBtn($this, 'prev');
 
-                        $container.append([ $navNext, $navPrev ]);
+                        $container.append($navNext).append($navPrev);
 
                         // Get the original control size
                         options.controlWidth = $navNext.width();
