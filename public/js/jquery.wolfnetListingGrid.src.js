@@ -162,6 +162,13 @@ if (typeof jQuery != 'undefined') {
 
             }
 
+            // Pad the container to center the grid as a whole
+            var containerPadding = Math.floor((targetWidth - ($items.first().outerWidth(true) * columns)) / 2);
+            data.$container.css({
+                'padding-left': containerPadding,
+                'padding-right': containerPadding
+            });
+
             data.$container.trigger('columns-updated.' + pluginName);
 
         };
