@@ -349,8 +349,7 @@
 
         if ($container.is('.wolfnet_propertyList')) {
             renderPropertyList.call($container, data);
-        }
-        else if ($container.is('.wolfnet_listingGrid')) {
+        } else if ($container.is('.wolfnet_listingGrid')) {
             renderListingGrid.call($container, data);
             $container.wolfnetListingGrid('refresh');
         }
