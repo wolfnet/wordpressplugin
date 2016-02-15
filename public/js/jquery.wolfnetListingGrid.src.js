@@ -271,13 +271,23 @@ if (typeof jQuery != 'undefined') {
                     $target
                         // Update start
                         .on('wolfnet.updating', function () {
+                            var data = $target.data(pluginName);
+                            data.imagesLoading = true;
+                            data.isUpdating = true;
+                            $target.addClass('wnt-in-transition');
                         })
                         // Whenever the parent container gets new data, update the listing columns
                         .on('wolfnet.updated', function (event) {
+                            var data = $target.data(pluginName);
                             methods.refresh.call(plugin, false);
                         })
                         // Transitions
                         .on('refresh-end.' + pluginName, function () {
+                            var data = $target.data(pluginName);
+                            data.isUpdating = false;
+                            if (!data.imagesLoading) {
+                                $target.removeClass('wnt-in-transition');
+                            }
                         });
 
                     $(window).on('columns-updated.' + pluginName, function () {
@@ -286,8 +296,12 @@ if (typeof jQuery != 'undefined') {
 
                     // Once all images have been loaded update row heights to prevent stagger.
                     $target.on('allImagesLoaded.' + pluginName, function () {
+                        var data = $target.data(pluginName);
+                        data.imagesLoading = false;
                         methods.refresh.call($target);
                     });
+
+                    data.imagesLoading = true;
 
                     prepareDomElements(target);
                     updateColumnWidths(target);
