@@ -25,6 +25,7 @@
     var optionsKey = plugin + '.options';
 
     var UPDATED = 'wolfnet.updated';
+    var UPDATING = 'wolfnet.updating';
 
     var nextClass  = 'a.wolfnet_page_nav_next';
     var prevClass  = 'a.wolfnet_page_nav_prev';
@@ -575,7 +576,7 @@
                     dataType : 'jsonp',
                     data : getData(),
                     beforeSend: function(xhr){
-                        $container.addClass('wolfnet_refreshing');
+                        $container.addClass('wolfnet_refreshing').trigger(UPDATING);
                     }
                 })
                 // success: update listings

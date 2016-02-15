@@ -268,10 +268,17 @@ if (typeof jQuery != 'undefined') {
 
                     });
 
-                    // Whenever the parent container gets new data, update the listing columns
-                    $target.on('wolfnet.updated', function (event) {
-                        methods.refresh.call(plugin, false);
-                    });
+                    $target
+                        // Update start
+                        .on('wolfnet.updating', function () {
+                        })
+                        // Whenever the parent container gets new data, update the listing columns
+                        .on('wolfnet.updated', function (event) {
+                            methods.refresh.call(plugin, false);
+                        })
+                        // Transitions
+                        .on('refresh-end.' + pluginName, function () {
+                        });
 
                     $(window).on('columns-updated.' + pluginName, function () {
                         resizing = false;
@@ -297,6 +304,8 @@ if (typeof jQuery != 'undefined') {
                 return this.each(function () {
                     var target = this;
 
+                    $(target).trigger('refresh-start.' + pluginName);
+
                     preparePluginData(target);
                     prepareDomElements(target);
                     updateColumnWidths(target);
@@ -306,6 +315,8 @@ if (typeof jQuery != 'undefined') {
                     } else {
                         updateRowHeight(target);
                     }
+
+                    $(target).trigger('refresh-end.' + pluginName);
 
                 });
 
