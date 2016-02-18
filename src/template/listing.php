@@ -72,7 +72,6 @@
             </span>
             <span class="wolfnet_brandingMessage">
                 <span class="wolfnet_brandingCourtesyText">
-                    Courtesy of Something or Other, LLC
                     <?php echo $listing['branding']['courtesy_text']; ?>
                 </span>
                 <span class="wolfnet_brandingAgent wolfnet_brandingAgentName">
