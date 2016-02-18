@@ -34,6 +34,10 @@
 		name="<?php echo $instance_id; ?>_quickSearchForm"
 		method="get" action="<?php echo $formAction; ?>" >
 
+        <input type="hidden" name="search_mode" value="form">
+        <input type="hidden" name="resetform" value="1">
+        <input type="hidden" name="action" value="newsearchsession">
+
 		<fieldset class="wnt-smartsearch">
 			<div class="form-group">
 				<div class="wnt-smartsearch-input-container">
