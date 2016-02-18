@@ -460,7 +460,7 @@ class Wolfnet_Ajax
 
             $data = $GLOBALS['wolfnet']->apin->sendRequest($productKey, '/listing', 'GET', $criteria);
 
-            $GLOBALS['wolfnet']->augmentListingsData($data, $productKey);
+            $GLOBALS['wolfnet']->augmentListingsData($data, $productKey, array('listing'));
 
         } catch (Wolfnet_Exception $e) {
             status_header(500);
