@@ -2087,6 +2087,13 @@
             var self = {};
             var map = this;
 
+            var onPOIOpen = function (e) {
+                $(mapNode).trigger('poiOpen');
+                var $listing = $(mapNode).find('.wolfnet_listing');
+                var imgWidth = $listing.find('.wolfnet_listingImage img').width();
+                $listing.find('.wolfnet_listingInfo').width(imgWidth);
+            };
+
             var _createMapquestPoi = function () {
                 _mapquestPoi = new MQA.Poi({ lat: lat, lng: lng });
                 if ((icon !== undefined) && (icon != null)) {
@@ -2122,6 +2129,9 @@
                 MQA.EventManager.addListener(_mapquestPoi, "touchstart", function (e) {
                     _mapquestPoi.toggleInfoWindowRollover();
                 });
+
+                MQA.EventManager.addListener(_mapquestPoi, 'rolloveropen', onPOIOpen);
+                MQA.EventManager.addListener(_mapquestPoi, 'infowindowopen', onPOIOpen);
 
                 return _mapquestPoi;
             };
