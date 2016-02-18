@@ -1257,7 +1257,7 @@ class Wolfnet_Plugin
 
         $data['wpMeta']['total_rows'] = $data['responseData']['data']['total_rows'];
 
-        $this->augmentListingsData($data, $key, array('listing'));
+        $this->augmentListingsData($data, $key, array('listing', 'map'));
 
         $listingsData = array();
 
@@ -2190,6 +2190,9 @@ class Wolfnet_Plugin
         if (in_array('listing', $templates)) {
             $data['responseData']['data']['templates']['listing'] = $this->views->listingView($vars);
         }
+        if (in_array('map', $templates)) {
+            $data['responseData']['data']['templates']['map'] = $this->views->houseOver($vars);
+        }
 
         // loop over listings
         foreach ($listingsData as &$listing) {
@@ -2528,7 +2531,7 @@ class Wolfnet_Plugin
                 'showBrokerImage' => $showBrokerImage,
             );
 
-            $concatHouseover = $this->views->listingView($vars);
+            $concatHouseover = $this->views->houseOver($vars);
 
             array_push($houseoverData, array(
                 'lat' => $listing['geo']['lat'],
