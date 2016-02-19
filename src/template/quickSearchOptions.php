@@ -42,6 +42,22 @@
 			<td><input id="<?php echo $title_wpid; ?>" name="<?php echo $title_wpname; ?>" value="<?php echo $title; ?>" type="text" /></td>
 		</tr>
 
+
+        <?php if(count($markets) < 2): ?>
+        <tr>
+            <td><label for="<?php echo $smartsearch_wpid; ?>">SmartSearch:</label></td>
+            <td>
+                <select id="<?php echo $smartsearch_wpid; ?>" name="<?php echo $smartsearch_wpname; ?>" >
+                    <option value="false" <?php echo $smartsearch_false_wps; ?>>Disabled</option>
+                    <option value="true" <?php echo $smartsearch_true_wps; ?>>Enabled</option>
+                </select>
+                <span class="wolfnet_moreInfo">
+                    Enabling SmartSearch on your WolfNet Quick Search will allow website visitors to search all available locale-based search types, including categories like ‘area,’ ‘body of water’ and ‘school district,’ while also being presented with search suggestions as they enter their search terms.
+                </span>
+            </td>
+        </tr>
+        <?php endif; ?>
+
 		<tr>
 			<td><label>Layout:</label></td>
 			<td>
@@ -51,21 +67,6 @@
 				</select>
 			</td>
 		</tr>
-
-		<?php if(count($markets) < 2): ?>
-		<tr>
-			<td><label for="<?php echo $smartsearch_wpid; ?>">SmartSearch:</label></td>
-			<td>
-				<select id="<?php echo $smartsearch_wpid; ?>" name="<?php echo $smartsearch_wpname; ?>" >
-					<option value="false" <?php echo $smartsearch_false_wps; ?>>Disabled</option>
-					<option value="true" <?php echo $smartsearch_true_wps; ?>>Enabled</option>
-				</select>
-				<span class="wolfnet_moreInfo">
-					Enabling SmartSearch on your WolfNet Quick Search will allow website visitors to search all available locale-based search types, including categories like ‘area,’ ‘body of water’ and ‘school district,’ while also being presented with search suggestions as they enter their search terms.
-				</span>
-			</td>
-		</tr>
-		<?php endif; ?>
 
 		<?php if(count($markets) > 1): ?>
         <tr>
