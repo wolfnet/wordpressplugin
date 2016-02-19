@@ -50,10 +50,7 @@
             <div class="wnt-smart-menu smart-menu<?php echo $componentId; ?>"></div>
         </fieldset>
 
-
-        <!--TODO: Move Price/Bed/Baths widget to its own modularized view/template-->
-        <!-- and call from both quicksearch and smartsearch views.-->
-
+        <!--TODO: horizontal layout-->
         <!-- Price form fields -->
         <div class="wolfnet_widgetPrice">
             <label>Price</label>
