@@ -185,6 +185,24 @@
             }
         <?php endif; ?>
         });
+
+        var $smartsearch = $('#<?php echo $smartsearch_wpid; ?>');
+
+        $smartsearch.change(function() {
+
+            var isSmart = $smartsearch.val();
+            var $layoutSetting = $('#<?php echo $view_wpid; ?>');
+
+            if (isSmart) {
+                $layoutSetting.prop('disabled',true);
+            } else {
+                // TODO: fix disabled not working
+                $layoutSetting.prop('disabled',false);
+            }
+            console.log(isSmart);
+        });
+
+
     });
 
 </script>
