@@ -32,15 +32,15 @@
 
 <div id="<?php echo $instance_id; ?>" class="wolfnet_quickSearchOptions">
     <?php if(count($markets) > 1): ?>
-	<input type="hidden" id="<?php echo $keyids_wpid; ?>" class="keyids" name="<?php echo $keyids_wpname; ?>" value="<?php echo implode(",", $keyids); ?>" />
+    <input type="hidden" id="<?php echo $keyids_wpid; ?>" class="keyids" name="<?php echo $keyids_wpname; ?>" value="<?php echo implode(",", $keyids); ?>" />
     <?php endif; ?>
 
-	<table class="form-table">
+    <table class="form-table">
 
-		<tr>
-			<td><label>Title:</label></td>
-			<td><input id="<?php echo $title_wpid; ?>" name="<?php echo $title_wpname; ?>" value="<?php echo $title; ?>" type="text" /></td>
-		</tr>
+        <tr>
+            <td><label>Title:</label></td>
+            <td><input id="<?php echo $title_wpid; ?>" name="<?php echo $title_wpname; ?>" value="<?php echo $title; ?>" type="text" /></td>
+        </tr>
 
 
         <?php if(count($markets) < 2): ?>
@@ -58,20 +58,20 @@
         </tr>
         <?php endif; ?>
 
-		<tr>
-			<td><label>Layout:</label></td>
-			<td>
-				<select id="<?php echo $view_wpid; ?>" name="<?php echo $view_wpname; ?>" >
-					<option value="basic" <?php echo ($view == "basic" ? 'selected="selcted"': "") ?>>Basic</option>
-					<option value="legacy" <?php echo ($view == "legacy" ? 'selected="selcted"': "") ?>>Legacy</option>
-				</select>
-			</td>
-		</tr>
-
-		<?php if(count($markets) > 1): ?>
         <tr>
-        	<td><label>Market:</label></td>
-        	<td>
+            <td><label>Layout:</label></td>
+            <td>
+                <select id="<?php echo $view_wpid; ?>" name="<?php echo $view_wpname; ?>" >
+                    <option value="basic" <?php echo ($view == "basic" ? 'selected="selcted"': "") ?>>Basic</option>
+                    <option value="legacy" <?php echo ($view == "legacy" ? 'selected="selcted"': "") ?>>Legacy</option>
+                </select>
+            </td>
+        </tr>
+
+        <?php if(count($markets) > 1): ?>
+        <tr>
+            <td><label>Market:</label></td>
+            <td>
                 <table>
                     <tr>
                         <td>
@@ -81,15 +81,15 @@
                     <?php for($i=0; $i<=count($markets)-1; $i++): ?>
                     <tr>
                         <td>
-        	                <input type="checkbox" class="productkey" value="<?php echo $markets[$i]->id; ?>"
+                            <input type="checkbox" class="productkey" value="<?php echo $markets[$i]->id; ?>"
                                 <?php if( in_array($markets[$i]->id, $keyids) ) echo ' checked'; ?>
-        	                    >
+                                >
                                 <?php echo $markets[$i]->label; ?>
                         </td>
                     </tr>
                     <?php endfor; ?>
                 </table>
-        	</td>
+            </td>
         </tr>
         <tr>
             <td><label>Routing</label></td>
@@ -107,7 +107,7 @@
         </tr>
     	<?php endif; ?>
 
-	</table>
+    </table>
     <span class="validate_msg"></span>
 </div>
 
