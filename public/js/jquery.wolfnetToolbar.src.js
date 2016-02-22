@@ -475,7 +475,7 @@
         $container.find('.wolfnet_page_start').text(state.startrow);
         $container.find('.wolfnet_page_end').text(rowcountDisplay);
 
-        $('html,body').scrollTop($container.closest('.wolfnet_widget').offset().top - 100);
+        $('html,body').scrollTop($container.find('.wolfnet_toolbar').offset().top - 100);
 
         if ($container.is('.wolfnet_listingGrid') && $container.wolfnetListingGrid) {
             $container.wolfnetListingGrid("refresh", true);
