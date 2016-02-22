@@ -187,21 +187,19 @@
         });
 
         var $smartsearch = $('#<?php echo $smartsearch_wpid; ?>');
+        if ($smartsearch.val() === 'true') {
+            $('#<?php echo $view_wpid; ?>').prop('disabled',true);
+        }
 
         $smartsearch.change(function() {
-
-            var isSmart = $smartsearch.val();
             var $layoutSetting = $('#<?php echo $view_wpid; ?>');
 
-            if (isSmart) {
+            if ($smartsearch.val() === 'true') {
                 $layoutSetting.prop('disabled',true);
             } else {
-                // TODO: fix disabled not working
-                $layoutSetting.prop('disabled',false);
+                $layoutSetting.prop("disabled", false);
             }
-            console.log(isSmart);
         });
-
 
     });
 
