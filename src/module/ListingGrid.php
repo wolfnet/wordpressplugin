@@ -239,7 +239,7 @@ class Wolfnet_Module_ListingGrid
 
         $vars['wpMeta']['paginated'] = ($vars['wpMeta']['paginated'] === true || $vars['wpMeta']['paginated'] === 'true');
         $vars['wpMeta']['sortoptions'] = ($vars['wpMeta']['sortoptions'] === true || $vars['wpMeta']['sortoptions'] === 'true');
-        $vars['maxresults'] = $this->getMaxResults($this->plugin->keyService->getDefaultProductKey());
+        $vars['maxresults'] = $this->plugin->data->getMaxResults($this->plugin->keyService->getDefault());
 
         if ($vars['wpMeta']['paginated'] || $vars['wpMeta']['sortoptions']) {
             $vars['toolbarTop']    = $this->plugin->data->getToolbar($vars, 'wolfnet_toolbarTop ');
