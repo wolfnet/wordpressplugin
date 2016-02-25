@@ -15,6 +15,7 @@ class Wolfnet_Smart_SearchService
 	protected $key;
 	protected $url;
 	protected $smartSearchFields;
+    protected $localeLabels;
 
 	/* CONSTRUCTOR ****************************************************************************** */
 	/**
@@ -29,6 +30,7 @@ class Wolfnet_Smart_SearchService
 		$this->setKey($key);
 		$this->setUrl($url);
 		$this->setSearchFields();
+        $this->setLocaleLabels();
 	}
 
 	/* PUBLIC METHODS *************************************************************************** */
@@ -155,6 +157,29 @@ class Wolfnet_Smart_SearchService
 	}
 
 
+    private function getLabels()
+    {
+
+        try {
+
+            // Retrive customer-facing labels
+            $data = $GLOBALS['wolfnet']->apin->sendRequest(
+                $this->getKey(),
+                '/search_criteria/locale',
+                'GET'
+            );
+
+            $labels = $data['responseData']['data'];
+
+        } catch (Wolfnet_Exception $e) {
+            // Return empty array on error
+            $labels = array();
+        }
+
+        return $labels;
+    }
+
+
 	private function getSearchParameters()
 	{
 		return json_decode(file_get_contents($this->getUrl().'SearchParams.json'));
@@ -170,6 +195,17 @@ class Wolfnet_Smart_SearchService
 	{
 		$this->smartSearchFields = $this->getSmartSearchCriteria();
 	}
+
+
+    private function getLocaleLabels()
+    {
+        return $this->localeLabels;
+    }
+
+    private function setLocaleLabels()
+    {
+        $this->localeLabels = $this->getLabels();
+    }
 
 
 	private function setKey(&$key)
