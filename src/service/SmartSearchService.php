@@ -89,6 +89,8 @@ class Wolfnet_Smart_SearchService
 
 		// TODO: Add "Zip" with logic for Canadian markets to be "Postal Code"
 		$placeholder = 'Search by City, Address, ';
+
+        //TODO: switch to localeLabels
 		$fields = $this->getSearchFields();
 		$customSearchTypes = 0;
 		$arrayCounter = 0;
