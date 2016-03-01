@@ -343,7 +343,7 @@
         var templates = data.responseData.data.hasOwnProperty('templates') ? data.responseData.data.templates : {};
 
         var $container = this;
-        var componentMap = $container.find('.wolfnet_wntMainMap').listingsData('map');
+        var componentMap = $container.find('.wolfnet_wntMainMap').data('map');
         var houseIcon = wolfnet_ajax.houseoverIcon;
 
         componentMap.removeAllShapes();
