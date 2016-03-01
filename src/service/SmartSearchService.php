@@ -87,47 +87,24 @@ class Wolfnet_Smart_SearchService
 
 	public function getPlaceholder() {
 
+        $labelLimit = 2;
+        $labelsAdded = 0;
+
 		// TODO: Add "Zip" with logic for Canadian markets to be "Postal Code"
 		$placeholder = 'Search by City, Address, ';
+        $searchTypes = $this->getLocaleLabels();
 
-        //TODO: switch to localeLabels
-		$fields = $this->getSearchFields();
-		$customSearchTypes = 0;
-		$arrayCounter = 0;
+        foreach($searchTypes as &$searchType)
+        {
+            if ($labelsAdded < $labelLimit)
+            {
+                $placeholder .= $searchType['label'] . ', ';
+                $labelsAdded++;
+            }
+        }
 
-		// Allow up to 3 dynamically concatenated search types
-		while ($customSearchTypes < 4 && $arrayCounter < sizeof($fields))
-		{
-			$preLength = strlen($placeholder);
+        $placeholder .= '& more!';
 
-			switch ($fields[$arrayCounter]) {
-				case 'area_name' :
-					$placeholder .= 'Area, ';
-					break;
-				case 'subdivision';
-					$placeholder .= 'Subdivision, ';
-					break;
-				case 'building_name';
-					$placeholder .= 'Building, ';
-					break;
-				case 'community';
-					$placeholder .= 'Community, ';
-					break;
-				case 'high_school';
-				case 'middle_school';
-				case 'jr_high_school';
-				case 'elementary_school';
-					$placeholder .= 'School, ';
-					break;
-			}
-
-			if (strlen($placeholder) > $preLength) {
-				$customSearchTypes++;
-			}
-			$arrayCounter++;
-		}
-
-		$placeholder = $placeholder . '& more!';
 		return $placeholder;
 
 	}
