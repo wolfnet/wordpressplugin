@@ -339,7 +339,8 @@
 
     var populateMap = function(data)
     {
-        data = ($.isArray(data.responseData.data.listing)) ? data.responseData.data.listing : [];
+        var listingsData = ($.isArray(data.responseData.data.listing)) ? data.responseData.data.listing : [];
+        var templates = data.responseData.data.hasOwnProperty('templates') ? data.responseData.data.templates : {};
 
         var $container = this;
         var componentMap = $container.find('.wolfnet_wntMainMap').data('map');
@@ -347,10 +348,10 @@
 
         componentMap.removeAllShapes();
 
-        for (var i=0, l=data.length; i<l; i++) {
-            houseoverHtml = getHouseoverHtml(data[i]);
-            var houseoverIcon = componentMap.mapIcon(houseIcon,20,20);
-            var houseover = componentMap.poi(data[i].geo.lat, data[i].geo.lng, houseoverIcon, houseoverHtml, data[i].property_id, data[i].property_url);
+        for (var i=0, l=listingsData.length; i<l; i++) {
+            var houseoverHtml = templates.hasOwnProperty('map') ? renderListing(listingsData[i], templates['map']).get(0) : '';
+            var houseoverIcon = componentMap.mapIcon(houseIcon, 20, 20);
+            var houseover = componentMap.poi(listingsData[i].geo.lat, listingsData[i].geo.lng, houseoverIcon, houseoverHtml, listingsData[i].property_id, listingsData[i].property_url);
             componentMap.addPoi(houseover);
         }
 
@@ -494,7 +495,7 @@
         $container.find('.wolfnet_page_start').text(state.startrow);
         $container.find('.wolfnet_page_end').text(rowcountDisplay);
 
-        $('html,body').scrollTop($container.closest('.wolfnet_widget').offset().top - 100);
+        $('html,body').scrollTop($container.find('.wolfnet_toolbar').offset().top - 100);
 
         if ($container.is('.wolfnet_listingGrid') && $container.wolfnetListingGrid) {
             $container.wolfnetListingGrid("refresh", true);
