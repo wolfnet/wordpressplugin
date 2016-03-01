@@ -121,9 +121,6 @@ if (typeof jQuery != 'undefined') {
 
             var remainingPixels = targetWidth - (columnWidth * columns);
             var margin = remainingPixels / (columns + 1);
-
-            //console.log('targetWidth: ' + targetWidth, 'columnWidth: ' + columnWidth, 'columns: ' + columns, 'remainingPixels: ' + remainingPixels, 'margin: ' + margin, 'rounded margin: ' + Math.floor(margin), '1/2 margin: ' + Math.floor(margin/2));
-
             var itemMargin   = columns === 1 ? Math.floor(margin) : 0;
             var sidePadding  = columns === 1 ? 0 : Math.floor(margin / 2);
 
