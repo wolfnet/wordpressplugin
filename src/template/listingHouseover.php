@@ -21,10 +21,9 @@
 
 
 // this template renders the markup for map property info that shows up on mouse hover.
-if (!is_null($listing['geo']['lat']) && !is_null($listing['geo']['lng'])) :
-    ?>
+?>
     <div class="wolfnet_wntHouseOverWrapper">
-        <a rel="follow" href="<?php echo $listing['property_url']; ?>">
+        <a class="wolfnet_listingLink" href="<?php echo $listing['property_url']; ?>" rel="follow">
             <div data-property-id="<?php echo $listing['property_id'] ?>" class="wntHOItem">
                 <table class="wolfnet_wntHOTable">
                     <tbody>
@@ -33,11 +32,12 @@ if (!is_null($listing['geo']['lat']) && !is_null($listing['geo']['lng'])) :
                                 <div class="wolfnet_wntHOImg wolfnet_listingImage">
                                     <img src="<?php echo $listing['thumbnail_url']; ?>" />
                                 </div>
-                                <?php if (trim($listing['branding']['logo']) !== '') { ?>
-                                    <div class="wolfnet_wntHOBroker wolfnet_brokerLogo<?php echo ($listing['branding']['type']=='idx') ? ' wolfnet_idxLogo' : ''; ?>">
-                                        <img src="<?php echo $listing['branding']['logo']; ?>" />
-                                    </span>
-                                <?php } ?>
+                                <div class="wolfnet_wntHOBroker wolfnet_brokerLogo"
+                                 <?php if (trim($listing['branding']['logo']) == '') { ?>
+                                    style="display: none;"
+                                 <?php } ?>>
+                                    <img src="<?php echo $listing['branding']['logo']; ?>" />
+                                </div>
                             </td>
                             <td>
                                 <div class="wolfnet_wntHOContentContainer">
@@ -45,25 +45,22 @@ if (!is_null($listing['geo']['lat']) && !is_null($listing['geo']['lng'])) :
                                         <div class="wolfnet_price">
                                             <?php echo $listing['listing_price']; ?>
                                         </div>
-                                        <?php if (trim($listing['total_bedrooms']) || trim($listing['total_baths'])) { ?>
-                                            <span class="wolfnet_bed_bath" title="<?php echo htmlspecialchars($listing['bedsbaths_full']); ?>">
-                                                <?php if (trim($listing['total_bedrooms'])) { ?>
-                                                    <span class="wolfnet_beds">
-                                                        <?php echo $listing['total_bedrooms']; ?>
-                                                        <span class="wolfnet_label">Bedrooms</span>
-                                                    </span>
-                                                    <?php if (trim($listing['total_baths'])) { ?>
-                                                        <span class="wolfnet_info_separator"></span>
-                                                    <?php } ?>
-                                                <?php } ?>
-                                                <?php if (trim($listing['total_baths'])) { ?>
-                                                    <span class="wolfnet_baths">
-                                                        <?php echo $listing['total_baths']; ?>
-                                                        <span class="wolfnet_label">Bathrooms</span>
-                                                    </span>
-                                                <?php } ?>
+                                        <span class="wolfnet_bed_bath" title="<?php echo htmlspecialchars($listing['bedsbaths_full']); ?>">
+                                            <span class="wolfnet_beds"
+                                             <?php if (!trim($listing['total_bedrooms'])) { ?>style="display: none;"<?php } ?>>
+                                                <?php echo $listing['total_bedrooms']; ?>
+                                                <span class="wolfnet_label">Bedrooms</span>
                                             </span>
-                                        <?php } ?>
+                                            <span class="wolfnet_info_separator"
+                                             <?php if (!trim($listing['total_bedrooms']) || !trim($listing['total_bedrooms'])) { ?>
+                                                style="display: none;"
+                                             <?php } ?>></span>
+                                            <span class="wolfnet_baths"
+                                             <?php if (!trim($listing['total_baths'])) { ?>style="display: none;"<?php } ?>>
+                                                <?php echo $listing['total_baths']; ?>
+                                                <span class="wolfnet_label">Bathrooms</span>
+                                            </span>
+                                        </span>
                                     </div>
                                     <div class="wolfnet_locationInfo" title="<?php echo htmlspecialchars($listing['address']); ?>">
                                         <div class="wolfnet_address">
@@ -88,5 +85,3 @@ if (!is_null($listing['geo']['lat']) && !is_null($listing['geo']['lng'])) :
             </div>
         </a>
     </div>
-<?php endif; ?>
-

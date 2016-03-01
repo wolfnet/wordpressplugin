@@ -1060,13 +1060,34 @@ class Wolfnet_Plugin
         wp_send_json($response);
     }
 
+    public function getListingDefaults()
+    {
 
-    /* Data ************************************************************************************* */
-    /*  _                                                                                         */
-    /* | \  _. _|_  _.                                                                            */
-    /* |_/ (_|  |_ (_|                                                                            */
-    /*                                                                                            */
-    /* ****************************************************************************************** */
+        return array(
+            'address'          => '',
+            'bedsbaths_full'   => '',
+            'branding'         => array(
+                'agent_name'       => '',
+                'agent_phone'      => '',
+                'courtesy_text'    => '',
+                'logo'             => '',
+                'office_name'      => '',
+                'office_phone'     => '',
+                'toll_free_phone'  => '',
+                'type'             => '',
+            ),
+            'display_address'  => '',
+            'listing_price'    => '',
+            'location'         => '',
+            'property_id'      => '',
+            'property_url'     => '',
+            'total_baths'      => '',
+            'total_bedrooms'   => '',
+            'thumbnail_url'    => '',
+            'thumbnails_url'   => '',
+        );
+
+    }
 
     public function getFeaturedListingsDefaults()
     {
@@ -1121,7 +1142,7 @@ class Wolfnet_Plugin
             return $this->displayException($e);
         }
 
-        $this->augmentListingsData($data, $key);
+        $this->augmentListingsData($data, $key, array('listing'));
 
         $listingsData = array();
 
@@ -1236,7 +1257,7 @@ class Wolfnet_Plugin
 
         $data['wpMeta']['total_rows'] = $data['responseData']['data']['total_rows'];
 
-        $this->augmentListingsData($data, $key);
+        $this->augmentListingsData($data, $key, array('listing', 'map'));
 
         $listingsData = array();
 
@@ -2144,12 +2165,13 @@ class Wolfnet_Plugin
      * @param  string        the api key
      * @return array         returns the same array structure with additional info
      */
-    public function augmentListingsData(&$data, $key)
+    public function augmentListingsData(&$data, $key, array $templates = array())
     {
 
         if (is_array($data['responseData']['data'])) {
             $listingsData = &$data['responseData']['data']['listing'];
         }
+        $data['responseData']['data']['templates'] = $templates;
 
         $br_logo = $this->getBrLogo($key);
 
@@ -2160,8 +2182,21 @@ class Wolfnet_Plugin
         $show_logo = $data['responseData']['metadata']['display_rules']['results']['display_broker_reciprocity_logo'];
         $wnt_base_url = $this->getBaseUrl($key);
 
+        // Include template(s)
+        $vars = array(
+            'listing' => $this->getListingDefaults()
+        );
+        $data['responseData']['data']['templates'] = array();
+        if (in_array('listing', $templates)) {
+            $data['responseData']['data']['templates']['listing'] = $this->views->listingView($vars);
+        }
+        if (in_array('map', $templates)) {
+            $data['responseData']['data']['templates']['map'] = $this->views->houseOver($vars);
+        }
+
         // loop over listings
         foreach ($listingsData as &$listing) {
+
             if (is_numeric($listing['listing_price'])) {
                 $listing['listing_price'] = '$' . number_format($listing['listing_price']);
             }
