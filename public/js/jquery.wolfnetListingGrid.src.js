@@ -272,7 +272,7 @@ if (typeof jQuery != 'undefined') {
 
                 // Capture the instances' options in each element's local data storage.
                 this.data(pluginName, {
-                    option: $.extend(defaultOptions, options || {})
+                    option: $.extend({}, defaultOptions, options || {})
                 });
 
                 // Initialized the plugin for each element that was selected.
