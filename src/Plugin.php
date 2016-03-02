@@ -1369,11 +1369,16 @@ class Wolfnet_Plugin
 
     /* listings **************************************************************************** */
 
-    public function getListingPhotos($propertyId)
+    public function getListingPhotos($propertyId, $keyId=null)
     {
+        if (($keyId == null) || ($keyId == '')) {
+            $productKey = $this->getDefaultProductKey();
+        } else {
+            $productKey = $this->getProductKeyById($keyId);
+        }
         try {
             $data = $this->apin->sendRequest(
-                $this->getDefaultProductKey(),
+                $productKey,
                 '/listing/' . $propertyId . '/photos',
                 'GET'
             );
