@@ -33,6 +33,7 @@ if (typeof jQuery !== 'undefined') {
         var dataKey = 'wnt.' + pluginName;
 
         var defaultOptions = {
+            keyid: '',
             containerClass: 'wnt-thumbnail-scroller',
             controlBtnClass: 'wnt-nav-btn',
             hideClass: 'wolfnet_hidden',
@@ -450,6 +451,7 @@ if (typeof jQuery !== 'undefined') {
                         $.ajax({
                             url: photoUrl,
                             dataType: 'json',
+                            data: { keyid: options.keyid },
                             type: 'get',
                             context: $thumbnails,
                             timeout: 2500,
