@@ -268,13 +268,22 @@ class Wolfnet_Plugin
         return $this->chr_utf8($matches[1]);
     }
 
-    public function createUUID()
+    public function createUUID($withDashes = false)
     {
         // Source: http://www.php.net/manual/en/function.uniqid.php#94959
 
+        $idSet = '%04x';
+        $idFormat = $idSet . $idSet;
+
+        for ($i=0; $i<4; $i++) {
+            $idFormat .= ($withDashes ? '-' : '') . $idSet;
+        }
+
+        $idFormat .= $idSet . $idSet;
+
         return sprintf(
 
-            '%04x%04x-%04x-%04x-%04x-%04x%04x%04x',
+            $idFormat,
 
             // 32 bits for "time_low"
             mt_rand(0, 0xffff), mt_rand(0, 0xffff),
