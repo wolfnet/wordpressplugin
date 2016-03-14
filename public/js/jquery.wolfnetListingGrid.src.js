@@ -26,9 +26,9 @@
  * code inside an immediately invoked function expression (IIFE) to avoid naming conflicts with the $
  * variable.
  */
-if (typeof jQuery != 'undefined') {
+if (typeof jQuery !== 'undefined') {
 
-    (function($, jQuery, window, document, undefined){
+    (function ($, jQuery, window, document, undefined) {
 
         var pluginName = 'wolfnetListingGrid';
 
@@ -42,6 +42,7 @@ if (typeof jQuery != 'undefined') {
             gridAlign: 'center'
         };
 
+
         var getGridItems = function(target)
         {
             var $target = $(target);
@@ -52,6 +53,7 @@ if (typeof jQuery != 'undefined') {
             return data.$container.find(itemSelector).not(clearFixSelector);
 
         };
+
 
         var preparePluginData = function(target)
         {
@@ -197,8 +199,8 @@ if (typeof jQuery != 'undefined') {
             }).find('.wolfnet_listingMain').css({
                 'padding-right': options.padding
             });
+        };
 
-        }
 
         /**
          * This function loops over all images in the container and triggers an event on the target
@@ -218,21 +220,18 @@ if (typeof jQuery != 'undefined') {
             var loadedImgs = 0;
 
             // Loop over each image and increment for each image that is completely loaded
-            $images.each(function(){
+            $images.each(function () {
                 if ($(this).prop('complete') === true) {
                     loadedImgs++;
                 }
-
             });
 
-            // If all of the images are loaded trigger the event
             if (loadedImgs >= imageCount) {
+                // If all of the images are loaded, trigger the event
                 $target.trigger('allImagesLoaded.' + pluginName);
-
-            // Otherwise run this function again after a brief delay
             } else {
-                setTimeout(function(){monitorImages(target);}, 100);
-
+                // Otherwise, run this function again after a brief delay
+                setTimeout(function () { monitorImages(target); }, 100);
             }
 
         };
