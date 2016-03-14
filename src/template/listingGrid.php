@@ -74,23 +74,29 @@ unset($wpMeta['key']);
             });
         };
 
+        var setupToolbar = function () {
+            $listingGrid.filter('.wolfnet_withPagination,.wolfnet_withSortOptions').wolfnetToolbar({
+                 numrows          : <?php echo $wpMeta['maxrows'] . "\n"; ?>
+                ,criteria         : <?php echo json_encode($wpMeta) . "\n"; ?>
+                ,maxResults       : <?php echo $wpMeta['total_rows'] . "\n"; ?>
+                ,itemsPerPageData : <?php echo json_encode($itemsPerPage) . "\n"; ?>
+                ,sortOptionsData  : <?php echo json_encode($sortOptions) . "\n"; ?>
+            });
+        };
+
+        var setupListingGrid = function () {
+            $listingGrid.filter('.wolfnet_listingGrid').wolfnetListingGrid({
+                containerClass: 'wolfnet_listings',
+                itemClass: 'wolfnet_listing',
+                clearfixClass: 'wolfnet_clearfix',
+                gridAlign: '<?php echo $gridalign; ?>'
+            });
+        };
+
         $listingGrid.on('wolfnet.updated', setupThumbnailScroller);
 
-        $listingGrid.filter('.wolfnet_withPagination,.wolfnet_withSortOptions').wolfnetToolbar({
-             numrows          : <?php echo $wpMeta['maxrows'] . "\n"; ?>
-            ,criteria         : <?php echo json_encode($wpMeta) . "\n"; ?>
-            ,maxResults       : <?php echo $wpMeta['total_rows'] . "\n"; ?>
-            ,itemsPerPageData : <?php echo json_encode($itemsPerPage) . "\n"; ?>
-            ,sortOptionsData  : <?php echo json_encode($sortOptions) . "\n"; ?>
-        });
-
-        $listingGrid.filter('.wolfnet_listingGrid').wolfnetListingGrid({
-            containerClass: 'wolfnet_listings',
-            itemClass: 'wolfnet_listing',
-            clearfixClass: 'wolfnet_clearfix',
-            gridAlign: '<?php echo $gridalign; ?>'
-        });
-
+        setupToolbar();
+        setupListingGrid();
         setupThumbnailScroller();
 
     });
