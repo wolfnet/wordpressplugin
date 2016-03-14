@@ -93,6 +93,9 @@ Please upgrade to the latest version of the plugin as we will be disabling our o
 
 == Changelog ==
 
+= 1.9.2 =
+* Removes deprecated jQuery.browser function.
+
 = 1.9.1 =
 * Adding new class names to widgets.
 * Corrected some instructions in Shortcode Builder.

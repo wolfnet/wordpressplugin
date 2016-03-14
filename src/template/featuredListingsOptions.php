@@ -25,34 +25,43 @@
 <div id="<?php echo $instance_id; ?>" class="wolfnet_featuredListingsOptions">
 
     <input id="<?php echo $direction_wpid; ?>" name="<?php echo $direction_wpname; ?>" type="hidden"
-        class="wolfnet_featuredListingsOptions_dirField" />
+     class="wolfnet_featuredListingsOptions_dirField" />
 
     <?php if(count($markets) == 1): ?>
-    <input type="hidden" id="<?php echo $keyid_wpid; ?>" name="<?php echo $keyid_wpid; ?>" value="1" />
+        <input type="hidden" id="<?php echo $keyid_wpid; ?>" name="<?php echo $keyid_wpid; ?>" value="1" />
     <?php endif; ?>
 
     <table class="form-table">
         <tr>
-            <td><label>Title:</label></td>
-            <td><input id="<?php echo $title_wpid; ?>" name="<?php echo $title_wpname; ?>" value="<?php echo $title; ?>" type="text" /></td>
+            <th>
+                <label for="wnt-<?php echo $title_wpid; ?>">Title:</label>
+            </th>
+            <td>
+                <input id="wnt-<?php echo $title_wpid; ?>" name="<?php echo $title_wpname; ?>" value="<?php echo $title; ?>" type="text" />
+            </td>
         </tr>
 
         <?php if(count($markets) > 1): ?>
-        <tr>
-            <td><label>Market:</label></td>
-            <td>
-                <select id="<?php echo $keyid_wpid; ?>" name="<?php echo $keyid_wpname; ?>">
-                    <?php for($i=0; $i<=count($markets)-1; $i++): ?>
-                    <option value="<?php echo $markets[$i]->id; ?>"
-                        <?php if($markets[$i]->id == $keyid) echo ' selected="selected"'?>><?php echo $markets[$i]->label; ?></option>
-                    <?php endfor; ?>
-                </select>
-            </td>
-        </tr>
+            <tr>
+                <th>
+                    <label for="<?php echo $keyid_wpid; ?>">Market:</label>
+                </th>
+                <td>
+                    <select id="<?php echo $keyid_wpid; ?>" name="<?php echo $keyid_wpname; ?>">
+                        <?php for($i=0; $i<=count($markets)-1; $i++): ?>
+                        <option value="<?php echo $markets[$i]->id; ?>"
+                         <?php if($markets[$i]->id == $keyid) echo ' selected="selected"'?>>
+                            <?php echo $markets[$i]->label; ?></option>
+                        <?php endfor; ?>
+                    </select>
+                </td>
+            </tr>
         <?php endif; ?>
 
         <tr>
-            <td><label for="<?php echo $autoplay_wpid; ?>">Scroll Control:</label></td>
+            <th>
+                <label for="<?php echo $autoplay_wpid; ?>">Scroll Control:</label>
+            </th>
             <td>
                 <select id="<?php echo $autoplay_wpid; ?>" name="<?php echo $autoplay_wpname; ?>"
                     class="wolfnet_featuredListingsOptions_autoPlayField">
@@ -80,10 +89,12 @@
                     <table class="form-table">
 
                         <tr>
-                            <td><label for="<?php echo $direction_wpid; ?>">Direction:</label></td>
+                            <th>
+                                <label for="wnt-<?php echo $direction_wpid; ?>">Direction:</label>
+                            </th>
                             <td>
-                                <select id="<?php echo $direction_wpid; ?>" name="<?php echo $direction_wpname; ?>"
-                                    class="wolfnet_featuredListingsOptions_autoDirField">
+                                <select id="wnt-<?php echo $direction_wpid; ?>" name="<?php echo $direction_wpname; ?>"
+                                 class="wolfnet_featuredListingsOptions_autoDirField">
                                     <option value="right"<?php echo $direction_right_wps; ?>>Left to Right</option>
                                     <option value="left"<?php echo $direction_left_wps; ?>>Right to Left</option>
                                 </select>
@@ -91,10 +102,12 @@
                         </tr>
 
                         <tr>
-                            <td><label for="<?php echo $speed_wpid; ?>">Animation Speed:</label></td>
+                            <th>
+                                <label for="<?php echo $speed_wpid; ?>">Animation Speed:</label>
+                            </th>
                             <td>
-                                <input id="<?php echo $speed_wpid; ?>" name="<?php echo $speed_wpname; ?>" type="text"
-                                    value="<?php echo $speed; ?>" size="2" maxlength="2" />
+                                <input id="<?php echo $speed_wpid; ?>" name="<?php echo $speed_wpname; ?>"
+                                 type="text" value="<?php echo $speed; ?>" size="2" maxlength="2" />
                                 <span class="wolfnet_moreInfo">
                                     Set the speed for the scrolling animation. Enter a value between
                                     1 and 99; the higher the number, the faster the scroll speed.
@@ -110,13 +123,15 @@
         </tr>
 
         <tr>
-            <td><label for="<?php echo $ownertype_wpid; ?>">Agent/Broker:</label></td>
+            <th>
+                <label for="<?php echo $ownertype_wpid; ?>">Agent/Broker:</label>
+            </th>
             <td>
                 <select id="<?php echo $ownertype_wpid; ?>" name="<?php echo $ownertype_wpname; ?>">
                     <?php foreach ( $ownertypes as $ot ) { ?>
-                    <option value="<?php echo $ot['value']; ?>"<?php selected($ownertype, $ot['value']); ?>>
-                        <?php echo $ot['label']; ?>
-                    </option>
+                        <option value="<?php echo $ot['value']; ?>"<?php selected($ownertype, $ot['value']); ?>>
+                            <?php echo $ot['label']; ?>
+                        </option>
                     <?php } ?>
                 </select>
                 <span class="wolfnet_moreInfo">
@@ -128,10 +143,12 @@
         </tr>
 
         <tr>
-            <td><label for="<?php echo $maxresults_wpid; ?>">Max Results:</label></td>
+            <th>
+                <label for="<?php echo $maxresults_wpid; ?>">Max Results:</label>
+            </th>
             <td>
                 <input id="<?php echo $maxresults_wpid; ?>" name="<?php echo $maxresults_wpname; ?>"
-                    value="<?php echo $maxresults; ?>" type="text" size="2" maxlength="2" />
+                 value="<?php echo $maxresults; ?>" type="text" size="2" maxlength="2" />
                 <span class="wolfnet_moreInfo">
                     Define the number of properties to be featured.  The maximum number of
                     properties that can be included is 50.

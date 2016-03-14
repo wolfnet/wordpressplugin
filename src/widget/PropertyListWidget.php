@@ -36,7 +36,7 @@ class Wolfnet_Widget_PropertyListWidget extends Wolfnet_Widget_ListingGridWidget
     {
 
         try {
-            $response = $this->plugin->listingGrid($this->collectData($args, $instance), 'list');
+            $response = $this->plugin->listingGrid->listingGrid($this->collectData($args, $instance), 'list');
 
         } catch (Wolfnet_Api_ApiException $e) {
             $response = $this->plugin->displayException($e);
