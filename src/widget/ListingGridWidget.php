@@ -46,7 +46,7 @@ class Wolfnet_Widget_ListingGridWidget extends Wolfnet_Widget_AbstractWidget
 
         try {
             $instance['maxrows'] = $instance['maxresults'];
-            $response = $this->plugin->listingGrid($this->collectData($args, $instance));
+            $response = $this->plugin->listingGrid->listingGrid($this->collectData($args, $instance));
 
         } catch (Wolfnet_Api_ApiException $e) {
             $response = $this->plugin->displayException($e);
@@ -69,14 +69,18 @@ class Wolfnet_Widget_ListingGridWidget extends Wolfnet_Widget_AbstractWidget
     public function update($new_instance, $old_instance)
     {
         // processes widget options to be saved
-        $saveData = parent::updateWithDefault($this->plugin->getListingGridDefaults(), $new_instance, $old_instance);
+        $saveData = parent::updateWithDefault(
+            $this->plugin->listingGrid->getDefaults(), 
+            $new_instance, 
+            $old_instance
+        );
 
         /* Advanced Mode */
         if ($saveData['mode'] == 'advanced') {
             if ($saveData['savedsearch'] == 'deleted') {
                 /* Maintain the existing search criteria */
             } else {
-                $criteria = $this->plugin->getSavedSearch($saveData['savedsearch']);
+                $criteria = $this->plugin->searchManager->getSavedSearch($saveData['savedsearch']);
                 $saveData['criteria'] = json_encode($criteria);
             }
 
@@ -125,7 +129,7 @@ class Wolfnet_Widget_ListingGridWidget extends Wolfnet_Widget_AbstractWidget
 
     protected function getOptions($instance = null)
     {
-        $options = $this->plugin->getListingGridOptions($instance);
+        $options = $this->plugin->listingGrid->getOptions($instance);
 
         return parent::prepOptions($options);
 

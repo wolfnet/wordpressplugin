@@ -41,7 +41,7 @@ class Wolfnet_Widget_QuickSearchWidget extends Wolfnet_Widget_AbstractWidget
 
         try {
             $options = $this->getOptions($instance);
-            $response = $this->plugin->quickSearch($options);
+            $response = $this->plugin->quickSearch->quickSearch($options);
 
         } catch (Wolfnet_Api_ApiException $e) {
             $response = $this->plugin->displayException($e);
@@ -63,14 +63,18 @@ class Wolfnet_Widget_QuickSearchWidget extends Wolfnet_Widget_AbstractWidget
 
     public function update($new_instance, $old_instance)
     {
-        return parent::updateWithDefault($this->plugin->getQuickSearchDefaults(), $new_instance, $old_instance);
+        return parent::updateWithDefault(
+            $this->plugin->quickSearch->getDefaults(), 
+            $new_instance, 
+            $old_instance
+        );
 
     }
 
 
     protected function getOptions($instance = null)
     {
-        $options = $this->plugin->getQuickSearchOptions($instance);
+        $options = $this->plugin->quickSearch->getOptions($instance);
 
         return parent::prepOptions($options);
 

@@ -29,64 +29,87 @@
 
     <table class="form-table">
         <tr>
-            <td><label>Office list title:</label></td>
+            <th>
+                <label for="<?php echo $officetitle_wpid; ?>">
+                    Office list title:
+                </label>
+            </th>
             <td>
-                <input id="<?php echo $officetitle_wpid; ?>" 
-                    name="<?php echo $officetitle_wpname; ?>" 
+                <input id="<?php echo $officetitle_wpid; ?>"
+                    name="<?php echo $officetitle_wpname; ?>"
                     value="<?php echo $officetitle; ?>" type="text" />
             </td>
         </tr>
         <tr>
-            <td><label>Agent list title:</label></td>
+            <th>
+                <label for="<?php echo $agenttitle_wpid; ?>">
+                    Agent list title:
+                </label>
+            </th>
             <td>
-                <input id="<?php echo $agenttitle_wpid; ?>" 
-                    name="<?php echo $agenttitle_wpname; ?>" 
+                <input id="<?php echo $agenttitle_wpid; ?>"
+                    name="<?php echo $agenttitle_wpname; ?>"
                     value="<?php echo $agenttitle; ?>" type="text" />
             </td>
         </tr>
         <tr>
-            <td><label>Agent detail title:</label></td>
+            <th>
+                <label for="<?php echo $detailtitle_wpid; ?>">
+                    Agent detail title:
+                </label>
+            </th>
             <td>
-                <input id="<?php echo $detailtitle_wpid; ?>" 
-                    name="<?php echo $detailtitle_wpname; ?>" 
+                <input id="<?php echo $detailtitle_wpid; ?>"
+                    name="<?php echo $detailtitle_wpname; ?>"
                     value="<?php echo $detailtitle; ?>" type="text" />
             </td>
         </tr>
         <?php
         if(count($offices) > 1) {
         ?>
-        <tr>
-            <td><label>Show offices:</label></td>
-            <td>
-                <select id="<?php echo $showoffices_wpid; ?>" name="<?php echo $showoffices_wpname; ?>">
-                    <option value="true"<?php if($showoffices == 'true') echo ' selected="selected"'?>>Yes</option>
-                    <option value="false"<?php if($showoffices == 'false') echo ' selected="selected"'?>>No</option>
-                </select>
-            </td>
-        </tr>
-        <tr>
-            <td><label>Exclude offices:</label></td>
-            <td>
-            <?php
-            $selectedOffices = array_unique(explode(",", $excludeoffices), SORT_STRING);
-            foreach($offices as $office) {
-                if(strlen($office['office_id']) > 0) {
-                    echo '<input type="checkbox" class="officeexclude"';
-                    if(in_array($office['office_id'], $selectedOffices)) {
-                        echo ' checked="checked"';
+            <tr>
+                <th>
+                    <label for="<?php echo $showoffices_wpid; ?>">
+                        Show offices:
+                    </label>
+                </th>
+                <td>
+                    <select id="<?php echo $showoffices_wpid; ?>" name="<?php echo $showoffices_wpname; ?>">
+                        <option value="true"<?php if($showoffices == 'true') echo ' selected="selected"'?>>Yes</option>
+                        <option value="false"<?php if($showoffices == 'false') echo ' selected="selected"'?>>No</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    <label>Exclude offices:</label>
+                </th>
+                <td>
+                    <?php
+                    $selectedOffices = array_unique(explode(",", $excludeoffices), SORT_STRING);
+                    foreach ($offices as $office) {
+                        if (strlen($office['office_id']) > 0) {
+                            echo '<input id="officeexclude_' . $office['office_id'] . '"';
+                            echo ' type="checkbox" class="officeexclude"';
+                            if (in_array($office['office_id'], $selectedOffices)) {
+                                echo ' checked="checked"';
+                            }
+                            echo ' value="' . $office['office_id'] . '" /> ';
+                            echo '<label for="officeexclude_' . $office['office_id'] . '">';
+                            echo $office['name'] . ' (' . $office['office_id'] . ')';
+                            echo '</label><br />';
+                        }
                     }
-                    echo ' value="' . $office['office_id'] . '" /> ' . $office['name'];
-                    echo ' (' . $office['office_id'] . ')<br />';
-                }
-            }
-            ?>
-            </td>
-        </tr>
+                    ?>
+                </td>
+            </tr>
         <?php
         }
         ?>
         <tr>
-            <td><label>Agents per page:</label></td>
+            <th>
+                <label for="<?php echo $numperpage_wpid; ?>">Agents per page:</label>
+            </th>
             <td>
                 <select id="<?php echo $numperpage_wpid; ?>" name="<?php echo $numperpage_wpname; ?>">
                     <option value="10"<?php if($numperpage == 10) echo ' selected="selected"'; ?>>10</option>
@@ -96,7 +119,9 @@
             </td>
         </tr>
         <tr>
-            <td><label>Show active listings:</label></td>
+            <th>
+                <label for="<?php echo $activelistings_wpid; ?>">Show active listings:</label>
+            </th>
             <td>
                 <select id="<?php echo $activelistings_wpid; ?>" name="<?php echo $activelistings_wpname; ?>">
                     <option value="true"<?php if($activelistings == 'true') echo ' selected="selected"'; ?>>Yes</option>
@@ -108,7 +133,9 @@
         if($showSoldOption) {
         ?>
         <tr>
-            <td><label>Show sold listings:</label></td>
+            <th>
+                <label for="<?php echo $soldlistings_wpid; ?>">Show sold listings:</label>
+            </th>
             <td>
                 <select id="<?php echo $soldlistings_wpid; ?>" name="<?php echo $soldlistings_wpname; ?>">
                     <option value="true"<?php if($soldlistings == 'true') echo ' selected="selected"'; ?>>Yes</option>
@@ -129,7 +156,7 @@
         $("button[type=submit],input[type=submit]").click(function() {
             var <?php echo $instance_id; ?> = [];
             var array = <?php echo $instance_id; ?>;
-            
+
             $('.officeexclude').each(function() {
                 if($(this).prop('checked')) {
                     if(array.indexOf($(this).val()) == -1) {
