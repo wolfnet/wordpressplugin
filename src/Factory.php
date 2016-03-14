@@ -125,9 +125,66 @@ class Wolfnet_Factory
     }
 
 
+    private function getWolfnet_Module_AgentPages()
+    {
+        return new Wolfnet_Module_AgentPages(
+            $this->args['plugin'],
+            $this->getWolfnet_AgentPagesHandler()
+        );
+    }
+
+
+    private function getWolfnet_Service_ProductKeyService()
+    {
+        return new Wolfnet_Service_ProductKeyService($this->args['plugin']);
+    }
+
+
+    private function getWolfnet_Module_FeaturedListings()
+    {
+        return new Wolfnet_Module_FeaturedListings($this->args['plugin']);
+    }
+
+
+    private function getWolfnet_Module_ListingGrid()
+    {
+        return new Wolfnet_Module_ListingGrid(
+            $this->args['plugin'],
+            $this->getWolfnet_Views()
+        );
+    }
+
+
+    private function getWolfnet_Module_PropertyList()
+    {
+        return new Wolfnet_Module_PropertyList(
+            $this->args['plugin'],
+            $this->getWolfnet_Views()
+        );
+    }
+
+
+    private function getWolfnet_Module_QuickSearch()
+    {
+        return new Wolfnet_Module_QuickSearch($this->args['plugin']);
+    }
+
+
+    private function getWolfnet_Module_SearchManager()
+    {
+        return new Wolfnet_Module_SearchManager($this->args['plugin']);
+    }
+
+
     private function getWolfnet_AgentPagesHandler()
     {
         return new Wolfnet_AgentPagesHandler($this->args['plugin']);
+    }
+
+
+    private function getWolfnet_Admin()
+    {
+        return new Wolfnet_Admin($this->args['plugin']);
     }
 
 
@@ -137,15 +194,27 @@ class Wolfnet_Factory
     }
 
 
-    private function getWolfnet_Views()
+    private function getWolfnet_Data()
     {
-        return new Wolfnet_Views();
+        return new Wolfnet_Data($this->args['plugin']);
     }
 
 
-    private function getWolfnet_Admin()
+    private function getWolfnet_Listings()
     {
-        return new Wolfnet_Admin($this->args['plugin']);
+        return new Wolfnet_Listings($this->args['plugin']);
+    }
+
+
+    private function getWolfnet_Template()
+    {
+        return new Wolfnet_Template($this->args['plugin']);
+    }
+
+
+    private function getWolfnet_Views()
+    {
+        return new Wolfnet_Views();
     }
 
 

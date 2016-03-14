@@ -50,7 +50,7 @@ class Wolfnet_Widget_FeaturedListingsWidget extends Wolfnet_Widget_AbstractWidge
 
         try {
             $options = $this->getOptions($instance);
-            $response = $this->plugin->featuredListings($options);
+            $response = $this->plugin->featuredListings->featuredListings($options);
 
         } catch (Wolfnet_Api_ApiException $e) {
             $response = $this->plugin->displayException($e);
@@ -72,14 +72,18 @@ class Wolfnet_Widget_FeaturedListingsWidget extends Wolfnet_Widget_AbstractWidge
 
     public function update($new_instance, $old_instance)
     {
-        return parent::updateWithDefault($this->plugin->getFeaturedListingsDefaults(), $new_instance, $old_instance);
+        return parent::updateWithDefault(
+            $this->plugin->featuredListings->getDefaults(), 
+            $new_instance, 
+            $old_instance
+        );
 
     }
 
 
     protected function getOptions($instance = null)
     {
-        $options = $this->plugin->getFeaturedListingsOptions($instance);
+        $options = $this->plugin->featuredListings->getOptions($instance);
 
         return parent::prepOptions($options);
 
