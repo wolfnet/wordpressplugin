@@ -65,13 +65,18 @@ if (typeof jQuery != 'undefined') {
             }
 
             var $items = getGridItems(target);
-            // Capture the original item width for later comparison, removing any applied max-width
-            data.itemWidth = $items.first().css('max-width', '').innerWidth();
-            if (data.hasOwnProperty('itemPadding') && !isNaN(data.itemPadding)) {
-                data.itemWidth -= data.itemPadding;
+            // Capture the original item width for later comparison, removing max-width, margins, and padding
+            data.$container.css({
+                'padding-left':  '',
+                'padding-right': ''
+            });
+            resizeItems($items);
+            var itemPadding = data.itemPadding || 0;
+            var itemWidth = $items.first().innerWidth();
+            if (!isNaN(itemPadding)) {
+                itemWidth = Math.max(itemWidth - itemPadding, 0);
             }
-            // Remove any existing margins
-            $items.css('margin', 0);
+            data.itemWidth = itemWidth;
 
         };
 
@@ -116,35 +121,35 @@ if (typeof jQuery != 'undefined') {
 
             var remainingPixels = targetWidth - (columnWidth * columns);
             var margin = remainingPixels / (columns + 1);
-
-            //console.log('targetWidth: ' + targetWidth, 'columnWidth: ' + columnWidth, 'columns: ' + columns, 'remainingPixels: ' + remainingPixels, 'margin: ' + margin, 'rounded margin: ' + Math.floor(margin), '1/2 margin: ' + Math.floor(margin/2));
-
             var itemMargin   = columns === 1 ? Math.floor(margin) : 0;
-            var leftPadding  = columns === 1 ? 0 : Math.floor(margin / 2);
-            var rightPadding = columns === 1 ? 0 : Math.floor(margin / 2);
+            var sidePadding  = columns === 1 ? 0 : Math.floor(margin / 2);
 
-            data.itemPadding = leftPadding + rightPadding;
+            data.itemPadding = sidePadding * 2;
 
-            if (gridAlign === 'center') {
-                $items.css('margin-left', itemMargin);
-            } else {
-                $items.css('margin-right', 15);
-            }
-
-            $items.css({
-                'padding-left': leftPadding,
-                'max-width': columnWidth + leftPadding + rightPadding
+            resizeItems($items, {
+                width:   columnWidth + data.itemPadding,
+                padding: sidePadding,
+                margin:  (gridAlign === 'center' ? itemMargin : 15),
+                align:   gridAlign
             });
-            $items.find('.wolfnet_listingMain').css({
-                'padding-right': rightPadding
+
+            // Pad the container to center the grid as a whole
+            var containerPadding = Math.floor(
+                (data.$container.innerWidth() - ($items.first().outerWidth(true) * columns)) / 2
+            );
+            data.$container.css({
+                'padding-left':  containerPadding,
+                'padding-right': containerPadding
             });
+
+            $items.trigger('wntResizeItem')
+                .removeClass('wolfnet_colFirst wolfnet_colLast');
 
             for (var i=0, l=$items.length; i<l; i++) {
 
                 var $item = $($items[i]);
-                $item.removeClass('wolfnet_colFirst wolfnet_colLast');
 
-                if ((i - 1) % columns === 0) {
+                if (((i + 1) == columns) || ((i + 1) % columns === 0)) {
                     $item.addClass('wolfnet_colLast');
                     if ((i + 1) < l) {
                         var $nextItem = $($items[i + 1]);
@@ -165,6 +170,35 @@ if (typeof jQuery != 'undefined') {
             data.$container.trigger('columns-updated.' + pluginName);
 
         };
+
+        var resizeItems = function($items, options)
+        {
+            var marginLeft = '', marginRight = '';
+
+            options = $.extend({}, {
+                width:   '',
+                padding: '',
+                margin:  '',
+                align:   ''
+            }, options || {});
+
+            if (options.align === 'center') {
+                marginLeft = options.margin;
+            } else {
+                marginRight = options.margin;
+            }
+
+            $items.css({
+                'margin-left':   marginLeft,
+                'margin-right':  marginRight,
+                'padding-left':  options.padding,
+                'max-width':     options.width,
+                'width':         (options.width === '' ? 'initial' : '')
+            }).find('.wolfnet_listingMain').css({
+                'padding-right': options.padding
+            });
+
+        }
 
         /**
          * This function loops over all images in the container and triggers an event on the target
@@ -235,7 +269,7 @@ if (typeof jQuery != 'undefined') {
 
                 // Capture the instances' options in each element's local data storage.
                 this.data(pluginName, {
-                    option: $.extend(defaultOptions, options || {})
+                    option: $.extend({}, defaultOptions, options || {})
                 });
 
                 // Initialized the plugin for each element that was selected.
@@ -261,10 +295,26 @@ if (typeof jQuery != 'undefined') {
 
                     });
 
-                    // Whenever the parent container gets new data, update the listing columns
-                    $target.on('wolfnet.updated', function (event) {
-                        methods.refresh.call(plugin, false);
-                    });
+                    $target
+                        // Update start
+                        .on('wolfnet.updating', function () {
+                            var data = $target.data(pluginName);
+                            data.imagesLoading = true;
+                            data.isUpdating = true;
+                            $target.addClass('wnt-in-transition');
+                        })
+                        // Whenever the parent container gets new data, update the listing columns
+                        .on('wolfnet.updated', function (event) {
+                            var data = $target.data(pluginName);
+                        })
+                        // Transitions
+                        .on('refresh-end.' + pluginName, function () {
+                            var data = $target.data(pluginName);
+                            data.isUpdating = false;
+                            if (!data.imagesLoading) {
+                                $target.removeClass('wnt-in-transition');
+                            }
+                        });
 
                     $(window).on('columns-updated.' + pluginName, function () {
                         resizing = false;
@@ -272,8 +322,12 @@ if (typeof jQuery != 'undefined') {
 
                     // Once all images have been loaded update row heights to prevent stagger.
                     $target.on('allImagesLoaded.' + pluginName, function () {
+                        var data = $target.data(pluginName);
+                        data.imagesLoading = false;
                         methods.refresh.call($target);
                     });
+
+                    data.imagesLoading = true;
 
                     prepareDomElements(target);
                     updateColumnWidths(target);
@@ -290,6 +344,8 @@ if (typeof jQuery != 'undefined') {
                 return this.each(function () {
                     var target = this;
 
+                    $(target).trigger('refresh-start.' + pluginName);
+
                     preparePluginData(target);
                     prepareDomElements(target);
                     updateColumnWidths(target);
@@ -299,6 +355,8 @@ if (typeof jQuery != 'undefined') {
                     } else {
                         updateRowHeight(target);
                     }
+
+                    $(target).trigger('refresh-end.' + pluginName);
 
                 });
 

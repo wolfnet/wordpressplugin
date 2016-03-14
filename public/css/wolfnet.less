@@ -459,7 +459,7 @@
                 /* These next two lines are some stupid crap they wanted so the
                 text lines up with the top of the agent image... If it breaks
                 later, well... */
-                line-height: .7em;
+                line-height: 0.7em;
                 padding-bottom: 10px;
             }
 
@@ -576,7 +576,8 @@
     &.wolfnet_featuredListings,
     &.wolfnet_listingGrid {
 
-        .wolfnet_listing {
+        .wolfnet_listing
+        {
             float:      left;
             margin:     0 5px 0 5px;
             position:   relative;
@@ -598,7 +599,6 @@
                 display:    block;
                 width:      100%;
                 height:     auto;
-                overflow:   hidden;
                 margin:     0 0 0.5em 0;
                 padding:    10px 0 10px 0;
                 text-align: center;
@@ -610,6 +610,80 @@
                     height:     @listingImgHeight;
                     margin:     auto;
                     border:     none;
+                }
+
+                .wnt-thumbnail-scroller {
+                    @control-width: 30px;
+                    @control-height: 100%;
+
+                    position: relative;
+                    display: block;
+                    text-align: center;
+                    background-color: transparent;
+                    width: 100%;
+
+                    .wnt-nav-btn {
+                        position: absolute;
+                        top: 0;
+                        width: @control-width;
+                        height: @control-height;
+                        border: none;
+                        outline: none;
+                        background: none;
+                        background-color: transparent;
+                        text-decoration: none;
+                        font-style: normal;
+                        font-weight: normal;
+                        color: black;
+                        padding: 0;
+
+                        .wnt-icon {
+                            font-size: @control-width;
+                        }
+
+                        &.wnt-next {
+                            right: @control-width * -1;
+                        }
+
+                        &.wnt-prev {
+                            left: @control-width * -1;
+                        }
+
+                    }
+
+                    .wnt-thumbnails-loader {
+                        position: absolute;
+                        top: 0;
+                        left: 0;
+                        display: none;
+                        width: 100%;
+                        height: 100%;
+                        background-color: white;
+                        background-image: url(../img/loading.gif);
+                        background-position: center;
+                        background-repeat: no-repeat;
+                        opacity: .40;
+                        filter: alpha(opacity=40);
+                    }
+
+                    &.wnt-thumbnails-loading {
+                        .wnt-thumbnails-loader {
+                            display: inline-block;
+                        }
+                    }
+
+                    &.wnt-hidable-controls {
+                        padding-left: 0;
+                        padding-right: 0;
+
+                        .wnt-nav-btn {
+                            background-color: white;
+                            background-color: rgba(255, 255, 255, .5);
+                            color: rgba(0, 0, 0, .90)
+                        }
+
+                    }
+
                 }
 
             }
@@ -721,8 +795,9 @@
             font-size: 0.8em;
             color: inherit;
 
-            a {
+            > a {
                 color: inherit;
+                text-decoration: none;
             }
 
             .wntHOItem {
@@ -766,6 +841,7 @@
                         position: relative;
                         min-width: 200px;
                         top: 0;
+                        left: 0.75em;
                     }
 
                 }
@@ -1130,6 +1206,10 @@
             }
         }
     }
+}
+
+.wolfnet_hidden {
+    display: none;
 }
 
 .wolfnet_clearfix:before,

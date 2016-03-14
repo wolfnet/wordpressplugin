@@ -19,7 +19,7 @@
  *                Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-class Wolfnet_Ajax 
+class Wolfnet_Ajax
 {
 	/*
 	 *
@@ -45,6 +45,7 @@ class Wolfnet_Ajax
             'wolfnet_content_footer'          => 'remoteContentFooter',
             'wolfnet_listings'                => 'remoteListings',
             'wolfnet_get_listings'            => 'remoteListingsGet',
+            'wolfnet_listing_photos'          => 'remoteListingPhotos',
             'wolfnet_css'                     => 'remotePublicCss',
             'wolfnet_market_name'             => 'remoteGetMarketName',
             'wolfnet_map_enabled'             => 'remoteMapEnabled',
@@ -67,6 +68,7 @@ class Wolfnet_Ajax
             'wolfnet_content_footer'    => 'remoteContentFooter',
             'wolfnet_listings'          => 'remoteListings',
             'wolfnet_get_listings'      => 'remoteListingsGet',
+            'wolfnet_listing_photos'    => 'remoteListingPhotos',
             'wolfnet_css'               => 'remotePublicCss',
             'wolfnet_base_url'          => 'remoteGetBaseUrl',
             'wolfnet_price_range'       => 'remotePriceRange',
@@ -79,7 +81,7 @@ class Wolfnet_Ajax
 
     }
 
-	
+
 
 	/*
 	 *
@@ -91,7 +93,7 @@ class Wolfnet_Ajax
         $productKey = (array_key_exists('key', $_REQUEST)) ? $_REQUEST['key'] : '';
 
         try {
-            $response = ($GLOBALS['wolfnet']->productKeyIsValid($productKey)) ? 'true' : 'false';
+            $response = ($GLOBALS['wolfnet']->keyService->isValid($productKey)) ? 'true' : 'false';
 
         } catch (Wolfnet_Exception $e) {
             status_header(500);
@@ -116,7 +118,7 @@ class Wolfnet_Ajax
                 $keyid = (array_key_exists('keyid', $_REQUEST)) ? $_REQUEST['keyid'] : '1';
             }
 
-            $response = $GLOBALS['wolfnet']->getSavedSearches(-1, $keyid);
+            $response = $GLOBALS['wolfnet']->searchManager->getSavedSearches(-1, $keyid);
 
         } catch (Wolfnet_Exception $e) {
             status_header(500);
@@ -206,8 +208,8 @@ class Wolfnet_Ajax
     {
 
         try {
-            $args = $GLOBALS['wolfnet']->getAgentPagesOptions();
-            $args['showSoldOption'] = $GLOBALS['wolfnet']->soldListingsEnabled();
+            $args = $GLOBALS['wolfnet']->agentPages->getOptions();
+            $args['showSoldOption'] = $GLOBALS['wolfnet']->data->soldListingsEnabled();
 
             $response = $GLOBALS['wolfnet']->views->agentPagesOptionsFormView($args);
 
@@ -229,7 +231,7 @@ class Wolfnet_Ajax
     {
 
         try {
-            $args = $GLOBALS['wolfnet']->getFeaturedListingsOptions();
+            $args = $GLOBALS['wolfnet']->featuredListings->getOptions();
 
             $response = $GLOBALS['wolfnet']->views->featuredListingsOptionsFormView($args);
 
@@ -251,7 +253,7 @@ class Wolfnet_Ajax
     {
 
         try {
-            $args = $GLOBALS['wolfnet']->getListingGridOptions();
+            $args = $GLOBALS['wolfnet']->listingGrid->getOptions();
 
             $response = $GLOBALS['wolfnet']->views->listingGridOptionsFormView($args);
 
@@ -273,7 +275,7 @@ class Wolfnet_Ajax
     {
 
         try {
-            $args = $GLOBALS['wolfnet']->getPropertyListOptions();
+            $args = $GLOBALS['wolfnet']->propertyList->getOptions();
 
             $response = $GLOBALS['wolfnet']->views->listingGridOptionsFormView($args);
 
@@ -295,7 +297,7 @@ class Wolfnet_Ajax
     {
 
         try {
-            $args = $GLOBALS['wolfnet']->getQuickSearchOptions();
+            $args = $GLOBALS['wolfnet']->quickSearch->getOptions();
 
             $response = $GLOBALS['wolfnet']->views->quickSearchOptionsFormView($args);
 
@@ -319,7 +321,7 @@ class Wolfnet_Ajax
         try {
             $id = (array_key_exists('id', $_REQUEST)) ? $_REQUEST['id'] : 0;
 
-            $response = $GLOBALS['wolfnet']->getSavedSearch($id);
+            $response = $GLOBALS['wolfnet']->searchManager->getSavedSearch($id);
 
         } catch (Wolfnet_Exception $e) {
             status_header(500);
@@ -339,7 +341,7 @@ class Wolfnet_Ajax
     public function remoteShortcodeBuilderShowAgentFeature()
     {
         try {
-            $response = $GLOBALS['wolfnet']->showAgentFeature();
+            $response = $GLOBALS['wolfnet']->agentPages->showAgentFeature();
         } catch (Wolfnet_Exception $e) {
             status_header(500);
 
@@ -357,7 +359,8 @@ class Wolfnet_Ajax
     {
 
         try {
-            $response = $GLOBALS['wolfnet']->getWpHeader() . $GLOBALS['wolfnet']->getWpFooter();
+            $response = $GLOBALS['wolfnet']->template->getWpHeader() 
+            . $GLOBALS['wolfnet']->template->getWpFooter();
 
         } catch (Wolfnet_Exception $e) {
             status_header(500);
@@ -377,7 +380,7 @@ class Wolfnet_Ajax
     {
 
         try {
-            $response = $GLOBALS['wolfnet']->getWpHeader();
+            $response = $GLOBALS['wolfnet']->template->getWpHeader();
 
         } catch (Wolfnet_Exception $e) {
             status_header(500);
@@ -397,7 +400,7 @@ class Wolfnet_Ajax
     {
 
         try {
-            $GLOBALS['wolfnet']->getWpHeader();
+            $GLOBALS['wolfnet']->template->getWpHeader();
 
             $response = $GLOBALS['wolfnet']->getWpFooter();
 
@@ -419,11 +422,11 @@ class Wolfnet_Ajax
     {
 
         try {
-            $args = $GLOBALS['wolfnet']->getListingGridOptions($_REQUEST);
+            $args = $GLOBALS['wolfnet']->listingGrid->getOptions($_REQUEST);
 
-            $response = $GLOBALS['wolfnet']->getWpHeader() 
+            $response = $GLOBALS['wolfnet']->template->getWpHeader() 
             	. $GLOBALS['wolfnet']->listingGrid($args) 
-            	. $GLOBALS['wolfnet']->getWpFooter();
+            	. $GLOBALS['wolfnet']->template->getWpFooter();
 
         } catch (Wolfnet_Exception $e) {
             status_header(500);
@@ -443,22 +446,22 @@ class Wolfnet_Ajax
     {
 
         try {
-            $args = $GLOBALS['wolfnet']->getListingGridOptions($_REQUEST);
+            $args = $GLOBALS['wolfnet']->listingGrid->getOptions($_REQUEST);
 
             // used by pagination dropdown "per page"
             if (!empty($_REQUEST['numrows'])) {
                 $_REQUEST['maxrows'] = $_REQUEST['numrows'];
             }
 
-            $criteria = $GLOBALS['wolfnet']->prepareListingQuery($_REQUEST);
+            $criteria = $GLOBALS['wolfnet']->listings->prepareListingQuery($_REQUEST);
 
             $keyid = (array_key_exists('keyid', $_REQUEST)) ? $_REQUEST["keyid"] : null;
 
-            $productKey = $GLOBALS['wolfnet']->getProductKeyById($keyid);
+            $productKey = $GLOBALS['wolfnet']->keyService->getById($keyid);
 
-            $data = $GLOBALS['wolfnet']->apin->sendRequest($productKey, '/listing', 'GET', $criteria);
+            $data = $GLOBALS['wolfnet']->api->sendRequest($productKey, '/listing', 'GET', $criteria);
 
-            $GLOBALS['wolfnet']->augmentListingsData($data, $productKey);
+            $GLOBALS['wolfnet']->listings->augmentListingsData($data, $productKey, array('listing', 'map'));
 
         } catch (Wolfnet_Exception $e) {
             status_header(500);
@@ -480,6 +483,31 @@ class Wolfnet_Ajax
         }
 
         die;
+
+    }
+
+
+    public function remoteListingPhotos()
+    {
+        try {
+
+            $propertyId = (array_key_exists('property_id', $_REQUEST)) ? $_REQUEST['property_id'] : 0;
+            $keyId = (array_key_exists('keyid', $_REQUEST)) ? $_REQUEST['keyid'] : '';
+
+            $response = $GLOBALS['wolfnet']->getListingPhotos($propertyId, $keyId);
+
+        } catch (Wolfnet_Exception $e) {
+
+            status_header(500);
+
+            $response = array(
+                'message' => $e->getMessage(),
+                'data' => $e->getData(),
+            );
+
+        }
+
+        wp_send_json($response);
 
     }
 
@@ -513,9 +541,9 @@ class Wolfnet_Ajax
             // TODO: Assign default value.
             $keyid = $_REQUEST["keyid"];
 
-            $productKey = $GLOBALS['wolfnet']->getProductKeyById($keyid);
+            $productKey = $GLOBALS['wolfnet']->keyService->getById($keyid);
 
-            $response = $GLOBALS['wolfnet']->getPrices($productKey);
+            $response = $GLOBALS['wolfnet']->data->getPrices($productKey);
 
         } catch (Wolfnet_Exception $e) {
             status_header(500);
@@ -539,7 +567,7 @@ class Wolfnet_Ajax
             // TODO: Assign default value.
             $productKey = $_REQUEST["productkey"];
 
-            $marketName = $GLOBALS['wolfnet']->getMarketName($productKey);
+            $marketName = $GLOBALS['wolfnet']->data->getMarketName($productKey);
             $response = strtoupper($marketName);
 
         } catch (Wolfnet_Exception $e) {
@@ -564,9 +592,9 @@ class Wolfnet_Ajax
             // TODO: Assign default value.
             $keyid = $_REQUEST["keyid"];
 
-            $productKey = $GLOBALS['wolfnet']->getProductKeyById($keyid);
+            $productKey = $GLOBALS['wolfnet']->keyService->getById($keyid);
 
-            $response = $GLOBALS['wolfnet']->getMaptracksEnabled($productKey);
+            $response = $GLOBALS['wolfnet']->data->getMaptracksEnabled($productKey);
 
         } catch (Wolfnet_Exception $e) {
             status_header(500);
@@ -589,8 +617,8 @@ class Wolfnet_Ajax
         try {
             // TODO: Assign default value.
             $keyid = $_REQUEST["keyid"];
-            $productKey = $GLOBALS['wolfnet']->getProductKeyById($keyid);
-            $response = $GLOBALS['wolfnet']->getBaseUrl($productKey);
+            $productKey = $GLOBALS['wolfnet']->keyService->getById($keyid);
+            $response = $GLOBALS['wolfnet']->data->getBaseUrl($productKey);
 
         } catch (Wolfnet_Exception $e) {
             status_header(500);
@@ -607,10 +635,10 @@ class Wolfnet_Ajax
     }
 
 
-    public function remoteRouteQuickSearch() 
+    public function remoteRouteQuickSearch()
     {
         try {
-            $response = $GLOBALS['wolfnet']->routeQuickSearch($_REQUEST['formData']);
+            $response = $GLOBALS['wolfnet']->quickSearch->routeQuickSearch($_REQUEST['formData']);
         } catch (Wolfnet_Exception $e) {
             status_header(500);
 

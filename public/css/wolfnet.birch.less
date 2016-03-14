@@ -146,6 +146,7 @@
                     img {
                         height:    auto;
                         border:    none;
+                        margin:    0;
                     }
 
                 }
@@ -188,13 +189,18 @@
                     display: none;
                 }
 
-                .wolfnet_beds {
+                .wolfnet_beds,
+                .wolfnet_baths {
                     display: inline-block;
-                    margin-right: inherit;
 
                     &:before {
                         content: none;
                     }
+
+                }
+
+                .wolfnet_beds {
+                    margin-right: inherit;
 
                     &:after {
                         content: ' Beds';
@@ -203,11 +209,6 @@
                 }
 
                 .wolfnet_baths {
-                    display: inline-block;
-
-                    &:before {
-                        content: none;
-                    }
 
                     &:after {
                         content: ' Baths';

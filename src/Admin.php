@@ -153,25 +153,25 @@ class Wolfnet_Admin extends Wolfnet_Plugin
         if(is_admin() && get_option('wolfnet_activatedPlugin181') == '1.8.1') {
             delete_option('wolfnet_activatedPlugin181');
 
-            $keyArray = json_decode($GLOBALS['wolfnet']->getProductKey());
+            $keyArray = json_decode($GLOBALS['wolfnet']->keyService->get());
             if(is_array($keyArray) && $keyArray[0]->key != false) {
-                $GLOBALS['wolfnet']->setSslVerifyOption($keyArray[0]->key);
+                $this->setSslVerifyOption($keyArray[0]->key);
 
                 // Check that key structure is formatted correctly and that the key
                 // label gets set if it was not already. If there's no preexisting key,
                 // ignore this.
                 foreach($keyArray as $key) {
                     if(strlen($key->label) == 0) {
-                        $key->label = strtoupper($GLOBALS['wolfnet']->getMarketName($key->key));
+                        $key->label = strtoupper($GLOBALS['wolfnet']->data->getMarketName($key->key));
                     }
                 }
                 $keyString = json_encode($keyArray);
-                update_option($GLOBALS['wolfnet']->productKeyOptionKey, $keyString);
+                update_option(Wolfnet_Service_ProductKeyService::PRODUCT_KEY_OPTION, $keyString);
             }
         }
 
         // Register Options
-        register_setting($this->optionGroup, $this->productKeyOptionKey);
+        register_setting($this->optionGroup, Wolfnet_Service_ProductKeyService::PRODUCT_KEY_OPTION);
         register_setting($this->optionGroup, Wolfnet_Plugin::SSL_WP_OPTION);
         register_setting($this->StyleOptionGroup, $this->widgetThemeOptionKey);
         register_setting($this->CssOptionGroup, $this->publicCssOptionKey);
@@ -205,10 +205,10 @@ class Wolfnet_Admin extends Wolfnet_Plugin
             try {
                 /* Now that we know we are dealing with a page that needs the search manager check
                    if the key is valid. */
-                $productKey = $GLOBALS['wolfnet']->getProductKeyById($_SESSION['keyid']);
+                $productKey = $GLOBALS['wolfnet']->keyService->getById($_SESSION['keyid']);
 
-                if ($GLOBALS['wolfnet']->productKeyIsValid($productKey)) {
-                    $GLOBALS['wolfnet']->smHttp = $GLOBALS['wolfnet']->searchManagerHtml($productKey);
+                if ($GLOBALS['wolfnet']->keyService->isValid($productKey)) {
+                    $GLOBALS['wolfnet']->smHttp = $GLOBALS['wolfnet']->searchManager->searchManagerHtml($productKey);
                 }
 
             } catch (Wolfnet_Exception $e) {
@@ -217,6 +217,30 @@ class Wolfnet_Admin extends Wolfnet_Plugin
 
         }
 
+    }
+
+
+    private function setSslVerifyOption($key)
+    {
+        // Hit an API endpoint so we can verify SSL.
+        try {
+            $data = $GLOBALS['wolfnet']->api->sendRequest($key, '/settings');
+        } catch(Wolfnet_Api_ApiException $e) {
+            // And exception at this point is PROBABLY due to SSL verification.
+            // Set the verify SSL option to false if so.
+            if(strpos($e->getDetails(), 'SSL certificate problem') >= 0) {
+                $GLOBALS['wolfnet']->api->setVerifySSL(0);
+                update_option(Wolfnet_Plugin::VERIFYSSL_WP_OPTION, 0);
+                return false;
+            }
+        }
+        // If we made it to this point we can set SSL verification to true.
+        if(get_option(Wolfnet_Plugin::VERIFYSSL_WP_OPTION) === false) {
+            update_option(Wolfnet_Plugin::VERIFYSSL_WP_OPTION, 1);
+            return true;
+        } else {
+            return false;
+        }
     }
 
 

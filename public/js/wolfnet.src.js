@@ -24,6 +24,11 @@ var wolfnet = function ()
 {
 }
 
+wolfnet.data = {
+    features: {}
+};
+
+
 wolfnet.initMoreInfo = function (  $moreInfoItems )
 {
 
@@ -111,6 +116,21 @@ wolfnet.showListings = function (collapseId,hideId,showId,instanceId)
 		}
 
 	} )( jQuery );
+}
+
+
+wolfnet.hasFeature = function (feature)
+{
+    if (!wolfnet.data.features.hasOwnProperty(feature)) {
+        switch (feature) {
+            case 'touch':
+                wolfnet.data.features.touch = ('ontouchstart' in window || navigator.maxTouchPoints);
+                break;
+        }
+    }
+
+    return wolfnet.data.features[feature];
+
 }
 
 

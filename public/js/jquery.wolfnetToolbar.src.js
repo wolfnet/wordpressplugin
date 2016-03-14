@@ -25,6 +25,7 @@
     var optionsKey = plugin + '.options';
 
     var UPDATED = 'wolfnet.updated';
+    var UPDATING = 'wolfnet.updating';
 
     var nextClass  = 'a.wolfnet_page_nav_next';
     var prevClass  = 'a.wolfnet_page_nav_prev';
@@ -201,58 +202,16 @@
     var renderListingGrid = function(data)
     {
 
-        data = ($.isArray(data.responseData.data.listing)) ? data.responseData.data.listing : [];
+        var listingsData = $.isArray(data.responseData.data.listing) ? data.responseData.data.listing : [];
+        var templates = data.responseData.data.hasOwnProperty('templates') ? data.responseData.data.templates : {};
 
         var $container = this;
         var $listings = $('<div>').addClass('wolfnet_listings');
 
-        for (var i=0, l=data.length; i<l; i++) {
-            var brokerLogo    = data[i].branding.logo  || null;
-            var brandingType  = data[i].branding.type || '';
-            var cityState     = data[i].city + ', ' + data[i].state;
-            var fullAddress   = data[i].display_address + ', ' + cityState;
-
-            var $listing = $('<div>')
-                .attr({
-                    'id': 'wolfnet_listing_' + data[i].property_id,
-                    'class': 'wolfnet_listing',
-                    'itemscope': 'itemscope'
-                })
-                .html(
-                   '<a href="' + data[i].property_url + '" rel="follow">' +
-                        '<div class="wolfnet_listingMain">' +
-                            '<div class="wolfnet_listingHead">' +
-                                '<div class="wolfnet_listingImage">' +
-                                    '<img src="' + data[i].thumbnail_url + '"' +
-                                    ' alt="Property for sale at ' + data[i].address + '" />' +
-                                '</div> ' +
-                                '<div class="wolfnet_listingInfo"' +
-                                ' title="' + escapeHtml(data[i].listing_price.toString()) + '">' +
-                                    '<span class="wolfnet_price" itemprop="price">' +
-                                        data[i].listing_price.toString() +
-                                    '</span> ' +
-                                    getBedBathHTML(data[i]) +
-                                '</div>' +
-                            '</div>' +
-                        '</div> ' +
-                        '<div class="wolfnet_locationInfo" title="' + escapeHtml(data[i].address) + '">' +
-                            '<div class="wolfnet_address">' +
-                                data[i].display_address +
-                            '</div> ' +
-                            '<div class="wolfnet_location" itemprop="locality">' +
-                                data[i].location +
-                            '</div> ' +
-                            '<div class="wolfnet_full_address" itemprop="street-address" style="display: none;">' +
-                                data[i].address +
-                            '</div> ' +
-                        '</div> ' +
-                        '<div class="wolfnet_branding">' +
-                            getBrandingHTML(data[i]) +
-                        '</div>' +
-                    '</a>'
-                )
-                .appendTo($listings);
-
+        if (templates.hasOwnProperty('listing')) {
+            for (var i=0, l=listingsData.length; i<l; i++) {
+                $listings.append(renderListing(listingsData[i], templates['listing']));
+            }
         }
 
         $container.find('.wolfnet_listings').replaceWith($listings);
@@ -316,9 +275,72 @@
 
     };
 
+    var renderListing = function(listing, template)
+    {
+        var $listing = $(template);
+
+        // Listing
+        $listing.attr('id', listing.property_id);
+
+        // Link
+        $listing.find('a.wolfnet_listingLink').attr('href', listing.property_url);
+
+        // Thumbnail
+        $listing.find('.wolfnet_listingImage img').attr({
+            'src': listing.thumbnail_url,
+            'alt': 'Property for sale at ' + listing.address,
+            'data-photo-url': listing.thumbnails_url
+        });
+
+        // Price
+        $listing.find('.wolfnet_price')
+            .attr('title', listing.listing_price)
+            .text(listing.listing_price);
+
+        // Beds / Baths
+        $listing.find('.wolfnet_bed_bath').attr('title', listing.bedsbaths_full);
+        if (listing.total_bedrooms) {
+            $listing.find('.wolfnet_beds').text(listing.total_bedrooms).show();
+            if (listing.total_baths) {
+                $listing.find('.wolfnet_bed_bath .wolfnet_info_separator').show();
+            }
+        }
+        if (listing.total_baths) {
+            $listing.find('.wolfnet_baths').text(listing.total_baths).show();
+        }
+
+        // Location
+        $listing.find('.wolfnet_locationInfo').attr('title', listing.address);
+        $listing.find('.wolfnet_address').text(listing.display_address);
+        $listing.find('.wolfnet_location').text(listing.location);
+        $listing.find('.wolfnet_full_address').text(listing.address);
+
+        // Branding
+        var $branding = $listing.find('.wolfnet_branding');
+
+        var $brokerLogo = $branding.find('.wolfnet_brokerLogo');
+        if ((listing.branding.type === 'idx') && !$brokerLogo.is('.wolfnet_idxLogo')) {
+            $brokerLogo.addClass('wolfnet_idxLogo');
+        }
+        if ($.trim(listing.branding.logo) !== '') {
+            $brokerLogo.show().find('img').first().attr('src', listing.branding.logo);
+        }
+
+        $branding.find('wolfnet_brandingCourtesyText').html(listing.branding.courtesy_text);
+        $branding.find('wolfnet_brandingAgent .wolfnet_brandingAgentName').html(listing.branding.agent_name);
+        $branding.find('wolfnet_brandingAgent .wolfnet_brandingAgentPhone').html(listing.branding.agent_phone);
+        $branding.find('wolfnet_brandingOffice .wolfnet_brandingOfficeName').html(listing.branding.office_name);
+        $branding.find('wolfnet_brandingOffice .wolfnet_brandingOfficePhone').html(listing.branding.office_phone);
+        $branding.find('wolfnet_brandingTollFreePhone').html(listing.branding.toll_free_phone);
+
+        return $listing;
+
+    }
+
     var populateMap = function(data)
     {
-        data = ($.isArray(data.responseData.data.listing)) ? data.responseData.data.listing : [];
+        var listingsData = ($.isArray(data.responseData.data.listing)) ? data.responseData.data.listing : [];
+        var templates = data.responseData.data.hasOwnProperty('templates') ? data.responseData.data.templates : {};
 
         var $container = this;
         var componentMap = $container.find('.wolfnet_wntMainMap').data('map');
@@ -326,10 +348,10 @@
 
         componentMap.removeAllShapes();
 
-        for (var i=0, l=data.length; i<l; i++) {
-            houseoverHtml = getHouseoverHtml(data[i]);
-            var houseoverIcon = componentMap.mapIcon(houseIcon,20,20);
-            var houseover = componentMap.poi(data[i].geo.lat, data[i].geo.lng, houseoverIcon, houseoverHtml, data[i].property_id, data[i].property_url);
+        for (var i=0, l=listingsData.length; i<l; i++) {
+            var houseoverHtml = templates.hasOwnProperty('map') ? renderListing(listingsData[i], templates['map']).get(0) : '';
+            var houseoverIcon = componentMap.mapIcon(houseIcon, 20, 20);
+            var houseover = componentMap.poi(listingsData[i].geo.lat, listingsData[i].geo.lng, houseoverIcon, houseoverHtml, listingsData[i].property_id, listingsData[i].property_url);
             componentMap.addPoi(houseover);
         }
 
@@ -348,8 +370,7 @@
 
         if ($container.is('.wolfnet_propertyList')) {
             renderPropertyList.call($container, data);
-        }
-        else if ($container.is('.wolfnet_listingGrid')) {
+        } else if ($container.is('.wolfnet_listingGrid')) {
             renderListingGrid.call($container, data);
             $container.wolfnetListingGrid('refresh');
         }
@@ -474,7 +495,7 @@
         $container.find('.wolfnet_page_start').text(state.startrow);
         $container.find('.wolfnet_page_end').text(rowcountDisplay);
 
-        $('html,body').scrollTop($container.closest('.wolfnet_widget').offset().top - 100);
+        $('html,body').scrollTop($container.find('.wolfnet_toolbar').offset().top - 100);
 
         if ($container.is('.wolfnet_listingGrid') && $container.wolfnetListingGrid) {
             $container.wolfnetListingGrid("refresh", true);
@@ -575,7 +596,7 @@
                     dataType : 'jsonp',
                     data : getData(),
                     beforeSend: function(xhr){
-                        $container.addClass('wolfnet_refreshing');
+                        $container.addClass('wolfnet_refreshing').trigger(UPDATING);
                     }
                 })
                 // success: update listings

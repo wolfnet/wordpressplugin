@@ -189,7 +189,7 @@ class Test_Wolfnet_Views extends WP_UnitTestCase
 
         $qdata['maxrows'] = 5;
         $data = $this->wolfnet->apin->sendRequest($GLOBALS['wnt_tests_options']['api_key_good1'], '/listing', 'GET', $qdata);
-        $this->wolfnet->augmentListingsData($data, $GLOBALS['wnt_tests_options']['api_key_good1'] );
+        $this->wolfnet->augmentListingsData($data, $GLOBALS['wnt_tests_options']['api_key_good1'], array('listing', 'map') );
         $listingsData = $data['responseData']['data']['listing'];
         $html = $this->wolfnet->views->mapView($listingsData, $GLOBALS['wnt_tests_options']['api_key_good1'] );
         $this->assertRegExp($this->wnt_html_regex, $html, $this->wnt_html_msg);

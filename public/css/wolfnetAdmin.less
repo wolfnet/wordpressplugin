@@ -88,14 +88,26 @@ html {
 		height: auto;
 	}
 
-	table tbody tr td {
-        vertical-align: top;
 	}
 
-	label {
-		font-weight: bold;
-		white-space: nowrap;
+	table {
+		thead tr,
+		tbody tr,
+		tr {
+
+			td {
+				vertical-align: top;
+			}
+
+		}
 	}
+
+    th {
+        label {
+            font-weight: bold;
+            white-space: nowrap;
+        }
+    }
 
 	fieldset {
 
