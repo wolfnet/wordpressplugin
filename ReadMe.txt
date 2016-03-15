@@ -93,6 +93,9 @@ Please upgrade to the latest version of the plugin as we will be disabling our o
 
 == Changelog ==
 
+= 1.9.3 =
+* Adds previously untracked bugfixes.
+
 = 1.9.2 =
 * Removes deprecated jQuery.browser function.
 * Fixes bug where agent featured listings were using the default product key, not the key associated with the agent's market.
