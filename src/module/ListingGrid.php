@@ -139,11 +139,11 @@ class Wolfnet_Module_ListingGrid
         } else {
             // $dataOverride is passed in. As of writing this comment, this is data
             // is coming from the AgentPagesHandler - we need to display a listing
-            // grid of an agent's featured listings. This is a vain attempt at 
+            // grid of an agent's featured listings. This is a vain attempt at
             // repurposing this code as-is.
             $data = $dataOverride;
         }
-        
+
 
         // add some elements to the array returned by the API
         // wpMeta should contain any criteria or other setting which do not come from the API
@@ -221,7 +221,7 @@ class Wolfnet_Module_ListingGrid
 
         if ($vars['wpMeta']['maptype'] != "disabled") {
             $vars['map'] = $this->plugin->data->getMap(
-            	$listingsData, 
+            	$listingsData,
             	$_REQUEST[$this->plugin->requestPrefix.'productkey']
             );
             $vars['wpMeta']['maptype'] = $vars['maptype'];
@@ -239,6 +239,7 @@ class Wolfnet_Module_ListingGrid
 
         $vars['wpMeta']['paginated'] = ($vars['wpMeta']['paginated'] === true || $vars['wpMeta']['paginated'] === 'true');
         $vars['wpMeta']['sortoptions'] = ($vars['wpMeta']['sortoptions'] === true || $vars['wpMeta']['sortoptions'] === 'true');
+
         $vars['maxresults'] = $this->plugin->data->getMaxResults($this->plugin->keyService->getDefault());
 
         if ($vars['wpMeta']['paginated'] || $vars['wpMeta']['sortoptions']) {
