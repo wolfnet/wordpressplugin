@@ -34,7 +34,13 @@ class Wolfnet_Module_PropertyList
     public function scPropertyList($attrs = array())
     {
         try {
+            $default_maxrows = '50';
             $criteria = array_merge($this->getDefaults(), (is_array($attrs)) ? $attrs : array());
+
+            // TODO: Default this elsewhere, and clean up maxrows vs numrows
+            if ($criteria['maxresults'] > $default_maxrows) {
+                $criteria['maxresults'] = $default_maxrows;
+            }
 
             $this->plugin->decodeCriteria($criteria);
 
