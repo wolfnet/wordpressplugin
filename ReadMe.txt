@@ -93,6 +93,9 @@ Please upgrade to the latest version of the plugin as we will be disabling our o
 
 == Changelog ==
 
+= 1.9.4 =
+* Fixing default issue with Max Results Per Page on list or grid.
+
 = 1.9.3 =
 * Adds previously untracked bugfixes.
 
