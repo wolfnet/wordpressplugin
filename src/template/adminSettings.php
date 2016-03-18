@@ -37,7 +37,9 @@
 
         <fieldset>
 
-            <legend><h3>General Settings</h3></legend>
+            <legend>
+                <h2 class="title">Product Key</h2>
+            </legend>
 
             <table class="form-table" style="width:800px">
                 <tr valign="top">
@@ -67,7 +69,7 @@
                                 <tr class="row<?php echo $i; ?>">
                                     <td>
                                         <input class="wolfnet_productKey"
-                                         type="text" size="50"
+                                         type="text" size="40"
                                          id="wolfnet_productKey_<?php echo $i; ?>"
                                          name="wolfnet_productKey_<?php echo $i; ?>"
                                          value="<?php echo $productKey[$i-1]->key; ?>" />
@@ -88,10 +90,10 @@
                                     </td>
                                     <td>
                                         <input class="wolfnet_keyLabel"
-                                         type="text"
+                                         type="text" size="25"
                                          id="wolfnet_keyLabel_<?php echo $i; ?>"
                                          name="wolfnet_keyLabel_<?php echo $i; ?>"
-                                         value="<?php echo $productKey[$i-1]->label; ?>" size="30" />
+                                         value="<?php echo $productKey[$i-1]->label; ?>" />
                                     </td>
                                     <td>
                                         <?php if($i != 1): ?>
@@ -135,20 +137,29 @@
 
                 <tr valign="top">
                     <td>
-                        <div>
+        </fieldset>
+
+        <fieldset>
+
+                        <legend>
+                            <h2 class="title">SSL</h2>
+                        </legend>
+
+                        <p>
                             <input name="<?php echo Wolfnet_Plugin::SSL_WP_OPTION; ?>"
                              id="wnt-<?php echo Wolfnet_Plugin::SSL_WP_OPTION; ?>"
                              <?php checked($sslEnabled, true); ?> type="checkbox" value="1" />
                             <label for="wnt-<?php echo Wolfnet_Plugin::SSL_WP_OPTION; ?>">
                                 SSL Enabled
                             </label>
-                        </div>
+                        </p>
+
                         <div>
-                            <small>
+                            <p class="description">
                                 This option determines if the plugin will communicate with the API via
                                 a secure connection. In the near future this option will be deprecated
                                 and the API will only work over SSL.
-                            </small>
+                            </p>
                         </div>
                     </td>
                 </tr>
