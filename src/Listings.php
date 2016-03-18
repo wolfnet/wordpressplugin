@@ -374,6 +374,26 @@ class Wolfnet_Listings
     }
 
 
+    public function getPhotos($propertyId, $keyId=null)
+    {
+        if (($keyId == null) || ($keyId == '')) {
+            $productKey = $this->plugin->keyService->getDefault();
+        } else {
+            $productKey = $this->plugin->keyService->getById($keyId);
+        }
+        try {
+            $data = $this->plugin->api->sendRequest(
+                $productKey,
+                '/listing/' . $propertyId . '/photos',
+                'GET'
+            );
+        } catch (Wolfnet_Exception $e) {
+            return $this->plugin->displayException($e);
+        }
+        return $data['responseData']['data'];
+    }
+
+
     public function getDefaults()
     {
 

@@ -338,7 +338,7 @@ class Wolfnet_Data
     public function getSearchManagerBaseUrl($productKey = null)
     {
         if ($productKey == null) {
-            $productKey = $this->plugin->keyService->getDefaultProductKey();
+            $productKey = $this->plugin->keyService->getDefault();
         }
 
         $data  = $this->plugin->api->sendRequest($productKey, '/settings');

@@ -494,7 +494,7 @@ class Wolfnet_Ajax
             $propertyId = (array_key_exists('property_id', $_REQUEST)) ? $_REQUEST['property_id'] : 0;
             $keyId = (array_key_exists('keyid', $_REQUEST)) ? $_REQUEST['keyid'] : '';
 
-            $response = $GLOBALS['wolfnet']->getListingPhotos($propertyId, $keyId);
+            $response = $GLOBALS['wolfnet']->listings->getPhotos($propertyId, $keyId);
 
         } catch (Wolfnet_Exception $e) {
 
