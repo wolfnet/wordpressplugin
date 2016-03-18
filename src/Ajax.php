@@ -359,7 +359,7 @@ class Wolfnet_Ajax
     {
 
         try {
-            $response = $GLOBALS['wolfnet']->template->getWpHeader() 
+            $response = $GLOBALS['wolfnet']->template->getWpHeader()
             . $GLOBALS['wolfnet']->template->getWpFooter();
 
         } catch (Wolfnet_Exception $e) {
@@ -424,8 +424,8 @@ class Wolfnet_Ajax
         try {
             $args = $GLOBALS['wolfnet']->listingGrid->getOptions($_REQUEST);
 
-            $response = $GLOBALS['wolfnet']->template->getWpHeader() 
-            	. $GLOBALS['wolfnet']->listingGrid($args) 
+            $response = $GLOBALS['wolfnet']->template->getWpHeader()
+            	. $GLOBALS['wolfnet']->listingGrid($args)
             	. $GLOBALS['wolfnet']->template->getWpFooter();
 
         } catch (Wolfnet_Exception $e) {
