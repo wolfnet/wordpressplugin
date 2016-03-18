@@ -59,9 +59,10 @@
             </p>
         </div>
 
-        <p style="clear: both;">
-            <input type="submit" name="submit" id="submit" class="button button-primary"
-             value="<?php _e('Save Changes') ?>" />
+        <p class="submit">
+            <?php submit_button(
+                $text = NULL, $type = 'primary', $name = 'submit', $wrap = FALSE, $other_attributes = NULL
+            ); ?>
         </p>
 
     </form>

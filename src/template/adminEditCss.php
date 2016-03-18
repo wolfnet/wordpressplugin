@@ -36,15 +36,15 @@
                     </td>
                 </tr>
 
-                <tr>
-                    <td class="submit">
-                        <input type="submit" class="button-primary" value="<?php _e('Save Changes') ?>" />
-                    </td>
-                </tr>
-
             </table>
 
         </fieldset>
+
+        <p class="submit">
+            <?php submit_button(
+                $text = NULL, $type = 'primary', $name = 'submit', $wrap = FALSE, $other_attributes = NULL
+            ); ?>
+        </p>
 
     </form>
 
