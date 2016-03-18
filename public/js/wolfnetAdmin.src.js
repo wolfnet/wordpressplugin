@@ -248,15 +248,15 @@ if ( typeof jQuery != 'undefined' ) {
         $.fn.wolfnetValidateProductKey = function (clientOptions) {
 
             var options = {
-                validClass      : 'valid',
-                invalidClass    : 'invalid',
+                validClass      : 'valid success',
+                invalidClass    : 'invalid error',
                 wrapperClass    : 'wolfnetProductKeyValidationWrapper',
                 validEvent      : 'validProductKey',
                 invalidEvent    : 'invalidProductKey',
                 validationEvent : 'validateProductKey',
                 iconClass       : 'wnt-icon',
-                validIconClass  : 'wnt-icon-checkmark-circle',
-                invalidIconClass: 'wnt-icon wnt-icon-cancel-circle',
+                validIconClass  : 'wnt-icon-checkmark',
+                invalidIconClass: 'wnt-icon wnt-icon-close',
                 validIndicatorClass: 'wnt-indicator-valid',
                 invalidIndicatorClass: 'wnt-indicator-invalid'
             };
