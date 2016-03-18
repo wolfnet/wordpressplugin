@@ -57,99 +57,99 @@
                     </tr>
                 </thead>
                 <tbody>
-                            <?php
-                            $numrows = count($productKey);
-                            // we need to show at least one row of form fields so they can add a key if there are none
-                            if ($numrows < 1 ) {
-                                $numrows = 1;
-                                $productKey = array( (object) array('key' => '', 'market' => '', 'label' => '') );
-                            }
-                            for($i=1; $i<=$numrows; $i++):
-                            ?>
-                                <tr class="<?php echo ($i % 2 == 0) ? 'alternate': '' ?>">
-                                    <td>
-                                        <input class="wolfnet_productKey"
-                                         type="text" size="40"
-                                         id="wolfnet_productKey_<?php echo $i; ?>"
-                                         name="wolfnet_productKey_<?php echo $i; ?>"
-                                         value="<?php echo $productKey[$i-1]->key; ?>" />
-                                    </td>
-                                    <td>
-                                        <span class="wolfnet_keyMarket">
-                                            <?php
-                                                if (isset($productKey[$i-1]->market)) {
-                                                    echo $productKey[$i-1]->market;
-                                                }
-                                            ?>
-                                            <input class="wolfnet_keyMarket_value"
-                                             type="hidden"
-                                             id="wolfnet_keyMarket_<?php echo $i; ?>"
-                                             name="wolfnet_keyMarket_<?php echo $i; ?>"
-                                             value="<?php echo $productKey[$i-1]->market; ?>" />
-                                        </span>
-                                    </td>
-                                    <td>
-                                        <input class="wolfnet_keyLabel"
-                                         type="text" size="25"
-                                         id="wolfnet_keyLabel_<?php echo $i; ?>"
-                                         name="wolfnet_keyLabel_<?php echo $i; ?>"
-                                         value="<?php echo $productKey[$i-1]->label; ?>" />
-                                    </td>
-                                    <td>
-                                        <?php if($i != 1): ?>
-                                            <button class="button action wolfnet_deleteKey wnt-text-danger"
-                                             type="button" data-wnt-key="<?php echo $i; ?>">
-                                                <span class="wnt-icon wnt-icon-bin wnt-text-danger"></span>
-                                                <?php _e('Delete'); ?>
-                                            </button>
-                                        <?php endif; ?>
-                                    </td>
-                                </tr>
-                            <?php endfor; ?>
+                    <?php
+                    $numrows = count($productKey);
+                    // we need to show at least one row of form fields so they can add a key if there are none
+                    if ($numrows < 1 ) {
+                        $numrows = 1;
+                        $productKey = array( (object) array('key' => '', 'market' => '', 'label' => '') );
+                    }
+                    for($i=1; $i<=$numrows; $i++):
+                    ?>
+                        <tr class="<?php echo ($i % 2 == 0) ? 'alternate': '' ?>">
+                            <td>
+                                <input class="wolfnet_productKey"
+                                 type="text" size="40"
+                                 id="wolfnet_productKey_<?php echo $i; ?>"
+                                 name="wolfnet_productKey_<?php echo $i; ?>"
+                                 value="<?php echo $productKey[$i-1]->key; ?>" />
+                            </td>
+                            <td>
+                                <span class="wolfnet_keyMarket">
+                                    <?php
+                                        if (isset($productKey[$i-1]->market)) {
+                                            echo $productKey[$i-1]->market;
+                                        }
+                                    ?>
+                                    <input class="wolfnet_keyMarket_value"
+                                     type="hidden"
+                                     id="wolfnet_keyMarket_<?php echo $i; ?>"
+                                     name="wolfnet_keyMarket_<?php echo $i; ?>"
+                                     value="<?php echo $productKey[$i-1]->market; ?>" />
+                                </span>
+                            </td>
+                            <td>
+                                <input class="wolfnet_keyLabel"
+                                 type="text" size="25"
+                                 id="wolfnet_keyLabel_<?php echo $i; ?>"
+                                 name="wolfnet_keyLabel_<?php echo $i; ?>"
+                                 value="<?php echo $productKey[$i-1]->label; ?>" />
+                            </td>
+                            <td>
+                                <?php if($i != 1): ?>
+                                    <button class="button action wolfnet_deleteKey wnt-text-danger"
+                                     type="button" data-wnt-key="<?php echo $i; ?>">
+                                        <span class="wnt-icon wnt-icon-bin wnt-text-danger"></span>
+                                        <?php _e('Delete'); ?>
+                                    </button>
+                                <?php endif; ?>
+                            </td>
+                        </tr>
+                    <?php endfor; ?>
                 </tbody>
             </table>
 
             <div class="tablenav bottom">
-                        <button type="button" class="button action" id="wolfnet_addKey">
-                            <span class="wnt-icon wnt-icon-plus"></span>
-                            <?php _e('Add Product Key'); ?>
-                        </button>
+                <button type="button" class="button action" id="wolfnet_addKey">
+                    <span class="wnt-icon wnt-icon-plus"></span>
+                    <?php _e('Add Product Key'); ?>
+                </button>
             </div>
 
-                        <p class="description">
-                            Enter your unique product key for the WolfNet WordPress plugin. The
-                            product key is required to connect your WordPress site to your WolfNet
-                            property search. WolfNet Plugin features will not be available until the
-                            correct key has been entered. If you do not have a key, please contact
-                            WolfNet Technologies via phone at 612-342-0088 or toll free at
-                            1-866-WOLFNET, or via email at
-                            <a href="mailto:service@wolfnet.com">service@wolfnet.com</a>.
-                            You may also find us online at
-                            <a href="http://wolfnet.com" target="_blank">WolfNet.com</a>.
-                        </p>
+            <p class="description">
+                Enter your unique product key for the WolfNet WordPress plugin. The
+                product key is required to connect your WordPress site to your WolfNet
+                property search. WolfNet Plugin features will not be available until the
+                correct key has been entered. If you do not have a key, please contact
+                WolfNet Technologies via phone at 612-342-0088 or toll free at
+                1-866-WOLFNET, or via email at
+                <a href="mailto:service@wolfnet.com">service@wolfnet.com</a>.
+                You may also find us online at
+                <a href="http://wolfnet.com" target="_blank">WolfNet.com</a>.
+            </p>
 
         </fieldset>
 
         <fieldset>
 
-                        <legend>
-                            <h2 class="title">SSL</h2>
-                        </legend>
+            <legend>
+                <h2 class="title">SSL</h2>
+            </legend>
 
-                        <p>
-                            <input name="<?php echo Wolfnet_Plugin::SSL_WP_OPTION; ?>"
-                             id="wnt-<?php echo Wolfnet_Plugin::SSL_WP_OPTION; ?>"
-                             <?php checked($sslEnabled, true); ?> type="checkbox" value="1" />
-                            <label for="wnt-<?php echo Wolfnet_Plugin::SSL_WP_OPTION; ?>">
-                                SSL Enabled
-                            </label>
-                        </p>
+            <p>
+                <input name="<?php echo Wolfnet_Plugin::SSL_WP_OPTION; ?>"
+                 id="wnt-<?php echo Wolfnet_Plugin::SSL_WP_OPTION; ?>"
+                 <?php checked($sslEnabled, true); ?> type="checkbox" value="1" />
+                <label for="wnt-<?php echo Wolfnet_Plugin::SSL_WP_OPTION; ?>">
+                    SSL Enabled
+                </label>
+            </p>
 
-                        <p class="description">
-                            This option determines if the plugin will communicate with the API via
-                            a secure connection. In the near future this option will be deprecated
-                            and the API will only work over SSL.
-                        </p>
+            <p class="description">
+                This option determines if the plugin will communicate with the API via
+                a secure connection. In the near future this option will be deprecated
+                and the API will only work over SSL.
+            </p>
 
         </fieldset>
 
