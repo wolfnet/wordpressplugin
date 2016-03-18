@@ -633,10 +633,8 @@ class Wolfnet_Ajax
 			// Retrieve user's search term from request
 			$term = $_REQUEST['data']['term'];
 
-			// TODO: Check for field in request and set if it exists
-
 			// Make API request to retrieve suggestion data
-			$response = $GLOBALS['wolfnet']->getSuggestions($term);
+			$response = $GLOBALS['wolfnet']->smartSearch->getSuggestions($term);
 
 		} catch (Wolfnet_Exception $e) {
 

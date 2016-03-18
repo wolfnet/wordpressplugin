@@ -170,6 +170,12 @@ class Wolfnet_Factory
     }
 
 
+    private function getWolfnet_Module_SmartSearch()
+    {
+        return new Wolfnet_Module_SmartSearch($this->args['plugin']);
+    }
+
+
     private function getWolfnet_Module_SearchManager()
     {
         return new Wolfnet_Module_SearchManager($this->args['plugin']);
@@ -182,11 +188,10 @@ class Wolfnet_Factory
     }
 
 
-    private function getWolfnet_Smart_SearchService($args)
+    private function getWolfnet_Service_SmartSearchService($args)
     {
-        return new Wolfnet_Smart_SearchService(
-            $args['key'],
-            $args['url']
+        return new Wolfnet_Service_SmartSearchService(
+            $args['key'],$args['url']
         );
     }
 

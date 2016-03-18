@@ -23,7 +23,7 @@
 ?>
 
 <div id="<?php echo $instance_id; echo ' '; echo $componentId; ?>"
-    class="wolfnet_smartSearch wolfnet_widget wolfnet_quickSearch <?php echo $viewclass; ?>">
+    class="wolfnet_smartSearch wolfnet_widget wolfnet_quickSearch">
 
     <?php if (trim($title) != '') { ?>
         <h2 class="wolfnet_widgetTitle"><?php echo $title; ?></h2>

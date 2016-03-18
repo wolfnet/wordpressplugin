@@ -414,24 +414,24 @@ class Wolfnet_Views
 			$args[$key] = apply_filters('wolfnet_quickSearchView_' . $key, $item);
 		}
 
-		if ($args['smartsearch']) {
-
-			$args['smartsearchInput'] = uniqid('wolfnet_smartsearch_');
-
-			return apply_filters(
-				'wolfnet_quickSearchView',
-				$this->parseTemplate('smartSearch', $args)
-			);
-
-		} else {
-
-			return apply_filters(
-				'wolfnet_quickSearchView',
-				$this->parseTemplate('quickSearch', $args)
-			);
-		}
+		return apply_filters(
+			'wolfnet_quickSearchView',
+			$this->parseTemplate('quickSearch', $args)
+		);
 
 	}
+
+
+    public function smartSearchView(array $args = array()) {
+        //$args['viewclass'] = 'wolfnet_quickSearch_' . (in_array($args['view'], $views) ? $args['view'] : 'legacy');
+        $args['smartsearchInput'] = uniqid('wolfnet_smartsearch_');
+
+        return apply_filters(
+            'wolfnet_quickSearchView',
+            $this->parseTemplate('smartSearch', $args)
+        );
+
+    }
 
 
     public function mapView($listingsData, $productKey = null)

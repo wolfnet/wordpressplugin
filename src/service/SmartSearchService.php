@@ -9,7 +9,7 @@
  * @license GPLv2 or later (http://www.gnu.org/licenses/gpl-2.0.html)
  *
  */
-class Wolfnet_Smart_SearchService
+class Wolfnet_Service_SmartSearchService
 {
 
 	protected $key;
@@ -117,7 +117,7 @@ class Wolfnet_Smart_SearchService
 		try {
 
 			// Retrieve available smart search criteria
-			$data = $GLOBALS['wolfnet']->apin->sendRequest(
+			$data = $GLOBALS['wolfnet']->api->sendRequest(
 				$this->getKey(),
 				'/search_criteria/smart_search',
 				'GET'
@@ -142,7 +142,7 @@ class Wolfnet_Smart_SearchService
         try {
 
             // Retrive customer-facing labels
-            $data = $GLOBALS['wolfnet']->apin->sendRequest(
+            $data = $GLOBALS['wolfnet']->api->sendRequest(
                 $this->getKey(),
                 '/search_criteria/locale',
                 'GET'
