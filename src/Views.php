@@ -423,11 +423,10 @@ class Wolfnet_Views
 
 
     public function smartSearchView(array $args = array()) {
-        //$args['viewclass'] = 'wolfnet_quickSearch_' . (in_array($args['view'], $views) ? $args['view'] : 'legacy');
         $args['smartsearchInput'] = uniqid('wolfnet_smartsearch_');
 
         return apply_filters(
-            'wolfnet_quickSearchView',
+            'wolfnet_smartSearchView',
             $this->parseTemplate('smartSearch', $args)
         );
 

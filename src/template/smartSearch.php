@@ -23,15 +23,15 @@
 ?>
 
 <div id="<?php echo $instance_id; echo ' '; echo $componentId; ?>"
-    class="wolfnet_smartSearch wolfnet_widget wolfnet_quickSearch">
+    class="wolfnet_smartSearch wolfnet_widget">
 
     <?php if (trim($title) != '') { ?>
         <h2 class="wolfnet_widgetTitle"><?php echo $title; ?></h2>
     <?php } ?>
 
-    <form id="<?php echo $instance_id; ?>_quickSearchForm"
-        class="wolfnet_quickSearch_form wnt-smart-search<?php echo $componentId; ?>"
-        name="<?php echo $instance_id; ?>_quickSearchForm"
+    <form id="<?php echo $instance_id; ?>_smartSearchForm"
+        class="wolfnet_smartSearch_form wnt-smart-search<?php echo $componentId; ?>"
+        name="<?php echo $instance_id; ?>_smartSearchForm"
         method="get" action="<?php echo $formAction; ?>" >
 
         <input type="hidden" name="search_mode" value="form">
@@ -50,11 +50,11 @@
             <div class="wnt-smart-menu smart-menu<?php echo $componentId; ?>"></div>
         </fieldset>
 
-        <!--TODO: horizontal layout-->
-        <!-- Price form fields -->
-        <div class="wolfnet_widgetPrice">
-            <label>Price</label>
-            <div>
+
+        <div class="wolfnet_smartHorizontalWidget">
+
+            <!-- Min Price -->
+            <div class="wolfnet_smartWidgetMinPrice">
                 <select id="<?php echo $instance_id; ?>_min_price" name="min_price">
                     <option value="">Min. Price</option>
                     <?php
@@ -66,7 +66,9 @@
                     } ?>
                 </select>
             </div>
-            <div>
+
+            <!-- Max Price -->
+            <div class="wolfnet_smartWidgetMaxPrice">
                 <select id="<?php echo $instance_id; ?>_max_price" name="max_price">
                     <option value="">Max. Price</option>
                     <?php
@@ -79,34 +81,32 @@
                     ?>
                 </select>
             </div>
-            <div class="wolfnet_clearfix"></div>
-        </div>
 
-        <!-- Beds/Baths form fields -->
-        <div class="wolfnet_widgetBedBath">
-            <div class="wolfnet_widgetBeds">
-                <label for="<?php echo $instance_id; ?>_min_beds">Beds</label>
+            <!-- Beds -->
+            <div class="wolfnet_smartWidgetBeds">
                 <select id="<?php echo $instance_id; ?>_min_beds" name="min_bedrooms">
-                    <option value="">Any</option>
+                    <option value="">Beds</option>
                     <?php foreach ($beds as $bed) { ?>
                     <option value="<?php echo $bed['value']; ?>"><?php echo $bed['label']; ?></option>
                     <?php } ?>
                 </select>
             </div>
-            <div class="wolfnet_widgetBaths">
-                <label for="<?php echo $instance_id; ?>_min_baths">Baths</label>
+
+            <!-- Baths -->
+            <div class="wolfnet_smartWidgetBaths">
                 <select id="<?php echo $instance_id; ?>_min_baths" name="min_bathrooms">
-                    <option value="">Any</option>
+                    <option value="">Baths</option>
                     <?php foreach ($baths as $bath) { ?>
                     <option value="<?php echo $bath['value']; ?>"><?php echo $bath['label']; ?></option>
                     <?php } ?>
                 </select>
             </div>
-        </div>
 
-        <div class="wolfnet_quickSearchFormButton">
-            <button class="wolfnet_quickSearchForm_submitButton" name="search" type="submit">Search!</button>
-        </div>
+            <div class="wolfnet_smartSearchFormButton">
+                <button class="wolfnet_smartSearchForm_submitButton" name="search" type="submit">Search!</button>
+            </div>
+
+        <div>
 
     </form>
 </div>
@@ -115,7 +115,7 @@
 <script type="text/javascript">
 
     jQuery(function($){
-        var $form = $('#<?php echo $instance_id; ?>_quickSearchForm');
+        var $form = $('#<?php echo $instance_id; ?>_smartSearchForm');
 
         var fields = JSON.parse('<?php echo $smartSearchFields; ?>');
         var map = JSON.parse('<?php echo $smartSearchFieldMap; ?>');
