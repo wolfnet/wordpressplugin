@@ -41,10 +41,22 @@
                 <h2 class="title">Product Key</h2>
             </legend>
 
-            <table class="form-table" style="width:800px">
-                <tr valign="top">
-                    <td>
-                        <table class="key-table" id="wolfnet_keys">
+            <table class="key-table widefat" id="wolfnet_keys">
+                <thead>
+                    <tr>
+                        <th class="row-title" scope="row">
+                            Product Key
+                        </th>
+                        <th class="row-title" scope="row">
+                            Market Name
+                        </th>
+                        <th class="row-title" scope="row">
+                            Label
+                        </th>
+                        <th class="row-title" scope="row"></th>
+                    </tr>
+                </thead>
+                <tbody>
                             <?php
                             $numrows = count($productKey);
                             // we need to show at least one row of form fields so they can add a key if there are none
@@ -54,19 +66,7 @@
                             }
                             for($i=1; $i<=$numrows; $i++):
                             ?>
-                                <tr class="row<?php echo $i; ?>">
-                                    <th scope="row">
-                                        <label for="wolfnet_productKey_<?php echo $i; ?>">Product Key</label>
-                                    </th>
-                                    <th scope="row">
-                                        Market Name
-                                    </th>
-                                    <th scope="row">
-                                        <label for="wolfnet_keyLabel_<?php echo $i; ?>">Label<label>
-                                    </th>
-                                    <th scope="row"></th>
-                                </tr>
-                                <tr class="row<?php echo $i; ?>">
+                                <tr class="<?php echo ($i % 2 == 0) ? 'alternate': '' ?>">
                                     <td>
                                         <input class="wolfnet_productKey"
                                          type="text" size="40"
@@ -106,21 +106,16 @@
                                     </td>
                                 </tr>
                             <?php endfor; ?>
-                        </table>
-                    </td>
-                </tr>
+                </tbody>
+            </table>
 
-                <tr>
-                    <td>
+            <div class="tablenav bottom">
                         <button type="button" class="button action" id="wolfnet_addKey">
                             <span class="wnt-icon wnt-icon-plus"></span>
                             <?php _e('Add Product Key'); ?>
                         </button>
-                    </td>
-                </tr>
+            </div>
 
-                <tr valign="top">
-                    <td>
                         <p class="description">
                             Enter your unique product key for the WolfNet WordPress plugin. The
                             product key is required to connect your WordPress site to your WolfNet
@@ -132,11 +127,7 @@
                             You may also find us online at
                             <a href="http://wolfnet.com" target="_blank">WolfNet.com</a>.
                         </p>
-                    </td>
-                </tr>
 
-                <tr valign="top">
-                    <td>
         </fieldset>
 
         <fieldset>
@@ -154,20 +145,13 @@
                             </label>
                         </p>
 
-                        <div>
-                            <p class="description">
-                                This option determines if the plugin will communicate with the API via
-                                a secure connection. In the near future this option will be deprecated
-                                and the API will only work over SSL.
-                            </p>
-                        </div>
-                    </td>
-                </tr>
-
-            </table>
+                        <p class="description">
+                            This option determines if the plugin will communicate with the API via
+                            a secure connection. In the near future this option will be deprecated
+                            and the API will only work over SSL.
+                        </p>
 
         </fieldset>
-
 
         <p class="submit">
             <?php submit_button(
