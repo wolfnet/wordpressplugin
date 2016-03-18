@@ -32,14 +32,32 @@
 
 <div id="<?php echo $instance_id; ?>" class="wolfnet_quickSearchOptions">
     <?php if(count($markets) > 1): ?>
-	<input type="hidden" id="<?php echo $keyids_wpid; ?>" class="keyids" name="<?php echo $keyids_wpname; ?>" value="<?php echo implode(",", $keyids); ?>" />
+    <input type="hidden" id="<?php echo $keyids_wpid; ?>" class="keyids" name="<?php echo $keyids_wpname; ?>" value="<?php echo implode(",", $keyids); ?>" />
     <?php endif; ?>
 
     <table class="form-table">
+
         <tr>
             <td><label>Title:</label></td>
             <td><input id="<?php echo $title_wpid; ?>" name="<?php echo $title_wpname; ?>" value="<?php echo $title; ?>" type="text" /></td>
         </tr>
+
+
+        <?php if(count($markets) < 2): ?>
+        <tr>
+            <td><label for="<?php echo $smartsearch_wpid; ?>">SmartSearch:</label></td>
+            <td>
+                <select id="<?php echo $smartsearch_wpid; ?>" name="<?php echo $smartsearch_wpname; ?>" >
+                    <option value="false" <?php echo $smartsearch_false_wps; ?>>Disabled</option>
+                    <option value="true" <?php echo $smartsearch_true_wps; ?>>Enabled</option>
+                </select>
+                <span class="wolfnet_moreInfo">
+                    Enabling SmartSearch on your WolfNet Quick Search will allow website visitors to search all available locale-based search types, including categories like ‘area,’ ‘body of water’ and ‘school district,’ while also being presented with search suggestions as they enter their search terms.
+                </span>
+            </td>
+        </tr>
+        <?php endif; ?>
+
         <tr>
             <td><label>Layout:</label></td>
             <td>
@@ -52,8 +70,8 @@
 
         <?php if(count($markets) > 1): ?>
         <tr>
-        	<td><label>Market:</label></td>
-        	<td>
+            <td><label>Market:</label></td>
+            <td>
                 <table>
                     <tr>
                         <td>
@@ -63,15 +81,15 @@
                     <?php for($i=0; $i<=count($markets)-1; $i++): ?>
                     <tr>
                         <td>
-        	                <input type="checkbox" class="productkey" value="<?php echo $markets[$i]->id; ?>"
+                            <input type="checkbox" class="productkey" value="<?php echo $markets[$i]->id; ?>"
                                 <?php if( in_array($markets[$i]->id, $keyids) ) echo ' checked'; ?>
-        	                    > 
+                                >
                                 <?php echo $markets[$i]->label; ?>
                         </td>
                     </tr>
                     <?php endfor; ?>
                 </table>
-        	</td>
+            </td>
         </tr>
         <tr>
             <td><label>Routing</label></td>
@@ -82,12 +100,13 @@
                 </select>
                 <span class="wolfnet_moreInfo">
                     Auto routing will automatically send users to your IDX solution that has the most
-                    matching listings for their search criteria. Manual routing will require the 
+                    matching listings for their search criteria. Manual routing will require the
                     user to select which if your IDX solutions to search on.
                 </span>
-            </td>   
+            </td>
         </tr>
     	<?php endif; ?>
+
     </table>
     <span class="validate_msg"></span>
 </div>
@@ -95,6 +114,8 @@
 <script type="text/javascript">
 
     jQuery(function($){
+
+        wolfnet.initMoreInfo( $( '#<?php echo $instance_id; ?> .wolfnet_moreInfo' ) );
 
         <?php if(count($markets) > 1): ?>
 
@@ -114,15 +135,15 @@
             }
 
             setValidate();
-            
+
         });
 
         $(".allproductkeys").click(function(){
             if($(this).prop('checked')) {
                 form.find(".productkey").attr("checked", true);
                 // add all the keys to the array
-                <?php echo $instance_id; ?> = form.find(".productkey").map(function() { return $(this).val() }).get(); 
-                 
+                <?php echo $instance_id; ?> = form.find(".productkey").map(function() { return $(this).val() }).get();
+
             } else {
                 // uncheckthem and remove everything from the array
                 form.find(".productkey").attr("checked", false);
@@ -130,7 +151,7 @@
             }
 
             setValidate();
-            
+
         });
 
         function setValidate() {
@@ -164,6 +185,22 @@
             }
         <?php endif; ?>
         });
+
+        var $smartsearch = $('#<?php echo $smartsearch_wpid; ?>');
+        if ($smartsearch.val() === 'true') {
+            $('#<?php echo $view_wpid; ?>').prop('disabled',true);
+        }
+
+        $smartsearch.change(function() {
+            var $layoutSetting = $('#<?php echo $view_wpid; ?>');
+
+            if ($smartsearch.val() === 'true') {
+                $layoutSetting.prop('disabled',true);
+            } else {
+                $layoutSetting.prop("disabled", false);
+            }
+        });
+
     });
 
 </script>

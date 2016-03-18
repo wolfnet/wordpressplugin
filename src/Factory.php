@@ -98,8 +98,8 @@ class Wolfnet_Factory
         $port = $ssl ? 443 : 80;
 
         $apiClient = new Wolfnet_Api_Client(
-            Wolfnet_Api_Client::DEFAULT_HOST, 
-            $port, 
+            Wolfnet_Api_Client::DEFAULT_HOST,
+            $port,
             $ssl,
             $verifySsl
         );
@@ -179,6 +179,15 @@ class Wolfnet_Factory
     private function getWolfnet_AgentPagesHandler()
     {
         return new Wolfnet_AgentPagesHandler($this->args['plugin']);
+    }
+
+
+    private function getWolfnet_Smart_SearchService($args)
+    {
+        return new Wolfnet_Smart_SearchService(
+            $args['key'],
+            $args['url']
+        );
     }
 
 

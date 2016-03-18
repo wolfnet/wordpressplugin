@@ -312,7 +312,7 @@ class Wolfnet_Views
     }
 
 
-    public function agentView(array $args = array()) 
+    public function agentView(array $args = array())
     {
         foreach ($args as $key => $item) {
             $args[$key] = apply_filters('wolfnet_agentPagesView_' . $key, $item);
@@ -322,7 +322,7 @@ class Wolfnet_Views
     }
 
 
-    public function agentContact(array $args = array()) 
+    public function agentContact(array $args = array())
     {
         foreach ($args as $key => $item) {
             $args[$key] = apply_filters('wolfnet_agentPagesView_' . $key, $item);
@@ -401,21 +401,37 @@ class Wolfnet_Views
     }
 
 
-    public function quickSearchView(array $args = array())
-    {
-        // array containing possible values for 'view' arg
-        $views = array('basic', 'legacy');
+	public function quickSearchView(array $args = array())
+	{
 
-        //set up a custom css class for the wrapper. default 'wolfnet_quickSearch_legacy'
-        $args['viewclass'] = 'wolfnet_quickSearch_' . (in_array($args['view'], $views) ? $args['view'] : 'legacy');
+		// array containing possible values for 'view' arg
+		$views = array('basic', 'legacy');
 
-        foreach ($args as $key => $item) {
-            $args[$key] = apply_filters('wolfnet_quickSearchView_' . $key, $item);
-        }
+		//set up a custom css class for the wrapper. default 'wolfnet_quickSearch_legacy'
+		$args['viewclass'] = 'wolfnet_quickSearch_' . (in_array($args['view'], $views) ? $args['view'] : 'legacy');
 
-        return apply_filters('wolfnet_quickSearchView', $this->parseTemplate('quickSearch', $args));
+		foreach ($args as $key => $item) {
+			$args[$key] = apply_filters('wolfnet_quickSearchView_' . $key, $item);
+		}
 
-    }
+		if ($args['smartsearch']) {
+
+			$args['smartsearchInput'] = uniqid('wolfnet_smartsearch_');
+
+			return apply_filters(
+				'wolfnet_quickSearchView',
+				$this->parseTemplate('smartSearch', $args)
+			);
+
+		} else {
+
+			return apply_filters(
+				'wolfnet_quickSearchView',
+				$this->parseTemplate('quickSearch', $args)
+			);
+		}
+
+	}
 
 
     public function mapView($listingsData, $productKey = null)

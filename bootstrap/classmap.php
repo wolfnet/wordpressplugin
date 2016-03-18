@@ -16,7 +16,7 @@ return array(
     'Wolfnet_Plugin' => '/Plugin.php',
     'Wolfnet_Template' => '/Template.php',
     'Wolfnet_Views' => '/Views.php',
-    
+
     'Wolfnet_Api_ApiException' => '/api/ApiException.php',
     'Wolfnet_Api_AuthDecorator' => '/api/AuthDecorator.php',
     'Wolfnet_Api_CachingDecorator' => '/api/CachingDecorator.php',
@@ -39,4 +39,5 @@ return array(
     'Wolfnet_Widget_ListingGridWidget' => '/widget/ListingGridWidget.php',
     'Wolfnet_Widget_PropertyListWidget' => '/widget/PropertyListWidget.php',
     'Wolfnet_Widget_QuickSearchWidget' => '/widget/QuickSearchWidget.php',
+    'Wolfnet_Smart_SearchService' => '/service/SmartSearchService.php',
 );
