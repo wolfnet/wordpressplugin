@@ -79,7 +79,7 @@ unset($wpMeta['key']);
         $listingGrid.filter('.wolfnet_withPagination,.wolfnet_withSortOptions').wolfnetToolbar({
              numrows          : <?php echo $wpMeta['maxrows'] . "\n"; ?>
             ,criteria         : <?php echo json_encode($wpMeta) . "\n"; ?>
-            ,maxResults       : <?php echo $wpMeta['total_rows'] . "\n"; ?>
+            ,maxResults       : <?php echo $maxresults . "\n"; ?>
             ,itemsPerPageData : <?php echo json_encode($itemsPerPage) . "\n"; ?>
             ,sortOptionsData  : <?php echo json_encode($sortOptions) . "\n"; ?>
         });

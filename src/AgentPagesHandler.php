@@ -362,6 +362,10 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
         $criteria['maxrows'] = $count;
         $criteria['maxresults'] = $count;
         $criteria['gridalign'] = 'left';
+        
+        // Override the default key with the agent's key
+        $criteria['key'] = $key;
+        $criteria['keyid'] = $this->plugin->keyService->getIdByKey($key);
 
         $this->args['criteria'] = array_merge($this->args['criteria'], $criteria);
 
