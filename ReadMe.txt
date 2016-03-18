@@ -3,7 +3,7 @@ Author:             WolfNet Technologies, LLC
 Contributors:       wolfnettech, ajmichels, asbaumgart, michaelpidde, blots
 Tags:               idx, mls, homes
 Requires at least:  3.5.1
-Tested up to:       4.3.1
+Tested up to:       4.4.2
 Stable tag:         {X.X.X-stable}
 License:            GPLv2 or later
 License URI:        http://www.gnu.org/licenses/gpl-2.0.html
@@ -93,8 +93,12 @@ Please upgrade to the latest version of the plugin as we will be disabling our o
 
 == Changelog ==
 
+= 1.9.3 =
+* Adds previously untracked bugfixes.
+
 = 1.9.2 =
 * Removes deprecated jQuery.browser function.
+* Fixes bug where agent featured listings were using the default product key, not the key associated with the agent's market.
 
 = 1.9.1 =
 * Adding new class names to widgets.
