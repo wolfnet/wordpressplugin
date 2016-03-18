@@ -29,7 +29,7 @@ function wolfnet_print_thumbnail($img, $imgdir)
 ?>
 <div id="wolfnet_support_page" class="wrap">
 
-    <div id="icon-options-wolfnet" class="icon32"><br/></div>
+    <div id="icon-options-wolfnet" class="icon32"><br /></div>
 
     <h2>WolfNet <sup>&reg;</sup> - Plugin Support</h2>
 

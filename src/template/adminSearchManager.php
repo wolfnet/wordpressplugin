@@ -24,7 +24,7 @@
 
 <div id="wolfnet-search-manager" class="wrap">
 
-    <div id="icon-options-wolfnet" class="icon32"><br></div>
+    <div id="icon-options-wolfnet" class="icon32"><br /></div>
 
     <h2>WolfNet <sup>&reg;</sup> - Search Manager</h2>
 

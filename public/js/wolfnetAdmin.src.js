@@ -357,8 +357,9 @@ if ( typeof jQuery != 'undefined' ) {
             var onValidEvent = function (event) {
                 var $input = $(this);
                 var $wrapper = $input.parent();
-                var $marketContainer = $wrapper.closest('tr').find('.wolfnet_keyMarket');
-                var $marketLabel = $wrapper.closest('tr').find('.wolfnet_keyLabel');
+                var $row = $wrapper.closest('tr');
+                var $marketContainer = $row.find('.wolfnet_keyMarket');
+                var $marketLabel = $row.find('.wolfnet_keyLabel');
                 var key = $input.val();
 
                 // Updating the appearance to indicate the input is valid
