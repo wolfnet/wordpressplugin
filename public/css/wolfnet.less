@@ -1208,13 +1208,17 @@
     }
 
     &.wolfnet_listingGrid {
-        text-align: left;
+        text-align: center;
         margin:     0 auto 2em auto;
 
         .wolfnet_listing {
             text-align: left;
             position:   relative;
 
+            display: inline-block;
+            float: none;
+            width: @listingWidth;
+            vertical-align: top;
 
             .wolfnet_branding {
                 display: block;
