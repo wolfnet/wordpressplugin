@@ -76,9 +76,62 @@ if (typeof jQuery !== 'undefined') {
             var $target = $(target);
             var data = $target.data(pluginName);
             var $items = getGridItems(target);
+            var containerWidth = data.$container.innerWidth();
 
-            // Resize items
-            $items.removeClass('wolfnet_listing_sm wolfnet_listing_xs');
+            // Reset size and column classes
+            $items.removeClass('wolfnet_listing_sm wolfnet_listing_xs wolfnet_colFirst wolfnet_colLast');
+
+            // See if the items fit in their container
+            if ($items.width() > containerWidth) {
+
+                // Not even one column fits; try reducing item size
+                resizeToFit($items, containerWidth, size);
+                $items.trigger('wntResizeItem');
+
+                // Set up the column classes
+                setupColumns($items);
+
+            } else {
+
+                // One or more columns can fit; resize the items to the target size
+                resizeItems($items, size);
+                $items.trigger('wntResizeItem');
+
+                // Set up and count the columns
+                var columns = setupColumns($items);
+
+                if (columns === 1) {
+                    // Try resizing to get more columns
+                    switch (size) {
+                        case 'full':
+                            // Done
+                            break;
+                        case 'xs':
+                            // Go back to full-size, 1-column
+                            return updateColumnWidths(target, 'full');
+                            break;
+                        case 'sm':
+                            // Try the next size down
+                            return updateColumnWidths(target, 'xs');
+                            break;
+                        default:
+                            // Try the next size down
+                            return updateColumnWidths(target, 'sm');
+                            break;
+                    }
+                }
+
+            }
+
+            data.$container.trigger('columns-updated.' + pluginName);
+
+            return true;
+
+        };
+
+
+        var resizeItems = function ($items, size)
+        {
             switch (size) {
                 case 'sm':
                     $items.addClass('wolfnet_listing_sm');
@@ -87,12 +140,40 @@ if (typeof jQuery !== 'undefined') {
                     $items.addClass('wolfnet_listing_xs');
                     break;
             }
-            $items.trigger('wntResizeItem');
+        };
 
-            // Remove first/last column identifiers
-            $items.removeClass('wolfnet_colFirst wolfnet_colLast');
 
-            // Find the row breaks, and count the columns
+        var resizeToFit = function ($items, containerWidth, size)
+        {
+            size = size || '';
+
+            resizeItems($items, size);
+
+            if ($items.width() > containerWidth) {
+                // Still too wide; reduce again
+                switch (size) {
+                    case 'xs':
+                        // Smallest size reached
+                        return false;
+                        break;
+                    case 'sm':
+                        return resizeToFit($items, containerWidth, 'xs');
+                        break;
+                    default:
+                        return resizeToFit($items, containerWidth, 'sm');
+                        break;
+                }
+            } else {
+                // Items fit
+                return true;
+            }
+
+        };
+
+
+        // Identify first/last columns; return number of columns found
+        var setupColumns = function($items)
+        {
             var $lastItem = null,
                 columns = 0,
                 rows = 0
@@ -130,30 +211,7 @@ if (typeof jQuery !== 'undefined') {
 
             }
 
-            if (columns === 1) {
-                // Try resizing to get more columns
-                switch (size) {
-                    case 'full':
-                        // Done
-                        data.$container.trigger('columns-updated.' + pluginName);
-                        break;
-                    case 'xs':
-                        // Go back to full-size, 1-column
-                        updateColumnWidths(target, 'full');
-                        break;
-                    case 'sm':
-                        // Try the next size down
-                        updateColumnWidths(target, 'xs');
-                        break;
-                    default:
-                        // Try the next size down
-                        updateColumnWidths(target, 'sm');
-                        break;
-                }
-            } else {
-                // Done
-                data.$container.trigger('columns-updated.' + pluginName);
-            }
+            return columns;
 
         };
 

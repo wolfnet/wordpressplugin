@@ -42,15 +42,15 @@ if (typeof jQuery !== 'undefined') {
             loadingClass: 'wnt-thumbnails-loading',
             photoType: 'thumb_url',
             hideControls: true,
-            controlWidth: 30,
+            controlWidth: 20,
             controlMinWidth: 15,
             controlMinWidthOffset: 2,
             controlsClass: 'wnt-controls',
             iconClass: 'wnt-icon',
             nextBtnClass: 'wnt-next',
             prevBtnClass: 'wnt-prev',
-            nextIconClass: 'wnt-icon-triangle-right',
-            prevIconClass: 'wnt-icon-triangle-left',
+            nextIconClass: 'wnt-icon-caret-right',
+            prevIconClass: 'wnt-icon-caret-left',
             photoSelector: '.primary-photo',
             extraButtonClass: '',
             photoUnavailable: '',
@@ -399,7 +399,6 @@ if (typeof jQuery !== 'undefined') {
                                 );
 
                                 $control.width(newWidth);
-                                $control.find('.' + options.iconClass).css('font-size', newWidth + 'px');
 
                                 if (isLeft) {
                                     $control.css('left', '-' + newPosition + 'px');
