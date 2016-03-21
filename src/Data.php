@@ -272,6 +272,10 @@ class Wolfnet_Data
 			'mapId'        => uniqid('wntMapTrack'),
 			'hideMapId'    => uniqid('hideMap'),
 			'showMapId'    => uniqid('showMap'),
+            'tlBoundLng'   =>$data['responseData']['data']['market']['maptracks']['bounds_tl_lng'],
+            'brBoundLat'   =>$data['responseData']['data']['market']['maptracks']['bounds_br_lat'],
+            'tlBoundLat'   =>$data['responseData']['data']['market']['maptracks']['bounds_tl_lat'],
+            'brBoundLng'   =>$data['responseData']['data']['market']['maptracks']['bounds_br_lng'],
 		);
 
         $args['houseoverData'] = $this->getHouseoverData(
