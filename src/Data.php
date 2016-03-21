@@ -96,12 +96,12 @@ class Wolfnet_Data
     {
         $args = array_merge($data['wpMeta'], array(
             'toolbarClass' => $class . ' ',
-            'maxresults'   => $this->getMaxResults($data['wpMeta']['key']), // total results on all pages
+            'maxresults'   => $data['maxresults'], // total results on all pages
             'numrows'      => $data['wpMeta']['maxresults'], // total results per page
             'prevClass'    => ($data['wpMeta']['startrow'] <= 1) ? 'wolfnet_disabled' : '',
             'lastitem'     => $data['wpMeta']['startrow'] + $data['wpMeta']['maxresults'] - 1,
             'action'       => 'wolfnet_listings'
-            ));
+        ));
 
         if ($args['total_rows'] < $args['maxresults']) {
             $args['maxresults'] = $args['total_rows'];
@@ -338,7 +338,7 @@ class Wolfnet_Data
     public function getSearchManagerBaseUrl($productKey = null)
     {
         if ($productKey == null) {
-            $productKey = $this->plugin->keyService->getDefaultProductKey();
+            $productKey = $this->plugin->keyService->getDefault();
         }
 
         $data  = $this->plugin->api->sendRequest($productKey, '/settings');

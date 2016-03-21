@@ -476,7 +476,6 @@ class Wolfnet_Plugin
         return $this->chr_utf8($matches[1]);
     }
 
-
     public function addAction($action, $callable = null, $priority = null)
     {
         if (is_array($action)) {

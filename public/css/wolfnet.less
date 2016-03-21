@@ -721,7 +721,7 @@
                 }
 
                 .wnt-thumbnail-scroller {
-                    @control-width: 30px;
+                    @control-width: 20px;
                     @control-height: 100%;
 
                     position: relative;
@@ -746,7 +746,7 @@
                         padding: 0;
 
                         .wnt-icon {
-                            font-size: @control-width;
+                            font-size: 30px;
                         }
 
                         &.wnt-next {
@@ -1087,11 +1087,7 @@
 
                 &.wolfnet_disabled
                 {
-                    text-decoration: none;
-                    opacity: 0.5;
-                    filter: alpha(opacity=50);
-                    cursor: default;
-
+                    display: none;
                 }
 
             }
@@ -1212,13 +1208,17 @@
     }
 
     &.wolfnet_listingGrid {
-        text-align: left;
+        text-align: center;
         margin:     0 auto 2em auto;
 
         .wolfnet_listing {
             text-align: left;
             position:   relative;
 
+            display: inline-block;
+            float: none;
+            width: @listingWidth;
+            vertical-align: top;
 
             .wolfnet_branding {
                 display: block;

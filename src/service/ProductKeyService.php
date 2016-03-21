@@ -47,7 +47,23 @@ class Wolfnet_Service_ProductKeyService
             }
             // TODO: Add some sort of error throwing if no key is found for the given ID.
         }
+    }
 
+
+    /**
+     * This method retrieves a specific product key ID from the WordPress options table based on a
+     * provided unique product key.
+     * @param  integer $id The ID of the key to be retrieved.
+     * @return string      The key that was retrieved from the WP options table.
+     */
+    public function getIdByKey($findKey) {
+        $keyList = json_decode($this->get());
+
+        foreach($keyList as $key) {
+            if($key->key == $findKey) {
+                return $key->id;
+            }
+        }
     }
 
 
