@@ -51,59 +51,67 @@
         </fieldset>
 
 
-        <div class="wolfnet_smartHorizontalWidget">
+        <div class="wolfnet_smartHorizontalFields">
 
-            <!-- Min Price -->
-            <div class="wolfnet_smartWidgetMinPrice">
-                <select id="<?php echo $instance_id; ?>_min_price" name="min_price">
-                    <option value="">Min. Price</option>
-                    <?php
-                    if (is_array($prices) && array_key_exists('min_price', $prices)) {
-                        foreach ($prices['min_price']['options'] as $price) { ?>
-                            <option value="<?php echo $price['value']; ?>"><?php echo $price['label']; ?></option>
+            <div class="wolfnet_smartPriceFields">
+
+                <!-- Min Price -->
+                <div class="wolfnet_smartMinPrice">
+                    <select id="<?php echo $instance_id; ?>_min_price" name="min_price">
+                        <option value="">Min. Price</option>
                         <?php
-                        }
-                    } ?>
-                </select>
-            </div>
+                        if (is_array($prices) && array_key_exists('min_price', $prices)) {
+                            foreach ($prices['min_price']['options'] as $price) { ?>
+                                <option value="<?php echo $price['value']; ?>"><?php echo $price['label']; ?></option>
+                            <?php
+                            }
+                        } ?>
+                    </select>
+                </div>
 
-            <!-- Max Price -->
-            <div class="wolfnet_smartWidgetMaxPrice">
-                <select id="<?php echo $instance_id; ?>_max_price" name="max_price">
-                    <option value="">Max. Price</option>
-                    <?php
-                    if (is_array($prices) && array_key_exists('max_price', $prices)) {
-                        foreach ($prices['max_price']['options'] as $price) { ?>
-                            <option value="<?php echo $price['value']; ?>"><?php echo $price['label']; ?></option>
+                <!-- Max Price -->
+                <div class="wolfnet_smartMaxPrice">
+                    <select id="<?php echo $instance_id; ?>_max_price" name="max_price">
+                        <option value="">Max. Price</option>
                         <?php
+                        if (is_array($prices) && array_key_exists('max_price', $prices)) {
+                            foreach ($prices['max_price']['options'] as $price) { ?>
+                                <option value="<?php echo $price['value']; ?>"><?php echo $price['label']; ?></option>
+                            <?php
+                            }
                         }
-                    }
-                    ?>
-                </select>
-            </div>
+                        ?>
+                    </select>
+                </div>
 
-            <!-- Beds -->
-            <div class="wolfnet_smartWidgetBeds">
-                <select id="<?php echo $instance_id; ?>_min_beds" name="min_bedrooms">
-                    <option value="">Beds</option>
-                    <?php foreach ($beds as $bed) { ?>
-                    <option value="<?php echo $bed['value']; ?>"><?php echo $bed['label']; ?></option>
-                    <?php } ?>
-                </select>
-            </div>
+            <div>
 
-            <!-- Baths -->
-            <div class="wolfnet_smartWidgetBaths">
-                <select id="<?php echo $instance_id; ?>_min_baths" name="min_bathrooms">
-                    <option value="">Baths</option>
-                    <?php foreach ($baths as $bath) { ?>
-                    <option value="<?php echo $bath['value']; ?>"><?php echo $bath['label']; ?></option>
-                    <?php } ?>
-                </select>
-            </div>
+            <div class="wolfnet_smartBedBathFields">
 
-            <div class="wolfnet_smartSearchFormButton">
-                <button class="wolfnet_smartSearchForm_submitButton" name="search" type="submit">Search!</button>
+                <!-- Beds -->
+                <div class="wolfnet_smartBeds">
+                    <select id="<?php echo $instance_id; ?>_min_beds" name="min_bedrooms">
+                        <option value="">Beds</option>
+                        <?php foreach ($beds as $bed) { ?>
+                        <option value="<?php echo $bed['value']; ?>"><?php echo $bed['label']; ?></option>
+                        <?php } ?>
+                    </select>
+                </div>
+
+                <!-- Baths -->
+                <div class="wolfnet_smartBaths">
+                    <select id="<?php echo $instance_id; ?>_min_baths" name="min_bathrooms">
+                        <option value="">Baths</option>
+                        <?php foreach ($baths as $bath) { ?>
+                        <option value="<?php echo $bath['value']; ?>"><?php echo $bath['label']; ?></option>
+                        <?php } ?>
+                    </select>
+                </div>
+
+            <div>
+
+            <div class="wolfnet_smartSubmit">
+                <button class="wolfnet_smartSearchForm_submitButton" name="search" type="submit">Search</button>
             </div>
 
         <div>
