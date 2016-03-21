@@ -3,7 +3,7 @@
 /**
  * WolfNet Data
  *
- * This class represents the search configuration and listing data and associated 
+ * This class represents the search configuration and listing data and associated
  * functions to retrieve it.
  *
  * @package Wolfnet
@@ -66,8 +66,8 @@ class Wolfnet_Data
     {
         try {
             $data = $this->plugin->api->sendRequest(
-                $this->plugin->keyService->getDefault(), 
-                '/office', 
+                $this->plugin->keyService->getDefault(),
+                '/office',
                 'GET'
             );
         } catch (Wolfnet_Exception $e) {
@@ -262,7 +262,6 @@ class Wolfnet_Data
             return $this->plugin->getWpError($data);
         }
 
-
         $args['mapParams'] = array(
     		'mapProvider'  => 'mapquest',
     		'centerLat'    => $data['responseData']['data']['market']['maptracks']['map_start_lat'],
@@ -344,18 +343,18 @@ class Wolfnet_Data
         if ($productKey == null) {
             $productKey = $this->plugin->keyService->getDefaultProductKey();
         }
- 
+
         $data  = $this->plugin->api->sendRequest($productKey, '/settings');
- 
+
         if(is_wp_error($data)) {
             return $data;
         }
- 
+
         $baseUrl =
             $data['responseData']['data']['site']['mlsfinder_web_root'] . '/' .
             $data['responseData']['data']['market']['datasource_name'] . '/' .
             $data['responseData']['data']['site']['site_directory_name'];
- 
+
         return $baseUrl;
     }
 
