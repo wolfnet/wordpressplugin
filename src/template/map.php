@@ -65,6 +65,44 @@
         	houseoverIcon : "<?php echo $mapParams['houseoverIcon']; ?>",
         	mapId         : "<?php echo $mapParams['mapId']; ?>"
     	});
+
+
+        var $bindingFields = {
+            centerLat:       $('[data-wnt-map-name="pluginMap"][data-wnt-map-bind=centerLat]'),
+            centerLng:       $('[data-wnt-map-name="pluginMap"][data-wnt-map-bind=centerLng]'),
+            mapType:         $('[data-wnt-map-name="pluginMap"][data-wnt-map-bind=mapType]'),
+            lrLat:           $('[data-wnt-map-name="pluginMap"][data-wnt-map-bind=lrLat]'),
+            lrLng:           $('[data-wnt-map-name="pluginMap"][data-wnt-map-bind=lrLng]'),
+            ulLat:           $('[data-wnt-map-name="pluginMap"][data-wnt-map-bind=ulLat]'),
+            ulLng:           $('[data-wnt-map-name="pluginMap"][data-wnt-map-bind=ulLng]'),
+            //zoom:            $('[data-wnt-map-name="pluginMap"][data-wnt-map-bind=zoom]'),
+            //mapViewType:     $('[data-wnt-map-name="pluginMap"][data-wnt-map-bind=mapViewType]'),
+            mapDragType:     $('[data-wnt-map-name="pluginMap"][data-wnt-map-bind=mapDragType]'),
+            allowMouseWheel: $('[data-wnt-map-name="pluginMap"][data-wnt-map-bind=allowMouseWheel]')
+        };
+
+        var setMapBindFields = function () {
+            $bindingFields.centerLat.val("<?php echo $mapParams['centerLat']; ?>");
+            $bindingFields.centerLng.val("<?php echo $mapParams['centerLng']; ?>");
+            //$bindingFields.mapType.val($('#' + mapId).mapTracks("getCurrentView"));
+            $bindingFields.lrLat.val("<?php echo $mapParams['brBoundLat']; ?>");
+            $bindingFields.lrLng.val("<?php echo $mapParams['brBoundLng']; ?>");
+            $bindingFields.ulLat.val("<?php echo $mapParams['tlBoundLat']; ?>");
+            $bindingFields.ulLng.val("<?php echo $mapParams['tlBoundLng']; ?>");
+            //$bindingFields.zoom.val("<?php echo $mapParams['zoomLevel']; ?>");
+
+            $bindingFields.centerLat.change();
+            $bindingFields.centerLng.change();
+            //$bindingFields.mapType.change();
+            $bindingFields.lrLat.change();
+            $bindingFields.lrLng.change();
+            $bindingFields.ulLat.change();
+            $bindingFields.ulLng.change();
+            //$bindingFields.zoom.change();
+        }
+
+        setMapBindFields();
+
     });
 
 </script>
