@@ -99,7 +99,7 @@
                                 <?php if($i != 1): ?>
                                     <button class="button action wolfnet_deleteKey wnt-text-danger"
                                      type="button" data-wnt-key="<?php echo $i; ?>">
-                                        <span class="wnt-icon wnt-icon-bin wnt-text-danger"></span>
+                                        <span class="wnt-icon wnt-icon-remove wnt-text-danger"></span>
                                         <?php _e('Delete'); ?>
                                     </button>
                                 <?php endif; ?>

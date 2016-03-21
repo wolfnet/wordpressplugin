@@ -33,6 +33,8 @@
 //== Listing dimensions
 
 @listingWidth:          312px;
+@listingWidthSm:        270px;
+@listingWidthXs:        230px;
 @listingHeight:         auto;
 @listingPadding:        20px;
 @listingImgWidth:       (@listingWidth - (@listingPadding * 2));
@@ -61,8 +63,9 @@
         height: auto !important;
 
         .wolfnet_listing {
-            // TODO: Remove if BrandCo stops targeting our class names:
-            height:     @listingHeight !important;
+            // TODO: Remove these 2 rules if BrandCo stops targeting our class names:
+            width:  auto !important;
+            height: @listingHeight !important;
         }
 
     }
@@ -130,6 +133,7 @@
                 position:   relative;
                 margin:     0 @listingPadding 5px @listingPadding;
                 padding:    0 0 0 0;
+                height: @listingImgHeight;
                 text-align: left;
                 color:      #fff;
                 border:     none;
@@ -138,15 +142,15 @@
                 background-size:     cover;
 
                 .wolfnet_listingImage {
+                    .vertical-align();
                     border: none;
                     padding: 0 0 0 0;
                     max-width: @listingImgWidth;
-                    max-height: 100%;
 
                     img {
                         height:    auto;
+                        max-height: @listingImgHeight;
                         border:    none;
-                        margin:    0;
                     }
 
                 }
@@ -259,6 +263,23 @@
 
     }
 
+    &.wolfnet_listingGrid {
+
+        .wolfnet_listing {
+            width: @listingWidth;
+            margin-bottom: 1em;
+
+            &.wolfnet_listing_sm {
+                width: @listingWidthSm;
+            }
+
+            &.wolfnet_listing_xs {
+                width: @listingWidthXs;
+            }
+
+        }
+
+    }
 
     &.wolfnet_featuredListings .wolfnet_listing {
         margin: 0 0 10px 0;

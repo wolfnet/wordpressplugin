@@ -14,3 +14,14 @@
     -ms-filter: ~"progid:DXImageTransform.Microsoft.gradient(startColorstr='@{startARGB}', endColorstr='@{endARGB}', GradientType=0)";
     filter: ~"progid:DXImageTransform.Microsoft.gradient(startColorstr='@{startARGB}', endColorstr='@{endARGB}', GradientType=0)";
 }
+
+
+//== Vertical Alignment (http://zerosixthree.se/vertical-align-anything-with-just-3-lines-of-css/)
+
+.vertical-align(@position: relative) {
+    position: @position;
+    top: 50%;
+    -webkit-transform: translateY(-50%);
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
+}

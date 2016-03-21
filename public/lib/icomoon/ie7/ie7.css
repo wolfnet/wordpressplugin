@@ -1,5 +1,14 @@
-.wnt-icon-bin {
-    *zoom: expression(this.runtimeStyle['zoom'] = '1', this.innerHTML = '&#xe900;');
+.wnt-icon-caret-up {
+    *zoom: expression(this.runtimeStyle['zoom'] = '1', this.innerHTML = '&#x25b2;');
+}
+.wnt-icon-caret-right {
+    *zoom: expression(this.runtimeStyle['zoom'] = '1', this.innerHTML = '&#x276f;');
+}
+.wnt-icon-caret-down {
+    *zoom: expression(this.runtimeStyle['zoom'] = '1', this.innerHTML = '&#x25bc;');
+}
+.wnt-icon-caret-left {
+    *zoom: expression(this.runtimeStyle['zoom'] = '1', this.innerHTML = '&#x276e;');
 }
 .wnt-icon-user-menu {
     *zoom: expression(this.runtimeStyle['zoom'] = '1', this.innerHTML = '&#xe60a;');
