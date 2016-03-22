@@ -517,7 +517,7 @@ class Wolfnet_Views
     {
         ob_start();
 
-        settings_fields($GLOBALS['wolfnet']->StyleOptionGroup);
+        settings_fields($GLOBALS['wolfnet']->WidgetThemeOptionGroup);
 
         return trim(ob_get_clean());
 

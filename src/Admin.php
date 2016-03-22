@@ -172,7 +172,7 @@ class Wolfnet_Admin extends Wolfnet_Plugin
         // Register Options
         register_setting($this->optionGroup, Wolfnet_Service_ProductKeyService::PRODUCT_KEY_OPTION);
         register_setting($this->optionGroup, Wolfnet_Plugin::SSL_WP_OPTION);
-        register_setting($this->StyleOptionGroup, $this->widgetThemeOptionKey);
+        register_setting($this->WidgetThemeOptionGroup, $this->widgetThemeOptionKey);
         register_setting($this->CssOptionGroup, $this->publicCssOptionKey);
         register_setting($this->CssOptionGroup, $this->adminCssOptionKey);
 

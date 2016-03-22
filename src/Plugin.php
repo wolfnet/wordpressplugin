@@ -50,7 +50,7 @@ class Wolfnet_Plugin
      * collection of variables which are used in saving page settings.
      * @var string
      */
-    public $StyleOptionGroup = 'wolfnetStyle';
+    public $WidgetThemeOptionGroup = 'wolfnetStyle';
 
     /**
      * This property is used to set the option group for the Edit Css page. It creates a namespaced
