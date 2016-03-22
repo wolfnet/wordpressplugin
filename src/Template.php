@@ -43,6 +43,7 @@ class Wolfnet_Template
         $scripts = array(
             'wolfnet-scrolling-items',
             'wolfnet-quick-search',
+            'wolfnet-smartsearch',
             'wolfnet-listing-grid',
             'wolfnet-toolbar',
             'wolfnet-maptracks',
@@ -129,6 +130,10 @@ class Wolfnet_Template
                 $this->url . 'js/jquery.wolfnetQuickSearch.src.js',
                 array('jquery', 'wolfnet'),
             ),
+            'wolfnet-smartsearch' => array(
+                $this->url . 'js/jquery.wolfnetSmartsearch.src.js',
+                array('jquery'),
+            ),
             'wolfnet-listing-grid' => array(
                 $this->url . 'js/jquery.wolfnetListingGrid.src.js',
                 array('jquery', 'tooltipjs', 'imagesloadedjs', 'wolfnet'),
@@ -152,7 +157,7 @@ class Wolfnet_Template
                 array('jquery', 'mapquest-api'),
                 $this->version,
                 true,
-            )
+            ),
         );
 
         foreach ($scripts as $script => $data) {
@@ -229,9 +234,9 @@ class Wolfnet_Template
             foreach ($_REQUEST['keyList'] as $key) {
                 try {
                     $disclaimer = $this->plugin->api->sendRequest(
-                    	$key, 
-                    	'/core/disclaimer', 
-                    	'GET', 
+                    	$key,
+                    	'/core/disclaimer',
+                    	'GET',
                     	array(
                         	'type'=>'search_results', 'format'=>'html'
                         )

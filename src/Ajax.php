@@ -19,7 +19,7 @@
  *                Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-class Wolfnet_Ajax 
+class Wolfnet_Ajax
 {
 	/*
 	 *
@@ -51,6 +51,7 @@ class Wolfnet_Ajax
             'wolfnet_price_range'             => 'remotePriceRange',
             'wolfnet_base_url'                => 'remoteGetBaseUrl',
             'wolfnet_route_quicksearch'       => 'remoteRouteQuickSearch',
+            'wolfnet_smart_search'            => 'remoteGetSuggestions',
             );
 
         foreach ($ajxActions as $action => $method) {
@@ -62,15 +63,15 @@ class Wolfnet_Ajax
     public function registerAjaxActions()
     {
         $ajxActions = array(
-            'wolfnet_content'           => 'remoteContent',
-            'wolfnet_content_header'    => 'remoteContentHeader',
-            'wolfnet_content_footer'    => 'remoteContentFooter',
-            'wolfnet_listings'          => 'remoteListings',
-            'wolfnet_get_listings'      => 'remoteListingsGet',
-            'wolfnet_css'               => 'remotePublicCss',
-            'wolfnet_base_url'          => 'remoteGetBaseUrl',
-            'wolfnet_price_range'       => 'remotePriceRange',
-            'wolfnet_route_quicksearch' => 'remoteRouteQuickSearch',
+            'wolfnet_content'        => 'remoteContent',
+            'wolfnet_content_header' => 'remoteContentHeader',
+            'wolfnet_content_footer' => 'remoteContentFooter',
+            'wolfnet_listings'       => 'remoteListings',
+            'wolfnet_get_listings'   => 'remoteListingsGet',
+            'wolfnet_css'            => 'remotePublicCss',
+            'wolfnet_base_url'       => 'remoteGetBaseUrl',
+            'wolfnet_price_range'    => 'remotePriceRange',
+            'wolfnet_smart_search'   => 'remoteGetSuggestions',
             );
 
         foreach ($ajxActions as $action => $method) {
@@ -79,7 +80,6 @@ class Wolfnet_Ajax
 
     }
 
-	
 
 	/*
 	 *
@@ -357,7 +357,7 @@ class Wolfnet_Ajax
     {
 
         try {
-            $response = $GLOBALS['wolfnet']->template->getWpHeader() 
+            $response = $GLOBALS['wolfnet']->template->getWpHeader()
             . $GLOBALS['wolfnet']->template->getWpFooter();
 
         } catch (Wolfnet_Exception $e) {
@@ -422,8 +422,8 @@ class Wolfnet_Ajax
         try {
             $args = $GLOBALS['wolfnet']->listingGrid->getOptions($_REQUEST);
 
-            $response = $GLOBALS['wolfnet']->template->getWpHeader() 
-            	. $GLOBALS['wolfnet']->listingGrid($args) 
+            $response = $GLOBALS['wolfnet']->template->getWpHeader()
+            	. $GLOBALS['wolfnet']->listingGrid($args)
             	. $GLOBALS['wolfnet']->template->getWpFooter();
 
         } catch (Wolfnet_Exception $e) {
@@ -608,7 +608,7 @@ class Wolfnet_Ajax
     }
 
 
-    public function remoteRouteQuickSearch() 
+    public function remoteRouteQuickSearch()
     {
         try {
             $response = $GLOBALS['wolfnet']->quickSearch->routeQuickSearch($_REQUEST['formData']);
@@ -624,6 +624,45 @@ class Wolfnet_Ajax
 
         wp_send_json($response);
     }
+
+
+	public function remoteGetSuggestions()
+	{
+		try {
+
+			// Retrieve user's search term from request
+			$term = $_REQUEST['data']['term'];
+
+			// Make API request to retrieve suggestion data
+			$response = $GLOBALS['wolfnet']->smartSearch->getSuggestions($term);
+
+		} catch (Wolfnet_Exception $e) {
+
+			status_header(500);
+			$response = array(
+				'message' => $e->getMessage(),
+				'data' => $e->getData(),
+			);
+
+		}
+
+		if(array_key_exists('callback', $_GET)){
+			$callback = $_REQUEST['callback'];
+
+			// TODO: evaluate if this is necessary
+			header('Content-Type: text/javascript; charset=utf8');
+			header('Access-Control-Allow-Origin: http://www.example.com/');
+			header('Access-Control-Max-Age: 3628800');
+			header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE');
+
+			echo $callback.'('.json_encode($response).')';
+			die;
+
+		} else {
+			wp_send_json($response);
+		}
+
+	}
 
 }
 

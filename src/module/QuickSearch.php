@@ -46,11 +46,12 @@ class Wolfnet_Module_QuickSearch
     public function getDefaults()
     {
         return array(
-            'title'     => 'QuickSearch',
-            'keyid'     => '',
-            'keyids'    => '',
-            'view'      => '',
-            'routing'   => '',
+            'title'      => 'QuickSearch',
+            'keyid'      => '',
+            'keyids'     => '',
+            'view'       => '',
+            'routing'    => '',
+            'smartsearch'=> false,
         );
     }
 
@@ -59,11 +60,14 @@ class Wolfnet_Module_QuickSearch
     {
         $options = $this->plugin->getOptions($this->getDefaults(), $instance);
 
+        $options['smartsearch_false_wps'] = selected($options['smartsearch'], 'false', false);
+        $options['smartsearch_true_wps']  = selected($options['smartsearch'], 'true', false);
+
         return $options;
     }
 
 
-    public function routeQuickSearch($formData) 
+    public function routeQuickSearch($formData)
     {
         /*
          * Loop over each key and get the number of matching listings for each.
@@ -78,8 +82,8 @@ class Wolfnet_Module_QuickSearch
                 $key = $this->plugin->keyService->getById($keyID);
 
                 $listings = $this->plugin->api->sendRequest(
-                    $key, 
-                    '/listing?detaillevel=1&startrow=1&maxrows=1', 
+                    $key,
+                    '/listing?detaillevel=1&startrow=1&maxrows=1',
                     'GET',
                     $formData
                 );
@@ -98,14 +102,14 @@ class Wolfnet_Module_QuickSearch
          * Route to the site associated with key determined above.
         */
         $baseUrl = $this->plugin->data->getBaseUrl($highestMatchKey);
-        
+
         $redirect = $baseUrl . "?";
         foreach($formData as $key => $param) {
             $redirect .= $key . "=" . $param . "&";
         }
-        
+
         return $redirect;
-    } 
+    }
 
 
     /**

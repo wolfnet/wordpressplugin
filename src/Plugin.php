@@ -149,6 +149,7 @@ class Wolfnet_Plugin
         $this->listingGrid = $this->ioc->get('Wolfnet_Module_ListingGrid');
         $this->propertyList = $this->ioc->get('Wolfnet_Module_PropertyList');
         $this->quickSearch = $this->ioc->get('Wolfnet_Module_QuickSearch');
+        $this->smartSearch = $this->ioc->get('Wolfnet_Module_SmartSearch');
         $this->searchManager = $this->ioc->get('Wolfnet_Module_SearchManager');
 
         if(is_admin()) {
@@ -251,7 +252,7 @@ class Wolfnet_Plugin
         /*
          * Note - functionality here has been moved to AFTER the activation
          * redirect. In the unforunate event that the activation code fails,
-         * we want the activation to at least have succeeded and not thrown 
+         * we want the activation to at least have succeeded and not thrown
          * a fatal error. Problems related to SSL and API connectivity should
          * not destroy the activation process.
          */
@@ -647,7 +648,7 @@ class Wolfnet_Plugin
     /*
      * Shortcode helper functions for registering in registerShortCodes above.
      */
-    public function scAgentPages($attrs) 
+    public function scAgentPages($attrs)
     {
         return $this->agentPages->scAgentPages($attrs);
     }
@@ -667,8 +668,15 @@ class Wolfnet_Plugin
         return $this->propertyList->scPropertyList($attrs);
     }
 
-    public function scQuickSearch($attrs, $content = '') 
+    public function scQuickSearch($attrs, $content = '')
     {
-        return $this->quickSearch->scQuickSearch($attrs, $content);
+        // Check for Smrt Srch opt-in setting here, and route to new module
+        $isSmart = isset($attrs['smartsearch']) ? $attrs['smartsearch'] : false;
+
+        if ($isSmart === 'true') {
+            return $this->smartSearch->scSmartSearch($attrs, $content);
+        } else {
+            return $this->quickSearch->scQuickSearch($attrs, $content);
+        }
     }
 }
