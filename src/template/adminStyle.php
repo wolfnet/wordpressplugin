@@ -30,7 +30,8 @@
                         </div>
                         <div class="wolfnet_widget_theme_label">
                             <input type="radio" name="wolfnet_widgetTheme"
-                             id="wolfnet_widgetTheme_<?php echo $themeOpt['name'] ?>" value="ash"
+                             id="wolfnet_widgetTheme_<?php echo $themeOpt['name'] ?>"
+                             value="<?php echo $themeOpt['name']; ?>"
                              <?php if (($widgetTheme == $themeOpt['name']) || ($widgetTheme == '')) echo 'checked="checked"'; ?> />
                             <?php echo $themeOpt['label']; ?>
                         </div>
