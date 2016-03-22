@@ -268,9 +268,35 @@
 
         for (var i=0, l=data.length; i<l; i++) {
             houseoverHtml = getHouseoverHtml(data[i]);
-            var houseoverIcon = componentMap.mapIcon(houseIcon,20,20);
-            var houseover = componentMap.poi(data[i].geo.lat, data[i].geo.lng, houseoverIcon, houseoverHtml, data[i].property_id, data[i].property_url);
-            componentMap.addPoi(houseover);
+
+			// Only add pin if coordinates are valid
+			if (
+				((data[i].geo.lat !== 0) || (data[i].geo.lng !== 0)) &&
+				(!isNaN(data[i].geo.lat) || !isNaN(data[i].geo.lng)) &&
+				(data[i].geo.lat !== '' || data[i].geo.lng !== '') &&
+				((data[i].geo.lat >= -180) && (data[i].geo.lat <= 180)) &&
+				((data[i].geo.lng >= -180) && (data[i].geo.lng <= 180))
+			) {
+            	var houseoverIcon = componentMap.mapIcon(houseIcon,20,20);
+
+            	var houseover = componentMap.poi(
+            		data[i].geo.lat,
+            		data[i].geo.lng,
+            		houseoverIcon,
+            		houseoverHtml,
+            		data[i].property_id,
+            		data[i].property_url);
+
+                    if (
+                        (data[i].geo.lat >= componentMap.getBounds().lr.lat &&
+                        data[i].geo.lat <= componentMap.getBounds().ul.lat) &&
+                        (data[i].geo.lng >=  componentMap.getBounds().lr.lng &&
+                        data[i].geo.lng <= componentMap.getBounds().ul.lng)
+                    ){
+
+            			componentMap.addPoi(houseover);
+            		}
+        	}
         }
 
         componentMap.bestFit();
