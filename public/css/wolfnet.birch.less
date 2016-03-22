@@ -39,6 +39,8 @@
 @listingPadding:        20px;
 @listingImgWidth:       (@listingWidth - (@listingPadding * 2));
 @listingImgHeight:      200px;
+@listingImgHeightSm:    173px;
+@listingImgHeightXs:    148px;
 @brandingWidth:         100px;
 @listingLocationWidth:  (@listingImgWidth - @brandingWidth);
 
@@ -271,10 +273,20 @@
 
             &.wolfnet_listing_sm {
                 width: @listingWidthSm;
+
+                .wolfnet_listingHead {
+                    height: @listingImgHeightSm;
+                }
+
             }
 
             &.wolfnet_listing_xs {
                 width: @listingWidthXs;
+
+                .wolfnet_listingHead {
+                    height: @listingImgHeightXs;
+                }
+
             }
 
         }
