@@ -207,20 +207,22 @@ class Wolfnet_Template
             'wolfnet-custom' => array(
                 admin_url('admin-ajax.php') . '?action=wolfnet_css',
             ),
-            'wolfnet-ash' => array(
-                $this->url . 'css/wolfnet.ash.src.css'
-            ),
-            'wolfnet-birch' => array(
-                $this->url . 'css/wolfnet.birch.src.css'
-            ),
             'jquery-ui' => array(
                 'http://ajax.googleapis.com/ajax/libs/jqueryui/' . $jquery_ui->ver
                     . '/themes/smoothness/jquery-ui.css'
             ),
             'icomoon' => array(
                 $this->url . 'lib/icomoon/style.css'
-                ),
+            ),
+        );
+
+        // Add widget theme styles
+        $widgetThemes = $this->plugin->widgetTheme->getThemeOptions();
+        for ($i=0; $i<count($widgetThemes); $i++) {
+            $styles['wolfnet-' . $widgetThemes[$i]] = array(
+                $this->url . 'css/wolfnet.' . $widgetThemes[$i] . '.src.css'
             );
+        }
 
         foreach ($styles as $style => $data) {
             $params   = array($style);

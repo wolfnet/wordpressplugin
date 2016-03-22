@@ -22,32 +22,21 @@
         <fieldset>
             <legend class="screen-reader-text"><span>Widget Theme</span></legend>
             <div class="wolfnet_widget_themes">
+            <?php for ($i=0; $i<count($widgetThemes); $i++) { ?>
                 <div class="wolfnet_widget_theme">
-                    <label for="wolfnet_widgetTheme_ash">
+                    <label for="wolfnet_widgetTheme_<?php echo $widgetThemes[$i] ?>">
                         <div class="wolfnet_widget_theme_thumb">
-                            <img src="<?php echo $imgdir; ?>support-ash-listing.png" />
+                            <img src="<?php echo $imgdir; ?>support-<?php echo $widgetThemes[$i] ?>-listing.png?v={X.X.X}" />
                         </div>
                         <div class="wolfnet_widget_theme_label">
                             <input type="radio" name="wolfnet_widgetTheme"
-                             id="wolfnet_widgetTheme_ash" value="ash"
-                             <?php if (($widgetTheme == 'ash') || ($widgetTheme == '')) echo 'checked="checked"'; ?> />
+                             id="wolfnet_widgetTheme_<?php echo $widgetThemes[$i] ?>" value="ash"
+                             <?php if (($widgetTheme == $widgetThemes[$i]) || ($widgetTheme == '')) echo 'checked="checked"'; ?> />
                             Classic
                         </div>
                     </label>
                 </div>
-                <div class="wolfnet_widget_theme">
-                    <label for="wolfnet_widgetTheme_birch">
-                        <div class="wolfnet_widget_theme_thumb">
-                            <img src="<?php echo $imgdir; ?>support-birch-listing.png" />
-                        </div>
-                        <div class="wolfnet_widget_theme_label">
-                            <input type="radio" name="wolfnet_widgetTheme"
-                             id="wolfnet_widgetTheme_birch" value="birch"
-                             <?php checked($widgetTheme, 'birch'); ?> />
-                            Modern
-                        </div>
-                    </label>
-                </div>
+            <?php } ?>
             </div>
         </fieldset>
 
