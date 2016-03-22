@@ -163,6 +163,7 @@ class Wolfnet_Plugin
         $this->propertyList = $this->ioc->get('Wolfnet_Module_PropertyList');
         $this->quickSearch = $this->ioc->get('Wolfnet_Module_QuickSearch');
         $this->searchManager = $this->ioc->get('Wolfnet_Module_SearchManager');
+        $this->widgetTheme = $this->ioc->get('Wolfnet_Module_WidgetTheme');
 
         if(is_admin()) {
             $this->admin = $this->ioc->get('Wolfnet_Admin');
