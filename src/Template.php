@@ -220,7 +220,7 @@ class Wolfnet_Template
         $widgetThemes = $this->plugin->widgetTheme->getThemeOptions();
         foreach ($widgetThemes as $widgetTheme) {
             $styles[$widgetTheme['styleName']] = array(
-                $this->url . $widgetTheme['styleFile']
+                $this->url . 'css/' . $widgetTheme['styleFile']
             );
         }
 
