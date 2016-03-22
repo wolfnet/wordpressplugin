@@ -218,9 +218,9 @@ class Wolfnet_Template
 
         // Add widget theme styles
         $widgetThemes = $this->plugin->widgetTheme->getThemeOptions();
-        for ($i=0; $i<count($widgetThemes); $i++) {
-            $styles['wolfnet-' . $widgetThemes[$i]] = array(
-                $this->url . 'css/wolfnet.' . $widgetThemes[$i] . '.src.css'
+        foreach ($widgetThemes as $widgetTheme) {
+            $styles[$widgetTheme['styleName']] = array(
+                $this->url . $widgetTheme['styleFile']
             );
         }
 

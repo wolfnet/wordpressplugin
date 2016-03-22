@@ -53,9 +53,24 @@ class Wolfnet_Module_WidgetTheme
     public function getThemeOptions()
     {
         return array(
-            'ash',
-            'birch',
+            'ash'      => $this->getTheme('ash',     'Classic'),
+            'birch'    => $this->getTheme('birch',   'Modern'),
+            'cedar'    => $this->getTheme('cedar',   'Modern 2'),
+            'dogwood'  => $this->getTheme('dogwood', 'Modern 3'),
         );
+    }
+
+
+    public function getTheme($name, $label)
+    {
+        return array(
+            'name'       => $name,
+            'label'      => $label,
+            'styleName'  => 'wolfnet-' . $name,
+            'styleFile'  => 'wolfnet.' . $name . '.src.css',
+            'previewImg' => 'support-' . $name . '-listing.png',
+        );
+
     }
 
 }
