@@ -287,11 +287,13 @@
             		data[i].property_id,
             		data[i].property_url);
 
+            		var boundsBuffer = 2;
+
                     if (
-                        (data[i].geo.lat >= componentMap.getBounds().lr.lat &&
-                        data[i].geo.lat <= componentMap.getBounds().ul.lat) &&
-                        (data[i].geo.lng >=  componentMap.getBounds().lr.lng &&
-                        data[i].geo.lng <= componentMap.getBounds().ul.lng)
+                        (data[i].geo.lat >= (componentMap.getBounds().lr.lat - boundsBuffer) &&
+                        data[i].geo.lat <= (componentMap.getBounds().ul.lat + boundsBuffer)) &&
+                        (data[i].geo.lng >=  (componentMap.getBounds().lr.lng - boundsBuffer) &&
+                        data[i].geo.lng <= (componentMap.getBounds().ul.lng + boundsBuffer))
                     ){
 
             			componentMap.addPoi(houseover);

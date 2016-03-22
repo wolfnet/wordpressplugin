@@ -2673,12 +2673,14 @@
 						houseoverData[i].propertyUrl
 					);
 
+                    var boundsBuffer = 2;
+
                     if (
-                        (lat >= wntMap.getBounds().lr.lat &&
-                        lat <= wntMap.getBounds().ul.lat) &&
-                        (lng >=  wntMap.getBounds().lr.lng &&
-                        lng <= wntMap.getBounds().ul.lng)
-                    ){
+                        (lat >= (wntMap.getBounds().lr.lat - boundsBuffer) &&
+                        lat <= (wntMap.getBounds().ul.lat + boundsBuffer)) &&
+                        (lng >=  (wntMap.getBounds().lr.lng - boundsBuffer) &&
+                        lng <= (wntMap.getBounds().ul.lng + boundsBuffer))
+                    ) {
                         // Pin houseover poi to map
                         wntMap.addPoi(houseover);
                     }
