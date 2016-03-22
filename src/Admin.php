@@ -156,8 +156,8 @@ class Wolfnet_Admin extends Wolfnet_Plugin
             if(is_array($keyArray) && $keyArray[0]->key != false) {
                 $this->setSslVerifyOption($keyArray[0]->key);
 
-                // Check that key structure is formatted correctly and that the key 
-                // label gets set if it was not already. If there's no preexisting key, 
+                // Check that key structure is formatted correctly and that the key
+                // label gets set if it was not already. If there's no preexisting key,
                 // ignore this.
                 foreach($keyArray as $key) {
                     if(strlen($key->label) == 0) {

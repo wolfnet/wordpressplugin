@@ -699,7 +699,7 @@ class Wolfnet_Plugin
     /*
      * Shortcode helper functions for registering in registerShortCodes above.
      */
-    public function scAgentPages($attrs) 
+    public function scAgentPages($attrs)
     {
         return $this->agentPages->scAgentPages($attrs);
     }
@@ -719,7 +719,7 @@ class Wolfnet_Plugin
         return $this->propertyList->scPropertyList($attrs);
     }
 
-    public function scQuickSearch($attrs, $content = '') 
+    public function scQuickSearch($attrs, $content = '')
     {
         return $this->quickSearch->scQuickSearch($attrs, $content);
     }

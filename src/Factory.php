@@ -98,8 +98,8 @@ class Wolfnet_Factory
         $port = $ssl ? 443 : 80;
 
         $apiClient = new Wolfnet_Api_Client(
-            Wolfnet_Api_Client::DEFAULT_HOST, 
-            $port, 
+            Wolfnet_Api_Client::DEFAULT_HOST,
+            $port,
             $ssl,
             $verifySsl
         );

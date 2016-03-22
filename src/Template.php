@@ -200,23 +200,23 @@ class Wolfnet_Template
         $styles = array(
             'wolfnet' => array(
                 $this->url . 'css/wolfnet.src.css'
-                ),
+            ),
             'wolfnet-admin' => array(
                 $this->url . 'css/wolfnetAdmin.src.css',
-                ),
+            ),
             'wolfnet-custom' => array(
                 admin_url('admin-ajax.php') . '?action=wolfnet_css',
-                ),
+            ),
             'wolfnet-ash' => array(
                 $this->url . 'css/wolfnet.ash.src.css'
-                ),
+            ),
             'wolfnet-birch' => array(
                 $this->url . 'css/wolfnet.birch.src.css'
-                ),
+            ),
             'jquery-ui' => array(
                 'http://ajax.googleapis.com/ajax/libs/jqueryui/' . $jquery_ui->ver
                     . '/themes/smoothness/jquery-ui.css'
-                ),
+            ),
             'icomoon' => array(
                 $this->url . 'lib/icomoon/style.css'
                 ),

@@ -16,7 +16,7 @@ return array(
     'Wolfnet_Plugin' => '/Plugin.php',
     'Wolfnet_Template' => '/Template.php',
     'Wolfnet_Views' => '/Views.php',
-    
+
     'Wolfnet_Api_ApiException' => '/api/ApiException.php',
     'Wolfnet_Api_AuthDecorator' => '/api/AuthDecorator.php',
     'Wolfnet_Api_CachingDecorator' => '/api/CachingDecorator.php',
