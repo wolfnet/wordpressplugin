@@ -94,7 +94,10 @@ Please upgrade to the latest version of the plugin as we will be disabling our o
 == Changelog ==
 
 = 1.9.4 =
-* Fixing default issue with Max Results Per Page on list or grid.
+* Adds lat/lng bounds to pinned listings on maps.
+* Enforces a maximum for Max Results Per Page on list or grid pagination.
+* Fixes sold price bug.
+* Removes outdated rule on specificity of city searches.
 
 = 1.9.3 =
 * Adds previously untracked bugfixes.
