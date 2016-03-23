@@ -124,13 +124,9 @@ class Wolfnet_Listings
 
         }
 
+
         if (array_key_exists('exact_city', $criteria)) {
             $hasCity = array_key_exists('city', $criteria);
-
-            // If multiple cities were selected we must set "exact_city" to false
-            if ($hasCity && count(explode(',', trim($criteria['city']))) > 1) {
-                $criteria['exact_city'] = 0;
-            }
 
             if ($criteria['exact_city'] === null || trim($criteria['exact_city']) === '') {
                 unset($criteria['exact_city']);
