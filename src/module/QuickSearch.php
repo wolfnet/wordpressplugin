@@ -46,11 +46,12 @@ class Wolfnet_Module_QuickSearch
     public function getDefaults()
     {
         return array(
-            'title'     => 'QuickSearch',
-            'keyid'     => '',
-            'keyids'    => '',
-            'view'      => '',
-            'routing'   => '',
+            'title'      => 'QuickSearch',
+            'keyid'      => '',
+            'keyids'     => '',
+            'view'       => '',
+            'routing'    => '',
+            'smartsearch'=> false,
         );
     }
 
@@ -58,6 +59,9 @@ class Wolfnet_Module_QuickSearch
     public function getOptions($instance = null)
     {
         $options = $this->plugin->getOptions($this->getDefaults(), $instance);
+
+        $options['smartsearch_false_wps'] = selected($options['smartsearch'], 'false', false);
+        $options['smartsearch_true_wps']  = selected($options['smartsearch'], 'true', false);
 
         return $options;
     }
