@@ -1,0 +1,304 @@
+/**
+ * CSS Document
+ *
+ * @package       css
+ * @title         wolfnet.birch.less
+ * @copyright     Copyright (c) 2016 WolfNet Technologies, LLC
+ *
+ *                This program is free software; you can redistribute it and/or
+ *                modify it under the terms of the GNU General Public License
+ *                as published by the Free Software Foundation; either version 2
+ *                of the License, or (at your option) any later version.
+ *
+ *                This program is distributed in the hope that it will be useful,
+ *                but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *                MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *                GNU General Public License for more details.
+ *
+ *                You should have received a copy of the GNU General Public License
+ *                along with this program; if not, write to the Free Software
+ *                Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ *
+ */
+
+@import 'public/css/_variables.inc';
+@import 'public/css/_mixins.inc';
+
+
+//
+// Variables
+// -------------------------------------------- //
+
+
+//== Listing dimensions
+
+@listingWidth:          312px;
+@listingWidthSm:        270px;
+@listingWidthXs:        230px;
+@listingHeight:         auto;
+@listingPadding:        20px;
+@listingImgWidth:       (@listingWidth - (@listingPadding * 2));
+@listingImgHeight:      200px;
+@listingImgHeightSm:    173px;
+@listingImgHeightXs:    148px;
+@brandingWidth:         100px;
+@listingLocationWidth:  (@listingImgWidth - @brandingWidth);
+
+
+//== Colors
+
+@gray-lighter:          lighten(#000, 80%);   // #ccc
+
+@quickSearchGrad1:      #FFFFFF;
+@quickSearchGrad2:      #E2E2E2;
+
+
+//
+// Styles
+// -------------------------------------------- //
+
+
+.wolfnet_widget {
+
+    &.wolfnet_featuredListings {
+        // TODO: Remove if BrandCo stops targeting our class names:
+        height: auto !important;
+
+        .wolfnet_listing {
+            // TODO: Remove these 2 rules if BrandCo stops targeting our class names:
+            width:  auto !important;
+            height: @listingHeight !important;
+        }
+
+    }
+
+    &.wolfnet_featuredListings,
+    &.wolfnet_listingGrid {
+
+        font-family: 'Roboto', sans-serif;
+        font-size: 16px;
+        line-height: 1.5em;
+
+        .wolfnet_listing {
+            height:     @listingHeight;
+            margin:     0 0 0 0;
+            padding:    0 0 0 0;
+            color:      @gray-dark;
+            // TODO: Remove if BrandCo stops targeting our class names:
+            font-weight: normal;
+            text-align: left;
+
+            a {
+                color:      @gray-dark;
+                // TODO: Remove if BrandCo stops targeting our class names:
+                font-weight: normal;
+                text-align: left;
+            }
+
+            .wolfnet_info_separator:after {
+                content: '/';
+            }
+
+            .wolfnet_listingMain {
+                background: none !important;
+                border-width: 0 1px 0 0;
+                border-style: solid;
+                border-color: transparent;
+                -moz-border-image: -moz-linear-gradient(
+                    top,
+                    transparent,
+                    transparent,
+                    @gray-lighter,
+                    transparent,
+                    transparent
+                );
+                -webkit-border-image: -webkit-gradient(
+                    linear, left top, left bottom,
+                    from(transparent),
+                    color-stop(25%, transparent),
+                    color-stop(50%, @gray-lighter),
+                    color-stop(75%, transparent),
+                    to(transparent)
+                );
+                border-image: linear-gradient(
+                    to bottom,
+                    transparent,
+                    transparent,
+                    @gray-lighter,
+                    transparent,
+                    transparent
+                );
+                border-image-slice: 1;
+            }
+
+            .wolfnet_listingHead {
+                position:   relative;
+                margin:     0 @listingPadding 5px @listingPadding;
+                padding:    0 0 0 0;
+                height: @listingImgHeight;
+                text-align: left;
+                color:      #fff;
+                border:     none;
+                background-repeat:   no-repeat;
+                background-position: center;
+                background-size:     cover;
+
+                .wolfnet_listingImage {
+                    .vertical-align();
+                    border: none;
+                    padding: 0 0 0 0;
+                    max-width: @listingImgWidth;
+
+                    img {
+                        height:    auto;
+                        max-height: @listingImgHeight;
+                        border:    none;
+                    }
+
+                }
+
+                .wolfnet_listingInfo {
+                    position: absolute;
+                    bottom: 0;
+                    padding: 0 0 0.3em 0.5em;
+                    width: 100%;
+                    min-height: 24px;
+                    line-height: 1.25em;
+                    text-align: left !important;
+                    text-shadow: 0 0 5px #000;
+                    .gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.5));
+                }
+
+            }
+
+            .wolfnet_price {
+                display: inline !important;
+                text-align: left !important;
+                font-size: 1.5em;
+                font-weight: bold;
+            }
+
+            .wolfnet_bed_bath {
+                display: inline !important;
+                font-size: 1em;
+                font-style: normal;
+                text-align: left !important;
+                line-height: inherit;
+                white-space: nowrap;
+                margin-bottom: inherit;
+                position: relative;
+                right: inherit;
+                top: 0;
+                left: 0;
+
+                .wolfnet_label {
+                    display: none;
+                }
+
+                .wolfnet_beds,
+                .wolfnet_baths {
+                    display: inline-block;
+
+                    &:before {
+                        content: none;
+                    }
+
+                }
+
+                .wolfnet_beds {
+                    margin-right: inherit;
+
+                    &:after {
+                        content: ' Beds';
+                    }
+
+                }
+
+                .wolfnet_baths {
+
+                    &:after {
+                        content: ' Baths';
+                    }
+
+                }
+
+            }
+
+            .wolfnet_location,
+            .wolfnet_address {
+                display: block;
+                line-height: 1.3em;
+            }
+
+            .wolfnet_locationInfo {
+                margin: 0 @listingPadding 0 @listingPadding;
+                float: left;
+
+                span {
+                    text-align: left !important;
+                    max-width: @listingLocationWidth;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                }
+            }
+
+            .wolfnet_branding {
+                float: right;
+                max-width: @brandingWidth;
+                margin-right: @listingPadding;
+
+                .wolfnet_brokerLogo img {
+                    max-height: 35px;
+                }
+
+            }
+
+            &.wolfnet_colLast {
+
+                .wolfnet_listingMain {
+                    border: none !important;
+                }
+
+            }
+
+        }
+
+    }
+
+    &.wolfnet_listingGrid {
+
+        .wolfnet_listing {
+            width: @listingWidth;
+            margin-bottom: 1em;
+
+            &.wolfnet_listing_sm {
+                width: @listingWidthSm;
+
+                .wolfnet_listingHead {
+                    height: @listingImgHeightSm;
+                }
+
+            }
+
+            &.wolfnet_listing_xs {
+                width: @listingWidthXs;
+
+                .wolfnet_listingHead {
+                    height: @listingImgHeightXs;
+                }
+
+            }
+
+        }
+
+    }
+
+    &.wolfnet_featuredListings .wolfnet_listing {
+        margin: 0 0 10px 0;
+    }
+
+    &.wolfnet_listingGrid .wolfnet_listing .wolfnet_branding {
+        font-size: 1em;
+    }
+
+}

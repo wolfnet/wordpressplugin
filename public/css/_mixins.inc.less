@@ -1,0 +1,27 @@
+
+//== Vertical Gradient
+
+.gradient(@startColor, @endColor) {
+    @startARGB: argb(@startColor);
+    @endARGB:   argb(@endColor);
+    /* FF3.6-15 */
+    background: -moz-linear-gradient(top, @startColor 0%, @endColor 100%);
+    /* Chrome10-25,Safari5.1-6 */
+    background: -webkit-linear-gradient(top, @startColor 0%, @endColor 100%);
+    /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    background: linear-gradient(to bottom, @startColor 0%, @endColor 100%);
+    /* IE6-9 */
+    -ms-filter: ~"progid:DXImageTransform.Microsoft.gradient(startColorstr='@{startARGB}', endColorstr='@{endARGB}', GradientType=0)";
+    filter: ~"progid:DXImageTransform.Microsoft.gradient(startColorstr='@{startARGB}', endColorstr='@{endARGB}', GradientType=0)";
+}
+
+
+//== Vertical Alignment (http://zerosixthree.se/vertical-align-anything-with-just-3-lines-of-css/)
+
+.vertical-align(@position: relative) {
+    position: @position;
+    top: 50%;
+    -webkit-transform: translateY(-50%);
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
+}

@@ -1,0 +1,108 @@
+/**
+ * CSS Document
+ *
+ * @package       css
+ * @title         wolfnet.ash.less
+ * @copyright     Copyright (c) 2016 WolfNet Technologies, LLC
+ *
+ *                This program is free software; you can redistribute it and/or
+ *                modify it under the terms of the GNU General Public License
+ *                as published by the Free Software Foundation; either version 2
+ *                of the License, or (at your option) any later version.
+ *
+ *                This program is distributed in the hope that it will be useful,
+ *                but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *                MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *                GNU General Public License for more details.
+ *
+ *                You should have received a copy of the GNU General Public License
+ *                along with this program; if not, write to the Free Software
+ *                Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ *
+ */
+
+@import 'public/css/_variables.inc';
+@import 'public/css/_mixins.inc';
+
+
+//
+// Variables
+// -------------------------------------------- //
+
+
+//== Listing dimensions
+
+@listingPadding:    10px;
+@control-width:     15px;
+@control-height:    100%;
+
+
+//
+// Styles
+// -------------------------------------------- //
+
+
+.wolfnet_widget {
+
+    &.wolfnet_featuredListings,
+    &.wolfnet_listingGrid {
+
+        .wolfnet_listing,
+        .wntHOItem {
+            min-width: @listingWidth;
+
+            .wolfnet_listingImage {
+                padding: @listingPadding 0 @listingPadding 0;
+
+                img {
+                    border:     1px solid #ebebeb;
+                    box-shadow: 0 5px @listingPadding hsla(0, 0%, 60%, 0.25);
+                }
+
+                .wnt-thumbnail-scroller {
+
+                    .wnt-nav-btn {
+                        width: @control-width;
+                        height: @control-height;
+
+                        .wnt-icon {
+                            font-size: 25px;
+                        }
+
+                        &.wnt-next {
+                            right: -2px;
+                        }
+
+                        &.wnt-prev {
+                            left: -2px;
+                        }
+
+                    }
+
+                }
+
+            }
+
+        }
+
+        .wolfnet_listing {
+
+            .wolfnet_listingHead,
+            .wolfnet_locationInfo,
+            .wolfnet_branding {
+                width: 150px;
+            }
+
+        }
+
+    }
+
+    &.wolfnet_listingGrid {
+
+        .wolfnet_listing {
+            width: @listingWidth;
+        }
+
+    }
+
+}

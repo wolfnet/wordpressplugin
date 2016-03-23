@@ -93,7 +93,7 @@ class Wolfnet_Module_FeaturedListings
             return $this->plugin->displayException($e);
         }
 
-        $this->plugin->listings->augmentListingsData($data, $key);
+        $this->plugin->listings->augmentListingsData($data, $key, array('listing'));
 
         $listingsData = array();
 
@@ -126,7 +126,7 @@ class Wolfnet_Module_FeaturedListings
         }
 
         $vars = array(
-            'instance_id'  => str_replace('.', '', uniqid('wolfnet_featuredListing_')),
+            'instance_id'  => str_replace('.', '', 'wolfnet_featuredListing_' . $this->plugin->createUUID()),
             'listingsHtml' => $listingsHtml,
             'siteUrl'      => site_url(),
             'criteria'     => json_encode($criteria)

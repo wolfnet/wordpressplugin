@@ -2074,9 +2074,9 @@
                     }
                 });
 
-				MQA.EventManager.addListener(_mapquestPoi, "touchstart", function (e) {
-					_mapquestPoi.toggleInfoWindowRollover();
-				});
+                MQA.EventManager.addListener(_mapquestPoi, "touchstart", function (e) {
+                    _mapquestPoi.toggleInfoWindowRollover();
+                });
 
                 return _mapquestPoi;
             };
@@ -2599,131 +2599,136 @@
             }
         }
 
-		return paramValue;
-	};
+        return paramValue;
+    };
 
 
-	var mapTracksGlobals = {
-		MAP_ID: 0,
-		CONTROL_ID: 0
-	};
+    var mapTracksGlobals = {
+        MAP_ID: 0,
+        CONTROL_ID: 0
+    };
 
 
-	var methods = {
+    var methods = {
 
-		/**
-		 * Initializes a map instance within a component.
-		 */
-		init: function(options) {
+        /**
+         * Initializes a map instance within a component.
+         */
+        init: function(options) {
 
-			return this.each(function() {
+            return this.each(function() {
 
-				// Build map
-				var wntMaptracksMap = new MapTracks();
-				wntMaptracksMap.createMap(this);
+                // Build map
+                var wntMaptracksMap = new MapTracks();
+                wntMaptracksMap.createMap(this);
 
-				var wntMapContainer = $('#' + options.mapId);
-				var houseoverData = options.houseoverData || [];
+                var wntMapContainer = $('#' + options.mapId);
+                var houseoverData = options.houseoverData || [];
 
-				// Pin houseovers to map
-				methods.pinHouseovers.call(
-					this,
-					wntMapContainer,
-					houseoverData,
-					options.houseoverIcon
-				);
+                // Pin houseovers to map
+                methods.pinHouseovers.call(
+                    this,
+                    wntMapContainer,
+                    houseoverData,
+                    options.houseoverIcon
+                );
 
-				// Size and fit map instance
-				methods.autoSizeMap.call(this,wntMapContainer);
+                // Size and fit map instance
+                methods.autoSizeMap.call(this,wntMapContainer);
 
-				// Bind map auto size to window resize for all maps
-				$(window).resize(methods.responsiveMaps);
+                // Bind map auto size to window resize for all maps
+                $(window).resize(methods.responsiveMaps);
 
-			});
+            });
 
-		},
+        },
 
 
-		// Places houseover poi's on a map instance
-		pinHouseovers: function(wntMapContainer,houseoverData,icon) {
+        // Places houseover poi's on a map instance
+        pinHouseovers: function(wntMapContainer,houseoverData,icon) {
 
-			var wntMap = wntMapContainer.data('map');
+            var wntMap = wntMapContainer.data('map');
 
-			for (var i in houseoverData) {
+            for (var i in houseoverData) {
 
-				var lat = houseoverData[i].lat;
-				var lng = houseoverData[i].lng;
+                var lat = houseoverData[i].lat;
+                var lng = houseoverData[i].lng;
 
                 // Only add pin if coordinates are valid
-				if (
-					((lat !== 0) || (lng !== 0)) &&
-					(!isNaN(lat) || !isNaN(lng)) &&
-					(lat !== '' || lng !== '') &&
-					((lat >= -180) && (lat <= 180)) &&
-					((lng >= -180) && (lng <= 180))
-				) {
+                if (
+                    ((lat !== 0) || (lng !== 0)) &&
+                    (!isNaN(lat) || !isNaN(lng)) &&
+                    (lat !== '' || lng !== '') &&
+                    ((lat >= -180) && (lat <= 180)) &&
+                    ((lng >= -180) && (lng <= 180))
+                ) {
 
-					// Build houseover icon object
-					var houseoverIcon = wntMap.mapIcon(icon,20,20);
+                    // Build houseover icon object
+                    var houseoverIcon = wntMap.mapIcon(icon,20,20);
 
-					// Build houseover as poi object
-					var houseover = wntMap.poi(
-						lat,
-						lng,
-						houseoverIcon,
-						houseoverData[i].content,
-						houseoverData[i].propertyId,
-						houseoverData[i].propertyUrl
-					);
+                    // Build houseover as poi object
+                    var houseover = wntMap.poi(
+                        lat,
+                        lng,
+                        houseoverIcon,
+                        houseoverData[i].content,
+                        houseoverData[i].propertyId,
+                        houseoverData[i].propertyUrl
+                    );
 
-					// Pin houseover poi to map
-					wntMap.addPoi(houseover);
+                    // Pin houseover poi to map
+                    wntMap.addPoi(houseover);
 
-				}
-			}
-
-
-		},
+                }
+            }
 
 
-		// Call autoSizeMap on each map instance
-		responsiveMaps: function() {
-			$('.wolfnet_wntMainMap').each(function() {
-				methods.autoSizeMap.call(this,$(this));
-			});
-		},
+        },
 
 
-		// Resizes a map instance based on parent element width
-		autoSizeMap: function(wntMapContainer) {
-			var parentWidth = wntMapContainer.parent().width();
-			var wntMap = wntMapContainer.data('map');
-			var mapWidth = wntMap.getSize().width;
-			var mapHeight = wntMap.getSize().height;
-
-			// If mapWidth does not equal parentWidth, reset size
-			if (mapWidth != parentWidth) {
-				wntMap.setSize(parentWidth,mapHeight);
-			}
-
-			// Fit map to listings
-			wntMap.bestFit();
-		}
-
-	}
+        // Call autoSizeMap on each map instance
+        responsiveMaps: function() {
+            $('.wolfnet_wntMainMap').each(function() {
+                methods.autoSizeMap.call(this,$(this));
+            });
+        },
 
 
-	$.fn[pluginName] = function(method)
-	{
+        // Resizes a map instance based on parent element width
+        autoSizeMap: function(wntMapContainer) {
+            var parentWidth = wntMapContainer.parent().width();
+            var wntMap = wntMapContainer.data('map');
 
-		if (methods[method]) {
-			return methods[method].apply(this, Array.prototype.slice.call(arguments, 1));
-		} else if (typeof method === 'object' || !method) {
-			return methods.init.apply( this, arguments );
-		} else {
-			$.error( 'Method ' +  method + ' does not exist on jQuery.' + pluginName );
-		}
+            if (typeof wntMap !== 'undefined') {
 
-	}
+                var mapWidth = wntMap.getSize().width;
+                var mapHeight = wntMap.getSize().height;
+
+                // If mapWidth does not equal parentWidth, reset size
+                if (mapWidth != parentWidth) {
+                    wntMap.setSize(parentWidth,mapHeight);
+                }
+
+                // Fit map to listings
+                wntMap.bestFit();
+
+            }
+        }
+
+    }
+
+
+    $.fn[pluginName] = function(method)
+    {
+
+        if (methods[method]) {
+            return methods[method].apply(this, Array.prototype.slice.call(arguments, 1));
+        } else if (typeof method === 'object' || !method) {
+            return methods.init.apply( this, arguments );
+        } else {
+            $.error( 'Method ' +  method + ' does not exist on jQuery.' + pluginName );
+        }
+
+    }
 
 })(jQuery);

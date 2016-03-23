@@ -46,6 +46,13 @@ class Wolfnet_Plugin
     public $optionGroup = 'wolfnet';
 
     /**
+     * This property is used to set the option group for the Appearance page. It creates a namespaced
+     * collection of variables which are used in saving page settings.
+     * @var string
+     */
+    public $StyleOptionGroup = 'wolfnetStyle';
+
+    /**
      * This property is used to set the option group for the Edit Css page. It creates a namespaced
      * collection of variables which are used in saving page settings.
      * @var string
@@ -58,6 +65,12 @@ class Wolfnet_Plugin
      * @var string
      */
     public $customPostTypeSearch = 'wolfnet_search';
+
+    /**
+     * This property is used to identify which widget theme to use.
+     * @var string
+     */
+    public $widgetThemeOptionKey = 'wolfnet_widgetTheme';
 
     /**
      * This property contains the public CSS as defined in the Edit CSS page.
@@ -81,7 +94,7 @@ class Wolfnet_Plugin
 
     /**
      * This Property is use as a prefix to request scope variables to avoid conflicts with get,
-     * post, and other global variables used by wordpress and other plugins.
+     * post, and other global variables used by WordPress and other plugins.
      * @var string
      */
     public $requestPrefix = 'wolfnet_';
@@ -218,6 +231,45 @@ class Wolfnet_Plugin
     public function templateRedirect()
     {
         return $this->template->templateRedirect();
+    }
+
+    public function createUUID($withDashes = false)
+    {
+        // Source: http://www.php.net/manual/en/function.uniqid.php#94959
+
+        $idSet = '%04x';
+        $idFormat = $idSet . $idSet;
+
+        for ($i=0; $i<4; $i++) {
+            $idFormat .= ($withDashes ? '-' : '') . $idSet;
+        }
+
+        $idFormat .= $idSet . $idSet;
+
+        return sprintf(
+
+            $idFormat,
+
+            // 32 bits for "time_low"
+            mt_rand(0, 0xffff), mt_rand(0, 0xffff),
+
+            // 16 bits for "time_mid"
+            mt_rand(0, 0xffff),
+
+            // 16 bits for "time_hi_and_version",
+            // four most significant bits holds version number 4
+            mt_rand(0, 0x0fff) | 0x4000,
+
+            // 16 bits, 8 bits for "clk_seq_hi_res",
+            // 8 bits for "clk_seq_low",
+            // two most significant bits holds zero and one for variant DCE1.1
+            mt_rand(0, 0x3fff) | 0x8000,
+
+            // 48 bits for "node"
+            mt_rand(0, 0xffff), mt_rand(0, 0xffff), mt_rand(0, 0xffff)
+
+        );
+
     }
 
 

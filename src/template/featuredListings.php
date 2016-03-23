@@ -32,8 +32,11 @@
 
 <script type="text/javascript">
 
-    jQuery(function($){
-        $('#<?php echo $instance_id; ?>').wolfnetScrollingItems({
+    jQuery(function ($) {
+
+        var $featured = $('#<?php echo $instance_id; ?>');
+
+        $featured.wolfnetScrollingItems({
             autoPlay : <?php echo ($autoplay) ? 'true' : 'false'; ?>,
             direction : <?php echo "'" . $direction . "'"; ?>,
             speed : <?php echo $speed; ?>,
@@ -44,6 +47,7 @@
             controlRightClass: 'wolfnet_rightControl',
             itemClass: 'wolfnet_listing'
         });
+
     });
 
 </script>

@@ -26,9 +26,9 @@
  * code inside an immediately invoked function expression (IIFE) to avoid naming conflicts with the $
  * variable.
  */
-if (typeof jQuery != 'undefined') {
+if (typeof jQuery !== 'undefined') {
 
-    (function($, jQuery, window, document, undefined){
+    (function ($, jQuery, window, document, undefined) {
 
         var pluginName = 'wolfnetListingGrid';
 
@@ -42,6 +42,7 @@ if (typeof jQuery != 'undefined') {
             gridAlign: 'center'
         };
 
+
         var getGridItems = function(target)
         {
             var $target = $(target);
@@ -52,6 +53,7 @@ if (typeof jQuery != 'undefined') {
             return data.$container.find(itemSelector).not(clearFixSelector);
 
         };
+
 
         var preparePluginData = function(target)
         {
@@ -64,57 +66,155 @@ if (typeof jQuery != 'undefined') {
                 data.$container = $target.find('.' + data.option.containerClass);
             }
 
-            var $items = getGridItems(target);
-            // Capture the original item width for later comparison
-            data.itemWidth = $items.first().innerWidth();
-            // Remove any existing margins
-            $items.css('margin', 0);
-
         };
 
-        var prepareDomElements = function(target)
+
+        var updateColumnWidths = function(target, size)
         {
+            size = size || '';
+
             var $target = $(target);
             var data = $target.data(pluginName);
             var $items = getGridItems(target);
+            var containerWidth = data.$container.innerWidth();
 
-            if (data.option.appendClearfix) {
-                $('<div>').addClass(data.option.clearfixClass).insertAfter($items.last());
-            }
+            // Reset size and column classes
+            $items.removeClass('wolfnet_listing_sm wolfnet_listing_xs wolfnet_colFirst wolfnet_colLast');
 
-        };
+            // See if the items fit in their container
+            if ($items.width() > containerWidth) {
 
-        var updateColumnWidths = function(target)
-        {
-            var $target = $(target);
-            var data = $target.data(pluginName);
-            var $items = getGridItems(target);
-            var targetWidth = data.$container.innerWidth();
-            var minColumnWidth = data.itemWidth;
-            var columnWidth = minColumnWidth;
-            var columns = Math.floor(targetWidth / (columnWidth + data.option.minColumnGap));
-            var gridAlign = data.option.gridAlign;
+                // Not even one column fits; try reducing item size
+                resizeToFit($items, containerWidth, size);
+                $items.trigger('wntResizeItem');
 
-            if (columns > $items.length) {
-                columns = $items.length;
-            }
+                // Set up the column classes
+                setupColumns($items);
 
-            var remainingPixels = targetWidth - (columnWidth * columns);
-            var margin = Math.floor(remainingPixels / (columns + 1));
-            var extraMargin = remainingPixels - (margin * (columns + 1));
-
-            // console.log(targetWidth, columnWidth, columns, remainingPixels, margin, extraMargin);
-
-            if(gridAlign == 'center') {
-                $items.css('marginLeft', margin);
             } else {
-                $items.css('marginRight', 15);
+
+                // One or more columns can fit; resize the items to the target size
+                resizeItems($items, size);
+                $items.trigger('wntResizeItem');
+
+                // Set up and count the columns
+                var columns = setupColumns($items);
+
+                if (columns === 1) {
+                    // Try resizing to get more columns
+                    switch (size) {
+                        case 'full':
+                            // Done
+                            break;
+                        case 'xs':
+                            // Go back to full-size, 1-column
+                            return updateColumnWidths(target, 'full');
+                            break;
+                        case 'sm':
+                            // Try the next size down
+                            return updateColumnWidths(target, 'xs');
+                            break;
+                        default:
+                            // Try the next size down
+                            return updateColumnWidths(target, 'sm');
+                            break;
+                    }
+                }
+
             }
-            // data.$container.css('paddingRight', margin + extraMargin);
 
             data.$container.trigger('columns-updated.' + pluginName);
 
+            return true;
+
         };
+
+
+        var resizeItems = function ($items, size)
+        {
+            switch (size) {
+                case 'sm':
+                    $items.addClass('wolfnet_listing_sm');
+                    break;
+                case 'xs':
+                    $items.addClass('wolfnet_listing_xs');
+                    break;
+            }
+        };
+
+
+        var resizeToFit = function ($items, containerWidth, size)
+        {
+            size = size || '';
+
+            resizeItems($items, size);
+
+            if ($items.width() > containerWidth) {
+                // Still too wide; reduce again
+                switch (size) {
+                    case 'xs':
+                        // Smallest size reached
+                        return false;
+                        break;
+                    case 'sm':
+                        return resizeToFit($items, containerWidth, 'xs');
+                        break;
+                    default:
+                        return resizeToFit($items, containerWidth, 'sm');
+                        break;
+                }
+            } else {
+                // Items fit
+                return true;
+            }
+
+        };
+
+
+        // Identify first/last columns; return number of columns found
+        var setupColumns = function($items)
+        {
+            var $lastItem = null,
+                columns = 0,
+                rows = 0
+                rowItems = 0;
+
+            for (var i=0, l=$items.length; i<l; i++) {
+
+                var $item = $($items[i]);
+
+                if ($lastItem) {
+                    if ($lastItem.offset().top != $item.offset().top) {
+                        $lastItem.addClass('wolfnet_colLast');
+                        $item.addClass('wolfnet_colFirst');
+                        rows++;
+                    }
+                } else {
+                    $item.addClass('wolfnet_colFirst');
+                    rows++;
+                }
+
+                // Count the items in the row
+                rowItems++;
+
+                // In the first row, count the columns
+                if (rows === 1) {
+                    columns = rowItems;
+                }
+
+                // Note the last item
+                if (i == (l - 1)) {
+                    $item.addClass('wolfnet_colLast');
+                }
+
+                $lastItem = $item;
+
+            }
+
+            return columns;
+
+        };
+
 
         /**
          * This function loops over all images in the container and triggers an event on the target
@@ -134,46 +234,22 @@ if (typeof jQuery != 'undefined') {
             var loadedImgs = 0;
 
             // Loop over each image and increment for each image that is completely loaded
-            $images.each(function(){
+            $images.each(function () {
                 if ($(this).prop('complete') === true) {
                     loadedImgs++;
                 }
-
             });
 
-            // If all of the images are loaded trigger the event
             if (loadedImgs >= imageCount) {
+                // If all of the images are loaded, trigger the event
                 $target.trigger('allImagesLoaded.' + pluginName);
-
-            // Otherwise run this function again after a brief delay
             } else {
-                setTimeout(function(){monitorImages(target);}, 100);
-
+                // Otherwise, run this function again after a brief delay
+                setTimeout(function () { monitorImages(target); }, 100);
             }
 
         };
 
-        var updateRowHeight = function(target)
-        {
-            var $target = $(target);
-            var data = $target.data(pluginName);
-            var $items = getGridItems(target);
-            var maxItemHeight = 0;
-            $items.height('auto');
-
-            // Loop over each item to determine what the height of the tallest one is.
-            $items.each(function(){
-                var itemHeight = this.scrollHeight;
-                maxItemHeight = (maxItemHeight < itemHeight) ? itemHeight : maxItemHeight;
-            });
-
-            // Set all items to the same height as the tallest.
-            $items.height(maxItemHeight);
-            $items.css('marginBottom', data.option.minRowGap);
-
-            $target.trigger('rows-updated.' + pluginName);
-
-        };
 
         /* Methods available to the plugin. */
         var methods = {
@@ -185,11 +261,11 @@ if (typeof jQuery != 'undefined') {
 
                 // Capture the instances' options in each element's local data storage.
                 this.data(pluginName, {
-                    option: $.extend(defaultOptions, options || {})
+                    option: $.extend({}, defaultOptions, options || {})
                 });
 
                 // Initialized the plugin for each element that was selected.
-                return this.each(function(){
+                return this.each(function () {
 
                     var target = this;
                     var $target = $(target);
@@ -200,34 +276,51 @@ if (typeof jQuery != 'undefined') {
 
                     var targetWidth = data.$container.innerWidth();
 
-                    // Whenever the parent container changes size udpate the column for even spacing
-                    $(window).on('resize', function(event){
-                        var newContainerWidth = data.$container.innerWidth();
+                    // Whenever the parent container changes size update the column for even spacing
+                    $(window).on('resize', function (event) {
 
-                        // Only update when the browser resize has cause the container width to change
-                        if (targetWidth !== newContainerWidth) {
-                            targetWidth = newContainerWidth;
-
-                            // To help with performance only resize if the previous resize has completed
-                            if (!resizing) {
-                                resizing = true;
-                                methods.refresh.call(plugin, false);
-                            }
-
+                        // To help with performance only resize if the previous resize has completed
+                        if (!resizing) {
+                            resizing = true;
+                            methods.refresh.call(plugin, false);
                         }
 
                     });
 
-                    $(window).on('columns-updated.' + pluginName, function(){
+                    $target
+                        // Update start
+                        .on('wolfnet.updating', function () {
+                            var data = $target.data(pluginName);
+                            data.imagesLoading = true;
+                            data.isUpdating = true;
+                            $target.addClass('wnt-in-transition');
+                        })
+                        // Whenever the parent container gets new data, update the listing columns
+                        .on('wolfnet.updated', function (event) {
+                            var data = $target.data(pluginName);
+                        })
+                        // Transitions
+                        .on('refresh-end.' + pluginName, function () {
+                            var data = $target.data(pluginName);
+                            data.isUpdating = false;
+                            if (!data.imagesLoading) {
+                                $target.removeClass('wnt-in-transition');
+                            }
+                        });
+
+                    $(window).on('columns-updated.' + pluginName, function () {
                         resizing = false;
                     });
 
                     // Once all images have been loaded update row heights to prevent stagger.
-                    $target.on('allImagesLoaded.' + pluginName, function(){
-                        updateRowHeight(target);
+                    $target.on('allImagesLoaded.' + pluginName, function () {
+                        var data = $target.data(pluginName);
+                        data.imagesLoading = false;
+                        methods.refresh.call($target);
                     });
 
-                    prepareDomElements(target);
+                    data.imagesLoading = true;
+
                     updateColumnWidths(target);
                     monitorImages(target);
 
@@ -239,18 +332,19 @@ if (typeof jQuery != 'undefined') {
             {
                 deep = deep || false;
 
-                return this.each(function(){
+                return this.each(function () {
                     var target = this;
 
+                    $(target).trigger('refresh-start.' + pluginName);
+
                     preparePluginData(target);
-                    prepareDomElements(target);
                     updateColumnWidths(target);
 
                     if (deep) {
                         monitorImages(target);
-                    } else {
-                        updateRowHeight(target);
                     }
+
+                    $(target).trigger('refresh-end.' + pluginName);
 
                 });
 

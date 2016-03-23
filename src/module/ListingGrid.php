@@ -124,7 +124,7 @@ class Wolfnet_Module_ListingGrid
             return false;
         }
 
-        if($dataOverride === null) {
+        if ($dataOverride === null) {
             if (!array_key_exists('numrows', $criteria)) {
                 $criteria['maxrows'] = $criteria['maxresults'];
             }
@@ -139,11 +139,10 @@ class Wolfnet_Module_ListingGrid
         } else {
             // $dataOverride is passed in. As of writing this comment, this is data
             // is coming from the AgentPagesHandler - we need to display a listing
-            // grid of an agent's featured listings. This is a vain attempt at 
+            // grid of an agent's featured listings. This is a vain attempt at
             // repurposing this code as-is.
             $data = $dataOverride;
         }
-        
 
         // add some elements to the array returned by the API
         // wpMeta should contain any criteria or other setting which do not come from the API
@@ -151,7 +150,7 @@ class Wolfnet_Module_ListingGrid
 
         $data['wpMeta']['total_rows'] = $data['responseData']['data']['total_rows'];
 
-        $this->plugin->listings->augmentListingsData($data, $key);
+        $this->plugin->listings->augmentListingsData($data, $key, array('listing', 'map'));
 
         $listingsData = array();
 
@@ -194,7 +193,7 @@ class Wolfnet_Module_ListingGrid
         }
 
         $vars = array(
-            'instance_id'        => str_replace('.', '', uniqid('wolfnet_listingGrid_')),
+            'instance_id'        => str_replace('.', '', 'wolfnet_listingGrid_' . $this->plugin->createUUID()),
             // TODO: not needed?? we are merging $vars and listing data below.
             'listings'           => $listingsData,
             'listingsHtml'       => $listingsHtml,
@@ -206,9 +205,9 @@ class Wolfnet_Module_ListingGrid
             'map'                => '',
             'maptype'            => $data['wpMeta']['maptype'],
             'hideListingsTools'  => '',
-            'hideListingsId'     => uniqid('hideListings'),
-            'showListingsId'     => uniqid('showListings'),
-            'collapseListingsId' => uniqid('collapseListings'),
+            'hideListingsId'     => 'hideListings' . $this->plugin->createUUID(),
+            'showListingsId'     => 'showListings' . $this->plugin->createUUID(),
+            'collapseListingsId' => 'collapseListings' . $this->plugin->createUUID(),
             'toolbarTop'         => '',
             'toolbarBottom'      => '',
             'maxrows'            => ((count($listingsData) > 0) ? $data['requestData']['maxrows'] : 0),
@@ -221,7 +220,7 @@ class Wolfnet_Module_ListingGrid
 
         if ($vars['wpMeta']['maptype'] != "disabled") {
             $vars['map'] = $this->plugin->data->getMap(
-            	$listingsData, 
+            	$listingsData,
             	$_REQUEST[$this->plugin->requestPrefix.'productkey']
             );
             $vars['wpMeta']['maptype'] = $vars['maptype'];

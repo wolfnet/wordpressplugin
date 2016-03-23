@@ -41,6 +41,8 @@ class Wolfnet_Template
         do_action($this->plugin->preHookPrefix . 'enqueueResources');
 
         $scripts = array(
+            'wolfnet-swipe',
+            'wolfnet-thumbnail-scroller',
             'wolfnet-scrolling-items',
             'wolfnet-quick-search',
             'wolfnet-smartsearch',
@@ -66,7 +68,13 @@ class Wolfnet_Template
     {
         $styles = array(
             'wolfnet',
+            'icomoon',
         );
+
+        $widgetTheme = $this->plugin->views->getWidgetTheme();
+        if (strlen($widgetTheme)) {
+            array_push($styles, 'wolfnet-' . $widgetTheme);
+        }
 
         foreach ($styles as $style) {
             wp_enqueue_style($style);
@@ -138,6 +146,14 @@ class Wolfnet_Template
                 $this->url . 'js/jquery.wolfnetListingGrid.src.js',
                 array('jquery', 'tooltipjs', 'imagesloadedjs', 'wolfnet'),
             ),
+            'wolfnet-swipe' => array(
+                $this->url . 'js/wolfnetSwipe.src.js',
+                array('jquery'),
+            ),
+            'wolfnet-thumbnail-scroller' => array(
+                $this->url . 'js/jquery.wolfnetThumbnailScroller.src.js',
+                array('jquery', 'wolfnet-swipe', 'wolfnet'),
+            ),
             'wolfnet-toolbar' => array(
                 $this->url . 'js/jquery.wolfnetToolbar.src.js',
                 array('jquery', 'wolfnet'),
@@ -196,9 +212,18 @@ class Wolfnet_Template
             'wolfnet-custom' => array(
                 admin_url('admin-ajax.php') . '?action=wolfnet_css',
                 ),
+            'wolfnet-ash' => array(
+                $this->url . 'css/wolfnet.ash.src.css'
+                ),
+            'wolfnet-birch' => array(
+                $this->url . 'css/wolfnet.birch.src.css'
+                ),
             'jquery-ui' => array(
                 'http://ajax.googleapis.com/ajax/libs/jqueryui/' . $jquery_ui->ver
                     . '/themes/smoothness/jquery-ui.css'
+                ),
+            'icomoon' => array(
+                $this->url . 'lib/icomoon/style.css'
                 ),
             );
 
@@ -350,7 +375,7 @@ class Wolfnet_Template
     }
 
 
-    private function localizedScriptData()
+    public function localizedScriptData()
     {
         global $wp_version;
 

@@ -2,6 +2,7 @@
 
 runfile=".runonce.vagrant"
 tempdir="/vagrant/.vagrant/temp"
+certsdir="/vagrant/.vagrant/certs"
 
 if [ ! -f "${runfile}" ]; then
 
@@ -28,6 +29,9 @@ if [ ! -f "${runfile}" ]; then
     service apache2 stop > /dev/null 2> /dev/null
 
     echo "Creating SSL ..."
+    if [ ! -d $certsdir ]; then
+        mkdir -p "${certsdir}"
+    fi
     a2enmod ssl > /dev/null
     openssl req -x509 -nodes -days 365 -newkey rsa:2048 -batch \
         -config /vagrant/.vagrant/openssl-cert.config \

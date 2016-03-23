@@ -257,12 +257,13 @@ class Wolfnet_Listings
      * @param  string        the api key
      * @return array         returns the same array structure with additional info
      */
-    public function augmentListingsData(&$data, $key)
+    public function augmentListingsData(&$data, $key, array $templates = array())
     {
 
         if (is_array($data['responseData']['data'])) {
             $listingsData = &$data['responseData']['data']['listing'];
         }
+        $data['responseData']['data']['templates'] = $templates;
 
         $br_logo = $this->plugin->data->getBrLogo($key);
 
@@ -272,6 +273,18 @@ class Wolfnet_Listings
 
         $show_logo = $data['responseData']['metadata']['display_rules']['results']['display_broker_reciprocity_logo'];
         $wnt_base_url = $this->plugin->data->getBaseUrl($key);
+
+        // Include template(s)
+        $vars = array(
+            'listing' => $this->getDefaults()
+        );
+        $data['responseData']['data']['templates'] = array();
+        if (in_array('listing', $templates)) {
+            $data['responseData']['data']['templates']['listing'] = $this->plugin->views->listingView($vars);
+        }
+        if (in_array('map', $templates)) {
+            $data['responseData']['data']['templates']['map'] = $this->plugin->views->houseOver($vars);
+        }
 
         // loop over listings
         foreach ($listingsData as &$listing) {
@@ -287,6 +300,10 @@ class Wolfnet_Listings
                 $listing['property_url'] = $wnt_base_url . '/?action=listing_detail&property_id='
                     . $listing['property_id'];
             }
+
+            $scriptData = $this->plugin->template->localizedScriptData();
+            $listing['thumbnails_url'] = $scriptData['ajaxurl']
+                . '?action=wolfnet_listing_photos&property_id=' . $listing['property_id'];
 
             $listing['location'] = $listing['city'];
 
@@ -353,6 +370,56 @@ class Wolfnet_Listings
         }
 
         return $data;
+
+    }
+
+
+    public function getPhotos($propertyId, $keyId=null)
+    {
+        if (($keyId == null) || ($keyId == '')) {
+            $productKey = $this->plugin->keyService->getDefault();
+        } else {
+            $productKey = $this->plugin->keyService->getById($keyId);
+        }
+        try {
+            $data = $this->plugin->api->sendRequest(
+                $productKey,
+                '/listing/' . $propertyId . '/photos',
+                'GET'
+            );
+        } catch (Wolfnet_Exception $e) {
+            return $this->plugin->displayException($e);
+        }
+        return $data['responseData']['data'];
+    }
+
+
+    public function getDefaults()
+    {
+
+        return array(
+            'address'          => '',
+            'bedsbaths_full'   => '',
+            'branding'         => array(
+                'agent_name'       => '',
+                'agent_phone'      => '',
+                'courtesy_text'    => '',
+                'logo'             => '',
+                'office_name'      => '',
+                'office_phone'     => '',
+                'toll_free_phone'  => '',
+                'type'             => '',
+            ),
+            'display_address'  => '',
+            'listing_price'    => '',
+            'location'         => '',
+            'property_id'      => '',
+            'property_url'     => '',
+            'total_baths'      => '',
+            'total_bedrooms'   => '',
+            'thumbnail_url'    => '',
+            'thumbnails_url'   => '',
+        );
 
     }
 

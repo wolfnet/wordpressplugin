@@ -97,6 +97,27 @@ class Wolfnet_Views
     }
 
 
+    public function amStylePage()
+    {
+
+        try {
+            $out = $this->parseTemplate('adminStyle', array(
+                'imgdir' => $this->remoteImages,
+                'formHeader' => $this->styleFormHeaders(),
+                'widgetTheme' => $this->getWidgetTheme(),
+            ));
+
+        } catch (Wolfnet_Exception $e) {
+            $out = $this->exceptionView($e);
+        }
+
+        echo $out;
+
+        return $out;
+
+    }
+
+
     public function amEditCssPage()
     {
 
@@ -172,6 +193,12 @@ class Wolfnet_Views
     }
 
 
+    public function getWidgetTheme()
+    {
+        return get_option(trim($GLOBALS['wolfnet']->widgetThemeOptionKey), 'ash');
+    }
+
+
     /**
      * This method is used in the context of admin_print_styles to output custom CSS.
      * @return void
@@ -206,7 +233,7 @@ class Wolfnet_Views
     public function featuredListingsOptionsFormView(array $args = array())
     {
         $defaultArgs = array(
-            'instance_id'     => str_replace('.', '', uniqid('wolfnet_featuredListing_')),
+            'instance_id'     => str_replace('.', '', 'wolfnet_featuredListing_' . $GLOBALS['wolfnet']->createUUID()),
             'markets'         => json_decode($GLOBALS['wolfnet']->keyService->get()),
         );
 
@@ -220,7 +247,7 @@ class Wolfnet_Views
     public function listingGridOptionsFormView(array $args = array())
     {
         $defaultArgs = array(
-            'instance_id'      => str_replace('.', '', uniqid('wolfnet_listingGrid_')),
+            'instance_id'      => str_replace('.', '', 'wolfnet_listingGrid_' . $GLOBALS['wolfnet']->createUUID()),
             'markets'          => json_decode($GLOBALS['wolfnet']->keyService->get()),
             'keyid'            => ''
         );
@@ -245,7 +272,7 @@ class Wolfnet_Views
         }
 
         $defaultArgs = array(
-            'instance_id' => str_replace('.', '', uniqid('wolfnet_quickSearch_')),
+            'instance_id' => str_replace('.', '', 'wolfnet_quickSearch_' . $GLOBALS['wolfnet']->createUUID()),
             'markets'     => $markets,
             'keyids'      => $keyids,
             'view'        => $view,
@@ -488,13 +515,24 @@ class Wolfnet_Views
 
     private function parseTemplate($template, array $vars = array())
     {
-        $vars['widgetThemeClass'] = 'wolfnet-theme-ash';
+        $vars['widgetThemeClass'] = 'wolfnet-theme-' . $this->getWidgetTheme();
 
         extract($vars, EXTR_OVERWRITE);
 
         ob_start();
 
         include $this->templateDir . '/' . $template . '.php';
+
+        return trim(ob_get_clean());
+
+    }
+
+
+    private function styleFormHeaders()
+    {
+        ob_start();
+
+        settings_fields($GLOBALS['wolfnet']->StyleOptionGroup);
 
         return trim(ob_get_clean());
 

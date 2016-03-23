@@ -3,7 +3,7 @@
 /**
  * WolfNet Data
  *
- * This class represents the search configuration and listing data and associated 
+ * This class represents the search configuration and listing data and associated
  * functions to retrieve it.
  *
  * @package Wolfnet
@@ -66,8 +66,8 @@ class Wolfnet_Data
     {
         try {
             $data = $this->plugin->api->sendRequest(
-                $this->plugin->keyService->getDefault(), 
-                '/office', 
+                $this->plugin->keyService->getDefault(),
+                '/office',
                 'GET'
             );
         } catch (Wolfnet_Exception $e) {
@@ -269,9 +269,9 @@ class Wolfnet_Data
 			'centerLng'    => $data['responseData']['data']['market']['maptracks']['map_start_lng'],
 			'zoomLevel'    => $data['responseData']['data']['market']['maptracks']['map_start_scale'],
 			'houseoverIcon'=> $GLOBALS['wolfnet']->url . 'img/houseover.png',
-			'mapId'        => uniqid('wntMapTrack'),
-			'hideMapId'    => uniqid('hideMap'),
-			'showMapId'    => uniqid('showMap'),
+			'mapId'        => 'wntMapTrack' . $this->plugin->createUUID(),
+			'hideMapId'    => 'hideMap' . $this->plugin->createUUID(),
+			'showMapId'    => 'showMap' . $this->plugin->createUUID(),
 		);
 
         $args['houseoverData'] = $this->getHouseoverData(
@@ -338,20 +338,20 @@ class Wolfnet_Data
     public function getSearchManagerBaseUrl($productKey = null)
     {
         if ($productKey == null) {
-            $productKey = $this->plugin->keyService->getDefaultProductKey();
+            $productKey = $this->plugin->keyService->getDefault();
         }
- 
+
         $data  = $this->plugin->api->sendRequest($productKey, '/settings');
- 
+
         if(is_wp_error($data)) {
             return $data;
         }
- 
+
         $baseUrl =
             $data['responseData']['data']['site']['mlsfinder_web_root'] . '/' .
             $data['responseData']['data']['market']['datasource_name'] . '/' .
             $data['responseData']['data']['site']['site_directory_name'];
- 
+
         return $baseUrl;
     }
 

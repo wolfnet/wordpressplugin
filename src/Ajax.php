@@ -45,6 +45,7 @@ class Wolfnet_Ajax
             'wolfnet_content_footer'          => 'remoteContentFooter',
             'wolfnet_listings'                => 'remoteListings',
             'wolfnet_get_listings'            => 'remoteListingsGet',
+            'wolfnet_listing_photos'          => 'remoteListingPhotos',
             'wolfnet_css'                     => 'remotePublicCss',
             'wolfnet_market_name'             => 'remoteGetMarketName',
             'wolfnet_map_enabled'             => 'remoteMapEnabled',
@@ -63,15 +64,17 @@ class Wolfnet_Ajax
     public function registerAjaxActions()
     {
         $ajxActions = array(
-            'wolfnet_content'        => 'remoteContent',
-            'wolfnet_content_header' => 'remoteContentHeader',
-            'wolfnet_content_footer' => 'remoteContentFooter',
-            'wolfnet_listings'       => 'remoteListings',
-            'wolfnet_get_listings'   => 'remoteListingsGet',
-            'wolfnet_css'            => 'remotePublicCss',
-            'wolfnet_base_url'       => 'remoteGetBaseUrl',
-            'wolfnet_price_range'    => 'remotePriceRange',
-            'wolfnet_smart_search'   => 'remoteGetSuggestions',
+            'wolfnet_content'           => 'remoteContent',
+            'wolfnet_content_header'    => 'remoteContentHeader',
+            'wolfnet_content_footer'    => 'remoteContentFooter',
+            'wolfnet_listings'          => 'remoteListings',
+            'wolfnet_get_listings'      => 'remoteListingsGet',
+            'wolfnet_listing_photos'    => 'remoteListingPhotos',
+            'wolfnet_css'               => 'remotePublicCss',
+            'wolfnet_base_url'          => 'remoteGetBaseUrl',
+            'wolfnet_price_range'       => 'remotePriceRange',
+            'wolfnet_route_quicksearch' => 'remoteRouteQuickSearch',
+            'wolfnet_smart_search'      => 'remoteGetSuggestions',
             );
 
         foreach ($ajxActions as $action => $method) {
@@ -459,7 +462,7 @@ class Wolfnet_Ajax
 
             $data = $GLOBALS['wolfnet']->api->sendRequest($productKey, '/listing', 'GET', $criteria);
 
-            $GLOBALS['wolfnet']->listings->augmentListingsData($data, $productKey);
+            $GLOBALS['wolfnet']->listings->augmentListingsData($data, $productKey, array('listing', 'map'));
 
         } catch (Wolfnet_Exception $e) {
             status_header(500);
@@ -481,6 +484,31 @@ class Wolfnet_Ajax
         }
 
         die;
+
+    }
+
+
+    public function remoteListingPhotos()
+    {
+        try {
+
+            $propertyId = (array_key_exists('property_id', $_REQUEST)) ? $_REQUEST['property_id'] : 0;
+            $keyId = (array_key_exists('keyid', $_REQUEST)) ? $_REQUEST['keyid'] : '';
+
+            $response = $GLOBALS['wolfnet']->listings->getPhotos($propertyId, $keyId);
+
+        } catch (Wolfnet_Exception $e) {
+
+            status_header(500);
+
+            $response = array(
+                'message' => $e->getMessage(),
+                'data' => $e->getData(),
+            );
+
+        }
+
+        wp_send_json($response);
 
     }
 

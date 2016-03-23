@@ -32,14 +32,20 @@
 
 <div id="<?php echo $instance_id; ?>" class="wolfnet_quickSearchOptions">
     <?php if(count($markets) > 1): ?>
-    <input type="hidden" id="<?php echo $keyids_wpid; ?>" class="keyids" name="<?php echo $keyids_wpname; ?>" value="<?php echo implode(",", $keyids); ?>" />
+        <input type="hidden" id="<?php echo $keyids_wpid; ?>" class="keyids"
+         name="<?php echo $keyids_wpname; ?>" value="<?php echo implode(",", $keyids); ?>" />
     <?php endif; ?>
 
     <table class="form-table">
 
         <tr>
-            <td><label>Title:</label></td>
-            <td><input id="<?php echo $title_wpid; ?>" name="<?php echo $title_wpname; ?>" value="<?php echo $title; ?>" type="text" /></td>
+            <th>
+                <label for="wnt-<?php echo $title_wpid; ?>">Title:</label>
+            </th>
+            <td>
+                <input id="wnt-<?php echo $title_wpid; ?>" name="<?php echo $title_wpname; ?>"
+                 value="<?php echo $title; ?>" type="text" />
+            </td>
         </tr>
 
 
@@ -59,7 +65,9 @@
         <?php endif; ?>
 
         <tr>
-            <td><label>Layout:</label></td>
+            <th>
+                <label for="<?php echo $view_wpid; ?>">Layout:</label>
+            </th>
             <td>
                 <select id="<?php echo $view_wpid; ?>" name="<?php echo $view_wpname; ?>" >
                     <option value="basic" <?php echo ($view == "basic" ? 'selected="selcted"': "") ?>>Basic</option>
@@ -69,42 +77,50 @@
         </tr>
 
         <?php if(count($markets) > 1): ?>
-        <tr>
-            <td><label>Market:</label></td>
-            <td>
-                <table>
-                    <tr>
-                        <td>
-                            <input type="checkbox" class="allproductkeys" id="all" value="all"> All
+            <tr>
+                <th>
+                    <label>Market:</label>
+                </th>
+                <td>
+                    <table>
+                        <tr>
+                            <td>
+                                <input id="productkey_all" type="checkbox" class="allproductkeys"
+                                 name="all" value="all" />
+                                <label for="productkey_all">All</label>
+                            </td>
                         </td>
-                    </td>
-                    <?php for($i=0; $i<=count($markets)-1; $i++): ?>
-                    <tr>
-                        <td>
-                            <input type="checkbox" class="productkey" value="<?php echo $markets[$i]->id; ?>"
-                                <?php if( in_array($markets[$i]->id, $keyids) ) echo ' checked'; ?>
-                                >
-                                <?php echo $markets[$i]->label; ?>
-                        </td>
-                    </tr>
-                    <?php endfor; ?>
-                </table>
-            </td>
-        </tr>
-        <tr>
-            <td><label>Routing</label></td>
-            <td>
-                <select id="<?php echo $routing_wpid; ?>" name="<?php echo $routing_wpname; ?>" >
-                    <option value="auto" <?php echo ($routing == "auto" ? 'selected="selcted"': "") ?>>Auto</option>
-                    <option value="manual" <?php echo ($routing == "manual" ? 'selected="selcted"': "") ?>>Manual</option>
-                </select>
-                <span class="wolfnet_moreInfo">
-                    Auto routing will automatically send users to your IDX solution that has the most
-                    matching listings for their search criteria. Manual routing will require the
-                    user to select which if your IDX solutions to search on.
-                </span>
-            </td>
-        </tr>
+                        <?php for($i=0; $i<=count($markets)-1; $i++): ?>
+                            <tr>
+                                <td>
+                                    <input id="productkey_<?php echo $markets[$i]->id; ?>"
+                                     type="checkbox" class="productkey" value="<?php echo $markets[$i]->id; ?>"
+                                     <?php if( in_array($markets[$i]->id, $keyids) ) echo ' checked'; ?> />
+                                    <label for="productkey_<?php echo $markets[$i]->id; ?>">
+                                        <?php echo $markets[$i]->label; ?>
+                                    </label>
+                                </td>
+                            </tr>
+                        <?php endfor; ?>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    <label for="<?php echo $routing_wpid; ?>">Routing</label>
+                </th>
+                <td>
+                    <select id="<?php echo $routing_wpid; ?>" name="<?php echo $routing_wpname; ?>" >
+                        <option value="auto" <?php echo ($routing == "auto" ? 'selected="selcted"': "") ?>>Auto</option>
+                        <option value="manual" <?php echo ($routing == "manual" ? 'selected="selcted"': "") ?>>Manual</option>
+                    </select>
+                    <span class="wolfnet_moreInfo">
+                        Auto routing will automatically send users to your IDX solution that has the most
+                        matching listings for their search criteria. Manual routing will require the
+                        user to select which if your IDX solutions to search on.
+                    </span>
+                </td>
+            </tr>
     	<?php endif; ?>
 
     </table>

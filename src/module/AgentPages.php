@@ -32,12 +32,12 @@ class Wolfnet_Module_AgentPages
     }
 
 
-    public function scAgentPages($attrs) 
+    public function scAgentPages($attrs)
     {
         if(!$this->showAgentFeature()) {
             return '';
         }
-        
+
         try {
             $defaultAttributes = $this->getDefaults();
 
@@ -59,8 +59,8 @@ class Wolfnet_Module_AgentPages
     {
         try {
             $data = $this->plugin->api->sendRequest(
-                $this->plugin->keyService->getDefault(), 
-                '/settings', 
+                $this->plugin->keyService->getDefault(),
+                '/settings',
                 'GET'
             );
         } catch (Wolfnet_Exception $e) {
@@ -99,7 +99,7 @@ class Wolfnet_Module_AgentPages
     }
 
 
-    public function agentPageHandler(array $criteria = array()) 
+    public function agentPageHandler(array $criteria = array())
     {
         $key = $this->plugin->keyService->getFromCriteria($criteria);
 
@@ -108,7 +108,7 @@ class Wolfnet_Module_AgentPages
         }
 
         $vars = array(
-            'instance_id' => str_replace('.', '', uniqid('wolfnet_agentPages_')),
+            'instance_id' => str_replace('.', '', 'wolfnet_agentPages_' . $this->plugin->createUUID()),
             'criteria'    => $criteria,
         );
 

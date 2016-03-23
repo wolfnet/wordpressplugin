@@ -25,44 +25,69 @@
 <div id="<?php echo $instance_id; ?>" class="wolfnet_listingGridOptions">
 
     <input id="<?php echo $criteria_wpid; ?>" name="<?php echo $criteria_wpname; ?>"
-           value="<?php echo $criteria; ?>" type="hidden" />
+     value="<?php echo $criteria; ?>" type="hidden" />
 
-    <?php if(count($markets) == 1): ?>
-    <input type="hidden" id="<?php echo $keyid_wpid; ?>" name="<?php echo $keyid_wpid; ?>" class="keyid" value="1" />
+    <?php if (count($markets) == 1): ?>
+        <input type="hidden" id="<?php echo $keyid_wpid; ?>" name="<?php echo $keyid_wpid; ?>"
+         class="keyid" value="1" />
     <?php endif; ?>
 
     <table class="form-table">
 
         <tr>
-            <td><label>Title:</label></td>
-            <td><input id="<?php echo $title_wpid; ?>" name="<?php echo $title_wpname; ?>"
-                       value="<?php echo $title; ?>" type="text" /></td>
+            <th>
+                <label for="wnt-<?php echo $title_wpid; ?>">Title:</label>
+            </th>
+            <td>
+                <input id="wnt-<?php echo $title_wpid; ?>" name="<?php echo $title_wpname; ?>"
+                 value="<?php echo $title; ?>" type="text" />
+            </td>
         </tr>
 
         <?php if(count($markets) > 1): ?>
-        <tr>
-            <td><label>Market:</label></td>
-            <td>
-                <select id="<?php echo $keyid_wpid; ?>" class="keyid" name="<?php echo $keyid_wpname; ?>" class="keyid">
-                    <?php for($i=0; $i<=count($markets)-1; $i++): ?>
-                    <option value="<?php echo $markets[$i]->id; ?>" <?php if($markets[$i]->id == $keyid) echo 'selected="selected"'; ?>><?php echo $markets[$i]->label; ?></option>
-                    <?php endfor; ?>
-                </select>
-            </td>
-        </tr>
+            <tr>
+                <th>
+                    <label for="<?php echo $keyid_wpid; ?>">Market:</label>
+                </th>
+                <td>
+                    <select id="<?php echo $keyid_wpid; ?>" class="keyid" name="<?php echo $keyid_wpname; ?>">
+                        <?php for ($i=0; $i<=count($markets)-1; $i++): ?>
+                            <option value="<?php echo $markets[$i]->id; ?>"
+                             <?php if ($markets[$i]->id == $keyid) echo 'selected="selected"'; ?>>
+                                <?php echo $markets[$i]->label; ?>
+                            </option>
+                        <?php endfor; ?>
+                    </select>
+                </td>
+            </tr>
         <?php endif; ?>
 
         <tr class="modeField">
-            <td><label>Mode:</label></td>
+            <th>
+                <label>Mode:</label>
+            </th>
             <td>
-                <input id="<?php echo $mode_wpid; ?>" name="<?php echo $mode_wpname; ?>" value="basic" type="radio" <?php echo $mode_basic_wpc ? 'checked="checked"' : '' ?> /> Basic <br/>
-                <input id="<?php echo $mode_wpid; ?>" name="<?php echo $mode_wpname; ?>" value="advanced" type="radio" <?php echo $mode_advanced_wpc ? 'checked="checked"' : '' ?> /> Advanced
+                <div>
+                    <input id="<?php echo $mode_wpid; ?>_basic" name="<?php echo $mode_wpname; ?>"
+                     value="basic" type="radio"
+                     <?php echo $mode_basic_wpc ? 'checked="checked"' : '' ?> />
+                    <label for="<?php echo $mode_wpid; ?>_basic">Basic</label>
+                </div>
+                <div>
+                    <input id="<?php echo $mode_wpid; ?>_advanced" name="<?php echo $mode_wpname; ?>"
+                     value="advanced" type="radio"
+                     <?php echo $mode_advanced_wpc ? 'checked="checked"' : '' ?> />
+                    <label for="<?php echo $mode_wpid; ?>_advanced">Advanced</label>
+                </div>
             </td>
         </tr>
 
         <tr>
-            <td><label>Include Map:</label></td>
+            <th>
+                <label for="<?php echo $maptype_wpid; ?>">Include Map:</label>
+            </th>
             <td>
+
                 <select id="<?php echo $maptype_wpid; ?>" name="<?php echo $maptype_wpname; ?>" class="maptype" <?php if (!$mapEnabled) { ?>disabled<?php } ?> >
                     <?php foreach ($maptypes as $mt) { ?>
                         <option value="<?php echo $mt['value']; ?>" <?php selected($maptype, $mt['value']); ?>>
@@ -71,23 +96,25 @@
                     <?php } ?>
                 </select>
 
-                <p id="mapDisabled" class="mapDisabled" style="display:<?php echo ($mapEnabled ? 'none' : 'block'); ?>">
-                    <?php if (!$mapEnabled) { ?>
-                        <p>
-                            <span style="color:#FF0000;font-weight:bold;">*</span>
-                            <span style="font-style:italic;font-size:0.75em;">
-                                Map option is unavailable at this time. To enable this feature, please contact WolfNet sales for more information (612) 342-0088.
-                            </span>
-                        </p>
-                    <?php } ?>
-                </p>
+                <?php if (!$mapEnabled) { ?>
+                    <p id="mapDisabled" class="mapDisabled">
+                        <span style="color: #FF0000; font-weight:bold;">*</span>
+                        <span style="font-style: italic; font-size: 0.75em;">
+                            Map option is unavailable at this time. To enable this feature, please contact WolfNet sales for more information (612) 342-0088.
+                        </span>
+                    </p>
+                <?php } ?>
+
             </td>
         </tr>
 
         <tr class="advanced-option savedSearchField">
-            <td><label>Saved Search:</label></td>
+            <th>
+                <label for="<?php echo $savedsearch_wpid; ?>">Saved Search:</label>
+            </th>
             <td>
-                <select id="<?php echo $savedsearch_wpid; ?>" class="savedsearch" name="<?php echo $savedsearch_wpname; ?>" style="width:200px;">
+                <select id="<?php echo $savedsearch_wpid; ?>" class="savedsearch"
+                 name="<?php echo $savedsearch_wpname; ?>" style="width: 200px;">
                     <?php $foundOne = false; ?>
                     <option value="">-- Saved Search --</option>
                     <?php foreach ($savedsearches as $ss) { ?>
@@ -108,64 +135,86 @@
         </tr>
 
         <tr class="basic-option">
-            <td><label>Price:</label></td>
+            <th>
+                <label for="<?php echo $minprice_wpid; ?>">Price:</label>
+            </th>
             <td>
+
                 <div class="wolfnet_prices">
+
                 <select id="<?php echo $minprice_wpid; ?>" class="pricerange minprice" name="<?php echo $minprice_wpname; ?>">
+
                     <option value="">Min. Price</option>
 
-                    <?php
-                    if (is_array($prices) && array_key_exists('max_price', $prices)) {
-                        foreach ($prices['max_price']['options'] as $price) {
-                            ?>
-                            <option value="<?php echo $price['value']; ?>" <?php selected($minprice, $price['value']); ?>>
-                                <?php echo $price['label']; ?>
-                            </option>
                         <?php
+                        if (is_array($prices) && array_key_exists('max_price', $prices)) {
+                            foreach ($prices['max_price']['options'] as $price) {
+                                ?>
+                                <option value="<?php echo $price['value']; ?>"
+                                 <?php selected($minprice, $price['value']); ?>>
+                                    <?php echo $price['label']; ?>
+                                </option>
+                            <?php
+                            }
                         }
-                    }
-                    ?>
+                        ?>
 
-                </select>
-                <span>to</span>
-                <select id="<?php echo $maxprice_wpid; ?>" class="pricerange maxprice" name="<?php echo $maxprice_wpname; ?>">
-                    <option value="">Max. Price</option>
-                    <?php
-                    if (is_array($prices) && array_key_exists('min_price', $prices)) {
-                        foreach ($prices['min_price']['options'] as $price) { ?>
-                            <option value="<?php echo $price['value']; ?>" <?php selected($maxprice, $price['value']); ?>>
-                                <?php echo $price['label']; ?>
-                            </option>
+                    </select>
+
+                    <span>to</span>
+
+                    <select id="<?php echo $maxprice_wpid; ?>" class="pricerange maxprice" name="<?php echo $maxprice_wpname; ?>">
+                        <option value="">Max. Price</option>
                         <?php
+                        if (is_array($prices) && array_key_exists('min_price', $prices)) {
+                            foreach ($prices['min_price']['options'] as $price) { ?>
+                                <option value="<?php echo $price['value']; ?>" <?php selected($maxprice, $price['value']); ?>>
+                                    <?php echo $price['label']; ?>
+                                </option>
+                            <?php
+                            }
                         }
-                    }
-                    ?>
-                </select>
+                        ?>
+                    </select>
+
+                </div>
+
+            </td>
+        </tr>
+
+        <tr class="basic-option">
+            <th>
+                <label for="<?php echo $city_wpid; ?>">City:</label>
+            </th>
+            <td>
+                <div>
+                    <input id="<?php echo $city_wpid; ?>" name="<?php echo $city_wpname; ?>"
+                     type="text" value="<?php echo $city; ?>" />
+                </div>
+                <div>
+                    <input id="<?php echo $exactcity_wpid; ?>" name="<?php echo $exactcity_wpname; ?>"
+                     type="checkbox" value="1" >
+                    <label for="<?php echo $exactcity_wpid; ?>">
+                        Only listings that exactly match this city.
+                    </label>
                 </div>
             </td>
         </tr>
 
         <tr class="basic-option">
-            <td><label>City:</label></td>
-            <td>
-                <input id="<?php echo $city_wpid; ?>" name="<?php echo $city_wpname; ?>"
-                    type="text" value="<?php echo $city; ?>" /> <br/>
-                <input id="<?php echo $exactcity_wpid; ?>" name="<?php echo $exactcity_wpname; ?>"
-                       type="checkbox" value="1" >
-                Only listings that exactly match this city.
-            </td>
-        </tr>
-
-        <tr class="basic-option">
-            <td><label>Zipcode:</label></td>
+            <th>
+                <label for="<?php echo $zipcode_wpid; ?>">Zipcode:</label>
+            </th>
             <td>
                 <input id="<?php echo $zipcode_wpid; ?>" name="<?php echo $zipcode_wpname; ?>"
-                    type="text" value="<?php echo $zipcode; ?>" />
+                 type="text" value="<?php echo $zipcode; ?>" />
             </td>
         </tr>
 
         <tr>
-            <td><label>Agent/Broker:</label></td>
+            <th>
+                <label for="<?php echo $ownertype_wpid; ?>">Agent/Broker:</label>
+            </th>
             <td>
                 <select id="<?php echo $ownertype_wpid; ?>" name="<?php echo $ownertype_wpname; ?>">
                     <option value="all">All</option>
@@ -186,7 +235,9 @@
         </tr>
 
         <tr>
-            <td><label>Pagination Enabled/Disabled:</label></td>
+            <th>
+                <label for="<?php echo $paginated_wpid; ?>">Pagination Enabled/Disabled:</label>
+            </th>
             <td>
                 <select id="<?php echo $paginated_wpid; ?>" name="<?php echo $paginated_wpname; ?>" >
                     <option value="false" <?php echo $paginated_false_wps; ?>>Disabled</option>
@@ -200,7 +251,9 @@
         </tr>
 
         <tr>
-            <td><label>Sort Options:</label></td>
+            <th>
+                <label for="<?php echo $sortoptions_wpid; ?>">Sort Options:</label>
+            </th>
             <td>
                 <select id="<?php echo $sortoptions_wpid; ?>" name="<?php echo $sortoptions_wpname; ?>" >
                     <option value="false" <?php echo $sortoptions_false_wps; ?>>Disabled</option>
@@ -214,7 +267,9 @@
         </tr>
 
         <tr>
-            <td><label>Max Results Per Page:</label></td>
+            <th>
+                <label for="<?php echo $maxresults_wpid; ?>">Max Results Per Page:</label>
+            </th>
             <td>
                 <input id="<?php echo $maxresults_wpid; ?>" name="<?php echo $maxresults_wpname; ?>"
                     type="text" maxlength="2" size="2" value="<?php echo $maxresults; ?>" />

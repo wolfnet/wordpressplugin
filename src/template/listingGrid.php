@@ -61,23 +61,43 @@ unset($wpMeta['key']);
 
 <script type="text/javascript">
 
-    jQuery(function($){
+    jQuery(function ($) {
+
         var instance = <?php echo "'#" . $instance_id . "';"; ?>
+        var $listingGrid = $(instance);
 
-        $(instance).filter('.wolfnet_withPagination,.wolfnet_withSortOptions').wolfnetToolbar({
-             numrows          : <?php echo $wpMeta['maxrows'] . "\n"; ?>
-            ,criteria         : <?php echo json_encode($wpMeta) . "\n"; ?>
-            ,maxResults       : <?php echo $maxresults . "\n"; ?>
-            ,itemsPerPageData : <?php echo json_encode($itemsPerPage) . "\n"; ?>
-            ,sortOptionsData  : <?php echo json_encode($sortOptions) . "\n"; ?>
-        });
+        var setupThumbnailScroller = function () {
+            $listingGrid.find('.wolfnet_listing').wolfnetThumbnailScroller({
+                keyid: <?php echo (array_key_exists('keyid', $wpMeta) ? $wpMeta['keyid'] : ''); ?>,
+                photoSelector: '.wolfnet_listingImage img',
+                hideControls: !wolfnet.hasFeature('touch') // If on a touch screen, always show the controls
+            });
+        };
 
-        $(instance).filter('.wolfnet_listingGrid').wolfnetListingGrid({
-            containerClass: 'wolfnet_listings',
-            itemClass: 'wolfnet_listing',
-            clearfixClass: 'wolfnet_clearfix',
-            gridAlign: '<?php echo $gridalign; ?>'
-        });
+        var setupToolbar = function () {
+            $listingGrid.filter('.wolfnet_withPagination,.wolfnet_withSortOptions').wolfnetToolbar({
+                 numrows          : <?php echo $wpMeta['maxrows'] . "\n"; ?>
+                ,criteria         : <?php echo json_encode($wpMeta) . "\n"; ?>
+                ,maxResults       : <?php echo $maxresults . "\n"; ?>
+                ,itemsPerPageData : <?php echo json_encode($itemsPerPage) . "\n"; ?>
+                ,sortOptionsData  : <?php echo json_encode($sortOptions) . "\n"; ?>
+            });
+        };
+
+        var setupListingGrid = function () {
+            $listingGrid.filter('.wolfnet_listingGrid').wolfnetListingGrid({
+                containerClass: 'wolfnet_listings',
+                itemClass: 'wolfnet_listing',
+                clearfixClass: 'wolfnet_clearfix',
+                gridAlign: '<?php echo $gridalign; ?>'
+            });
+        };
+
+        $listingGrid.on('wolfnet.updated', setupThumbnailScroller);
+
+        setupToolbar();
+        setupListingGrid();
+        setupThumbnailScroller();
 
     });
 

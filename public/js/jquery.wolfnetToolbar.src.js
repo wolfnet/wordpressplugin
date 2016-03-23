@@ -25,6 +25,7 @@
     var optionsKey = plugin + '.options';
 
     var UPDATED = 'wolfnet.updated';
+    var UPDATING = 'wolfnet.updating';
 
     var nextClass  = 'a.wolfnet_page_nav_next';
     var prevClass  = 'a.wolfnet_page_nav_prev';
@@ -40,6 +41,20 @@
             {value:'price_desc', label:'Descending by Price'},
             {value:'price', label:'Ascending by Price'}
         ]
+    };
+
+    var escapeHtml = function(text)
+    {
+        var map = {
+            '&': '&amp;',
+            '<': '&lt;',
+            '>': '&gt;',
+            '"': '&quot;',
+            "'": '&#039;'
+        };
+
+        return text.replace(/[&<>"']/g, function (m) { return map[m]; });
+
     };
 
     var renderPropertyList = function(data)
@@ -81,153 +96,122 @@
 
     };
 
+    var getBedBathHTML = function(listing)
+    {
+        var bedBathHTML = '';
+
+        var totalBeds = 0;
+        if (listing.total_bedrooms !== '') {
+            totalBeds += parseInt(listing.total_bedrooms);
+        }
+
+        var totalBaths = 0;
+        if (listing.total_baths !== '') {
+            totalBaths += parseInt(listing.total_baths);
+        }
+
+        if (totalBeds + totalBaths > 0) {
+            bedBathHTML = (
+                '<span class="wolfnet_bed_bath" title="' + escapeHtml(listing.bedsbaths_full) + '">' +
+                (
+                    totalBeds > 0 ? (
+                        '<span class="wolfnet_beds">' +
+                            totalBeds + ' ' + '<span class="wolfnet_label">Bedrooms</span>' +
+                        '</span> ' +
+                        (totalBaths > 0 ? '<span class="wolfnet_info_separator"></span> ' : '')
+                    ) : ''
+                ) +
+                (
+                    totalBaths > 0 ? (
+                        '<span class="wolfnet_baths">' +
+                            totalBaths + ' ' + '<span class="wolfnet_label">Bathrooms</span>' +
+                        '</span> '
+                    ) : ''
+                ) +
+                '</span> '
+            );
+        }
+
+        return bedBathHTML;
+
+    }
+
+    var getBrandingHTML = function(listing)
+    {
+        var brandingHTML = '';
+
+        if (listing.hasOwnProperty('branding')) {
+            brandingHTML = (
+                getBrandingLogoHTML(listing.branding) +
+                '<span class="wolfnet_brandingMessage">' +
+                    getBrandingMessageHTML(listing.branding) +
+                '</span> '
+            );
+        }
+
+        return brandingHTML;
+
+    };
+
+    var getBrandingLogoHTML = function(branding)
+    {
+        var brandingLogoHTML = '';
+
+        if ($.trim(branding.logo || '') !== '') {
+            var isIdx = (branding.type || '') === 'idx';
+            brandingLogoHTML = (
+                '<span class="wolfnet_brokerLogo' + (isIdx ? ' wolfnet_idxLogo' : '') + '">' +
+                    '<img src="' + branding.logo + '" />' +
+                '</span> '
+            );
+        }
+
+        return brandingLogoHTML;
+
+    }
+
+    var getBrandingMessageHTML = function(branding)
+    {
+        var brandingMessageHTML = '';
+        var brandingFields = [
+            { name: 'courtesy_text',   className: 'wolfnet_brandingCourtesyText' },
+            { name: 'agent_name',      className: 'wolfnet_brandingAgent wolfnet_brandingAgentName' },
+            { name: 'agent_phone',     className: 'wolfnet_brandingAgent wolfnet_brandingAgentPhone' },
+            { name: 'office_name',     className: 'wolfnet_brandingOffice wolfnet_brandingOfficeName' },
+            { name: 'office_phone',    className: 'wolfnet_brandingOffice wolfnet_brandingOfficePhone' },
+            { name: 'toll_free_phone', className: 'wolfnet_brandingTollFreePhone' }
+        ];
+
+        for (var i=0, l=brandingFields.length; i<l; i++) {
+            if (
+                branding.hasOwnProperty(brandingFields[i].name)
+                && ($.trim(branding[brandingFields[i].name]) !== '')
+            ) {
+                brandingMessageHTML += (
+                    '<span class="' + brandingFields[i].className + '">' +
+                        branding[brandingFields[i].name] +
+                    '</span> '
+                );
+            }
+        }
+
+        return brandingMessageHTML;
+
+    };
+
     var renderListingGrid = function(data)
     {
 
-        data = ($.isArray(data.responseData.data.listing)) ? data.responseData.data.listing : [];
+        var listingsData = $.isArray(data.responseData.data.listing) ? data.responseData.data.listing : [];
+        var templates = data.responseData.data.hasOwnProperty('templates') ? data.responseData.data.templates : {};
 
         var $container = this;
         var $listings = $('<div>').addClass('wolfnet_listings');
 
-        for (var i=0, l=data.length; i<l; i++) {
-            var brokerLogo  = data[i].branding.logo  || null;
-            var brandingType  = data[i].branding.type || '';
-            var cityState   = data[i].city + ', ' + data[i].state;
-            var fullAddress = data[i].display_address + ', ' + cityState;
-
-            var $listing = $('<div>')
-                .addClass('wolfnet_listing')
-                .attr('id', 'wolfnet_listing_' + data[i].property_id)
-                .appendTo($listings);
-
-            var $link = $('<a>')
-                .attr('href',data[i].property_url)
-                .appendTo($listing);
-
-            var $imageContainer = $('<span>')
-                .addClass('wolfnet_listingImage')
-                .appendTo($link);
-
-            var $image = $('<img>')
-                .attr('src',data[i].thumbnail_url)
-                .appendTo($imageContainer);
-
-            var $price = $('<span>')
-                .addClass('wolfnet_price')
-                .attr('itemprop', 'price')
-                .html(data[i].listing_price.toString())
-                .appendTo($link);
-
-            // calculate total number of baths
-            var total_baths = 0;
-
-            if(data[i].total_partial_baths !== '') {
-                total_baths += parseInt(data[i].total_partial_baths);
+        if (templates.hasOwnProperty('listing')) {
+            for (var i=0, l=listingsData.length; i<l; i++) {
+                $listings.append(renderListing(listingsData[i], templates['listing']));
             }
-
-            if(data[i].total_full_baths !== '' ) {
-                total_baths += parseInt(data[i].total_full_baths);
-            }
-
-            var $bedBath = $('<span>')
-                .addClass('wolfnet_bed_bath')
-                .attr('title', data[i].total_bedrooms + ' Bedrooms & ' + total_baths + ' Bathrooms')
-                .appendTo($link);
-
-            if (data[i].total_bedrooms !== '' ) {
-                $bedBath.append(data[i].total_bedrooms + 'bd');
-            }
-
-            if ( total_baths > 0 ) {
-                if ($bedBath.text() !== '') {
-                    $bedBath.append('/');
-                }
-                $bedBath.append(total_baths + 'ba');
-            }
-
-            var $locationContainer = $('<span>')
-                .attr('title', fullAddress)
-                .appendTo($link);
-
-            var $address = $('<span>')
-                .addClass('wolfnet_address')
-                .html(data[i].display_address)
-                .appendTo($locationContainer);
-
-            var $location = $('<span>')
-                .addClass('wolfnet_location')
-                .attr('itemprop', 'locality')
-                .html(cityState)
-                .appendTo($locationContainer);
-
-            var $fullAddress = $('<span>')
-                .addClass('wolfnet_full_address')
-                .attr('itemprop', 'street_address')
-                .css('display', 'none')
-                .html(fullAddress)
-                .appendTo($locationContainer);
-
-            var $brandingContainer = $('<div>')
-                .addClass('wolfnet_branding')
-                .insertAfter($locationContainer);
-
-            if (data[i].branding.logo !== '') {
-
-                var $brokerLogo = $('<span>')
-                    .addClass('wolfnet_brokerLogo')
-                    .append($('<img>').attr('src', data[i].branding.logo))
-                    .appendTo($brandingContainer);
-
-                if (brandingType == 'idx') {
-                    $brokerLogo.addClass('wolfnet_idxLogo');
-                }
-
-            }
-
-            var $brokerName = $('<span>')
-                .addClass('wolfnet_brandingMessage')
-                .appendTo($brandingContainer);
-
-            if (data[i].branding.courtesy_text !== '') {
-                $('<span>').text(data[i].branding.courtesy_text)
-                    .addClass('wolfnet_brandingCourtesyText')
-                    .appendTo($brokerName);
-            }
-
-            if (data[i].branding.agent_name !== '') {
-                $('<span>').text(data[i].branding.agent_name)
-                    .addClass('wolfnet_brandingAgent')
-                    .addClass('wolfnet_brandingAgentName')
-                    .appendTo($brokerName);
-            }
-
-            if (data[i].branding.agent_phone !== '') {
-                $('<span>').text(data[i].branding.agent_phone)
-                    .addClass('wolfnet_brandingAgent')
-                    .addClass('wolfnet_brandingAgentPhone')
-                    .appendTo($brokerName);
-            }
-
-            if (data[i].branding.office_name !== '') {
-                $('<span>').text(data[i].branding.office_name)
-                    .addClass('wolfnet_brandingOffice')
-                    .addClass('wolfnet_brandingOfficeName')
-                    .appendTo($brokerName);
-            }
-
-            if (data[i].branding.office_phone !== '') {
-                $('<span>').text(data[i].branding.office_phone)
-                    .addClass('wolfnet_brandingOffice')
-                    .addClass('wolfnet_brandingOfficePhone')
-                    .appendTo($brokerName);
-            }
-
-            if (data[i].branding.toll_free_phone !== '') {
-                $('<span>').text(data[i].branding.toll_free_phone)
-                    .addClass('wolfnet_brandingTollFreePhone')
-                    .appendTo($brokerName);
-            }
-
         }
 
         $container.find('.wolfnet_listings').replaceWith($listings);
@@ -239,26 +223,124 @@
     {
         var concatHouseover = '';
 
-        concatHouseover += '<a style="display:block" rel="follow" href="' + listing.property_url + '">';
-        concatHouseover += '<div class="wolfnet_wntHouseOverWrapper"><div data-property-id="' + listing.property_id;
-        concatHouseover += '" class="wntHOItem"><table class="wolfnet_wntHOTable"><tbody><tr>';
-        concatHouseover += '<td class="wntHOImgCol" valign="top" style="vertical-align:top;"><div class="wolfnet_wntHOImg">';
-        concatHouseover += '<img src="' + listing.thumbnail_url + '" style="max-height:100px;width:auto"></div><div class="wolfnet_wntHOBroker" style="text-align: center">';
-        concatHouseover += '<img class="wolfnet_wntHOBrokerLogo" src="' + listing.branding.logo + '" style="max-height:50px;width:auto" alt="Broker Reciprocity">';
-        concatHouseover += '</div></td><td valign="top" style="vertical-align:top;"><div class="wolfnet_wntHOContentContainer">';
-        concatHouseover += '<div style="text-align:left;font-weight:bold">' + listing.listing_price.toString() + '</div>';
-        concatHouseover += '<div style="text-align:left;">' + listing.display_address + '</div><div style="text-align:left;">';
-        concatHouseover += listing.city + ', ' + listing.state + '</div><div style="text-align:left;">' + listing.bedsbaths;
-        concatHouseover += '</div><div style="text-align:left;padding-top:20px;">' + listing.branding.courtesy_text + '</div>';
-        concatHouseover += '</div></td></tr></tbody></table></div></div></a>';
+        concatHouseover += '<div class="wolfnet_wntHouseOverWrapper">';
+        concatHouseover += '    <a rel="follow" href="' + listing.property_url + '">';
+        concatHouseover += '        <div data-property-id="' + listing.property_id + '" class="wntHOItem">';
+        concatHouseover += '            <table class="wolfnet_wntHOTable"><tbody><tr>';
+        concatHouseover += '                <td class="wntHOImgCol">';
+        concatHouseover += '                    <div class="wolfnet_wntHOImg wolfnet_listingImage">';
+        concatHouseover += '                        <img src="' + listing.thumbnail_url + '" />';
+        concatHouseover += '                    </div>';
+        if (listing.branding.logo !== '') {
+            concatHouseover += '<div class="wolfnet_wntHOBroker wolfnet_brokerLogo' + (listing.branding.type === 'idx' ? ' wolfnet_idxLogo' : '') + '">';
+            concatHouseover += '    <img src="' + listing.branding.logo + '" />';
+            concatHouseover += '</span>';
+        }
+        concatHouseover += '                </td>';
+        concatHouseover += '                <td>';
+        concatHouseover += '                    <div class="wolfnet_wntHOContentContainer">';
+        concatHouseover += '                        <div class="wolfnet_listingInfo">';
+        concatHouseover += '                            <div class="wolfnet_price">' + listing.listing_price.toString() + '</div>';
+        if (listing.total_bedrooms || listing.total_baths) {
+            concatHouseover += '<span class="wolfnet_bed_bath">';
+            if (listing.total_bedrooms) {
+                concatHouseover += '<span class="wolfnet_beds">' + listing.total_bedrooms + '<span class="wolfnet_label">Bedrooms</span></span>';
+                if (listing.total_baths) {
+                    concatHouseover += '<span class="wolfnet_info_separator"></span>';
+                }
+            }
+            if (listing.total_baths) {
+                concatHouseover += '<span class="wolfnet_baths">' + listing.total_baths + '<span class="wolfnet_label">Bathrooms</span></span>';
+            }
+            concatHouseover += '</span>';
+        }
+        concatHouseover += '                        </div>';
+        concatHouseover += '                        <div class="wolfnet_locationInfo">';
+        concatHouseover += '                            <div class="wolfnet_address">' + listing.display_address + '</div>';
+        concatHouseover += '                            <div class="wolfnet_location">' + listing.city + ', ' + listing.state + '</div>';
+        concatHouseover += '                        </div>';
+        concatHouseover += '                        <div class="wolfnet_branding" style="text-align: left; padding-top: 20px;">';
+        concatHouseover += '                            <span class="wolfnet_brandingMessage">';
+        concatHouseover += '                                <span class="wolfnet_brandingCourtesyText">' + listing.branding.courtesy_text + '</span>';
+        concatHouseover += '                            </span>';
+        concatHouseover += '                        </div>';
+        concatHouseover += '                    </div>';
+        concatHouseover += '                </td>';
+        concatHouseover += '            </tr></tbody></table>';
+        concatHouseover += '        </div>';
+        concatHouseover += '    </a>';
+        concatHouseover += '</div>';
 
         return concatHouseover;
 
     };
 
+    var renderListing = function(listing, template)
+    {
+        var $listing = $(template);
+
+        // Listing
+        $listing.attr('id', listing.property_id);
+
+        // Link
+        $listing.find('a.wolfnet_listingLink').attr('href', listing.property_url);
+
+        // Thumbnail
+        $listing.find('.wolfnet_listingImage img').attr({
+            'src': listing.thumbnail_url,
+            'alt': 'Property for sale at ' + listing.address,
+            'data-photo-url': listing.thumbnails_url
+        });
+
+        // Price
+        $listing.find('.wolfnet_price')
+            .attr('title', listing.listing_price)
+            .text(listing.listing_price);
+
+        // Beds / Baths
+        $listing.find('.wolfnet_bed_bath').attr('title', listing.bedsbaths_full);
+        if (listing.total_bedrooms) {
+            $listing.find('.wolfnet_beds').text(listing.total_bedrooms).show();
+            if (listing.total_baths) {
+                $listing.find('.wolfnet_bed_bath .wolfnet_info_separator').show();
+            }
+        }
+        if (listing.total_baths) {
+            $listing.find('.wolfnet_baths').text(listing.total_baths).show();
+        }
+
+        // Location
+        $listing.find('.wolfnet_locationInfo').attr('title', listing.address);
+        $listing.find('.wolfnet_address').text(listing.display_address);
+        $listing.find('.wolfnet_location').text(listing.location);
+        $listing.find('.wolfnet_full_address').text(listing.address);
+
+        // Branding
+        var $branding = $listing.find('.wolfnet_branding');
+
+        var $brokerLogo = $branding.find('.wolfnet_brokerLogo');
+        if ((listing.branding.type === 'idx') && !$brokerLogo.is('.wolfnet_idxLogo')) {
+            $brokerLogo.addClass('wolfnet_idxLogo');
+        }
+        if ($.trim(listing.branding.logo) !== '') {
+            $brokerLogo.show().find('img').first().attr('src', listing.branding.logo);
+        }
+
+        $branding.find('wolfnet_brandingCourtesyText').html(listing.branding.courtesy_text);
+        $branding.find('wolfnet_brandingAgent .wolfnet_brandingAgentName').html(listing.branding.agent_name);
+        $branding.find('wolfnet_brandingAgent .wolfnet_brandingAgentPhone').html(listing.branding.agent_phone);
+        $branding.find('wolfnet_brandingOffice .wolfnet_brandingOfficeName').html(listing.branding.office_name);
+        $branding.find('wolfnet_brandingOffice .wolfnet_brandingOfficePhone').html(listing.branding.office_phone);
+        $branding.find('wolfnet_brandingTollFreePhone').html(listing.branding.toll_free_phone);
+
+        return $listing;
+
+    }
+
     var populateMap = function(data)
     {
-        data = ($.isArray(data.responseData.data.listing)) ? data.responseData.data.listing : [];
+        var listingsData = ($.isArray(data.responseData.data.listing)) ? data.responseData.data.listing : [];
+        var templates = data.responseData.data.hasOwnProperty('templates') ? data.responseData.data.templates : {};
 
         var $container = this;
         var componentMap = $container.find('.wolfnet_wntMainMap').data('map');
@@ -266,10 +348,10 @@
 
         componentMap.removeAllShapes();
 
-        for (var i=0, l=data.length; i<l; i++) {
-            houseoverHtml = getHouseoverHtml(data[i]);
-            var houseoverIcon = componentMap.mapIcon(houseIcon,20,20);
-            var houseover = componentMap.poi(data[i].geo.lat, data[i].geo.lng, houseoverIcon, houseoverHtml, data[i].property_id, data[i].property_url);
+        for (var i=0, l=listingsData.length; i<l; i++) {
+            var houseoverHtml = templates.hasOwnProperty('map') ? renderListing(listingsData[i], templates['map']).get(0) : '';
+            var houseoverIcon = componentMap.mapIcon(houseIcon, 20, 20);
+            var houseover = componentMap.poi(listingsData[i].geo.lat, listingsData[i].geo.lng, houseoverIcon, houseoverHtml, listingsData[i].property_id, listingsData[i].property_url);
             componentMap.addPoi(houseover);
         }
 
@@ -288,8 +370,7 @@
 
         if ($container.is('.wolfnet_propertyList')) {
             renderPropertyList.call($container, data);
-        }
-        else if ($container.is('.wolfnet_listingGrid')) {
+        } else if ($container.is('.wolfnet_listingGrid')) {
             renderListingGrid.call($container, data);
             $container.wolfnetListingGrid('refresh');
         }
@@ -414,7 +495,7 @@
         $container.find('.wolfnet_page_start').text(state.startrow);
         $container.find('.wolfnet_page_end').text(rowcountDisplay);
 
-        $('html,body').scrollTop($container.closest('.wolfnet_widget').offset().top - 100);
+        $('html,body').scrollTop($container.find('.wolfnet_toolbar').offset().top - 100);
 
         if ($container.is('.wolfnet_listingGrid') && $container.wolfnetListingGrid) {
             $container.wolfnetListingGrid("refresh", true);
@@ -515,7 +596,7 @@
                     dataType : 'jsonp',
                     data : getData(),
                     beforeSend: function(xhr){
-                        $container.addClass('wolfnet_refreshing');
+                        $container.addClass('wolfnet_refreshing').trigger(UPDATING);
                     }
                 })
                 // success: update listings

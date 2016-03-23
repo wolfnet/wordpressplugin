@@ -163,7 +163,7 @@ class Wolfnet_Module_QuickSearch
         }
 
         $vars = array(
-            'instance_id'  => str_replace('.', '', uniqid('wolfnet_quickSearch_')),
+            'instance_id'  => str_replace('.', '', 'wolfnet_quickSearch_' . $this->plugin->createUUID()),
             'siteUrl'      => site_url(),
             'keyids'       => $keyids,
             'markets'      => json_decode($markets),
