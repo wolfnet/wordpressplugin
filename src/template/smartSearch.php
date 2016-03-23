@@ -93,7 +93,10 @@
                     <select id="<?php echo $instance_id; ?>_min_beds" name="min_bedrooms">
                         <option value="">Beds</option>
                         <?php foreach ($beds as $bed) { ?>
-                        <option value="<?php echo $bed['value']; ?>"><?php echo $bed['label']; ?></option>
+                        <option value="<?php echo $bed['value']; ?>">
+                            <?php echo $bed['label']; ?>
+                            BED<?php if ($bed['value'] > 1) { ?>S<?php } ?>
+                        </option>
                         <?php } ?>
                     </select>
                 </div>
@@ -103,7 +106,10 @@
                     <select id="<?php echo $instance_id; ?>_min_baths" name="min_bathrooms">
                         <option value="">Baths</option>
                         <?php foreach ($baths as $bath) { ?>
-                        <option value="<?php echo $bath['value']; ?>"><?php echo $bath['label']; ?></option>
+                        <option value="<?php echo $bath['value']; ?>">
+                            <?php echo $bath['label']; ?>
+                            BATH<?php if ($bath['value'] > 1) { ?>S<?php } ?>
+                        </option>
                         <?php } ?>
                     </select>
                 </div>
