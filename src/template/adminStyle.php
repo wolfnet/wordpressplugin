@@ -22,8 +22,11 @@
         <fieldset>
             <legend class="screen-reader-text"><span>Widget Theme</span></legend>
             <div class="wolfnet_widget_themes">
-            <?php foreach ($widgetThemes as $themeOpt) { ?>
-                <div class="wolfnet_widget_theme">
+            <?php foreach ($widgetThemes as $themeOpt) {
+                $themeOptSelected = (
+                    ($widgetTheme == $themeOpt['name'])
+                    || (($widgetTheme == '') && ($defaultWidgetTheme == $themeOpt['name']))
+                ); ?>
                     <label for="wolfnet_widgetTheme_<?php echo $themeOpt['name'] ?>">
                         <div class="wolfnet_widget_theme_thumb">
                             <img src="<?php echo $imgdir . $themeOpt['previewImg']; ?>?v={X.X.X}" />
@@ -32,7 +35,7 @@
                             <input type="radio" name="wolfnet_widgetTheme"
                              id="wolfnet_widgetTheme_<?php echo $themeOpt['name'] ?>"
                              value="<?php echo $themeOpt['name']; ?>"
-                             <?php if (($widgetTheme == $themeOpt['name']) || ($widgetTheme == '')) echo 'checked="checked"'; ?> />
+                             <?php if ($themeOptSelected) echo 'checked="checked"'; ?> />
                             <?php echo $themeOpt['label']; ?>
                         </div>
                     </label>
