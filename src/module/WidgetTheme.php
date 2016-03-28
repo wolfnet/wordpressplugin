@@ -68,7 +68,7 @@ class Wolfnet_Module_WidgetTheme
             'label'      => $label,
             'styleName'  => 'wolfnet-' . $name,
             'styleFile'  => 'wolfnet.' . $name . '.src.css',
-            'previewImg' => 'support-' . $name . '-listing.png',
+            'previewImg' => 'theme-preview-' . $name . '.png',
         );
 
     }
