@@ -27,6 +27,7 @@
                     ($widgetTheme == $themeOpt['name'])
                     || (($widgetTheme == '') && ($defaultWidgetTheme == $themeOpt['name']))
                 ); ?>
+                <div class="wolfnet_widget_theme <?php if ($themeOptSelected) { echo 'wolfnet_widget_theme_active'; } ?>">
                     <label for="wolfnet_widgetTheme_<?php echo $themeOpt['name'] ?>">
                         <div class="wolfnet_widget_theme_thumb">
                             <img src="<?php echo $imgdir . $themeOpt['previewImg']; ?>?v={X.X.X}" />

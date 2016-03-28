@@ -110,6 +110,7 @@ class Wolfnet_Views
                 'widgetTheme' => $this->getWidgetTheme(),
                 'widgetThemes' => $GLOBALS['wolfnet']->widgetTheme->getThemeOptions(),
                 'defaultWidgetTheme' => $widgetThemeDefaults['widgetTheme'],
+                'defaultColors' => $widgetThemeDefaults['colors'],
             ));
 
         } catch (Wolfnet_Exception $e) {
