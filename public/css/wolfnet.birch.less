@@ -32,15 +32,21 @@
 
 //== Listing dimensions
 
-@listingWidth:          312px;
-@listingWidthSm:        270px;
-@listingWidthXs:        230px;
-@listingHeight:         auto;
+@listingImgRatio:       4 / 3;
+@listingImgWidth:       272px;
+@listingImgWidthSm:     round(@listingImgWidth * 0.85);  // ~270
+@listingImgWidthXs:     round(@listingImgWidth * 0.714); // ~230
+@listingImgHeight:      round(@listingImgWidth   / @listingImgRatio); // ~200
+@listingImgHeightSm:    round(@listingImgWidthSm / @listingImgRatio); // ~173
+@listingImgHeightXs:    round(@listingImgWidthXs / @listingImgRatio); // ~148
 @listingPadding:        20px;
-@listingImgWidth:       (@listingWidth - (@listingPadding * 2));
-@listingImgHeight:      200px;
-@listingImgHeightSm:    173px;
-@listingImgHeightXs:    148px;
+@listingWidth:          @listingImgWidth   + (@listingPadding * 2);
+@listingWidthSm:        @listingImgWidthSm + (@listingPadding * 2);
+@listingWidthXs:        @listingImgWidthXs + (@listingPadding * 2);
+@listingHeight:         auto;
+@brandingWidth:         100px;
+@listingLocationWidth:  (@listingImgWidth - @brandingWidth);
+
 @brandingWidth:         100px;
 @listingLocationWidth:  (@listingImgWidth - @brandingWidth);
 
@@ -150,9 +156,9 @@
                     max-width: @listingImgWidth;
 
                     img {
-                        height:    auto;
-                        max-height: @listingImgHeight;
-                        border:    none;
+                        width: 100%;
+                        height: auto;
+                        border: none;
                     }
 
                 }
