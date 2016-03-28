@@ -51,6 +51,7 @@
                             <span class="wolfnet_label">Bathrooms</span>
                         </span>
                     </span>
+                    <div class="wolfnet_detailsLink"></div>
                 </div>
             </div>
         </div>
