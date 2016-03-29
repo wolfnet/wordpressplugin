@@ -93,6 +93,9 @@ Please upgrade to the latest version of the plugin as we will be disabling our o
 
 == Changelog ==
 
+= 1.9.5 =
+* More generous map bound buffer; tweak of fix in 1.9.4.
+
 = 1.9.4 =
 * Adds lat/lng bounds to pinned listings on maps.
 * Enforces a maximum for Max Results Per Page on list or grid pagination.
