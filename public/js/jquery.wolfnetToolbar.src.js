@@ -287,7 +287,7 @@
             		data[i].property_id,
             		data[i].property_url);
 
-            		var boundsBuffer = 2;
+            		var boundsBuffer = 20;
 
                     if (
                         (data[i].geo.lat >= (componentMap.getBounds().lr.lat - boundsBuffer) &&
