@@ -65,6 +65,30 @@
                 width: 100% !important;
             }
         }
+
+        &.wolfnet_smartSearch {
+            .wolfnet_smartHorizontalFields {
+
+                .wolfnet_smartPriceFields,
+                .wolfnet_smartBedBathFields,
+                .wolfnet_smartSubmit {
+                    width: 100%;
+                    clear: both;
+                }
+
+                .wolfnet_smartMinPrice,
+                .wolfnet_smartMaxPrice,
+                .wolfnet_smartBeds,
+                .wolfnet_smartBaths {
+                    width: 50% !important;
+                }
+                .wolfnet_smartSubmit {
+                    width: 100% !important;
+                }
+
+            }
+
+        }
     }
 }
 
@@ -414,7 +438,11 @@
 
         .wolfnet_smartHorizontalFields {
             width: 100%;
-            padding-top: 0.9em;
+            padding-top: 0.5em;
+
+            .wolfnet_smartPriceFields,
+            .wolfnet_smartBedBathFields,
+            .wolfnet_smartSubmit {}
 
             .wolfnet_smartMinPrice,
             .wolfnet_smartMaxPrice,
