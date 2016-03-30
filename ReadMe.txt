@@ -93,6 +93,9 @@ Please upgrade to the latest version of the plugin as we will be disabling our o
 
 == Changelog ==
 
+= 1.9.6 =
+* Fixes failing JS event when 'Show these listings' is clicked on a listing grid.
+
 = 1.9.5 =
 * More generous map bound buffer; tweak of fix in 1.9.4.
 
