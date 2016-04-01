@@ -93,6 +93,9 @@ Please upgrade to the latest version of the plugin as we will be disabling our o
 
 == Changelog ==
 
+= 1.9.7 =
+* Fixes remote footer calls.
+
 = 1.9.6 =
 * Fixes failing JS event when 'Show these listings' is clicked on a listing grid.
 
