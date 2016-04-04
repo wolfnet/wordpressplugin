@@ -93,11 +93,14 @@ unset($wpMeta['key']);
             });
         };
 
-        $listingGrid.on('wolfnet.updated', setupThumbnailScroller);
 
         setupToolbar();
         setupListingGrid();
-        setupThumbnailScroller();
+
+        <?php if ($widgetThemeName != 'ash') { ?>
+            $listingGrid.on('wolfnet.updated', setupThumbnailScroller);
+            setupThumbnailScroller();
+        <?php } ?>
 
     });
 
