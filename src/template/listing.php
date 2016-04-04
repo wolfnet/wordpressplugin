@@ -65,7 +65,7 @@
                 <?php echo $listing['address']; ?>
             </div>
         </div>
-        <?php /*<div class="wolfnet_branding">
+        <div class="wolfnet_branding">
             <span class="wolfnet_brokerLogo<?php echo ($listing['branding']['type']=='idx') ? ' wolfnet_idxLogo' : ''; ?>"
              <?php if (trim($listing['branding']['logo']) == '') { ?>style="display: none;"<?php } ?>>
                 <img src="<?php echo $listing['branding']['logo']; ?>" />
@@ -89,25 +89,6 @@
                 <span class="wolfnet_brandingTollFreePhone">
                     <?php echo $listing['branding']['toll_free_phone']; ?>
                 </span>
-            </span>
-        </div> */ ?>
-        <div class="wolfnet_branding">
-            <span class="wolfnet_brokerLogo wolfnet_idxLogo">
-                <img src="https://assets.wolfnet.com/reciprocity_logos/MLSLogo.png">
-            </span>
-            <span class="wolfnet_brandingMessage">
-                <span class="wolfnet_brandingCourtesyText">
-                                    </span>
-                <span class="wolfnet_brandingAgent wolfnet_brandingAgentName">
-                                    </span>
-                <span class="wolfnet_brandingAgent wolfnet_brandingAgentPhone">
-                                    </span>
-                <span class="wolfnet_brandingOffice wolfnet_brandingOfficeName">
-                    Edina Realty, Inc.                </span>
-                <span class="wolfnet_brandingOffice wolfnet_brandingOfficePhone">
-                                    </span>
-                <span class="wolfnet_brandingTollFreePhone">
-                                    </span>
             </span>
         </div>
     </a>
