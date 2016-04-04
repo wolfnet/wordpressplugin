@@ -326,12 +326,12 @@
             $brokerLogo.show().find('img').first().attr('src', listing.branding.logo);
         }
 
-        $branding.find('wolfnet_brandingCourtesyText').html(listing.branding.courtesy_text);
-        $branding.find('wolfnet_brandingAgent .wolfnet_brandingAgentName').html(listing.branding.agent_name);
-        $branding.find('wolfnet_brandingAgent .wolfnet_brandingAgentPhone').html(listing.branding.agent_phone);
-        $branding.find('wolfnet_brandingOffice .wolfnet_brandingOfficeName').html(listing.branding.office_name);
-        $branding.find('wolfnet_brandingOffice .wolfnet_brandingOfficePhone').html(listing.branding.office_phone);
-        $branding.find('wolfnet_brandingTollFreePhone').html(listing.branding.toll_free_phone);
+        $branding.find('.wolfnet_brandingCourtesyText').html(listing.branding.courtesy_text);
+        $branding.find('.wolfnet_brandingAgent.wolfnet_brandingAgentName').html(listing.branding.agent_name);
+        $branding.find('.wolfnet_brandingAgent.wolfnet_brandingAgentPhone').html(listing.branding.agent_phone);
+        $branding.find('.wolfnet_brandingOffice.wolfnet_brandingOfficeName').html(listing.branding.office_name);
+        $branding.find('.wolfnet_brandingOffice.wolfnet_brandingOfficePhone').html(listing.branding.office_phone);
+        $branding.find('.wolfnet_brandingTollFreePhone').html(listing.branding.toll_free_phone);
 
         return $listing;
 
