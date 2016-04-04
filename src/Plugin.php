@@ -722,7 +722,7 @@ class Wolfnet_Plugin
 
     public function scQuickSearch($attrs, $content = '')
     {
-        // Check for Smrt Srch opt-in setting here, and route to new module
+        // Route to smart search module, if user opted for smart functionality
         $isSmart = isset($attrs['smartsearch']) ? $attrs['smartsearch'] : false;
 
         if ($isSmart === 'true') {
@@ -731,4 +731,5 @@ class Wolfnet_Plugin
             return $this->quickSearch->scQuickSearch($attrs, $content);
         }
     }
+
 }

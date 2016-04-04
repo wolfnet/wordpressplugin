@@ -41,7 +41,13 @@ class Wolfnet_Widget_QuickSearchWidget extends Wolfnet_Widget_AbstractWidget
 
         try {
             $options = $this->getOptions($instance);
-            $response = $this->plugin->quickSearch->quickSearch($options);
+
+            // Route to smart search module, if user opted for smart functionality
+            if ($options['smartsearch']) {
+                $response = $this->plugin->smartSearch->smartSearch($options);
+            } else {
+                $response = $this->plugin->quickSearch->quickSearch($options);
+            }
 
         } catch (Wolfnet_Api_ApiException $e) {
             $response = $this->plugin->displayException($e);
