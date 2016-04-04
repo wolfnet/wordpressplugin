@@ -122,6 +122,8 @@
 
         <div>
 
+        <div class="wolfnet_clearfix"></div>
+
     </form>
 </div>
 
