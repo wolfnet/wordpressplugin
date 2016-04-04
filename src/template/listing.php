@@ -55,17 +55,17 @@
             </div>
         </div>
         <div class="wolfnet_locationInfo" title="<?php echo htmlspecialchars($listing['address']); ?>">
-            <div class="wolfnet_address">
+            <div class="wolfnet_locationPart wolfnet_address">
                 <?php echo $listing['display_address']; ?>
             </div>
-            <div class="wolfnet_location" itemprop="locality">
+            <div class="wolfnet_locationPart wolfnet_location" itemprop="locality">
                 <?php echo $listing['location']; ?>
             </div>
-            <div class="wolfnet_full_address" itemprop="street-address" style="display: none;">
+            <div class="wolfnet_locationPart wolfnet_full_address" itemprop="street-address" style="display: none;">
                 <?php echo $listing['address']; ?>
             </div>
         </div>
-        <div class="wolfnet_branding">
+        <?php /*<div class="wolfnet_branding">
             <span class="wolfnet_brokerLogo<?php echo ($listing['branding']['type']=='idx') ? ' wolfnet_idxLogo' : ''; ?>"
              <?php if (trim($listing['branding']['logo']) == '') { ?>style="display: none;"<?php } ?>>
                 <img src="<?php echo $listing['branding']['logo']; ?>" />
@@ -89,6 +89,25 @@
                 <span class="wolfnet_brandingTollFreePhone">
                     <?php echo $listing['branding']['toll_free_phone']; ?>
                 </span>
+            </span>
+        </div> */ ?>
+        <div class="wolfnet_branding">
+            <span class="wolfnet_brokerLogo wolfnet_idxLogo">
+                <img src="https://assets.wolfnet.com/reciprocity_logos/MLSLogo.png">
+            </span>
+            <span class="wolfnet_brandingMessage">
+                <span class="wolfnet_brandingCourtesyText">
+                                    </span>
+                <span class="wolfnet_brandingAgent wolfnet_brandingAgentName">
+                                    </span>
+                <span class="wolfnet_brandingAgent wolfnet_brandingAgentPhone">
+                                    </span>
+                <span class="wolfnet_brandingOffice wolfnet_brandingOfficeName">
+                    Edina Realty, Inc.                </span>
+                <span class="wolfnet_brandingOffice wolfnet_brandingOfficePhone">
+                                    </span>
+                <span class="wolfnet_brandingTollFreePhone">
+                                    </span>
             </span>
         </div>
     </a>

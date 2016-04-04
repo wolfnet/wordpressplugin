@@ -71,6 +71,7 @@
         height: auto !important;
 
         .wolfnet_listing {
+            margin: 0 0 10px 0;
             // TODO: Remove these 2 rules if BrandCo stops targeting our class names:
             width:  auto !important;
             height: @listingHeight !important;
@@ -237,14 +238,15 @@
             }
 
             .wolfnet_locationInfo {
-                margin: 0 @listingPadding 0 @listingPadding;
+                margin: 0 (@listingPadding / 2) 0 @listingPadding;
                 float: left;
 
-                span {
-                    text-align: left !important;
+                .wolfnet_locationPart {
                     max-width: @listingLocationWidth;
+                    white-space: nowrap;
                     overflow: hidden;
                     text-overflow: ellipsis;
+                    text-align: left !important;
                 }
             }
 
@@ -252,9 +254,9 @@
                 float: right;
                 max-width: @brandingWidth;
                 margin-right: @listingPadding;
+                font-size: 0.86em;
 
                 .wolfnet_brokerLogo img {
-                    max-height: 35px;
                 }
 
             }
@@ -297,14 +299,6 @@
 
         }
 
-    }
-
-    &.wolfnet_featuredListings .wolfnet_listing {
-        margin: 0 0 10px 0;
-    }
-
-    &.wolfnet_listingGrid .wolfnet_listing .wolfnet_branding {
-        font-size: 1em;
     }
 
 }
