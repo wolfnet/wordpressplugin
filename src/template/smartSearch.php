@@ -141,6 +141,37 @@
             fields     : fields,
             fieldMap   : map
 		})
+
+
+        // If Smartsearch form is in less than 520px container
+        // TODO: Possibly move this block to wolfnetSmartSearch JS, if sensible
+        var formWidth = $form.width();
+        if ((formWidth < 520) && !($('.wolfnet_smartSubmit').css('clear') == 'both'))
+        {
+            // Emulate 520px max-width media screen rules if this is a narrow container but
+            // media screen rules have not been applied (i.e. widgets)
+
+            // Put min/max price, bed/bath, and submit button on own lines
+            $form.find('.wolfnet_smartPriceFields').css({
+                width: "100%",
+                clear: "both"
+            });
+            $form.find('.wolfnet_smartBedBathFields').css({
+                width: "100%",
+                clear: "both"
+            });
+            $form.find('.wolfnet_smartSubmit').css({
+                width: "100%",
+                clear: "both"
+            });
+
+            // Adjust widths of formfield pairs
+            $form.find('.wolfnet_smartMinPrice').css({'width':'50%'});
+            $form.find('.wolfnet_smartMaxPrice').css({'width':'50%'});
+            $form.find('.wolfnet_smartBeds').css({'width':'50%'});
+            $form.find('.wolfnet_smartBaths').css({'width':'50%'});
+        }
+
     });
 
 </script>
