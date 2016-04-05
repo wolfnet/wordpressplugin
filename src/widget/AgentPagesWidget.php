@@ -73,7 +73,12 @@ class Wolfnet_Widget_AgentPagesWidget extends Wolfnet_Widget_AbstractWidget
 
     protected function getOptions($instance = null)
     {
-        $options = $this->plugin->agentPages->getOptions($instance);
+        $options = array();
+        try {
+            $options = $this->plugin->agentPages->getOptions($instance);
+        } catch (Wolfnet_Api_ApiException $e) {
+            echo $this->plugin->displayException($e);
+        }
 
         return parent::prepOptions($options);
 
