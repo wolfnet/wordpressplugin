@@ -22,8 +22,7 @@
 
 ?>
 
-<div id="<?php echo $instance_id; echo ' '; echo $componentId; ?>"
-    class="wolfnet_smartSearch wolfnet_widget">
+<div id="<?php echo $instance_id; ?>" class="wolfnet_widget wolfnet_smartSearch">
 
     <?php if (trim($title) != '') { ?>
         <h2 class="wolfnet_widgetTitle"><?php echo $title; ?></h2>
@@ -54,7 +53,6 @@
         <div class="wolfnet_smartHorizontalFields">
 
             <div class="wolfnet_smartPriceFields">
-
                 <!-- Min Price -->
                 <div class="wolfnet_smartMinPrice">
                     <select id="<?php echo $instance_id; ?>_min_price" name="min_price">
@@ -83,11 +81,9 @@
                         ?>
                     </select>
                 </div>
-
             <div>
 
             <div class="wolfnet_smartBedBathFields">
-
                 <!-- Beds -->
                 <div class="wolfnet_smartBeds">
                     <select id="<?php echo $instance_id; ?>_min_beds" name="min_bedrooms">
@@ -113,7 +109,6 @@
                         <?php } ?>
                     </select>
                 </div>
-
             <div>
 
             <div class="wolfnet_smartSubmit">
@@ -125,6 +120,7 @@
         <div class="wolfnet_clearfix"></div>
 
     </form>
+
 </div>
 
 
@@ -146,7 +142,6 @@
 
 
         // If Smartsearch form is in less than 520px container
-        // TODO: Possibly move this block to wolfnetSmartSearch JS, if sensible
         var formWidth = $form.width();
         if ((formWidth < 520) && !($('.wolfnet_smartSubmit').css('clear') == 'both'))
         {
