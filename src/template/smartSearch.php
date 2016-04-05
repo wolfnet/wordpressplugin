@@ -81,7 +81,7 @@
                         ?>
                     </select>
                 </div>
-            <div>
+            </div>
 
             <div class="wolfnet_smartBedBathFields">
                 <!-- Beds -->
@@ -109,13 +109,13 @@
                         <?php } ?>
                     </select>
                 </div>
-            <div>
+            </div>
 
             <div class="wolfnet_smartSubmit">
                 <button class="wolfnet_smartSearchForm_submitButton" name="search" type="submit">Search</button>
             </div>
 
-        <div>
+        </div>
 
         <div class="wolfnet_clearfix"></div>
 
