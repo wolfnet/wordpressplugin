@@ -65,6 +65,41 @@
                 width: 100% !important;
             }
         }
+
+        &.wolfnet_smartSearch {
+
+            .wolfnet-suggestion-label
+            {
+                font-size: 0.7em !important;
+            }
+
+            .wolfnet-suggestion-field
+            {
+                font-size: 0.6em !important;
+            }
+
+            .wolfnet_smartHorizontalFields {
+
+                .wolfnet_smartPriceFields,
+                .wolfnet_smartBedBathFields,
+                .wolfnet_smartSubmit {
+                    width: 100%;
+                    clear: both;
+                }
+
+                .wolfnet_smartMinPrice,
+                .wolfnet_smartMaxPrice,
+                .wolfnet_smartBeds,
+                .wolfnet_smartBaths {
+                    width: 50% !important;
+                }
+                .wolfnet_smartSubmit {
+                    width: 100% !important;
+                }
+
+            }
+
+        }
     }
 }
 
@@ -308,6 +343,142 @@
         }
 
     }
+
+	&.wolfnet_smartSearch
+	{
+		&.wnt-smartsearch {
+			.wnt-smartsearch-input-container {
+				width: 100%;
+			}
+		}
+
+        .wolfnet-suggestion-label
+        {
+            font-weight: bold;
+            font-size: 1.1em;
+            padding-left: 10px;
+            display: inline-block;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .wolfnet-suggestion-field
+        {
+            float: right;
+            padding-right: 10px;
+            font-size: 0.9em;
+        }
+
+		.wnt-smart-menu
+		{
+			display: inline-block;
+			position:absolute;
+		}
+
+		span.wnt-smart-search
+		{
+			padding: 1em 1em 1em 1em;
+			cursor: text;
+			overflow: hidden;
+			vertical-align: top;
+			border: 1px solid @quickSearchGrad2;
+			height: auto !important;
+			width: 100%;
+			display: inline-block;
+			text-align: left;
+
+			.wnt-ss-value
+			{
+				background-color: @quickSearchGrad2;
+				border: 1px solid black;
+				font-size: 1.1em;
+				margin-right:.5em;
+				padding: 0 5px 0 5px;
+
+				.wnt-close-btn
+				{
+					padding-left: 5px;
+					cursor: pointer;
+					font-weight: bold;
+				}
+			}
+
+			> span
+			{
+				vertical-align: top;
+
+				input {
+                    background-color: white;
+					height: 100%;
+					border: 0 !important;
+					padding: 0 !important;
+					margin: 0 !important;
+					outline: none !important;
+					padding: 0 !important;
+				}
+			}
+
+		}
+
+		.wnt-suggestions
+		{
+			border-top: 1px solid @quickSearchGrad2;
+			border-bottom: 1px solid @quickSearchGrad2;
+			border-left: 1px solid @quickSearchGrad2;
+			border-right: 1px solid @quickSearchGrad2;
+
+			> div
+			{
+				clear: both;
+
+				&.wnt-hover
+				{
+					color: @quickSearchGrad2;
+					background-color: gray;
+				}
+
+				&.wnt-suggestion
+				{
+					cursor: pointer;
+				}
+
+			}
+		}
+
+        .wolfnet_smartHorizontalFields {
+            width: 100%;
+            padding-top: 0.5em;
+
+            .wolfnet_smartPriceFields,
+            .wolfnet_smartBedBathFields,
+            .wolfnet_smartSubmit {}
+
+            .wolfnet_smartMinPrice,
+            .wolfnet_smartMaxPrice,
+            .wolfnet_smartBeds,
+            .wolfnet_smartBaths,
+            .wolfnet_smartSubmit {
+                padding-right: 5px;
+                width: 20%;
+                float: left;
+                margin-top: .3em;
+                height: 2em;
+            }
+
+            button,
+            select
+            {
+                width: 100%;
+                height: 2.8em;
+                text-transform: uppercase;
+                font-size:0.7em;
+            }
+
+        }
+
+	}
+
 
     &.wolfnet_officesList {
 
@@ -1090,8 +1261,8 @@
 
             .wolfnet_branding {
                 display: block;
-                padding-top: 1.5em;
                 font-size: 0.8em;
+                line-height: 1.25;
 
                 .wolfnet_brokerLogo {
                     display: block;
@@ -1099,6 +1270,7 @@
 
                 .wolfnet_brandingMessage {
                     display: block;
+                    margin-top: 0.5em;
                 }
 
             }

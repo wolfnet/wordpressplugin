@@ -162,6 +162,7 @@ class Wolfnet_Plugin
         $this->listingGrid = $this->ioc->get('Wolfnet_Module_ListingGrid');
         $this->propertyList = $this->ioc->get('Wolfnet_Module_PropertyList');
         $this->quickSearch = $this->ioc->get('Wolfnet_Module_QuickSearch');
+        $this->smartSearch = $this->ioc->get('Wolfnet_Module_SmartSearch');
         $this->searchManager = $this->ioc->get('Wolfnet_Module_SearchManager');
         $this->widgetTheme = $this->ioc->get('Wolfnet_Module_WidgetTheme');
 
@@ -722,6 +723,14 @@ class Wolfnet_Plugin
 
     public function scQuickSearch($attrs, $content = '')
     {
-        return $this->quickSearch->scQuickSearch($attrs, $content);
+        // Route to smart search module, if user opted for smart functionality
+        $isSmart = isset($attrs['smartsearch']) ? $attrs['smartsearch'] : false;
+
+        if ($isSmart === 'true') {
+            return $this->smartSearch->scSmartSearch($attrs, $content);
+        } else {
+            return $this->quickSearch->scQuickSearch($attrs, $content);
+        }
     }
+
 }

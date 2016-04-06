@@ -37,6 +37,7 @@
     <?php endif; ?>
 
     <table class="form-table">
+
         <tr>
             <th>
                 <label for="wnt-<?php echo $title_wpid; ?>">Title:</label>
@@ -46,6 +47,25 @@
                  value="<?php echo $title; ?>" type="text" />
             </td>
         </tr>
+
+
+        <?php if(count($markets) < 2): ?>
+            <tr>
+                <th>
+                    <label for="<?php echo $smartsearch_wpid; ?>">SmartSearch:</label>
+                </th>
+                <td>
+                    <select id="<?php echo $smartsearch_wpid; ?>" name="<?php echo $smartsearch_wpname; ?>" >
+                        <option value="false" <?php echo $smartsearch_false_wps; ?>>Disabled</option>
+                        <option value="true" <?php echo $smartsearch_true_wps; ?>>Enabled</option>
+                    </select>
+                    <span class="wolfnet_moreInfo">
+                        Enabling SmartSearch on your WolfNet Quick Search will allow website visitors to search all available locale-based search types, including categories like ‘area,’ ‘body of water’ and ‘school district,’ while also being presented with search suggestions as they enter their search terms.
+                    </span>
+                </td>
+            </tr>
+        <?php endif; ?>
+
         <tr>
             <th>
                 <label for="<?php echo $view_wpid; ?>">Layout:</label>
@@ -104,6 +124,7 @@
                 </td>
             </tr>
     	<?php endif; ?>
+
     </table>
     <span class="validate_msg"></span>
 </div>
@@ -111,6 +132,8 @@
 <script type="text/javascript">
 
     jQuery(function($){
+
+        wolfnet.initMoreInfo( $( '#<?php echo $instance_id; ?> .wolfnet_moreInfo' ) );
 
         <?php if(count($markets) > 1): ?>
 
@@ -180,6 +203,22 @@
             }
         <?php endif; ?>
         });
+
+        var $smartsearch = $('#<?php echo $smartsearch_wpid; ?>');
+        if ($smartsearch.val() === 'true') {
+            $('#<?php echo $view_wpid; ?>').prop('disabled',true);
+        }
+
+        $smartsearch.change(function() {
+            var $layoutSetting = $('#<?php echo $view_wpid; ?>');
+
+            if ($smartsearch.val() === 'true') {
+                $layoutSetting.prop('disabled',true);
+            } else {
+                $layoutSetting.prop("disabled", false);
+            }
+        });
+
     });
 
 </script>

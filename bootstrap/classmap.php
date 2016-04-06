@@ -28,11 +28,13 @@ return array(
     'Wolfnet_Module_ListingGrid' => '/module/ListingGrid.php',
     'Wolfnet_Module_PropertyList' => '/module/PropertyList.php',
     'Wolfnet_Module_QuickSearch' => '/module/QuickSearch.php',
+    'Wolfnet_Module_SmartSearch' => '/module/SmartSearch.php',
     'Wolfnet_Module_SearchManager' => '/module/SearchManager.php',
     'Wolfnet_Module_WidgetTheme' => '/module/WidgetTheme.php',
 
     'Wolfnet_Service_CachingService' => '/service/CachingService.php',
     'Wolfnet_Service_ProductKeyService' => '/service/ProductKeyService.php',
+    'Wolfnet_Service_SmartSearchService' => '/service/SmartSearchService.php',
 
     'Wolfnet_Widget_AbstractWidget' => '/widget/AbstractWidget.php',
     'Wolfnet_Widget_AgentPagesWidget' => '/widget/AgentPagesWidget.php',

@@ -56,13 +56,13 @@
             </div>
         </div>
         <div class="wolfnet_locationInfo" title="<?php echo htmlspecialchars($listing['address']); ?>">
-            <div class="wolfnet_address">
+            <div class="wolfnet_locationPart wolfnet_address">
                 <?php echo $listing['display_address']; ?>
             </div>
-            <div class="wolfnet_location" itemprop="locality">
+            <div class="wolfnet_locationPart wolfnet_location" itemprop="locality">
                 <?php echo $listing['location']; ?>
             </div>
-            <div class="wolfnet_full_address" itemprop="street-address" style="display: none;">
+            <div class="wolfnet_locationPart wolfnet_full_address" itemprop="street-address" style="display: none;">
                 <?php echo $listing['address']; ?>
             </div>
         </div>
