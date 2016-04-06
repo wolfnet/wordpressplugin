@@ -45,7 +45,7 @@
 @listingHeight:         auto;
 @listingPadding:        8px;
 @brandingWidth:         100px;
-@listingLocationWidth:  (@listingImgWidth - @brandingWidth);
+@listingLocationWidth:  (@listingImgWidth - @brandingWidth - (@listingPadding * 3));
 
 @control-width:         36px;
 @control-height:        36px;
@@ -262,19 +262,21 @@
                 margin: @listingPadding;
                 float: left;
 
-                span {
-                    text-align: left !important;
+                .wolfnet_locationPart {
                     max-width: @listingLocationWidth;
+                    white-space: nowrap;
                     overflow: hidden;
                     text-overflow: ellipsis;
+                    text-align: left !important;
                 }
+
             }
 
             .wolfnet_branding {
                 float: right;
                 max-width: @brandingWidth;
-                margin-top: @listingPadding;
-                margin-right: @listingPadding;
+                margin: @listingPadding @listingPadding @listingPadding 0;
+                font-size: 0.86em;
 
                 .wolfnet_brokerLogo img {
                     max-height: 35px;
@@ -337,10 +339,6 @@
 
         }
 
-    }
-
-    &.wolfnet_listingGrid .wolfnet_listing .wolfnet_branding {
-        font-size: 1em;
     }
 
 }
