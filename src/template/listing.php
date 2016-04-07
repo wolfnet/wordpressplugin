@@ -91,6 +91,7 @@
                     <?php echo $listing['branding']['toll_free_phone']; ?>
                 </span>
             </span>
+            <span class="wolfnet_clearfix"></span>
         </div>
     </a>
 </div>

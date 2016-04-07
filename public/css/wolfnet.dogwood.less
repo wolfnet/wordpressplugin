@@ -44,8 +44,8 @@
 @listingWidthXs:        @listingImgWidthXs + 2;
 @listingHeight:         auto;
 @listingPadding:        8px;
-@brandingWidth:         100px;
-@listingLocationWidth:  (@listingImgWidth - @brandingWidth - (@listingPadding * 3));
+@brandingWidth:         100%;
+@listingLocationWidth:  100%;
 
 @control-width:         36px;
 @control-height:        36px;
@@ -55,7 +55,7 @@
 
 @accentColor:           #D28E45;
 
-@gray-light:            lighten(#000, 80%);   // #ccc
+@gray-lighter:          lighten(#000, 80%); // #ccc
 
 @quickSearchGrad1:      #FFFFFF;
 @quickSearchGrad2:      #E2E2E2;
@@ -89,15 +89,17 @@
 
         .wolfnet_listing {
             height:     @listingHeight;
-            margin:     0 0 0 0;
+            margin:     @listingPadding;
             padding:    0 0 0 0;
             color:      @gray-dark;
+            border:     1px solid @gray-light;
+            font-size:  0.9em;
             // TODO: Remove if BrandCo stops targeting our class names:
             font-weight: normal;
             text-align: left;
 
             a {
-                color:      @gray-dark;
+                color: @gray-dark;
                 // TODO: Remove if BrandCo stops targeting our class names:
                 font-weight: normal;
                 text-align: left;
@@ -109,42 +111,14 @@
 
             .wolfnet_listingMain {
                 background: none !important;
-                border-width: 0 1px 0 0;
-                border-style: solid;
-                border-color: transparent;
-                -moz-border-image: -moz-linear-gradient(
-                    top,
-                    transparent,
-                    transparent,
-                    @gray-lighter,
-                    transparent,
-                    transparent
-                );
-                -webkit-border-image: -webkit-gradient(
-                    linear, left top, left bottom,
-                    from(transparent),
-                    color-stop(25%, transparent),
-                    color-stop(50%, @gray-lighter),
-                    color-stop(75%, transparent),
-                    to(transparent)
-                );
-                border-image: linear-gradient(
-                    to bottom,
-                    transparent,
-                    transparent,
-                    @gray-lighter,
-                    transparent,
-                    transparent
-                );
-                border-image-slice: 1;
             }
 
             .wolfnet_listingHead {
                 position:   relative;
-                margin:     0 @listingPadding 5px @listingPadding;
-                padding:    0 0 0 0;
-                height: @listingImgHeight;
-                text-align: left;
+                margin:     0;
+                padding:    0;
+                height:     @listingImgHeight;
+                text-align: center;
                 color:      #fff;
                 border:     none;
                 background-repeat:   no-repeat;
@@ -152,48 +126,96 @@
                 background-size:     cover;
 
                 .wolfnet_listingImage {
-                    .vertical-align();
                     border: none;
-                    padding: 0 0 0 0;
+                    margin: 0;
+                    padding: 0;
                     max-width: @listingImgWidth;
+                    .vertical-align();
 
                     img {
-                        height:    auto;
-                        max-height: @listingImgHeight;
-                        border:    none;
+                        width: 100%;
+                        height: auto;
+                        border: none;
+                    }
+
+                    .wnt-thumbnail-scroller {
+
+                        .wnt-nav-btn {
+                            top: 75%;
+                            width: @control-width;
+                            height: @control-height;
+                            background-color: @gray-light;
+
+                            // Override BrandCo theme button styles
+                            box-shadow: none;
+                            -webkit-box-shadow: none;
+                            border-radius: 0;
+
+                            .wnt-icon {
+                                font-size: 30px;
+                            }
+
+                            &.wnt-next {
+                                right: 0;
+                            }
+
+                            &.wnt-prev {
+                                left: 0;
+                            }
+
+                            &:hover,
+                            &:active {
+                                background-color: @accentColor;
+                            }
+
+                        }
+
                     }
 
                 }
 
                 .wolfnet_listingInfo {
                     position: absolute;
-                    bottom: 0;
-                    padding: 0 0 0.3em 0.5em;
-                    width: 100%;
-                    min-height: 24px;
-                    line-height: 1.25em;
-                    text-align: left !important;
-                    text-shadow: 0 0 5px #000;
-                    .gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.5));
+                    top: (@listingPadding * 2);
+                    right: 0;
+                    width: auto;
+                    min-width: 130px;
+                    text-align: center !important;
+                    background-color: @gray-lighter;
+
+                }
+
+                .wolfnet_detailsLink {
+                    display: none;
+                    background-color: @accentColor;
+                    text-transform: uppercase;
+                    min-width: 130px;
+                    padding: (@listingPadding / 2) (@listingPadding / 2) (@listingPadding / 4) (@listingPadding / 2);
+
+                    &:after {
+                        content: 'View Property';
+                    }
+
                 }
 
             }
 
             .wolfnet_price {
-                display: inline !important;
-                text-align: left !important;
-                font-size: 1.5em;
-                font-weight: bold;
+                display: block;
+                font-size: 1.3em;
+                font-weight: normal;
+                text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+                margin: @listingPadding @listingPadding 0 @listingPadding;
             }
 
             .wolfnet_bed_bath {
-                display: inline !important;
+                display: block;
+                color: @gray;
                 font-size: 1em;
                 font-style: normal;
-                text-align: left !important;
                 line-height: inherit;
                 white-space: nowrap;
-                margin-bottom: inherit;
+                margin: 0 @listingPadding (@listingPadding / 2) @listingPadding;
                 position: relative;
                 right: inherit;
                 top: 0;
@@ -214,7 +236,7 @@
                 }
 
                 .wolfnet_beds {
-                    margin-right: inherit;
+                    margin-right: 0;
 
                     &:after {
                         content: ' Beds';
@@ -239,8 +261,7 @@
             }
 
             .wolfnet_locationInfo {
-                margin: 0 @listingPadding 0 @listingPadding;
-                float: left;
+                margin: @listingPadding;
 
                 .wolfnet_locationPart {
                     max-width: @listingLocationWidth;
@@ -253,12 +274,13 @@
             }
 
             .wolfnet_branding {
-                float: right;
                 max-width: @brandingWidth;
-                margin-right: @listingPadding;
+                margin: @listingPadding;
                 font-size: 0.86em;
+                color: @gray-light;
 
                 .wolfnet_brokerLogo img {
+                    float: right;
                     max-height: 35px;
                 }
 
@@ -272,6 +294,14 @@
 
             }
 
+            &:hover {
+                .wolfnet_listingHead {
+                    .wolfnet_detailsLink {
+                        display: block;
+                    }
+                }
+            }
+
         }
 
     }
@@ -280,13 +310,17 @@
 
         .wolfnet_listing {
             width: @listingWidth;
-            margin-bottom: 1em;
 
             &.wolfnet_listing_sm {
                 width: @listingWidthSm;
 
                 .wolfnet_listingHead {
                     height: @listingImgHeightSm;
+
+                    img {
+                        max-height: @listingImgHeightSm;
+                    }
+
                 }
 
             }
@@ -296,6 +330,11 @@
 
                 .wolfnet_listingHead {
                     height: @listingImgHeightXs;
+
+                    img {
+                        max-height: @listingImgHeightXs;
+                    }
+
                 }
 
             }
