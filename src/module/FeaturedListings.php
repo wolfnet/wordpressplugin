@@ -105,12 +105,7 @@ class Wolfnet_Module_FeaturedListings
 
 
         foreach ($listingsData as &$listing) {
-            $vars = array(
-                'listing' => $listing
-                );
-
-            $listingsHtml .= $this->plugin->views->listingView($vars);
-
+            $listingsHtml .= $this->plugin->views->listingView(array( 'listing' => $listing ));
         }
 
         $_REQUEST['wolfnet_includeDisclaimer'] = true;
@@ -130,7 +125,7 @@ class Wolfnet_Module_FeaturedListings
             'listingsHtml' => $listingsHtml,
             'siteUrl'      => site_url(),
             'criteria'     => json_encode($criteria)
-            );
+        );
 
         $args = $this->plugin->convertDataType(array_merge($criteria, $vars));
 
