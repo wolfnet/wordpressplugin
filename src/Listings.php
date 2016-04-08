@@ -398,27 +398,73 @@ class Wolfnet_Listings
     {
 
         return array(
+            //'acres'          => '',
             'address'          => '',
+            'bedsbaths'        => '',
             'bedsbaths_full'   => '',
             'branding'         => array(
                 'agent_name'             => '',
                 'agent_phone'            => '',
                 'courtesy_text'          => '',
+                //'email'                => '',
                 'logo'                   => '',
+                //'map_logo'             => '',
+                //'mobile_app_url'       => '',
+                //'mobile_phone'         => '',
                 'office_name'            => '',
+                //'office_name_prefix'   => '',
                 'office_phone'           => '',
+                //'owner'                => false,
+                /*'social_media'         => array(
+                    'facebook'    => '',
+                    'google_plus' => '',
+                    'linked_in'   => '',
+                    'twitter'     => '',
+                ),*/
                 'toll_free_phone'        => '',
                 'type'                   => '',
+                //'url'                  => '',
             ),
+            //'city'                  => '',
+            //'county'                => '',
             'display_address'         => '',
+            //'display_mlsnumber'     => '',
+            //'featured'              => false,
+            //'geo'                   => array( 'lat' => '', 'lng' => '', ),
+            //'is_foreclosure'        => false,
+            //'is_shortsale'          => false,
+            //'list_date'             => '',
             'listing_price'           => '',
+            //'listing_status'        => '',
+            //'listings_at_location'  => array(),
             'location'                => '',
+            //'market_name'           => '',
+            //'open_house'            => array(),
+            //'photo_url'             => '',
             'property_id'             => '',
+            /*'property_type'         => array(
+                'general_sub_type'    => '',
+                'detail'              => array(),
+                'general_type'        => '',
+            ),*/
             'property_url'            => '',
+            //'sold_date'             => '',
+            //'sold_price'            => '',
+            //'square_feet'           => '',
+            //'state'                 => '',
+            //'status'                => array(),
             'thumbnail_url'           => '',
             'thumbnails_url'          => '',
             'total_baths'             => '',
             'total_bedrooms'          => '',
+            //'total_full_baths'      => '',
+            //'total_partial_baths'   => '',
+            /*'vow'                   => array(
+                'days_on_market'           => '',
+                'original_listing_price'   => '',
+                'sort'                     => array(),
+            ),*/
+            //'zip_code'              => '',
         );
 
     }
