@@ -470,6 +470,26 @@ class Wolfnet_Listings
     }
 
 
+    public function getSample()
+    {
+
+        return array_merge($this->getDefaults(), array(
+            'address'          => '1234 Green Hills Rd, Austin, TX 78701',
+            'bedsbaths'        => '4bd/3ba',
+            'bedsbaths_full'   => '4 Bedrooms & 3 Bathrooms',
+            'display_address'  => '1234 Green Hills Rd',
+            'listing_price'    => '$649,000',
+            'location'         => 'Austin, TX 78701',
+            'property_id'      => '1234567',
+            'thumbnail_url'    => '//common.wolfnet.com/wordpress/sample-thumb.jpg',
+            'thumbnails_url'   => '',
+            'total_baths'      => 3,
+            'total_bedrooms'   => 4,
+        ));
+
+    }
+
+
     /**
      * The API expects boolean values to be passed as 0 or 1.
      * shortcodes arguments from saved searches save boolean args in many non constant ways

@@ -101,8 +101,11 @@ class Wolfnet_Module_FeaturedListings
             $listingsData = $data['responseData']['data']['listing'];
         }
 
-        $listingsHtml = '';
+        if (array_key_exists('preview', $criteria)) {
+            array_unshift($listingsData, $this->plugin->listings->getSample());
+        }
 
+        $listingsHtml = '';
 
         foreach ($listingsData as &$listing) {
             $listingsHtml .= $this->plugin->views->listingView(array( 'listing' => $listing ));
