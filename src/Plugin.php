@@ -50,7 +50,7 @@ class Wolfnet_Plugin
      * collection of variables which are used in saving page settings.
      * @var string
      */
-    public $StyleOptionGroup = 'wolfnetStyle';
+    public $WidgetThemeOptionGroup = 'wolfnetStyle';
 
     /**
      * This property is used to set the option group for the Edit Css page. It creates a namespaced
@@ -164,6 +164,7 @@ class Wolfnet_Plugin
         $this->quickSearch = $this->ioc->get('Wolfnet_Module_QuickSearch');
         $this->smartSearch = $this->ioc->get('Wolfnet_Module_SmartSearch');
         $this->searchManager = $this->ioc->get('Wolfnet_Module_SearchManager');
+        $this->widgetTheme = $this->ioc->get('Wolfnet_Module_WidgetTheme');
 
         if(is_admin()) {
             $this->admin = $this->ioc->get('Wolfnet_Admin');
