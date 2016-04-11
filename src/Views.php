@@ -105,6 +105,7 @@ class Wolfnet_Views
                 'imgdir' => $this->remoteImages,
                 'formHeader' => $this->styleFormHeaders(),
                 'widgetTheme' => $this->getWidgetTheme(),
+                'widgetThemes' => $GLOBALS['wolfnet']->widgetTheme->getThemeOptions(),
             ));
 
         } catch (Wolfnet_Exception $e) {
