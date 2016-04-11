@@ -69,6 +69,7 @@ class Wolfnet_Template
         $styles = array(
             'wolfnet',
             'icomoon',
+            'google-lato',
         );
 
         $widgetTheme = $this->plugin->views->getWidgetTheme();
@@ -218,6 +219,9 @@ class Wolfnet_Template
             ),
             'icomoon' => array(
                 $this->url . 'lib/icomoon/style.css'
+            ),
+            'google-lato' => array(
+                'https://fonts.googleapis.com/css?family=Lato',
             ),
         );
 
