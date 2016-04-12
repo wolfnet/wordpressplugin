@@ -22,12 +22,11 @@
         <fieldset>
             <legend class="screen-reader-text"><span>Widget Theme</span></legend>
             <div class="wolfnet_widget_themes">
-                <div class="wolfnet_widget_theme">
-                <?php foreach ($widgetThemes as $themeOpt) {
-                    $themeOptSelected = (
-                        ($widgetTheme == $themeOpt['name'])
-                        || (($widgetTheme == '') && ($defaultWidgetTheme == $themeOpt['name']))
-                ); ?>
+            <?php foreach ($widgetThemes as $themeOpt) {
+                $themeOptSelected = (
+                    ($widgetTheme == $themeOpt['name'])
+                    || (($widgetTheme == '') && ($defaultWidgetTheme == $themeOpt['name']))
+            ); ?>
                 <div class="wolfnet_widget_theme <?php if ($themeOptSelected) { echo 'wolfnet_widget_theme_active'; } ?>">
                     <label for="wolfnet_widgetTheme_<?php echo $themeOpt['name'] ?>">
                         <div class="wolfnet_widget_theme_thumb">
@@ -42,7 +41,7 @@
                         </div>
                     </label>
                 </div>
-                <?php } ?>
+            <?php } ?>
             </div>
         </fieldset>
 
