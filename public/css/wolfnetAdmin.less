@@ -30,11 +30,30 @@
 // -------------------------------------------- //
 
 
-//== Colors
+//== WordPress Admin Colors
+
+@wp-blues:               #0073aa;
+@wp-blues-light:         #00a0d2;
+@wp-blues-lighter:       #00b9eb;
+
+@wp-grays-darkest:       #191e23;
+@wp-grays-darker:        #23282d;
+@wp-grays-dark:          #32373c;
+@wp-grays:               #464b50;
+@wp-grays-light:         #82878c;
+@wp-grays-lighter:       #a0a5aa;
+@wp-grays-lightest:      #b4b9be;
+
+
+//== Custom Colors
 
 @gray-light:    lighten(#000, 80%);   // #ccc
 @gray-lighter:  lighten(#000, 86.7%); // #ddd
 @gray-lightest: lighten(#000, 93.3%); // #eee
+
+@brand-primary: @wp-blues;
+@brand-success: #1eaa00;
+@brand-danger:  #d54e21;
 
 
 //
@@ -160,21 +179,44 @@ html {
     .wolfnet_widget_theme {
         float: left;
         margin: 0 1em 1em 0;
-        border: 1px solid @gray-light;
-        border-radius: 0.5em;
-        background-color: @gray-lighter;
+        border: 1px solid @wp-grays-light;
+        background-color: @wp-grays-lightest;
+        transition-property: border-color, background-color;
+        transition-duration: 0.2s;
+        transition-timing-function: ease-in-out;
 
         &:hover,
         &:active {
-            border-color: @gray-lighter;
-            background-color: @gray-lightest;
+            background-color: lighten(@wp-grays-lightest, 10%);
+        }
+
+        &:focus {
+            border-color: fade(@wp-blues-light, 80%);
+            box-shadow: 0 0 2px fade(@wp-blues-light, 80%);
+        }
+
+        &.wolfnet_widget_theme_active {
+            border-color: @wp-grays-darker;
+
+            .wolfnet_widget_theme_info {
+                background-color: @wp-grays-darker;
+
+                .wolfnet_widget_theme_label {
+                    color: #fff;
+
+                    .wolfnet_widget_theme_flag {
+                        font-weight: bold;
+                    }
+
+                }
+
+            }
+
         }
 
         .wolfnet_widget_theme_thumb {
             height: 290px;
             padding: 0.75em;
-            border-top-left-radius: 0.5em;
-            border-top-right-radius: 0.5em;
 
             img {
                 box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.25);
@@ -182,11 +224,14 @@ html {
 
         }
 
-        .wolfnet_widget_theme_label {
+        .wolfnet_widget_theme_info {
             background-color: #fff;
             padding: 0.75em;
-            border-bottom-left-radius: 0.5em;
-            border-bottom-right-radius: 0.5em;
+
+            .wolfnet_widget_theme_label {
+                font-size: 1.15em;
+            }
+
         }
 
     }
