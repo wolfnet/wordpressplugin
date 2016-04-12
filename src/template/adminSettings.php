@@ -64,10 +64,10 @@
                                         value="<?php echo $productKey[$i-1]->key; ?>" class="wolfnet_productKey" size="50" />
                                 </td>
                                 <td><span class="wolfnet_keyMarket">
-                                <?php 
+                                <?php
                                     if (isset($productKey[$i-1]->market)) {
                                         echo $productKey[$i-1]->market;
-                                    }  
+                                    }
                                 ?>
                                 <input type="hidden" id="wolfnet_keyMarket_<?php echo $i; ?>" name="wolfnet_keyMarket_<?php echo $i; ?>"
                                     class="wolfnet_keyMarket_value" value="<?php echo $productKey[$i-1]->market; ?>" />
