@@ -101,10 +101,15 @@ class Wolfnet_Views
     {
 
         try {
+
+            $widgetThemeDefaults = $GLOBALS['wolfnet']->widgetTheme->getDefaults();
+
             $out = $this->parseTemplate('adminStyle', array(
                 'imgdir' => $this->remoteImages,
                 'formHeader' => $this->styleFormHeaders(),
                 'widgetTheme' => $this->getWidgetTheme(),
+                'widgetThemes' => $GLOBALS['wolfnet']->widgetTheme->getThemeOptions(),
+                'defaultWidgetTheme' => $widgetThemeDefaults['widgetTheme'],
             ));
 
         } catch (Wolfnet_Exception $e) {
@@ -533,7 +538,7 @@ class Wolfnet_Views
     {
         ob_start();
 
-        settings_fields($GLOBALS['wolfnet']->StyleOptionGroup);
+        settings_fields($GLOBALS['wolfnet']->WidgetThemeOptionGroup);
 
         return trim(ob_get_clean());
 
