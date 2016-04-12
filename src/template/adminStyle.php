@@ -61,7 +61,7 @@
 
         <p style="clear: both;">
             <input type="submit" name="submit" id="submit" class="button button-primary"
-             value="<?php _e('Save Changes') ?>" />
+             value="<?php esc_attr_e('Save Changes') ?>" />
         </p>
 
     </form>
