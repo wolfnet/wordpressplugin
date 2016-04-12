@@ -12,7 +12,7 @@
  */
 class Wolfnet_Module_WidgetTheme
 {
-	/**
+    /**
     * This property holds the current instance of the Wolfnet_Plugin.
     * @var Wolfnet_Plugin
     */
