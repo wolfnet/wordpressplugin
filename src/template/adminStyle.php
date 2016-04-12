@@ -27,17 +27,23 @@
                     ($widgetTheme == $themeOpt['name'])
                     || (($widgetTheme == '') && ($defaultWidgetTheme == $themeOpt['name']))
                 ); ?>
-                <div class="wolfnet_widget_theme <?php if ($themeOptSelected) { echo 'wolfnet_widget_theme_active'; } ?>">
-                    <label for="wolfnet_widgetTheme_<?php echo $themeOpt['name'] ?>">
+                <div class="wolfnet_widget_theme <?php if ($themeOptSelected) echo esc_attr('wolfnet_widget_theme_active'); ?>"
+                 tabindex="0">
+                    <label for="wolfnet_widgetTheme_<?php echo esc_attr($themeOpt['name']); ?>">
                         <div class="wolfnet_widget_theme_thumb">
                             <img src="<?php echo $imgdir . $themeOpt['previewImg']; ?>?v={X.X.X}" />
                         </div>
-                        <div class="wolfnet_widget_theme_label">
-                            <input type="radio" name="wolfnet_widgetTheme"
-                             id="wolfnet_widgetTheme_<?php echo $themeOpt['name'] ?>"
-                             value="<?php echo $themeOpt['name']; ?>"
-                             <?php if ($themeOptSelected) echo 'checked="checked"'; ?> />
-                            <?php echo $themeOpt['label']; ?>
+                        <div class="wolfnet_widget_theme_info">
+                            <span class="wolfnet_widget_theme_label">
+                                <input type="radio" name="wolfnet_widgetTheme"
+                                 id="wolfnet_widgetTheme_<?php echo esc_attr($themeOpt['name']); ?>"
+                                 value="<?php echo esc_attr($themeOpt['name']); ?>"
+                                 <?php if ($themeOptSelected) echo 'checked="checked"'; ?> />
+                                <span class="wolfnet_widget_theme_flag">
+                                    <?php if ($themeOptSelected) echo _e('Active:') ?>
+                                </span>
+                                <?php _e($themeOpt['label']); ?>
+                            </span>
                         </div>
                     </label>
                 </div>
