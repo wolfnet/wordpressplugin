@@ -112,7 +112,7 @@ wolfnet.showListings = function (collapseId,hideId,showId,instanceId)
 		$("#" + showId).hide();
 
 		if (instanceId.indexOf("listingGrid") != -1) {
-			$('#' + instanceId).wolfnetListingGrid('reload');
+			$('#' + instanceId).wolfnetListingGrid('refresh');
 		}
 
 	} )( jQuery );

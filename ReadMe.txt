@@ -93,6 +93,21 @@ Please upgrade to the latest version of the plugin as we will be disabling our o
 
 == Changelog ==
 
+= 1.9.7 =
+* Fixes remote footer calls.
+
+= 1.9.6 =
+* Fixes failing JS event when 'Show these listings' is clicked on a listing grid.
+
+= 1.9.5 =
+* More generous map bound buffer; tweak of fix in 1.9.4.
+
+= 1.9.4 =
+* Adds lat/lng bounds to pinned listings on maps.
+* Enforces a maximum for Max Results Per Page on list or grid pagination.
+* Fixes sold price bug.
+* Removes outdated rule on specificity of city searches.
+
 = 1.9.3 =
 * Adds previously untracked bugfixes.
 
