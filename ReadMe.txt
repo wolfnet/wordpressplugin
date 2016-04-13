@@ -97,13 +97,13 @@ Please upgrade to the latest version of the plugin as we will be disabling our o
 * Fix warnings being thrown in Smart Search functionality.
 
 = 1.10.0 =
-* Improved dynamic search functionality in Quick Search
-* New "Modern" widget style option
-* Scrolling thumbnail photos in the listing grid (Modern widget style only)
-* Smoother listing grid transitions
-* More consistency in listing info between grid, featured, and map listings, and with data from AJAX requests
-* Centered listing grid
-* Fixes pagination issues
+* Improved dynamic search functionality in Quick Search.
+* New "Modern" widget style option.
+* Scrolling thumbnail photos in the listing grid (Modern widget style only).
+* Smoother listing grid transitions.
+* More consistency in listing info between grid, featured, and map listings, and with data from AJAX requests.
+* Centered listing grid.
+* Fixes pagination issues.
 
 = 1.9.7 =
 * Fixes remote footer calls.
