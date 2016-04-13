@@ -360,7 +360,7 @@
             ) {
                 var houseoverIcon = componentMap.mapIcon(houseIcon, 20, 20);
                 var houseover = componentMap.poi(listingsData[i].geo.lat, listingsData[i].geo.lng, houseoverIcon, houseoverHtml, listingsData[i].property_id, listingsData[i].property_url);
-                var boundsBuffer = 20;
+                var boundsBuffer = 10;
                 if (
                     (data[i].geo.lat >= (componentMap.getBounds().lr.lat - boundsBuffer) &&
                     data[i].geo.lat <= (componentMap.getBounds().ul.lat + boundsBuffer)) &&
