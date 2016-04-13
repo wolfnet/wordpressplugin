@@ -73,13 +73,11 @@ class Wolfnet_Service_SmartSearchService
 		$map = array();
 		$params = $this->getSearchParameters();
 
-		foreach ($params as $param => $aliases) {
-			$formName = $aliases[0];
-
-			for ($i=0; $i < sizeof($aliases); $i++) {
-				$map[$aliases[$i]] = $formName;
-			}
-		}
+        foreach ($params as $paramArray) {
+            for ($i=0; $i < sizeof($paramArray); $i++) {
+                $map[$paramArray[$i]] = $paramArray[$i];
+            }
+        }
 
 		return $map;
 	}
