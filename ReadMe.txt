@@ -94,6 +94,9 @@ Please upgrade to the latest version of the plugin as we will be disabling our o
 == Changelog ==
 
 = 1.10.0 =
+* Fix warnings being thrown in Smart Search functionality.
+
+= 1.10.0 =
 * Improved dynamic search functionality in Quick Search
 * New "Modern" widget style option
 * Scrolling thumbnail photos in the listing grid (Modern widget style only)
