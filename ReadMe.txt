@@ -93,6 +93,10 @@ Please upgrade to the latest version of the plugin as we will be disabling our o
 
 == Changelog ==
 
+= 1.10.1 =
+* Box-sizing fix for Modern widget style
+* Hand cursor for widget buttons
+
 = 1.10.0 =
 * Improved dynamic search functionality in Quick Search
 * New "Modern" widget style option
