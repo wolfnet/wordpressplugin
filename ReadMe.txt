@@ -93,7 +93,7 @@ Please upgrade to the latest version of the plugin as we will be disabling our o
 
 == Changelog ==
 
-= 1.10.0 =
+= 1.10.1 =
 * Fix warnings being thrown in Smart Search functionality.
 
 = 1.10.0 =
