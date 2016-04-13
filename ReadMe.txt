@@ -93,6 +93,9 @@ Please upgrade to the latest version of the plugin as we will be disabling our o
 
 == Changelog ==
 
+= 1.10.0 =
+* Improved dynamic search functionality in Quick Search
+
 = 1.9.7 =
 * Fixes remote footer calls.
 
