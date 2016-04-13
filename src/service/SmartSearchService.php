@@ -161,7 +161,8 @@ class Wolfnet_Service_SmartSearchService
 
 	private function getSearchParameters()
 	{
-		return json_decode(file_get_contents($this->getUrl().'SearchParams.json'));
+        $url = $this->getUrl().'SearchParams.json';
+        return json_decode(wp_remote_fopen($url));
 	}
 
 
