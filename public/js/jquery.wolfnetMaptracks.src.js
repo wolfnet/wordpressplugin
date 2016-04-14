@@ -2673,7 +2673,7 @@
                         houseoverData[i].propertyUrl
                     );
 
-                    var boundsBuffer = 10;
+                    var boundsBuffer = 50;
 
                     if (
                         (lat >= (wntMap.getBounds().lr.lat - boundsBuffer) &&
