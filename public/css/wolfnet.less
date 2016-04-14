@@ -106,6 +106,18 @@
 .wolfnet_widget {
     margin: 1em auto 2em auto;
 
+    * {
+        box-sizing: border-box !important;
+    }
+
+    button,
+    input[type="button"],
+    input[type="reset"],
+    input[type="submit"] {
+        -webkit-appearance: button;
+        cursor: pointer;
+    }
+
     &.wolfnet_quickSearch_basic {
 
     }

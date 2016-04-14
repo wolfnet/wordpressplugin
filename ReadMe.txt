@@ -95,6 +95,8 @@ Please upgrade to the latest version of the plugin as we will be disabling our o
 
 = 1.10.1 =
 * Fix warnings being thrown in Smart Search functionality.
+* Fix box-sizing for Modern widget style
+* Add hand cursor for widget buttons
 
 = 1.10.0 =
 * Improved dynamic search functionality in Quick Search.
