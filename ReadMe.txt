@@ -3,7 +3,7 @@ Author:             WolfNet Technologies, LLC
 Contributors:       wolfnettech, ajmichels, asbaumgart, michaelpidde, blots
 Tags:               idx, mls, homes
 Requires at least:  3.5.1
-Tested up to:       4.4.2
+Tested up to:       4.5
 Stable tag:         {X.X.X-stable}
 License:            GPLv2 or later
 License URI:        http://www.gnu.org/licenses/gpl-2.0.html
@@ -94,17 +94,18 @@ Please upgrade to the latest version of the plugin as we will be disabling our o
 == Changelog ==
 
 = 1.10.1 =
-* Box-sizing fix for Modern widget style
-* Hand cursor for widget buttons
+* Fix warnings being thrown in Smart Search functionality.
+* Fix box-sizing for Modern widget style
+* Add hand cursor for widget buttons
 
 = 1.10.0 =
-* Improved dynamic search functionality in Quick Search
-* New "Modern" widget style option
-* Scrolling thumbnail photos in the listing grid (Modern widget style only)
-* Smoother listing grid transitions
-* More consistency in listing info between grid, featured, and map listings, and with data from AJAX requests
-* Centered listing grid
-* Fixes pagination issues
+* Improved dynamic search functionality in Quick Search.
+* New "Modern" widget style option.
+* Scrolling thumbnail photos in the listing grid (Modern widget style only).
+* Smoother listing grid transitions.
+* More consistency in listing info between grid, featured, and map listings, and with data from AJAX requests.
+* Centered listing grid.
+* Fixes pagination issues.
 
 = 1.9.7 =
 * Fixes remote footer calls.
