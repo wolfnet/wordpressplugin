@@ -47,9 +47,12 @@
 
 //== Custom Colors
 
-@gray-light:    lighten(#000, 80%);   // #ccc
-@gray-lighter:  lighten(#000, 86.7%); // #ddd
-@gray-lightest: lighten(#000, 93.3%); // #eee
+@gray-darker:   @wp-grays-darkest;
+@gray-dark:     @wp-grays-darker;
+@gray:          @wp-grays-darker;
+@gray-light:    @wp-grays-light;
+@gray-lighter:  @wp-grays-lightest;
+@gray-lightest: lighten(@wp-grays-lightest, 15%); // #eee
 
 @brand-primary: @wp-blues;
 @brand-success: #1eaa00;
@@ -179,27 +182,52 @@ html {
     .wolfnet_widget_theme {
         float: left;
         margin: 0 1em 1em 0;
-        border: 1px solid @wp-grays-light;
-        background-color: @wp-grays-lightest;
+        background-color: @gray-lightest;
         transition-property: border-color, background-color;
         transition-duration: 0.2s;
         transition-timing-function: ease-in-out;
+        box-sizing: border-box;
 
-        &:hover,
-        &:active {
-            background-color: lighten(@wp-grays-lightest, 10%);
+        .wolfnet_widget_theme_thumb,
+        .wolfnet_widget_theme_info {
+            border: 1px solid @gray-lightest;
         }
 
-        &:focus {
-            border-color: fade(@wp-blues-light, 80%);
-            box-shadow: 0 0 2px fade(@wp-blues-light, 80%);
+        .wolfnet_widget_theme_thumb {
+            height: 290px;
+            padding: 0.75em;
+            border-bottom: none;
+
+            img {
+                box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.25);
+            }
+
+        }
+
+        .wolfnet_widget_theme_info {
+            position: relative;
+            background-color: #fff;
+            padding: 0.75em;
+            border-top: none;
+
+            .wolfnet_widget_theme_label {
+                font-size: 1.15em;
+            }
+
+            .wolfnet_widget_theme_actions {
+                position: absolute;
+                top: 0;
+                right: 0;
+                padding: 0.4em;
+            }
+
         }
 
         &.wolfnet_widget_theme_active {
-            border-color: @wp-grays-darker;
 
             .wolfnet_widget_theme_info {
-                background-color: @wp-grays-darker;
+                border-color: @gray-dark;
+                background-color: @gray-dark;
 
                 .wolfnet_widget_theme_label {
                     color: #fff;
@@ -214,24 +242,14 @@ html {
 
         }
 
-        .wolfnet_widget_theme_thumb {
-            height: 290px;
-            padding: 0.75em;
-
-            img {
-                box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.25);
-            }
-
+        &:hover,
+        &:active {
+            background-color: lighten(@gray-lightest, 10%);
         }
 
-        .wolfnet_widget_theme_info {
-            background-color: #fff;
-            padding: 0.75em;
-
-            .wolfnet_widget_theme_label {
-                font-size: 1.15em;
-            }
-
+        &:focus {
+            border-color: fade(@wp-blues-light, 80%);
+            box-shadow: 0 0 2px fade(@wp-blues-light, 80%);
         }
 
     }
