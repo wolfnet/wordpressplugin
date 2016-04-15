@@ -403,7 +403,7 @@ class Wolfnet_Ajax
         try {
             $GLOBALS['wolfnet']->template->getWpHeader();
 
-            $response = $GLOBALS['wolfnet']->getWpFooter();
+            $response = $GLOBALS['wolfnet']->template->getWpFooter();
 
         } catch (Wolfnet_Exception $e) {
             status_header(500);

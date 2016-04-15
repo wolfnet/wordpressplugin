@@ -3,7 +3,7 @@ Author:             WolfNet Technologies, LLC
 Contributors:       wolfnettech, ajmichels, asbaumgart, michaelpidde, blots
 Tags:               idx, mls, homes
 Requires at least:  3.5.1
-Tested up to:       4.4.2
+Tested up to:       4.5
 Stable tag:         {X.X.X-stable}
 License:            GPLv2 or later
 License URI:        http://www.gnu.org/licenses/gpl-2.0.html
@@ -92,6 +92,36 @@ Please upgrade to the latest version of the plugin as we will be disabling the i
 Please upgrade to the latest version of the plugin as we will be disabling our old API servers. This means that plugin versions 0.1.0 - 1.6.4 will no longer function.
 
 == Changelog ==
+
+= 1.10.1 =
+* Fix warnings being thrown in Smart Search functionality.
+* Fix box-sizing for Modern widget style
+* Add hand cursor for widget buttons
+* Fixes map bounds bug.
+
+= 1.10.0 =
+* Improved dynamic search functionality in Quick Search.
+* New "Modern" widget style option.
+* Scrolling thumbnail photos in the listing grid (Modern widget style only).
+* Smoother listing grid transitions.
+* More consistency in listing info between grid, featured, and map listings, and with data from AJAX requests.
+* Centered listing grid.
+* Fixes pagination issues.
+
+= 1.9.7 =
+* Fixes remote footer calls.
+
+= 1.9.6 =
+* Fixes failing JS event when 'Show these listings' is clicked on a listing grid.
+
+= 1.9.5 =
+* More generous map bound buffer; tweak of fix in 1.9.4.
+
+= 1.9.4 =
+* Adds lat/lng bounds to pinned listings on maps.
+* Enforces a maximum for Max Results Per Page on list or grid pagination.
+* Fixes sold price bug.
+* Removes outdated rule on specificity of city searches.
 
 = 1.9.3 =
 * Adds previously untracked bugfixes.
