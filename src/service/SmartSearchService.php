@@ -73,13 +73,11 @@ class Wolfnet_Service_SmartSearchService
 		$map = array();
 		$params = $this->getSearchParameters();
 
-		foreach ($params as $param => $aliases) {
-			$formName = $aliases[0];
-
-			for ($i=0; $i < sizeof($aliases); $i++) {
-				$map[$aliases[$i]] = $formName;
-			}
-		}
+        foreach ((array) $params as $paramArray) {
+            for ($i=0; $i < sizeof($paramArray); $i++) {
+                $map[$paramArray[$i]] = $paramArray[$i];
+            }
+        }
 
 		return $map;
 	}
@@ -161,7 +159,8 @@ class Wolfnet_Service_SmartSearchService
 
 	private function getSearchParameters()
 	{
-		return json_decode(file_get_contents($this->getUrl().'SearchParams.json'));
+        $url = $this->getUrl().'SearchParams.json';
+        return json_decode(wp_remote_fopen($url));
 	}
 
 

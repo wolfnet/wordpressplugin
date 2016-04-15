@@ -348,11 +348,29 @@
 
         componentMap.removeAllShapes();
 
+
         for (var i=0, l=listingsData.length; i<l; i++) {
             var houseoverHtml = templates.hasOwnProperty('map') ? renderListing(listingsData[i], templates['map']).get(0) : '';
-            var houseoverIcon = componentMap.mapIcon(houseIcon, 20, 20);
-            var houseover = componentMap.poi(listingsData[i].geo.lat, listingsData[i].geo.lng, houseoverIcon, houseoverHtml, listingsData[i].property_id, listingsData[i].property_url);
-            componentMap.addPoi(houseover);
+
+            if (
+                ((listingsData[i].geo.lat !== 0) || (listingsData[i].geo.lng !== 0)) &&
+                (!isNaN(listingsData[i].geo.lat) || !isNaN(listingsData[i].geo.lng)) &&
+                (listingsData[i].geo.lat !== '' || listingsData[i].geo.lng !== '') &&
+                ((listingsData[i].geo.lat >= -180) && (listingsData[i].geo.lat <= 180)) &&
+                ((listingsData[i].geo.lng >= -180) && (listingsData[i].geo.lng <= 180))
+            ) {
+                var houseoverIcon = componentMap.mapIcon(houseIcon, 20, 20);
+                var houseover = componentMap.poi(listingsData[i].geo.lat, listingsData[i].geo.lng, houseoverIcon, houseoverHtml, listingsData[i].property_id, listingsData[i].property_url);
+                var boundsBuffer = 50;
+                if (
+                    (listingsData[i].geo.lat >= (componentMap.getBounds().lr.lat - boundsBuffer) &&
+                    listingsData[i].geo.lat <= (componentMap.getBounds().ul.lat + boundsBuffer)) &&
+                    (listingsData[i].geo.lng >=  (componentMap.getBounds().lr.lng - boundsBuffer) &&
+                    listingsData[i].geo.lng <= (componentMap.getBounds().ul.lng + boundsBuffer))
+                ){
+                    componentMap.addPoi(houseover);
+                }
+            }
         }
 
         componentMap.bestFit();
