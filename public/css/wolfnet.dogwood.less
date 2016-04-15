@@ -93,7 +93,7 @@
             margin:     @listingPadding;
             padding:    0 0 0 0;
             color:      @gray-dark;
-            border:     1px solid @gray-light;
+            border:     1px solid #ccc;
             font-size:  0.9em;
             // TODO: Remove if BrandCo stops targeting our class names:
             font-weight: normal;
@@ -145,7 +145,7 @@
                             top: 75%;
                             width: @control-width;
                             height: @control-height;
-                            background-color: @gray-light;
+                            background-color: fade(@gray-lighter, 80%);
 
                             // Override BrandCo theme button styles
                             box-shadow: none;
@@ -166,7 +166,8 @@
 
                             &:hover,
                             &:active {
-                                background-color: @accentColor;
+                                background-color: fade(@accentColor, 80%);
+                                color: #fff;
                             }
 
                         }
