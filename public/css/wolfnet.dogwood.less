@@ -44,6 +44,7 @@
 @listingWidthXs:        @listingImgWidthXs + 2;
 @listingHeight:         auto;
 @listingPadding:        8px;
+@infoPadding:           8px;
 @brandingWidth:         100%;
 @listingLocationWidth:  100%;
 
@@ -176,21 +177,25 @@
 
                 .wolfnet_listingInfo {
                     position: absolute;
-                    top: (@listingPadding * 2);
+                    top: (@infoPadding * 2);
                     right: 0;
                     width: auto;
                     min-width: 130px;
                     text-align: center !important;
-                    background-color: @gray-lighter;
+
+                    .wolfnet_price_rooms {
+                        background-color: fade(@gray-lighter, 80%);
+                        padding: (@infoPadding / 2) @infoPadding 0 @infoPadding;
+                    }
 
                 }
 
                 .wolfnet_detailsLink {
                     display: none;
-                    background-color: @accentColor;
+                    background-color: fade(@accentColor, 80%);
                     text-transform: uppercase;
                     min-width: 130px;
-                    padding: (@listingPadding / 2) (@listingPadding / 2) (@listingPadding / 4) (@listingPadding / 2);
+                    padding: (@infoPadding / 4) (@infoPadding / 2) (@infoPadding / 4) (@infoPadding / 2);
 
                     &:after {
                         content: 'View Property';
@@ -205,7 +210,7 @@
                 font-size: 1.3em;
                 font-weight: normal;
                 text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
-                margin: @listingPadding @listingPadding 0 @listingPadding;
+                margin: 0;
             }
 
             .wolfnet_bed_bath {
@@ -215,7 +220,7 @@
                 font-style: normal;
                 line-height: inherit;
                 white-space: nowrap;
-                margin: 0 @listingPadding (@listingPadding / 2) @listingPadding;
+                margin: 0;
                 position: relative;
                 right: inherit;
                 top: 0;

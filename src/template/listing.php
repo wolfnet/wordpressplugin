@@ -32,25 +32,27 @@
                      data-photo-url="<?php echo $listing['thumbnails_url']; ?>" />
                 </span>
                 <div class="wolfnet_listingInfo">
-                    <span class="wolfnet_price" title="<?php echo htmlspecialchars($listing['listing_price']); ?>" itemprop="price">
-                        <?php echo $listing['listing_price']; ?>
-                    </span>
-                    <span class="wolfnet_bed_bath" title="<?php echo htmlspecialchars($listing['bedsbaths_full']); ?>">
-                        <span class="wolfnet_beds"
-                         <?php if (!trim($listing['total_bedrooms'])) { ?>style="display: none;"<?php } ?>>
-                            <?php echo $listing['total_bedrooms']; ?>
-                            <span class="wolfnet_label">Bedrooms</span>
+                    <div class="wolfnet_price_rooms">
+                        <span class="wolfnet_price" title="<?php echo htmlspecialchars($listing['listing_price']); ?>" itemprop="price">
+                            <?php echo $listing['listing_price']; ?>
                         </span>
-                        <span class="wolfnet_info_separator"
-                         <?php if (!trim($listing['total_bedrooms']) || !trim($listing['total_bedrooms'])) { ?>
-                            style="display: none;"
-                         <?php } ?>></span>
-                        <span class="wolfnet_baths"
-                         <?php if (!trim($listing['total_baths'])) { ?>style="display: none;"<?php } ?>>
-                            <?php echo $listing['total_baths']; ?>
-                            <span class="wolfnet_label">Bathrooms</span>
+                        <span class="wolfnet_bed_bath" title="<?php echo htmlspecialchars($listing['bedsbaths_full']); ?>">
+                            <span class="wolfnet_beds"
+                             <?php if (!trim($listing['total_bedrooms'])) { ?>style="display: none;"<?php } ?>>
+                                <?php echo $listing['total_bedrooms']; ?>
+                                <span class="wolfnet_label">Bedrooms</span>
+                            </span>
+                            <span class="wolfnet_info_separator"
+                             <?php if (!trim($listing['total_bedrooms']) || !trim($listing['total_bedrooms'])) { ?>
+                                style="display: none;"
+                             <?php } ?>></span>
+                            <span class="wolfnet_baths"
+                             <?php if (!trim($listing['total_baths'])) { ?>style="display: none;"<?php } ?>>
+                                <?php echo $listing['total_baths']; ?>
+                                <span class="wolfnet_label">Bathrooms</span>
+                            </span>
                         </span>
-                    </span>
+                    </div>
                     <div class="wolfnet_detailsLink"></div>
                 </div>
             </div>
