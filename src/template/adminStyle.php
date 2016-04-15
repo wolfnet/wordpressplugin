@@ -30,7 +30,7 @@
                 <div class="wolfnet_widget_theme <?php if ($themeOptSelected) { echo 'wolfnet_widget_theme_active'; } ?>">
                     <label for="wolfnet_widgetTheme_<?php echo $themeOpt['name'] ?>">
                         <div class="wolfnet_widget_theme_thumb">
-                            <img src="<?php echo $imgdir . $themeOpt['previewImg']; ?>?v={X.X.X}" />
+                            <img src="<?php echo $imgdir . $themeOpt['previewImg']; ?>?v={X.X.X}.1" />
                         </div>
                         <div class="wolfnet_widget_theme_label">
                             <input type="radio" name="wolfnet_widgetTheme"
