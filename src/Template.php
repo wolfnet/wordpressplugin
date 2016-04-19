@@ -68,6 +68,7 @@ class Wolfnet_Template
     {
         $styles = array(
             'wolfnet',
+            'wolfnet-agent',
             'icomoon',
         );
 
@@ -205,6 +206,9 @@ class Wolfnet_Template
         $styles = array(
             'wolfnet' => array(
                 $this->url . 'css/wolfnet.src.css'
+                ),
+            'wolfnet-agent' => array(
+                $this->url . 'css/wolfnetAgentPages.src.css'
                 ),
             'wolfnet-admin' => array(
                 $this->url . 'css/wolfnetAdmin.src.css',

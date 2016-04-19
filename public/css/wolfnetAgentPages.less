@@ -1,0 +1,398 @@
+/**
+ * CSS Document
+ *
+ * @package       css
+ * @title         wolfnetAgentPages.less
+ * @copyright     Copyright (c) 2012 - 2016, WolfNet Technologies, LLC
+ *
+ *                This program is free software; you can redistribute it and/or
+ *                modify it under the terms of the GNU General Public License
+ *                as published by the Free Software Foundation; either version 2
+ *                of the License, or (at your option) any later version.
+ *
+ *                This program is distributed in the hope that it will be useful,
+ *                but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *                MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *                GNU General Public License for more details.
+ *
+ *                You should have received a copy of the GNU General Public License
+ *                along with this program; if not, write to the Free Software
+ *                Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ *
+ */
+
+ @media screen and (max-width: 480px) {
+    .wolfnet_widget {
+        &.wolfnet_officesList,
+        &.wolfnet_agentsList {
+            .wolfnet_agentSearch {
+                .wolfnet_agentCriteria {
+                    width: 37% !important;
+                    margin-right: 10px;
+                }
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 520px) {
+    .wolfnet_widget {
+        &.wolfnet_agentShow {
+            .wolfnet_agentInfo {
+                float: none !important;
+                clear: both;
+                padding-top: 20px;
+                width: 100% !important;
+            }
+        }
+    }
+}
+
+.widget_wolfnet_agentpageswidget {
+    .wolfnet_widget {
+        .wolfnet_agentSearch {
+            width: inherit;
+
+            .wolfnet_agentSearchButton {
+                float: left;
+                margin-top: 4px;
+            }
+        }
+
+        .wolfnet_agent {
+            .wolfnet_agentInfo {
+                float: left;
+                width: inherit;
+                margin-top: 10px;
+            }
+        }
+
+        &.wolfnet_contactAgent {
+            .wolfnet_agentPreview {
+                .wolfnet_agentInfo {
+                    width: 100% !important;
+                }
+            }
+        }
+    }
+}
+
+.wolfnet_widget {
+
+	&.wolfnet_officesList {
+
+        h2 {
+            margin-top: 0;
+            text-transform: uppercase;
+        }
+
+        .wolfnet_agentOfficeView {
+            text-transform: uppercase;
+
+            .selected {
+
+            }
+        }
+
+        .wolfnet_agentSearch {
+            width: 500px;
+
+            input {
+                float: left;
+            }
+
+            .wolfnet_agentCriteria {
+                width: 280px;
+                margin-right: 10px;
+            }
+        }
+
+        .wolfnet_officePreview {
+            position: relative;
+            font-size: .9em;
+            float: left;
+            border: 1px solid #ccc;
+            margin: 10px 10px 0 0;
+            width: 280px;
+
+            .wolfnet_officeLinks {
+                position: absolute;
+                bottom: 0;
+                left: 6px;
+                height: 80px;
+                width: 100%;
+                font-size: .75em !important;
+
+                .wolfnet_officeLink {
+                    float: left;
+                    width: 50%;
+                    padding-bottom: 10px;
+                }
+
+                .wolfnet_officeLinkLeft {
+                    float: left;
+                    width: 46%;
+                    padding-bottom: 10px;
+                }
+
+            }
+        }
+
+        .wolfnet_officeImage {
+            float: none;
+            height: 250px;
+            overflow: hidden;
+            text-align: center;
+        }
+
+        .wolfnet_officeData {
+            padding: 10px;
+        }
+
+        .wolfnet_officeContact {
+            float: none;
+            font-size: .8em;
+        }
+
+        .wolfnet_officeName {
+            font-weight: bold;
+            font-size: 1.5em;
+        }
+
+        .wolfnet_officeRule {
+            width: 30%;
+            margin: 6px 0;
+        }
+
+        .wolfnet_officeAddress {
+            font-size: 1.2em;
+            color: #bbb;
+        }
+
+    }
+
+    &.wolfnet_agentsList {
+
+        h2 {
+            margin-top: 0;
+            text-transform: uppercase;
+        }
+
+        .wolfnet_viewAll {
+            margin-bottom: 10px;
+        }
+
+        .wolfnet_noResults {
+            margin-top: 30px;
+        }
+
+        .wolfnet_agentSearch {
+            width: 500px;
+            margin-bottom: 10px;
+
+            input {
+                float: left;
+            }
+
+            .wolfnet_agentCriteria {
+                width: 280px;
+                margin-right: 10px;
+            }
+        }
+
+        .wolfnet_agentPreview {
+            float: left;
+            border: 1px solid #ccc;
+            margin: 10px 10px 0 0;
+            padding-right: 10px;
+            width: 280px;
+        }
+
+        .wolfnet_agentImage {
+            float: left;
+            margin: 8px;
+        }
+
+        .wolfnet_agentInfo {
+            float: right;
+            width: 170px;
+            font-size: .75em;
+
+            .wolfnet_agentName {
+                font-weight: bold;
+                font-size: 1.1em;
+            }
+
+        }
+
+    }
+
+    &.wolfnet_agentShow {
+        width: 100%;
+
+        h2 {
+            margin-top: 0;
+        }
+
+        .wolfnet_viewAll,
+        .wolfnet_back {
+            margin-bottom: 30px;
+        }
+
+        .wolfnet_agentImage {
+            float: left;
+            margin-right: 20px;
+            width: 200px;
+        }
+
+        .wolfnet_agentInfo {
+            float: right;
+            width: 50%;
+
+            .wolfnet_agentName {
+                font-weight: bold;
+                font-size: 1.2em;
+                /* These next two lines are some stupid crap they wanted so the
+                text lines up with the top of the agent image... If it breaks
+                later, well... */
+                line-height:.7em;
+                padding-bottom:10px;
+            }
+
+            .wolfnet_agentTitle {
+                font-weight: bold;
+                font-size: 1.2em;
+            }
+
+        }
+
+        .wolfnet_agentBio {
+            clear: both;
+            padding-top: 20px;
+
+            .wolfnet_agentLinks {
+                padding-bottom: 10px;
+                list-style: none;
+            }
+
+            .wolfnet_agentSection {
+                padding: 10px 0;
+            }
+
+        }
+
+    }
+
+    .wolfnet_agentPagination {
+        list-style: none;
+        clear: both;
+
+        li {
+            display: inline-block;
+            margin-right: 10px;
+
+            .wolfnet_selected {
+                font-weight: bold;
+            }
+
+        }
+
+    }
+
+    &.wolfnet_contactAgent,
+    &.wolfnet_contactOffice {
+        width: 100%;
+
+        .wolfnet_contactThanks {
+            width: 600px;
+            border: 1px solid #ccc;
+            text-align: center;
+            margin-top: 20px;
+            padding: 20px 0;
+        }
+
+        .wolfnet_agentPreview {
+            border: 1px solid #ccc;
+            padding: 6px;
+
+            .wolfnet_agentImage {
+                float: left;
+                margin: 8px;
+            }
+
+            .wolfnet_agentInfo {
+                float: left;
+                margin-left: 10px;
+                width: 60%;
+            }
+
+        }
+
+        .wolfnet_officePreview {
+            border: 1px solid #ccc;
+            padding: 6px;
+            text-align: center;
+
+            .wolfnet_officeName {
+                font-weight: bold;
+            }
+
+        }
+
+        .wolfnet_contactForm {
+            padding-top: 16px;
+
+            label {
+                display: block;
+                padding-top: 16px;
+            }
+
+            .wolfnet_red {
+                color: red;
+            }
+
+            .wolfnet_errorMessage {
+                font-size: .9em;
+            }
+
+            #wolfnet_submit {
+                margin-top: 16px;
+            }
+
+            .wolfnet_required {
+                border: 1px solid red;
+            }
+        }
+
+    }
+
+}
+
+.widget_wolfnet_agentpageswidget {
+    .wolfnet_widget {
+        .wolfnet_agentSearch {
+            width: inherit;
+
+            .wolfnet_agentSearchButton {
+                float: left;
+                margin-top: 4px;
+            }
+        }
+
+        .wolfnet_agent {
+            .wolfnet_agentInfo {
+                float: left;
+                width: inherit;
+                margin-top: 10px;
+            }
+        }
+
+        &.wolfnet_contactAgent {
+            .wolfnet_agentPreview {
+                .wolfnet_agentInfo {
+                    width: 100% !important;
+                }
+            }
+        }
+    }
+}

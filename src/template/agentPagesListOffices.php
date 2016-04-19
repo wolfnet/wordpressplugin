@@ -36,8 +36,9 @@ if(strlen($officetitle) > 0) {
 }
 ?>
 
-<div class="wolfnet_viewAll">
-	<a href="?search#post-<?php echo get_the_id(); ?>">Click here</a> to view all agents and staff.
+<div class="wolfnet_agentOfficeView">
+	<a href="?search#post-<?php echo get_the_id(); ?>">Agents</a>
+	<span class="selected">Offices</span>
 </div>
 
 <form name="wolfnet_agentSearch" class="wolfnet_agentSearch" method="POST" 
@@ -71,62 +72,64 @@ foreach($offices as $office) {
 	<div class="wolfnet_officePreview">
 		<?php 
 			echo '<div class="wolfnet_officeImage">';
-			if(strlen($office['photo_url']) > 0) {
+			if(strlen($office['medium_url']) > 0) {
 				echo '<a href="' . $officeLink . '">';
-				echo "<img src=\"{$office['photo_url']}\" />";
+				echo "<img src=\"{$office['medium_url']}\" />";
 				echo '</a>';
 			}
 			echo '</div>'; 
 		?>
 
-		<div class="wolfnet_officeContact">
-			<div class="wolfnet_officeName">
+		<div class="wolfnet_officeData">
+			<div class="wolfnet_officeContact">
+				<div class="wolfnet_officeName">
+					<?php 
+						echo '<a href="' . $officeLink . '">';
+						echo $office['name'];
+						echo '</a>';
+					?>
+				</div>
+
+				<hr class="wolfnet_officeRule">
+
 				<?php 
-					echo '<a href="' . $officeLink . '">';
-					echo $office['name'];
-					echo '</a>';
+				if(strlen($office['address_1']) > 0) {
+					echo '<div class="wolfnet_officeAddress">';
+					echo $office['address_1'] . ' ' . $office['address_2'];
+					echo '<br>';
+					echo $office['city'] . ', ' . $office['state'] . ' ';
+					echo $office ['postal_code'];
+					echo '</div>';
+				}
 				?>
-			</div>
+			</div> <?php // wolfnet_officeContact ?>
 
-			<?php 
-			if(strlen($office['address_1']) > 0) {
-				echo '<div class="wolfnet_officeAddress">';
-				echo $office['address_1'] . ' ' . $office['address_2'];
-				echo '<br>';
-				echo $office['city'] . ', ' . $office['state'] . ' ';
-				echo $office ['postal_code'];
-				echo '</div>';
-			}
-			if(strlen($office['phone_number']) > 0) {
-				echo '<div class="wolfnet_officePhone">';
-				echo "Phone: " . $office['phone_number'];
-				echo '</div>';
-			}
+			<ul class="wolfnet_officeLinks">
 
-			if(strlen($office['fax_number']) > 0) {
-				echo '<div class="wolfnet_officeFax">';
-				echo "Fax: " . $office['fax_number'];
-				echo '</div>';
-			}
-			?>
-		</div>
+				<?php
+				if(strlen($office['phone_number']) > 0) {
+					echo '<li class="wolfnet_officePhone">' . $office['phone_number'] . '</li>';
+				}
 
-		<div class="wolfnet_clearfix"></div>
+				if(strlen($office['fax_number']) > 0) {
+					echo '<li class="wolfnet_officeFax">' . $office['fax_number'] . '</li>';
+				}
+				?>
 
-		<div class="wolfnet_officeLinks">
-			<div class="wolfnet_officeLinkLeft">
-				<a href="<?php echo $officeLink; ?>">Meet Our Agents</a>
-			</div>
-			<div class="wolfnet_officeLink">
-				<a href="<?php echo $searchResultLink; ?>">Our Featured Listings</a>
-			</div>
-			<div class="wolfnet_officeLinkLeft">
-				<a href="<?php echo $searchLink; ?>">Search All Area<br />Listings</a>
-			</div>
-			<div class="wolfnet_officeLink">
-				<a href="<?php echo $contactLink; ?>">Contact Us</a>
-			</div>
-		</div>
+				<div class="wolfnet_officeLinkLeft">
+					<a href="<?php echo $officeLink; ?>">Meet Our Agents</a>
+				</div>
+				<div class="wolfnet_officeLink">
+					<a href="<?php echo $searchResultLink; ?>">Our Featured Listings</a>
+				</div>
+				<div class="wolfnet_officeLinkLeft">
+					<a href="<?php echo $searchLink; ?>">Search All Area<br />Listings</a>
+				</div>
+				<div class="wolfnet_officeLink">
+					<a href="<?php echo $contactLink; ?>">Contact Us</a>
+				</div>
+			</ul>
+		</div> <?php // wolfnet_officeData ?>
 	</div>
 
 <?php
