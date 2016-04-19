@@ -19,6 +19,14 @@
 
         <p>Select the appearance of the widgets.</p>
 
+        <div class="notice notice-warning below-h2" style="clear: both;">
+            <p>
+                Updating to the 'Modern' widget theme may cause display conflicts on your website.
+                If you experience any conflicts, switch back to the 'Classic' widget theme
+                and contact your web developer to correct these issues.
+            </p>
+        </div>
+
         <fieldset>
             <legend class="screen-reader-text"><span>Widget Theme</span></legend>
             <div class="wolfnet_widget_themes">
@@ -55,14 +63,6 @@
             <?php } ?>
             </div>
         </fieldset>
-
-        <div class="notice notice-warning below-h2" style="clear: both;">
-            <p>
-                Updating to the 'Modern' widget theme may cause display conflicts on your website.
-                If you experience any conflicts, switch back to the 'Classic' widget theme
-                and contact your web developer to correct these issues.
-            </p>
-        </div>
 
     </form>
 
