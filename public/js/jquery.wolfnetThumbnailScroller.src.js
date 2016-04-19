@@ -247,9 +247,6 @@ if (typeof jQuery !== 'undefined') {
                         var $this = $(this);
                         var options = methods['private'].options($this);
 
-                        // Item resize-handling
-                        $this.on('wntResizeItem', methods['private'].eventHandler.itemResize);
-
                         if ((typeof wolfnet !== 'undefined') && (wolfnet.hasFeature('touch'))) {
                             $this.addClass('has-swipe').wolfnetSwipe({
                                 direction: 'horizontal'
@@ -371,51 +368,6 @@ if (typeof jQuery !== 'undefined') {
 
                 },
 
-                resizeControls: function ($thumbnails, newWidth) {
-                    var $controls = methods['private'].controls($thumbnails);
-
-                    $controls.each(function () {
-                        var $control = $(this);
-                        var options = methods['private'].options($thumbnails);
-
-                        if (!options.resizing) {
-
-                            options.resizing = true;
-
-                            var isLeft = $control.is('.' + options.prevBtnClass);
-
-                            // Constrain the new width to the limits of the control
-                            newWidth = Math.min(Math.max(newWidth, options.controlMinWidth), options.controlWidth);
-
-                            if ($control.width() != newWidth) {
-
-                                var newPosition = Math.max(
-                                    newWidth,
-                                    Math.floor(
-                                        (newWidth - options.controlMinWidth) / options.controlMinWidth *
-                                        (options.controlWidth - options.controlMinWidthOffset) +
-                                        options.controlMinWidthOffset
-                                    )
-                                );
-
-                                $control.width(newWidth);
-
-                                if (isLeft) {
-                                    $control.css('left', '-' + newPosition + 'px');
-                                } else {
-                                    $control.css('right', '-' + newPosition + 'px');
-                                }
-
-                            }
-
-                            options.resizing = false;
-
-                        }
-
-                    });
-
-                },
-
                 controls: function ($thumbnails) {
 
                     if ($thumbnails.length > 1) {
@@ -504,27 +456,6 @@ if (typeof jQuery !== 'undefined') {
                         }
 
                         return false; // We don't want any other click event being triggered.
-
-                    },
-
-                    itemResize: function () {
-                        var $this = $(this);
-                        var options = methods['private'].options($this);
-
-                        clearTimeout(options.resizeTimeout);
-                        options.resizeTimeout = setTimeout(function () {
-
-                            if (options.controlWidth > options.controlMinWidth) {
-
-                                var newWidth = Math.floor(
-                                    (($this.outerWidth(true) - $this.find(options.photoSelector).width()) / 2)
-                                );
-
-                                methods['private'].resizeControls($this, newWidth);
-
-                            }
-
-                        }, 500);
 
                     }
 

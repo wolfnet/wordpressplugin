@@ -339,7 +339,7 @@ class Wolfnet_Views
     }
 
 
-    public function agentView(array $args = array()) 
+    public function agentView(array $args = array())
     {
         foreach ($args as $key => $item) {
             $args[$key] = apply_filters('wolfnet_agentPagesView_' . $key, $item);
@@ -349,7 +349,7 @@ class Wolfnet_Views
     }
 
 
-    public function agentContact(array $args = array()) 
+    public function agentContact(array $args = array())
     {
         foreach ($args as $key => $item) {
             $args[$key] = apply_filters('wolfnet_agentPagesView_' . $key, $item);
@@ -428,19 +428,34 @@ class Wolfnet_Views
     }
 
 
-    public function quickSearchView(array $args = array())
-    {
-        // array containing possible values for 'view' arg
-        $views = array('basic', 'legacy');
+	public function quickSearchView(array $args = array())
+	{
 
-        //set up a custom css class for the wrapper. default 'wolfnet_quickSearch_legacy'
-        $args['viewclass'] = 'wolfnet_quickSearch_' . (in_array($args['view'], $views) ? $args['view'] : 'legacy');
+		// array containing possible values for 'view' arg
+		$views = array('basic', 'legacy');
 
-        foreach ($args as $key => $item) {
-            $args[$key] = apply_filters('wolfnet_quickSearchView_' . $key, $item);
-        }
+		//set up a custom css class for the wrapper. default 'wolfnet_quickSearch_legacy'
+		$args['viewclass'] = 'wolfnet_quickSearch_' . (in_array($args['view'], $views) ? $args['view'] : 'legacy');
 
-        return apply_filters('wolfnet_quickSearchView', $this->parseTemplate('quickSearch', $args));
+		foreach ($args as $key => $item) {
+			$args[$key] = apply_filters('wolfnet_quickSearchView_' . $key, $item);
+		}
+
+		return apply_filters(
+			'wolfnet_quickSearchView',
+			$this->parseTemplate('quickSearch', $args)
+		);
+
+	}
+
+
+    public function smartSearchView(array $args = array()) {
+        $args['smartsearchInput'] = uniqid('wolfnet_smartsearch_');
+
+        return apply_filters(
+            'wolfnet_smartSearchView',
+            $this->parseTemplate('smartSearch', $args)
+        );
 
     }
 
@@ -500,7 +515,8 @@ class Wolfnet_Views
 
     private function parseTemplate($template, array $vars = array())
     {
-        $vars['widgetThemeClass'] = 'wolfnet-theme-' . $this->getWidgetTheme();
+        $vars['widgetThemeName'] = $this->getWidgetTheme();
+        $vars['widgetThemeClass'] = 'wolfnet-theme-' . $vars['widgetThemeName'];
 
         extract($vars, EXTR_OVERWRITE);
 

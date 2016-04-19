@@ -262,16 +262,19 @@ class Wolfnet_Data
             return $this->plugin->getWpError($data);
         }
 
-
         $args['mapParams'] = array(
-    		'mapProvider'  => 'mapquest',
-    		'centerLat'    => $data['responseData']['data']['market']['maptracks']['map_start_lat'],
-			'centerLng'    => $data['responseData']['data']['market']['maptracks']['map_start_lng'],
-			'zoomLevel'    => $data['responseData']['data']['market']['maptracks']['map_start_scale'],
-			'houseoverIcon'=> $GLOBALS['wolfnet']->url . 'img/houseover.png',
-			'mapId'        => 'wntMapTrack' . $this->plugin->createUUID(),
-			'hideMapId'    => 'hideMap' . $this->plugin->createUUID(),
-			'showMapId'    => 'showMap' . $this->plugin->createUUID(),
+            'mapProvider'  => 'mapquest',
+            'centerLat'    => $data['responseData']['data']['market']['maptracks']['map_start_lat'],
+            'centerLng'    => $data['responseData']['data']['market']['maptracks']['map_start_lng'],
+            'zoomLevel'    => $data['responseData']['data']['market']['maptracks']['map_start_scale'],
+            'houseoverIcon'=> $GLOBALS['wolfnet']->url . 'img/houseover.png',
+            'mapId'        => 'wntMapTrack' . $this->plugin->createUUID(),
+            'hideMapId'    => 'hideMap' . $this->plugin->createUUID(),
+            'showMapId'    => 'showMap' . $this->plugin->createUUID(),
+            'tlBoundLng'   => $data['responseData']['data']['market']['maptracks']['bounds_tl_lng'],
+            'brBoundLat'   => $data['responseData']['data']['market']['maptracks']['bounds_br_lat'],
+            'tlBoundLat'   => $data['responseData']['data']['market']['maptracks']['bounds_tl_lat'],
+            'brBoundLng'   => $data['responseData']['data']['market']['maptracks']['bounds_br_lng'],
 		);
 
         $args['houseoverData'] = $this->getHouseoverData(
