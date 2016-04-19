@@ -30,11 +30,33 @@
 // -------------------------------------------- //
 
 
-//== Colors
+//== WordPress Admin Colors
 
-@gray-light:    lighten(#000, 80%);   // #ccc
-@gray-lighter:  lighten(#000, 86.7%); // #ddd
-@gray-lightest: lighten(#000, 93.3%); // #eee
+@wp-blues:               #0073aa;
+@wp-blues-light:         #00a0d2;
+@wp-blues-lighter:       #00b9eb;
+
+@wp-grays-darkest:       #191e23;
+@wp-grays-darker:        #23282d;
+@wp-grays-dark:          #32373c;
+@wp-grays:               #464b50;
+@wp-grays-light:         #82878c;
+@wp-grays-lighter:       #a0a5aa;
+@wp-grays-lightest:      #b4b9be;
+
+
+//== Custom Colors
+
+@gray-darker:   @wp-grays-darkest;
+@gray-dark:     @wp-grays-darker;
+@gray:          @wp-grays-darker;
+@gray-light:    @wp-grays-light;
+@gray-lighter:  @wp-grays-lightest;
+@gray-lightest: lighten(@wp-grays-lightest, 15%); // #eee
+
+@brand-primary: @wp-blues;
+@brand-success: #1eaa00;
+@brand-danger:  #d54e21;
 
 @brand-primary: #0073aa;
 @brand-success: #1eaa00;
@@ -164,30 +186,21 @@ html {
     .wolfnet_widget_theme {
         float: left;
         margin: 0 1em 1em 0;
-        border: 1px solid @gray-light;
-        border-radius: 0.5em;
-        background-color: @gray-lighter;
+        background-color: @gray-lightest;
+        transition-property: border-color, background-color;
+        transition-duration: 0.2s;
+        transition-timing-function: ease-in-out;
+        box-sizing: border-box;
 
-        &:hover,
-        &:active {
-            border-color: @gray-lighter;
-            background-color: @gray-lightest;
-        }
-
-        &.wolfnet_widget_theme_active {
-            border-color: darken(@brand-primary, 5%);
-
-            .wolfnet_widget_theme_label {
-                background-color: @brand-primary;
-                color: #fff;
-            }
+        .wolfnet_widget_theme_thumb,
+        .wolfnet_widget_theme_info {
+            border: 1px solid @gray-lightest;
         }
 
         .wolfnet_widget_theme_thumb {
             height: 290px;
             padding: 0.75em;
-            border-top-left-radius: 0.5em;
-            border-top-right-radius: 0.5em;
+            border-bottom: none;
 
             img {
                 box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.25);
@@ -195,11 +208,52 @@ html {
 
         }
 
-        .wolfnet_widget_theme_label {
+        .wolfnet_widget_theme_info {
+            position: relative;
             background-color: #fff;
             padding: 0.75em;
-            border-bottom-left-radius: 0.5em;
-            border-bottom-right-radius: 0.5em;
+            border-top: none;
+
+            .wolfnet_widget_theme_label {
+                font-size: 1.15em;
+            }
+
+            .wolfnet_widget_theme_actions {
+                position: absolute;
+                top: 0;
+                right: 0;
+                padding: 0.4em;
+            }
+
+        }
+
+        &.wolfnet_widget_theme_active {
+
+            .wolfnet_widget_theme_info {
+                border-color: @gray-dark;
+                background-color: @gray-dark;
+
+                .wolfnet_widget_theme_label {
+                    color: #fff;
+
+                    .wolfnet_widget_theme_flag {
+                        font-weight: bold;
+                    }
+
+                }
+
+            }
+
+        }
+
+        &:hover,
+        &:active {
+            background-color: lighten(@gray-lightest, 10%);
+        }
+
+        &:focus {
+            border-color: fade(@wp-blues-light, 80%);
+            box-shadow: 0 0 2px fade(@wp-blues-light, 80%);
         }
 
     }
