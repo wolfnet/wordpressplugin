@@ -167,20 +167,17 @@
         this.setMapBindings = function () {
             $bindingFields.centerLat.val(mapquestMap.getCenter().lat);
             $bindingFields.centerLng.val(mapquestMap.getCenter().lng);
-            $bindingFields.mapType.val(mapquestMap.getCurrentMapType().id);
             $bindingFields.lrLat.val(mapquestMap.getBounds().lr.lat);
             $bindingFields.lrLng.val(mapquestMap.getBounds().lr.lng);
             $bindingFields.ulLat.val(mapquestMap.getBounds().ul.lat);
             $bindingFields.ulLng.val(mapquestMap.getBounds().ul.lng);
-            $bindingFields.zoom.val(map.getZoomLevel());
+
             $bindingFields.centerLat.change();
             $bindingFields.centerLng.change();
-            $bindingFields.mapType.change();
             $bindingFields.lrLat.change();
             $bindingFields.lrLng.change();
             $bindingFields.ulLat.change();
             $bindingFields.ulLng.change();
-            $bindingFields.zoom.change();
         };
 
         this.setupMouseControls = function () {
@@ -2686,12 +2683,20 @@
                         houseoverData[i].propertyUrl
                     );
 
-                    // Pin houseover poi to map
-                    wntMap.addPoi(houseover);
+                    var boundsBuffer = 50;
+
+                    if (
+                        (lat >= (wntMap.getBounds().lr.lat - boundsBuffer) &&
+                        lat <= (wntMap.getBounds().ul.lat + boundsBuffer)) &&
+                        (lng >=  (wntMap.getBounds().lr.lng - boundsBuffer) &&
+                        lng <= (wntMap.getBounds().ul.lng + boundsBuffer))
+                    ) {
+                        // Pin houseover poi to map
+                        wntMap.addPoi(houseover);
+                    }
 
                 }
             }
-
 
         },
 

@@ -2,7 +2,7 @@
  * CSS Document
  *
  * @package       css
- * @title         wolfnet.bismuth.less
+ * @title         wolfnet.birch.less
  * @copyright     Copyright (c) 2016 WolfNet Technologies, LLC
  *
  *                This program is free software; you can redistribute it and/or
@@ -32,13 +32,21 @@
 
 //== Listing dimensions
 
-@listingWidth:          312px;
-@listingWidthSm:        270px;
-@listingWidthXs:        230px;
-@listingHeight:         auto;
+@listingImgRatio:       4 / 3;
+@listingImgWidth:       272px;
+@listingImgWidthSm:     round(@listingImgWidth * 0.85);  // ~270
+@listingImgWidthXs:     round(@listingImgWidth * 0.714); // ~230
+@listingImgHeight:      round(@listingImgWidth   / @listingImgRatio); // ~200
+@listingImgHeightSm:    round(@listingImgWidthSm / @listingImgRatio); // ~173
+@listingImgHeightXs:    round(@listingImgWidthXs / @listingImgRatio); // ~148
 @listingPadding:        20px;
-@listingImgWidth:       (@listingWidth - (@listingPadding * 2));
-@listingImgHeight:      200px;
+@listingWidth:          @listingImgWidth   + (@listingPadding * 2);
+@listingWidthSm:        @listingImgWidthSm + (@listingPadding * 2);
+@listingWidthXs:        @listingImgWidthXs + (@listingPadding * 2);
+@listingHeight:         auto;
+@brandingWidth:         100px;
+@listingLocationWidth:  (@listingImgWidth - @brandingWidth);
+
 @brandingWidth:         100px;
 @listingLocationWidth:  (@listingImgWidth - @brandingWidth);
 
@@ -63,6 +71,7 @@
         height: auto !important;
 
         .wolfnet_listing {
+            margin: 0 0 10px 0;
             // TODO: Remove these 2 rules if BrandCo stops targeting our class names:
             width:  auto !important;
             height: @listingHeight !important;
@@ -148,9 +157,9 @@
                     max-width: @listingImgWidth;
 
                     img {
-                        height:    auto;
-                        max-height: @listingImgHeight;
-                        border:    none;
+                        width: 100%;
+                        height: auto;
+                        border: none;
                     }
 
                 }
@@ -229,14 +238,15 @@
             }
 
             .wolfnet_locationInfo {
-                margin: 0 @listingPadding 0 @listingPadding;
+                margin: 0 0 0 @listingPadding;
                 float: left;
 
-                span {
-                    text-align: left !important;
+                .wolfnet_locationPart {
                     max-width: @listingLocationWidth;
+                    white-space: nowrap;
                     overflow: hidden;
                     text-overflow: ellipsis;
+                    text-align: left !important;
                 }
             }
 
@@ -244,9 +254,9 @@
                 float: right;
                 max-width: @brandingWidth;
                 margin-right: @listingPadding;
+                font-size: 0.86em;
 
                 .wolfnet_brokerLogo img {
-                    max-height: 35px;
                 }
 
             }
@@ -271,22 +281,24 @@
 
             &.wolfnet_listing_sm {
                 width: @listingWidthSm;
+
+                .wolfnet_listingHead {
+                    height: @listingImgHeightSm;
+                }
+
             }
 
             &.wolfnet_listing_xs {
                 width: @listingWidthXs;
+
+                .wolfnet_listingHead {
+                    height: @listingImgHeightXs;
+                }
+
             }
 
         }
 
-    }
-
-    &.wolfnet_featuredListings .wolfnet_listing {
-        margin: 0 0 10px 0;
-    }
-
-    &.wolfnet_listingGrid .wolfnet_listing .wolfnet_branding {
-        font-size: 1em;
     }
 
     &.wolfnet_listingGrid,

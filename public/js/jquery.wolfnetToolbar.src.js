@@ -326,12 +326,12 @@
             $brokerLogo.show().find('img').first().attr('src', listing.branding.logo);
         }
 
-        $branding.find('wolfnet_brandingCourtesyText').html(listing.branding.courtesy_text);
-        $branding.find('wolfnet_brandingAgent .wolfnet_brandingAgentName').html(listing.branding.agent_name);
-        $branding.find('wolfnet_brandingAgent .wolfnet_brandingAgentPhone').html(listing.branding.agent_phone);
-        $branding.find('wolfnet_brandingOffice .wolfnet_brandingOfficeName').html(listing.branding.office_name);
-        $branding.find('wolfnet_brandingOffice .wolfnet_brandingOfficePhone').html(listing.branding.office_phone);
-        $branding.find('wolfnet_brandingTollFreePhone').html(listing.branding.toll_free_phone);
+        $branding.find('.wolfnet_brandingCourtesyText').html(listing.branding.courtesy_text);
+        $branding.find('.wolfnet_brandingAgent.wolfnet_brandingAgentName').html(listing.branding.agent_name);
+        $branding.find('.wolfnet_brandingAgent.wolfnet_brandingAgentPhone').html(listing.branding.agent_phone);
+        $branding.find('.wolfnet_brandingOffice.wolfnet_brandingOfficeName').html(listing.branding.office_name);
+        $branding.find('.wolfnet_brandingOffice.wolfnet_brandingOfficePhone').html(listing.branding.office_phone);
+        $branding.find('.wolfnet_brandingTollFreePhone').html(listing.branding.toll_free_phone);
 
         return $listing;
 
@@ -348,11 +348,29 @@
 
         componentMap.removeAllShapes();
 
+
         for (var i=0, l=listingsData.length; i<l; i++) {
             var houseoverHtml = templates.hasOwnProperty('map') ? renderListing(listingsData[i], templates['map']).get(0) : '';
-            var houseoverIcon = componentMap.mapIcon(houseIcon, 20, 20);
-            var houseover = componentMap.poi(listingsData[i].geo.lat, listingsData[i].geo.lng, houseoverIcon, houseoverHtml, listingsData[i].property_id, listingsData[i].property_url);
-            componentMap.addPoi(houseover);
+
+            if (
+                ((listingsData[i].geo.lat !== 0) || (listingsData[i].geo.lng !== 0)) &&
+                (!isNaN(listingsData[i].geo.lat) || !isNaN(listingsData[i].geo.lng)) &&
+                (listingsData[i].geo.lat !== '' || listingsData[i].geo.lng !== '') &&
+                ((listingsData[i].geo.lat >= -180) && (listingsData[i].geo.lat <= 180)) &&
+                ((listingsData[i].geo.lng >= -180) && (listingsData[i].geo.lng <= 180))
+            ) {
+                var houseoverIcon = componentMap.mapIcon(houseIcon, 20, 20);
+                var houseover = componentMap.poi(listingsData[i].geo.lat, listingsData[i].geo.lng, houseoverIcon, houseoverHtml, listingsData[i].property_id, listingsData[i].property_url);
+                var boundsBuffer = 50;
+                if (
+                    (listingsData[i].geo.lat >= (componentMap.getBounds().lr.lat - boundsBuffer) &&
+                    listingsData[i].geo.lat <= (componentMap.getBounds().ul.lat + boundsBuffer)) &&
+                    (listingsData[i].geo.lng >=  (componentMap.getBounds().lr.lng - boundsBuffer) &&
+                    listingsData[i].geo.lng <= (componentMap.getBounds().ul.lng + boundsBuffer))
+                ){
+                    componentMap.addPoi(houseover);
+                }
+            }
         }
 
         componentMap.bestFit();

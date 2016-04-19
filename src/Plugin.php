@@ -162,6 +162,7 @@ class Wolfnet_Plugin
         $this->listingGrid = $this->ioc->get('Wolfnet_Module_ListingGrid');
         $this->propertyList = $this->ioc->get('Wolfnet_Module_PropertyList');
         $this->quickSearch = $this->ioc->get('Wolfnet_Module_QuickSearch');
+        $this->smartSearch = $this->ioc->get('Wolfnet_Module_SmartSearch');
         $this->searchManager = $this->ioc->get('Wolfnet_Module_SearchManager');
 
         if(is_admin()) {
@@ -699,7 +700,7 @@ class Wolfnet_Plugin
     /*
      * Shortcode helper functions for registering in registerShortCodes above.
      */
-    public function scAgentPages($attrs) 
+    public function scAgentPages($attrs)
     {
         return $this->agentPages->scAgentPages($attrs);
     }
@@ -719,8 +720,16 @@ class Wolfnet_Plugin
         return $this->propertyList->scPropertyList($attrs);
     }
 
-    public function scQuickSearch($attrs, $content = '') 
+    public function scQuickSearch($attrs, $content = '')
     {
-        return $this->quickSearch->scQuickSearch($attrs, $content);
+        // Route to smart search module, if user opted for smart functionality
+        $isSmart = isset($attrs['smartsearch']) ? $attrs['smartsearch'] : false;
+
+        if ($isSmart === 'true') {
+            return $this->smartSearch->scSmartSearch($attrs, $content);
+        } else {
+            return $this->quickSearch->scQuickSearch($attrs, $content);
+        }
     }
+
 }

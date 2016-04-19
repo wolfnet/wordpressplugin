@@ -124,13 +124,9 @@ class Wolfnet_Listings
 
         }
 
+
         if (array_key_exists('exact_city', $criteria)) {
             $hasCity = array_key_exists('city', $criteria);
-
-            // If multiple cities were selected we must set "exact_city" to false
-            if ($hasCity && count(explode(',', trim($criteria['city']))) > 1) {
-                $criteria['exact_city'] = 0;
-            }
 
             if ($criteria['exact_city'] === null || trim($criteria['exact_city']) === '') {
                 unset($criteria['exact_city']);
@@ -288,8 +284,14 @@ class Wolfnet_Listings
 
         // loop over listings
         foreach ($listingsData as &$listing) {
-            if (is_numeric($listing['listing_price'])) {
+
+            // If sold_price is empty, use listing_price
+            if (empty($listing['sold_price'])) {
                 $listing['listing_price'] = '$' . number_format($listing['listing_price']);
+
+            // If sold_price is populated, use that
+            } else {
+                $listing['listing_price'] = '$' . number_format($listing['sold_price']);
             }
 
             if ($show_logo && empty($listing['branding']['logo'])&& !empty($br_logo_url)) {
