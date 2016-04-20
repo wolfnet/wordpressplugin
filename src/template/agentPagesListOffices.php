@@ -100,6 +100,8 @@ foreach($offices as $office) {
 					echo $office['city'] . ', ' . $office['state'] . ' ';
 					echo $office ['postal_code'];
 					echo '</div>';
+				} else {
+					echo '<div class="wolfnet_officeAddress">&nbsp;<br>&nbsp;</div>';
 				}
 				?>
 			</div> <?php // wolfnet_officeContact ?>
@@ -107,28 +109,41 @@ foreach($offices as $office) {
 			<ul class="wolfnet_officeLinks">
 
 				<?php
+				$extraSpace = '';
+
 				if(strlen($office['phone_number']) > 0) {
-					echo '<li class="wolfnet_officePhone">' . $office['phone_number'] . '</li>';
+					echo '<li><span class="wnt-icon wnt-icon-phone"></span> ';
+					echo $office['phone_number'] . '</li>';
+				} else {
+					$extraSpace .= '<li>&nbsp;</li>';
 				}
 
 				if(strlen($office['fax_number']) > 0) {
-					echo '<li class="wolfnet_officeFax">' . $office['fax_number'] . '</li>';
+					echo '<li><span  class="wnt-icon wnt-icon-fax"></span> ';
+					echo $office['fax_number'] . '</li>';
+				} else {
+					$extraSpace .= '<li>&nbsp;</li>';
 				}
 				?>
+				
+				<li>
+					<span class="wnt-icon wnt-icon-mail3"></span>
+					<a href="<?php echo $contactLink; ?>"> Contact Us</a>
+				</li>
+				<li>
+					<span class="wnt-icon wnt-icon-location"></span>
+					<a href="<?php echo $searchLink; ?>"> Search All Area Listings</a>
+				</li>
 
-				<div class="wolfnet_officeLinkLeft">
-					<a href="<?php echo $officeLink; ?>">Meet Our Agents</a>
-				</div>
-				<div class="wolfnet_officeLink">
-					<a href="<?php echo $searchResultLink; ?>">Our Featured Listings</a>
-				</div>
-				<div class="wolfnet_officeLinkLeft">
-					<a href="<?php echo $searchLink; ?>">Search All Area<br />Listings</a>
-				</div>
-				<div class="wolfnet_officeLink">
-					<a href="<?php echo $contactLink; ?>">Contact Us</a>
-				</div>
+				<?php echo $extraSpace; ?>
 			</ul>
+
+			<div class="officeButton wolfnet_officeLinkLeft">
+				<a href="<?php echo $officeLink; ?>">Meet Our Agents</a>
+			</div>
+			<div class="officeButton wolfnet_officeLink">
+				<a href="<?php echo $searchResultLink; ?>">Featured Listings</a>
+			</div>
 		</div> <?php // wolfnet_officeData ?>
 	</div>
 
@@ -151,9 +166,6 @@ jQuery(function($) {
 				maxHeight<?php echo $instance_id; ?> = $(this).height();
 			}
 		});
-
-		// Increase height to account for absolute positioned links
-		maxHeight<?php echo $instance_id; ?> += 90;
 
 		$('#<?php echo $instance_id; ?> .wolfnet_officePreview').height(
 			maxHeight<?php echo $instance_id; ?>

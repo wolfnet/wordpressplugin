@@ -112,35 +112,56 @@
             font-size: .9em;
             float: left;
             border: 1px solid #ccc;
-            margin: 10px 10px 0 0;
-            width: 280px;
+            margin: 10px 16px 0 0;
+            width: 370px;
 
-            .wolfnet_officeLinks {
-                position: absolute;
-                bottom: 0;
-                left: 6px;
-                height: 80px;
-                width: 100%;
-                font-size: .75em !important;
+            ul.wolfnet_officeLinks {
+                margin: 6px 0 20px 0;
 
-                .wolfnet_officeLink {
-                    float: left;
-                    width: 50%;
-                    padding-bottom: 10px;
+                li {
+                    font-size: 1em;
+                    list-style: none;
+                    padding: 8px 0;
+
+                    .wnt-icon {
+                        margin-right: 6px;
+                        font-size: 1.2em;
+                    }
                 }
+            }
 
-                .wolfnet_officeLinkLeft {
-                    float: left;
-                    width: 46%;
-                    padding-bottom: 10px;
+            .officeButton {
+                display: block;
+                width: 48%;
+                text-align: center;
+                font-size: 1em;
+                text-transform: uppercase;
+                color: #fff;
+                margin-bottom: 10px;
+
+                a, a:link, a:hover {
+                    color: #fff;
+                    display: block;
+                    height: 100%;
+                    width: 100%;
+                    padding: 6px;
                 }
+            }
 
+            .wolfnet_officeLink {
+                float: right;
+                background: lightblue;
+            }
+
+            .wolfnet_officeLinkLeft {
+                float: left;
+                background: #ccc;
             }
         }
 
         .wolfnet_officeImage {
             float: none;
-            height: 250px;
+            height: 230px;
             overflow: hidden;
             text-align: center;
         }
@@ -156,7 +177,7 @@
 
         .wolfnet_officeName {
             font-weight: bold;
-            font-size: 1.5em;
+            font-size: 1.6em;
         }
 
         .wolfnet_officeRule {
@@ -165,7 +186,7 @@
         }
 
         .wolfnet_officeAddress {
-            font-size: 1.2em;
+            font-size: 1.4em;
             color: #bbb;
         }
 
