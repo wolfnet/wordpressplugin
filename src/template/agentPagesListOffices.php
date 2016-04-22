@@ -31,25 +31,31 @@ if(array_key_exists("REDIRECT_URL", $_SERVER)) {
 	$linkBase = $_SERVER['PHP_SELF'];
 }
 
-if(strlen($officetitle) > 0) {
-	echo '<h2>' . $officetitle . '</h2>';
-}
 ?>
 
-<div class="wolfnet_agentOfficeView">
-	<a href="?search#post-<?php echo get_the_id(); ?>">Agents</a>
-	<span class="selected">Offices</span>
+<div class="wolfnet_officeHeader">
+
+	<?php
+	if(strlen($officetitle) > 0) {
+		echo '<h2>' . $officetitle . '</h2>';
+	}
+	?>
+
+	<form name="wolfnet_agentSearch" class="wolfnet_agentSearch" method="POST" 
+		action="<?php echo $linkBase . "?search#post-" . get_the_id(); ?>">
+		<?php // No office ID as a hidden field. We want to search all offices ?>
+
+		<input type="text" name="agentCriteria" class="wolfnet_agentCriteria"
+			value="<?php echo (strlen($agentCriteria) > 0) ? $agentCriteria : ''; ?>" /> 
+		<!-- <input type="submit" name="agentSearch" class="wolfnet_agentSearchButton" value="Search" /> -->
+	</form>
+
+	<div class="wolfnet_agentOfficeView">
+		<div><a href="?search#post-<?php echo get_the_id(); ?>">Agents</a></div>
+		<div class="selected">Offices</div>
+	</div>
+
 </div>
-
-<form name="wolfnet_agentSearch" class="wolfnet_agentSearch" method="POST" 
-	action="<?php echo $linkBase . "?search#post-" . get_the_id(); ?>">
-	<?php // No office ID as a hidden field. We want to search all offices ?>
-
-	<input type="text" name="agentCriteria" class="wolfnet_agentCriteria"
-		value="<?php echo (strlen($agentCriteria) > 0) ? $agentCriteria : ''; ?>" /> 
-	<input type="submit" name="agentSearch" class="wolfnet_agentSearchButton" value="Search" />
-	<div class="wolfnet_clearfix"></div>
-</form>
 
 <?php
 
