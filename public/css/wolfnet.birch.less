@@ -44,9 +44,9 @@
 @listingImgHeightSm:    round(@listingImgWidthSm / @listingImgRatio); // ~173
 @listingImgHeightXs:    round(@listingImgWidthXs / @listingImgRatio); // ~146
 
-@listingWidth:          @listingImgWidth   + (@listingPadding * 2);
-@listingWidthSm:        @listingImgWidthSm + (@listingPadding * 2);
-@listingWidthXs:        @listingImgWidthXs + (@listingPadding * 2);
+@listingWidth:          @listingImgWidth;
+@listingWidthSm:        @listingImgWidthSm;
+@listingWidthXs:        @listingImgWidthXs;
 
 @listingHeight:         auto;
 
@@ -92,7 +92,7 @@
 
         .wolfnet_listing {
             height:     @listingHeight;
-            margin:     0;
+            margin:     0 @listingPadding 0 @listingPadding;
             padding:    0;
             color:      @gray-dark;
             // TODO: Remove if BrandCo stops targeting our class names:
@@ -112,39 +112,11 @@
 
             .wolfnet_listingMain {
                 background: none !important;
-                border-width: 0 1px 0 0;
-                border-style: solid;
-                border-color: transparent;
-                -moz-border-image: -moz-linear-gradient(
-                    top,
-                    transparent,
-                    transparent,
-                    @gray-lighter,
-                    transparent,
-                    transparent
-                );
-                -webkit-border-image: -webkit-gradient(
-                    linear, left top, left bottom,
-                    from(transparent),
-                    color-stop(25%, transparent),
-                    color-stop(50%, @gray-lighter),
-                    color-stop(75%, transparent),
-                    to(transparent)
-                );
-                border-image: linear-gradient(
-                    to bottom,
-                    transparent,
-                    transparent,
-                    @gray-lighter,
-                    transparent,
-                    transparent
-                );
-                border-image-slice: 1;
             }
 
             .wolfnet_listingHead {
                 position:   relative;
-                margin:     0 @listingPadding 5px @listingPadding;
+                margin-bottom: 5px;
                 padding:    0;
                 height:     @listingImgHeight;
                 text-align: left;
@@ -242,7 +214,6 @@
             }
 
             .wolfnet_locationInfo {
-                margin: 0 0 0 @listingPadding;
                 float: left;
 
                 .wolfnet_locationPart {
@@ -258,7 +229,6 @@
             .wolfnet_branding {
                 float: right;
                 max-width: @brandingWidth;
-                margin-right: @listingPadding;
                 font-size: 0.86em;
 
                 .wolfnet_brokerLogo img {
