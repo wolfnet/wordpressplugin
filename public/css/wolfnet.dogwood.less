@@ -33,20 +33,27 @@
 //== Listing dimensions
 
 @listingImgRatio:       4 / 3;
+
+@listingPadding:        8px;
+@infoPadding:           8px;
+
 @listingImgWidth:       272px;
 @listingImgWidthSm:     round(@listingImgWidth * 0.85);  // ~230
 @listingImgWidthXs:     round(@listingImgWidth * 0.714); // ~196
+
 @listingImgHeight:      round(@listingImgWidth   / @listingImgRatio); // ~219
 @listingImgHeightSm:    round(@listingImgWidthSm / @listingImgRatio); // ~173
 @listingImgHeightXs:    round(@listingImgWidthXs / @listingImgRatio); // ~146
+
 @listingWidth:          @listingImgWidth   + 2;
 @listingWidthSm:        @listingImgWidthSm + 2;
 @listingWidthXs:        @listingImgWidthXs + 2;
+
 @listingHeight:         auto;
-@listingPadding:        8px;
-@infoPadding:           8px;
-@brandingWidth:         100%;
+
 @listingLocationWidth:  100%;
+
+@brandingWidth:         100%;
 
 @control-width:         36px;
 @control-height:        36px;

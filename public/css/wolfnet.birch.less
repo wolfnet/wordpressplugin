@@ -33,17 +33,23 @@
 //== Listing dimensions
 
 @listingImgRatio:       4 / 3;
+
+@listingPadding:        20px;
+
 @listingImgWidth:       272px;
 @listingImgWidthSm:     round(@listingImgWidth * 0.85);  // ~270
 @listingImgWidthXs:     round(@listingImgWidth * 0.714); // ~230
+
 @listingImgHeight:      round(@listingImgWidth   / @listingImgRatio); // ~200
 @listingImgHeightSm:    round(@listingImgWidthSm / @listingImgRatio); // ~173
 @listingImgHeightXs:    round(@listingImgWidthXs / @listingImgRatio); // ~148
-@listingPadding:        20px;
+
 @listingWidth:          @listingImgWidth   + (@listingPadding * 2);
 @listingWidthSm:        @listingImgWidthSm + (@listingPadding * 2);
 @listingWidthXs:        @listingImgWidthXs + (@listingPadding * 2);
+
 @listingHeight:         auto;
+
 @listingLocationWidth:  (@listingImgWidth - @brandingWidth);
 
 @brandingWidth:         100px;
@@ -91,7 +97,7 @@
             text-align: left;
 
             a {
-                color:      @gray-dark;
+                color: @gray-dark;
                 // TODO: Remove if BrandCo stops targeting our class names:
                 font-weight: normal;
                 text-align: left;
@@ -136,8 +142,8 @@
             .wolfnet_listingHead {
                 position:   relative;
                 margin:     0 @listingPadding 5px @listingPadding;
-                padding:    0 0 0 0;
-                height: @listingImgHeight;
+                padding:    0;
+                height:     @listingImgHeight;
                 text-align: left;
                 color:      #fff;
                 border:     none;
@@ -146,10 +152,10 @@
                 background-size:     cover;
 
                 .wolfnet_listingImage {
-                    .vertical-align();
                     border: none;
-                    padding: 0 0 0 0;
+                    padding: 0;
                     max-width: @listingImgWidth;
+                    .vertical-align();
 
                     img {
                         width: 100%;
