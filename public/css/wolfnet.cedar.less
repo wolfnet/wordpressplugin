@@ -34,7 +34,7 @@
 
 @listingImgRatio:       4 / 3;
 
-@listingPadding:        8px;
+@listingPadding:        20px;
 @infoPadding:           6px;
 
 @listingImgWidth:       272px;
@@ -92,7 +92,7 @@
 
         .wolfnet_listing {
             height:     @listingHeight;
-            margin:     @listingPadding;
+            margin:     0 @listingPadding 0 0;
             padding:    0;
             color:      @gray-dark;
             font-family: 'Lato', 'Calibri', 'Carlito', sans-serif;
@@ -144,32 +144,11 @@
                     .wnt-thumbnail-scroller {
 
                         .wnt-nav-btn {
-                            top: 50%;
-                            width: @control-width;
-                            height: @control-height;
-                            background-color: @gray-light;
 
                             // Override BrandCo theme button styles
                             box-shadow: none;
                             -webkit-box-shadow: none;
                             border-radius: 0;
-
-                            .wnt-icon {
-                                font-size: 30px;
-                            }
-
-                            &.wnt-next {
-                                right: 0;
-                            }
-
-                            &.wnt-prev {
-                                left: 0;
-                            }
-
-                            &:hover,
-                            &:active {
-                                background-color: @accentColor;
-                            }
 
                         }
 
@@ -243,7 +222,6 @@
             }
 
             .wolfnet_locationInfo {
-                margin: 0;
                 padding: @infoPadding;
                 background-color: @gray-light;
                 color: #fff;
@@ -260,7 +238,6 @@
 
             .wolfnet_branding {
                 max-width: @brandingWidth;
-                margin: @listingPadding;
                 font-size: 0.86em;
                 color: @gray-light;
 
@@ -295,6 +272,7 @@
 
         .wolfnet_listing {
             width: @listingWidth;
+            margin: 0 @listingPadding 1em @listingPadding;
 
             &.wolfnet_listing_sm {
                 width: @listingWidthSm;

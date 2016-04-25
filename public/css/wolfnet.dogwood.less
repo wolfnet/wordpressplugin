@@ -34,7 +34,7 @@
 
 @listingImgRatio:       4 / 3;
 
-@listingPadding:        8px;
+@listingPadding:        20px;
 @infoPadding:           8px;
 
 @listingImgWidth:       272px;
@@ -45,9 +45,9 @@
 @listingImgHeightSm:    round(@listingImgWidthSm / @listingImgRatio); // ~173
 @listingImgHeightXs:    round(@listingImgWidthXs / @listingImgRatio); // ~146
 
-@listingWidth:          @listingImgWidth   + 2;
-@listingWidthSm:        @listingImgWidthSm + 2;
-@listingWidthXs:        @listingImgWidthXs + 2;
+@listingWidth:          @listingImgWidth;
+@listingWidthSm:        @listingImgWidthSm;
+@listingWidthXs:        @listingImgWidthXs;
 
 @listingHeight:         auto;
 
@@ -94,7 +94,7 @@
 
         .wolfnet_listing {
             height:     @listingHeight;
-            margin:     @listingPadding;
+            margin:     0 @listingPadding 0 0;
             padding:    0;
             color:      @gray-dark;
             border:     1px solid #ccc;
@@ -146,33 +146,11 @@
                     .wnt-thumbnail-scroller {
 
                         .wnt-nav-btn {
-                            top: 75%;
-                            width: @control-width;
-                            height: @control-height;
-                            background-color: fade(@gray-lighter, 80%);
 
                             // Override BrandCo theme button styles
                             box-shadow: none;
                             -webkit-box-shadow: none;
                             border-radius: 0;
-
-                            .wnt-icon {
-                                font-size: 30px;
-                            }
-
-                            &.wnt-next {
-                                right: 0;
-                            }
-
-                            &.wnt-prev {
-                                left: 0;
-                            }
-
-                            &:hover,
-                            &:active {
-                                background-color: fade(@accentColor, 80%);
-                                color: #fff;
-                            }
 
                         }
 
@@ -271,7 +249,7 @@
             }
 
             .wolfnet_locationInfo {
-                margin: @listingPadding;
+				padding: @infoPadding;
 
                 .wolfnet_locationPart {
                     max-width: @listingLocationWidth;
@@ -285,7 +263,6 @@
 
             .wolfnet_branding {
                 max-width: @brandingWidth;
-                margin: @listingPadding;
                 font-size: 0.86em;
                 color: @gray-light;
 
@@ -320,6 +297,7 @@
 
         .wolfnet_listing {
             width: @listingWidth;
+            margin: 0 @listingPadding 1em @listingPadding;
 
             &.wolfnet_listing_sm {
                 width: @listingWidthSm;
