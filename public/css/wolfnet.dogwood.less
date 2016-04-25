@@ -45,9 +45,9 @@
 @listingImgHeightSm:    round(@listingImgWidthSm / @listingImgRatio); // ~173
 @listingImgHeightXs:    round(@listingImgWidthXs / @listingImgRatio); // ~146
 
-@listingWidth:          @listingImgWidth   + (@listingPadding * 2);
-@listingWidthSm:        @listingImgWidthSm + (@listingPadding * 2);
-@listingWidthXs:        @listingImgWidthXs + (@listingPadding * 2);
+@listingWidth:          @listingImgWidth;
+@listingWidthSm:        @listingImgWidthSm;
+@listingWidthXs:        @listingImgWidthXs;
 
 @listingHeight:         auto;
 
@@ -94,7 +94,7 @@
 
         .wolfnet_listing {
             height:     @listingHeight;
-            margin:     0;
+            margin:     0 @listingPadding 0 0;
             padding:    0;
             color:      @gray-dark;
             border:     1px solid #ccc;
@@ -120,7 +120,7 @@
 
             .wolfnet_listingHead {
                 position:   relative;
-                margin:     0 @listingPadding 0 @listingPadding;
+                margin:     0;
                 padding:    0;
                 height:     @listingImgHeight;
                 text-align: center;
@@ -249,7 +249,6 @@
             }
 
             .wolfnet_locationInfo {
-                margin: 0 @listingPadding 0 @listingPadding;
 				padding: @infoPadding;
 
                 .wolfnet_locationPart {
@@ -264,7 +263,6 @@
 
             .wolfnet_branding {
                 max-width: @brandingWidth;
-                margin: 0 @listingPadding 0 @listingPadding;
                 font-size: 0.86em;
                 color: @gray-light;
 
@@ -299,7 +297,7 @@
 
         .wolfnet_listing {
             width: @listingWidth;
-            margin-bottom: 1em;
+            margin: 0 @listingPadding 1em @listingPadding;
 
             &.wolfnet_listing_sm {
                 width: @listingWidthSm;
