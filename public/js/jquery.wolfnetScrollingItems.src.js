@@ -49,6 +49,7 @@ if (typeof jQuery != 'undefined') {
             itemClass: 'item'
         };
 
+
         /**
          * Retrieve the "state" data for the supplied target element.
          *
@@ -60,6 +61,7 @@ if (typeof jQuery != 'undefined') {
         {
             return $(target).data(pluginName) || {};
         };
+
 
         /**
          * This function is responsible for clearing whitespace which otherwise causes spacing issues.
@@ -77,6 +79,7 @@ if (typeof jQuery != 'undefined') {
             }).remove();
 
         };
+
 
         /**
          * Ensures there are enough items within the container so that the animation is not jerky
@@ -106,6 +109,7 @@ if (typeof jQuery != 'undefined') {
 
         };
 
+
         /**
          * Retrieves all child elements which match a specific class.
          *
@@ -120,6 +124,7 @@ if (typeof jQuery != 'undefined') {
             return data.$itemContainer.children().filter('.' + data.option.itemClass);
 
         };
+
 
         /**
          * Establishes the next frame event for animation. This method will use the most efficient
@@ -157,6 +162,7 @@ if (typeof jQuery != 'undefined') {
 
         };
 
+
         /**
          * The callback which is executed for every animation frame. This method also determines
          * whether or not the animation should actually be performed.
@@ -186,6 +192,7 @@ if (typeof jQuery != 'undefined') {
             }
 
         };
+
 
         /**
          * Perform the actual animation. This function advances or retreats the "scroll" position of
@@ -232,6 +239,7 @@ if (typeof jQuery != 'undefined') {
             data.$itemContainer.scrollLeft(nextScroll);
 
         };
+
 
         /**
          * Determines whether or not animation should be performed.
@@ -293,6 +301,7 @@ if (typeof jQuery != 'undefined') {
             createButton(target, 'right').prependTo($target);
 
         };
+
 
         /**
          * Creates a control element for a specified direction and returns it. The new element is
