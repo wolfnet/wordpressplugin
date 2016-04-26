@@ -318,6 +318,7 @@ if (typeof jQuery != 'undefined') {
 
         };
 
+
         var methods = {
 
             /**
@@ -334,6 +335,19 @@ if (typeof jQuery != 'undefined') {
                     var target = this;
                     var $target = $(this);
 
+                    // Speed translation
+                    switch (options.speed) {
+                        case 'slow':
+                            options.speed = 1;
+                            break;
+                        case 'fast':
+                            options.speed = 4;
+                            break;
+                        default:
+                            // Defaulted to middle speed if slow or fast are unspecified
+                            options.speed = 2;
+                    }
+
                     $target.data(pluginName, {option:$.extend({}, defaultOptions, options)});
 
                     var data = getData(target);
@@ -344,9 +358,6 @@ if (typeof jQuery != 'undefined') {
                     if (!$target.hasClass(data.option.componentClass)) {
                         $target.addClass(data.option.componentClass);
                     }
-
-                    data.option.speed = Math.round(data.option.speed / 4);
-                    data.option.speed = (data.option.speed < 1) ? 1 : (data.option.speed > 5) ? 5 : data.option.speed;
 
                     removeWhitespaceBetweenTags(target);
                     data.itemWidth = getItems(target).first().outerWidth(true);
