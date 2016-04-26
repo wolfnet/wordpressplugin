@@ -249,6 +249,13 @@ if (typeof jQuery != 'undefined') {
         };
 
 
+        /**
+         * Translate string speed to integer.
+         *
+         * @param  string  speed  The speed string to be translated ('slow'/'medium'/'fast')
+         *
+         * @return int
+         */
         var translateSpeed = function(speed)
         {
             switch (speed) {
