@@ -248,6 +248,21 @@ if (typeof jQuery != 'undefined') {
 
         };
 
+
+        var translateSpeed = function(speed)
+        {
+            switch (speed) {
+                case 'slow':
+                    return 1;
+                case 'fast':
+                    return 4;
+                default:
+                    // Defaulted to middle speed if slow or fast are unspecified
+                    return 2;
+            }
+        };
+
+
         /**
          * This method builds control elements which can be used to control the animation of the
          * component. This method also modifies the parent container to make room for the controls.
@@ -330,23 +345,10 @@ if (typeof jQuery != 'undefined') {
              */
             init: function(options)
             {
-
                 return this.each(function(){
                     var target = this;
                     var $target = $(this);
-
-                    // Speed translation
-                    switch (options.speed) {
-                        case 'slow':
-                            options.speed = 1;
-                            break;
-                        case 'fast':
-                            options.speed = 4;
-                            break;
-                        default:
-                            // Defaulted to middle speed if slow or fast are unspecified
-                            options.speed = 2;
-                    }
+                    options.speed = translateSpeed(options.speed);
 
                     $target.data(pluginName, {option:$.extend({}, defaultOptions, options)});
 
