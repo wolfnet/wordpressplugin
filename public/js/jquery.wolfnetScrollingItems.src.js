@@ -268,12 +268,12 @@ if (typeof jQuery != 'undefined') {
         {
             switch (speed) {
                 case 'slow':
-                    return 1;
+                    return 2;
                 case 'fast':
                     return 4;
                 default:
                     // Defaulted to middle speed if slow or fast are unspecified
-                    return 2;
+                    return 3;
             }
         };
 
