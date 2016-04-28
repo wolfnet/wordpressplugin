@@ -83,6 +83,14 @@ Vagrant.configure("2") do |config|
         wp44.vm.provision :shell, :path => ".vagrant/wordpress.sh", :args => "4.4"
     end
 
+    # The most up to date version of the 4.5
+    config.vm.define "wp45" do |wp45|
+        #wp45.vm.box = "ubuntu-14"
+        wp45.vm.box_url = "https://github.com/kraksoft/vagrant-box-ubuntu/releases/download/14.04/ubuntu-14.04-amd64.box"
+        wp45.vm.network :private_network, ip: "192.168.50.45"
+        wp45.vm.provision :shell, :path => ".vagrant/wordpress.sh", :args => "4.5"
+    end
+
     # Most up to date version from master
     config.vm.define "dev" do |dev|
         #dev.vm.box = "ubuntu-14"
