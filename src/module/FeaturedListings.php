@@ -49,7 +49,7 @@ class Wolfnet_Module_FeaturedListings
             'title'      => '',
             'direction'  => 'left',
             'autoplay'   => true,
-            'speed'      => 'medium',
+            'speed'      => 'default',
             'ownertype'  => 'agent_broker',
             'maxresults' => 50,
             'numrows'    => 50,

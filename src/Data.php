@@ -242,9 +242,11 @@ class Wolfnet_Data
     public function getSpeedSettings()
     {
         return array(
-            array('value'=>'slow', 'label'=>'Slow'),
+            array('value'=>'slow',   'label'=>'Slow'),
+            array('value'=>'default','label'=>'Default'),
             array('value'=>'medium', 'label'=>'Medium'),
-            array('value'=>'fast', 'label'=>'Fast')
+            array('value'=>'fast',   'label'=>'Fast'),
+            array('value'=>'faster', 'label'=>'Faster')
         );
     }
 
