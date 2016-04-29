@@ -288,7 +288,6 @@ if (typeof jQuery !== 'undefined') {
                         methods['private'].controls($this)
                             .click(function (event) {
                                 methods['private'].eventHandler.controlClick.call(this, event, $this);
-                                $this.trigger('mouseout');
                             })
                             .hover(
                                 function (event) {
