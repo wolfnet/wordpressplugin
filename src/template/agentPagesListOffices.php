@@ -41,12 +41,12 @@ if(array_key_exists("REDIRECT_URL", $_SERVER)) {
 	}
 	?>
 
-	<form name="wolfnet_agentSearch" class="wolfnet_agentSearch" method="POST" 
+	<form name="wolfnet_agentSearch" class="wolfnet_agentSearch" method="POST"
 		action="<?php echo $linkBase . "?search#post-" . get_the_id(); ?>">
 		<?php // No office ID as a hidden field. We want to search all offices ?>
 
 		<input type="text" name="agentCriteria" class="wolfnet_agentCriteria"
-			value="<?php echo (strlen($agentCriteria) > 0) ? $agentCriteria : ''; ?>" /> 
+			value="<?php echo (strlen($agentCriteria) > 0) ? $agentCriteria : ''; ?>" />
 		<!-- <input type="submit" name="agentSearch" class="wolfnet_agentSearchButton" value="Search" /> -->
 	</form>
 
@@ -76,20 +76,20 @@ foreach($offices as $office) {
 ?>
 
 	<div class="wolfnet_officePreview">
-		<?php 
+		<?php
 			echo '<div class="wolfnet_officeImage">';
 			if(strlen($office['medium_url']) > 0) {
 				echo '<a href="' . $officeLink . '">';
 				echo "<img src=\"{$office['medium_url']}\" />";
 				echo '</a>';
 			}
-			echo '</div>'; 
+			echo '</div>';
 		?>
 
 		<div class="wolfnet_officeData">
 			<div class="wolfnet_officeContact">
 				<div class="wolfnet_officeName">
-					<?php 
+					<?php
 						echo '<a href="' . $officeLink . '">';
 						echo $office['name'];
 						echo '</a>';
@@ -98,7 +98,7 @@ foreach($offices as $office) {
 
 				<hr class="wolfnet_officeRule">
 
-				<?php 
+				<?php
 				if(strlen($office['address_1']) > 0) {
 					echo '<div class="wolfnet_officeAddress">';
 					echo $office['address_1'] . ' ' . $office['address_2'];
@@ -131,7 +131,7 @@ foreach($offices as $office) {
 					$extraSpace .= '<li>&nbsp;</li>';
 				}
 				?>
-				
+
 				<li>
 					<span class="wnt-icon wnt-icon-mail3"></span>
 					<a href="<?php echo $contactLink; ?>"> Contact Us</a>
