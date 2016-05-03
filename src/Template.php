@@ -70,6 +70,7 @@ class Wolfnet_Template
             'wolfnet',
             'wolfnet-agent',
             'icomoon',
+            'google-roboto',
         );
 
         $widgetTheme = $this->plugin->views->getWidgetTheme();
@@ -228,6 +229,9 @@ class Wolfnet_Template
                 ),
             'icomoon' => array(
                 $this->url . 'lib/icomoon/style.css'
+                ),
+            'google-roboto' => array(
+                'https://fonts.googleapis.com/css?family=Roboto',
                 ),
             );
 
