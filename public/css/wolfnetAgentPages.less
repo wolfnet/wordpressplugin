@@ -24,33 +24,6 @@
 @accentColor: #7BA4CE;
 
 
-@media screen and (max-width: 480px) {
-    .wolfnet_widget {
-        &.wolfnet_officesList,
-        &.wolfnet_agentsList {
-            .wolfnet_agentSearch {
-                .wolfnet_agentCriteria {
-                    width: 37% !important;
-                    margin-right: 10px;
-                }
-            }
-        }
-    }
-}
-
-@media screen and (max-width: 520px) {
-    .wolfnet_widget {
-        &.wolfnet_agentShow {
-            .wolfnet_agentInfo {
-                float: none !important;
-                clear: both;
-                padding-top: 20px;
-                width: 100% !important;
-            }
-        }
-    }
-}
-
 .widget_wolfnet_agentpageswidget {
     .wolfnet_widget {
         .wolfnet_agentSearch {
@@ -89,6 +62,21 @@
         font-size: 16px;
         line-height: 1.3em;
         color: #666;
+
+        .wolfnet_agentSearch {
+            float: right;
+
+            .wolfnet_agentCriteria {
+                width: 280px;
+                margin-right: 10px;
+            }
+
+            .wolfnet_agentSearchButton {
+                display: none;
+            }
+
+        }
+
     }
 
     &.wolfnet_officesList {
@@ -133,16 +121,6 @@
                 .selected {
                     background: @accentColor;
                     padding: 6px;
-                }
-            }
-
-            .wolfnet_agentSearch {
-                width: auto;
-                float: right;
-
-                .wolfnet_agentCriteria {
-                    width: 280px;
-                    margin-right: 10px;
                 }
             }
 
@@ -275,20 +253,6 @@
 
         .wolfnet_noResults {
             margin-top: 30px;
-        }
-
-        .wolfnet_agentSearch {
-            width: 500px;
-            margin-bottom: 10px;
-
-            input {
-                float: left;
-            }
-
-            .wolfnet_agentCriteria {
-                width: 280px;
-                margin-right: 10px;
-            }
         }
 
         .wolfnet_agentPreview {
@@ -461,14 +425,6 @@
 
 .widget_wolfnet_agentpageswidget {
     .wolfnet_widget {
-        .wolfnet_agentSearch {
-            width: inherit;
-
-            .wolfnet_agentSearchButton {
-                float: left;
-                margin-top: 4px;
-            }
-        }
 
         .wolfnet_agent {
             .wolfnet_agentInfo {
@@ -483,6 +439,35 @@
                 .wolfnet_agentInfo {
                     width: 100% !important;
                 }
+            }
+        }
+
+    }
+}
+
+
+@media screen and (max-width: 480px) {
+    .wolfnet_widget {
+        &.wolfnet_officesList,
+        &.wolfnet_agentsList {
+            .wolfnet_agentSearch {
+                .wolfnet_agentCriteria {
+                    width: 37% !important;
+                    margin-right: 10px;
+                }
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 520px) {
+    .wolfnet_widget {
+        &.wolfnet_agentShow {
+            .wolfnet_agentInfo {
+                float: none !important;
+                clear: both;
+                padding-top: 20px;
+                width: 100% !important;
             }
         }
     }
