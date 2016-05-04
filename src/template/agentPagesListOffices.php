@@ -46,7 +46,7 @@
 
 			<input type="text" name="agentCriteria" class="wolfnet_agentCriteria"
 				value="<?php echo (strlen($agentCriteria) > 0) ? $agentCriteria : ''; ?>" />
-			<!-- <input type="submit" name="agentSearch" class="wolfnet_agentSearchButton" value="Search" /> -->
+			<button type="submit" name="agentSearch" class="wolfnet_agentSearchButton">Search</button>
 		</form>
 
 		<div class="wolfnet_agentOfficeView">
