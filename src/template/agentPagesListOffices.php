@@ -40,12 +40,11 @@
 			}
 		?>
 
-		<form name="wolfnet_agentSearch" class="wolfnet_agentSearch" method="POST"
-			action="<?php echo $linkBase . "?search#post-" . get_the_id(); ?>">
+		<form name="wolfnet_agentSearch" class="wolfnet_agentSearch" method="post"
+		 action="<?php echo $linkBase . "?search#post-" . get_the_id(); ?>">
 			<?php // No office ID as a hidden field. We want to search all offices ?>
-
 			<input type="text" name="agentCriteria" class="wolfnet_agentCriteria"
-				value="<?php echo (strlen($agentCriteria) > 0) ? $agentCriteria : ''; ?>" />
+			 value="<?php echo (strlen($agentCriteria) > 0) ? $agentCriteria : ''; ?>" />
 			<button type="submit" name="agentSearch" class="wolfnet_agentSearchButton">Search</button>
 		</form>
 
