@@ -56,113 +56,113 @@
 
 	</div>
 
-<?php
+	<?php
 
-	foreach ($offices as $office) {
+		foreach ($offices as $office) {
 
-		if ($office['office_id'] != '') {
+			if ($office['office_id'] != '') {
 
-			$officeLink = $linkBase . '?officeId=' . $office['office_id'];
-			$officeLink .= '#post-' . get_the_id();
+				$officeLink = $linkBase . '?officeId=' . $office['office_id'];
+				$officeLink .= '#post-' . get_the_id();
 
-			$searchLink = $office['search_solution_url'] . "/?action=newsearch";
-			$searchLink .= "&office_id=" . $office['office_id'];
-			$searchLink .= "&ld_action=find_office";
+				$searchLink = $office['search_solution_url'] . "/?action=newsearch";
+				$searchLink .= "&office_id=" . $office['office_id'];
+				$searchLink .= "&ld_action=find_office";
 
-			$searchResultLink = $office['search_solution_url'] . "/?action=newsearchsession";
-			$searchResultLink .= "&office_id=" . $office['office_id'];
+				$searchResultLink = $office['search_solution_url'] . "/?action=newsearchsession";
+				$searchResultLink .= "&office_id=" . $office['office_id'];
 
-			$contactLink = "?contactOffice=" . $office['office_id'];
-			$contactLink .= "#post-" . get_the_id();
+				$contactLink = "?contactOffice=" . $office['office_id'];
+				$contactLink .= "#post-" . get_the_id();
 
-?>
+	?>
 
-			<div class="wolfnet_officePreview">
+				<div class="wolfnet_officePreview">
 
-				<a href="<?php echo $officeLink; ?>">
-					<div class="wolfnet_officeImage"
-					 style="background-image: url('<?php echo $office['medium_url']; ?>');"></div>
-				</a>
+					<a href="<?php echo $officeLink; ?>">
+						<div class="wolfnet_officeImage"
+						 style="background-image: url('<?php echo $office['medium_url']; ?>');"></div>
+					</a>
 
-				<div class="wolfnet_officeData">
+					<div class="wolfnet_officeData">
 
-					<div class="wolfnet_officeContact">
+						<div class="wolfnet_officeContact">
 
-						<div class="wolfnet_officeName">
-							<?php echo '<a href="' . $officeLink . '">' . $office['name'] . '</a>'; ?>
+							<div class="wolfnet_officeName">
+								<?php echo '<a href="' . $officeLink . '">' . $office['name'] . '</a>'; ?>
+							</div>
+
+							<hr />
+
+							<div class="wolfnet_officeAddress">
+								<?php
+									if (strlen($office['address_1']) > 0) {
+										echo $office['address_1'] . ' ' . $office['address_2'];
+										echo '<br />';
+										echo $office['city'] . ', ' . $office['state'] . ' ';
+										echo $office ['postal_code'];
+									} else {
+										// TODO: Replace with a min-height style applied to parent
+										echo '&nbsp;<br />&nbsp;';
+									}
+								?>
+							</div>
+
 						</div>
 
-						<hr />
+						<ul class="wolfnet_officeLinks">
 
-						<div class="wolfnet_officeAddress">
 							<?php
-								if (strlen($office['address_1']) > 0) {
-									echo $office['address_1'] . ' ' . $office['address_2'];
-									echo '<br />';
-									echo $office['city'] . ', ' . $office['state'] . ' ';
-									echo $office ['postal_code'];
+
+								// TODO: Replace extraSpace usage with a min-height style
+								$extraSpace = '';
+
+								if (strlen($office['phone_number']) > 0) {
+									echo '<li><span class="wnt-icon wnt-icon-phone"></span> ';
+									echo $office['phone_number'] . '</li>';
 								} else {
-									// TODO: Replace with a min-height style applied to parent
-									echo '&nbsp;<br />&nbsp;';
+									$extraSpace .= '<li>&nbsp;</li>';
 								}
+
+								if (strlen($office['fax_number']) > 0) {
+									echo '<li><span  class="wnt-icon wnt-icon-fax"></span> ';
+									echo $office['fax_number'] . '</li>';
+								} else {
+									$extraSpace .= '<li>&nbsp;</li>';
+								}
+
 							?>
+
+							<li>
+								<span class="wnt-icon wnt-icon-mail3"></span>
+								<a href="<?php echo $contactLink; ?>">Contact Us</a>
+							</li>
+							<li>
+								<span class="wnt-icon wnt-icon-location"></span>
+								<a href="<?php echo $searchLink; ?>">Search All Area Listings</a>
+							</li>
+
+							<?php echo $extraSpace; ?>
+
+						</ul>
+
+						<div class="wolfnet_officeActions wolfnet_clearfix">
+							<div class="wolfnet_officeAction">
+								<a href="<?php echo $officeLink; ?>">Meet Our Agents</a>
+							</div>
+							<div class="wolfnet_officeAction">
+								<a href="<?php echo $searchResultLink; ?>">Featured Listings</a>
+							</div>
 						</div>
 
-					</div>
-
-					<ul class="wolfnet_officeLinks">
-
-						<?php
-
-							// TODO: Replace extraSpace usage with a min-height style
-							$extraSpace = '';
-
-							if (strlen($office['phone_number']) > 0) {
-								echo '<li><span class="wnt-icon wnt-icon-phone"></span> ';
-								echo $office['phone_number'] . '</li>';
-							} else {
-								$extraSpace .= '<li>&nbsp;</li>';
-							}
-
-							if (strlen($office['fax_number']) > 0) {
-								echo '<li><span  class="wnt-icon wnt-icon-fax"></span> ';
-								echo $office['fax_number'] . '</li>';
-							} else {
-								$extraSpace .= '<li>&nbsp;</li>';
-							}
-
-						?>
-
-						<li>
-							<span class="wnt-icon wnt-icon-mail3"></span>
-							<a href="<?php echo $contactLink; ?>">Contact Us</a>
-						</li>
-						<li>
-							<span class="wnt-icon wnt-icon-location"></span>
-							<a href="<?php echo $searchLink; ?>">Search All Area Listings</a>
-						</li>
-
-						<?php echo $extraSpace; ?>
-
-					</ul>
-
-					<div class="wolfnet_officeActions wolfnet_clearfix">
-						<div class="wolfnet_officeAction">
-							<a href="<?php echo $officeLink; ?>">Meet Our Agents</a>
-						</div>
-						<div class="wolfnet_officeAction">
-							<a href="<?php echo $searchResultLink; ?>">Featured Listings</a>
-						</div>
 					</div>
 
 				</div>
 
-			</div>
-
-<?php
-		}
-	} // end foreach
-?>
+	<?php
+			}
+		} // end foreach
+	?>
 
 	<div class="wolfnet_clearfix"></div>
 
