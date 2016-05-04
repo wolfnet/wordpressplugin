@@ -95,9 +95,7 @@
 					<div class="wolfnet_officeContact">
 
 						<div class="wolfnet_officeName">
-							<?php
-								echo '<a href="' . $officeLink . '">' . $office['name'] . '</a>';
-							?>
+							<?php echo '<a href="' . $officeLink . '">' . $office['name'] . '</a>'; ?>
 						</div>
 
 						<hr class="wolfnet_officeRule" />
