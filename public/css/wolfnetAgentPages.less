@@ -21,6 +21,9 @@
  *
  */
 
+@accentColor: #7BA4CE;
+
+
 @media screen and (max-width: 480px) {
     .wolfnet_widget {
         &.wolfnet_officesList,
@@ -79,6 +82,15 @@
 
 .wolfnet_widget {
 
+    &.wolfnet_officesList,
+    &.wolfnet_agentsList,
+    &.wolfnet_agentShow {
+        font-family: 'Montserrat', sans-serif;
+        font-size: 16px;
+        line-height: 1.3em;
+        color: #666;
+    }
+
     &.wolfnet_officesList {
 
         .wolfnet_officeHeader {
@@ -89,6 +101,8 @@
                 float: left;
                 margin: 0;
                 padding: 0;
+                font-family: 'Open Sans', sans-serif;
+                font-weight: normal;
                 text-transform: uppercase;
             }
 
@@ -117,8 +131,7 @@
                 }
 
                 .selected {
-                    /* This probably won't stay this color. */
-                    background: lightblue;
+                    background: @accentColor;
                     padding: 6px;
                 }
             }
@@ -137,11 +150,40 @@
 
         .wolfnet_officePreview {
             position: relative;
-            font-size: 14px;
             float: left;
             width: 370px;
             border: 1px solid #ccc;
             margin: 10px 16px 0 0;
+
+            a, a:hover, a:active, a:visited {
+                // Color the links, but let the client's theme decide whether to use decorations
+                // e.g., text-decoration, border, box-shadow
+                color: @accentColor;
+            }
+
+            .wolfnet_officeContact {
+                float: none;
+                font-size: .8em;
+
+                .wolfnet_officeName {
+                    font-weight: normal;
+                    font-size: 18px;
+
+                    a, a:link, a:hover, a:visited {
+                        color: inherit;
+                        text-decoration: none;
+                        border: none;
+                        box-shadow: none;
+                    }
+
+                }
+
+                .wolfnet_officeAddress {
+                    font-size: 16px;
+                    color: #bbb;
+                }
+
+            }
 
             ul.wolfnet_officeLinks {
                 margin: 6px 0 20px 0;
@@ -154,6 +196,7 @@
                     .wnt-icon {
                         margin-right: 6px;
                         font-size: 16px;
+                        color: @accentColor;
                     }
                 }
             }
@@ -199,14 +242,7 @@
             padding: 10px;
         }
 
-        .wolfnet_officeContact {
-            float: none;
-            font-size: .8em;
-        }
 
-        .wolfnet_officeName {
-            font-weight: bold;
-            font-size: 18px;
 
             a, a:link, a:hover, a:visited {
                 text-decoration: none;
@@ -217,11 +253,7 @@
         .wolfnet_officeRule {
             width: 30%;
             margin: 6px 0;
-        }
 
-        .wolfnet_officeAddress {
-            font-size: 16px;
-            color: #bbb;
         }
 
     }
