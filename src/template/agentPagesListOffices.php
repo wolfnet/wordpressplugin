@@ -101,17 +101,17 @@
 				<hr class="wolfnet_officeRule">
 
 				<div class="wolfnet_officeAddress">
-				<?php
-					if (strlen($office['address_1']) > 0) {
-						echo $office['address_1'] . ' ' . $office['address_2'];
-						echo '<br />';
-						echo $office['city'] . ', ' . $office['state'] . ' ';
-						echo $office ['postal_code'];
-					} else {
-						// TODO: Replace with a min-height style applied to parent
-						echo '&nbsp;<br />&nbsp;';
-					}
-				?>
+					<?php
+						if (strlen($office['address_1']) > 0) {
+							echo $office['address_1'] . ' ' . $office['address_2'];
+							echo '<br />';
+							echo $office['city'] . ', ' . $office['state'] . ' ';
+							echo $office ['postal_code'];
+						} else {
+							// TODO: Replace with a min-height style applied to parent
+							echo '&nbsp;<br />&nbsp;';
+						}
+					?>
 				</div>
 
 			</div>
