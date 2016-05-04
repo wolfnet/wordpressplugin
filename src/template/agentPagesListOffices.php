@@ -119,47 +119,48 @@
 
 			</div>
 
-			<ul class="wolfnet_officeLinks">
+					<ul class="wolfnet_officeLinks">
 
-				<?php
+						<?php
 
-					$extraSpace = '';
+							// TODO: Replace extraSpace usage with a min-height style
+							$extraSpace = '';
 
-					if (strlen($office['phone_number']) > 0) {
-						echo '<li><span class="wnt-icon wnt-icon-phone"></span> ';
-						echo $office['phone_number'] . '</li>';
-					} else {
-						$extraSpace .= '<li>&nbsp;</li>';
-					}
+							if (strlen($office['phone_number']) > 0) {
+								echo '<li><span class="wnt-icon wnt-icon-phone"></span> ';
+								echo $office['phone_number'] . '</li>';
+							} else {
+								$extraSpace .= '<li>&nbsp;</li>';
+							}
 
-					if (strlen($office['fax_number']) > 0) {
-						echo '<li><span  class="wnt-icon wnt-icon-fax"></span> ';
-						echo $office['fax_number'] . '</li>';
-					} else {
-						$extraSpace .= '<li>&nbsp;</li>';
-					}
+							if (strlen($office['fax_number']) > 0) {
+								echo '<li><span  class="wnt-icon wnt-icon-fax"></span> ';
+								echo $office['fax_number'] . '</li>';
+							} else {
+								$extraSpace .= '<li>&nbsp;</li>';
+							}
 
-				?>
+						?>
 
-				<li>
-					<span class="wnt-icon wnt-icon-mail3"></span>
-					<a href="<?php echo $contactLink; ?>">Contact Us</a>
-				</li>
-				<li>
-					<span class="wnt-icon wnt-icon-location"></span>
-					<a href="<?php echo $searchLink; ?>">Search All Area Listings</a>
-				</li>
+						<li>
+							<span class="wnt-icon wnt-icon-mail3"></span>
+							<a href="<?php echo $contactLink; ?>">Contact Us</a>
+						</li>
+						<li>
+							<span class="wnt-icon wnt-icon-location"></span>
+							<a href="<?php echo $searchLink; ?>">Search All Area Listings</a>
+						</li>
 
-				<?php echo $extraSpace; ?>
+						<?php echo $extraSpace; ?>
 
-			</ul>
+					</ul>
 
-			<div class="officeButton wolfnet_officeLinkLeft">
-				<a href="<?php echo $officeLink; ?>">Meet Our Agents</a>
-			</div>
-			<div class="officeButton wolfnet_officeLink">
-				<a href="<?php echo $searchResultLink; ?>">Featured Listings</a>
-			</div>
+					<div class="officeButton wolfnet_officeLinkLeft">
+						<a href="<?php echo $officeLink; ?>">Meet Our Agents</a>
+					</div>
+					<div class="officeButton wolfnet_officeLink">
+						<a href="<?php echo $searchResultLink; ?>">Featured Listings</a>
+					</div>
 
 				</div>
 
