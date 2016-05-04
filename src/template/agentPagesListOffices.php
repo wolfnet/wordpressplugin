@@ -146,11 +146,13 @@
 
 					</ul>
 
-					<div class="officeButton wolfnet_officeLinkLeft">
-						<a href="<?php echo $officeLink; ?>">Meet Our Agents</a>
-					</div>
-					<div class="officeButton wolfnet_officeLink">
-						<a href="<?php echo $searchResultLink; ?>">Featured Listings</a>
+					<div class="wolfnet_officeActions wolfnet_clearfix">
+						<div class="wolfnet_officeAction">
+							<a href="<?php echo $officeLink; ?>">Meet Our Agents</a>
+						</div>
+						<div class="wolfnet_officeAction">
+							<a href="<?php echo $searchResultLink; ?>">Featured Listings</a>
+						</div>
 					</div>
 
 				</div>
