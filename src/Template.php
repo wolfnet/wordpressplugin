@@ -70,7 +70,7 @@ class Wolfnet_Template
             'wolfnet',
             'wolfnet-agent',
             'icomoon',
-            'google-roboto',
+            'google-fonts',
         );
 
         $widgetTheme = $this->plugin->views->getWidgetTheme();
@@ -204,6 +204,12 @@ class Wolfnet_Template
         global $wp_scripts;
         $jquery_ui = $wp_scripts->query('jquery-ui-core');
 
+		$google_fonts = array(
+			'Open+Sans:400,700',
+			'Montserrat:400,700',
+			'Roboto:400,700',
+		);
+
         $styles = array(
             'wolfnet' => array(
                 $this->url . 'css/wolfnet.src.css'
@@ -230,8 +236,8 @@ class Wolfnet_Template
             'icomoon' => array(
                 $this->url . 'lib/icomoon/style.css'
                 ),
-            'google-roboto' => array(
-                'https://fonts.googleapis.com/css?family=Roboto',
+            'google-fonts' => array(
+                'https://fonts.googleapis.com/css?family=' . implode('|', $google_fonts),
                 ),
             );
 
