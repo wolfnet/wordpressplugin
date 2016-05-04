@@ -92,7 +92,7 @@
 							<?php echo '<a href="' . $officeLink . '">' . $office['name'] . '</a>'; ?>
 						</div>
 
-						<hr class="wolfnet_officeRule" />
+						<hr />
 
 						<div class="wolfnet_officeAddress">
 							<?php
