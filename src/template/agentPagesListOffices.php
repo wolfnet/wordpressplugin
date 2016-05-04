@@ -79,16 +79,10 @@
 
 			<div class="wolfnet_officePreview">
 
-				<div class="wolfnet_officeImage">
-					<?php
-						if (strlen($office['medium_url']) > 0) {
-							echo '<a href="' . $officeLink . '">';
-							echo '<img src="' . $office['medium_url'] . '" />';
-							echo '</a>';
-						}
-					?>
-				</div>
-
+				<a href="<?php echo $officeLink; ?>">
+					<div class="wolfnet_officeImage"
+					 style="background-image: url('<?php echo $office['medium_url']; ?>');"></div>
+				</a>
 
 				<div class="wolfnet_officeData">
 
