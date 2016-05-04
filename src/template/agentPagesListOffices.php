@@ -89,35 +89,34 @@
 					?>
 				</div>
 
-		<div class="wolfnet_officeData">
 
 				<div class="wolfnet_officeData">
 
-			<div class="wolfnet_officeContact">
+					<div class="wolfnet_officeContact">
 
-				<div class="wolfnet_officeName">
-					<?php
-						echo '<a href="' . $officeLink . '">' . $office['name'] . '</a>';
-					?>
-				</div>
+						<div class="wolfnet_officeName">
+							<?php
+								echo '<a href="' . $officeLink . '">' . $office['name'] . '</a>';
+							?>
+						</div>
 
-				<hr class="wolfnet_officeRule">
+						<hr class="wolfnet_officeRule" />
 
-				<div class="wolfnet_officeAddress">
-					<?php
-						if (strlen($office['address_1']) > 0) {
-							echo $office['address_1'] . ' ' . $office['address_2'];
-							echo '<br />';
-							echo $office['city'] . ', ' . $office['state'] . ' ';
-							echo $office ['postal_code'];
-						} else {
-							// TODO: Replace with a min-height style applied to parent
-							echo '&nbsp;<br />&nbsp;';
-						}
-					?>
-				</div>
+						<div class="wolfnet_officeAddress">
+							<?php
+								if (strlen($office['address_1']) > 0) {
+									echo $office['address_1'] . ' ' . $office['address_2'];
+									echo '<br />';
+									echo $office['city'] . ', ' . $office['state'] . ' ';
+									echo $office ['postal_code'];
+								} else {
+									// TODO: Replace with a min-height style applied to parent
+									echo '&nbsp;<br />&nbsp;';
+								}
+							?>
+						</div>
 
-			</div>
+					</div>
 
 					<ul class="wolfnet_officeLinks">
 
@@ -172,23 +171,27 @@
 ?>
 
 	<div class="wolfnet_clearfix"></div>
+
 </div>
 
-<script type="text/javascript">
-jQuery(function($) {
-	$(window).load(function() {
-		// Resize office boxes to height of tallest one.
-		var $offices = $('#<?php echo $instance_id; ?> .wolfnet_officePreview');
-		var maxHeight<?php echo $instance_id; ?> = 0;
-		$offices.each(function() {
-			if($(this).height() > maxHeight<?php echo $instance_id; ?>) {
-				maxHeight<?php echo $instance_id; ?> = $(this).height();
-			}
-		});
 
-		$('#<?php echo $instance_id; ?> .wolfnet_officePreview').height(
-			maxHeight<?php echo $instance_id; ?>
-		);
+<script type="text/javascript">
+
+	jQuery(function ($) {
+		$(window).load(function () {
+			// Resize office boxes to height of tallest one.
+			var $offices = $('#<?php echo $instance_id; ?> .wolfnet_officePreview');
+			var maxHeight<?php echo $instance_id; ?> = 0;
+			$offices.each(function () {
+				if ($(this).height() > maxHeight<?php echo $instance_id; ?>) {
+					maxHeight<?php echo $instance_id; ?> = $(this).height();
+				}
+			});
+
+			$('#<?php echo $instance_id; ?> .wolfnet_officePreview').height(
+				maxHeight<?php echo $instance_id; ?>
+			);
+		});
 	});
-});
+
 </script>
