@@ -77,18 +77,21 @@
 
 ?>
 
-	<div class="wolfnet_officePreview">
-		<div class="wolfnet_officeImage">
-			<?php
-				if (strlen($office['medium_url']) > 0) {
-					echo '<a href="' . $officeLink . '">';
-					echo '<img src="' . $office['medium_url'] . '" />';
-					echo '</a>';
-				}
-			?>
-		</div>
+			<div class="wolfnet_officePreview">
+
+				<div class="wolfnet_officeImage">
+					<?php
+						if (strlen($office['medium_url']) > 0) {
+							echo '<a href="' . $officeLink . '">';
+							echo '<img src="' . $office['medium_url'] . '" />';
+							echo '</a>';
+						}
+					?>
+				</div>
 
 		<div class="wolfnet_officeData">
+
+				<div class="wolfnet_officeData">
 
 			<div class="wolfnet_officeContact">
 
@@ -157,8 +160,10 @@
 			<div class="officeButton wolfnet_officeLink">
 				<a href="<?php echo $searchResultLink; ?>">Featured Listings</a>
 			</div>
-		</div> <?php // wolfnet_officeData ?>
-	</div>
+
+				</div>
+
+			</div>
 
 <?php
 		}
