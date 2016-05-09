@@ -94,7 +94,8 @@ Please upgrade to the latest version of the plugin as we will be disabling our o
 == Changelog ==
 
 = 1.10.2 =
-* New, simpler speed scale for Featured Listings in lieu of the 1-99 scale.
+* New, simpler speed scale for Featured Listings scroller in lieu of the 1-99 scale.
+* New speed default for Featured Listings scroller.
 * Modern theme font family fix.
 
 = 1.10.1 =
