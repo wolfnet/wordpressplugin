@@ -1,4 +1,22 @@
 
+//== Placeholder color
+
+.placeholderColor(@color) {
+    ::-webkit-input-placeholder {
+        color: @color !important;
+    }
+    :-moz-placeholder {
+        color: @color !important;
+    }
+    ::-moz-placeholder {
+        color: @color !important;
+    }
+    :-ms-input-placeholder {
+        color: @color !important;
+    }
+}
+
+
 //== Vertical Gradient
 
 .gradient(@startColor, @endColor) {
@@ -24,4 +42,13 @@
     -webkit-transform: translateY(-50%);
     -ms-transform: translateY(-50%);
     transform: translateY(-50%);
+}
+
+
+//== Remove decorations from links
+
+.no-decoration() {
+    text-decoration: none;
+    box-shadow: none;
+    border: none;
 }

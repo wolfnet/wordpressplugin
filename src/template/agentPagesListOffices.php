@@ -32,7 +32,7 @@
 		}
 	?>
 
-	<div class="wolfnet_officeHeader">
+	<div class="wolfnet_agentOfficeHeader">
 
 		<?php
 			if (strlen($officetitle) > 0) {
@@ -40,20 +40,30 @@
 			}
 		?>
 
-		<form name="wolfnet_agentSearch" class="wolfnet_agentSearch" method="post"
-		 action="<?php echo $linkBase . "?search#post-" . get_the_id(); ?>">
-			<?php // No office ID as a hidden field. We want to search all offices ?>
-			<input type="text" name="agentCriteria" class="wolfnet_agentCriteria"
-			 value="<?php echo (strlen($agentCriteria) > 0) ? $agentCriteria : ''; ?>" />
-			<button type="submit" name="agentSearch" class="wolfnet_agentSearchButton">Search</button>
-		</form>
+		<div class="wolfnet_agentOfficeNav">
 
-		<div class="wolfnet_agentOfficeView">
-			<div><a href="?search#post-<?php echo get_the_id(); ?>">Agents</a></div>
-			<div class="selected">Offices</div>
+			<div class="wnt-btn-group">
+				<a class="wnt-btn" href="?search#post-<?php echo get_the_id(); ?>">Agents</a>
+				<a class="wnt-btn wnt-btn-active" href="<?php echo $linkBase . '#post-' . get_the_id(); ?>">Offices</a>
+			</div>
+
+			<form name="wolfnet_agentSearch" class="wolfnet_agentSearch" method="post"
+			 action="<?php echo $linkBase . "?search#post-" . get_the_id(); ?>">
+				<?php // No office ID as a hidden field. We want to search all offices ?>
+				<span class="wolfnet_agentCriteria">
+					<span class="wnt-icon wnt-icon-search"></span>
+					<input type="text" name="agentCriteria"
+					 value="<?php echo (strlen($agentCriteria) > 0) ? $agentCriteria : ''; ?>"
+					 placeholder="search by office name" />
+				</span>
+				<button type="submit" name="agentSearch" class="wolfnet_agentSearchButton">Search</button>
+			</form>
+
 		</div>
 
 	</div>
+
+	<div class="wolfnet_clearfix"></div>
 
 	<?php
 
@@ -171,20 +181,30 @@
 <script type="text/javascript">
 
 	jQuery(function ($) {
-		$(window).load(function () {
-			// Resize office boxes to height of tallest one.
-			var $offices = $('#<?php echo $instance_id; ?> .wolfnet_officePreview');
-			var maxHeight<?php echo $instance_id; ?> = 0;
-			$offices.each(function () {
-				if ($(this).height() > maxHeight<?php echo $instance_id; ?>) {
-					maxHeight<?php echo $instance_id; ?> = $(this).height();
-				}
-			});
 
-			$('#<?php echo $instance_id; ?> .wolfnet_officePreview').height(
-				maxHeight<?php echo $instance_id; ?>
-			);
+		var $officesWidget = $('.wolfnet_officesList');
+
+		// Search field
+		var $searchForm = $officesWidget.find('.wolfnet_agentSearch');
+		var $criteria = $searchForm.find('.wolfnet_agentCriteria');
+		$criteria.css({ cursor: 'text' });
+		$criteria.click(function () {
+			$(this).find('input[name="agentCriteria"]').focus();
 		});
+
+		// Resize office boxes to height of tallest one.
+		var $offices = $('#<?php echo $instance_id; ?> .wolfnet_officePreview');
+		var maxHeight<?php echo $instance_id; ?> = 0;
+		$offices.each(function () {
+			if ($(this).height() > maxHeight<?php echo $instance_id; ?>) {
+				maxHeight<?php echo $instance_id; ?> = $(this).height();
+			}
+		});
+
+		$('#<?php echo $instance_id; ?> .wolfnet_officePreview').height(
+			maxHeight<?php echo $instance_id; ?>
+		);
+
 	});
 
 </script>

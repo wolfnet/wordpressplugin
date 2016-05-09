@@ -21,8 +21,11 @@
  *
  */
 
-@accentColor: #7BA4CE;
+@import 'public/css/_variables.inc';
+@import 'public/css/_mixins.inc';
 
+@accentColor: #7BA4CE;
+@btnRadius: 4px;
 
 .widget_wolfnet_agentpageswidget {
     .wolfnet_widget {
@@ -63,27 +66,37 @@
         line-height: 1.3em;
         color: #666;
 
-        .wolfnet_agentSearch {
-            float: right;
+        .wnt-btn {
+            display: inline-block;
+            width: 100px;
+            padding: 6px;
+            background-color: #ccc;
+            color: #fff;
+            .no-decoration();
+            text-align: center;
+            text-transform: uppercase;
+            border-radius: @btnRadius;
+            font-size: 0.8em;
 
-            .wolfnet_agentCriteria {
-                width: 280px;
-                margin-right: 10px;
-            }
-
-            .wolfnet_agentSearchButton {
-                display: none;
+            &.wnt-btn-active {
+                background-color: @accentColor;
             }
 
         }
 
-    }
+        .wnt-btn-group {
+            vertical-align: middle;
 
-    &.wolfnet_officesList {
+            .wnt-btn {
+                float: left;
+                border-radius: 0;
+                margin: -1px;
+            }
 
-        .wolfnet_officeHeader {
+        }
 
-            height: 40px;
+        .wolfnet_agentOfficeHeader {
+            //height: 40px;
 
             h2 {
                 float: left;
@@ -94,37 +107,91 @@
                 text-transform: uppercase;
             }
 
-            .wolfnet_agentOfficeView {
-                text-transform: uppercase;
-                display: block;
-                width: auto;
+            .wolfnet_agentOfficeNav {
                 float: right;
-                margin-right: 10px;
 
-                div {
+                .wnt-btn {
+                    width: 6em;
+                    height: 100%;
+                    border-radius: @btnRadius;
+                }
+
+                .wnt-btn-group {
                     display: inline-block;
-                    width: 100px;
-                    background: #ddd;
-                    text-align: center;
-                    float: left;
 
-                    a, a:link, a:hover, a:visited {
-                        display: block;
-                        padding: 6px;
-                        width: 100%;
-                        height: 100%;
-                        text-decoration: none;
-                        border: 0;
+                    .wnt-btn {
+                        border-radius: 0;
+
+                        &:first-child {
+                            border-top-left-radius:     @btnRadius;
+                            border-bottom-left-radius:  @btnRadius;
+                        }
+
+                        &:last-child {
+                            border-top-right-radius:    @btnRadius;
+                            border-bottom-right-radius: @btnRadius;
+                        }
+
+                        &.wnt-btn-active {
+                            box-shadow: inset 0 0 5px 1px fade(#000, 30%);
+                        }
+
                     }
+
                 }
 
-                .selected {
-                    background: @accentColor;
+            }
+
+            .wolfnet_agentSearch {
+                //float: right;
+                display: inline-block;
+                vertical-align: middle;
+                margin-left: 1em;
+
+                .wolfnet_agentCriteria {
+                    width: 280px;
+                    height: 2.5em;
+                    border: 1px solid #ccc;
+                    border-radius: @btnRadius;
                     padding: 6px;
+
+                    .wnt-icon {
+                        color: #999;
+                    }
+
+                    input {
+                        display: inline-block;
+                        width: 248px;
+                        border: none !important;
+                        border-radius: @btnRadius;
+                        outline: none !important;
+                        margin: 0 !important;
+                        padding: 0 !important;
+                        box-shadow: none;
+                        font-size: 0.8em;
+                        background-image: none !important;
+                        background-color: #fff !important;
+
+                        &[placeholder] {
+                            text-overflow: ellipsis;
+                            .placeholderColor(#ccc);
+                        }
+
+                    }
+
                 }
+
+                .wolfnet_agentSearchButton {
+                    display: none;
+                }
+
             }
 
         }
+
+    }
+
+    &.wolfnet_officesList {
 
         .wolfnet_officePreview {
             position: relative;
@@ -169,10 +236,8 @@
                     font-size: 18px;
 
                     a, a:link, a:hover, a:visited {
+                        .no-decoration();
                         color: inherit;
-                        text-decoration: none;
-                        border: none;
-                        box-shadow: none;
                     }
 
                 }
@@ -217,8 +282,7 @@
                         width: 100%;
                         height: 100%;
                         padding: 6px;
-                        border: 0;
-                        box-shadow: none;
+                        .no-decoration();
                         color: #fff;
                     }
 
