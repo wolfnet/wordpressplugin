@@ -1,14 +1,11 @@
-.wnt-icon-fax {
-    *zoom: expression(this.runtimeStyle['zoom'] = '1', this.innerHTML = '&#xe900;');
-}
 .wnt-icon-caret-up {
-    *zoom: expression(this.runtimeStyle['zoom'] = '1', this.innerHTML = '&#x25b2;');
+    *zoom: expression(this.runtimeStyle['zoom'] = '1', this.innerHTML = '&#x25b3;');
 }
 .wnt-icon-caret-right {
     *zoom: expression(this.runtimeStyle['zoom'] = '1', this.innerHTML = '&#x276f;');
 }
 .wnt-icon-caret-down {
-    *zoom: expression(this.runtimeStyle['zoom'] = '1', this.innerHTML = '&#x25bc;');
+    *zoom: expression(this.runtimeStyle['zoom'] = '1', this.innerHTML = '&#x25bd;');
 }
 .wnt-icon-caret-left {
     *zoom: expression(this.runtimeStyle['zoom'] = '1', this.innerHTML = '&#x276e;');
@@ -29,19 +26,19 @@
     *zoom: expression(this.runtimeStyle['zoom'] = '1', this.innerHTML = '&#xe609;');
 }
 .wnt-icon-triangle-right {
-    *zoom: expression(this.runtimeStyle['zoom'] = '1', this.innerHTML = '&#xe74e;');
+    *zoom: expression(this.runtimeStyle['zoom'] = '1', this.innerHTML = '&#x25ba;');
 }
 .wnt-icon-triangle-left {
-    *zoom: expression(this.runtimeStyle['zoom'] = '1', this.innerHTML = '&#xe74f;');
+    *zoom: expression(this.runtimeStyle['zoom'] = '1', this.innerHTML = '&#x25c4;');
 }
 .wnt-icon-triangle-down {
-    *zoom: expression(this.runtimeStyle['zoom'] = '1', this.innerHTML = '&#xe750;');
+    *zoom: expression(this.runtimeStyle['zoom'] = '1', this.innerHTML = '&#x25bc;');
 }
 .wnt-icon-triangle-up {
-    *zoom: expression(this.runtimeStyle['zoom'] = '1', this.innerHTML = '&#xe751;');
+    *zoom: expression(this.runtimeStyle['zoom'] = '1', this.innerHTML = '&#x25b2;');
 }
 .wnt-icon-grid {
-    *zoom: expression(this.runtimeStyle['zoom'] = '1', this.innerHTML = '&#xe74a;');
+    *zoom: expression(this.runtimeStyle['zoom'] = '1', this.innerHTML = '&#xe901;');
 }
 .wnt-icon-grid2 {
     *zoom: expression(this.runtimeStyle['zoom'] = '1', this.innerHTML = '&#xe74b;');
@@ -335,10 +332,10 @@
     *zoom: expression(this.runtimeStyle['zoom'] = '1', this.innerHTML = '&#xe678;');
 }
 .wnt-icon-search {
-    *zoom: expression(this.runtimeStyle['zoom'] = '1', this.innerHTML = '&#xe679;');
+    *zoom: expression(this.runtimeStyle['zoom'] = '1', this.innerHTML = '&#x1f50d;');
 }
 .wnt-icon-zoom-in {
-    *zoom: expression(this.runtimeStyle['zoom'] = '1', this.innerHTML = '&#xe67a;');
+    *zoom: expression(this.runtimeStyle['zoom'] = '1', this.innerHTML = '&#xe902;');
 }
 .wnt-icon-zoom-out {
     *zoom: expression(this.runtimeStyle['zoom'] = '1', this.innerHTML = '&#xe67b;');
@@ -750,5 +747,8 @@
 }
 .wnt-icon-pinterest {
     *zoom: expression(this.runtimeStyle['zoom'] = '1', this.innerHTML = '&#xe62e;');
+}
+.wnt-icon-fax {
+    *zoom: expression(this.runtimeStyle['zoom'] = '1', this.innerHTML = '&#xe900;');
 }
 
