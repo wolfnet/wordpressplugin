@@ -162,19 +162,22 @@
                 margin-left: 1em;
 
                 .wolfnet_agentCriteria {
+                    display: block;
                     width: 280px;
-                    height: 2.5em;
                     border: 1px solid #ccc;
                     border-radius: @btnRadius;
                     padding: 6px;
 
                     .wnt-icon {
+                        vertical-align: middle;
                         color: #999;
                     }
 
                     input {
                         display: inline-block;
-                        width: 248px;
+                        width: 90%;
+                        height: 100%;
+                        vertical-align: middle;
                         border: none !important;
                         border-radius: @btnRadius;
                         outline: none !important;
@@ -239,7 +242,6 @@
 
                 .wolfnet_officeContact {
                     float: none;
-                    font-size: .8em;
 
                     hr {
                         width: 25%;
@@ -261,7 +263,6 @@
                     }
 
                     .wolfnet_officeAddress {
-                        font-size: 16px;
                         color: #bbb;
                     }
 
@@ -439,8 +440,8 @@
 
     }
 
-    &.wolfnet_contactAgent,
-    &.wolfnet_contactOffice {
+    &.wolfnet_contactAgent {
+    //, &.wolfnet_contactOffice {
         width: 100%;
 
         .wolfnet_contactThanks {
