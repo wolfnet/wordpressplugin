@@ -30,7 +30,7 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
         $this->plugin = $plugin;
     }
 
-    public function handleRequest() 
+    public function handleRequest()
     {
         $action = '';
 
@@ -62,7 +62,7 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
         } else {
             $action = 'officeList';
         }
-        
+
         // Run the function associated with the action.
         return $this->$action();
 	}
@@ -93,6 +93,7 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
         $args = array_merge($args, $this->args);
 
         return $this->plugin->views->officesListView($args);
+
     }
 
 
@@ -101,7 +102,7 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
         if(array_key_exists("agentpage", $_REQUEST) && $_REQUEST['agentpage'] > 1) {
             /*
              * $startrow needs to be calculated based on the requested page. If $page == 2
-             * and numPerPage is 10, for example, we would need to get agents 11 through 20. 
+             * and numPerPage is 10, for example, we would need to get agents 11 through 20.
              * The below equation will set the starting row accordingly.
              */
             $startrow = $this->args['criteria']['numperpage'] * ($_REQUEST['agentpage'] - 1) + 1;
@@ -162,6 +163,7 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
         $args = array_merge($args, $this->args);
 
         return $this->plugin->views->agentsListView($args);
+
     }
 
 
@@ -211,10 +213,10 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
     }
 
 
-    protected function contactForm() 
+    protected function contactForm()
     {
         $agentData = $this->getAgentById($_REQUEST['contact']);
-        
+
         $args = array(
             'agent' => $agentData,
             'agentId' => $_REQUEST['contact'],
@@ -229,7 +231,7 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
     protected function contactFormOffice()
     {
         $officeData = $this->getOfficeByOfficeId($_REQUEST['contactOffice']);
-        
+
         $args = array(
             'office' => $officeData,
             'officeId' => $_REQUEST['contactOffice'],
@@ -343,7 +345,7 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
     }
 
 
-    protected function agentFeaturedListings($key, $agentId) 
+    protected function agentFeaturedListings($key, $agentId)
     {
         return $this->getAgentListings($key, $agentId);
     }
@@ -362,7 +364,7 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
         $criteria['maxrows'] = $count;
         $criteria['maxresults'] = $count;
         $criteria['gridalign'] = 'left';
-        
+
         // Override the default key with the agent's key
         $criteria['key'] = $key;
         $criteria['keyid'] = $this->plugin->keyService->getIdByKey($key);
@@ -385,19 +387,19 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
     }
 
 
-    protected function getListingsByAgentId($key, $agentId, $sold = 0) 
+    protected function getListingsByAgentId($key, $agentId, $sold = 0)
     {
         try {
             $data = $this->plugin->api->sendRequest(
-                $key, 
-                '/listing/?agent_id=' . $agentId . "&sold=" . $sold, 
-                'GET', 
+                $key,
+                '/listing/?agent_id=' . $agentId . "&sold=" . $sold,
+                'GET',
                 $this->args['criteria']
             );
         } catch (Wolfnet_Exception $e) {
             $data = $e->getData();
             $errorCode = json_decode($data['body'])->metadata->status->errorCode;
-            
+
             if($errorCode == 'Auth1004' || $errorCode == 'Auth1001') {
                 $data = null;
             } else {
@@ -409,13 +411,13 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
     }
 
 
-    protected function getAgentById($agentId) 
+    protected function getAgentById($agentId)
     {
         try {
             $data = $this->plugin->api->sendRequest(
-                $this->key, 
-                '/agent/' . $agentId, 
-                'GET', 
+                $this->key,
+                '/agent/' . $agentId,
+                'GET',
                 $this->args['criteria']
             );
         } catch (Wolfnet_Exception $e) {
@@ -456,12 +458,12 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
     }
 
 
-    public function setKey(&$key) 
+    public function setKey(&$key)
     {
         $this->key = $key;
     }
 
-    public function setArgs(&$args) 
+    public function setArgs(&$args)
     {
         $this->args = $args;
     }

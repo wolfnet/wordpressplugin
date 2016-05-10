@@ -20,17 +20,16 @@
  *                Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
+if (array_key_exists("REDIRECT_URL", $_SERVER)) {
+	$linkBase = $_SERVER['REDIRECT_URL'];
+} else {
+	$linkBase = $_SERVER['PHP_SELF'];
+}
+
 ?>
 
-<div id="<?php echo $instance_id; ?>" class="wolfnet_widget wolfnet_officesList">
 
-	<?php
-		if (array_key_exists("REDIRECT_URL", $_SERVER)) {
-			$linkBase = $_SERVER['REDIRECT_URL'];
-		} else {
-			$linkBase = $_SERVER['PHP_SELF'];
-		}
-	?>
+<div id="<?php echo $instance_id; ?>" class="wolfnet_widget wolfnet_officesList">
 
 	<div class="wolfnet_agentOfficeHeader">
 
