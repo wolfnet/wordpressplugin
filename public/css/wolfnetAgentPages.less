@@ -28,10 +28,12 @@
 @btnRadius: 4px;
 
 @aoImgRatio: 35 / 21;
-@aoWidthLg: 350px;
-@aoWidthMd: 290px;
+@aoWidthXl: 350px;
+@aoWidthLg: 300px;
+@aoWidthMd: 250px;
 @aoWidthSm: 200px;
 @aoWidthXs: 100%;
+@aoImgHeightXl: round(@aoWidthXl / @aoImgRatio);
 @aoImgHeightLg: round(@aoWidthLg / @aoImgRatio);
 @aoImgHeightMd: round(@aoWidthMd / @aoImgRatio);
 @aoImgHeightSm: round(@aoWidthSm / @aoImgRatio);
@@ -209,11 +211,11 @@
 
             .wolfnet_officePreview {
                 position: relative;
-                //float: left;
                 display: inline-block;
-                width: @aoWidthLg;
-                border: 1px solid #ccc;
+                width: 45%;
+                min-width: @aoWidthSm;
                 margin: 16px 16px 0 0;
+                border: 1px solid #ccc;
                 text-align: left;
 
                 a, a:hover, a:active, a:visited {
@@ -223,7 +225,7 @@
                 }
 
                 .wolfnet_officeImage {
-                    height: @aoImgHeightLg;
+                    height: @aoImgHeightXl;
                     overflow: hidden;
                     text-align: center;
                     background-repeat: no-repeat;
@@ -544,25 +546,51 @@
 }
 
 
+@media screen and (max-width: 1060px) {
+
+    .wolfnet_widget {
+        &.wolfnet_officesList,
+        &.wolfnet_agentsList {
+            .wolfnet_offices {
+                .wolfnet_officePreview {
+                    .wolfnet_officeImage {
+                        height: @aoImgHeightLg;
+                    }
+                }
+            }
+
+        }
+    }
+
+}
+
+
+@media screen and (max-width: 1024px) {
+
+    .wolfnet_widget {
+        &.wolfnet_officesList,
+        &.wolfnet_agentsList {
+            .wolfnet_offices {
+                font-size: 0.9em;
+            }
+        }
+    }
+
+}
+
+
 @media screen and (min-width: 769px) and (max-width: 1024px) {
 
     .wolfnet_widget {
         &.wolfnet_officesList,
         &.wolfnet_agentsList {
-
             .wolfnet_offices {
-
                 .wolfnet_officePreview {
-                    width: @aoWidthMd;
-
                     .wolfnet_officeImage {
                         height: @aoImgHeightMd;
                     }
-
                 }
-
             }
-
         }
     }
 
@@ -607,7 +635,7 @@
 }
 
 
-@media screen and (min-width: 481px) and (max-width: 768px) {
+@media screen and (min-width: 531px) and (max-width: 768px) {
 
     .wolfnet_widget {
         &.wolfnet_officesList,
@@ -616,7 +644,6 @@
             .wolfnet_offices {
 
                 .wolfnet_officePreview {
-                    width: @aoWidthSm;
 
                     .wolfnet_officeImage {
                         height: @aoImgHeightSm;
@@ -648,7 +675,7 @@
 }
 
 
-@media screen and (max-width: 480px) {
+@media screen and (max-width: 530px) {
 
     .wolfnet_widget {
         &.wolfnet_officesList,
@@ -682,7 +709,7 @@
             .wolfnet_offices {
 
                 .wolfnet_officePreview {
-                    width: @aoWidthXs;
+                    width: 100%;
 
                     .wolfnet_officeImage {
                         height: @aoImgHeightXs;
