@@ -34,31 +34,14 @@ if (array_key_exists("REDIRECT_URL", $_SERVER)) {
 	<div class="wolfnet_agentOfficeHeader">
 
 		<?php
+
 			if (strlen($officetitle) > 0) {
 				echo '<h2>' . $officetitle . '</h2>';
 			}
+
+			echo $agentsNav;
+
 		?>
-
-		<div class="wolfnet_agentOfficeNav">
-
-			<div class="wnt-btn-group">
-				<a class="wnt-btn" href="?search#post-<?php echo get_the_id(); ?>">Agents</a>
-				<a class="wnt-btn wnt-btn-active" href="<?php echo $linkBase . '#post-' . get_the_id(); ?>">Offices</a>
-			</div>
-
-			<form name="wolfnet_agentSearch" class="wolfnet_agentSearch" method="post"
-			 action="<?php echo $linkBase . "?search#post-" . get_the_id(); ?>">
-				<?php // No office ID as a hidden field. We want to search all offices ?>
-				<span class="wolfnet_agentCriteria">
-					<span class="wnt-icon wnt-icon-search"></span>
-					<input type="text" name="agentCriteria"
-					 value="<?php echo (strlen($agentCriteria) > 0) ? $agentCriteria : ''; ?>"
-					 placeholder="search by office name" />
-				</span>
-				<button type="submit" name="agentSearch" class="wolfnet_agentSearchButton">Search</button>
-			</form>
-
-		</div>
 
 	</div>
 

@@ -89,7 +89,9 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
         $args = array(
             'offices' => $officeData,
             'agentCriteria' => (array_key_exists('agentCriteria', $_REQUEST)) ? $_REQUEST['agentCriteria'] : null,
+            'isAgent' => false,
         );
+        $args['agentsNav'] = $this->plugin->views->agentsNavView($args);
         $args = array_merge($args, $this->args);
 
         return $this->plugin->views->officesListView($args);
@@ -159,7 +161,9 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
             'officeId' => (array_key_exists('officeId', $_REQUEST)) ? $_REQUEST['officeId'] : '',
             'officeCount' => $officeCount,
             'agentCriteria' => (array_key_exists('agentCriteria', $_REQUEST)) ? $_REQUEST['agentCriteria'] : '',
+            'isAgent' => true,
         );
+        $args['agentsNav'] = $this->plugin->views->agentsNavView($args);
         $args = array_merge($args, $this->args);
 
         return $this->plugin->views->agentsListView($args);

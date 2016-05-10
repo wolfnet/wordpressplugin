@@ -83,39 +83,21 @@ if (!function_exists('paginate')) {
 
 <div id="<?php echo $instance_id; ?>" class="wolfnet_widget wolfnet_agentsList">
 
-	<?php
-		if (strlen($agenttitle) > 0) {
-			echo '<h2>' . $agenttitle . '</h2>';
-		}
-	?>
-
-	<?php
-		if ($showoffices && array_key_exists("REDIRECT_URL", $_SERVER)) {
-			echo '<a href="' . $linkBase . '#post-' . get_the_id() . '">Back</a> to offices.';
-		}
-	?>
-
-	<div class="wolfnet_viewAll">
-		<a href="?search&agentCriteria=#post-<?php echo get_the_id(); ?>">Click here</a> to view all agents and staff.
-	</div>
-
-	<form name="wolfnet_agentSearch" class="wolfnet_agentSearch" method="post"
-	 action="<?php echo $linkBase . "?search#post-" . get_the_id(); ?>">
+	<div class="wolfnet_agentOfficeHeader">
 
 		<?php
-			if ($officeId != '') {
-				echo "<input type=\"hidden\" name=\"officeId\" value=\"$officeId\" />";
+
+			if (strlen($agenttitle) > 0) {
+				echo '<h2>' . $agenttitle . '</h2>';
 			}
+
+			echo $agentsNav;
+
 		?>
 
-		<input type="text" name="agentCriteria" class="wolfnet_agentCriteria"
-		 value="<?php echo (strlen($agentCriteria) > 0) ? $agentCriteria : ''; ?>" />
+	</div>
 
-		<input type="submit" name="agentSearch" class="wolfnet_agentSearchButton" value="Search" />
-
-		<div class="wolfnet_clearfix"></div>
-
-	</form>
+	<div class="wolfnet_clearfix"></div>
 
 	<?php if ($officeCount > 1) { ?>
 		<label for="agentSort">Sort By:</label>

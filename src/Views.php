@@ -319,6 +319,17 @@ class Wolfnet_Views
     }
 
 
+    public function agentsNavView(array $args = array())
+    {
+        foreach ($args as $key => $item) {
+            $args[$key] = apply_filters('wolfnet_agentPagesNavView_' . $key, $item);
+        }
+
+        return apply_filters('wolfnet_agentPagesNavView', $this->parseTemplate('agentPagesNav', $args));
+
+    }
+
+
     public function agentsListView(array $args = array())
     {
         foreach ($args as $key => $item) {
