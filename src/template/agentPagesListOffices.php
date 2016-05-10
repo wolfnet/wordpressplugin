@@ -77,7 +77,7 @@ if (array_key_exists("REDIRECT_URL", $_SERVER)) {
 							 style="background-image: url('<?php echo $office['medium_url']; ?>');"></div>
 						</a>
 
-						<div class="wolfnet_officeData">
+						<div class="wolfnet_officeInfo">
 
 							<div class="wolfnet_officeContact">
 
