@@ -26,6 +26,8 @@ if (array_key_exists("REDIRECT_URL", $_SERVER)) {
 	$linkBase = $_SERVER['PHP_SELF'];
 }
 
+$allAgentsLink = $linkBase . '?search#post-' . get_the_id();
+
 if (!function_exists('paginate')) {
 
 	function paginate ($page, $total, $numPerPage, $officeId = '', $search = null, $sort = 'name') {
@@ -109,102 +111,117 @@ if (!function_exists('paginate')) {
 	<?php } ?>
 
 	<?php
-
 		if (count($agents) == 0) {
-
-			if (array_key_exists("agentCriteria", $_REQUEST) && strlen($_REQUEST['agentCriteria']) > 0) {
-				echo '<p class="wolfnet_noResults">There are no matching agents. Please try your search again.</p>';
-			} elseif (strlen($officeId) > 0) {
-				$link = $linkBase . "#post-" . get_the_id();
-				echo '<p class="wolfnet_noResults">There are currently no agents in this office. Go ';
-				echo '<a href="' . $link . '">back</a> to see agents in our other offices.</p>';
-			}
-
-		}
-
-		foreach ($agents as $agent) {
-
-			if ($agent['display_agent']) {
-
-				$agentLink = $linkBase . '?agentId=' . $agent['agent_id'];
-
-				if (array_key_exists('agentCriteria', $_REQUEST) && strlen($_REQUEST['agentCriteria']) > 0) {
-					$agentLink .= '&agentCriteria=' . $_REQUEST['agentCriteria'];
-				}
-
-				if ($officeId != '') {
-					$agentLink .= '&officeId=' . $officeId;
-				}
-
-				$agentLink .= '#post-' . get_the_id();
-
+			if (array_key_exists('agentCriteria', $_REQUEST) && strlen($_REQUEST['agentCriteria']) > 0) {
 	?>
-
-				<div class="wolfnet_agentPreview">
-					<?php
-						echo '<div class="wolfnet_agentImage">';
-						if (strlen($agent['thumbnail_url']) > 0) {
-							echo '<a href="' . $agentLink . '">';
-							echo "<img src=\"{$agent['thumbnail_url']}\" />";
-							echo '</a>';
-						}
-						echo '</div>';
-					?>
-
-					<div class="wolfnet_agentInfo">
-						<div class="wolfnet_agentName">
-							<?php
-								echo '<a href="' . $agentLink . '">';
-								echo $agent['first_name'] . " " . $agent['last_name'];
-								echo '</a>';
-							?>
-						</div>
-
-						<?php if (strlen($agent['business_name']) > 0) {
-							echo '<div class="wolfnet_agentBusiness">';
-							echo $agent['business_name'];
-							echo '</div>';
-						} ?>
-
-						<div class="wolfnet_agentContact">
-							<?php
-
-								if (strlen($agent['office_phone_number']) > 0) {
-									echo '<div class="wolfnet_agentOfficePhone">';
-									echo "Office: " . $agent['office_phone_number'];
-									echo '</div>';
-								}
-
-								if (strlen($agent['mobile_phone']) > 0) {
-									echo '<div class="wolfnet_agentMobilePhone">';
-									echo "Mobile: " . $agent['mobile_phone'];
-									echo '</div>';
-								}
-
-								if (strlen($agent['email_address']) > 0) {
-									echo '<div class="wolfnet_agentOfficeEmail">';
-									echo '<strong>Email:</strong> <a href="?contact='
-										. $agent['agent_id'] . '#post-' . get_the_id() . '">'
-										. $agent['first_name'] . ' '
-										. $agent['last_name'] . '</a>';
-									echo '</div>';
-								}
-
-							?>
-						</div>
-					</div>
-				</div>
-
+				<p class="wolfnet_noResults">There are no matching agents. Please try your search again.</p>
 	<?php
-
-			} // end if display_agent
-		} // end foreach
-
-		echo '<div class="wolfnet_clearfix"></div>';
-
-		echo paginate($page, $totalrows, $numperpage, $officeId, $agentCriteria, $agentSort);
-
+			} elseif (strlen($officeId) > 0) {
 	?>
+				<p class="wolfnet_noResults">
+					There are currently no agents in this office. Go
+					<a href="<?php echo $allAgentsLink; ?>">back</a>
+					to see agents in our other offices.
+				</p>
+	<?php
+			}
+		}
+	?>
+
+
+		<?php
+
+			foreach ($agents as $agent) {
+
+				if ($agent['display_agent']) {
+
+					$agentLink = $linkBase . '?agentId=' . $agent['agent_id'];
+
+					if (array_key_exists('agentCriteria', $_REQUEST) && strlen($_REQUEST['agentCriteria']) > 0) {
+						$agentLink .= '&agentCriteria=' . $_REQUEST['agentCriteria'];
+					}
+
+					if ($officeId != '') {
+						$agentLink .= '&officeId=' . $officeId;
+					}
+
+					$agentLink .= '#post-' . get_the_id();
+
+		?>
+
+					<div class="wolfnet_agentPreview">
+
+						<div class="wolfnet_agentImage">
+							<?php
+								if (strlen($agent['thumbnail_url']) > 0) {
+									echo '<a href="' . $agentLink . '">';
+									echo '<img src="' . $agent['thumbnail_url'] . '" />';
+									echo '</a>';
+								}
+							?>
+						</div>
+
+						<div class="wolfnet_agentInfo">
+
+							<div class="wolfnet_agentName">
+								<?php
+									echo '<a href="' . $agentLink . '">';
+									echo $agent['first_name'] . ' ' . $agent['last_name'];
+									echo '</a>';
+								?>
+							</div>
+
+							<?php if (strlen($agent['business_name']) > 0) {
+								echo '<div class="wolfnet_agentBusiness">';
+								echo $agent['business_name'];
+								echo '</div>';
+							} ?>
+
+							<div class="wolfnet_agentContact">
+
+								<?php
+
+									if (strlen($agent['office_phone_number']) > 0) {
+										echo '<div class="wolfnet_agentOfficePhone">';
+										echo "Office: " . $agent['office_phone_number'];
+										echo '</div>';
+									}
+
+									if (strlen($agent['mobile_phone']) > 0) {
+										echo '<div class="wolfnet_agentMobilePhone">';
+										echo "Mobile: " . $agent['mobile_phone'];
+										echo '</div>';
+									}
+
+									if (strlen($agent['email_address']) > 0) {
+										echo '<div class="wolfnet_agentOfficeEmail">';
+										echo '<strong>Email:</strong> <a href="?contact='
+											. $agent['agent_id'] . '#post-' . get_the_id() . '">'
+											. $agent['first_name'] . ' '
+											. $agent['last_name'] . '</a>';
+										echo '</div>';
+									}
+
+								?>
+
+							</div>
+
+						</div>
+
+					</div>
+
+		<?php
+
+				} // end if display_agent
+
+			} // end foreach
+
+		?>
+
+
+	<div class="wolfnet_clearfix"></div>
+
+	<?php echo paginate($page, $totalrows, $numperpage, $officeId, $agentCriteria, $agentSort); ?>
 
 </div>
 
