@@ -112,9 +112,6 @@
 											echo '<br />';
 											echo $office['city'] . ', ' . $office['state'] . ' ';
 											echo $office ['postal_code'];
-										} else {
-											// TODO: Replace with a min-height style applied to parent
-											echo '&nbsp;<br />&nbsp;';
 										}
 									?>
 								</div>
@@ -125,21 +122,14 @@
 
 								<?php
 
-									// TODO: Replace extraSpace usage with a min-height style
-									$extraSpace = '';
-
 									if (strlen($office['phone_number']) > 0) {
 										echo '<li><span class="wnt-icon wnt-icon-phone"></span> ';
 										echo $office['phone_number'] . '</li>';
-									} else {
-										$extraSpace .= '<li>&nbsp;</li>';
 									}
 
 									if (strlen($office['fax_number']) > 0) {
 										echo '<li><span  class="wnt-icon wnt-icon-fax"></span> ';
 										echo $office['fax_number'] . '</li>';
-									} else {
-										$extraSpace .= '<li>&nbsp;</li>';
 									}
 
 								?>
@@ -152,8 +142,6 @@
 									<span class="wnt-icon wnt-icon-location"></span>
 									<a href="<?php echo $searchLink; ?>">Search All Area Listings</a>
 								</li>
-
-								<?php echo $extraSpace; ?>
 
 							</ul>
 
@@ -186,7 +174,7 @@
 
 	jQuery(function ($) {
 
-		var $officesWidget = $('.wolfnet_officesList');
+		var $officesWidget = $('#<?php echo $instance_id; ?>');
 
 		// Search field
 		var $searchForm = $officesWidget.find('.wolfnet_agentSearch');
@@ -196,18 +184,61 @@
 			$(this).find('input[name="agentCriteria"]').focus();
 		});
 
-		// Resize office boxes to height of tallest one.
-		var $offices = $('#<?php echo $instance_id; ?> .wolfnet_officePreview');
-		var maxHeight<?php echo $instance_id; ?> = 0;
-		/*$offices.each(function () {
-			if ($(this).height() > maxHeight<?php echo $instance_id; ?>) {
-				maxHeight<?php echo $instance_id; ?> = $(this).height();
-			}
-		});
 
-		$('#<?php echo $instance_id; ?> .wolfnet_officePreview').height(
-			maxHeight<?php echo $instance_id; ?>
-		);*/
+		// Resize office boxes to height of tallest one.
+
+		var officeSections = [
+			{
+				selector:  '.wolfnet_officeContact',
+				maxHeight: 0
+			},
+			{
+				selector:  '.wolfnet_officeLinks',
+				maxHeight: 0
+			}
+		];
+
+		var resizeOffices = function () {
+			var $offices = $officesWidget.find('.wolfnet_officePreview'),
+				sectionsSelector = '';
+
+			// Reset the max heights
+			for (var i=0, l=officeSections.length; i<l; i++) {
+				officeSections[i].maxHeight = 0;
+			}
+
+			// Update the max heights
+			$offices.each(getOfficeSectionsMaxHeights);
+
+			// Set the new heights
+			for (var i=0, l=officeSections.length; i<l; i++) {
+				$offices.find(officeSections[i].selector).height(officeSections[i].maxHeight);
+			}
+
+		};
+
+		var getOfficeSectionsMaxHeights = function () {
+			var $office = $(this);
+			var $officeSection, sectionHeight;
+			for (var i=0, l=officeSections.length; i<l; i++) {
+				$officeSection = $office.find(officeSections[i].selector);
+				if ($officeSection.length > 0) {
+					$officeSection.css('height', 'auto');
+					sectionHeight = $officeSection.height();
+					if (sectionHeight > officeSections[i].maxHeight) {
+						officeSections[i].maxHeight = sectionHeight;
+					}
+				}
+			}
+		};
+
+		resizeOffices();
+
+		var resizeTimeout;
+		$(window).resize(function () {
+			clearTimeout(resizeTimeout);
+			resizeTimeout = setTimeout(resizeOffices, 500);
+		});
 
 	});
 
