@@ -79,7 +79,7 @@ $postHash = '#post-' . get_the_id();
 
 						<div class="wolfnet_officeInfo">
 
-							<div class="wolfnet_officeContact">
+							<div class="wolfnet_aoContact">
 
 								<div class="wolfnet_officeName">
 									<?php echo '<a href="' . $officeLink . '">' . $office['name'] . '</a>'; ?>
@@ -100,7 +100,7 @@ $postHash = '#post-' . get_the_id();
 
 							</div>
 
-							<ul class="wolfnet_officeLinks">
+							<ul class="wolfnet_aoLinks">
 
 								<?php
 
@@ -129,11 +129,11 @@ $postHash = '#post-' . get_the_id();
 
 							</ul>
 
-							<div class="wolfnet_officeActions wolfnet_clearfix">
-								<div class="wolfnet_officeAction">
+							<div class="wolfnet_aoActions wolfnet_clearfix">
+								<div class="wolfnet_aoAction">
 									<a href="<?php echo $officeLink; ?>">Meet Our Agents</a>
 								</div>
-								<div class="wolfnet_officeAction">
+								<div class="wolfnet_aoAction">
 									<a href="<?php echo $searchResultLink; ?>">Featured Listings</a>
 								</div>
 							</div>
@@ -173,11 +173,11 @@ $postHash = '#post-' . get_the_id();
 
 		var officeSections = [
 			{
-				selector:  '.wolfnet_officeContact',
+				selector:  '.wolfnet_aoContact',
 				maxHeight: 0
 			},
 			{
-				selector:  '.wolfnet_officeLinks',
+				selector:  '.wolfnet_aoLinks',
 				maxHeight: 0
 			}
 		];

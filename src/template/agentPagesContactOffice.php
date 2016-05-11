@@ -42,7 +42,7 @@
 			<?php echo $office['name']; ?>
 		</div>
 
-		<div class="wolfnet_officeContact">
+		<div class="wolfnet_officeContact wolfnet_aoContact">
 			<?php
 			echo $office['address_1'] . ' ' . $office['address_2'];
 			echo '<br>';
