@@ -105,13 +105,15 @@ if (array_key_exists("REDIRECT_URL", $_SERVER)) {
 								<?php
 
 									if (strlen($office['phone_number']) > 0) {
-										echo '<li><span class="wnt-icon wnt-icon-phone"></span> ';
-										echo $office['phone_number'] . '</li>';
+										echo '<li><span class="wnt-icon wnt-icon-phone"></span> '
+											. '<span class="wnt-visuallyhidden">Office phone:</span> '
+											. $office['phone_number'] . '</li>';
 									}
 
 									if (strlen($office['fax_number']) > 0) {
-										echo '<li><span  class="wnt-icon wnt-icon-fax"></span> ';
-										echo $office['fax_number'] . '</li>';
+										echo '<li><span  class="wnt-icon wnt-icon-fax"></span> '
+											. '<span class="wnt-visuallyhidden">Office fax:</span> '
+											. $office['fax_number'] . '</li>';
 									}
 
 								?>
