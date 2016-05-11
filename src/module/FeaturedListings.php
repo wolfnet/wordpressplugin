@@ -49,7 +49,7 @@ class Wolfnet_Module_FeaturedListings
             'title'      => '',
             'direction'  => 'left',
             'autoplay'   => true,
-            'speed'      => 5,
+            'speed'      => 'slow',
             'ownertype'  => 'agent_broker',
             'maxresults' => 50,
             'numrows'    => 50,
@@ -63,11 +63,12 @@ class Wolfnet_Module_FeaturedListings
     {
         $options = $this->plugin->getOptions($this->getDefaults(), $instance);
 
-        $options['autoplay_false_wps']  = selected($options['autoplay'], 'false', false);
-        $options['autoplay_true_wps']   = selected($options['autoplay'], 'true', false);
-        $options['direction_left_wps']  = selected($options['direction'], 'left', false);
+        $options['autoplay_false_wps'] = selected($options['autoplay'], 'false', false);
+        $options['autoplay_true_wps'] = selected($options['autoplay'], 'true', false);
+        $options['direction_left_wps'] = selected($options['direction'], 'left', false);
         $options['direction_right_wps'] = selected($options['direction'], 'right', false);
-        $options['ownertypes']          = $this->plugin->data->getOwnerTypes();
+        $options['ownertypes'] = $this->plugin->data->getOwnerTypes();
+        $options['speedsettings'] = $this->plugin->data->getSpeedSettings();
 
         return $options;
     }
