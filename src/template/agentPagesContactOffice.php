@@ -43,7 +43,7 @@
 		</div>
 
 		<div class="wolfnet_officeContact">
-			<?php 
+			<?php
 			echo $office['address_1'] . ' ' . $office['address_2'];
 			echo '<br>';
 			echo $office['city'] . ', ' . $office['state'] . ' ';
@@ -92,8 +92,8 @@
 		(<span class="wolfnet_red">*</span> Indicates a required field.)<br />
 
 		<label for="name"><span class="wolfnet_red">*</span>Name: </label>
-		<input type="text" name="wolfnet_name" 
-			class="wolfnet_name<?php echo ($errorField == 'wolfnet_name') ? ' wolfnet_required' : ''; ?>" 
+		<input type="text" name="wolfnet_name"
+			class="wolfnet_name<?php echo ($errorField == 'wolfnet_name') ? ' wolfnet_required' : ''; ?>"
 			value="<?php echo (array_key_exists('wolfnet_name', $_REQUEST)) ? $_REQUEST['wolfnet_name'] : ''; ?>" />
 		<?php
 			if($errorField == 'wolfnet_name') {
