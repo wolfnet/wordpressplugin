@@ -1094,22 +1094,39 @@
 
 }
 
-.wolfnet_hidden {
+.wolfnet_hidden,
+.wnt-hidden {
     display: none;
 }
 
-.wolfnet_clearfix:before,
-.wolfnet_clearfix:after {
-    content: "";
-    display: table;
+// Accessibility - visually-hidden descriptions
+// More info: http://a11yproject.com/patterns/#anchors
+.wnt-visuallyhidden,
+.wnt-sr-only {
+	border: 0;
+	clip: rect(0 0 0 0);
+	height: 1px;
+	margin: -1px;
+	overflow: hidden;
+	padding: 0;
+	position: absolute;
+	width: 1px;
 }
 
-.wolfnet_clearfix:after {
-    clear: both;
-}
+.wolfnet_clearfix,
+.wnt-clearfix {
+	/* *zoom: 1; */
+	float: none !important;
+	clear: both;
 
-.wolfnet_clearfix {
-    /* *zoom: 1; */
-    float: none !important;
-    clear: both;
+	&:before,
+	&:after {
+		content: '';
+		display: table;
+	}
+
+	&:after {
+		clear: both;
+	}
+
 }
