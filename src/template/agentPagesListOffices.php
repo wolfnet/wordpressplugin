@@ -26,6 +26,8 @@ if (array_key_exists("REDIRECT_URL", $_SERVER)) {
 	$linkBase = $_SERVER['PHP_SELF'];
 }
 
+$postHash = '#post-' . get_the_id();
+
 ?>
 
 
@@ -55,18 +57,16 @@ if (array_key_exists("REDIRECT_URL", $_SERVER)) {
 
 				if ($office['office_id'] != '') {
 
-					$officeLink = $linkBase . '?officeId=' . $office['office_id'];
-					$officeLink .= '#post-' . get_the_id();
+					$officeLink = $linkBase . '?officeId=' . $office['office_id'] . $postHash;
 
-					$searchLink = $office['search_solution_url'] . "/?action=newsearch";
-					$searchLink .= "&office_id=" . $office['office_id'];
-					$searchLink .= "&ld_action=find_office";
+					$searchLink = $office['search_solution_url'] . '/?action=newsearch'
+						. '&office_id=' . $office['office_id']
+						. '&ld_action=find_office';
 
-					$searchResultLink = $office['search_solution_url'] . "/?action=newsearchsession";
-					$searchResultLink .= "&office_id=" . $office['office_id'];
+					$searchResultLink = $office['search_solution_url'] . '/?action=newsearchsession'
+						. '&office_id=' . $office['office_id'];
 
-					$contactLink = "?contactOffice=" . $office['office_id'];
-					$contactLink .= "#post-" . get_the_id();
+					$contactLink = '?contactOffice=' . $office['office_id'] . $postHash;
 
 		?>
 
@@ -90,10 +90,10 @@ if (array_key_exists("REDIRECT_URL", $_SERVER)) {
 								<div class="wolfnet_officeAddress">
 									<?php
 										if (strlen($office['address_1']) > 0) {
-											echo $office['address_1'] . ' ' . $office['address_2'];
-											echo '<br />';
-											echo $office['city'] . ', ' . $office['state'] . ' ';
-											echo $office ['postal_code'];
+											echo $office['address_1'] . ' ' . $office['address_2']
+												. '<br />'
+												. $office['city'] . ', ' . $office['state'] . ' '
+												. $office ['postal_code'];
 										}
 									?>
 								</div>

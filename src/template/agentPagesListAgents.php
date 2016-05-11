@@ -26,7 +26,9 @@ if (array_key_exists("REDIRECT_URL", $_SERVER)) {
 	$linkBase = $_SERVER['PHP_SELF'];
 }
 
-$allAgentsLink = $linkBase . '?search#post-' . get_the_id();
+$postHash = '#post-' . get_the_id();
+
+$allAgentsLink = $linkBase . '?search' . $postHash;
 
 if (!function_exists('paginate')) {
 
@@ -64,12 +66,12 @@ if (!function_exists('paginate')) {
 			if ($i == $page) {
 				$output .= '<li class="wolfnet_selected">' . $i . '</li>';
 			} else {
-				$output .= '<li><a href="' . $linkBase . 'agentpage=' . $i . '#post-' . get_the_id() . '">' . $i . '</a></li>';
+				$output .= '<li><a href="' . $linkBase . 'agentpage=' . $i . $postHash . '">' . $i . '</a></li>';
 			}
 		}
 
 		if(($page * $numPerPage) < $total) {
-			$output .= '<li><a href="' . $linkBase . 'agentpage=' . ($page + 1) . '#post-' . get_the_id() . '">Next</a></li>';
+			$output .= '<li><a href="' . $linkBase . 'agentpage=' . ($page + 1) . $postHash . '">Next</a></li>';
 		}
 
 		$output .= "</ul>";
@@ -135,17 +137,15 @@ if (!function_exists('paginate')) {
 
 				if ($agent['display_agent']) {
 
-					$agentLink = $linkBase . '?agentId=' . $agent['agent_id'];
+					$agentLink = $linkBase . '?agentId=' . $agent['agent_id']
+						. (
+							array_key_exists('agentCriteria', $_REQUEST) && (strlen($_REQUEST['agentCriteria']) > 0) ?
+							'&agentCriteria=' . $_REQUEST['agentCriteria'] : ''
+						)
+						. ($officeId != '' ? '&officeId=' . $officeId : '')
+						. $postHash;
 
-					if (array_key_exists('agentCriteria', $_REQUEST) && strlen($_REQUEST['agentCriteria']) > 0) {
-						$agentLink .= '&agentCriteria=' . $_REQUEST['agentCriteria'];
-					}
-
-					if ($officeId != '') {
-						$agentLink .= '&officeId=' . $officeId;
-					}
-
-					$agentLink .= '#post-' . get_the_id();
+					$contactLink = '?contact=' . $agent['agent_id'] . $postHash;
 
 		?>
 
@@ -163,21 +163,21 @@ if (!function_exists('paginate')) {
 
 						<div class="wolfnet_agentInfo">
 
-							<div class="wolfnet_agentName">
-								<?php
-									echo '<a href="' . $agentLink . '">';
-									echo $agent['first_name'] . ' ' . $agent['last_name'];
-									echo '</a>';
-								?>
-							</div>
 
-							<?php if (strlen($agent['business_name']) > 0) {
-								echo '<div class="wolfnet_agentBusiness">';
-								echo $agent['business_name'];
-								echo '</div>';
-							} ?>
+								<div class="wolfnet_agentName">
+									<?php
+										echo '<a href="' . $agentLink . '">';
+										echo $agent['first_name'] . ' ' . $agent['last_name'];
+										echo '</a>';
+									?>
+								</div>
 
 							<div class="wolfnet_agentContact">
+								<?php if (strlen($agent['business_name']) > 0) {
+									echo '<div class="wolfnet_agentBusiness">';
+									echo $agent['business_name'];
+									echo '</div>';
+								} ?>
 
 								<?php
 
