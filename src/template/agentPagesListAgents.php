@@ -32,7 +32,7 @@ $allAgentsLink = $linkBase . '?search' . $postHash;
 
 if (!function_exists('paginate')) {
 
-	function paginate ($page, $total, $numPerPage, $officeId = '', $search = null, $sort = 'name') {
+	function paginate ($page, $total, $numPerPage, $postHash, $officeId = '', $search = null, $sort = 'name') {
 		/*
 		 * Note: We're using "agentpage" instead of just "page" as out URL variable
 		 * here because Wordpress uses page internally for their own pagination
@@ -228,7 +228,7 @@ if (!function_exists('paginate')) {
 
 	<div class="wolfnet_clearfix"></div>
 
-	<?php echo paginate($page, $totalrows, $numperpage, $officeId, $agentCriteria, $agentSort); ?>
+	<?php echo paginate($page, $totalrows, $numperpage, $postHash, $officeId, $agentCriteria, $agentSort); ?>
 
 </div>
 
