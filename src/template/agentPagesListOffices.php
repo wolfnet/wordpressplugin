@@ -70,24 +70,24 @@ $postHash = '#post-' . get_the_id();
 
 		?>
 
-					<div class="wolfnet_officePreview">
+					<div class="wolfnet_aoItem">
 
 						<a href="<?php echo $officeLink; ?>">
-							<div class="wolfnet_officeImage"
+							<div class="wolfnet_aoImage"
 							 style="background-image: url('<?php echo $office['medium_url']; ?>');"></div>
 						</a>
 
-						<div class="wolfnet_officeInfo">
+						<div class="wolfnet_aoItemInfo">
 
 							<div class="wolfnet_aoContact">
 
-								<div class="wolfnet_officeName">
+								<div class="wolfnet_aoItemTitle">
 									<?php echo '<a href="' . $officeLink . '">' . $office['name'] . '</a>'; ?>
 								</div>
 
 								<hr />
 
-								<div class="wolfnet_officeAddress">
+								<div class="wolfnet_aoItemSubTitle">
 									<?php
 										if (strlen($office['address_1']) > 0) {
 											echo $office['address_1'] . ' ' . $office['address_2']
@@ -183,7 +183,7 @@ $postHash = '#post-' . get_the_id();
 		];
 
 		var resizeOffices = function () {
-			var $offices = $officesWidget.find('.wolfnet_officePreview'),
+			var $offices = $officesWidget.find('.wolfnet_aoItem'),
 				sectionsSelector = '';
 
 			// Reset the max heights

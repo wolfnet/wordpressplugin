@@ -150,9 +150,9 @@ if (!function_exists('paginate')) {
 
 		?>
 
-					<div class="wolfnet_agentPreview">
+					<div class="wolfnet_aoItem wolfnet_agentPreview">
 
-						<div class="wolfnet_agentImage">
+						<div class="wolfnet_aoImage">
 							<?php
 								if (strlen($agent['thumbnail_url']) > 0) {
 									echo '<a href="' . $agentLink . '">';
@@ -162,11 +162,11 @@ if (!function_exists('paginate')) {
 							?>
 						</div>
 
-						<div class="wolfnet_agentInfo">
+						<div class="wolfnet_aoItemInfo">
 
-							<div class="wolfnet_agentContact">
+							<div class="wolfnet_aoContact">
 
-								<div class="wolfnet_agentName">
+								<div class="wolfnet_aoItemTitle">
 									<?php
 										echo '<a href="' . $agentLink . '">';
 										echo $agent['first_name'] . ' ' . $agent['last_name'];
@@ -176,11 +176,9 @@ if (!function_exists('paginate')) {
 
 								<hr />
 
-								<?php if (strlen($agent['business_name']) > 0) {
-									echo '<div class="wolfnet_agentBusiness">';
-									echo $agent['business_name'];
-									echo '</div>';
-								} ?>
+								<div class="wolfnet_aoItemSubTitle">
+									<?php $agent['business_name']; ?>
+								</div>
 
 							</div>
 
