@@ -130,6 +130,7 @@ if (!function_exists('paginate')) {
 		}
 	?>
 
+	<div class="wolfnet_agents">
 
 		<?php
 
@@ -163,6 +164,7 @@ if (!function_exists('paginate')) {
 
 						<div class="wolfnet_agentInfo">
 
+							<div class="wolfnet_agentContact">
 
 								<div class="wolfnet_agentName">
 									<?php
@@ -172,39 +174,43 @@ if (!function_exists('paginate')) {
 									?>
 								</div>
 
-							<div class="wolfnet_agentContact">
+								<hr />
+
 								<?php if (strlen($agent['business_name']) > 0) {
 									echo '<div class="wolfnet_agentBusiness">';
 									echo $agent['business_name'];
 									echo '</div>';
 								} ?>
 
+							</div>
+
+							<ul class="wolfnet_aoLinks">
+
 								<?php
 
 									if (strlen($agent['office_phone_number']) > 0) {
-										echo '<div class="wolfnet_agentOfficePhone">';
-										echo "Office: " . $agent['office_phone_number'];
-										echo '</div>';
+										echo '<li><span class="wnt-icon wnt-icon-phone"></span> '
+											. '<span class="wnt-visuallyhidden">Office phone:</span> '
+											. $agent['office_phone_number'] . '</li>';
 									}
 
 									if (strlen($agent['mobile_phone']) > 0) {
-										echo '<div class="wolfnet_agentMobilePhone">';
-										echo "Mobile: " . $agent['mobile_phone'];
-										echo '</div>';
+										echo '<li><span class="wnt-icon wnt-icon-mobile"></span> '
+											. '<span class="wnt-visuallyhidden">Mobile phone:</span> '
+											. $agent['mobile_phone'] . '</li>';
 									}
 
 									if (strlen($agent['email_address']) > 0) {
-										echo '<div class="wolfnet_agentOfficeEmail">';
-										echo '<strong>Email:</strong> <a href="?contact='
-											. $agent['agent_id'] . '#post-' . get_the_id() . '">'
-											. $agent['first_name'] . ' '
-											. $agent['last_name'] . '</a>';
-										echo '</div>';
+										echo '<li><span class="wnt-icon wnt-icon-envelope"></span> '
+											. '<span class="wnt-visuallyhidden">Email:</span> '
+											. '<a href="' . $contactLink . '">'
+											. $agent['first_name'] . ' ' . $agent['last_name']
+											. '</a></li>';
 									}
 
 								?>
 
-							</div>
+							</ul>
 
 						</div>
 
@@ -218,6 +224,7 @@ if (!function_exists('paginate')) {
 
 		?>
 
+	</div>
 
 	<div class="wolfnet_clearfix"></div>
 
