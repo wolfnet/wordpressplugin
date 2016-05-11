@@ -80,7 +80,7 @@
 	?>
 
 	<form class="wolfnet_contactForm" action="<?php echo $_SERVER['PHP_SELF'] . "?contactOffice=" . $officeId; ?>" method="post">
-		<?php 
+		<?php
 		if(array_key_exists('errorField', $_REQUEST)) {
 			echo '<span class="wolfnet_red">Please correct the errors below.</span><br />';
 			$errorField = $_REQUEST['errorField'];
@@ -102,7 +102,7 @@
 		?>
 
 		<label for="email"><span class="wolfnet_red">*</span>Email: </label>
-		<input type="text" name="wolfnet_email" 
+		<input type="text" name="wolfnet_email"
 			class="wolfnet_email<?php echo ($errorField == 'wolfnet_email') ? ' wolfnet_required' : ''; ?>"
 			value="<?php echo (array_key_exists('wolfnet_email', $_REQUEST)) ? $_REQUEST['wolfnet_email'] : ''; ?>" />
 		<?php
@@ -157,7 +157,7 @@ jQuery(function($) {
 	$(window).load(function() {
 		$('#wolfnet_submit').click(function(event) {
 			event.preventDefault();
-			
+
 			var message = '';
 			var error = false;
 			var validEmail = true;
