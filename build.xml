@@ -35,7 +35,14 @@
 
 
     <target name="compile-less">
-        <compile-less />
+        <sequential>
+            <!-- Compile Less Files -->
+            <echo>Compiling Less Files</echo>
+            <exec executable="grunt.cmd" dir="${basedir}">
+                <arg value="less" />
+            </exec>
+        </sequential>
+        <!-- <compile-less /> -->
     </target>
 
 

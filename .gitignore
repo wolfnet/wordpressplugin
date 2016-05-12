@@ -8,7 +8,7 @@ LessCompilerOutput.txt
 Desktop.ini
 *.sublime*
 **/icomoon/demo*
-
+node_modules
 /vendor/
 .vagrant/temp/*
 .vagrant/certs/*
