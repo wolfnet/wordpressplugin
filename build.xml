@@ -21,8 +21,8 @@
 
     <available file=".git" type="dir" property="git.present"/>
 
-    <condition property="gruntExecutable" value="grunt" else="grunt.cmd">
-        <os name="Mac OS X" />
+    <condition property="gruntExecutable" value="grunt.cmd" else="grunt">
+        <os family="windows" />
     </condition>
 
 
