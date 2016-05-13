@@ -21,6 +21,10 @@
 
     <available file=".git" type="dir" property="git.present"/>
 
+    <condition property="gruntExecutable" value="grunt.cmd" else="grunt">
+        <os family="windows" />
+    </condition>
+
 
     <!-- Define the Java Library for the AntContrib project -->
     <taskdef resource="net/sf/antcontrib/antcontrib.properties">
@@ -38,7 +42,7 @@
         <sequential>
             <!-- Compile Less Files -->
             <echo>Compiling Less Files</echo>
-            <exec executable="grunt.cmd" dir="${basedir}">
+            <exec executable="${gruntExecutable}" dir="${basedir}">
                 <arg value="less" />
             </exec>
         </sequential>
