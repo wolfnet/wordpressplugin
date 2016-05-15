@@ -212,22 +212,22 @@ class Wolfnet_Template
 
         $styles = array(
             'wolfnet' => array(
-                $this->url . 'css/wolfnet.src.css'
+                $this->url . 'css/wolfnet.min.css'
                 ),
             'wolfnet-agent' => array(
-                $this->url . 'css/wolfnetAgentPages.src.css'
+                $this->url . 'css/wolfnetAgentPages.min.css'
                 ),
             'wolfnet-admin' => array(
-                $this->url . 'css/wolfnetAdmin.src.css',
+                $this->url . 'css/wolfnetAdmin.min.css',
                 ),
             'wolfnet-custom' => array(
                 admin_url('admin-ajax.php') . '?action=wolfnet_css',
                 ),
             'wolfnet-ash' => array(
-                $this->url . 'css/wolfnet.ash.src.css'
+                $this->url . 'css/wolfnet.ash.min.css'
                 ),
             'wolfnet-birch' => array(
-                $this->url . 'css/wolfnet.birch.src.css'
+                $this->url . 'css/wolfnet.birch.min.css'
                 ),
             'jquery-ui' => array(
                 'http://ajax.googleapis.com/ajax/libs/jqueryui/' . $jquery_ui->ver
