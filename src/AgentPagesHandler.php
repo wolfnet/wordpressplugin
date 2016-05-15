@@ -163,8 +163,8 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
             'agentCriteria' => (array_key_exists('agentCriteria', $_REQUEST)) ? $_REQUEST['agentCriteria'] : '',
             'isAgent' => true,
         );
-        $args['agentsNav'] = $this->plugin->views->agentsNavView($args);
         $args = array_merge($args, $this->args);
+        $args['agentsNav'] = $this->plugin->views->agentsNavView($args);
 
         return $this->plugin->views->agentsListView($args);
 
