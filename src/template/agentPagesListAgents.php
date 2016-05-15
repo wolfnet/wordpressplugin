@@ -238,15 +238,26 @@ if (!function_exists('paginate')) {
 
 		$(window).load(function () {
 
+			var $aoWidget = $('#<?php echo $instance_id; ?>');
+
 			// Resize agent boxes to height of tallest one.
-			var $agents = $('#<?php echo $instance_id; ?> .wolfnet_agentPreview');
-			var maxHeight<?php echo $instance_id; ?> = 0;
+			var $agents = $aoWidget.find('.wolfnet_aoItem');
+			var maxHeight = 0;
 			$agents.each(function() {
-				if($(this).height() > maxHeight<?php echo $instance_id; ?>) {
-					maxHeight<?php echo $instance_id; ?> = $(this).height();
+				if($(this).height() > maxHeight) {
+					maxHeight = $(this).height();
 				}
 			});
-			$('#<?php echo $instance_id; ?> .wolfnet_agentPreview').height(maxHeight<?php echo $instance_id; ?>);
+			//$agents.height(maxHeight);
+
+
+			// Remove broken images
+			var $agentImages = $agents.find('.wolfnet_aoImage img');
+			$agentImages.each(function () {
+				var $aoImg = $(this);
+				console.log($aoImg);
+			});
+
 
 			<?php if ($officeCount > 1) { ?>
 
