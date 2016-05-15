@@ -34,6 +34,33 @@
 }
 
 
+//== Blur
+
+.blur(@amt: 10) {
+	@unitAmt: unit(@amt, px);
+	@marginAmt: (@amt * -2);
+	@marginUnitAmt: unit(@marginAmt, px);
+	//margin: @marginUnitAmt auto;
+	position: relative;
+	filter: blur(@unitAmt);
+	-webkit-filter: blur(@unitAmt);
+	-moz-filter: blur(@unitAmt);
+	-o-filter: blur(@unitAmt);
+	-ms-filter: blur(@unitAmt);
+	filter: ~"progid: DXImageTransform.Microsoft.Blur(PixelRadius='@{amt}')";
+	overflow: hidden;
+
+	&:after {
+		content: '';
+		height: 100%;
+		width: 100%;
+		background: rgba(255, 255, 255, .2);
+		position: absolute;
+	}
+
+}
+
+
 //== Vertical Alignment (http://zerosixthree.se/vertical-align-anything-with-just-3-lines-of-css/)
 
 .vertical-align(@position: relative) {

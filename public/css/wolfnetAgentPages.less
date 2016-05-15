@@ -27,17 +27,17 @@
 @accentColor: #7BA4CE;
 @btnRadius: 4px;
 
-@aoImgRatio: 35 / 21;
-@aoWidthXl: 350px;
-@aoWidthLg: 300px;
-@aoWidthMd: 250px;
-@aoWidthSm: 200px;
-@aoWidthXs: 100%;
-@aoImgHeightXl: round(@aoWidthXl / @aoImgRatio);
-@aoImgHeightLg: round(@aoWidthLg / @aoImgRatio);
-@aoImgHeightMd: round(@aoWidthMd / @aoImgRatio);
-@aoImgHeightSm: round(@aoWidthSm / @aoImgRatio);
-@aoImgHeightXs: round(300px / @aoImgRatio);
+@officeImgRatio: 35 / 21;
+@officeWidthXl: 350px;
+@officeWidthLg: 300px;
+@officeWidthMd: 250px;
+@officeWidthSm: 200px;
+@officeWidthXs: 100%;
+@officeImgHeightXl: round(@officeWidthXl / @officeImgRatio);
+@officeImgHeightLg: round(@officeWidthLg / @officeImgRatio);
+@officeImgHeightMd: round(@officeWidthMd / @officeImgRatio);
+@officeImgHeightSm: round(@officeWidthSm / @officeImgRatio);
+@officeImgHeightXs: round(300px / @officeImgRatio);
 
 
 .wolfnet_widget {
@@ -184,13 +184,54 @@
                 color: @accentColor;
             }
 
+            >a, >a:hover, >a:active, >a:visited {
+                .no-decoration();
+            }
+
             .wolfnet_aoImage {
-                height: @aoImgHeightXl;
+                position: relative;
                 overflow: hidden;
                 text-align: center;
-                background-repeat: no-repeat;
-                background-size: cover;
-                background-position-y: center;
+                background-color: #fff;
+
+                .wolfnet_aoImageMain,
+                .wolfnet_aoImageBg {
+                    display: block;
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                }
+
+                .wolfnet_aoImageMain {
+                    z-index: 1;
+
+                    img {
+                        display: block;
+                        margin: auto;
+                        .vertical-align();
+                        box-shadow: 0 0 40px rgba(0, 0, 0, 0.5);
+                        max-width: 100%;
+                        max-height: 100%;
+                    }
+
+                }
+
+                .wolfnet_aoImageBg {
+                    z-index: 0;
+                    background-color: #ccc;
+                    background-repeat: no-repeat;
+                    background-size: cover;
+                    background-position-y: center;
+                    .blur(10);
+                    opacity: 0.9;
+                    width: 110%;
+                    height: 110%;
+                    top: -5%;
+                    left: -5%;
+                }
+
             }
 
             .wolfnet_aoItemInfo {
@@ -279,20 +320,6 @@
 
         }
 
-        .wolfnet_agentPreview {
-            border: 1px solid #ccc;
-            padding-right: 10px;
-
-            .wolfnet_aoImage {
-                float: left;
-            }
-
-            .wolfnet_aoItemInfo {
-                float: right;
-            }
-
-        }
-
     }
 
     &.wolfnet_officesList,
@@ -305,15 +332,8 @@
             .wolfnet_aoItem {
                 display: inline-block;
                 width: 45%;
-                min-width: @aoWidthSm;
                 margin: 16px 16px 0 0;
                 text-align: left;
-            }
-
-            .wolfnet_agentPreview {
-                float: left;
-                margin: 10px 10px 0 0;
-                width: 280px;
             }
 
         }
@@ -323,6 +343,49 @@
         }
 
     }
+
+	&.wolfnet_officesList {
+		.wolfnet_offices {
+			.wolfnet_aoItem {
+				min-width: @officeWidthSm;
+
+				.wolfnet_aoImage {
+					height: @officeImgHeightXl;
+				}
+
+			}
+		}
+	}
+
+	&.wolfnet_agentsList {
+
+		.wolfnet_offices,
+		.wolfnet_agents {
+			text-align: center;
+
+			.wolfnet_aoItem {
+				min-width: 500px;
+
+				.wolfnet_aoImage,
+				.wolfnet_aoItemInfo {
+					display: inline-block;
+					vertical-align: top;
+				}
+
+				.wolfnet_aoImage {
+					width: 150px;
+					height: 200px;
+				}
+
+				.wolfnet_aoItemInfo {
+					width: 340px;
+				}
+
+			}
+
+		}
+
+	}
 
     &.wolfnet_agentShow {
         width: 100%;
@@ -489,7 +552,7 @@
             .wolfnet_offices {
                 .wolfnet_aoItem {
                     .wolfnet_aoImage {
-                        height: @aoImgHeightLg;
+                        height: @officeImgHeightLg;
                     }
                 }
             }
@@ -522,7 +585,7 @@
             .wolfnet_offices {
                 .wolfnet_aoItem {
                     .wolfnet_aoImage {
-                        height: @aoImgHeightMd;
+                        height: @officeImgHeightMd;
                     }
                 }
             }
@@ -581,7 +644,7 @@
                 .wolfnet_aoItem {
 
                     .wolfnet_aoImage {
-                        height: @aoImgHeightSm;
+                        height: @officeImgHeightSm;
                     }
 
                     .wolfnet_aoActions {
@@ -647,7 +710,7 @@
                     width: 100%;
 
                     .wolfnet_aoImage {
-                        height: @aoImgHeightXs;
+                        height: @officeImgHeightXs;
                     }
 
                     .wolfnet_aoActions {
