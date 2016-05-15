@@ -200,11 +200,20 @@ if (!function_exists('paginate')) {
 									}
 
 									if (strlen($agent['email_address']) > 0) {
-										echo '<li><span class="wnt-icon wnt-icon-envelope"></span> '
-											. '<span class="wnt-visuallyhidden">Email:</span> '
+										echo '<li><span class="wnt-icon wnt-icon-mail3"></span> '
+											. '<span class="wnt-visuallyhidden">Contact:</span> '
 											. '<a href="' . $contactLink . '">'
 											. $agent['first_name'] . ' ' . $agent['last_name']
 											. '</a></li>';
+									}
+
+									if (strlen($agent['address_1']) > 0) {
+										echo '<li><span class="wnt-icon wnt-icon-location"></span> '
+											. '<span class="wnt-visuallyhidden">Address:</span> '
+											. $agent['address_1'] . ' ' . $agent['address_2']
+											. '<br />'
+											. $agent['city'] . ', ' . $agent['state'] . ' '
+											. $agent ['zip_code'];
 									}
 
 								?>
