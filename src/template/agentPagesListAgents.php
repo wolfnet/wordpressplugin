@@ -28,6 +28,13 @@ if (array_key_exists("REDIRECT_URL", $_SERVER)) {
 
 $postHash = '#post-' . get_the_id();
 
+$linkExtra = (
+		array_key_exists('agentCriteria', $_REQUEST) && (strlen($_REQUEST['agentCriteria']) > 0) ?
+		'&agentCriteria=' . $_REQUEST['agentCriteria'] : ''
+	)
+	. ($officeId != '' ? '&officeId=' . $officeId : '')
+	. $postHash;
+
 $allAgentsLink = $linkBase . '?search' . $postHash;
 
 if (!function_exists('paginate')) {
@@ -138,15 +145,9 @@ if (!function_exists('paginate')) {
 
 				if ($agent['display_agent']) {
 
-					$agentLink = $linkBase . '?agentId=' . $agent['agent_id']
-						. (
-							array_key_exists('agentCriteria', $_REQUEST) && (strlen($_REQUEST['agentCriteria']) > 0) ?
-							'&agentCriteria=' . $_REQUEST['agentCriteria'] : ''
-						)
-						. ($officeId != '' ? '&officeId=' . $officeId : '')
-						. $postHash;
+					$agentLink = $linkBase . '?agentId=' . $agent['agent_id'] . $linkExtra;
 
-					$contactLink = '?contact=' . $agent['agent_id'] . $postHash;
+					$contactLink = $linkBase . '?contact=' . $agent['agent_id'] . $linkExtra;
 
 		?>
 
