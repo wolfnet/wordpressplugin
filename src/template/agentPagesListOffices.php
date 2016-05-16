@@ -82,7 +82,7 @@ $postHash = '#post-' . get_the_id();
 							</div>
 						</a>
 
-						<div class="wolfnet_aoItemInfo">
+						<div class="wolfnet_aoInfo">
 
 							<div class="wolfnet_aoContact">
 
