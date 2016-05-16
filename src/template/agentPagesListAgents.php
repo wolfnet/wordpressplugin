@@ -167,7 +167,7 @@ if (!function_exists('paginate')) {
 
 							<div class="wolfnet_aoContact">
 
-								<div class="wolfnet_aoItemTitle">
+								<div class="wolfnet_aoTitle">
 									<?php
 										echo '<a href="' . $agentLink . '">';
 										echo $agent['first_name'] . ' ' . $agent['last_name'];
@@ -177,7 +177,7 @@ if (!function_exists('paginate')) {
 
 								<hr />
 
-								<div class="wolfnet_aoItemSubTitle">
+								<div class="wolfnet_aoSubTitle">
 									<?php $agent['business_name']; ?>
 								</div>
 

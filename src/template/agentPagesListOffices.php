@@ -86,13 +86,13 @@ $postHash = '#post-' . get_the_id();
 
 							<div class="wolfnet_aoContact">
 
-								<div class="wolfnet_aoItemTitle">
+								<div class="wolfnet_aoTitle">
 									<?php echo '<a href="' . $officeLink . '">' . $office['name'] . '</a>'; ?>
 								</div>
 
 								<hr />
 
-								<div class="wolfnet_aoItemSubTitle">
+								<div class="wolfnet_aoSubTitle">
 									<?php
 										if (strlen($office['address_1']) > 0) {
 											echo $office['address_1'] . ' ' . $office['address_2']
