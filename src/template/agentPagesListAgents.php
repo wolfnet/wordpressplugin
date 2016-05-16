@@ -200,7 +200,7 @@ if (!function_exists('paginate')) {
 									}
 
 									if (strlen($agent['email_address']) > 0) {
-										echo '<li><span class="wnt-icon wnt-icon-mail3"></span> '
+										echo '<li><span class="wnt-icon wnt-icon-mail"></span> '
 											. '<span class="wnt-visuallyhidden">Contact:</span> '
 											. '<a href="' . $contactLink . '">'
 											. $agent['first_name'] . ' ' . $agent['last_name']

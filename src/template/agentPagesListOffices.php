@@ -124,7 +124,7 @@ $postHash = '#post-' . get_the_id();
 								?>
 
 								<li>
-									<span class="wnt-icon wnt-icon-mail3"></span>
+									<span class="wnt-icon wnt-icon-mail"></span>
 									<a href="<?php echo $contactLink; ?>">Contact Us</a>
 								</li>
 								<li>
