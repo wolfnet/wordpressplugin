@@ -60,7 +60,10 @@
             text-align: center;
             text-transform: uppercase;
             border-radius: @btnRadius;
-            font-size: 0.8em;
+
+            &.wnt-btn-primary {
+                background-color: @accentColor;
+            }
 
             &.wnt-btn-active {
                 background-color: @accentColor;
@@ -97,6 +100,7 @@
                     width: 6em;
                     height: 100%;
                     border-radius: @btnRadius;
+                    font-size: 0.8em;
                 }
 
                 .wnt-btn-group {
@@ -223,6 +227,7 @@
                     background-color: #ccc;
                     background-repeat: no-repeat;
                     background-size: cover;
+                    background-position-x: center;
                     background-position-y: center;
                     .blur(10);
                     opacity: 0.9;
@@ -374,6 +379,7 @@
 
 			.wolfnet_aoItem {
 				min-width: 500px;
+				height: 290px;
 
 				.wolfnet_aoImage,
 				.wolfnet_aoItemInfo {
@@ -383,7 +389,7 @@
 
 				.wolfnet_aoImage {
 					width: 150px;
-					height: 200px;
+					height: 100%;
 				}
 
 				.wolfnet_aoItemInfo {
@@ -409,8 +415,8 @@
         }
 
         .wolfnet_agentImage {
-            float: left;
-            margin-right: 20px;
+            float: right;
+            margin-left: 20px;
             width: 200px;
         }
 

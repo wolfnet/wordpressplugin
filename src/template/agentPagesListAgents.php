@@ -222,11 +222,13 @@ if (!function_exists('paginate')) {
 
 							<div class="wolfnet_aoActions wolfnet_clearfix">
 								<div class="wolfnet_aoAction">
-									<a class="wnt-btn" href="<?php echo $agentLink; ?>">View Profile</a>
+									<a class="wnt-btn wnt-btn-secondary"
+									 href="<?php echo $agentLink; ?>">View Profile</a>
 								</div>
 								<?php if (strlen($agent['web_url']) > 0) { ?>
 									<div class="wolfnet_aoAction">
-										<a class="wnt-btn wnt-btn-active" target="_blank" href="<?php echo $agent['web_url']; ?>">View Website</a>
+										<a class="wnt-btn wnt-btn-primary" target="_blank"
+										 href="<?php echo $agent['web_url']; ?>">View Website</a>
 									</div>
 								<?php } ?>
 							</div>

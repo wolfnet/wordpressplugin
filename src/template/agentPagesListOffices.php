@@ -136,10 +136,10 @@ $postHash = '#post-' . get_the_id();
 
 							<div class="wolfnet_aoActions wolfnet_clearfix">
 								<div class="wolfnet_aoAction">
-									<a href="<?php echo $officeLink; ?>">Meet Our Agents</a>
+									<a class="wnt-btn wnt-btn-secondary" href="<?php echo $officeLink; ?>">Meet Our Agents</a>
 								</div>
 								<div class="wolfnet_aoAction">
-									<a href="<?php echo $searchResultLink; ?>">Featured Listings</a>
+									<a class="wnt-btn wnt-btn-primary" href="<?php echo $searchResultLink; ?>">Featured Listings</a>
 								</div>
 							</div>
 
