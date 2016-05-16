@@ -20,6 +20,23 @@
  *                Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
+if (array_key_exists("REDIRECT_URL", $_SERVER)) {
+	$linkBase = $_SERVER['REDIRECT_URL'];
+} else {
+	$linkBase = $_SERVER['PHP_SELF'];
+}
+
+$postHash = '#post-' . get_the_id();
+
+$linkExtra = (
+		array_key_exists('agentCriteria', $_REQUEST) && (strlen($_REQUEST['agentCriteria']) > 0) ?
+		'&agentCriteria=' . $_REQUEST['agentCriteria'] : ''
+	)
+	. ($officeId != '' ? '&officeId=' . $officeId : '')
+	. $postHash;
+
+$contactLink = $linkBase . '?contact=' . $agent['agent_id'] . $linkExtra;
+
 if (!function_exists('formatUrl')) {
 	function formatUrl ($url) {
 		$cleanUrl = $url;
@@ -29,6 +46,28 @@ if (!function_exists('formatUrl')) {
 		return '<a href="' . $cleanUrl . '">' . str_replace("http://", "", $cleanUrl) . '</a>';
 	}
 }
+
+// Agent links
+$socialLinks = array(
+	array( 'field' => 'facebook_url',     'label' => 'Facebook',   'icon'  => 'facebook' ),
+	array( 'field' => 'twitter_url',      'label' => 'Twitter',    'icon'  => 'twitter' ),
+	array( 'field' => 'linkedin_url',     'label' => 'LinkedIn',   'icon'  => 'linkedin' ),
+	array( 'field' => 'google_plus_url',  'label' => 'Google+',    'icon'  => 'googleplus' ),
+	array( 'field' => 'youtube_url',      'label' => 'YouTube',    'icon'  => 'youtube' ),
+	array( 'field' => 'pinterest_url',    'label' => 'Pinterest',  'icon'  => 'pinterest' ),
+	array( 'field' => 'instagram_url',    'label' => 'Instagram',  'icon'  => 'instagram' ),
+);
+
+$contactMethods = array(
+	array( 'field' => 'office_phone_number',     'label' => 'Office',     'icon'  => 'office' ),
+	array( 'field' => 'primary_contact_phone',   'label' => 'Primary',    'icon'  => 'phone' ),
+	array( 'field' => 'mobile_phone',            'label' => 'Mobile',     'icon'  => 'mobile' ),
+	array( 'field' => 'home_phone_number',       'label' => 'Home',       'icon'  => 'home' ),
+	array( 'field' => 'fax_number',              'label' => 'Fax',        'icon'  => 'fax' ),
+	array( 'field' => 'pager_number',            'label' => 'Pager',      'icon'  => 'bell' ),
+	array( 'field' => 'toll_free_phone_number',  'label' => 'Toll Free',  'icon'  => 'phone' ),
+);
+
 
 ?>
 
@@ -70,116 +109,111 @@ if (!function_exists('formatUrl')) {
 
 		<div class="wolfnet_agent">
 
-			<div class="wolfnet_agentImage">
-				<?php
-					if (strlen($agent['image_url']) > 0) {
-						echo "<img src=\"{$agent['image_url']}\" />";
-					}
-				?>
-			</div>
+			<div class="wolfnet_aoSidebar">
 
-			<div class="wolfnet_agentInfo">
-
-				<div class="wolfnet_agentName">
-					<?php
-						echo $agent['first_name'] . " " . $agent['last_name'];
-					?>
-				</div>
-
-				<?php
-
-					if (strlen($agent['title']) > 0) {
-						echo '<div class="wolfnet_agentTitle">';
-						echo $agent['title'];
-						echo '</div>';
-					}
-
-					if (strlen($agent['business_name']) > 0) {
-						echo '<div class="wolfnet_agentBusiness">';
-						echo $agent['business_name'];
-						echo '</div>';
-					}
-
-					if (strlen($agent['address_1']) > 0) {
-						echo '<div class="wolfnet_agentAddress">';
-						echo $agent['address_1'] . ' ' . $agent['address_2'];
-						echo '<br />';
-						if (strlen($agent['city']) > 0) {
-							echo $agent['city'] . ', ';
-						}
-						echo $agent['state'] . ' ' . $agent['zip_code'];
-						echo '</div>';
-					}
-
-				?>
-
-				<div class="wolfnet_agentContact">
-
-					<?php
-
-						$agentContact = array(
-							'office_phone_number' => 'Office',
-							'primary_contact_phone' => 'Primary',
-							'mobile_phone' => 'Mobile',
-							'home_phone_number' => 'Home',
-							'fax_number' => 'Fax',
-							'pager_number' => 'Pager',
-							'toll_free_phone_number' => 'Toll Free',
-						);
-
-						foreach ($agentContact as $key => $label) {
-							if (strlen($agent[$key]) > 0) {
-								echo '<div class="wolfnet_$key">';
-								echo "<strong>$label:</strong> " . $agent[$key];
-								echo '</div>';
+				<div class="wolfnet_aoExtLinks">
+					<?php if (strlen($agent['web_url']) > 0) { ?>
+						<a class="wnt-btn wnt-btn-primary" target="_blank"
+						 href="<?php echo $agent['web_url']; ?>">View Website</a>
+					<?php } ?>
+					<div class="wolfnet_aoSocial">
+						<?php foreach ($socialLinks as $socialLink) {
+							if (strlen($agent[$socialLink['field']]) > 0) {
+								echo '<a target="_blank" href="' . $agent[$socialLink['field']] . '">'
+									. '<span class="wnt-icon wnt-icon-' . $socialLink['icon'] . '"></span>'
+									. '<span class="wnt-visuallyhidden"> ' . $socialLink['label'] . '</span>'
+									. '</a>';
 							}
-						}
+						} ?>
+					</div>
+					<div class="wnt-clearfix"></div>
+				</div>
 
-						if (strlen($agent['email_address']) > 0) {
-							echo '<div class="wolfnet_agentOfficeEmail">';
-							echo '<strong>Email:</strong> <a href="?contact='
-								. $agent['agent_id']
-								. '&officeId=' . $officeId
-								. '#post-' . get_the_id() . '">'
-								. $agent['first_name'] . ' '
-								. $agent['last_name'] . '</a>';
-							echo '</div>';
-						}
+				<div class="wolfnet_aoContact">
 
-						if (strlen($agent['web_url']) > 0) {
-							echo '<div class="wolfnet_agentUrl">';
-							echo "<strong>Website:</strong> " . formatUrl($agent['web_url']);
-							echo '</div>';
-						}
+					<div class="wolfnet_aoImage wolfnet_agentImage">
+						<span class="wolfnet_aoImageMain">
+							<img src="<?php echo $agent['image_url']; ?>"
+							 onerror="this.className += ' wnt-hidden';" />
+						</span>
+						<span class="wolfnet_aoImageBg"
+						 style="background-image: url('<?php echo $agent['image_url']; ?>');"></span>
+					</div>
 
-					?>
+					<div class="wolfnet_aoContactInfo">
+
+						<div class="wolfnet_aoTitle">
+							Contact <?php echo $agent['first_name'] . ' ' . $agent['last_name']; ?>
+						</div>
+
+						<hr />
+
+						<ul class="wolfnet_aoLinks">
+
+							<?php
+
+								$contactNumbers = array();
+
+								foreach ($contactMethods as $contactMethod) {
+									// Filter out duplicate voice numbers
+									if (
+										(strlen($agent[$contactMethod['field']]) > 0)
+										&& (
+											($contactMethod['field'] == 'fax_number')
+											|| ($contactMethod['field'] == 'pager_number')
+											|| !in_array($agent[$contactMethod['field']], $contactNumbers)
+										)
+									) {
+										array_push($contactNumbers, $agent[$contactMethod['field']]);
+										echo '<li>'
+											. '<span class="wnt-icon wnt-icon-' . $contactMethod['icon'] . '"></span> '
+											. '<span class="wnt-visuallyhidden">' . $contactMethod['label'] . ':</span> '
+											. $agent[$contactMethod['field']]
+											. '</li>';
+									}
+								}
+
+								if (strlen($agent['email_address']) > 0) {
+									echo '<li><span class="wnt-icon wnt-icon-mail"></span> '
+										. '<span class="wnt-visuallyhidden">Email:</span> '
+										. '<a href="' . $contactLink . '">'
+										. $agent['first_name'] . ' ' . $agent['last_name']
+										. '</a></li>';
+								}
+
+								if (strlen($agent['address_1']) > 0) {
+									echo '<li><span class="wnt-icon wnt-icon-location"></span> '
+										. '<span class="wnt-visuallyhidden">Address:</span> '
+										. $agent['address_1'] . ' ' . $agent['address_2']
+										. '<br />'
+										. $agent['city'] . ', ' . $agent['state'] . ' '
+										. $agent ['zip_code'];
+								}
+
+							?>
+
+						</ul>
+
+					</div>
 
 				</div>
 
 			</div>
 
-			<div class="wolfnet_agentBio">
+			<div class="wolfnet_aoInfo">
+
+				<div class="wolfnet_aoTitle">
+					<?php echo $agent['first_name'] . ' ' . $agent['last_name']; ?>
+				</div>
+
+				<hr />
+
+				<div class="wolfnet_aoSubTitle">
+					<div><?php echo $agent['title']; ?></div>
+					<div><?php echo $agent['business_name']; ?></div>
+				</div>
 
 				<?php
-
-					// Agent links
-					$agentLinks = array(
-						'facebook_url'    => 'Facebook',
-						'twitter_url'     => 'Twitter',
-						'linkedin_url'    => 'LinkedIn',
-						'google_plus_url' => 'Google+',
-						'youtube_url'     => 'YouTube',
-						'pinterest_url'   => 'Pinterest',
-						'instagram_url'   => 'Instagram',
-					);
-
-					echo '<ul class="wolfnet_agentLinks">';
-					foreach ($agentLinks as $key => $label) {
-						if (strlen($agent[$key]) > 0) {
-							echo "<li><strong>$label:</strong> " . formatUrl($agent[$key]) . "</li>";
-						}
-					}
-					echo '</ul>';
 
 					// Agent text areas
 					$agentBio = array(
@@ -196,9 +230,10 @@ if (!function_exists('formatUrl')) {
 
 					foreach ($agentBio as $key => $label) {
 						if (strlen($agent[$key]) > 0) {
-							echo '<span class="wolfnet_agentSection">';
-							echo '<p><strong>' . $label . '</strong><br />' . $agent[$key] . '</p>';
-							echo '</span>';
+							echo '<div class="wolfnet_aoSectionTitle">' . $label . '</div>'
+								. '<div class="wolfnet_aoSection">'
+								. '<p>' . $agent[$key] . '</p>'
+								. '</div>';
 						}
 					}
 
@@ -206,10 +241,10 @@ if (!function_exists('formatUrl')) {
 						strlen($agent['optional_field_label']) > 0 &&
 						strlen($agent['optional_field_value']) > 0
 					) {
-						echo '<span class="wolfnet_agentSection">';
-						echo '<p><strong>' . $agent['optional_field_label'] . '</strong><br />';
-						echo $agent['optional_field_value'] . '</p>';
-						echo '</span>';
+						echo '<div class="wolfnet_aoSectionTitle">' . $agent['optional_field_label'] . '</div>'
+							. '<div class="wolfnet_aoSection">'
+							. '<p>' . $agent['optional_field_value'] . '</p>'
+							. '</div>';
 					}
 
 					// Favorite links

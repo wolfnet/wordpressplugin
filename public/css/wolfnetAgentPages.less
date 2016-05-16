@@ -403,61 +403,74 @@
 
 	}
 
-    &.wolfnet_agentShow {
-        width: 100%;
+	&.wolfnet_agentShow {
+		width: 100%;
 
-        h2 {
-            margin-top: 0;
-        }
+		h2 {
+			margin-top: 0;
+		}
 
-        .wolfnet_viewAll,
-        .wolfnet_back {
-            margin-bottom: 30px;
-        }
+		.wolfnet_viewAll,
+		.wolfnet_back {
+			margin-bottom: 30px;
+		}
 
-        .wolfnet_agentImage {
-            float: right;
-            margin-left: 20px;
-            width: 200px;
-        }
+		.wolfnet_aoSidebar {
+			float: right;
+			margin-left: 20px;
+			width: 280px;
 
-        .wolfnet_agentInfo {
-            float: right;
-            width: 50%;
+			.wolfnet_aoExtLinks {
+				margin-bottom: 1em;
 
-            .wolfnet_agentName {
-                font-weight: bold;
-                font-size: 1.2em;
-                /* These next two lines are some stupid crap they wanted so the
-                text lines up with the top of the agent image... If it breaks
-                later, well... */
-                line-height:.7em;
-                padding-bottom:10px;
-            }
+				.wnt-btn {
+					float: left;
+					width: auto;
+					font-size: 0.8em;
+				}
 
-            .wolfnet_agentTitle {
-                font-weight: bold;
-                font-size: 1.2em;
-            }
+				.wolfnet_aoSocial {
+					text-align: right;
 
-        }
+					a, a:hover, a:active, a:visited {
+						.no-decoration();
+						margin-left: 1em;
+					}
 
-        .wolfnet_agentBio {
-            clear: both;
-            padding-top: 20px;
+					.wnt-icon {
+						vertical-align: middle;
+						font-size: 2em;
+						color: @accentColor;
+					}
 
-            .wolfnet_agentLinks {
-                padding-bottom: 10px;
-                list-style: none;
-            }
+				}
 
-            .wolfnet_agentSection {
-                padding: 10px 0;
-            }
+			}
 
-        }
+			.wolfnet_aoContact {
+				border: 1px solid #ccc;
 
-    }
+				.wolfnet_aoImage {
+					height: 250px;
+				}
+
+				.wolfnet_aoContactInfo {
+					margin: 1em;
+				}
+
+			}
+
+		}
+
+		.wolfnet_aoSectionTitle {
+			margin-top: 1em;
+		}
+
+		.wolfnet_aoSection {
+			font-size: 0.8em;
+		}
+
+	}
 
     .wolfnet_agentPagination {
         list-style: none;
