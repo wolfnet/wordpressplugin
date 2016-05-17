@@ -4,7 +4,7 @@ dist
 LessCompilerOutput.txt
 *wolfnet*.css
 *.min.css*
-*.min.js
+*.min.js*
 Desktop.ini
 *.sublime*
 **/icomoon/demo*

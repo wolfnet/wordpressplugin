@@ -20,8 +20,28 @@ module.exports = function (grunt) {
 				}]
 			}
 		},
+		// Minify JavaScript files and create source maps
+		uglify: {
+			main: {
+				options: {
+					sourceMap: true
+				},
+				files: [{
+					expand: true,
+					cwd: 'public/js',
+					src: [ '*.src.js', '!**/*.min.js' ],
+					dest: 'public/js/',
+					ext: '.min.js',
+					extDot: 'last',
+					rename: function (dest, src) {
+						return dest + src.replace('.src', '');
+					}
+				}]
+			}
+		},
 	});
 
 	grunt.loadNpmTasks('grunt-contrib-less');
+	grunt.loadNpmTasks('grunt-contrib-uglify');
 
 };
