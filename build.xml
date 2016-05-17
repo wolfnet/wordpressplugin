@@ -30,7 +30,7 @@
     </taskdef>
 
 
-    <target name="compile" depends="compile-less">
+    <target name="compile" depends="compile-less,minify-javascript">
     </target>
 
 
@@ -45,10 +45,6 @@
     </target>
 
 
-    <target name="minify" depends="minify-javascript">
-    </target>
-
-
     <target name="minify-javascript">
         <sequential>
             <echo>Minifiying JavaScript Files</echo>
@@ -59,7 +55,7 @@
     </target>
 
 
-    <target name="build" depends="compile,minify,git-revision">
+    <target name="build" depends="compile,git-revision">
         <clean-for-build />
 
         <echo>Creating Build Directory: ${dir.build}</echo>
