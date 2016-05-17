@@ -110,15 +110,6 @@ if (!function_exists('paginate')) {
 
 	<div class="wolfnet_clearfix"></div>
 
-	<?php if ($officeCount > 1) { ?>
-		<label for="agentSort">Sort By:</label>
-		<select name="agentSort" class="wolfnet_agentSort">
-			<option value="name" <?php echo ($agentSort == 'name') ? 'selected="selected"' : ''; ?>>Name</option>
-			<option value="office_id" <?php echo ($agentSort == 'office_id') ? 'selected="selected"' : ''; ?>>Office</option>
-		</select>
-		<div class="wolfnet_clearfix"></div>
-	<?php } ?>
-
 	<?php
 		if (count($agents) == 0) {
 			if (array_key_exists('agentCriteria', $_REQUEST) && strlen($_REQUEST['agentCriteria']) > 0) {
@@ -272,50 +263,6 @@ if (!function_exists('paginate')) {
 				}
 			});
 			//$agents.height(maxHeight);
-
-
-			// Remove broken images
-			var $agentImages = $agents.find('.wolfnet_aoImage img');
-			$agentImages.each(function () {
-				var $aoImg = $(this);
-				console.log($aoImg);
-			});
-
-
-			<?php if ($officeCount > 1) { ?>
-
-				$('#<?php echo $instance_id; ?> .wolfnet_agentSort').change(function () {
-					var href = $(location).attr('href');
-					var sortPos = href.indexOf('agentSort');
-
-					if (sortPos > -1) {
-						if ($(this).val() == 'name') {
-							href = href.replace('agentSort=office_id', 'agentSort=name');
-						} else {
-							href = href.replace('agentSort=name', 'agentSort=office_id');
-						}
-					} else {
-						// We need to put the sort param before the anchor.
-						var hashPos = href.indexOf('#');
-						if (hashPos > -1) {
-							href = href.replace('#', '&agentSort=' + $(this).val() + '#');
-						} else {
-							href += '&agentSort=' + $(this).val();
-						}
-					}
-
-					// Remove page is there since the pages won't correlate between
-					// offices and agents.
-					var pagePos = href.indexOf('agentpage');
-					if (pagePos > -1) {
-						href = href.replace(/&agentpage=[0-9]+/gi, '');
-					}
-
-					window.location.href = href;
-
-				});
-
-			<?php } ?>
 
 		});
 
