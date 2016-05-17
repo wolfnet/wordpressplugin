@@ -49,6 +49,7 @@ if (typeof jQuery != 'undefined') {
             itemClass: 'item'
         };
 
+
         /**
          * Retrieve the "state" data for the supplied target element.
          *
@@ -60,6 +61,7 @@ if (typeof jQuery != 'undefined') {
         {
             return $(target).data(pluginName) || {};
         };
+
 
         /**
          * This function is responsible for clearing whitespace which otherwise causes spacing issues.
@@ -77,6 +79,7 @@ if (typeof jQuery != 'undefined') {
             }).remove();
 
         };
+
 
         /**
          * Ensures there are enough items within the container so that the animation is not jerky
@@ -106,6 +109,7 @@ if (typeof jQuery != 'undefined') {
 
         };
 
+
         /**
          * Retrieves all child elements which match a specific class.
          *
@@ -120,6 +124,7 @@ if (typeof jQuery != 'undefined') {
             return data.$itemContainer.children().filter('.' + data.option.itemClass);
 
         };
+
 
         /**
          * Establishes the next frame event for animation. This method will use the most efficient
@@ -157,6 +162,7 @@ if (typeof jQuery != 'undefined') {
 
         };
 
+
         /**
          * The callback which is executed for every animation frame. This method also determines
          * whether or not the animation should actually be performed.
@@ -186,6 +192,7 @@ if (typeof jQuery != 'undefined') {
             }
 
         };
+
 
         /**
          * Perform the actual animation. This function advances or retreats the "scroll" position of
@@ -233,6 +240,7 @@ if (typeof jQuery != 'undefined') {
 
         };
 
+
         /**
          * Determines whether or not animation should be performed.
          *
@@ -247,6 +255,30 @@ if (typeof jQuery != 'undefined') {
             return (data.animating || false);
 
         };
+
+
+        /**
+         * Translate string speed to integer.
+         *
+         * @param  string  speed  The speed string to be translated ('slow'/'medium'/'fast')
+         *
+         * @return int
+         */
+        var translateSpeed = function(speed)
+        {
+            switch (speed) {
+                case 'slow':
+                    return 1;
+                case 'medium':
+                    return 2;
+                case 'fast':
+                    return 3;
+                default:
+                    // Default to slowest in case of unspecified speed or deprecated integer value
+                    return 1;
+            }
+        };
+
 
         /**
          * This method builds control elements which can be used to control the animation of the
@@ -271,6 +303,7 @@ if (typeof jQuery != 'undefined') {
             createButton(target, 'right').prependTo($target);
 
         };
+
 
         /**
          * Creates a control element for a specified direction and returns it. The new element is
@@ -318,6 +351,7 @@ if (typeof jQuery != 'undefined') {
 
         };
 
+
         var methods = {
 
             /**
@@ -329,10 +363,10 @@ if (typeof jQuery != 'undefined') {
              */
             init: function(options)
             {
-
                 return this.each(function(){
                     var target = this;
                     var $target = $(this);
+                    options.speed = translateSpeed(options.speed);
 
                     $target.data(pluginName, {option:$.extend({}, defaultOptions, options)});
 
@@ -344,9 +378,6 @@ if (typeof jQuery != 'undefined') {
                     if (!$target.hasClass(data.option.componentClass)) {
                         $target.addClass(data.option.componentClass);
                     }
-
-                    data.option.speed = Math.round(data.option.speed / 4);
-                    data.option.speed = (data.option.speed < 1) ? 1 : (data.option.speed > 5) ? 5 : data.option.speed;
 
                     removeWhitespaceBetweenTags(target);
                     data.itemWidth = getItems(target).first().outerWidth(true);
