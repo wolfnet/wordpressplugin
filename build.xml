@@ -11,11 +11,8 @@
     <property name="dir.js"    value="public/js" />
     <property name="dir.css"   value="public/css" />
 
-    <property name="tool.yuicompressor" value="${dir.ant}/yuicompressor-2.4.5.jar"  />
     <property name="tool.closure"       value="${dir.ant}/closure/compiler.jar" />
     <property name="tool.ant-contrib"   value="${dir.ant}/ant-contrib/lib/ant-contrib.jar" />
-    <property name="tool.rhino"         value="${dir.ant}/rhino.jar" />
-    <property name="tool.less"          value="${dir.ant}/less-rhino-1.1.5.js" />
 
     <property name="dist.name"          value="${dir.dist}/${ant.project.name}" />
 
@@ -46,16 +43,10 @@
                 <arg value="less" />
             </exec>
         </sequential>
-        <!-- <compile-less /> -->
     </target>
 
 
-    <target name="minify" depends="minify-css,minify-javascript">
-    </target>
-
-
-    <target name="minify-css" depends="compile-less">
-        <min-css />
+    <target name="minify" depends="minify-javascript">
     </target>
 
 
@@ -187,49 +178,6 @@
                 <replacefilter token="{X.X.X}" value="${version}+${git.revision}" />
                 <replacefilter token="{X.X.X-stable}" value="${version}" />
             </replace>
-        </sequential>
-    </macrodef>
-
-
-    <macrodef name="compile-less">
-        <sequential>
-            <!-- Compile Less Files -->
-            <echo>Compiling Less Files</echo>
-            <apply executable="java" parallel="false" output="${basedir}/LessCompilerOutput.txt" append="true" failonerror="true">
-                <fileset dir="${basedir}/" >
-                    <include name="${dir.css}/**/*.less" />
-                    <exclude name="${dir.css}/**/*.inc.less" />
-                </fileset>
-                <arg line="-jar" />
-                <arg path="${tool.rhino}" />
-                <arg path="${tool.less}" />
-                <srcfile />
-                <mapper type="glob" from="*.less" to="${basedir}/*.src.css" />
-                <targetfile />
-                <arg line="-o"/>
-            </apply>
-        </sequential>
-    </macrodef>
-
-
-    <macrodef name="min-css">
-        <!-- Minify CSS Files -->
-        <sequential>
-            <echo>Minifiying CSS Files</echo>
-            <apply executable="java" parallel="false">
-                <fileset dir="${basedir}/" >
-                    <include name="${dir.css}/**/*.src.css" />
-                    <exclude name="${dir.css}/**/*.min.css" />
-                </fileset>
-                <arg line="-jar" />
-                <arg path="${tool.yuicompressor}" />
-                <srcfile />
-                <arg line="--line-break" />
-                <arg line="4000" />
-                <arg line="-o" />
-                <mapper type="glob" from="*.src.css" to="${basedir}/*.min.css" />
-                <targetfile />
-            </apply>
         </sequential>
     </macrodef>
 
