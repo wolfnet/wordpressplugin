@@ -3,12 +3,12 @@ build
 dist
 LessCompilerOutput.txt
 *wolfnet*.css
-*.min.css
-*.min.js
+*.min.css*
+*.min.js*
 Desktop.ini
 *.sublime*
 **/icomoon/demo*
-
+node_modules/*
 /vendor/
 .vagrant/temp/*
 .vagrant/certs/*
