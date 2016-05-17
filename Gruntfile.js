@@ -7,9 +7,8 @@ module.exports = function (grunt) {
 		less: {
 			development: {
 				options: {
-					//paths: [ 'public/css' ],
-					//compress: true,
-					//sourceMap: true
+					compress: true,
+					sourceMap: true
 				},
 				files: [{
 					expand: true,
