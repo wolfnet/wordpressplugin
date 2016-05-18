@@ -59,12 +59,11 @@ $postHash = '#post-' . get_the_id();
 
 					$officeLink = $linkBase . '?officeId=' . $office['office_id'] . $postHash;
 
-					$searchLink = $office['search_solution_url'] . '/?action=newsearch'
-						. '&office_id=' . $office['office_id']
-						. '&ld_action=find_office';
+					$searchLink = $office['search_solution_url'] . '/?action=newsearchsession';
 
 					$searchResultLink = $office['search_solution_url'] . '/?action=newsearchsession'
-						. '&office_id=' . $office['office_id'];
+						. '&office_id=' . $office['office_id']
+						. '&ld_action=find_office';
 
 					$contactLink = '?contactOffice=' . $office['office_id'] . $postHash;
 
@@ -129,7 +128,7 @@ $postHash = '#post-' . get_the_id();
 								</li>
 								<li>
 									<span class="wnt-icon wnt-icon-location"></span>
-									<a href="<?php echo $searchLink; ?>">Search All Area Listings</a>
+									<a target="_blank" href="<?php echo $searchLink; ?>">Search All Area Listings</a>
 								</li>
 
 							</ul>
@@ -139,7 +138,7 @@ $postHash = '#post-' . get_the_id();
 									<a class="wnt-btn wnt-btn-secondary" href="<?php echo $officeLink; ?>">Meet Our Agents</a>
 								</div>
 								<div class="wolfnet_aoAction">
-									<a class="wnt-btn wnt-btn-primary" href="<?php echo $searchResultLink; ?>">Featured Listings</a>
+									<a class="wnt-btn wnt-btn-primary" target="_blank" href="<?php echo $searchResultLink; ?>">Featured Listings</a>
 								</div>
 							</div>
 
