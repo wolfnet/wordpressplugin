@@ -35,17 +35,11 @@ $linkExtra = (
 	. ($officeId != '' ? '&officeId=' . $officeId : '')
 	. $postHash;
 
+
 $contactLink = $linkBase . '?contact=' . $agent['agent_id'] . $linkExtra;
 
-if (!function_exists('formatUrl')) {
-	function formatUrl ($url) {
-		$cleanUrl = $url;
-		if (strpos($url, "http://") === false) {
-			$cleanUrl = "http://" . $cleanUrl;
-		}
-		return '<a href="' . $cleanUrl . '">' . str_replace("http://", "", $cleanUrl) . '</a>';
-	}
-}
+$agentsLink  = $linkBase . '?agentSearch&agentCriteria=' . $postHash;
+
 
 // Agent links
 $socialLinks = array(
@@ -67,6 +61,17 @@ $contactMethods = array(
 	array( 'field' => 'pager_number',            'label' => 'Pager',      'icon'  => 'bell' ),
 	array( 'field' => 'toll_free_phone_number',  'label' => 'Toll Free',  'icon'  => 'phone' ),
 );
+
+
+if (!function_exists('formatUrl')) {
+	function formatUrl ($url) {
+		$cleanUrl = $url;
+		if (strpos($url, "http://") === false) {
+			$cleanUrl = "http://" . $cleanUrl;
+		}
+		return '<a href="' . $cleanUrl . '">' . str_replace("http://", "", $cleanUrl) . '</a>';
+	}
+}
 
 
 ?>
@@ -96,7 +101,7 @@ $contactMethods = array(
 ?>
 
 		<div class="wolfnet_viewAll">
-			<a href="?search&agentCriteria=#post-<?php echo get_the_id(); ?>">Click here</a> to view all agents and staff.
+			<a href="<?php echo $agentsLink; ?>">Click here</a> to view all agents and staff.
 		</div>
 
 <?php

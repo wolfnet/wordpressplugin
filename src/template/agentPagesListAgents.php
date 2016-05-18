@@ -35,7 +35,7 @@ $linkExtra = (
 	. ($officeId != '' ? '&officeId=' . $officeId : '')
 	. $postHash;
 
-$allAgentsLink = $linkBase . '?search' . $postHash;
+$allAgentsLink = $linkBase . '?agentSearch' . $postHash;
 
 if (!function_exists('paginate')) {
 
@@ -54,7 +54,7 @@ if (!function_exists('paginate')) {
 		$iterate = ceil($total / $numPerPage);
 
 		if (!is_null($search)) {
-			$linkBase = '?search&agentCriteria=' . $search . '&';
+			$linkBase = '?agentSearch&agentCriteria=' . $search . '&';
 		} else {
 			$linkBase = '?';
 		}

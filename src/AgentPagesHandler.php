@@ -34,7 +34,7 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
     {
         $action = '';
 
-        if(array_key_exists('search', $_REQUEST)) {
+        if (array_key_exists('agentSearch', $_REQUEST)) {
             // All of the logic for searching is in the agentList function since
             // we're just passing more criteria to the API call.
             $action = 'agentList';

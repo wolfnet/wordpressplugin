@@ -26,7 +26,12 @@ if (array_key_exists("REDIRECT_URL", $_SERVER)) {
 	$linkBase = $_SERVER['PHP_SELF'];
 }
 
+$postHash = '#post-' . get_the_id();
+
 $searchPlaceholder = ( $isAgent ? 'search by agent last name' : 'search by office name' );
+
+$agentsLink  = $linkBase . '?agentSearch' . $postHash;
+$officesLink = $linkBase . $postHash;
 
 ?>
 
@@ -34,13 +39,13 @@ $searchPlaceholder = ( $isAgent ? 'search by agent last name' : 'search by offic
 
 	<div class="wnt-btn-group">
 		<a class="wnt-btn <?php if ($isAgent) { echo 'wnt-btn-active'; } ?>"
-		 href="?search#post-<?php echo get_the_id(); ?>">Agents</a>
+		 href="<?php echo $agentsLink; ?>">Agents</a>
 		<a class="wnt-btn <?php if (!$isAgent) { echo 'wnt-btn-active'; } ?>"
-		 href="<?php echo $linkBase . '#post-' . get_the_id(); ?>">Offices</a>
+		 href="<?php echo $officesLink; ?>">Offices</a>
 	</div>
 
 	<form name="wolfnet_agentSearch" class="wolfnet_agentSearch" method="post"
-	 action="<?php echo $linkBase . "?search#post-" . get_the_id(); ?>">
+	 action="<?php echo $agentsLink; ?>">
 		<?php // No office ID as a hidden field. We want to search all offices ?>
 		<span class="wolfnet_agentCriteria">
 			<span class="wnt-icon wnt-icon-search"></span>
@@ -48,7 +53,7 @@ $searchPlaceholder = ( $isAgent ? 'search by agent last name' : 'search by offic
 			 value="<?php echo (strlen($agentCriteria) > 0) ? $agentCriteria : ''; ?>"
 			 placeholder="<?php echo $searchPlaceholder; ?>" />
 		</span>
-		<button type="submit" name="agentSearch" class="wolfnet_agentSearchButton">Search</button>
+		<button type="submit" class="wolfnet_agentSearchButton">Search</button>
 	</form>
 
 </div>
