@@ -92,7 +92,7 @@ if (!function_exists('paginate')) {
 ?>
 
 
-<div id="<?php echo $instance_id; ?>" class="wolfnet_widget wolfnet_agentsList">
+<div id="<?php echo $instance_id; ?>" class="wolfnet_widget wolfnet_aoAgentsList">
 
 	<div class="wolfnet_agentOfficeHeader">
 
@@ -128,7 +128,7 @@ if (!function_exists('paginate')) {
 		}
 	?>
 
-	<div class="wolfnet_agents">
+	<div class="wolfnet_aoAgents">
 
 		<?php
 
@@ -142,7 +142,7 @@ if (!function_exists('paginate')) {
 
 		?>
 
-					<div class="wolfnet_aoItem wolfnet_agentPreview">
+					<div class="wolfnet_aoItem">
 
 						<a href="<?php echo $agentLink; ?>">
 							<div class="wolfnet_aoImage">

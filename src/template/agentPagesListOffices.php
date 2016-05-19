@@ -31,7 +31,7 @@ $postHash = '#post-' . get_the_id();
 ?>
 
 
-<div id="<?php echo $instance_id; ?>" class="wolfnet_widget wolfnet_officesList">
+<div id="<?php echo $instance_id; ?>" class="wolfnet_widget wolfnet_aoOfficesList">
 
 	<div class="wolfnet_agentOfficeHeader">
 

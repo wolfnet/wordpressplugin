@@ -45,9 +45,9 @@
 
 .wolfnet_widget {
 
-    &.wolfnet_officesList,
-    &.wolfnet_agentsList,
-    &.wolfnet_agentShow {
+    &.wolfnet_aoOfficesList,
+    &.wolfnet_aoAgentsList,
+    &.wolfnet_aoAgentDetails {
         font-family: 'Montserrat', sans-serif;
         font-size: 16px;
         line-height: 1.3em;
@@ -313,11 +313,11 @@
 	}
 
 	// All list items
-	&.wolfnet_officesList,
-	&.wolfnet_agentsList {
+	&.wolfnet_aoOfficesList,
+	&.wolfnet_aoAgentsList {
 
-		.wolfnet_offices,
-		.wolfnet_agents {
+		.wolfnet_aoOffices,
+		.wolfnet_aoAgents {
 			text-align: center;
 		}
 
@@ -345,7 +345,7 @@
 	}
 
 	// Only office list items
-	&.wolfnet_officesList {
+	&.wolfnet_aoOfficesList {
 		.wolfnet_aoItem {
 			width: @officeWidthBase;
 
@@ -357,10 +357,10 @@
 	}
 
 	// Only agent list items
-	&.wolfnet_agentsList {
+	&.wolfnet_aoAgentsList {
 
-		.wolfnet_offices,
-		.wolfnet_agents {
+		.wolfnet_aoOffices,
+		.wolfnet_aoAgents {
 			text-align: center;
 		}
 
@@ -394,7 +394,7 @@
 	}
 
 	// Only agent detail items
-	&.wolfnet_agentShow {
+	&.wolfnet_aoAgentDetails {
 		width: 100%;
 
 		h2 {
@@ -556,12 +556,12 @@
 // TODO: Check if needed after new styles are applied
 @media screen and (max-width: 520px) {
     .wolfnet_widget {
-        &.wolfnet_agentShow {
-            .wolfnet_agentInfo {
-                float: none !important;
-                clear: both;
-                padding-top: 20px;
-                width: 100% !important;
+        &.wolfnet_aoAgentDetails {
+            .wolfnet_aoAgentInfo {
+                //float: none !important;
+                //clear: both;
+                //padding-top: 20px;
+                //width: 100% !important;
             }
         }
     }
@@ -572,7 +572,7 @@
 @media screen and (min-width: 1221px) {
 
 	.wolfnet_widget {
-		&.wolfnet_officesList {
+		&.wolfnet_aoOfficesList {
 
 			.wolfnet_aoItem {
 				width: @officeWidthXl;
@@ -599,7 +599,7 @@
 @media screen and (max-width: 1024px) {
 
 	.wolfnet_widget {
-		&.wolfnet_officesList {
+		&.wolfnet_aoOfficesList {
 			font-size: 0.9em;
 		}
 	}
@@ -611,7 +611,7 @@
 @media screen and (min-width: 841px) and (max-width: 1024px) {
 
 	.wolfnet_widget {
-		&.wolfnet_officesList {
+		&.wolfnet_aoOfficesList {
 			.wolfnet_aoItem {
 				width: @officeWidthMd;
 
@@ -630,7 +630,7 @@
 @media screen and (max-width: 840px) {
 
 	.wolfnet_widget {
-		&.wolfnet_officesList {
+		&.wolfnet_aoOfficesList {
 
             .wolfnet_agentOfficeHeader {
 
@@ -668,7 +668,7 @@
 @media screen and (min-width: 531px) and (max-width: 840px) {
 
 	.wolfnet_widget {
-		&.wolfnet_officesList {
+		&.wolfnet_aoOfficesList {
 
 			.wolfnet_aoItem {
 				width: @officeWidthSm;
@@ -705,7 +705,7 @@
 @media screen and (max-width: 530px) {
 
 	.wolfnet_widget {
-		&.wolfnet_officesList {
+		&.wolfnet_aoOfficesList {
 
             .wolfnet_agentOfficeHeader {
 
