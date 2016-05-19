@@ -146,10 +146,8 @@ if (!function_exists('paginate')) {
 
 						<a href="<?php echo $agentLink; ?>">
 							<div class="wolfnet_aoImage">
-								<span class="wolfnet_aoImageMain">
-									<img src="<?php echo $agent['medium_url']; ?>"
-									 onerror="this.className += ' wnt-hidden';" />
-								</span>
+								<img src="<?php echo $agent['medium_url']; ?>"
+								 onerror="this.className += ' wnt-hidden';" />
 							</div>
 						</a>
 
