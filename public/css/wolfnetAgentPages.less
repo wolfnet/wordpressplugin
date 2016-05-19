@@ -28,7 +28,6 @@
 @btnRadius: 4px;
 
 @officeImgRatio: 4 / 3;
-@agentImgRatio:  3 / 4;
 @officeWidthBase: 288px;
 @officeWidthXl: 350px;
 @officeWidthLg: @officeWidthBase;
@@ -41,6 +40,20 @@
 @officeImgHeightMd: round(@officeWidthMd / @officeImgRatio);
 @officeImgHeightSm: round(@officeWidthSm / @officeImgRatio);
 @officeImgHeightXs: round(300px / @officeImgRatio);
+
+@agentImgRatio:  3 / 4;
+@agentImgWidthBase: 180px;
+@agentInfoWidthBase: 280px;
+@agentImgWidthXl: 200px;
+@agentInfoWidthXl: 340px;
+@agentImgWidthLg: @agentImgWidthBase;
+@agentInfoWidthLg: @agentInfoWidthBase;
+@agentImgWidthMd: 180px;
+@agentInfoWidthMd: 250px;
+@agentImgWidthSm: 100px;
+@agentInfoWidthSm: 200px;
+@agentImgWidthXs: 30%;
+@agentInfoWidthXs: 60%;
 
 
 .wolfnet_widget {
@@ -366,7 +379,7 @@
 		}
 
 		.wolfnet_aoItem {
-			min-width: 500px;
+			//min-width: 500px;
 			height: 290px;
 
 			.wolfnet_aoImage,
@@ -376,7 +389,7 @@
 			}
 
 			.wolfnet_aoImage {
-				width: 200px;
+				width: @agentImgWidthBase;
 				height: 100%;
 
 				img {
@@ -387,7 +400,7 @@
 			}
 
 			.wolfnet_aoInfo {
-				width: 340px;
+				width: @agentInfoWidthBase;
 			}
 
 		}
@@ -576,6 +589,7 @@
 @media screen and (min-width: 1221px) {
 
 	.wolfnet_widget {
+
 		&.wolfnet_aoOfficesList {
 
 			.wolfnet_aoItem {
@@ -588,6 +602,23 @@
 			}
 
 		}
+
+		&.wolfnet_aoAgentsList {
+
+			.wolfnet_aoItem {
+
+				.wolfnet_aoImage {
+					width: @agentImgWidthXl;
+				}
+
+				.wolfnet_aoInfo {
+					width: @agentInfoWidthXl;
+				}
+
+			}
+
+		}
+
 	}
 
 }
@@ -603,9 +634,12 @@
 @media screen and (max-width: 1024px) {
 
 	.wolfnet_widget {
-		&.wolfnet_aoOfficesList {
+
+		&.wolfnet_aoOfficesList
+		&.wolfnet_aoAgentsList {
 			font-size: 0.9em;
 		}
+
 	}
 
 }
@@ -615,6 +649,7 @@
 @media screen and (min-width: 841px) and (max-width: 1024px) {
 
 	.wolfnet_widget {
+
 		&.wolfnet_aoOfficesList {
 			.wolfnet_aoItem {
 				width: @officeWidthMd;
@@ -625,6 +660,21 @@
 
 			}
 		}
+
+		&.wolfnet_aoAgentsList {
+			.wolfnet_aoItem {
+
+				.wolfnet_aoImage {
+					width: @agentImgWidthMd;
+				}
+
+				.wolfnet_aoInfo {
+					width: @agentInfoWidthMd;
+				}
+
+			}
+		}
+
 	}
 
 }
@@ -634,7 +684,8 @@
 @media screen and (max-width: 840px) {
 
 	.wolfnet_widget {
-		&.wolfnet_aoOfficesList {
+		&.wolfnet_aoOfficesList,
+		&.wolfnet_aoAgentsList {
 
             .wolfnet_agentOfficeHeader {
 
@@ -672,6 +723,7 @@
 @media screen and (min-width: 531px) and (max-width: 840px) {
 
 	.wolfnet_widget {
+
 		&.wolfnet_aoOfficesList {
 
 			.wolfnet_aoItem {
@@ -700,6 +752,21 @@
 			}
 
 		}
+
+		&.wolfnet_aoAgentsList {
+			.wolfnet_aoItem {
+
+				.wolfnet_aoImage {
+					width: @agentImgWidthSm;
+				}
+
+				.wolfnet_aoInfo {
+					width: @agentInfoWidthSm;
+				}
+
+			}
+		}
+
 	}
 
 }
@@ -709,7 +776,9 @@
 @media screen and (max-width: 530px) {
 
 	.wolfnet_widget {
-		&.wolfnet_aoOfficesList {
+
+		&.wolfnet_aoOfficesList,
+		&.wolfnet_aoAgentsList {
 
             .wolfnet_agentOfficeHeader {
 
@@ -736,6 +805,10 @@
 
             }
 
+		}
+
+		&.wolfnet_aoOfficesList {
+
 			.wolfnet_aoItem {
 				width: 100%;
 
@@ -751,7 +824,45 @@
 
 			}
 
-        }
-    }
+		}
+
+		&.wolfnet_aoAgentsList {
+			.wolfnet_aoItem {
+
+				.wolfnet_aoImage {
+					width: @agentImgWidthXs;
+				}
+
+				.wolfnet_aoInfo {
+					width: @agentInfoWidthXs;
+				}
+
+			}
+		}
+
+	}
+
+}
+
+// Any screen (excludes printing and other non-screen presentations)
+@media screen {
+	.wolfnet_widget {
+
+		&.wolfnet_aoOfficesList,
+		&.wolfnet_aoAgentsList,
+		&.wolfnet_aoAgentDetails {
+			.wolfnet_aoItem {
+				.wolfnet_aoImage {
+
+					// Hide thumbnails - they fit better as background images
+					img {
+						display: none;
+					}
+
+				}
+			}
+		}
+
+	}
 
 }
