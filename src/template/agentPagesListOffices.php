@@ -31,7 +31,7 @@ $postHash = '#post-' . get_the_id();
 ?>
 
 
-<div id="<?php echo $instance_id; ?>" class="wolfnet_widget wolfnet_officesList">
+<div id="<?php echo $instance_id; ?>" class="wolfnet_widget wolfnet_aoOfficesList">
 
 	<div class="wolfnet_agentOfficeHeader">
 
@@ -73,11 +73,7 @@ $postHash = '#post-' . get_the_id();
 
 						<a href="<?php echo $officeLink; ?>">
 							<div class="wolfnet_aoImage">
-								<span class="wolfnet_aoImageMain">
-									<img src="<?php echo $office['medium_url']; ?>" />
-								</span>
-								<span class="wolfnet_aoImageBg"
-								 style="background-image: url('<?php echo $office['medium_url']; ?>');"></span>
+								<img src="<?php echo $office['medium_url']; ?>" />
 							</div>
 						</a>
 

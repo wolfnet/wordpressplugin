@@ -76,7 +76,7 @@ if (!function_exists('formatUrl')) {
 
 ?>
 
-<div id="<?php echo $instance_id; ?>" class="wolfnet_widget wolfnet_agentShow">
+<div id="<?php echo $instance_id; ?>" class="wolfnet_widget wolfnet_aoAgentDetails">
 
 <?php
 
@@ -137,12 +137,8 @@ if (!function_exists('formatUrl')) {
 				<div class="wolfnet_aoContact">
 
 					<div class="wolfnet_aoImage wolfnet_agentImage">
-						<span class="wolfnet_aoImageMain">
-							<img src="<?php echo $agent['image_url']; ?>"
-							 onerror="this.className += ' wnt-hidden';" />
-						</span>
-						<span class="wolfnet_aoImageBg"
-						 style="background-image: url('<?php echo $agent['image_url']; ?>');"></span>
+						<img src="<?php echo $agent['image_url']; ?>"
+						 onerror="this.className += ' wnt-hidden';" />
 					</div>
 
 					<div class="wolfnet_aoContactInfo">
