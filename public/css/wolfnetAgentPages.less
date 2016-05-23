@@ -229,7 +229,7 @@
                 }
             }
 
-        }
+		}
 
 		.wolfnet_aoImage {
 			position: relative;
@@ -291,8 +291,11 @@
 		}
 
 		.wolfnet_aoActions {
+			text-align: center;
 
 			.wolfnet_aoAction {
+				display: inline-block;
+				max-width: 130px;
 				text-align: center;
 				text-transform: uppercase;
 				font-size: 0.8em;
@@ -303,21 +306,6 @@
 					height: 100%;
 					color: #fff;
 					.no-decoration();
-				}
-
-				&:first-child {
-					float: left;
-				}
-
-				&:last-child {
-					float: right;
-
-					&:first-child {
-						float: none;
-						margin-left: auto;
-						margin-right: auto;
-					}
-
 				}
 
 			}
@@ -380,8 +368,10 @@
 		}
 
 		.wolfnet_aoItem {
-			//min-width: 500px;
-			height: 290px;
+
+			.wolfnet_aoBody {
+				height: 290px;
+			}
 
 			.wolfnet_aoImage,
 			.wolfnet_aoInfo {
@@ -392,6 +382,7 @@
 			.wolfnet_aoImage {
 				width: @agentImgWidthBase;
 				height: 100%;
+				background-color: #ccc;
 
 				img {
 					margin: 0;
@@ -402,6 +393,10 @@
 
 			.wolfnet_aoInfo {
 				width: @agentInfoWidthBase;
+			}
+
+			.wolfnet_aoFooter {
+				display: none;
 			}
 
 		}
@@ -685,6 +680,7 @@
 @media screen and (max-width: 840px) {
 
 	.wolfnet_widget {
+
 		&.wolfnet_aoOfficesList,
 		&.wolfnet_aoAgentsList {
 
@@ -715,6 +711,15 @@
             }
 
         }
+
+		&.wolfnet_aoAgentsList {
+
+			.wolfnet_aoItem {
+				width: 100%;
+			}
+
+		}
+
     }
 
 }
@@ -765,6 +770,19 @@
 					width: @agentInfoWidthSm;
 				}
 
+				.wolfnet_aoActions {
+					position: absolute;
+					top: 20px;
+					right: 20px;
+					width: 130px;
+
+					.wolfnet_aoAction {
+						width: 100%;
+						margin-bottom: 1em;
+					}
+
+				}
+
 			}
 		}
 
@@ -811,7 +829,8 @@
 		&.wolfnet_aoOfficesList {
 
 			.wolfnet_aoItem {
-				width: 100%;
+				width: @officeWidthXs;
+				max-width: @officeWidthBase;
 
 				.wolfnet_aoImage {
 					height: @officeImgHeightXs;
@@ -830,12 +849,32 @@
 		&.wolfnet_aoAgentsList {
 			.wolfnet_aoItem {
 
+				.wolfnet_aoBody {
+					height: 295px;
+				}
+
 				.wolfnet_aoImage {
 					width: @agentImgWidthXs;
 				}
 
 				.wolfnet_aoInfo {
 					width: @agentInfoWidthXs;
+					padding: 10px;
+
+					.wolfnet_aoActions {
+						display: none;
+					}
+
+				}
+
+				ul.wolfnet_aoLinks {
+					margin-bottom: 5px;
+				}
+
+				.wolfnet_aoFooter {
+					display: block;
+					padding: 20px 10px;
+					border-top: 1px solid #ccc;
 				}
 
 			}
