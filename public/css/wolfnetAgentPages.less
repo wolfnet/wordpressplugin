@@ -27,12 +27,22 @@
 @accentColor: #7BA4CE;
 @btnRadius: 4px;
 
+@screenXlMin: 1220px;
+@screenLgMin: 1024px;
+@screenMdMin: 840px;
+@screenSmMin: 600px; // 530
+
+@screenLgMax: (@screenXlMin - 1);
+@screenMdMax: (@screenLgMin - 1);
+@screenSmMax: (@screenMdMin - 1);
+@screenXsMax: (@screenSmMin - 1);
+
 @officeImgRatio: 4 / 3;
 @officeWidthBase: 288px;
 @officeWidthXl: 350px;
 @officeWidthLg: @officeWidthBase;
-@officeWidthMd: 250px;
-@officeWidthSm: 200px;
+@officeWidthMd: @officeWidthBase;
+@officeWidthSm: @officeWidthBase;
 @officeWidthXs: 100%;
 @officeImgHeightBase: round(@officeWidthBase / @officeImgRatio);
 @officeImgHeightXl: round(@officeWidthXl / @officeImgRatio);
@@ -42,17 +52,17 @@
 @officeImgHeightXs: round(300px / @officeImgRatio);
 
 @agentImgRatio:  3 / 4;
-@agentImgWidthBase: 180px;
+@agentImgWidthBase:  180px;
 @agentInfoWidthBase: 280px;
-@agentImgWidthXl: 200px;
+@agentImgWidthXl:  200px;
 @agentInfoWidthXl: 340px;
-@agentImgWidthLg: @agentImgWidthBase;
+@agentImgWidthLg:  @agentImgWidthBase;
 @agentInfoWidthLg: @agentInfoWidthBase;
-@agentImgWidthMd: 180px;
+@agentImgWidthMd:  180px;
 @agentInfoWidthMd: 250px;
-@agentImgWidthSm: 100px;
-@agentInfoWidthSm: 200px;
-@agentImgWidthXs: 30%;
+@agentImgWidthSm:  30%;
+@agentInfoWidthSm: 65%;
+@agentImgWidthXs:  35%;
 @agentInfoWidthXs: 60%;
 
 
@@ -582,7 +592,7 @@
 
 
 // XL size and up
-@media screen and (min-width: 1221px) {
+@media screen and (min-width: @screenXlMin) {
 
 	.wolfnet_widget {
 
@@ -621,13 +631,13 @@
 
 
 // Up to and including Lg size - this should be handled above as the defaults
-@media screen and (max-width: 1220px) {
+@media screen and (max-width: @screenLgMax) {
 
 }
 
 
 // Up to and including Md size
-@media screen and (max-width: 1024px) {
+@media screen and (max-width: @screenMdMax) {
 
 	.wolfnet_widget {
 
@@ -642,7 +652,7 @@
 
 
 // Md size only
-@media screen and (min-width: 841px) and (max-width: 1024px) {
+@media screen and (min-width: @screenMdMin) and (max-width: @screenMdMax) {
 
 	.wolfnet_widget {
 
@@ -677,7 +687,7 @@
 
 
 // Up to and including Sm Size
-@media screen and (max-width: 840px) {
+@media screen and (max-width: @screenSmMax) {
 
 	.wolfnet_widget {
 
@@ -726,7 +736,7 @@
 
 
 // Sm size only
-@media screen and (min-width: 531px) and (max-width: 840px) {
+@media screen and (min-width: @screenSmMin) and (max-width: @screenSmMax) {
 
 	.wolfnet_widget {
 
@@ -792,7 +802,7 @@
 
 
 // Xs size and below
-@media screen and (max-width: 530px) {
+@media screen and (max-width: @screenXsMax) {
 
 	.wolfnet_widget {
 
