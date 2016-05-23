@@ -49,7 +49,7 @@ $postHash = '#post-' . get_the_id();
 
 	<div class="wolfnet_clearfix"></div>
 
-	<div class="wolfnet_offices">
+	<div class="wolfnet_aoOffices">
 
 		<?php
 
