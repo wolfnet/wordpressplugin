@@ -63,10 +63,8 @@ $officesLink = $linkBase . $postHash;
 
 	jQuery(function ($) {
 
-		var $officesWidget = $('#<?php echo $instance_id; ?>');
-
 		// Search field
-		var $searchForm = $officesWidget.find('.wolfnet_agentSearch');
+		var $searchForm = $('.wolfnet_agentOfficeNav .wolfnet_agentSearch');
 		var $criteria = $searchForm.find('.wolfnet_agentCriteria');
 		$criteria.css({ cursor: 'text' });
 		$criteria.click(function () {
