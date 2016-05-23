@@ -22,7 +22,7 @@
 
 var wolfnet = function ()
 {
-}
+};
 
 wolfnet.data = {
     features: {}
@@ -67,7 +67,7 @@ wolfnet.initMoreInfo = function (  $moreInfoItems )
 
 	} )( jQuery );
 
-}
+};
 
 
 wolfnet.hideMap = function (mapId,hideMapId,showMapId)
@@ -78,7 +78,7 @@ wolfnet.hideMap = function (mapId,hideMapId,showMapId)
 		$("#" + hideMapId).hide();
 		$("#" + showMapId).show();
 	} )( jQuery );
-}
+};
 
 
 wolfnet.showMap = function (mapId,hideMapId,showMapId)
@@ -89,7 +89,7 @@ wolfnet.showMap = function (mapId,hideMapId,showMapId)
 		$("#" + hideMapId).show();
 		$("#" + showMapId).hide();
 	} )( jQuery );
-}
+};
 
 
 wolfnet.hideListings = function (collapseId,hideId,showId)
@@ -100,7 +100,7 @@ wolfnet.hideListings = function (collapseId,hideId,showId)
 		$("#" + showId).show();
 		$("#" + hideId).hide();
 	} )( jQuery );
-}
+};
 
 
 wolfnet.showListings = function (collapseId,hideId,showId,instanceId)
@@ -116,7 +116,7 @@ wolfnet.showListings = function (collapseId,hideId,showId,instanceId)
 		}
 
 	} )( jQuery );
-}
+};
 
 
 wolfnet.hasFeature = function (feature)
@@ -131,10 +131,11 @@ wolfnet.hasFeature = function (feature)
 
     return wolfnet.data.features[feature];
 
-}
+};
 
 
-if ( typeof jQuery != 'undefined' ) {
+
+if ( typeof jQuery !== 'undefined' ) {
 
 	( function ( $ ) {
 
