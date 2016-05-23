@@ -277,28 +277,106 @@ if (!function_exists('formatUrl')) {
 
 	} // end if display_agent
 
-	if ($activeListingCount > 0) {
-		echo '<p><strong>Featured Listings</strong></p>';
-		echo $activeListingHTML;
-	}
 
-	if ($activeListingCount > 10) {
-		echo '<a href="' . $searchUrl . '">';
-		echo "View all " . $activeListingCount . " of " . $agent['first_name'] . "'s listings.";
-		echo "</a>";
-	}
+	// Agent's listings
 
-	if ($soldListingCount > 0) {
-		echo '<p><strong>Sold Listings</strong></p>';
-		echo $soldListingHTML;
-	}
+	if (($activeListingCount > 0) || ($soldListingCount > 0)) {
 
-	if ($soldListingCount > 10) {
-		echo '<a href="' . $soldSearchUrl . '">';
-		echo "View all " . $soldListingCount . " of " . $agent['first_name'] . "'s sold listings.";
-		echo "</a>";
+?>
+
+		<div class="wolfnet_aoListings">
+
+			<div class="wolfnet_aoTitle">Agent's Listings</div>
+
+			<hr />
+
+			<?php if ($activeListingCount > 0) { ?>
+
+				<div class="wolfnet_aoFeaturedListings">
+
+					<?php echo $activeListingHTML; ?>
+
+					<?php if ($activeListingCount > 10) {
+						echo '<a href="<?php echo $searchUrl; ?>">'
+							. 'View all ' . $activeListingCount . ' of '
+							. $agent['first_name'] . "'s listings."
+							. '</a>';
+					} ?>
+
+				</div>
+
+			<?php }
+
+			if ($soldListingCount > 0) { ?>
+
+				<div class="wolfnet_aoSoldListings">
+
+					<?php echo $soldListingHTML; ?>
+
+					<?php if ($soldListingCount > 10) {
+						echo '<a href="' . $soldSearchUrl . '">'
+							. 'View all ' . $soldListingCount . ' of ' . $agent['first_name'] . "'s sold listings."
+							. '</a>';
+					} ?>
+
+				</div>
+
+			<?php } ?>
+
+		</div>
+
+<?php
+
 	}
 
 ?>
 
 </div>
+
+
+<script>
+
+jQuery(function ($) {
+
+	var $aoWidget = $('#<?php echo $instance_id; ?>'),
+		$agentListings = $aoWidget.find('.wolfnet_aoListings'),
+		$agentFeatured = $agentListings.find('.wolfnet_aoFeaturedListings'),
+		$agentSold = $agentListings.find('.wolfnet_aoSoldListings'),
+		agentFeaturedLabel = 'Active',
+		agentSoldLabel = 'Sold';
+
+	if (($agentFeatured.length > 0) && ($agentSold.length > 0)) {
+
+		var $agentListingNav = $('<div class="wnt-btn-group wolfnet_aoListingNav"></div>'),
+			$agentFeaturedBtn = $(
+				'<a class="wnt-btn wnt-btn-active wolfnet_aoFeaturedListingsLink"' +
+				' href="javascript:void(0);">' + agentFeaturedLabel + '</a>'
+			).appendTo($agentListingNav),
+			$agentSoldBtn = $(
+				'<a class="wnt-btn wolfnet_aoSoldListingsLink"' +
+				' href="javascript:void(0);">' + agentSoldLabel + '</a>'
+			).appendTo($agentListingNav);
+
+		$agentListings.prepend($agentListingNav);
+
+		$agentSold.hide();
+
+		$agentFeaturedBtn.click(function () {
+			$agentFeatured.show();
+			$agentSold.hide();
+			$agentSoldBtn.removeClass('wnt-btn-active');
+			$agentFeaturedBtn.addClass('wnt-btn-active');
+		});
+
+		$agentSoldBtn.click(function () {
+			$agentSold.show();
+			$agentFeatured.hide();
+			$agentFeaturedBtn.removeClass('wnt-btn-active');
+			$agentSoldBtn.addClass('wnt-btn-active');
+		});
+
+	}
+
+});
+
+</script>
