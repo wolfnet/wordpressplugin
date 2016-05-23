@@ -426,6 +426,14 @@
 			margin-bottom: 30px;
 		}
 
+		.wolfnet_aoHeader {
+
+			.wolfnet_aoName {
+				display: none;
+			}
+
+		}
+
 		.wolfnet_aoSidebar {
 			float: right;
 			margin-left: 20px;
@@ -618,21 +626,6 @@
 
     }
 
-}
-
-
-// TODO: Check if needed after new styles are applied
-@media screen and (max-width: 520px) {
-    .wolfnet_widget {
-        &.wolfnet_aoAgentDetails {
-            .wolfnet_aoAgentInfo {
-                //float: none !important;
-                //clear: both;
-                //padding-top: 20px;
-                //width: 100% !important;
-            }
-        }
-    }
 }
 
 
@@ -933,6 +926,29 @@
 				}
 
 			}
+		}
+
+		&.wolfnet_aoAgentDetails {
+
+			.wolfnet_aoHeader {
+				.wolfnet_aoName {
+					display: block;
+				}
+			}
+
+			.wolfnet_aoInfo {
+				.wolfnet_aoName {
+					display: none;
+				}
+			}
+
+			.wolfnet_aoSidebar {
+				float: none;
+				margin-top: 1em;
+				margin-left: 0;
+				width: auto;
+			}
+
 		}
 
 	}

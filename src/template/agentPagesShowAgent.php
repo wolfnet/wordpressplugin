@@ -114,6 +114,25 @@ if (!function_exists('formatUrl')) {
 
 		<div class="wolfnet_agent">
 
+			<div class="wolfnet_aoHeader">
+
+				<div class="wolfnet_aoName">
+
+					<div class="wolfnet_aoTitle">
+						<?php echo $agent['first_name'] . ' ' . $agent['last_name']; ?>
+					</div>
+
+					<hr />
+
+					<div class="wolfnet_aoSubTitle">
+						<div><?php echo $agent['title']; ?></div>
+						<div><?php echo $agent['business_name']; ?></div>
+					</div>
+
+				</div>
+
+			</div>
+
 			<div class="wolfnet_aoSidebar">
 
 				<div class="wolfnet_aoExtLinks">
@@ -203,15 +222,19 @@ if (!function_exists('formatUrl')) {
 
 			<div class="wolfnet_aoInfo">
 
-				<div class="wolfnet_aoTitle">
-					<?php echo $agent['first_name'] . ' ' . $agent['last_name']; ?>
-				</div>
+				<div class="wolfnet_aoName">
 
-				<hr />
+					<div class="wolfnet_aoTitle">
+						<?php echo $agent['first_name'] . ' ' . $agent['last_name']; ?>
+					</div>
 
-				<div class="wolfnet_aoSubTitle">
-					<div><?php echo $agent['title']; ?></div>
-					<div><?php echo $agent['business_name']; ?></div>
+					<hr />
+
+					<div class="wolfnet_aoSubTitle">
+						<div><?php echo $agent['title']; ?></div>
+						<div><?php echo $agent['business_name']; ?></div>
+					</div>
+
 				</div>
 
 				<?php
