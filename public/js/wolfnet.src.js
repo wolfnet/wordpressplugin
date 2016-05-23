@@ -159,13 +159,25 @@ if ( typeof jQuery !== 'undefined' ) {
 				if (($itemSection.length === 0) && $aoItems.is(itemSections[i].selector)) {
 					$itemSection = $aoItems;
 				}
-				$itemSection.height(itemSections[i].maxHeight);
+				$itemSection.height(Math.max(itemSections[i].maxHeight, itemSections[i].origMaxHeight));
 			}
 
 		};
 
 		var getItemSectionsMaxHeights = function ($aoItem, itemSections) {
 			var $itemSection, sectionHeight;
+			// Get original max height
+			for (var i=0, l=itemSections.length; i<l; i++) {
+				$itemSection = $aoItem.find(itemSections[i].selector);
+				if (($itemSection.length === 0) && $aoItem.is(itemSections[i].selector)) {
+					$itemSection = $aoItem;
+				}
+				sectionHeight = $itemSection.height();
+				if (sectionHeight > itemSections[i].origMaxHeight) {
+					itemSections[i].origMaxHeight = sectionHeight;
+				}
+			}
+			// Get new max height
 			for (var i=0, l=itemSections.length; i<l; i++) {
 				$itemSection = $aoItem.find(itemSections[i].selector);
 				if (($itemSection.length === 0) && $aoItem.is(itemSections[i].selector)) {
