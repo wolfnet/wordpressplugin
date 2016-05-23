@@ -247,8 +247,6 @@ if (!function_exists('paginate')) {
 
 	jQuery(function ($) {
 
-		$(window).load(function () {
-
 			var $aoWidget = $('#<?php echo $instance_id; ?>');
 
 			// Resize agent boxes to height of tallest one.
@@ -260,8 +258,6 @@ if (!function_exists('paginate')) {
 				}
 			});
 			//$agents.height(maxHeight);
-
-		});
 
 	});
 
