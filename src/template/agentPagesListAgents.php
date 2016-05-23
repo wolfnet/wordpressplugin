@@ -247,17 +247,29 @@ if (!function_exists('paginate')) {
 
 	jQuery(function ($) {
 
-			var $aoWidget = $('#<?php echo $instance_id; ?>');
+		var $aoWidget = $('#<?php echo $instance_id; ?>');
 
-			// Resize agent boxes to height of tallest one.
-			var $agents = $aoWidget.find('.wolfnet_aoItem');
-			var maxHeight = 0;
-			$agents.each(function() {
-				if($(this).height() > maxHeight) {
-					maxHeight = $(this).height();
-				}
-			});
-			//$agents.height(maxHeight);
+		// Resize item boxes to height of tallest one.
+
+		var $aoItems = $aoWidget.find('.wolfnet_aoItem'),
+			itemSections = [
+				{ selector: '.wolfnet_aoContact',  maxHeight: 0 },
+				{ selector: '.wolfnet_aoLinks',    maxHeight: 0 },
+				{ selector: '.wolfnet_aoInfo .wolfnet_aoActions',  maxHeight: 0 },
+				{ selector: '.wolfnet_aoBody',     maxHeight: 0 },
+				{ selector: '.wolfnet_aoFooter',   maxHeight: 0 },
+				{ selector: '.wolfnet_aoItem',     maxHeight: 0 }
+			];
+
+		wolfnet.resizeAOItems($aoItems, itemSections);
+
+		var resizeTimeout;
+		$(window).resize(function () {
+			clearTimeout(resizeTimeout);
+			resizeTimeout = setTimeout(function () {
+				wolfnet.resizeAOItems($aoItems, itemSections);
+			}, 500);
+		});
 
 	});
 

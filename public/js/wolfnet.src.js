@@ -133,11 +133,53 @@ wolfnet.hasFeature = function (feature)
 
 };
 
+wolfnet.resizeAOItems = function () {};
 
 
 if ( typeof jQuery !== 'undefined' ) {
 
 	( function ( $ ) {
+
+		wolfnet.resizeAOItems = function ($aoItems, itemSections) {
+			var sectionsSelector = '';
+
+			// Reset the max heights
+			for (var i=0, l=itemSections.length; i<l; i++) {
+				itemSections[i].maxHeight = 0;
+			}
+
+			// Update the max heights
+			for (var i=0, l=$aoItems.length; i<l; i++) {
+				getItemSectionsMaxHeights($($aoItems[i]), itemSections);
+			}
+
+			// Set the new heights
+			for (var i=0, l=itemSections.length; i<l; i++) {
+				var $itemSection = $aoItems.find(itemSections[i].selector);
+				if (($itemSection.length === 0) && $aoItems.is(itemSections[i].selector)) {
+					$itemSection = $aoItems;
+				}
+				$itemSection.height(itemSections[i].maxHeight);
+			}
+
+		};
+
+		var getItemSectionsMaxHeights = function ($aoItem, itemSections) {
+			var $itemSection, sectionHeight;
+			for (var i=0, l=itemSections.length; i<l; i++) {
+				$itemSection = $aoItem.find(itemSections[i].selector);
+				if (($itemSection.length === 0) && $aoItem.is(itemSections[i].selector)) {
+					$itemSection = $aoItem;
+				}
+				if ($itemSection.length > 0) {
+					$itemSection.css('height', 'auto');
+					sectionHeight = $itemSection.height();
+					if (sectionHeight > itemSections[i].maxHeight) {
+						itemSections[i].maxHeight = sectionHeight;
+					}
+				}
+			}
+		};
 
 		var isPlaceholderSupported = function ()
 		{

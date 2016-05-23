@@ -159,55 +159,24 @@ $postHash = '#post-' . get_the_id();
 
 	jQuery(function ($) {
 
-		var $officesWidget = $('#<?php echo $instance_id; ?>');
+		var $aoWidget = $('#<?php echo $instance_id; ?>');
 
-		// Resize office boxes to height of tallest one.
+		// Resize item boxes to height of tallest one.
 
-		var officeSections = [
-			{ selector: '.wolfnet_aoContact', maxHeight: 0 },
-			{ selector: '.wolfnet_aoLinks',   maxHeight: 0 }
-		];
+		var $aoItems = $aoWidget.find('.wolfnet_aoItem'),
+			itemSections = [
+				{ selector: '.wolfnet_aoContact', maxHeight: 0 },
+				{ selector: '.wolfnet_aoLinks',   maxHeight: 0 }
+			];
 
-		var resizeOffices = function () {
-			var $offices = $officesWidget.find('.wolfnet_aoItem'),
-				sectionsSelector = '';
-
-			// Reset the max heights
-			for (var i=0, l=officeSections.length; i<l; i++) {
-				officeSections[i].maxHeight = 0;
-			}
-
-			// Update the max heights
-			$offices.each(getOfficeSectionsMaxHeights);
-
-			// Set the new heights
-			for (var i=0, l=officeSections.length; i<l; i++) {
-				$offices.find(officeSections[i].selector).height(officeSections[i].maxHeight);
-			}
-
-		};
-
-		var getOfficeSectionsMaxHeights = function () {
-			var $office = $(this);
-			var $officeSection, sectionHeight;
-			for (var i=0, l=officeSections.length; i<l; i++) {
-				$officeSection = $office.find(officeSections[i].selector);
-				if ($officeSection.length > 0) {
-					$officeSection.css('height', 'auto');
-					sectionHeight = $officeSection.height();
-					if (sectionHeight > officeSections[i].maxHeight) {
-						officeSections[i].maxHeight = sectionHeight;
-					}
-				}
-			}
-		};
-
-		resizeOffices();
+		wolfnet.resizeAOItems($aoItems, itemSections);
 
 		var resizeTimeout;
 		$(window).resize(function () {
 			clearTimeout(resizeTimeout);
-			resizeTimeout = setTimeout(resizeOffices, 500);
+			resizeTimeout = setTimeout(function () {
+				wolfnet.resizeAOItems($aoItems, itemSections);
+			}, 500);
 		});
 
 	});
