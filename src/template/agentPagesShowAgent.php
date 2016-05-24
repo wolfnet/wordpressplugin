@@ -285,10 +285,10 @@ if (!function_exists('formatUrl')) {
 					}
 
 					if ($showFavoriteLinks) {
-						echo '<strong>Favorite Links</strong>';
-						echo '<ul class="wolfnet_agentLinks">';
-						echo $favoriteLinks;
-						echo '</ul>';
+						echo '<div class="wolfnet_aoSectionTitle">Favorite Links</div>'
+							. '<div class="wolfnet_aoSection">'
+							. '<ul class="wolfnet_agentLinks">' . $favoriteLinks . '</ul>'
+							. '</div>';
 					}
 				?>
 
