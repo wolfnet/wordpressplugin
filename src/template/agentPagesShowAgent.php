@@ -361,8 +361,58 @@ if (!function_exists('formatUrl')) {
 
 jQuery(function ($) {
 
-	var $aoWidget = $('#<?php echo $instance_id; ?>'),
-		$agentListings = $aoWidget.find('.wolfnet_aoListings'),
+	var $aoWidget = $('#<?php echo $instance_id; ?>');
+
+
+	// Collapse info sections
+
+	var $agentInfoSections = $aoWidget.find('.wolfnet_aoInfo .wolfnet_aoSection'),
+		infoMaxLen = 200;
+
+	var collapseSection = function () {
+		var $this = $(this),
+			$summary = $('<div class="wolfnet_aoSectionSummary"></div>'),
+			$content = $('<div class="wolfnet_aoSectionContent"></div>'),
+			$showMoreBtn = $('<a href="javascript:void(0);">[...]</a>'),
+			fullContent = $this.html(),
+			summaryText = $this.text();
+
+		if (summaryText.length > infoMaxLen) {
+
+			summaryText = summaryText.substring(0, infoMaxLen);
+
+			if (summaryText.lastIndexOf(' ') > -1) {
+				summaryText = summaryText.substring(0, summaryText.lastIndexOf(' '));
+			}
+			if (summaryText.lastIndexOf('\n') > -1) {
+				summaryText = summaryText.substring(0, summaryText.lastIndexOf('\n'));
+			}
+
+			$this.html($summary.text(summaryText).append(' ', $showMoreBtn));
+			$this.append($content.hide().html(fullContent));
+
+			$showMoreBtn.click(onShowMoreClick);
+
+		}
+
+	};
+
+	var onShowMoreClick = function (e) {
+		var $section = $(this).closest('.wolfnet_aoSection'),
+			$summary = $section.find('.wolfnet_aoSectionSummary'),
+			$content = $section.find('.wolfnet_aoSectionContent');
+
+		$summary.hide();
+		$content.show();
+
+	};
+
+	$agentInfoSections.each(collapseSection);
+
+
+	// Agent listings toggle
+
+	var $agentListings = $aoWidget.find('.wolfnet_aoListings'),
 		$agentFeatured = $agentListings.find('.wolfnet_aoFeaturedListings'),
 		$agentSold = $agentListings.find('.wolfnet_aoSoldListings'),
 		agentFeaturedLabel = 'Active',
