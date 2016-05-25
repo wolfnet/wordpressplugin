@@ -17,6 +17,14 @@
 
 		<h2>Color Options</h2>
 
+		<div id="wolfnet_themePreview" style="width: 300px;">
+			<div class="wolfnet_widget wolfnet_listingGrid">
+				<div class="wolfnet_listings">
+					<?php echo $sampleListing; ?>
+				</div>
+			</div>
+		</div>
+
 		<table class="form-table">
 			<tbody>
 				<tr>
@@ -131,9 +139,22 @@
 			}).on('wnt-theme-change', onWidgetThemeChange);
 
 
+			var $themePreview = $('#wolfnet_themePreview');
+
+			var updateThemePreview = function () {
+			}
+
+			var updatePreviewTimeout;
+
 			var onWidgetThemeChange = function (e) {
+				clearTimeout(updatePreviewTimeout);
+				updatePreviewTimeout = setTimeout(function () {
+					updateThemePreview();
+				}, 500);
 			};
 
+
+			updateThemePreview();
 
 
             var btnClasses = {

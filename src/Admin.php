@@ -130,8 +130,17 @@ class Wolfnet_Admin extends Wolfnet_Plugin
         $styles = array(
             'jquery-ui',
             'wp-color-picker',
+            'wolfnet',
+            'icomoon',
+            'google-lato',
+            'google-roboto',
             'wolfnet-admin',
         );
+
+        $widgetTheme = $GLOBALS['wolfnet']->views->getWidgetTheme();
+        if (strlen($widgetTheme)) {
+            array_push($styles, 'wolfnet-' . $widgetTheme);
+        }
 
         foreach ($styles as $style) {
             wp_enqueue_style($style);
