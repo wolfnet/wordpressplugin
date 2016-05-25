@@ -29,7 +29,8 @@ class Wolfnet_Module_WidgetTheme
 
         return array(
             'widgetTheme' => 'ash',
-            'colors'      => array(),
+            'colors'      => array('#333'),
+            'opacity'     => 50,
         );
 
     }

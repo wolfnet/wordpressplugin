@@ -102,20 +102,23 @@ class Wolfnet_Views
 
 		try {
 
-            $widgetThemeDefaults = $GLOBALS['wolfnet']->widgetTheme->getDefaults();
+			$themeDefaults = $GLOBALS['wolfnet']->widgetTheme->getDefaults();
+			$sampleListing = $GLOBALS['wolfnet']->listings->getSample();
 
-            $out = $this->parseTemplate('adminStyle', array(
-                'imgdir' => $this->remoteImages,
-                'formHeader' => $this->styleFormHeaders(),
-                'widgetTheme' => $this->getWidgetTheme(),
-                'widgetThemes' => $GLOBALS['wolfnet']->widgetTheme->getThemeOptions(),
-                'defaultWidgetTheme' => $widgetThemeDefaults['widgetTheme'],
-                'defaultColors' => $widgetThemeDefaults['colors'],
-            ));
+			$out = $this->parseTemplate('adminStyle', array(
+				'imgdir'                   => $this->remoteImages,
+				'formHeader'               => $this->styleFormHeaders(),
+				'widgetTheme'              => $this->getWidgetTheme(),
+				'widgetThemes'             => $GLOBALS['wolfnet']->widgetTheme->getThemeOptions(),
+				'themeColors'              => $this->getThemeColors(),
+				'themeOpacity'             => $this->getThemeOpacity(),
+				'defaultWidgetTheme'       => $themeDefaults['widgetTheme'],
+				'sampleListing'            => $this->listingView(array( 'listing' => $sampleListing )),
+			));
 
-        } catch (Wolfnet_Exception $e) {
-            $out = $this->exceptionView($e);
-        }
+		} catch (Wolfnet_Exception $e) {
+			$out = $this->exceptionView($e);
+		}
 
 		echo $out;
 
@@ -199,10 +202,42 @@ class Wolfnet_Views
     }
 
 
-    public function getWidgetTheme()
-    {
-        return get_option(trim($GLOBALS['wolfnet']->widgetThemeOptionKey), 'ash');
-    }
+	public function getWidgetTheme()
+	{
+		$themeDefaults = $GLOBALS['wolfnet']->widgetTheme->getDefaults();
+		return get_option(trim($GLOBALS['wolfnet']->widgetThemeOptionKey), $themeDefaults['widgetTheme']);
+	}
+
+
+	public function getThemeColors()
+	{
+		$themeDefaults = $GLOBALS['wolfnet']->widgetTheme->getDefaults();
+		$themeColors = get_option(trim($GLOBALS['wolfnet']->themeColorsOptionKey), $themeDefaults['colors']);
+
+		// Set default values
+		foreach ($themeColors as $key => $color) {
+			if (strlen($color) == 0) {
+				$themeColors[$key] = $themeDefaults['colors'][$key];
+			}
+		}
+
+		return $themeColors;
+
+	}
+
+
+	public function getThemeOpacity()
+	{
+		$themeDefaults = $GLOBALS['wolfnet']->widgetTheme->getDefaults();
+		$themeOpacity = get_option(trim($GLOBALS['wolfnet']->themeOpacityOptionKey), $themeDefaults['opacity']);
+
+		if (!is_numeric($themeOpacity)) {
+			$themeOpacity = $themeDefaults['opacity'];
+		}
+
+		return $themeOpacity;
+
+	}
 
 
     /**
@@ -521,8 +556,11 @@ class Wolfnet_Views
 
     private function parseTemplate($template, array $vars = array())
     {
-        $vars['widgetThemeName'] = $this->getWidgetTheme();
-        $vars['widgetThemeClass'] = 'wolfnet-theme-' . $vars['widgetThemeName'];
+		// Load theme option values for use in rendering
+		$vars['widgetThemeName']   = $this->getWidgetTheme();
+		$vars['widgetThemeClass']  = 'wolfnet-theme-' . $vars['widgetThemeName'];
+		$vars['themeColors']       = $this->getThemeColors();
+		$vars['themeOpacity']      = $this->getThemeOpacity();
 
         extract($vars, EXTR_OVERWRITE);
 

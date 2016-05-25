@@ -73,6 +73,18 @@ class Wolfnet_Plugin
     public $widgetThemeOptionKey = 'wolfnet_widgetTheme';
 
     /**
+     * This property is used to identify which widget theme color(s) to use.
+     * @var array
+     */
+    public $themeColorsOptionKey = 'wolfnet_themeColors';
+
+    /**
+     * This property is used to identify what opacity to use.
+     * @var integer
+     */
+    public $themeOpacityOptionKey = 'wolfnet_themeOpacity';
+
+    /**
      * This property contains the public CSS as defined in the Edit CSS page.
      * @var string
      */

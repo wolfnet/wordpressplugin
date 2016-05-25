@@ -105,6 +105,8 @@ class Wolfnet_Admin extends Wolfnet_Plugin
 
         // JavaScript
         $scripts = array(
+            'wp-color-picker',
+            'jquery-ui-slider',
             'wolfnet-admin',
             'wolfnet-shortcode-builder',
         );
@@ -127,6 +129,7 @@ class Wolfnet_Admin extends Wolfnet_Plugin
         // CSS
         $styles = array(
             'jquery-ui',
+            'wp-color-picker',
             'wolfnet-admin',
         );
 
@@ -173,6 +176,8 @@ class Wolfnet_Admin extends Wolfnet_Plugin
         register_setting($this->optionGroup, Wolfnet_Service_ProductKeyService::PRODUCT_KEY_OPTION);
         register_setting($this->optionGroup, Wolfnet_Plugin::SSL_WP_OPTION);
         register_setting($this->WidgetThemeOptionGroup, $this->widgetThemeOptionKey);
+        register_setting($this->WidgetThemeOptionGroup, $this->themeColorsOptionKey);
+        register_setting($this->WidgetThemeOptionGroup, $this->themeOpacityOptionKey);
         register_setting($this->CssOptionGroup, $this->publicCssOptionKey);
         register_setting($this->CssOptionGroup, $this->adminCssOptionKey);
 

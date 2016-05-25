@@ -15,6 +15,41 @@
 
         <?php echo $formHeader; ?>
 
+		<h2>Color Options</h2>
+
+		<table class="form-table">
+			<tbody>
+				<tr>
+					<th scope="row">
+						<label for="wolfnet_themeColors[0]">
+							<?php echo _e('Accent Color'); ?>
+						</label>
+					</th>
+					<td>
+						<input type="text" name="wolfnet_themeColors[0]" id="wolfnet_themeColors[0]"
+						 value="<?php echo esc_attr($themeColors[0]); ?>"
+						 data-default-color="#333333" class="wolfnet_colorPicker" />
+					</td>
+				</tr>
+				<tr>
+					<th scope="row">
+						<label for="wolfnet_opacity">
+							<?php echo _e('Opacity'); ?>
+						</label>
+					</th>
+					<td>
+						<input type="text" name="wolfnet_themeOpacity" id="wolfnet_themeOpacity"
+						 value="<?php echo esc_attr($themeOpacity); ?>" size="3" maxlength="3" /> %
+					</td>
+				</tr>
+			</tbody>
+		</table>
+
+		<p class="submit">
+			<button class="button button-primary" type="submit"><?php echo _e('Save Color Options'); ?></button>
+		</p>
+
+
         <h2>Widget Theme</h2>
 
         <p>Select the appearance of the widgets.</p>
@@ -71,9 +106,35 @@
 
 <script>
 
-    if (typeof jQuery !== 'undefined') {
+	if (typeof jQuery !== 'undefined') {
 
-        jQuery(function ($) {
+		jQuery(function ($) {
+
+			var $colorField = $('.wolfnet_colorPicker');
+			$colorField.wpColorPicker({
+				change: onWidgetThemeChange
+			}).change(onWidgetThemeChange);
+
+			var $opacityField = $('#wolfnet_themeOpacity'),
+			$opacitySlider = $('<div class="wolfnet_opacity_slider"></div>').insertBefore($opacityField).slider({
+				min: 0,
+				max: 100,
+				step: 10,
+				value: $opacityField.val(),
+				slide: function (e, ui) {
+					$opacityField.val(ui.value).trigger('wnt-theme-change');
+				}
+			});
+			$opacityField.change(function () {
+				$opacityField.trigger('wnt-theme-change');
+				$opacitySlider.slider('value', $(this).val());
+			}).on('wnt-theme-change', onWidgetThemeChange);
+
+
+			var onWidgetThemeChange = function (e) {
+			};
+
+
 
             var btnClasses = {
                 primary:    'button-primary',
