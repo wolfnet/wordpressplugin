@@ -97,10 +97,10 @@ class Wolfnet_Views
     }
 
 
-    public function amStylePage()
-    {
+	public function amStylePage()
+	{
 
-        try {
+		try {
 
             $widgetThemeDefaults = $GLOBALS['wolfnet']->widgetTheme->getDefaults();
 
@@ -117,11 +117,11 @@ class Wolfnet_Views
             $out = $this->exceptionView($e);
         }
 
-        echo $out;
+		echo $out;
 
-        return $out;
+		return $out;
 
-    }
+	}
 
 
     public function amEditCssPage()
