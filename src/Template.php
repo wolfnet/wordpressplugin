@@ -206,10 +206,10 @@ class Wolfnet_Template
 
         $styles = array(
             'wolfnet' => array(
-                $this->url . 'css/wolfnet.src.css'
+                $this->url . 'css/wolfnet.min.css'
             ),
             'wolfnet-admin' => array(
-                $this->url . 'css/wolfnetAdmin.src.css',
+                $this->url . 'css/wolfnetAdmin.min.css',
             ),
             'wolfnet-custom' => array(
                 admin_url('admin-ajax.php') . '?action=wolfnet_css',
