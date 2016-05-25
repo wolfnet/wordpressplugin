@@ -83,7 +83,6 @@
 
             $('.wolfnet_widget_theme').mouseover(function () {
                 var $btn = $(this).find(btnSelector);
-                console.log($(this), $btn);
                 $btn.removeClass(btnClasses.secondary).addClass(btnClasses.primary);
             });
 
