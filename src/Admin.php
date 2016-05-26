@@ -137,9 +137,9 @@ class Wolfnet_Admin extends Wolfnet_Plugin
             'wolfnet-admin',
         );
 
-        $widgetTheme = $GLOBALS['wolfnet']->views->getWidgetTheme();
-        if (strlen($widgetTheme)) {
-            array_push($styles, 'wolfnet-' . $widgetTheme);
+        $widgetThemes = $GLOBALS['wolfnet']->widgetTheme->getThemeOptions();
+        foreach ($widgetThemes as $widgetTheme) {
+            array_push($styles, $widgetTheme['styleName']);
         }
 
         foreach ($styles as $style) {
