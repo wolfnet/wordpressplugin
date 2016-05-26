@@ -175,9 +175,41 @@ html {
 	}
 }
 
+.wolfnet_themePreview {
+	float: right;
+	margin-left: 1em;
+	margin-bottom: 1em;
+	border: 1px solid @gray-lightest;
+	background-color: #fff;
+
+	> h2 {
+		margin-left: 1em;
+		margin-right: 1em;
+	}
+
+	.wolfnet_themePreviewBody {
+		margin: 0 1em 1em 1em;
+	}
+
+}
+
+.wolfnet_colorOptions {
+	float: left;
+	width: auto;
+
+	.form-table th {
+		width: auto;
+	}
+
+}
+
+.wolfnet_widgetThemeOptions {
+	clear: both;
+}
+
 .wolfnet_opacity_slider {
 	display: inline-block;
-	width: 200px;
+	width: 150px;
 	margin-right: 1em;
 }
 
@@ -283,6 +315,13 @@ html {
 
     }
 }
+
+@media screen and (max-width: 600px) {
+	.wolfnet_themePreview {
+		float: none;
+	}
+}
+
 
 html.ie .wolfnetProductKeyValidationWrapper.valid input {
 	border-color: green !important;

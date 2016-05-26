@@ -110,9 +110,35 @@ class Wolfnet_Views
 				'formHeader'               => $this->styleFormHeaders(),
 				'widgetTheme'              => $this->getWidgetTheme(),
 				'widgetThemes'             => $GLOBALS['wolfnet']->widgetTheme->getThemeOptions(),
+				'defaultWidgetTheme'       => $themeDefaults['widgetTheme'],
+				'sampleListing'            => $this->listingView(array( 'listing' => $sampleListing )),
+			));
+
+		} catch (Wolfnet_Exception $e) {
+			$out = $this->exceptionView($e);
+		}
+
+		echo $out;
+
+		return $out;
+
+	}
+
+
+	public function amColorPage()
+	{
+
+		try {
+
+			$themeDefaults = $GLOBALS['wolfnet']->widgetTheme->getDefaults();
+			$sampleListing = $GLOBALS['wolfnet']->listings->getSample();
+
+			$out = $this->parseTemplate('adminColors', array(
+				'imgdir'                   => $this->remoteImages,
+				'formHeader'               => $this->colorFormHeaders(),
+				'widgetTheme'              => $this->getWidgetTheme(),
 				'themeColors'              => $this->getThemeColors(),
 				'themeOpacity'             => $this->getThemeOpacity(),
-				'defaultWidgetTheme'       => $themeDefaults['widgetTheme'],
 				'sampleListing'            => $this->listingView(array( 'listing' => $sampleListing )),
 			));
 
@@ -585,6 +611,17 @@ class Wolfnet_Views
         ob_start();
 
         settings_fields($GLOBALS['wolfnet']->WidgetThemeOptionGroup);
+
+        return trim(ob_get_clean());
+
+    }
+
+
+    private function colorFormHeaders()
+    {
+        ob_start();
+
+        settings_fields($GLOBALS['wolfnet']->ColorOptionGroup);
 
         return trim(ob_get_clean());
 
