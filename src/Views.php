@@ -266,13 +266,6 @@ class Wolfnet_Views
 	}
 
 
-	public function getThemePreview(array $args = array())
-	{
-		$args['preview'] = true;
-		return $this->parseTemplate('themePreview', $args);
-	}
-
-
     /**
      * This method is used in the context of admin_print_styles to output custom CSS.
      * @return void
