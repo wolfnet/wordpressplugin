@@ -82,35 +82,6 @@ if (typeof jQuery != 'undefined') {
 
 
         /**
-         * Ensures there are enough items within the container so that the animation is not jerky
-         * or not possible to complete. If there are not enough items it will copy the items and
-         * append them to the parent element.
-         *
-         * @param  DOMElement  target  The element within which to ensure there are enough items.
-         *
-         * @return null
-         */
-        var ensureThereAreEnoughItems = function(target, containerWidth)
-        {
-            var $target = $(target);
-            var data = getData(target);
-            containerWidth = containerWidth || data.$itemContainer.innerWidth();
-            var $items = getItems(target);
-
-            if (
-				(containerWidth) &&
-				($items.length) &&
-				(data.itemWidth) &&
-				containerWidth >= (($items.length * data.itemWidth) / 2)
-			) {
-               	$items.clone().appendTo(data.$itemContainer);
-               	ensureThereAreEnoughItems(target, containerWidth);
-            }
-
-        };
-
-
-        /**
          * Retrieves all child elements which match a specific class.
          *
          * @param  DOMElement  target  The element to look within for items.
@@ -174,10 +145,15 @@ if (typeof jQuery != 'undefined') {
         var executeFrame = function(target)
         {
             var data = getData(target);
+            var enoughItems = hasEnoughItems(target);
 
             if (shouldAnimate(target)) {
-                // Trigger the animation
-                animate(target);
+
+                // Trigger the animation if there are enough items to scroll
+				if (enoughItems) {
+					cloneItems(target);
+                	animate(target);
+                }
 
                 data.timeoutFlag = false;
 
@@ -190,6 +166,60 @@ if (typeof jQuery != 'undefined') {
                 data.nextFrameSet = false;
 
             }
+
+        };
+
+
+        /**
+         * If there are not enough items within the container for a smooth animation, recursively
+         * clone the items and append to the parent element.
+         *
+         * @param  DOMElement  target  The element within which to ensure there are enough items.
+         *
+         * @return null
+         */
+        var cloneItems = function(target)
+        {
+            var $target = $(target);
+            var data = getData(target);
+            var containerWidth = data.$itemContainer.innerWidth();
+            var $items = getItems(target);
+
+            if (
+				(containerWidth) &&
+				($items.length) &&
+				(data.itemWidth) &&
+				containerWidth >= (($items.length * data.itemWidth) / 2)
+			) {
+               	$items.clone().appendTo(data.$itemContainer);
+               	cloneItems(target, containerWidth);
+            }
+
+        };
+
+
+        /**
+         * Return true if the sum width of the items included in the scroller are greater than
+         * the container's width; return false if the sum width of the items is smaller.
+         *
+         * @param  DOMElement  target  The element within which to ensure there are enough items.
+         *
+         * @return null
+         */
+        var hasEnoughItems = function(target)
+        {
+            var $target = $(target);
+            var data = getData(target);
+
+            var numberOfListings = getItems(target).length;
+            var listingWidth = data.itemWidth;
+            var containerWidth = data.$itemContainer.innerWidth();
+
+            if ((numberOfListings) && (listingWidth) && (containerWidth) &&
+				(numberOfListings * listingWidth) < containerWidth) {
+				return false;
+            }
+            return true;
 
         };
 
@@ -381,7 +411,6 @@ if (typeof jQuery != 'undefined') {
 
                     removeWhitespaceBetweenTags(target);
                     data.itemWidth = getItems(target).first().outerWidth(true);
-                    ensureThereAreEnoughItems(target);
 
                     if (data.option.showControls) {
                         buildControls(target);
@@ -407,13 +436,14 @@ if (typeof jQuery != 'undefined') {
                         }
                     });
 
-                    $(window).resize(function(){
-                        if ((data.resizing || false) === false) {
-                            data.resizing = true;
-                            ensureThereAreEnoughItems(target);
-                            data.resizing = false;
-                        }
-                    });
+					var enoughItems = hasEnoughItems(target);
+
+					$(window).resize(function(){
+						if ((data.resizing || false) === false) {
+							data.resizing = true;
+							data.resizing = false;
+						}
+					});
 
                 });
 
