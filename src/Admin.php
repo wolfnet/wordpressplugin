@@ -118,37 +118,39 @@ class Wolfnet_Admin extends Wolfnet_Plugin
     }
 
 
-    /**
-     * This method is a callback for the 'admin_enqueue_scripts' hook. Any CSS files which are
-     * needed by the plugin for areas areas are registered in this method.
-     * @return void
-     */
-    public function adminStyles()
-    {
+	/**
+	 * This method is a callback for the 'admin_enqueue_scripts' hook. Any CSS files which are
+	 * needed by the plugin for areas areas are registered in this method.
+	 * @return void
+	 */
+	public function adminStyles()
+	{
 
-        // CSS
-        $styles = array(
-            'jquery-ui',
-            'wp-color-picker',
-            'wolfnet',
-            'icomoon',
-            'google-lato',
-            'google-roboto',
-            'wolfnet-admin',
-        );
+		// CSS
+		$styles = array(
+			'jquery-ui',
+			'wp-color-picker',
+			'wolfnet',
+			'icomoon',
+			'google-lato',
+			'google-roboto',
+			'wolfnet-admin',
+		);
 
-        $widgetThemes = $GLOBALS['wolfnet']->widgetTheme->getThemeOptions();
-        foreach ($widgetThemes as $widgetTheme) {
-            array_push($styles, $widgetTheme['styleName']);
-        }
+		$widgetThemes = $GLOBALS['wolfnet']->widgetTheme->getThemeOptions();
+		foreach ($widgetThemes as $widgetTheme) {
+			array_push($styles, $widgetTheme['styleName']);
+		}
 
-        foreach ($styles as $style) {
-            wp_enqueue_style($style);
-        }
+		array_push($styles, 'wolfnet-theme');
 
-        do_action($this->postHookPrefix . 'enqueueAdminResources');
+		foreach ($styles as $style) {
+			wp_enqueue_style($style);
+		}
 
-    }
+		do_action($this->postHookPrefix . 'enqueueAdminResources');
+
+	}
 
 
     /**

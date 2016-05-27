@@ -47,6 +47,7 @@ class Wolfnet_Ajax
             'wolfnet_get_listings'            => 'remoteListingsGet',
             'wolfnet_listing_photos'          => 'remoteListingPhotos',
             'wolfnet_css'                     => 'remotePublicCss',
+            'wolfnet_theme_css'               => 'remoteThemeCss',
             'wolfnet_market_name'             => 'remoteGetMarketName',
             'wolfnet_map_enabled'             => 'remoteMapEnabled',
             'wolfnet_price_range'             => 'remotePriceRange',
@@ -71,6 +72,7 @@ class Wolfnet_Ajax
             'wolfnet_get_listings'      => 'remoteListingsGet',
             'wolfnet_listing_photos'    => 'remoteListingPhotos',
             'wolfnet_css'               => 'remotePublicCss',
+            'wolfnet_theme_css'         => 'remoteThemeCss',
             'wolfnet_base_url'          => 'remoteGetBaseUrl',
             'wolfnet_price_range'       => 'remotePriceRange',
             'wolfnet_route_quicksearch' => 'remoteRouteQuickSearch',
@@ -533,6 +535,41 @@ class Wolfnet_Ajax
         die;
 
     }
+
+
+	public function remoteThemeCss()
+	{
+
+		try {
+
+			$args = array();
+
+			if (!empty($_REQUEST['colors'])) {
+				$args['colors'] = explode(',', $_REQUEST['colors']);
+			}
+
+			if (!empty($_REQUEST['opacity'])) {
+				$args['opacity'] = $_REQUEST['opacity'];
+			}
+
+			$response = $GLOBALS['wolfnet']->views->getThemeStyles($args);
+
+		} catch (Wolfnet_Exception $e) {
+
+			status_header(500);
+
+			echo $GLOBALS['wolfnet']->displayException($e);
+
+			die;
+
+		}
+
+		header('Content-type: text/css');
+		echo $response;
+
+		die;
+
+	}
 
 
     public function remotePriceRange()

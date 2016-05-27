@@ -19,6 +19,8 @@
 		listing details within the photo.
 	</p>
 
+	<pre><?php echo $themeStyles; ?></pre>
+
 	<form method="post" action="options.php">
 
 		<?php echo $formHeader; ?>
@@ -95,14 +97,60 @@
 
 			var updatePreviewTimeout;
 
+			var themeStylesheetBaseUrl = '<?php echo admin_url("admin-ajax.php"); ?>?action=wolfnet_theme_css';
+
 			var $themePreview = $('.wolfnet_themePreview'),
+				$themeStyles = $('<style type="text/css"></style>'),
+				$spinner = $('<div class="spinner is-active"></div>'),
 				$colorField = $('.wolfnet_colorPicker'),
 				$opacityField = $('#wolfnet_themeOpacity'),
 				$opacitySlider = $('<div class="wolfnet_opacity_slider"></div>');
 
+
+			var updateThemePreview = function () {
+				var themeArgs = '';
+				var colors = [];
+
+				// Turn on spinner
+				$spinner.prependTo($themePreview.find('h2')).show();
+
+				// Accent Color
+				colors.push($colorField.val());
+
+				// Colors
+				themeArgs += '&colors=' + encodeURIComponent(colors.toString());
+
+				// Opacity
+				themeArgs += '&opacity=' + encodeURIComponent($opacityField.val());
+
+				// Update the styles
+				$.ajax({
+					url: themeStylesheetBaseUrl + themeArgs,
+					type: 'get',
+					dataType: 'html'
+				}).done(onThemeStylesLoad);
+
+			};
+
+
+			var onThemeStylesLoad = function (data) {
+				$themeStyles.html(data).appendTo($('head'));
+				$spinner.hide().remove();
+			};
+
+
+			var onWidgetThemeChange = function (e) {
+				clearTimeout(updatePreviewTimeout);
+				updatePreviewTimeout = setTimeout(function () {
+					updateThemePreview();
+				}, 500);
+			};
+
+
 			$colorField.wpColorPicker({
 				change: onWidgetThemeChange
-			}).change(onWidgetThemeChange);
+			});
+			$colorField.change(onWidgetThemeChange);
 
 			$opacitySlider.insertBefore($opacityField).slider({
 				min: <?php echo $opacityMin; ?>,
@@ -117,19 +165,6 @@
 				$opacityField.trigger('wnt-theme-change');
 				$opacitySlider.slider('value', $(this).val());
 			}).on('wnt-theme-change', onWidgetThemeChange);
-
-
-
-			var updateThemePreview = function () {
-			}
-
-
-			var onWidgetThemeChange = function (e) {
-				clearTimeout(updatePreviewTimeout);
-				updatePreviewTimeout = setTimeout(function () {
-					updateThemePreview();
-				}, 500);
-			};
 
 			updateThemePreview();
 

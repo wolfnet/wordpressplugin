@@ -73,10 +73,12 @@ class Wolfnet_Template
             'google-roboto',
         );
 
-        $widgetTheme = $this->plugin->views->getWidgetTheme();
-        if (strlen($widgetTheme)) {
-            array_push($styles, 'wolfnet-' . $widgetTheme);
-        }
+		$widgetTheme = $this->plugin->views->getWidgetTheme();
+		if (strlen($widgetTheme)) {
+			array_push($styles, 'wolfnet-' . $widgetTheme);
+		}
+
+		array_push($styles, 'wolfnet-theme');
 
         foreach ($styles as $style) {
             wp_enqueue_style($style);
@@ -214,6 +216,9 @@ class Wolfnet_Template
             'wolfnet-custom' => array(
                 admin_url('admin-ajax.php') . '?action=wolfnet_css',
             ),
+			'wolfnet-theme' => array(
+				admin_url('admin-ajax.php') . '?action=wolfnet_theme_css',
+			),
             'jquery-ui' => array(
                 'http://ajax.googleapis.com/ajax/libs/jqueryui/' . $jquery_ui->ver
                     . '/themes/smoothness/jquery-ui.css'
