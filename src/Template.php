@@ -205,41 +205,50 @@ class Wolfnet_Template
         $jquery_ui = $wp_scripts->query('jquery-ui-core');
 
 		$google_fonts = array(
-			'Open+Sans:400,700',
+			'Lato:400,700',
 			'Montserrat:400,700',
+			'Open+Sans:400,700',
 			'Roboto:400,700',
 		);
 
         $styles = array(
             'wolfnet' => array(
                 $this->url . 'css/wolfnet.min.css'
-                ),
+            ),
             'wolfnet-agent' => array(
                 $this->url . 'css/wolfnetAgentPages.min.css'
-                ),
+            ),
             'wolfnet-admin' => array(
                 $this->url . 'css/wolfnetAdmin.min.css',
-                ),
+            ),
             'wolfnet-custom' => array(
                 admin_url('admin-ajax.php') . '?action=wolfnet_css',
-                ),
+            ),
             'wolfnet-ash' => array(
                 $this->url . 'css/wolfnet.ash.min.css'
-                ),
+            ),
             'wolfnet-birch' => array(
                 $this->url . 'css/wolfnet.birch.min.css'
-                ),
+            ),
             'jquery-ui' => array(
                 'http://ajax.googleapis.com/ajax/libs/jqueryui/' . $jquery_ui->ver
                     . '/themes/smoothness/jquery-ui.css'
-                ),
+            ),
             'icomoon' => array(
                 $this->url . 'lib/icomoon/style.css'
-                ),
+            ),
             'google-fonts' => array(
                 'https://fonts.googleapis.com/css?family=' . implode('|', $google_fonts),
-                ),
+            ),
+        );
+
+        // Add widget theme styles
+        $widgetThemes = $this->plugin->widgetTheme->getThemeOptions();
+        foreach ($widgetThemes as $widgetTheme) {
+            $styles[$widgetTheme['styleName']] = array(
+                $this->url . 'css/' . $widgetTheme['styleFile']
             );
+        }
 
         foreach ($styles as $style => $data) {
             $params   = array($style);
