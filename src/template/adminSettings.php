@@ -64,12 +64,12 @@
                                         value="<?php echo $productKey[$i-1]->key; ?>" class="wolfnet_productKey" size="50" />
                                 </td>
                                 <td><span class="wolfnet_keyMarket">
-                                <?php 
+                                <?php
                                     if (isset($productKey[$i-1]->market)) {
                                         echo $productKey[$i-1]->market;
-                                    }  
+                                    }
                                 ?>
-                                <input type="hidden" id="wolfnet_keyMarket_<?php echo $i; ?>" name="wolfnet_keyMarket_<?php echo $i; ?>" 
+                                <input type="hidden" id="wolfnet_keyMarket_<?php echo $i; ?>" name="wolfnet_keyMarket_<?php echo $i; ?>"
                                     class="wolfnet_keyMarket_value" value="<?php echo $productKey[$i-1]->market; ?>" />
                                 </span></td>
                                 <td>
@@ -79,7 +79,7 @@
                                 <td>
                                     <?php if($i != 1): ?>
                                         <input type="button" wnt-key="<?php echo $i; ?>" class="wolfnet_deleteKey"
-                                        value="<?php _e('Delete'); ?>" />
+                                        value="<?php esc_attr_e('Delete'); ?>" />
                                     <?php endif; ?>
                                 </td>
                             </tr>
@@ -90,7 +90,7 @@
 
                 <tr>
                     <td>
-                        <input type="button" id="wolfnet_addKey" value="<?php _e('Add Product Key'); ?>" />
+                        <input type="button" id="wolfnet_addKey" value="<?php esc_attr_e('Add Product Key'); ?>" />
                     </td>
                 </tr>
 
@@ -122,7 +122,7 @@
 
                 <tr valign="top">
                     <td class="submit">
-                        <input type="submit" class="button-primary" value="<?php _e('Save Changes') ?>" />
+                        <input type="submit" class="button-primary" value="<?php esc_attr_e('Save Changes') ?>" />
                     </td>
                 </tr>
 

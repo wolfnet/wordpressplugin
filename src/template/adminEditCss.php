@@ -38,7 +38,7 @@
 
                 <tr>
                     <td class="submit">
-                        <input type="submit" class="button-primary" value="<?php _e('Save Changes') ?>" />
+                        <input type="submit" class="button-primary" value="<?php esc_attr_e('Save Changes') ?>" />
                     </td>
                 </tr>
 
