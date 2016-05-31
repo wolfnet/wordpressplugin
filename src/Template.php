@@ -234,13 +234,13 @@ class Wolfnet_Template
             ),
         );
 
-        // Add widget theme styles
-        $widgetThemes = $this->plugin->widgetTheme->getThemeOptions();
-        foreach ($widgetThemes as $widgetTheme) {
-            $styles[$widgetTheme['styleName']] = array(
-                $this->url . 'css/' . $widgetTheme['styleFile']
-            );
-        }
+		// Add widget theme styles
+		$widgetThemes = $this->plugin->widgetTheme->getThemeOptions();
+		foreach ($widgetThemes as $widgetTheme) {
+			$styles[$widgetTheme['styleName']] = array(
+				$this->url . 'css/' . $widgetTheme['styleFile']
+			);
+		}
 
         foreach ($styles as $style => $data) {
             $params   = array($style);

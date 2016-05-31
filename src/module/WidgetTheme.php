@@ -61,19 +61,19 @@ class Wolfnet_Module_WidgetTheme
 	}
 
 
-    public function getOptions($instance = null)
-    {
-        $options = $this->plugin->getOptions($this->getDefaults(), $instance);
+	public function getOptions($instance = null)
+	{
+		$options = $this->plugin->getOptions($this->getDefaults(), $instance);
 
-        if (array_key_exists('keyid', $options) && $options['keyid'] != '') {
-            $keyid = $options['keyid'];
-        } else {
-            $keyid = 1;
-        }
+		if (array_key_exists('keyid', $options) && $options['keyid'] != '') {
+			$keyid = $options['keyid'];
+		} else {
+			$keyid = 1;
+		}
 
-        return $options;
+		return $options;
 
-    }
+	}
 
 
 	public function getThemeOptions()
