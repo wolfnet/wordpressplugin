@@ -10,7 +10,7 @@
 
 	<div id="icon-options-wolfnet" class="icon32"><br /></div>
 
-	<h2>WolfNet <sup>&reg;</sup> - Appearance</h2>
+	<h2>WolfNet <sup>&reg;</sup> - Color Options</h2>
 
 	<p>
 		The 'Modern' widget theme streamlines the look of the property photos within
