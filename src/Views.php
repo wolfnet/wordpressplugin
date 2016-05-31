@@ -134,13 +134,13 @@ class Wolfnet_Views
 			$sampleListing = $GLOBALS['wolfnet']->listings->getSample();
 
 			$out = $this->parseTemplate('adminColors', array(
-				'imgdir'                   => $this->remoteImages,
-				'formHeader'               => $this->colorFormHeaders(),
-				'widgetTheme'              => $this->getWidgetTheme(),
-				'themeColors'              => $this->getThemeColors(),
-				'themeOpacity'             => $this->getThemeOpacity(),
-				'themeStyles'              => $this->getThemeStyles(),
-				'sampleListing'            => $this->listingView(array( 'listing' => $sampleListing )),
+				'url'            => $GLOBALS['wolfnet']->url,
+				'imgdir'         => $this->remoteImages,
+				'formHeader'     => $this->colorFormHeaders(),
+				'widgetTheme'    => $this->getWidgetTheme(),
+				'themeColors'    => $this->getThemeColors(),
+				'themeOpacity'   => $this->getThemeOpacity(),
+				'sampleListing'  => $this->listingView(array( 'listing' => $sampleListing )),
 			));
 
 		} catch (Wolfnet_Exception $e) {
@@ -267,19 +267,14 @@ class Wolfnet_Views
 	}
 
 
-	public function getThemeStyles(array $args = array())
+	public function getThemeStyleArgs(array $args = array())
 	{
-		$widgetTheme = $GLOBALS['wolfnet']->widgetTheme->getTheme(
-			array_key_exists('widgetTheme', $args) && (strlen($args['widgetTheme']) > 0) ?
-				$args['widgetTheme'] : $this->getWidgetTheme()
-		);
-
 		$styleOptions = array(
 			'colors'    => (array_key_exists('colors', $args)  ? $args['colors']  : $this->getThemeColors()),
 			'opacity'   => (array_key_exists('opacity', $args) ? $args['opacity'] : $this->getThemeOpacity()),
 		);
 
-		return $GLOBALS['wolfnet']->widgetTheme->generateCss($widgetTheme, $styleOptions);
+		return $GLOBALS['wolfnet']->widgetTheme->getStyleArgs($styleOptions);
 
 	}
 

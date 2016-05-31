@@ -19,8 +19,6 @@
 		listing details within the photo.
 	</p>
 
-	<pre><?php echo $themeStyles; ?></pre>
-
 	<form method="post" action="options.php">
 
 		<?php echo $formHeader; ?>
@@ -97,7 +95,7 @@
 
 			var updatePreviewTimeout;
 
-			var themeStylesheetBaseUrl = '<?php echo admin_url("admin-ajax.php"); ?>?action=wolfnet_theme_css';
+			var themeStylesheetBaseUrl = '<?php echo $url; ?>/css/wolfnet.theme.custom.php';
 
 			var $themePreview = $('.wolfnet_themePreview'),
 				$themeStyles = $('<style type="text/css"></style>'),
@@ -108,7 +106,7 @@
 
 
 			var updateThemePreview = function () {
-				var themeArgs = '';
+				var themeArgs = {};
 				var colors = [];
 
 				// Turn on spinner
@@ -117,17 +115,15 @@
 				// Accent Color
 				colors.push($colorField.val());
 
-				// Colors
-				themeArgs += '&colors=' + encodeURIComponent(colors.toString());
-
-				// Opacity
-				themeArgs += '&opacity=' + encodeURIComponent($opacityField.val());
-
 				// Update the styles
 				$.ajax({
-					url: themeStylesheetBaseUrl + themeArgs,
+					url: themeStylesheetBaseUrl,
 					type: 'get',
-					dataType: 'html'
+					dataType: 'html',
+					data: {
+						'colors':  colors.toString(),
+						'opacity': $opacityField.val()
+					}
 				}).done(onThemeStylesLoad);
 
 			};

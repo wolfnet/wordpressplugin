@@ -142,7 +142,7 @@ class Wolfnet_Admin extends Wolfnet_Plugin
 			array_push($styles, $widgetTheme['styleName']);
 		}
 
-		array_push($styles, 'wolfnet-theme');
+		array_push($styles, 'wolfnet-theme-custom');
 
 		foreach ($styles as $style) {
 			wp_enqueue_style($style);

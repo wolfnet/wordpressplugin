@@ -78,7 +78,7 @@ class Wolfnet_Template
 			array_push($styles, 'wolfnet-' . $widgetTheme);
 		}
 
-		array_push($styles, 'wolfnet-theme');
+		array_push($styles, 'wolfnet-theme-custom');
 
         foreach ($styles as $style) {
             wp_enqueue_style($style);
@@ -216,8 +216,8 @@ class Wolfnet_Template
             'wolfnet-custom' => array(
                 admin_url('admin-ajax.php') . '?action=wolfnet_css',
             ),
-			'wolfnet-theme' => array(
-				admin_url('admin-ajax.php') . '?action=wolfnet_theme_css',
+			'wolfnet-theme-custom' => array(
+				$this->url . 'css/wolfnet.theme.custom.php?' . $this->plugin->views->getThemeStyleArgs(),
 			),
             'jquery-ui' => array(
                 'http://ajax.googleapis.com/ajax/libs/jqueryui/' . $jquery_ui->ver
