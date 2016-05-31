@@ -43,7 +43,15 @@
 					 tabindex="0">
 
 						<div class="wolfnet_widget_theme_thumb">
-							<img src="<?php echo $imgdir . $themeOpt['previewImg']; ?>?v={X.X.X}.2" />
+
+							<div class="wolfnet_themePreviewBody">
+								<div class="wolfnet_widget wolfnet_listingGrid wolfnet-theme-<?php echo $themeOpt['name']; ?>">
+									<div class="wolfnet_listings">
+										<?php echo $sampleListing; ?>
+									</div>
+								</div>
+							</div>
+
 						</div>
 
 						<div class="wolfnet_widget_theme_info">
