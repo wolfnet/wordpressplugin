@@ -28,25 +28,41 @@
 		</div>
 
 		<fieldset>
+
 			<legend class="screen-reader-text"><span>Widget Theme</span></legend>
+
 			<div class="wolfnet_widget_themes">
+
 				<?php foreach ($widgetThemes as $themeOpt) {
 					$themeOptSelected = (
 					($widgetTheme == $themeOpt['name'])
 					|| (($widgetTheme == '') && ($defaultWidgetTheme == $themeOpt['name']))
 				); ?>
+
 					<div class="wolfnet_widget_theme <?php if ($themeOptSelected) echo esc_attr('wolfnet_widget_theme_active'); ?>"
 					 tabindex="0">
+
 						<div class="wolfnet_widget_theme_thumb">
-							<img src="<?php echo $imgdir . $themeOpt['previewImg']; ?>?v={X.X.X}.2" />
+
+							<div class="wolfnet_themePreviewBody">
+								<div class="wolfnet_widget wolfnet_listingGrid wolfnet-theme-<?php echo $themeOpt['name']; ?>">
+									<div class="wolfnet_listings">
+										<?php echo $sampleListing; ?>
+									</div>
+								</div>
+							</div>
+
 						</div>
+
 						<div class="wolfnet_widget_theme_info">
+
 							<span class="wolfnet_widget_theme_label">
 								<span class="wolfnet_widget_theme_flag">
 									<?php if ($themeOptSelected) echo _e('Active:') ?>
 								</span>
 								<?php _e($themeOpt['label']); ?>
 							</span>
+
 							<span class="wolfnet_widget_theme_actions">
 								<?php if ($themeOptSelected) { ?>
 									<a href="<?php echo admin_url('admin.php?page=wolfnet_plugin_colors'); ?>"
@@ -61,10 +77,15 @@
 									</button>
 								<?php } ?>
 							</span>
+
 						</div>
+
 					</div>
+
 				<?php } ?>
+
 			</div>
+
 		</fieldset>
 
 	</form>

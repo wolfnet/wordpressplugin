@@ -106,12 +106,12 @@ class Wolfnet_Views
 			$sampleListing = $GLOBALS['wolfnet']->listings->getSample();
 
 			$out = $this->parseTemplate('adminStyle', array(
-				'imgdir'                   => $this->remoteImages,
-				'formHeader'               => $this->styleFormHeaders(),
-				'widgetTheme'              => $this->getWidgetTheme(),
-				'widgetThemes'             => $GLOBALS['wolfnet']->widgetTheme->getThemeOptions(),
-				'defaultWidgetTheme'       => $themeDefaults['widgetTheme'],
-				'sampleListing'            => $this->listingView(array( 'listing' => $sampleListing )),
+				'imgdir'              => $this->remoteImages,
+				'formHeader'          => $this->styleFormHeaders(),
+				'widgetTheme'         => $this->getWidgetTheme(),
+				'widgetThemes'        => $GLOBALS['wolfnet']->widgetTheme->getThemeOptions(),
+				'defaultWidgetTheme'  => $themeDefaults['widgetTheme'],
+				'sampleListing'       => $this->listingView(array( 'listing' => $sampleListing )),
 			));
 
 		} catch (Wolfnet_Exception $e) {

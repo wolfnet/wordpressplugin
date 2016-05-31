@@ -220,6 +220,7 @@ html {
 	display: inline-block;
 	width: 150px;
 	margin-right: 1em;
+	vertical-align: middle;
 }
 
 .wolfnet_opacity {
@@ -231,7 +232,7 @@ html {
 
     .wolfnet_widget_theme {
         float: left;
-        width: 325px;
+        width: 350px;
         margin: 0 1em 1em 0;
         background-color: @gray-lightest;
         transition-property: border-color, background-color;
@@ -244,19 +245,30 @@ html {
             border: 1px solid @gray-lightest;
         }
 
-        .wolfnet_widget_theme_thumb {
-            height: 290px;
-            padding: 0.75em;
-            border-bottom: none;
-            text-align: center;
+		.wolfnet_widget_theme_thumb {
+			height: 300px;
+			padding: 1em;
+			border-bottom: none;
+			text-align: center;
 
-            img {
-                max-width: 100%;
-                max-height: 100%;
-                box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.25);
-            }
+			.wolfnet_themePreviewBody {
+				display: inline-block;
+				vertical-align: top;
+				background-color: #fff;
+				box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.25);
 
-        }
+				.wolfnet_widget {
+					margin-bottom: 0;
+
+					.wolfnet_listings {
+						margin-top: 1em;
+					}
+
+				}
+
+			}
+
+		}
 
         .wolfnet_widget_theme_info {
             position: relative;
