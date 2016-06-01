@@ -28,10 +28,20 @@ if (array_key_exists("REDIRECT_URL", $_SERVER)) {
 
 $postHash = '#post-' . get_the_id();
 
-$searchPlaceholder = ( $isAgent ? 'search by agent last name' : 'search by office name' );
-
 $agentsLink  = $linkBase . '?agentSearch' . $postHash;
 $officesLink = $linkBase . $postHash;
+
+if ($isAgent) {
+	$searchPlaceholder = 'search by agent last name';
+	$searchAction = $agentsLink;
+	$criteriaName = 'agentCriteria';
+	$criteriaVal = (strlen($agentCriteria) > 0) ? $agentCriteria : '';
+} else {
+	$searchPlaceholder = 'search by office name';
+	$searchAction = $officesLink;
+	$criteriaName = 'officeCriteria';
+	$criteriaVal = (strlen($officeCriteria) > 0 ? $officeCriteria : '');
+}
 
 ?>
 
@@ -44,16 +54,16 @@ $officesLink = $linkBase . $postHash;
 		 href="<?php echo $officesLink; ?>">Offices</a>
 	</div>
 
-	<form name="wolfnet_agentSearch" class="wolfnet_agentSearch" method="post"
-	 action="<?php echo $agentsLink; ?>">
+	<form name="wolfnet_aoSearch" class="wolfnet_aoSearch" method="post"
+	 action="<?php echo $searchAction; ?>">
 		<?php // No office ID as a hidden field. We want to search all offices ?>
-		<span class="wolfnet_agentCriteria">
+		<span class="wolfnet_aoCriteria">
 			<span class="wnt-icon wnt-icon-search"></span>
-			<input type="text" name="agentCriteria"
-			 value="<?php echo (strlen($agentCriteria) > 0) ? $agentCriteria : ''; ?>"
+			<input type="text" name="<?php echo $criteriaName; ?>"
+			 value="<?php echo $criteriaVal; ?>"
 			 placeholder="<?php echo $searchPlaceholder; ?>" />
 		</span>
-		<button type="submit" class="wolfnet_agentSearchButton">Search</button>
+		<button type="submit" class="wolfnet_aoSearchButton">Search</button>
 	</form>
 
 </div>
@@ -64,11 +74,11 @@ $officesLink = $linkBase . $postHash;
 	jQuery(function ($) {
 
 		// Search field
-		var $searchForm = $('.wolfnet_agentOfficeNav .wolfnet_agentSearch');
-		var $criteria = $searchForm.find('.wolfnet_agentCriteria');
+		var $searchForm = $('.wolfnet_agentOfficeNav .wolfnet_aoSearch');
+		var $criteria = $searchForm.find('.wolfnet_aoCriteria');
 		$criteria.css({ cursor: 'text' });
 		$criteria.click(function () {
-			$(this).find('input[name="agentCriteria"]').focus();
+			$(this).find('input[name="<?php echo $criteriaName; ?>"]').focus();
 		});
 
 	});
