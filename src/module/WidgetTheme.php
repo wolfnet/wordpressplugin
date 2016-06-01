@@ -54,9 +54,9 @@ class Wolfnet_Module_WidgetTheme
     {
         return array(
             'ash'      => $this->getTheme('ash',     'Classic'),
-            'birch'    => $this->getTheme('birch',   'Modern'),
-            'cedar'    => $this->getTheme('cedar',   'Modern 2'),
-            'dogwood'  => $this->getTheme('dogwood', 'Modern 3'),
+            'birch'    => $this->getTheme('birch',   'Modern Lite'),
+            'cedar'    => $this->getTheme('cedar',   'Modern Contrast'),
+            'dogwood'  => $this->getTheme('dogwood', 'Modern Tile'),
         );
     }
 
