@@ -76,7 +76,7 @@ if (!function_exists('formatUrl')) {
 
 ?>
 
-<div id="<?php echo $instance_id; ?>" class="wolfnet_widget wolfnet_aoAgentDetails">
+<div id="<?php echo $instance_id; ?>" class="wolfnet_widget wolfnet_ao wolfnet_aoAgentDetails">
 
 <?php
 

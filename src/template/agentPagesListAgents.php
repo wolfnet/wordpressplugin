@@ -92,7 +92,7 @@ if (!function_exists('paginate')) {
 ?>
 
 
-<div id="<?php echo $instance_id; ?>" class="wolfnet_widget wolfnet_aoAgentsList">
+<div id="<?php echo $instance_id; ?>" class="wolfnet_widget wolfnet_ao wolfnet_aoAgentsList">
 
 	<div class="wolfnet_agentOfficeHeader">
 
