@@ -84,17 +84,14 @@
             text-align: center;
             text-transform: uppercase;
 
-            &.wnt-btn-primary {
-                background-color: @accentColor;
-            }
+			&.wnt-btn-primary,
+			&.wnt-btn-active {
+				background-color: @accentColor;
+			}
 
-            &.wnt-btn-secondary {
-                background-color: #ccc;
-            }
-
-            &.wnt-btn-active {
-                background-color: @accentColor;
-            }
+			&.wnt-btn-secondary {
+				background-color: #ccc;
+			}
 
         }
 
@@ -239,13 +236,19 @@
 			border-width: 1px 0 0 0;
 		}
 
-		.wolfnet_aoTitle {
-			font-weight: normal;
-			font-size: 18px;
+		.wolfnet_aoItem,
+		.wolfnet_aoInfo,
+		.wolfnet_aoContact {
 
-			a, a:link, a:hover, a:visited {
-				.no-decoration();
-				color: inherit;
+			.wolfnet_aoTitle {
+				font-weight: normal;
+				font-size: 18px;
+
+				a, a:link, a:hover, a:visited {
+					.no-decoration();
+					color: #666;
+				}
+
 			}
 
 		}
@@ -255,20 +258,22 @@
 		}
 
 		ul.wolfnet_aoLinks {
+
 			li {
 				padding: 8px 0;
 				text-indent: -1.8em;
 				margin-left: 1.8em;
 				list-style: none;
 				font-size: 14px;
+			}
 
-				.wnt-icon {
-					margin-right: 6px;
-					font-size: 16px;
-					color: @accentColor;
-				}
+			.wnt-icon {
+				margin-right: 6px;
+				font-size: 16px;
+			}
 
 			}
+
 		}
 
 		.wolfnet_aoActions {
@@ -289,6 +294,18 @@
 					.no-decoration();
 				}
 
+			}
+
+		}
+
+		.wolfnet_aoSocial {
+
+			a, a:hover, a:active, a:visited {
+				.no-decoration();
+			}
+
+			.wnt-icon {
+				color: @accentColor;
 			}
 
 		}
@@ -427,7 +444,6 @@
 					a, a:hover, a:active, a:visited {
 						display: inline-block;
 						margin: 0 0 0.5em 0.5em;
-						.no-decoration();
 					}
 
 					.wnt-icon {
