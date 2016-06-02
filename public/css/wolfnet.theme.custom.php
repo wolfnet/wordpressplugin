@@ -50,6 +50,10 @@
 	}
 
 
+	function getHex (array $color) {
+		return '#' . $color['r']['hex'] . $color['g']['hex'] . $color['b']['hex'];
+	}
+
 	function getRGB (array $color) {
 		return $color['r']['dec'] . ','
 			. $color['g']['dec'] . ','
@@ -71,12 +75,41 @@
 
 ?>
 
-.wolfnet_widget.wolfnet-theme-cedar.wolfnet_featuredListings .wolfnet_listing .wolfnet_listingHead .wolfnet_listingInfo,
-.wolfnet_widget.wolfnet-theme-cedar.wolfnet_listingGrid .wolfnet_listing .wolfnet_listingHead .wolfnet_listingInfo {
-	background-color: rgba(<?php echo getRGBA($args['colors'][0], $args['opacity']); ?>);
-}
+/* Agent Pages */
 
-.wolfnet_widget.wolfnet-theme-dogwood.wolfnet_featuredListings .wolfnet_listing .wolfnet_listingHead .wolfnet_detailsLink,
-.wolfnet_widget.wolfnet-theme-dogwood.wolfnet_listingGrid .wolfnet_listing .wolfnet_listingHead .wolfnet_detailsLink {
-	background-color: rgba(<?php echo getRGBA($args['colors'][0], $args['opacity']); ?>);
-}
+	.wolfnet_widget.wolfnet_ao .wnt-btn.wnt-btn-primary,
+	.wolfnet_widget.wolfnet_ao .wnt-btn.wnt-btn-active {
+		background-color: <?php echo getHex($args['colors'][0]); ?>;
+	}
+
+	.wolfnet_widget.wolfnet_ao hr {
+		border-color: <?php echo getHex($args['colors'][0]); ?>;
+	}
+
+	.wolfnet_widget.wolfnet_ao ul.wolfnet_aoLinks .wnt-icon,
+	.wolfnet_widget.wolfnet_ao ul.wolfnet_aoLinks a,
+	.wolfnet_widget.wolfnet_ao ul.wolfnet_aoLinks a:hover,
+	.wolfnet_widget.wolfnet_ao ul.wolfnet_aoLinks a:active,
+	.wolfnet_widget.wolfnet_ao ul.wolfnet_aoLinks a:visited {
+		color: <?php echo getHex($args['colors'][0]); ?>;
+	}
+
+	.wolfnet_widget.wolfnet_ao .wolfnet_aoSocial .wnt-icon {
+		color: <?php echo getHex($args['colors'][0]); ?>;
+	}
+
+
+/* Cedar Theme */
+
+	.wolfnet_widget.wolfnet-theme-cedar.wolfnet_featuredListings .wolfnet_listing .wolfnet_listingHead .wolfnet_listingInfo,
+	.wolfnet_widget.wolfnet-theme-cedar.wolfnet_listingGrid      .wolfnet_listing .wolfnet_listingHead .wolfnet_listingInfo {
+		background-color: rgba(<?php echo getRGBA($args['colors'][0], $args['opacity']); ?>);
+	}
+
+
+/* Dogwood Theme */
+
+	.wolfnet_widget.wolfnet-theme-dogwood.wolfnet_featuredListings .wolfnet_listing .wolfnet_listingHead .wolfnet_detailsLink,
+	.wolfnet_widget.wolfnet-theme-dogwood.wolfnet_listingGrid      .wolfnet_listing .wolfnet_listingHead .wolfnet_detailsLink {
+		background-color: rgba(<?php echo getRGBA($args['colors'][0], $args['opacity']); ?>);
+	}
