@@ -179,12 +179,6 @@
             border: 1px solid #ccc;
             background-color: #fff;
 
-            a, a:hover, a:active, a:visited {
-                // Color the links, but let the client's theme decide whether to use decorations
-                // e.g., text-decoration, border, box-shadow
-                color: @accentColor;
-            }
-
             >a, >a:hover, >a:active, >a:visited {
                 .no-decoration();
             }
@@ -272,6 +266,11 @@
 				font-size: 16px;
 			}
 
+			.wnt-icon,
+			a, a:hover, a:active, a:visited {
+				// Color the links, but let the client's theme decide whether to use decorations
+				// e.g., text-decoration, border, box-shadow
+				color: @accentColor;
 			}
 
 		}
@@ -449,7 +448,6 @@
 					.wnt-icon {
 						vertical-align: middle;
 						font-size: 2em;
-						color: @accentColor;
 					}
 
 				}
