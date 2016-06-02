@@ -64,6 +64,7 @@
                 <exclude name="dist/" />
                 <exclude name="docs/" />
                 <exclude name="tests/" />
+                <exclude name="node_modules/" />
                 <!-- Excluded Files -->
                 <exclude name="build.xml" />
                 <exclude name="phpunit.xml" />
