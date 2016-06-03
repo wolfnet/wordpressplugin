@@ -133,7 +133,7 @@ class Wolfnet_Views
 			$themeDefaults = $GLOBALS['wolfnet']->widgetTheme->getDefaults();
 			$sampleListing = $GLOBALS['wolfnet']->listings->getSample();
 
-			$out = $this->parseTemplate('adminColors', array(
+			$args = array(
 				'url'            => $GLOBALS['wolfnet']->url,
 				'imgdir'         => $this->remoteImages,
 				'formHeader'     => $this->colorFormHeaders(),
@@ -141,7 +141,18 @@ class Wolfnet_Views
 				'themeColors'    => $this->getThemeColors(),
 				'themeOpacity'   => $this->getThemeOpacity(),
 				'sampleListing'  => $this->listingView(array( 'listing' => $sampleListing )),
-			));
+				'sampleAgent'    => '',
+			);
+
+			if ($GLOBALS['wolfnet']->agentPages->showAgentFeature()) {
+				$args['sampleAgent'] = $this->agentBriefView(array(
+					'agent'        => $GLOBALS['wolfnet']->agentPages->getSampleAgent(),
+					'agentLink'    => '#',
+					'contactLink'  => '#',
+				));
+			}
+
+			$out = $this->parseTemplate('adminColors', $args);
 
 		} catch (Wolfnet_Exception $e) {
 			$out = $this->exceptionView($e);

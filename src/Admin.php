@@ -131,6 +131,7 @@ class Wolfnet_Admin extends Wolfnet_Plugin
 			'jquery-ui',
 			'wp-color-picker',
 			'wolfnet',
+			'wolfnet-agent',
 			'icomoon',
 			'google-lato',
 			'google-roboto',

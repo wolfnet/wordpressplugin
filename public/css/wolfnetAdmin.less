@@ -176,15 +176,15 @@ html {
 }
 
 .wolfnet_themePreview {
-	float: right;
-	margin-left: 1em;
-	margin-bottom: 1em;
+	min-width: 480px;
 	border: 1px solid @gray-lightest;
 	background-color: #fff;
+	text-align: center;
 
 	> h2 {
 		margin-left: 1em;
 		margin-right: 1em;
+		text-align: left;
 	}
 
 	.spinner {
@@ -197,17 +197,44 @@ html {
 	}
 
 	.wolfnet_themePreviewBody {
+		display: inline-block;
 		margin: 0 1em 1em 1em;
+		vertical-align: top;
+		text-align: left;
+	}
+
+	.wolfnet_widget {
+		margin-top: 0;
+
+		.wolfnet_listing,
+		.wolfnet_aoItem {
+			margin: 0 0 0 0;
+		}
+
 	}
 
 }
 
 .wolfnet_colorOptions {
-	float: left;
-	width: auto;
 
-	.form-table th {
-		width: auto;
+	.wolfnet_colorOption {
+		display: inline-block;
+		margin-right: 2em;
+		vertical-align: top;
+
+		label {
+			margin-right: 1em;
+			color: @wp-grays-darker;
+			font-weight: 600;
+			line-height: 1.3em;
+		}
+
+		>label,
+		.wolfnet_colorField {
+			display: inline-block;
+			vertical-align: middle;
+		}
+
 	}
 
 }
@@ -337,9 +364,58 @@ html {
     }
 }
 
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 840px) {
+
+	.wolfnet_colorOptions {
+
+		.wolfnet_colorOption {
+			margin-right: 1em;
+
+			label {
+				margin-right: 1.5em;
+			}
+
+		}
+
+	}
+
 	.wolfnet_themePreview {
-		float: none;
+
+		.wolfnet_themePreviewBody {
+			.wolfnet_ao {
+				min-width: 550px;
+			}
+		}
+
+	}
+
+}
+
+@media screen and (max-width: 600px) {
+
+	.wolfnet_colorOptions {
+
+		.wolfnet_colorOption {
+			display: block;
+			margin-right: 0;
+
+			label {
+				margin-right: 0;
+				width: 8em;
+			}
+
+		}
+
+	}
+
+	.wolfnet_themePreview {
+
+		.wolfnet_themePreviewBody {
+			.wolfnet_ao {
+				min-width: 300px;
+			}
+		}
+
 	}
 
 }
