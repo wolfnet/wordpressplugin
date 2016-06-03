@@ -174,11 +174,31 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
 			'agentCriteria'   => (array_key_exists('agentCriteria', $_REQUEST)) ? $_REQUEST['agentCriteria'] : '',
 			'officeCriteria'  => (array_key_exists('officeCriteria', $_REQUEST)) ? $_REQUEST['officeCriteria'] : '',
 			'isAgent'         => true,
+			'agentsHtml'      => '',
+			'postHash'        => $this->getPostHash(),
+			'allAgentsLink'   => $this->buildLinkToAgents(),
 		);
 
 		$args = array_merge($args, $this->args);
 
+		// Add agent/office navigation
 		$args['agentsNav'] = $this->plugin->views->agentsNavView($args);
+
+		// Add agents HTML
+		$agentsHtml = '';
+
+		foreach ($agentsData as &$agent) {
+			if ($agent['display_agent']) {
+				$agentArgs = array_merge($args, array(
+					'agent'        => $agent,
+					'agentLink'    => $this->buildLinkToAgent($agent),
+					'contactLink'  => $this->buildLinkToAgentContact($agent),
+				));
+				$agentsHtml .= $this->plugin->views->agentBriefView($agentArgs);
+			}
+		}
+
+		$args['agentsHtml'] = $agentsHtml;
 
 		return $this->plugin->views->agentsListView($args);
 
@@ -472,6 +492,98 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
 
         return $officeData;
     }
+
+
+	protected function buildLink(array $args = array())
+	{
+
+		$agentPagesLink = '';
+
+		if (array_key_exists("REDIRECT_URL", $_SERVER)) {
+			$linkBase = $_SERVER['REDIRECT_URL'];
+		} else {
+			$linkBase = $_SERVER['PHP_SELF'];
+		}
+
+		$agentPagesLink = $linkBase . '?' . http_build_query($args) . $this->getPostHash();
+
+		return $agentPagesLink;
+
+	}
+
+
+	protected function buildLinkToAgents()
+	{
+		return $this->buildLink(array( 'agentSearch' ));
+	}
+
+
+	protected function buildLinkToAgent($agent)
+	{
+		$args = array(
+			'agentId' => $agent['agent_id'],
+			'agentCriteria' => (
+				array_key_exists('agentCriteria', $_REQUEST) && (strlen($_REQUEST['agentCriteria']) > 0) ?
+				$_REQUEST['agentCriteria'] : ''
+			),
+			'officeId' => (array_key_exists('officeId', $_REQUEST) ? $_REQUEST['officeId'] : ''),
+		);
+
+		return $this->buildLink($args);
+
+	}
+
+
+	protected function buildLinkToAgentContact($agent)
+	{
+		$args = array(
+			'contact' => $agent['agent_id'],
+			'agentCriteria' => (
+				array_key_exists('agentCriteria', $_REQUEST) && (strlen($_REQUEST['agentCriteria']) > 0) ?
+				$_REQUEST['agentCriteria'] : ''
+			),
+			'officeId' => (array_key_exists('officeId', $_REQUEST) ? $_REQUEST['officeId'] : ''),
+		);
+
+		return $this->buildLink($args);
+
+	}
+
+
+	protected function buildLinkToOffice($office)
+	{
+		return $this->buildLink(array( 'officeId' => $office['office_id'] ));
+
+	}
+
+
+	protected function buildLinkToOfficeContact($agent)
+	{
+		return $this->buildLink(array( 'contactOffice' => $office['office_id'] ));
+
+	}
+
+
+	protected function buildLinkToOfficeSearch($office)
+	{
+		return $office['search_solution_url'] . '/?action=newsearchsession';
+
+	}
+
+
+	protected function buildLinkToOfficeSearchResults($office)
+	{
+		return $office['search_solution_url'] . '/?action=newsearchsession'
+			. '&office_id=' . $office['office_id']
+			. '&ld_action=find_office';
+
+	}
+
+
+	protected function getPostHash()
+	{
+		return '#post-' . get_the_id();
+	}
 
 
     public function setKey(&$key)
