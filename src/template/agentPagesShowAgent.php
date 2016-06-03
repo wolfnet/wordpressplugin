@@ -247,7 +247,7 @@ if (!function_exists('formatUrl')) {
 						'areas_served'       => 'Areas Served',
 						'services_available' => 'Services Available',
 						'awards'             => 'Awards',
-						'specialty'          => 'Speciality',
+						'specialty'          => 'Specialty',
 						'motto_quote'        => 'Motto',
 						'designations'       => 'Designations',
 					);
