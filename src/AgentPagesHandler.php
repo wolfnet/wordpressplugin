@@ -164,23 +164,25 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
             $agentsData = $data['responseData']['data']['agent'];
         }
 
-        $args = array(
-            'agents' => $agentsData,
-            'totalrows' => $data['responseData']['data']['total_rows'],
-            'page' => $_REQUEST['agentpage'],
-            'agentSort' => $agentSort,
-            'officeId' => (array_key_exists('officeId', $_REQUEST)) ? $_REQUEST['officeId'] : '',
-            'officeCount' => $officeCount,
-            'agentCriteria' => (array_key_exists('agentCriteria', $_REQUEST)) ? $_REQUEST['agentCriteria'] : '',
-            'officeCriteria' => (array_key_exists('officeCriteria', $_REQUEST)) ? $_REQUEST['officeCriteria'] : '',
-            'isAgent' => true,
-        );
-        $args = array_merge($args, $this->args);
-        $args['agentsNav'] = $this->plugin->views->agentsNavView($args);
+		$args = array(
+			'agents'          => $agentsData,
+			'totalrows'       => $data['responseData']['data']['total_rows'],
+			'page'            => $_REQUEST['agentpage'],
+			'agentSort'       => $agentSort,
+			'officeId'        => (array_key_exists('officeId', $_REQUEST)) ? $_REQUEST['officeId'] : '',
+			'officeCount'     => $officeCount,
+			'agentCriteria'   => (array_key_exists('agentCriteria', $_REQUEST)) ? $_REQUEST['agentCriteria'] : '',
+			'officeCriteria'  => (array_key_exists('officeCriteria', $_REQUEST)) ? $_REQUEST['officeCriteria'] : '',
+			'isAgent'         => true,
+		);
 
-        return $this->plugin->views->agentsListView($args);
+		$args = array_merge($args, $this->args);
 
-    }
+		$args['agentsNav'] = $this->plugin->views->agentsNavView($args);
+
+		return $this->plugin->views->agentsListView($args);
+
+	}
 
 
     protected function agent()
