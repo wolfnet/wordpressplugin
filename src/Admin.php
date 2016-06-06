@@ -128,7 +128,7 @@ class Wolfnet_Admin extends Wolfnet_Plugin
 
 		// CSS
 		$styles = array(
-			'jquery-ui',
+			'wolfnet-jquery-ui',
 			'wp-color-picker',
 			'wolfnet',
 			'wolfnet-agent',

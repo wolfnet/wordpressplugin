@@ -229,6 +229,10 @@ class Wolfnet_Template
 			'wolfnet-theme-custom' => array(
 				$this->url . 'css/wolfnet.theme.custom.php?' . $this->plugin->views->getThemeStyleArgs(),
 			),
+			'wolfnet-jquery-ui' => array(
+				$this->url . 'lib/jquery-ui/themes/wolfnet-wp/jquery-ui.min.css',
+				$this->url . 'lib/jquery-ui/themes/wolfnet-wp/jquery-ui.theme.min.css',
+			),
             'jquery-ui' => array(
                 'http://ajax.googleapis.com/ajax/libs/jqueryui/' . $jquery_ui->ver
                     . '/themes/smoothness/jquery-ui.css'
