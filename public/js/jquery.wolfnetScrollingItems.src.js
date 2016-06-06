@@ -211,17 +211,21 @@ if (typeof jQuery != 'undefined') {
             var $target = $(target);
             var data = getData(target);
 
-            var numberOfListings = getItems(target).length;
-            var listingWidth = data.itemWidth;
+            var numberOfItems = getItems(target).length;
+            var itemWidth = data.itemWidth;
             var containerWidth = data.$itemContainer.innerWidth();
 
-            if ((numberOfListings) && (listingWidth) && (containerWidth) &&
-				(numberOfListings * listingWidth) < containerWidth) {
+            // Do not scroll if width of all items in scroller is less than container
+            if ((numberOfItems) && (itemWidth) && (containerWidth) &&
+				(numberOfItems * itemWidth) < containerWidth) {
 				return false;
             }
-            if ((numberOfListings) && numberOfListings == 1) {
+
+            // Do not scroll a single item
+            if ((numberOfItems) && numberOfItems == 1) {
 				return false;
             }
+
             return true;
 
         };
