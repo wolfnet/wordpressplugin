@@ -61,9 +61,9 @@
 
 		<div class="wolfnet_themePreview">
 
-			<h2>Preview</h2>
+			<div class="wolfnet_themePreviewBody" id="wnt-theme-preview-listing">
 
-			<div class="wolfnet_themePreviewBody">
+				<h3>Listing Preview</h3>
 
 				<div class="wolfnet_widget wolfnet_listingGrid wolfnet-theme-<?php echo $widgetTheme; ?>">
 					<div class="wolfnet_listings">
@@ -75,7 +75,9 @@
 
 			<?php if (strlen($sampleAgent) > 0) { ?>
 
-				<div class="wolfnet_themePreviewBody">
+				<div class="wolfnet_themePreviewBody" id="wnt-theme-preview-agent">
+
+					<h3>Agent Preview</h3>
 
 					<div class="wolfnet_widget wolfnet_ao wolfnet_aoAgentsList">
 						<div class="wolfnet_aoAgents">
@@ -170,6 +172,34 @@
 			}).on('wnt-theme-change', onWidgetThemeChange);
 
 			updateThemePreview();
+
+
+			// Preview tabs
+
+			var $previewItems = $themePreview.find('.wolfnet_themePreviewBody');
+
+			if ($previewItems.length > 1) {
+
+				var $previewNav = $('<ul>');
+
+				$previewItems.each(function () {
+					var $item = $(this);
+					var $itemHeading = $item.find('>h1, >h2, >h3, >h4, >h5').first();
+					var itemId = $item.attr('id'),
+						itemLabel = $itemHeading.text();
+
+					$itemHeading.remove();
+
+					$previewNav.append($('<li><a href="#' + itemId + '">' + itemLabel + '</a></li>'));
+
+				});
+
+				$previewItems.first().before($previewNav);
+
+				$themePreview.tabs();
+
+			}
+
 
 		});
 
