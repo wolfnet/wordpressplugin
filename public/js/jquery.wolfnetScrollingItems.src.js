@@ -219,6 +219,9 @@ if (typeof jQuery != 'undefined') {
 				(numberOfListings * listingWidth) < containerWidth) {
 				return false;
             }
+            if ((numberOfListings) && numberOfListings == 1) {
+				return false;
+            }
             return true;
 
         };
