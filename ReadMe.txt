@@ -94,6 +94,7 @@ Please upgrade to the latest version of the plugin as we will be disabling our o
 == Changelog ==
 
 = 1.10.3 =
+
 * Two new widget themes: "Modern Contrast" & "Modern Tile"
 * Adds a missing font to the "Modern Lite" widget theme
 * Simplified widget theme selection interface
