@@ -140,10 +140,10 @@
 
         ( function ( $ ) {
 
-            $( '.wolfnet_productKey' ).wolfnetValidateProductKey( {
-                rootUri: '<?php echo site_url(); ?>?pagename=wolfnet-admin-validate-key',
-                setSslVerify: $('#wolfnet_setSslVerify').val()
-            } );
+			$('.wolfnet_productKey').wolfnetValidateProductKey({
+				rootUri: '<?php echo site_url(); ?>?pagename=wolfnet-admin-validate-key',
+				setSslVerify: $('#wolfnet_setSslVerify').val()
+			});
 
 
             $( '#wolfnetSettings' ).submit( function() {
