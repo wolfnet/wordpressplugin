@@ -32,7 +32,7 @@ $agentsLink  = $linkBase . '?agentSearch' . $postHash;
 $officesLink = $linkBase . $postHash;
 
 if ($isAgent) {
-	$searchPlaceholder = 'search by agent last name';
+	$searchPlaceholder = 'search by agent name';
 	$searchAction = $agentsLink;
 	$criteriaName = 'agentCriteria';
 	$criteriaVal = (strlen($agentCriteria) > 0) ? $agentCriteria : '';
