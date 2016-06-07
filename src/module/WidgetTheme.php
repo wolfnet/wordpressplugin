@@ -36,9 +36,9 @@ class Wolfnet_Module_WidgetTheme
 
 		$this->widgetThemes = array(
 			'ash'      => $this->createTheme('ash',     'Classic'),
-			'birch'    => $this->createTheme('birch',   'Modern'),
-			'cedar'    => $this->createTheme('cedar',   'Modern 2'),
-			'dogwood'  => $this->createTheme('dogwood', 'Modern 3'),
+			'birch'    => $this->createTheme('birch',   'Modern Lite'),
+			'cedar'    => $this->createTheme('cedar',   'Modern Contrast'),
+			'dogwood'  => $this->createTheme('dogwood', 'Modern Tile'),
 		);
 
 		$this->widgetSelectors = array(
