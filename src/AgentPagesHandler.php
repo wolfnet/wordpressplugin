@@ -387,9 +387,13 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
 
         $agentListings = $this->getListingsByAgentId($key, $agentId, $sold);
 
-        if($agentListings == null || count($agentListings['responseData']['data']['listing']) == 0) {
-            return array('totalRows' => 0, 'listings' => '');
-        }
+		if (
+			($agentListings == null) ||
+			!array_key_exists('responseData', $agentListings) ||
+			(count($agentListings['responseData']['data']['listing']) == 0)
+		) {
+			return array('totalRows' => 0, 'listings' => '');
+		}
 
         $this->decodeCriteria($criteria);
         $agentListings['requestData'] = array_merge($agentListings['requestData'], $criteria);
@@ -401,28 +405,40 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
     }
 
 
-    protected function getListingsByAgentId($key, $agentId, $sold = 0)
-    {
-        try {
-            $data = $this->plugin->api->sendRequest(
-                $key,
-                '/listing/?agent_id=' . $agentId . "&sold=" . $sold,
-                'GET',
-                $this->args['criteria']
-            );
-        } catch (Wolfnet_Exception $e) {
-            $data = $e->getData();
-            $errorCode = json_decode($data['body'])->metadata->status->errorCode;
+	protected function getListingsByAgentId($key, $agentId, $sold = 0)
+	{
+		try {
 
-            if($errorCode == 'Auth1004' || $errorCode == 'Auth1001') {
-                $data = null;
-            } else {
-                $this->plugin->displayException($e);
-            }
-        }
+			$data = $this->plugin->api->sendRequest(
+				$key,
+				'/listing/?agent_id=' . $agentId . "&sold=" . $sold,
+				'GET',
+				$this->args['criteria']
+			);
 
-        return $data;
-    }
+		} catch (Wolfnet_Exception $e) {
+
+			$data = $e->getData();
+			$errorCode = '';
+
+			if (array_key_exists('body', $data)) {
+				$responseBody = json_decode($data['body']);
+				if (is_object($responseBody)) {
+					$errorCode = $responseBody->metadata->status->errorCode;
+				}
+			}
+
+			if ($errorCode == 'Auth1004' || $errorCode == 'Auth1001') {
+				$data = null;
+			} else {
+				$this->plugin->displayException($e);
+			}
+
+		}
+
+		return $data;
+
+	}
 
 
     protected function getAgentById($agentId)
