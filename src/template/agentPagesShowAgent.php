@@ -108,117 +108,123 @@ if (!function_exists('formatUrl')) {
 
 	}
 
-	if ($agent['display_agent']) {
-
 ?>
 
-		<div class="wolfnet_agent">
+<div class="wolfnet_agent">
 
-			<div class="wolfnet_aoHeader">
+	<?php if ($agent['display_agent']) { ?>
 
-				<div class="wolfnet_aoName">
+		<div class="wolfnet_aoHeader">
+
+			<div class="wolfnet_aoName">
+
+				<div class="wolfnet_aoTitle">
+					<?php echo $agent['first_name'] . ' ' . $agent['last_name']; ?>
+				</div>
+
+				<hr />
+
+				<div class="wolfnet_aoSubTitle">
+					<div><?php echo $agent['title']; ?></div>
+					<div><?php echo $agent['business_name']; ?></div>
+				</div>
+
+			</div>
+
+		</div>
+
+		<div class="wolfnet_aoSidebar">
+
+			<div class="wolfnet_aoExtLinks">
+				<?php if (strlen($agent['web_url']) > 0) { ?>
+					<a class="wnt-btn wnt-btn-primary" target="_blank"
+					 href="<?php echo $agent['web_url']; ?>">View Website</a>
+				<?php } ?>
+				<div class="wolfnet_aoSocial">
+					<?php foreach ($socialLinks as $socialLink) {
+						if (strlen($agent[$socialLink['field']]) > 0) {
+							echo '<a target="_blank" href="' . $agent[$socialLink['field']] . '">'
+								. '<span class="wnt-icon wnt-icon-' . $socialLink['icon'] . '"></span>'
+								. '<span class="wnt-visuallyhidden"> ' . $socialLink['label'] . '</span>'
+								. '</a>';
+						}
+					} ?>
+				</div>
+				<div class="wnt-clearfix"></div>
+			</div>
+
+			<div class="wolfnet_aoContact">
+
+				<div class="wolfnet_aoImage wolfnet_agentImage">
+					<img src="<?php echo $agent['image_url']; ?>"
+					 onerror="this.className += ' wnt-hidden';" />
+				</div>
+
+				<div class="wolfnet_aoContactInfo">
 
 					<div class="wolfnet_aoTitle">
-						<?php echo $agent['first_name'] . ' ' . $agent['last_name']; ?>
+						Contact <?php echo $agent['first_name'] . ' ' . $agent['last_name']; ?>
 					</div>
 
 					<hr />
 
-					<div class="wolfnet_aoSubTitle">
-						<div><?php echo $agent['title']; ?></div>
-						<div><?php echo $agent['business_name']; ?></div>
-					</div>
+					<ul class="wolfnet_aoLinks">
 
-				</div>
+						<?php
 
-			</div>
+							$contactNumbers = array();
 
-			<div class="wolfnet_aoSidebar">
-
-				<div class="wolfnet_aoExtLinks">
-					<?php if (strlen($agent['web_url']) > 0) { ?>
-						<a class="wnt-btn wnt-btn-primary" target="_blank"
-						 href="<?php echo $agent['web_url']; ?>">View Website</a>
-					<?php } ?>
-					<div class="wolfnet_aoSocial">
-						<?php foreach ($socialLinks as $socialLink) {
-							if (strlen($agent[$socialLink['field']]) > 0) {
-								echo '<a target="_blank" href="' . $agent[$socialLink['field']] . '">'
-									. '<span class="wnt-icon wnt-icon-' . $socialLink['icon'] . '"></span>'
-									. '<span class="wnt-visuallyhidden"> ' . $socialLink['label'] . '</span>'
-									. '</a>';
+							foreach ($contactMethods as $contactMethod) {
+								// Filter out duplicate voice numbers
+								if (
+									(strlen($agent[$contactMethod['field']]) > 0)
+									&& (
+										($contactMethod['field'] == 'fax_number')
+										|| ($contactMethod['field'] == 'pager_number')
+										|| !in_array($agent[$contactMethod['field']], $contactNumbers)
+									)
+								) {
+									array_push($contactNumbers, $agent[$contactMethod['field']]);
+									echo '<li>'
+										. '<span class="wnt-icon wnt-icon-' . $contactMethod['icon'] . '"></span> '
+										. '<span class="wnt-visuallyhidden">' . $contactMethod['label'] . ':</span> '
+										. $agent[$contactMethod['field']]
+										. '</li>';
+								}
 							}
-						} ?>
-					</div>
-					<div class="wnt-clearfix"></div>
-				</div>
 
-				<div class="wolfnet_aoContact">
+							if (strlen($agent['email_address']) > 0) {
+								echo '<li><span class="wnt-icon wnt-icon-mail"></span> '
+									. '<span class="wnt-visuallyhidden">Email:</span> '
+									. '<a href="' . $contactLink . '">'
+									. $agent['first_name'] . ' ' . $agent['last_name']
+									. '</a></li>';
+							}
 
-					<div class="wolfnet_aoImage wolfnet_agentImage">
-						<img src="<?php echo $agent['image_url']; ?>"
-						 onerror="this.className += ' wnt-hidden';" />
-					</div>
+							if (strlen($agent['address_1']) > 0) {
+								echo '<li><span class="wnt-icon wnt-icon-location"></span> '
+									. '<span class="wnt-visuallyhidden">Address:</span> '
+									. $agent['address_1'] . ' ' . $agent['address_2']
+									. '<br />'
+									. $agent['city'] . ', ' . $agent['state'] . ' '
+									. $agent ['zip_code'];
+							}
 
-					<div class="wolfnet_aoContactInfo">
+						?>
 
-						<div class="wolfnet_aoTitle">
-							Contact <?php echo $agent['first_name'] . ' ' . $agent['last_name']; ?>
-						</div>
-
-						<hr />
-
-						<ul class="wolfnet_aoLinks">
-
-							<?php
-
-								$contactNumbers = array();
-
-								foreach ($contactMethods as $contactMethod) {
-									// Filter out duplicate voice numbers
-									if (
-										(strlen($agent[$contactMethod['field']]) > 0)
-										&& (
-											($contactMethod['field'] == 'fax_number')
-											|| ($contactMethod['field'] == 'pager_number')
-											|| !in_array($agent[$contactMethod['field']], $contactNumbers)
-										)
-									) {
-										array_push($contactNumbers, $agent[$contactMethod['field']]);
-										echo '<li>'
-											. '<span class="wnt-icon wnt-icon-' . $contactMethod['icon'] . '"></span> '
-											. '<span class="wnt-visuallyhidden">' . $contactMethod['label'] . ':</span> '
-											. $agent[$contactMethod['field']]
-											. '</li>';
-									}
-								}
-
-								if (strlen($agent['email_address']) > 0) {
-									echo '<li><span class="wnt-icon wnt-icon-mail"></span> '
-										. '<span class="wnt-visuallyhidden">Email:</span> '
-										. '<a href="' . $contactLink . '">'
-										. $agent['first_name'] . ' ' . $agent['last_name']
-										. '</a></li>';
-								}
-
-								if (strlen($agent['address_1']) > 0) {
-									echo '<li><span class="wnt-icon wnt-icon-location"></span> '
-										. '<span class="wnt-visuallyhidden">Address:</span> '
-										. $agent['address_1'] . ' ' . $agent['address_2']
-										. '<br />'
-										. $agent['city'] . ', ' . $agent['state'] . ' '
-										. $agent ['zip_code'];
-								}
-
-							?>
-
-						</ul>
-
-					</div>
+					</ul>
 
 				</div>
 
 			</div>
+
+		</div>
+
+	<?php } ?>
+
+	<div class="wolfnet_aoMain">
+
+		<?php if ($agent['display_agent']) { ?>
 
 			<div class="wolfnet_aoInfo">
 
@@ -294,65 +300,55 @@ if (!function_exists('formatUrl')) {
 
 			</div>
 
-		</div>
-
-<?php
-
-	} // end if display_agent
+		<?php } ?>
 
 
-	// Agent's listings
+		<?php if (($activeListingCount > 0) || ($soldListingCount > 0)) { ?>
 
-	if (($activeListingCount > 0) || ($soldListingCount > 0)) {
+			<div class="wolfnet_aoListings">
 
-?>
+				<div class="wolfnet_aoTitle">Agent's Listings</div>
 
-		<div class="wolfnet_aoListings">
+				<hr />
 
-			<div class="wolfnet_aoTitle">Agent's Listings</div>
+				<?php if ($activeListingCount > 0) { ?>
 
-			<hr />
+					<div class="wolfnet_aoFeaturedListings">
 
-			<?php if ($activeListingCount > 0) { ?>
+						<?php echo $activeListingHTML; ?>
 
-				<div class="wolfnet_aoFeaturedListings">
+						<?php if ($activeListingCount > 10) {
+							echo '<a href="<?php echo $searchUrl; ?>">'
+								. 'View all ' . $activeListingCount . ' of '
+								. $agent['first_name'] . "'s listings."
+								. '</a>';
+						} ?>
 
-					<?php echo $activeListingHTML; ?>
+					</div>
 
-					<?php if ($activeListingCount > 10) {
-						echo '<a href="<?php echo $searchUrl; ?>">'
-							. 'View all ' . $activeListingCount . ' of '
-							. $agent['first_name'] . "'s listings."
-							. '</a>';
-					} ?>
+				<?php }
 
-				</div>
+				if ($soldListingCount > 0) { ?>
 
-			<?php }
+					<div class="wolfnet_aoSoldListings">
 
-			if ($soldListingCount > 0) { ?>
+						<?php echo $soldListingHTML; ?>
 
-				<div class="wolfnet_aoSoldListings">
+						<?php if ($soldListingCount > 10) {
+							echo '<a href="' . $soldSearchUrl . '">'
+								. 'View all ' . $soldListingCount . ' of ' . $agent['first_name'] . "'s sold listings."
+								. '</a>';
+						} ?>
 
-					<?php echo $soldListingHTML; ?>
+					</div>
 
-					<?php if ($soldListingCount > 10) {
-						echo '<a href="' . $soldSearchUrl . '">'
-							. 'View all ' . $soldListingCount . ' of ' . $agent['first_name'] . "'s sold listings."
-							. '</a>';
-					} ?>
+				<?php } ?>
 
-				</div>
+			</div>
 
-			<?php } ?>
+		<?php } ?>
 
-		</div>
-
-<?php
-
-	}
-
-?>
+	</div>
 
 </div>
 
