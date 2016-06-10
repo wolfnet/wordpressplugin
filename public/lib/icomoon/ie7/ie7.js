@@ -26,6 +26,7 @@
 		'wnt-icon-triangle-left': '&#x25c4;',
 		'wnt-icon-triangle-down': '&#x25bc;',
 		'wnt-icon-triangle-up': '&#x25b2;',
+		'wnt-icon-triangle-up-stop': '&#x2912;',
 		'wnt-icon-grid': '&#xe901;',
 		'wnt-icon-list': '&#x2261;',
 		'wnt-icon-home': '&#x1f3e0;',

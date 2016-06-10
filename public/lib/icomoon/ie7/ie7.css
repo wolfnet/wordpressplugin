@@ -37,6 +37,9 @@
 .wnt-icon-triangle-up {
     *zoom: expression(this.runtimeStyle['zoom'] = '1', this.innerHTML = '&#x25b2;');
 }
+.wnt-icon-triangle-up-stop {
+    *zoom: expression(this.runtimeStyle['zoom'] = '1', this.innerHTML = '&#x2912;');
+}
 .wnt-icon-grid {
     *zoom: expression(this.runtimeStyle['zoom'] = '1', this.innerHTML = '&#xe901;');
 }

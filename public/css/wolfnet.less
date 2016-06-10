@@ -95,6 +95,38 @@
         cursor: pointer;
     }
 
+	.wnt-btn {
+		display: inline-block;
+		padding: 6px;
+		background-color: #ccc;
+		color: #fff;
+		.no-decoration();
+		text-align: center;
+
+		&.wnt-btn-round {
+			width: 2em;
+			height: 2em;
+			border-radius: 50%;
+
+			.wnt-icon {
+				display: inline-block;
+				margin-top: 0.25em;
+			}
+
+		}
+
+	}
+
+	.wnt-btn-group {
+		vertical-align: middle;
+
+		.wnt-btn {
+			float: left;
+			margin: -1px;
+		}
+
+	}
+
     &.wolfnet_quickSearch_basic {
 
     }
