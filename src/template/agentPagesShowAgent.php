@@ -369,7 +369,7 @@ jQuery(function ($) {
 		var $this = $(this),
 			$summary = $('<div class="wolfnet_aoSectionSummary"></div>'),
 			$content = $('<div class="wolfnet_aoSectionContent"></div>'),
-			$showMoreBtn = $('<a href="javascript:void(0);">[...]</a>'),
+			$showMoreBtn = $('<a href="javascript:void(0);">[<span class="wnt-visuallyhidden"><?php _e('Continue reading'); ?></span>...]</a>'),
 			fullContent = $this.html(),
 			summaryText = $this.text();
 
@@ -411,8 +411,8 @@ jQuery(function ($) {
 	var $agentListings = $aoWidget.find('.wolfnet_aoListings'),
 		$agentFeatured = $agentListings.find('.wolfnet_aoFeaturedListings'),
 		$agentSold = $agentListings.find('.wolfnet_aoSoldListings'),
-		agentFeaturedLabel = 'Active',
-		agentSoldLabel = 'Sold';
+		agentFeaturedLabel = '<?php _e('Active'); ?>',
+		agentSoldLabel = '<?php _e('Sold'); ?>';
 
 	if (($agentFeatured.length > 0) && ($agentSold.length > 0)) {
 
