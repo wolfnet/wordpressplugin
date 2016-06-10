@@ -26,6 +26,7 @@
 
 @accentColor: #7BA4CE;
 @btnRadius: 4px;
+@itemMargin: 16px;
 
 @screenXlMin: 1220px;
 @screenLgMin: 1024px;
@@ -308,7 +309,7 @@
 
 		.wolfnet_aoItem {
 			display: inline-block;
-			margin: 16px 16px 0 0;
+			margin: @itemMargin (@itemMargin - 4) 0 0; // Subtract 4 horizontally b/c of inline space
 			vertical-align: top;
 			text-align: left;
 
