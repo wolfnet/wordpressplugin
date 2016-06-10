@@ -93,6 +93,10 @@
                 background-color: @accentColor;
             }
 
+			&.wnt-btn-round {
+				width: 2em;
+				height: 2em;
+			}
 
         }
 
@@ -398,6 +402,13 @@
 
 		}
 
+		.wolfnet_top {
+			float: right;
+			margin-top: 0.1em;
+			box-shadow: 2px 4px 10px rgba(0, 0, 0, 0.25);
+			font-size: 2em;
+		}
+
 		.wolfnet_aoSidebar {
 			display: inline-block;
 			position: relative;
@@ -636,6 +647,12 @@
 			font-size: 0.9em;
 		}
 
+		&.wolfnet_aoAgentDetails {
+			.wolfnet_aoMain {
+				max-width: 50%;
+			}
+		}
+
 	}
 
 }
@@ -686,12 +703,6 @@
 					width: @agentInfoWidthMd;
 				}
 
-			}
-		}
-
-		&.wolfnet_aoAgentDetails {
-			.wolfnet_aoMain {
-				max-width: 50%;
 			}
 		}
 

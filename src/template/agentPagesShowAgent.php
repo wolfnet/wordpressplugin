@@ -352,6 +352,18 @@ if (!function_exists('formatUrl')) {
 
 </div>
 
+<div class="wnt-clearfix"></div>
+
+<a class="wnt-btn wnt-btn-round wnt-btn-primary wolfnet_top" href="#<?php echo $instance_id; ?>"
+ title="<?php esc_attr_e('Back to Top'); ?>">
+	<span class="wnt-icon wnt-icon-triangle-up-stop"></span>
+	<span class="wnt-visuallyhidden"><?php _e('Back to Top'); ?></span>
+</a>
+
+<div class="wnt-clearfix"></div>
+
+</div>
+
 
 <script>
 
