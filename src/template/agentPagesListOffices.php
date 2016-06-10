@@ -167,15 +167,16 @@ $postHash = '#post-' . get_the_id();
 			itemSections = [
 				{ selector: '.wolfnet_aoContact', maxHeight: 0, origMaxHeight: 0 },
 				{ selector: '.wolfnet_aoLinks',   maxHeight: 0, origMaxHeight: 0 }
-			];
+			],
+			$aoHeader = $aoWidget.find('.wolfnet_agentOfficeHeader');
 
-		wolfnet.resizeAOItems($aoItems, itemSections);
+		wolfnet.resizeAOItems($aoItems, itemSections, $aoHeader);
 
 		var resizeTimeout;
 		$(window).resize(function () {
 			clearTimeout(resizeTimeout);
 			resizeTimeout = setTimeout(function () {
-				wolfnet.resizeAOItems($aoItems, itemSections);
+				wolfnet.resizeAOItems($aoItems, itemSections, $aoHeader);
 			}, 500);
 		});
 

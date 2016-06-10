@@ -26,11 +26,12 @@
 
 @accentColor: #7BA4CE;
 @btnRadius: 4px;
+@itemMargin: 16px;
 
 @screenXlMin: 1220px;
 @screenLgMin: 1024px;
 @screenMdMin: 840px;
-@screenSmMin: 600px; // 530
+@screenSmMin: 600px;
 
 @screenLgMax: (@screenXlMin - 1);
 @screenMdMax: (@screenLgMin - 1);
@@ -321,6 +322,11 @@
 	&.wolfnet_aoOfficesList,
 	&.wolfnet_aoAgentsList {
 
+		.wolfnet_agentOfficeHeader {
+			margin-left: auto;
+			margin-right: auto;
+		}
+
 		.wolfnet_aoOffices,
 		.wolfnet_aoAgents {
 			text-align: center;
@@ -328,7 +334,7 @@
 
 		.wolfnet_aoItem {
 			display: inline-block;
-			margin: 16px 16px 0 0;
+			margin: @itemMargin (@itemMargin - 4) 0 0; // Subtract 4 horizontally b/c of inline space
 			vertical-align: top;
 			text-align: left;
 
@@ -428,10 +434,19 @@
 		}
 
 		.wolfnet_aoSidebar {
+			display: inline-block;
 			position: relative;
 			float: right;
+			width: 39%;
 			margin-left: 20px;
-			width: 280px;
+			text-align: right;
+
+			.wolfnet_aoExtLinks,
+			.wolfnet_aoContact {
+				display: inline-block;
+				width: 280px;
+				text-align: left;
+			}
 
 			.wolfnet_aoExtLinks {
 
@@ -478,6 +493,11 @@
 
 			}
 
+		}
+
+		.wolfnet_aoMain {
+			display: inline-block;
+			max-width: 58%;
 		}
 
 		.wolfnet_aoSectionTitle {
@@ -659,6 +679,24 @@
 
 	.wolfnet_widget {
 
+		&.wolfnet_aoOfficesList,
+		&.wolfnet_aoAgentsList {
+			.wolfnet_agentOfficeHeader {
+				.wolfnet_agentOfficeNav {
+
+					.wolfnet_aoSearch {
+						margin-left: 0.5em;
+
+						.wolfnet_aoCriteria {
+							width: 275px;
+						}
+
+					}
+
+				}
+			}
+		}
+
 		&.wolfnet_aoOfficesList {
 			.wolfnet_aoItem {
 				width: @officeWidthMd;
@@ -681,6 +719,12 @@
 					width: @agentInfoWidthMd;
 				}
 
+			}
+		}
+
+		&.wolfnet_aoAgentDetails {
+			.wolfnet_aoMain {
+				max-width: 50%;
 			}
 		}
 
@@ -908,10 +952,23 @@
 			}
 
 			.wolfnet_aoSidebar {
+				display: block;
 				float: none;
 				margin-top: 1em;
 				margin-left: 0;
-				width: auto;
+				width: 100%;
+				text-align: center;
+
+				.wolfnet_aoExtLinks,
+				.wolfnet_aoContact {
+					display: block;
+					width: 100%;
+				}
+
+			}
+
+			.wolfnet_aoMain {
+				max-width: 100%;
 			}
 
 		}
