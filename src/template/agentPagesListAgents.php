@@ -279,15 +279,16 @@ if (!function_exists('paginate')) {
 				{ selector: '.wolfnet_aoBody',     maxHeight: 0,  origMaxHeight: 0 },
 				{ selector: '.wolfnet_aoFooter',   maxHeight: 0,  origMaxHeight: 0 },
 				{ selector: '.wolfnet_aoItem',     maxHeight: 0,  origMaxHeight: 0 }
-			];
+			],
+			$aoHeader = $aoWidget.find('.wolfnet_agentOfficeHeader');
 
-		wolfnet.resizeAOItems($aoItems, itemSections);
+		wolfnet.resizeAOItems($aoItems, itemSections, $aoHeader);
 
 		var resizeTimeout;
 		$(window).resize(function () {
 			clearTimeout(resizeTimeout);
 			resizeTimeout = setTimeout(function () {
-				wolfnet.resizeAOItems($aoItems, itemSections);
+				wolfnet.resizeAOItems($aoItems, itemSections, $aoHeader);
 			}, 500);
 		});
 

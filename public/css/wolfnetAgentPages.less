@@ -26,6 +26,7 @@
 
 @accentColor: #7BA4CE;
 @btnRadius: 4px;
+@itemMargin: 16px;
 
 @screenXlMin: 1220px;
 @screenLgMin: 1024px;
@@ -77,13 +78,7 @@
         color: #666;
 
         .wnt-btn {
-            display: inline-block;
             width: 100px;
-            padding: 6px;
-            background-color: #ccc;
-            color: #fff;
-            .no-decoration();
-            text-align: center;
             text-transform: uppercase;
 
             &.wnt-btn-primary {
@@ -98,15 +93,10 @@
                 background-color: @accentColor;
             }
 
-        }
-
-        .wnt-btn-group {
-            vertical-align: middle;
-
-            .wnt-btn {
-                float: left;
-                margin: -1px;
-            }
+			&.wnt-btn-round {
+				width: 2em;
+				height: 2em;
+			}
 
         }
 
@@ -301,6 +291,11 @@
 	&.wolfnet_aoOfficesList,
 	&.wolfnet_aoAgentsList {
 
+		.wolfnet_agentOfficeHeader {
+			margin-left: auto;
+			margin-right: auto;
+		}
+
 		.wolfnet_aoOffices,
 		.wolfnet_aoAgents {
 			text-align: center;
@@ -308,7 +303,7 @@
 
 		.wolfnet_aoItem {
 			display: inline-block;
-			margin: 16px 16px 0 0;
+			margin: @itemMargin (@itemMargin - 4) 0 0; // Subtract 4 horizontally b/c of inline space
 			vertical-align: top;
 			text-align: left;
 
@@ -405,6 +400,13 @@
 				display: none;
 			}
 
+		}
+
+		.wolfnet_top {
+			float: right;
+			margin-top: 0.1em;
+			box-shadow: 2px 4px 10px rgba(0, 0, 0, 0.25);
+			font-size: 2em;
 		}
 
 		.wolfnet_aoSidebar {
@@ -645,6 +647,12 @@
 			font-size: 0.9em;
 		}
 
+		&.wolfnet_aoAgentDetails {
+			.wolfnet_aoMain {
+				max-width: 50%;
+			}
+		}
+
 	}
 
 }
@@ -654,6 +662,24 @@
 @media screen and (min-width: @screenMdMin) and (max-width: @screenMdMax) {
 
 	.wolfnet_widget {
+
+		&.wolfnet_aoOfficesList,
+		&.wolfnet_aoAgentsList {
+			.wolfnet_agentOfficeHeader {
+				.wolfnet_agentOfficeNav {
+
+					.wolfnet_aoSearch {
+						margin-left: 0.5em;
+
+						.wolfnet_aoCriteria {
+							width: 275px;
+						}
+
+					}
+
+				}
+			}
+		}
 
 		&.wolfnet_aoOfficesList {
 			.wolfnet_aoItem {
@@ -677,12 +703,6 @@
 					width: @agentInfoWidthMd;
 				}
 
-			}
-		}
-
-		&.wolfnet_aoAgentDetails {
-			.wolfnet_aoMain {
-				max-width: 50%;
 			}
 		}
 
