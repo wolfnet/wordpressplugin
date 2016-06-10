@@ -446,6 +446,65 @@ jQuery(function ($) {
 
 	}
 
+
+	// Agent contact box
+
+	var $aoSidebar = $aoWidget.find('.wolfnet_aoSidebar');
+
+	var aoSidebarOffset = $aoSidebar.offset();
+
+	$aoSidebar.data('wnt-sticky', {
+		position: {
+			top: aoSidebarOffset.top,
+			left: aoSidebarOffset.left
+		}
+	});
+
+	var attachAgentBox = function (yPos) {
+		if (!$aoSidebar.is('.wnt-attached')) {
+			var sidebarOffset = $aoSidebar.offset();
+			$aoSidebar.addClass('wnt-attached').css({
+				position: 'fixed',
+				top: yPos,
+				left: sidebarOffset.left
+			});
+		}
+	};
+
+	var detatchAgentBox = function () {
+		if ($aoSidebar.is('.wnt-attached')) {
+			$aoSidebar.removeClass('wnt-attached').css({
+				position: null,
+				top: null,
+				left: null
+			});
+		}
+	};
+
+	$(window).on('scroll touchmove', function (event) {
+		onScrollAgent($(this), $aoSidebar);
+	});
+
+	$(window).resize(function () {
+		onScrollAgent($(this), $aoSidebar);
+	});
+
+	var onScrollAgent = function ($window, $aoSidebar) {
+		var sidebarData = $aoSidebar.data('wnt-sticky');
+		var sidebarTop = sidebarData.top,
+			windowTop  = $window.scrollTop();
+
+		if (
+			//methods.isAttachable.call($aoSidebar) &&
+			(windowTop > sidebarTop)
+		) {
+			attachAgentBox(windowTop - sidebarTop);
+		} else {
+			detatchAgentBox();
+		}
+
+	};
+
 });
 
 </script>
