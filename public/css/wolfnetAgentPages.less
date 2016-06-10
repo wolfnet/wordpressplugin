@@ -302,6 +302,11 @@
 	&.wolfnet_aoOfficesList,
 	&.wolfnet_aoAgentsList {
 
+		.wolfnet_agentOfficeHeader {
+			margin-left: auto;
+			margin-right: auto;
+		}
+
 		.wolfnet_aoOffices,
 		.wolfnet_aoAgents {
 			text-align: center;
@@ -655,6 +660,24 @@
 @media screen and (min-width: @screenMdMin) and (max-width: @screenMdMax) {
 
 	.wolfnet_widget {
+
+		&.wolfnet_aoOfficesList,
+		&.wolfnet_aoAgentsList {
+			.wolfnet_agentOfficeHeader {
+				.wolfnet_agentOfficeNav {
+
+					.wolfnet_aoSearch {
+						margin-left: 0.5em;
+
+						.wolfnet_aoCriteria {
+							width: 275px;
+						}
+
+					}
+
+				}
+			}
+		}
 
 		&.wolfnet_aoOfficesList {
 			.wolfnet_aoItem {
