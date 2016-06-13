@@ -150,10 +150,10 @@ if ( typeof jQuery != 'undefined' ) {
 				$.ajaxSetup({
 					beforeSend: function (jqXHR, data) {
 
-						// Look for calls being made to gateway.cfm with justcount parameter for
-						// live updates of listing count - being called from https solutions
+						// Look for URL Search Builder calls being made to gateway.cfm -
+						// being called from https WP Admins
 						if (
-							(data.url.indexOf('gateway.cfm') != -1  && data.url.indexOf('justCount=y') != -1) &&
+							(data.url.indexOf('gateway.cfm') != -1  && data.url.indexOf('isURLSearchBuilder') != -1) &&
 							(window.location.href.indexOf('https://') != -1)
 						) {
 							// Convert outgoing call to HTTPS
