@@ -149,8 +149,6 @@ if ( typeof jQuery != 'undefined' ) {
 				// Intercept all AJAX requests
 				$.ajaxSetup({
 					beforeSend: function (jqXHR, data) {
-
-						ajaxUrl = data.url;
 						thisUrl = window.location.href;
 
 						if (
@@ -158,8 +156,7 @@ if ( typeof jQuery != 'undefined' ) {
 							(thisUrl.indexOf('https://') != -1)
 						) {
 							// This is an AJAX call being made from HTTPS solution - relay through PHP
-							ajaxUrl = ajaxUrl.replace('http:','https:');
-							data.url = ajaxUrl;
+							data.url = data.url.replace('http:','https:');;
 
 							// TODO: delete this after production validation
 							console.log('HTTPS - Ajax call converted to HTTPS:');
