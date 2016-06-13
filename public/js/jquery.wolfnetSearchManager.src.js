@@ -146,16 +146,17 @@ if ( typeof jQuery != 'undefined' ) {
 
 			interceptAjax: function()
 			{
-				// Intercept all AJAX requests
+				// Intercept outgoing AJAX requests
 				$.ajaxSetup({
 					beforeSend: function (jqXHR, data) {
-						thisUrl = window.location.href;
 
+						// Look for calls being made to gateway.cfm with justcount parameter for
+						// live updates of listing count - being called from https solutions
 						if (
 							(data.url.indexOf('gateway.cfm') != -1  && data.url.indexOf('justCount=y') != -1) &&
-							(thisUrl.indexOf('https://') != -1)
+							(window.location.href.indexOf('https://') != -1)
 						) {
-							// This is an AJAX call being made from HTTPS solution - relay through PHP
+							// Convert outgoing call to HTTPS
 							data.url = data.url.replace('http:','https:');;
 
 							// TODO: delete this after production validation
