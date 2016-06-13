@@ -57,6 +57,8 @@ if ( typeof jQuery != 'undefined' ) {
 
 				return this.each( function () {
 
+					methods.interceptAjax();
+
 					var $this = $( this );
 
 					var data = {
@@ -140,6 +142,33 @@ if ( typeof jQuery != 'undefined' ) {
 				} );
 
 			},
+
+
+			interceptAjax: function()
+			{
+				// Intercept all AJAX requests
+				$.ajaxSetup({
+					beforeSend: function (jqXHR, data) {
+
+						ajaxUrl = data.url;
+						thisUrl = window.location.href;
+
+						if (
+							(data.url.indexOf('gateway.cfm') != -1  && data.url.indexOf('justCount=y') != -1) &&
+							(thisUrl.indexOf('https://') != -1)
+						) {
+							// This is an AJAX call being made from HTTPS solution - relay through PHP
+							ajaxUrl = ajaxUrl.replace('http:','https:');
+							data.url = ajaxUrl;
+
+							// TODO: delete this after production validation
+							console.log('HTTPS - Ajax call converted to HTTPS:');
+							console.log(data.url);
+						}
+					}
+				});
+			},
+
 
 			refresh : function ()
 			{
