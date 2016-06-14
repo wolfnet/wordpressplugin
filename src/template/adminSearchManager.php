@@ -104,6 +104,8 @@
         ( function ( $ ) {
 
             $( '#savedsearches' ).wolfnetSearchManager( {
+            	ajaxUrl    : wolfnet_ajax.ajaxurl,
+            	ajaxAction : 'wolfnet_search_manager_ajax',
                 saveForm  : $( '#save_search' )
             } );
 

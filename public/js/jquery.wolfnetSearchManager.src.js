@@ -57,7 +57,7 @@ if ( typeof jQuery != 'undefined' ) {
 
 				return this.each( function () {
 
-					methods.interceptAjax();
+					methods.interceptAjax(options.ajaxUrl,options.ajaxAction);
 
 					var $this = $( this );
 
@@ -144,24 +144,24 @@ if ( typeof jQuery != 'undefined' ) {
 			},
 
 
-			interceptAjax: function()
+			interceptAjax: function(ajaxUrl,ajaxAction)
 			{
+
 				// Intercept outgoing AJAX requests
 				$.ajaxSetup({
 					beforeSend: function (jqXHR, data) {
 
 						// Look for URL Search Builder calls being made to gateway.cfm -
-						// being called from https WP Admins
+						// calls being made from https wordpress solutions.
 						if (
 							(data.url.indexOf('gateway.cfm') != -1  && data.url.indexOf('isURLSearchBuilder') != -1) &&
-							(window.location.href.indexOf('https://') != -1)
+							(window.location.href.indexOf('https:') != -1)
 						) {
-							// Convert outgoing call to HTTPS
-							data.url = data.url.replace('http:','https:');;
 
-							// TODO: delete this after production validation
-							console.log('HTTPS - Ajax call converted to HTTPS:');
-							console.log(data.url);
+							// Route ajax call through wolfnet ajax so it's being made from https
+							var newAjax = ajaxUrl + '?' + ajaxAction;
+							data.url = newAjax;
+
 						}
 					}
 				});

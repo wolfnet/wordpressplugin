@@ -52,6 +52,7 @@ class Wolfnet_Ajax
             'wolfnet_price_range'             => 'remotePriceRange',
             'wolfnet_base_url'                => 'remoteGetBaseUrl',
             'wolfnet_route_quicksearch'       => 'remoteRouteQuickSearch',
+            'wolfnet_search_manager_ajax'     => 'remoteAjaxRelay',
             'wolfnet_smart_search'            => 'remoteGetSuggestions',
             );
 
@@ -74,6 +75,7 @@ class Wolfnet_Ajax
             'wolfnet_base_url'          => 'remoteGetBaseUrl',
             'wolfnet_price_range'       => 'remotePriceRange',
             'wolfnet_route_quicksearch' => 'remoteRouteQuickSearch',
+            'wolfnet_search_manager_ajax'=> 'remoteAjaxRelay',
             'wolfnet_smart_search'      => 'remoteGetSuggestions',
             );
 
@@ -652,6 +654,26 @@ class Wolfnet_Ajax
 
         wp_send_json($response);
     }
+
+
+	public function remoteAjaxRelay()
+    {
+
+		$response = array(
+			'data' => 'helloworld'
+		);
+
+		// Send back response
+		if (array_key_exists('callback', $_GET)){
+			$callback = $_REQUEST['callback'];
+			header('Content-Type: text/javascript; charset=utf8');
+			echo $callback.'('.json_encode($response).')';
+			die;
+		} else {
+			wp_send_json($response);
+		}
+
+	}
 
 
 	public function remoteGetSuggestions()
