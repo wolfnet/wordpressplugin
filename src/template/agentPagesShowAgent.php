@@ -461,61 +461,145 @@ jQuery(function ($) {
 
 	// Agent contact box
 
-	var $aoSidebar = $aoWidget.find('.wolfnet_aoSidebar');
+	var $window = $(window),
+		$aoSidebar = $aoWidget.find('.wolfnet_aoSidebar'),
+		sidebarData = {
+			lastScrollTop:      $window.scrollTop(),
+			topOffset:          50,
+			leftOffset:         20,
+			// The following are set up in updatePosition()
+			windowHeight:       0,
+			sidebarTop:         0,
+			sidebarLeft:        0,
+			sidebarWidth:       0,
+			sidebarHeight:      0,
+			containerBottom:    0
+		};
 
-	var aoSidebarOffset = $aoSidebar.offset();
 
-	$aoSidebar.data('wnt-sticky', {
-		position: {
-			top: aoSidebarOffset.top,
-			left: aoSidebarOffset.left
-		}
-	});
-
-	var attachAgentBox = function (yPos) {
-		if (!$aoSidebar.is('.wnt-attached')) {
-			var sidebarOffset = $aoSidebar.offset();
-			$aoSidebar.addClass('wnt-attached').css({
-				position: 'fixed',
-				top: yPos,
-				left: sidebarOffset.left
-			});
-		}
+	var updatePosition = function () {
+		$.extend(sidebarData, {
+			windowHeight:      $window.height(),
+			sidebarTop:        $aoSidebar.position().top,
+			sidebarLeft:       $aoSidebar.offset().left,
+			sidebarWidth:      $aoSidebar.width(),
+			sidebarHeight:     $aoSidebar.outerHeight(),
+			containerTop:      $aoWidget.offset().top,
+			containerBottom:   $aoWidget.offset().top + $aoWidget.height()
+		});
 	};
 
-	var detatchAgentBox = function () {
+
+	var setupStickySidebar = function () {
+		updatePosition();
+
+		$(window).on('scroll touchmove', onScrollAgent);
+
+		$(window).resize(function () {
+			detachSidebar();
+			updatePosition();
+			onScrollAgent();
+		});
+
+	};
+
+
+	var attachSidebar = function () {
+		//console.log('orig left: ' + sidebarData.sidebarLeft);
+		if (!$aoSidebar.is('.wnt-attached')) {
+			$aoSidebar.addClass('wnt-attached');
+		}
+		$aoSidebar.css({
+			left:   sidebarData.sidebarLeft - sidebarData.leftOffset,
+			width:  sidebarData.sidebarWidth
+		});
+		//console.log(' new left: ' + $aoSidebar.offset().left);
+	};
+
+
+	var detachSidebar = function () {
 		if ($aoSidebar.is('.wnt-attached')) {
 			$aoSidebar.removeClass('wnt-attached').css({
-				position: null,
-				top: null,
-				left: null
+				top:    '',
+				left:   '',
+				width:  ''
 			});
 		}
 	};
 
-	$(window).on('scroll touchmove', function (event) {
-		onScrollAgent($(this), $aoSidebar);
-	});
 
-	$(window).resize(function () {
-		onScrollAgent($(this), $aoSidebar);
-	});
-
-	var onScrollAgent = function ($window, $aoSidebar) {
-		var sidebarData = $aoSidebar.data('wnt-sticky');
-		var sidebarTop = sidebarData.top,
-			windowTop  = $window.scrollTop();
+	var onScrollAgent = function () {
+		var sidebarTop        = $aoSidebar.offset().top - sidebarData.topOffset,
+			sidebarBottom     = sidebarData.sidebarTop + sidebarData.sidebarHeight + sidebarData.topOffset,
+			windowTop         = $window.scrollTop(),
+			windowBottom      = windowTop + sidebarData.windowHeight,
+			isAtBottom        = (windowBottom >= sidebarData.containerBottom),
+			bottomDelta       = Math.abs(windowBottom - sidebarData.containerBottom),
+			heightDelta       = Math.abs(sidebarData.windowHeight - sidebarData.sidebarHeight),
+			scrollDelta       = sidebarData.lastScrollTop - windowTop,
+			isScrollingDown   = (windowTop > sidebarData.lastScrollTop),
+			isWindowLarger    = (sidebarData.windowHeight > sidebarData.sidebarHeight);
 
 		if (
-			//methods.isAttachable.call($aoSidebar) &&
-			(windowTop > sidebarTop)
+			(isWindowLarger && (windowTop > sidebarData.containerTop)) ||
+			(!isWindowLarger && (windowTop > sidebarData.containerTop + heightDelta))
 		) {
-			attachAgentBox(windowTop - sidebarTop);
-		} else {
-			detatchAgentBox();
+			attachSidebar();
+		} else if (!isScrollingDown && windowTop <= sidebarData.containerTop) {
+			detachSidebar();
 		}
 
+		if ($aoSidebar.is('.wnt-attached')) {
+
+			var dragBottomDown = ((sidebarBottom <= Math.max(windowBottom, sidebarData.containerBottom)) && isScrollingDown),
+				dragTopUp      = ((sidebarTop >= Math.max(windowTop, sidebarData.containerTop)) && !isScrollingDown),
+				topOffset      = ($aoSidebar.is('.wnt-attached') ? sidebarData.topOffset : 0);
+
+			if (dragBottomDown) {
+				//console.log('dragBottomDown');
+
+				if (isWindowLarger) {
+					$aoSidebar.css('top', sidebarData.topOffset - (isAtBottom ? bottomDelta : 0));
+				} else {
+					$aoSidebar.css('top', -sidebarData.topOffset - heightDelta - (isAtBottom ? bottomDelta : 0));
+				}
+
+			} else if (dragTopUp) {
+				//console.log('dragTopUp');
+
+				$aoSidebar.css('top', Math.min(
+					sidebarData.containerBottom - windowTop - sidebarData.sidebarHeight - sidebarData.topOffset,
+					sidebarData.topOffset
+				));
+
+			} else {
+
+				var currentTop    = parseInt($aoSidebar.css('top'), 10),
+					scrolledTop   = currentTop + scrollDelta,
+					//newTop        = isAtBottom ? -bottomDelta + sidebarData.topOffset : scrolledTop;
+					newTop        = Math.min(
+						sidebarData.containerBottom - windowTop - sidebarData.sidebarHeight - sidebarData.topOffset,
+						scrolledTop
+					);
+				//console.log('scrolledTop: ' + scrolledTop);
+
+				$aoSidebar.css({
+					top: newTop,
+					left: sidebarData.sidebarLeft - sidebarData.leftOffset
+				});
+
+			}
+
+		}
+
+		sidebarData.lastScrollTop = windowTop;
+
 	};
+
+
+	// Set up sticky sidebar
+	setTimeout(setupStickySidebar, 500);
+
 
 });
 
