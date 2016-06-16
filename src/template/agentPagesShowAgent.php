@@ -459,6 +459,146 @@ jQuery(function ($) {
 
 	}
 
+
+	// Agent contact box
+
+	var $window = $(window),
+		$aoSidebar = $aoWidget.find('.wolfnet_aoSidebar'),
+		sidebarData = {
+			lastScrollTop:      $window.scrollTop(),
+			topOffset:          50,
+			leftOffset:         20,
+			// The following are set up in updatePosition()
+			windowHeight:       0,
+			sidebarTop:         0,
+			sidebarLeft:        0,
+			sidebarWidth:       0,
+			sidebarHeight:      0,
+			containerBottom:    0
+		};
+
+
+	var updatePosition = function () {
+		$.extend(sidebarData, {
+			windowHeight:      $window.height(),
+			sidebarTop:        $aoSidebar.position().top,
+			sidebarLeft:       $aoSidebar.offset().left,
+			sidebarWidth:      $aoSidebar.width(),
+			sidebarHeight:     $aoSidebar.outerHeight(),
+			containerTop:      $aoWidget.offset().top,
+			containerBottom:   $aoWidget.offset().top + $aoWidget.height()
+		});
+	};
+
+
+	var setupStickySidebar = function () {
+		updatePosition();
+
+		$(window).on('scroll touchmove', onScrollAgent);
+
+		$(window).resize(function () {
+			detachSidebar();
+			updatePosition();
+			onScrollAgent();
+		});
+
+	};
+
+
+	var attachSidebar = function () {
+		if (!$aoSidebar.is('.wnt-attached')) {
+			$aoSidebar.addClass('wnt-attached');
+			$aoSidebar.css('top', sidebarData.topOffset);
+		}
+		$aoSidebar.css({
+			left:   sidebarData.sidebarLeft - sidebarData.leftOffset,
+			width:  sidebarData.sidebarWidth
+		});
+	};
+
+
+	var detachSidebar = function () {
+		if ($aoSidebar.is('.wnt-attached')) {
+			$aoSidebar.removeClass('wnt-attached').css({
+				top:    '',
+				left:   '',
+				width:  ''
+			});
+		}
+	};
+
+
+	var onScrollAgent = function () {
+		var windowTop         = $window.scrollTop(),
+			windowBottom      = windowTop + sidebarData.windowHeight,
+			isAtBottom        = (windowBottom >= sidebarData.containerBottom),
+			bottomDelta       = Math.abs(windowBottom - sidebarData.containerBottom),
+			heightDelta       = Math.abs(sidebarData.windowHeight - sidebarData.sidebarHeight),
+			scrollDelta       = sidebarData.lastScrollTop - windowTop,
+			isScrollingDown   = (windowTop > sidebarData.lastScrollTop),
+			isWindowLarger    = (sidebarData.windowHeight > sidebarData.sidebarHeight);
+
+		if (
+			(isWindowLarger && (windowTop > sidebarData.containerTop)) ||
+			(!isWindowLarger && (windowTop > sidebarData.containerTop + heightDelta))
+		) {
+			attachSidebar();
+		} else if (!isScrollingDown && windowTop <= sidebarData.containerTop) {
+			detachSidebar();
+		}
+
+		var sidebarTop     = $aoSidebar.offset().top - sidebarData.topOffset,
+			sidebarBottom  = sidebarTop + sidebarData.sidebarHeight + sidebarData.topOffset
+			clientRect     = $aoSidebar.get(0).getBoundingClientRect();
+
+		if ($aoSidebar.is('.wnt-attached')) {
+
+			var dragBottomDown = ((sidebarBottom <= Math.min(windowBottom, sidebarData.containerBottom)) && isScrollingDown),
+				dragTopUp      = ((sidebarTop >= Math.max(windowTop, sidebarData.containerTop)) && !isScrollingDown),
+				topOffset      = ($aoSidebar.is('.wnt-attached') ? sidebarData.topOffset : 0);
+
+			if (dragBottomDown) {
+
+				if (isWindowLarger) {
+					$aoSidebar.css('top', sidebarData.topOffset - (isAtBottom ? bottomDelta : 0));
+				} else {
+					$aoSidebar.css('top', -sidebarData.topOffset - heightDelta - (isAtBottom ? bottomDelta : 0));
+				}
+
+			} else if (dragTopUp) {
+
+				$aoSidebar.css('top', Math.min(
+					sidebarData.containerBottom - windowTop - sidebarData.sidebarHeight - sidebarData.topOffset,
+					sidebarData.topOffset
+				));
+
+			} else {
+
+				var currentTop    = clientRect.top,
+					scrolledTop   = currentTop + scrollDelta,
+					newTop        = Math.min(
+						sidebarData.containerBottom - windowTop - sidebarData.sidebarHeight - sidebarData.topOffset,
+						scrolledTop
+					);
+
+				$aoSidebar.css({
+					top: newTop,
+					left: sidebarData.sidebarLeft - sidebarData.leftOffset
+				});
+
+			}
+
+		}
+
+		sidebarData.lastScrollTop = windowTop;
+
+	};
+
+
+	// Set up sticky sidebar
+	setTimeout(setupStickySidebar, 500);
+
+
 });
 
 </script>
