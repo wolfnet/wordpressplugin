@@ -403,6 +403,7 @@
 
 	// Only agent detail items
 	&.wolfnet_aoAgentDetails {
+		position: relative;
 		width: 100%;
 
 		h2 {
@@ -436,6 +437,20 @@
 			width: 39%;
 			margin-left: 20px;
 			text-align: right;
+
+			&.wnt-attached {
+				position: fixed;
+			}
+
+			&.wnt-attached-bottom {
+				position: absolute;
+				bottom:   50px;
+			}
+
+			&.wnt-attached-top {
+				position: fixed;
+				top:      50px;
+			}
 
 			.wolfnet_aoExtLinks,
 			.wolfnet_aoContact {
