@@ -505,7 +505,6 @@ jQuery(function ($) {
 
 
 	var attachSidebar = function () {
-		//console.log('orig left: ' + sidebarData.sidebarLeft);
 		if (!$aoSidebar.is('.wnt-attached')) {
 			$aoSidebar.addClass('wnt-attached');
 			$aoSidebar.css('top', sidebarData.topOffset);
@@ -514,7 +513,6 @@ jQuery(function ($) {
 			left:   sidebarData.sidebarLeft - sidebarData.leftOffset,
 			width:  sidebarData.sidebarWidth
 		});
-		//console.log(' new left: ' + $aoSidebar.offset().left);
 	};
 
 
@@ -559,7 +557,6 @@ jQuery(function ($) {
 				topOffset      = ($aoSidebar.is('.wnt-attached') ? sidebarData.topOffset : 0);
 
 			if (dragBottomDown) {
-				//console.log('dragBottomDown');
 
 				if (isWindowLarger) {
 					$aoSidebar.css('top', sidebarData.topOffset - (isAtBottom ? bottomDelta : 0));
@@ -568,7 +565,6 @@ jQuery(function ($) {
 				}
 
 			} else if (dragTopUp) {
-				//console.log('dragTopUp');
 
 				$aoSidebar.css('top', Math.min(
 					sidebarData.containerBottom - windowTop - sidebarData.sidebarHeight - sidebarData.topOffset,
@@ -579,12 +575,10 @@ jQuery(function ($) {
 
 				var currentTop    = clientRect.top,
 					scrolledTop   = currentTop + scrollDelta,
-					//newTop        = isAtBottom ? -bottomDelta + sidebarData.topOffset : scrolledTop;
 					newTop        = Math.min(
 						sidebarData.containerBottom - windowTop - sidebarData.sidebarHeight - sidebarData.topOffset,
 						scrolledTop
 					);
-				//console.log('scrolledTop: ' + scrolledTop);
 
 				$aoSidebar.css({
 					top: newTop,
