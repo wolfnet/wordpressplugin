@@ -508,6 +508,7 @@ jQuery(function ($) {
 		//console.log('orig left: ' + sidebarData.sidebarLeft);
 		if (!$aoSidebar.is('.wnt-attached')) {
 			$aoSidebar.addClass('wnt-attached');
+			$aoSidebar.css('top', sidebarData.topOffset);
 		}
 		$aoSidebar.css({
 			left:   sidebarData.sidebarLeft - sidebarData.leftOffset,
@@ -529,9 +530,7 @@ jQuery(function ($) {
 
 
 	var onScrollAgent = function () {
-		var sidebarTop        = $aoSidebar.offset().top - sidebarData.topOffset,
-			sidebarBottom     = sidebarData.sidebarTop + sidebarData.sidebarHeight + sidebarData.topOffset,
-			windowTop         = $window.scrollTop(),
+		var windowTop         = $window.scrollTop(),
 			windowBottom      = windowTop + sidebarData.windowHeight,
 			isAtBottom        = (windowBottom >= sidebarData.containerBottom),
 			bottomDelta       = Math.abs(windowBottom - sidebarData.containerBottom),
@@ -549,9 +548,13 @@ jQuery(function ($) {
 			detachSidebar();
 		}
 
+		var sidebarTop     = $aoSidebar.offset().top - sidebarData.topOffset,
+			sidebarBottom  = sidebarTop + sidebarData.sidebarHeight + sidebarData.topOffset
+			clientRect     = $aoSidebar.get(0).getBoundingClientRect();
+
 		if ($aoSidebar.is('.wnt-attached')) {
 
-			var dragBottomDown = ((sidebarBottom <= Math.max(windowBottom, sidebarData.containerBottom)) && isScrollingDown),
+			var dragBottomDown = ((sidebarBottom <= Math.min(windowBottom, sidebarData.containerBottom)) && isScrollingDown),
 				dragTopUp      = ((sidebarTop >= Math.max(windowTop, sidebarData.containerTop)) && !isScrollingDown),
 				topOffset      = ($aoSidebar.is('.wnt-attached') ? sidebarData.topOffset : 0);
 
@@ -574,7 +577,7 @@ jQuery(function ($) {
 
 			} else {
 
-				var currentTop    = parseInt($aoSidebar.css('top'), 10),
+				var currentTop    = clientRect.top,
 					scrolledTop   = currentTop + scrollDelta,
 					//newTop        = isAtBottom ? -bottomDelta + sidebarData.topOffset : scrolledTop;
 					newTop        = Math.min(
