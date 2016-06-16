@@ -150,8 +150,9 @@ if (!function_exists('formatUrl')) {
 						}
 					} ?>
 				</div>
-				<div class="wnt-clearfix"></div>
 			</div>
+
+			<div class="wnt-clearfix"></div>
 
 			<div class="wolfnet_aoContact">
 
