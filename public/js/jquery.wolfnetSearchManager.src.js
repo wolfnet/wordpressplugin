@@ -59,6 +59,15 @@ if ( typeof jQuery != 'undefined' ) {
 
 					methods.interceptAjax(options.ajaxUrl,options.ajaxAction);
 
+					//$.ajax( {
+					//	url: options.ajaxUrl,
+					//	dataType: 'json',
+					//	type: 'GET',
+					//	data: {
+					//		action : options.ajaxAction
+					//	},
+					//} );
+
 					var $this = $( this );
 
 					var data = {
@@ -155,14 +164,28 @@ if ( typeof jQuery != 'undefined' ) {
 						// calls being made from https wordpress solutions.
 						if (
 							(data.url.indexOf('gateway.cfm') != -1  && data.url.indexOf('isURLSearchBuilder') != -1) &&
-							(window.location.href.indexOf('https:') != -1)
+							true
+							//(window.location.href.indexOf('https:') != -1)
 						) {
 
-							// Route ajax call through wolfnet ajax so it's being made from https
-							var newAjax = ajaxUrl + '?' + ajaxAction;
-							data.url = newAjax;
+							// Adding a prefix to action so to not confuse WP
+							var urlParts = data.url.split('?');
+							var queryString = urlParts[1];
+							var queryStringParams = queryString.split('&');
+							for (var i = 0; i < queryStringParams.length;  i++) {
+								//data.url = data.url.replace(queryStringParams[i],'wnt'+queryStringParams[i]);
+								queryString = queryString.replace(queryStringParams[i],'wnt'+queryStringParams[i]);
+							}
 
+							// Route ajax call through wordpress ajax so it's being made from https
+							//data.url = ajaxUrl + '?' + ajaxAction;
+							data.url = ajaxUrl + '?' + ajaxAction + '&' + queryString;
+
+							console.log(data.url); //TODO: delete
 						}
+					},
+					complete: function(jqXHR, textStatus) {
+						console.log(textStatus); //TODO: delete
 					}
 				});
 			},

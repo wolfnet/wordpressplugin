@@ -659,19 +659,26 @@ class Wolfnet_Ajax
 	public function remoteAjaxRelay()
     {
 
+    	// TODO: Parse query string and remove the prefix prepended in wolfnetSearchManager.JS
+
+    	// TODO: retrieve data via remote get using 2.5 gateway url
 		$response = array(
-			'data' => 'helloworld'
+			'matches' => 2,
+			'open' => 0
 		);
 
 		// Send back response
-		if (array_key_exists('callback', $_GET)){
-			$callback = $_REQUEST['callback'];
-			header('Content-Type: text/javascript; charset=utf8');
-			echo $callback.'('.json_encode($response).')';
-			die;
-		} else {
-			wp_send_json($response);
-		}
+		//if (array_key_exists('callback', $_GET)){
+		//	$callback = $_REQUEST['callback'];
+		//	header('Content-Type: text/javascript; charset=utf8');
+		//	echo $callback.'('.json_encode($response).')';
+		//	die;
+		//} else {
+		//	wp_send_json($response);
+		//}
+		//
+		wp_send_json($response);
+		die;
 
 	}
 
