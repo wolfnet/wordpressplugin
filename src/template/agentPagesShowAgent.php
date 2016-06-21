@@ -463,31 +463,42 @@ jQuery(function ($) {
 	// Agent contact box
 
 	var $window = $(window),
+		$aoMainContent = $aoWidget.find('.wolfnet_aoMain'),
 		$aoSidebar = $aoWidget.find('.wolfnet_aoSidebar'),
-		sidebarData = {
-			lastScrollTop:      $window.scrollTop(),
-			topOffset:          50,
-			leftOffset:         20,
+		sb = {
+			lastScrollTop:  $window.scrollTop(),
+			leftOffset:     20,
 			// The following are set up in updatePosition()
-			windowHeight:       0,
-			sidebarTop:         0,
-			sidebarLeft:        0,
-			sidebarWidth:       0,
-			sidebarHeight:      0,
-			containerBottom:    0
+			windowTop:      0,
+			windowHeight:   0,
+			sidebarTop:     0,
+			sidebarLeft:    0,
+			sidebarWidth:   0,
+			sidebarHeight:  0,
+			limitTop:       0,
+			limitBottom:    0,
+			sidebarDocTop:  0
 		};
 
 
 	var updatePosition = function () {
-		$.extend(sidebarData, {
+		var mainContentHeight = $aoMainContent.height(),
+			mainContentOffset = $aoMainContent.offset(),
+			windowTop         = $window.scrollTop(),
+			sidebarTop        = $aoSidebar.position().top;
+
+		$.extend(sb, {
+			windowTop:         windowTop,
 			windowHeight:      $window.height(),
-			sidebarTop:        $aoSidebar.position().top,
+			sidebarTop:        sidebarTop,
 			sidebarLeft:       $aoSidebar.offset().left,
 			sidebarWidth:      $aoSidebar.width(),
 			sidebarHeight:     $aoSidebar.outerHeight(),
-			containerTop:      $aoWidget.offset().top,
-			containerBottom:   $aoWidget.offset().top + $aoWidget.height()
+			limitTop:          mainContentOffset.top,
+			limitBottom:       mainContentOffset.top + mainContentHeight,
+			sidebarDocTop:     windowTop + sidebarTop
 		});
+
 	};
 
 
@@ -502,17 +513,22 @@ jQuery(function ($) {
 			onScrollAgent();
 		});
 
+		onScrollAgent();
+
 	};
 
 
-	var attachSidebar = function () {
+	var attachSidebar = function (top) {
+		if (typeof top === 'undefined') {
+			top = 0;
+		}
 		if (!$aoSidebar.is('.wnt-attached')) {
 			$aoSidebar.addClass('wnt-attached');
-			$aoSidebar.css('top', sidebarData.topOffset);
 		}
 		$aoSidebar.css({
-			left:   sidebarData.sidebarLeft - sidebarData.leftOffset,
-			width:  sidebarData.sidebarWidth
+			top:    top,
+			left:   sb.sidebarLeft - sb.leftOffset,
+			width:  sb.sidebarWidth
 		});
 	};
 
@@ -529,68 +545,87 @@ jQuery(function ($) {
 
 
 	var onScrollAgent = function () {
-		var windowTop         = $window.scrollTop(),
-			windowBottom      = windowTop + sidebarData.windowHeight,
-			isAtBottom        = (windowBottom >= sidebarData.containerBottom),
-			bottomDelta       = Math.abs(windowBottom - sidebarData.containerBottom),
-			heightDelta       = Math.abs(sidebarData.windowHeight - sidebarData.sidebarHeight),
-			scrollDelta       = sidebarData.lastScrollTop - windowTop,
-			isScrollingDown   = (windowTop > sidebarData.lastScrollTop),
-			isWindowLarger    = (sidebarData.windowHeight > sidebarData.sidebarHeight);
 
-		if (
-			(isWindowLarger && (windowTop > sidebarData.containerTop)) ||
-			(!isWindowLarger && (windowTop > sidebarData.containerTop + heightDelta))
-		) {
-			attachSidebar();
-		} else if (!isScrollingDown && windowTop <= sidebarData.containerTop) {
+		// Get sidebar and window positions
+		sb.windowTop     = $window.scrollTop();
+		sb.sidebarTop    = $aoSidebar.position().top;
+		sb.sidebarDocTop = sb.windowTop + sb.sidebarTop;
+
+		var sidebarAttached       = $aoSidebar.is('.wnt-attached'),
+			sidebarWithinLimits   = sb.sidebarHeight < (sb.limitBottom - sb.limitTop),
+			sidebarWithinWindow   = sb.sidebarHeight < sb.windowHeight,
+			windowPastTopLimit    = sb.windowTop > sb.limitTop,
+			windowPastBottomLimit = sb.windowTop + sb.windowHeight > sb.limitBottom,
+			scrollHeight          = sb.windowTop - sb.lastScrollTop,
+			isScrollingDown       = scrollHeight > 0;
+			lowestDocTop          = sb.limitBottom - sb.sidebarHeight;
+			lowestTop             = lowestDocTop - sb.windowTop;
+
+		// Determine whether to attach the sidebar
+		if (sidebarWithinLimits && windowPastTopLimit) {
+
+			var newTop = 0;
+
+			if (sidebarWithinWindow) {
+				// Sidebar can fit within window - keep it at the top of the screen unless limit has been reached
+				if (
+					(sb.windowTop >= sb.sidebarDocTop) &&
+					(
+						(
+							isScrollingDown &&
+							(sb.sidebarDocTop >= lowestDocTop)
+						) || (
+							!isScrollingDown &&
+							(sb.sidebarDocTop >= lowestDocTop + scrollHeight)
+						)
+					)
+				) {
+					// Sidebar has reached the bottom limit - move sidebar opposite of scroll
+					newTop = lowestTop;
+				} else {
+					// Snap to the top of the screen
+					newTop = 0;
+				}
+			} else {
+				// Sidebar is taller than window - move sidebar based on scroll direction
+				if (isScrollingDown) {
+					// Scrolling down
+					if (sb.sidebarDocTop >= lowestDocTop) {
+						// Sidebar has reached the bottom limit
+						newTop = lowestTop;
+					} else if (sb.sidebarTop + sb.sidebarHeight <= sb.windowHeight) {
+						// Sidebar has reached the bottom of the window - snap to bottom
+						newTop = sb.windowHeight - sb.sidebarHeight;
+					} else {
+						// Sidebar should scroll
+						newTop = (sidebarAttached ? sb.sidebarTop : 0) - scrollHeight;
+					}
+				} else {
+					// Scrolling up
+					if ((sb.sidebarTop < 0) && (sb.sidebarDocTop >= lowestDocTop + scrollHeight)) {
+						// Sidebar has reached the bottom limit - move sidebar opposite of scroll
+						newTop = lowestTop;
+					} else if (sb.sidebarTop >= 0) {
+						// Sidebar has reached the top of the window - snap to top
+						newTop = 0;
+					} else {
+						// Sidebar should scroll
+						newTop = (sidebarAttached ? sb.sidebarTop : 0) - scrollHeight;
+					}
+				}
+			}
+
+			attachSidebar(newTop);
+
+			// Get updated position
+			sb.sidebarTop = $aoSidebar.position().top;
+
+		} else {
 			detachSidebar();
 		}
 
-		var sidebarTop     = $aoSidebar.offset().top - sidebarData.topOffset,
-			sidebarBottom  = sidebarTop + sidebarData.sidebarHeight + sidebarData.topOffset
-			clientRect     = $aoSidebar.get(0).getBoundingClientRect();
-
-		if ($aoSidebar.is('.wnt-attached')) {
-
-			var dragBottomDown = ((sidebarBottom <= Math.min(windowBottom, sidebarData.containerBottom)) && isScrollingDown),
-				dragTopUp      = ((sidebarTop >= Math.max(windowTop, sidebarData.containerTop)) && !isScrollingDown),
-				topOffset      = ($aoSidebar.is('.wnt-attached') ? sidebarData.topOffset : 0);
-
-			if (dragBottomDown) {
-
-				if (isWindowLarger) {
-					$aoSidebar.css('top', sidebarData.topOffset - (isAtBottom ? bottomDelta : 0));
-				} else {
-					$aoSidebar.css('top', -sidebarData.topOffset - heightDelta - (isAtBottom ? bottomDelta : 0));
-				}
-
-			} else if (dragTopUp) {
-
-				$aoSidebar.css('top', Math.min(
-					sidebarData.containerBottom - windowTop - sidebarData.sidebarHeight - sidebarData.topOffset,
-					sidebarData.topOffset
-				));
-
-			} else {
-
-				var currentTop    = clientRect.top,
-					scrolledTop   = currentTop + scrollDelta,
-					newTop        = Math.min(
-						sidebarData.containerBottom - windowTop - sidebarData.sidebarHeight - sidebarData.topOffset,
-						scrolledTop
-					);
-
-				$aoSidebar.css({
-					top: newTop,
-					left: sidebarData.sidebarLeft - sidebarData.leftOffset
-				});
-
-			}
-
-		}
-
-		sidebarData.lastScrollTop = windowTop;
+		// Update the lastScrollTop value
+		sb.lastScrollTop = sb.windowTop;
 
 	};
 
