@@ -460,11 +460,12 @@ jQuery(function ($) {
 	}
 
 
-	// Agent contact box
+	// Agent profile follows scroll + Back-to-top
 
 	var $window = $(window),
 		$aoMainContent = $aoWidget.find('.wolfnet_aoMain'),
 		$aoSidebar = $aoWidget.find('.wolfnet_aoSidebar'),
+		$backToTop = $aoWidget.find('.wolfnet_top'),
 		sb = {
 			lastScrollTop:  $window.scrollTop(),
 			leftOffset:     20,
@@ -560,6 +561,13 @@ jQuery(function ($) {
 			isScrollingDown       = scrollHeight > 0;
 			lowestDocTop          = sb.limitBottom - sb.sidebarHeight;
 			lowestTop             = lowestDocTop - sb.windowTop;
+
+		// Determine whether to show the 'back-to-top' button
+		if (windowPastTopLimit) {
+			$backToTop.css('visibility', 'visible');
+		} else {
+			$backToTop.css('visibility', 'hidden');
+		}
 
 		// Determine whether to attach the sidebar
 		if (sidebarWithinLimits && windowPastTopLimit) {
