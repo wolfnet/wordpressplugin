@@ -181,9 +181,19 @@ class Wolfnet_Plugin
             array(self::CACHE_CRON_HOOK, array($this->cachingService, 'clearExpired')),
             ));
 
-        if($this->keyService->getDefault()) {
+        try {
+			$productKey = $this->keyService->getDefault();
+			$keyState = $this->api->sendRequest($productKey, '/status', 'GET');
+		} catch (Exception $e) {
+			var_dump($e);
+			die;
+		}
+
+        if ($this->keyService->getDefault() &&
+        	$keyState['responseData']['data']['status'] == true
+        ){
             $this->addAction(array(
-                array('widgets_init',      'widgetInit'),
+                array('widgets_init','widgetInit'),
             ));
         }
 
