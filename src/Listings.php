@@ -400,28 +400,94 @@ class Wolfnet_Listings
     {
 
         return array(
+            //'acres'          => '',
             'address'          => '',
+            'bedsbaths'        => '',
             'bedsbaths_full'   => '',
             'branding'         => array(
-                'agent_name'       => '',
-                'agent_phone'      => '',
-                'courtesy_text'    => '',
-                'logo'             => '',
-                'office_name'      => '',
-                'office_phone'     => '',
-                'toll_free_phone'  => '',
-                'type'             => '',
+                'agent_name'             => '',
+                'agent_phone'            => '',
+                'courtesy_text'          => '',
+                //'email'                => '',
+                'logo'                   => '',
+                //'map_logo'             => '',
+                //'mobile_app_url'       => '',
+                //'mobile_phone'         => '',
+                'office_name'            => '',
+                //'office_name_prefix'   => '',
+                'office_phone'           => '',
+                //'owner'                => false,
+                /*'social_media'         => array(
+                    'facebook'    => '',
+                    'google_plus' => '',
+                    'linked_in'   => '',
+                    'twitter'     => '',
+                ),*/
+                'toll_free_phone'        => '',
+                'type'                   => '',
+                //'url'                  => '',
             ),
-            'display_address'  => '',
-            'listing_price'    => '',
-            'location'         => '',
-            'property_id'      => '',
-            'property_url'     => '',
-            'total_baths'      => '',
-            'total_bedrooms'   => '',
-            'thumbnail_url'    => '',
-            'thumbnails_url'   => '',
+            //'city'                  => '',
+            //'county'                => '',
+            'display_address'         => '',
+            //'display_mlsnumber'     => '',
+            //'featured'              => false,
+            //'geo'                   => array( 'lat' => '', 'lng' => '', ),
+            //'is_foreclosure'        => false,
+            //'is_shortsale'          => false,
+            //'list_date'             => '',
+            'listing_price'           => '',
+            //'listing_status'        => '',
+            //'listings_at_location'  => array(),
+            'location'                => '',
+            //'market_name'           => '',
+            //'open_house'            => array(),
+            //'photo_url'             => '',
+            'property_id'             => '',
+            /*'property_type'         => array(
+                'general_sub_type'    => '',
+                'detail'              => array(),
+                'general_type'        => '',
+            ),*/
+            'property_url'            => '',
+            //'sold_date'             => '',
+            //'sold_price'            => '',
+            //'square_feet'           => '',
+            //'state'                 => '',
+            //'status'                => array(),
+            'thumbnail_url'           => '',
+            'thumbnails_url'          => '',
+            'total_baths'             => '',
+            'total_bedrooms'          => '',
+            //'total_full_baths'      => '',
+            //'total_partial_baths'   => '',
+            /*'vow'                   => array(
+                'days_on_market'           => '',
+                'original_listing_price'   => '',
+                'sort'                     => array(),
+            ),*/
+            //'zip_code'              => '',
         );
+
+    }
+
+
+    public function getSample()
+    {
+
+        return array_merge($this->getDefaults(), array(
+            'address'          => '1234 Green Hills Rd, Austin, TX 78701',
+            'bedsbaths'        => '4bd/3ba',
+            'bedsbaths_full'   => '4 Bedrooms & 3 Bathrooms',
+            'display_address'  => '1234 Green Hills Rd',
+            'listing_price'    => '$649,000',
+            'location'         => 'Austin, TX 78701',
+            'property_id'      => '1234567',
+            'thumbnail_url'    => '//common.wolfnet.com/wordpress/sample-thumb.jpg',
+            'thumbnails_url'   => '',
+            'total_baths'      => 3,
+            'total_bedrooms'   => 4,
+        ));
 
     }
 

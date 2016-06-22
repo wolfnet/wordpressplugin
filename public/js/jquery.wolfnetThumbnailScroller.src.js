@@ -285,9 +285,18 @@ if (typeof jQuery !== 'undefined') {
                             });
                         }
 
-                        methods['private'].controls($this).click(function (event) {
-                            methods['private'].eventHandler.controlClick.call(this, event, $this);
-                        });
+                        methods['private'].controls($this)
+                            .click(function (event) {
+                                methods['private'].eventHandler.controlClick.call(this, event, $this);
+                            })
+                            .hover(
+                                function (event) {
+                                    methods['private'].eventHandler.controlOver.call(this, event, $this);
+                                },
+                                function (event) {
+                                    methods['private'].eventHandler.controlOut.call(this, event, $this);
+                                }
+                            );
 
                     });
 
@@ -457,6 +466,14 @@ if (typeof jQuery !== 'undefined') {
 
                         return false; // We don't want any other click event being triggered.
 
+                    },
+
+                    controlOver: function (event, $thumbnails) {
+                        $thumbnails.trigger('wolfnet.controlover');
+                    },
+
+                    controlOut: function (event, $thumbnails) {
+                        $thumbnails.trigger('wolfnet.controlout');
                     }
 
                 }
