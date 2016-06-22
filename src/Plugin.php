@@ -184,12 +184,12 @@ class Wolfnet_Plugin
         try {
 			$productKey = $this->keyService->getDefault();
 			$response = $this->api->sendRequest($productKey, '/status', 'GET');
-			$succesfulApiConnection = true;
+			$successfulApiConnection = true;
 		} catch (Exception $e) {
-			$succesfulApiConnection = false;
+			$successfulApiConnection = false;
 		}
 
-        if ($succesfulApiConnection) {
+        if ($successfulApiConnection) {
             $this->addAction(array(
                 array('widgets_init','widgetInit'),
             ));
