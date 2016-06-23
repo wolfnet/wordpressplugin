@@ -47,7 +47,9 @@ if ( typeof jQuery != 'undefined' ) {
 			refreshedEvent  : 'wolfnetDataRefreshed',
 			savedEvent      : 'wolfnetSearchSaved',
 			deletedEvent    : 'wolfnetSearchDelete',
-			itemIdPrefix    : 'savedsearch_'
+			itemIdPrefix    : 'savedsearch_',
+			ajaxUrl         : '',
+			ajaxAction      : 'wolfnet_search_manager_ajax'
 		};
 
 		var methods = {
