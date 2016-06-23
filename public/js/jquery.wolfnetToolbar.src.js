@@ -415,9 +415,16 @@
 
             // Register change event handler to trigger an update when the tool is changed.
             $select.change(function(){
+
+				// Set new numrows
                 state.numrows = $(this).val();
+
+                // Reset page given new numrows
+                state.page = (state.startrow + (state.numrows - 1)) / state.numrows;
+
                 $container.data(stateKey, state);
                 $container.find('span.' + itemsClass + ' select').val(state.numrows);
+
                 methods.update.call($container);
             });
 
