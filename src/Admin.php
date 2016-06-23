@@ -107,7 +107,7 @@ class Wolfnet_Admin extends Wolfnet_Plugin
         $scripts = array(
             'wolfnet-admin',
             'wolfnet-shortcode-builder',
-            );
+        );
 
         foreach ($scripts as $script) {
             wp_enqueue_script($script);
@@ -128,7 +128,7 @@ class Wolfnet_Admin extends Wolfnet_Plugin
         $styles = array(
             'jquery-ui',
             'wolfnet-admin',
-            );
+        );
 
         foreach ($styles as $style) {
             wp_enqueue_style($style);

@@ -657,7 +657,7 @@ class Wolfnet_Ajax
 
 
 	public function remoteAjaxRelay()
-    {
+	{
 
     	// TODO: Parse query string and remove the prefix prepended in wolfnetSearchManager.JS
 

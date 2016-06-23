@@ -158,6 +158,7 @@ if ( typeof jQuery != 'undefined' ) {
 
 				// Intercept outgoing AJAX requests
 				$.ajaxSetup({
+
 					beforeSend: function (jqXHR, data) {
 
 						// Look for URL Search Builder calls being made to gateway.cfm -
@@ -184,9 +185,11 @@ if ( typeof jQuery != 'undefined' ) {
 							console.log(data.url); //TODO: delete
 						}
 					},
+
 					complete: function(jqXHR, textStatus) {
 						console.log(textStatus); //TODO: delete
 					}
+
 				});
 			},
 
