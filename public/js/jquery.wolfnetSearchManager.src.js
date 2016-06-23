@@ -61,16 +61,7 @@ if ( typeof jQuery != 'undefined' ) {
 
 					methods.interceptAjax(options.ajaxUrl,options.ajaxAction);
 
-					//$.ajax( {
-					//	url: options.ajaxUrl,
-					//	dataType: 'json',
-					//	type: 'GET',
-					//	data: {
-					//		action : options.ajaxAction
-					//	},
-					//} );
-
-					var $this = $( this );
+					var $this = $(this);
 
 					var data = {
 						option        : $.extend( defaultOptions, options ),
@@ -176,12 +167,10 @@ if ( typeof jQuery != 'undefined' ) {
 							var queryString = urlParts[1];
 							var queryStringParams = queryString.split('&');
 							for (var i = 0; i < queryStringParams.length;  i++) {
-								//data.url = data.url.replace(queryStringParams[i],'wnt'+queryStringParams[i]);
 								queryString = queryString.replace(queryStringParams[i],'wnt'+queryStringParams[i]);
 							}
 
 							// Route ajax call through wordpress ajax so it's being made from https
-							//data.url = ajaxUrl + '?' + ajaxAction;
 							data.url = ajaxUrl + '?' + ajaxAction + '&' + queryString;
 
 							console.log(data.url); //TODO: delete
