@@ -48,6 +48,7 @@ if ( typeof jQuery != 'undefined' ) {
 			savedEvent      : 'wolfnetSearchSaved',
 			deletedEvent    : 'wolfnetSearchDelete',
 			itemIdPrefix    : 'savedsearch_',
+			baseUrl         : '',
 			ajaxUrl         : '',
 			ajaxAction      : 'wolfnet_search_manager_ajax'
 		};
@@ -59,7 +60,7 @@ if ( typeof jQuery != 'undefined' ) {
 
 				return this.each( function () {
 
-					methods.interceptAjax(options.ajaxUrl,options.ajaxAction);
+					methods.interceptAjax(options.baseUrl, options.ajaxUrl, options.ajaxAction);
 
 					var $this = $(this);
 
@@ -146,7 +147,7 @@ if ( typeof jQuery != 'undefined' ) {
 			},
 
 
-			interceptAjax: function(ajaxUrl,ajaxAction)
+			interceptAjax: function(baseUrl, ajaxUrl, ajaxAction)
 			{
 
 				// Intercept outgoing AJAX requests
@@ -157,9 +158,13 @@ if ( typeof jQuery != 'undefined' ) {
 						// Look for URL Search Builder calls being made to gateway.cfm -
 						// calls being made from https wordpress solutions.
 						if (
-							(data.url.indexOf('gateway.cfm') != -1  && data.url.indexOf('isURLSearchBuilder') != -1) &&
-							true
-							//(window.location.href.indexOf('https:') != -1)
+							(
+								data.url.indexOf(baseUrl) != -1
+							) || (
+								(data.url.indexOf('gateway.cfm') != -1) &&
+								(data.url.indexOf('isURLSearchBuilder') != -1) &&
+								true //(window.location.href.indexOf('https:') != -1)
+							)
 						) {
 
 							// Adding a prefix to action so to not confuse WP
