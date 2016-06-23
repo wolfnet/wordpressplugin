@@ -96,7 +96,6 @@
 
 </div>
 
-<script type="text/javascript" src="<?php echo $url; ?>js/jquery.wolfnetSearchManager.src.js"></script>
 <script type="text/javascript">
 
     if ( typeof jQuery != 'undefined' ) {
