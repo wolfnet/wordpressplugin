@@ -659,15 +659,58 @@ class Wolfnet_Ajax
 	public function remoteAjaxRelay()
 	{
 
-    	// TODO: Parse query string and remove the prefix prepended in wolfnetSearchManager.JS
+		try {
 
-    	// TODO: retrieve data via remote get using 2.5 gateway url
-		$response = array(
-			'matches' => 2,
-			'open' => 0
-		);
+			$url       = $_REQUEST['wnt__url'];
+			$reqMethod = $_REQUEST['wnt__method'];
+			$params    = $_REQUEST['wnt__params'];
+			$dataType  = (array_key_exists('wnt__datatype', $_REQUEST) ? $_REQUEST['wnt__datatype'] : '');
 
-		wp_send_json($response);
+			// Relay the request and get the response
+			$response = $GLOBALS['wolfnet']->searchManager->searchRelay($url, $requestMethod, $params);
+
+		} catch (Wolfnet_Exception $e) {
+
+			status_header(500);
+			$response = var_export(
+				array(
+					'message' => $e->getMessage(),
+					'data' => $e->getData(),
+				),
+				true
+			);
+
+		}
+
+		// For the create_session request (which returns HTML of a full page of 2.5), remove HTML
+		if (
+			(strpos($params, 'create_session') !== false) &&
+			in_array($dataType, array('json', 'script', 'jsonp'))
+		) {
+			$response = 'true';
+		}
+
+		switch ($dataType) {
+			case 'json':
+				header('Content-Type: text/json');
+				break;
+			case 'script':
+			case 'jsonp':
+				header('Content-Type: text/javascript');
+				break;
+			case 'xml':
+				header('Content-Type: application/xml');
+				break;
+			case 'html':
+				header('Content-Type: text/html');
+				break;
+			case 'text':
+				header('Content-Type: text/plain');
+				break;
+		}
+
+		echo $response;
+
 		die;
 
 	}

@@ -167,16 +167,33 @@ if ( typeof jQuery != 'undefined' ) {
 							)
 						) {
 
-							// Adding a prefix to action so to not confuse WP
+							// Split up the URL into the URL path and the URL params
 							var urlParts = data.url.split('?');
-							var queryString = urlParts[1];
-							var queryStringParams = queryString.split('&');
-							for (var i = 0; i < queryStringParams.length;  i++) {
-								queryString = queryString.replace(queryStringParams[i],'wnt'+queryStringParams[i]);
+							var destUrl  = urlParts[0];
+
+							// Add the originally-intended URL and request type
+							var queryString = 'wnt__url=' + destUrl + '&wnt__method=' + data.type;
+
+							if (data.hasOwnProperty('dataType')) {
+								queryString += '&wnt__datatype=' + data.dataType;
 							}
 
-							// Route ajax call through wordpress ajax so it's being made from https
-							data.url = ajaxUrl + '?' + ajaxAction + '&' + queryString;
+							// Test for absolute URL
+							if (/^(http|\/\/)/.test(destUrl)) {
+
+								// Prefix the original URL params to avoid conflicts with WP params
+								if (urlParts.length > 1) {
+									/* var destParams = urlParts[1].split('&');
+									for (var i=0, l=destParams.length; i<l; i++) {
+										queryString += 'wnt__' + destParams[i];
+									} */
+									queryString += '&wnt__params=' + encodeURIComponent(urlParts[1]);
+								}
+
+								// Route ajax call through wordpress ajax so it's being made from https
+								data.url = ajaxUrl + '?action=' + ajaxAction + '&' + queryString;
+
+							}
 
 							console.log(data.url); //TODO: delete
 						}
