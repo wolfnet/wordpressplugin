@@ -163,7 +163,7 @@ if ( typeof jQuery != 'undefined' ) {
 							) || (
 								(data.url.indexOf('gateway.cfm') != -1) &&
 								(data.url.indexOf('isURLSearchBuilder') != -1) &&
-								true //(window.location.href.indexOf('https:') != -1)
+								(window.location.href.indexOf('https:') != -1)
 							)
 						) {
 
@@ -192,16 +192,10 @@ if ( typeof jQuery != 'undefined' ) {
 
 								// Route ajax call through wordpress ajax so it's being made from https
 								data.url = ajaxUrl + '?action=' + ajaxAction + '&' + queryString;
-
 							}
 
-							console.log(data.url); //TODO: delete
 						}
 					},
-
-					complete: function(jqXHR, textStatus) {
-						console.log(textStatus); //TODO: delete
-					}
 
 				});
 			},
