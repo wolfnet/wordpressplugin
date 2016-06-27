@@ -193,7 +193,7 @@
             }
 
             ul.wolfnet_aoLinks {
-                margin: 6px 0 20px 0;
+                margin: 6px 0 15px 0;
             }
 
             .wolfnet_aoActions {
@@ -232,8 +232,9 @@
 		}
 
 		.wolfnet_aoTitle {
-			font-weight: normal;
-			font-size: 18px;
+			font-weight: bold;
+			font-size: 20px;
+			color: #222222;
 
 			a, a:link, a:hover, a:visited {
 				.no-decoration();
@@ -260,6 +261,10 @@
 					color: @accentColor;
 				}
 
+				.address-focus {
+					font-weight: bold;
+				}
+
 			}
 		}
 
@@ -268,11 +273,12 @@
 
 			.wolfnet_aoAction {
 				display: inline-block;
-				max-width: 130px;
+				max-width: 150px;
 				text-align: center;
 				text-transform: uppercase;
 				font-size: 0.8em;
 				line-height: 1.2em;
+				margin: 5px 0;
 
 				a, a:link, a:hover, a:visited {
 					width: 100%;
@@ -283,6 +289,10 @@
 
 			}
 
+		}
+
+		.wolfnet_aoInfo {
+			margin-bottom: 40px;
 		}
 
 	}
@@ -388,6 +398,7 @@
 
 		h2 {
 			margin-top: 0;
+			text-transform: uppercase;
 		}
 
 		.wolfnet_aoHeader {
