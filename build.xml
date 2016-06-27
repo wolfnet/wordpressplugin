@@ -1,7 +1,7 @@
 <project name="wolfnet-idx-for-wordpress" default="build" basedir=".">
 
     <property name="majorVersion" value="1.10" />
-    <property name="minorVersion" value="3" />
+    <property name="minorVersion" value="4" />
 
     <property name="version" value="${majorVersion}.${minorVersion}" />
 
