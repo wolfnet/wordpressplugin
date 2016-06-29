@@ -52,7 +52,6 @@ class Wolfnet_Ajax
             'wolfnet_price_range'             => 'remotePriceRange',
             'wolfnet_base_url'                => 'remoteGetBaseUrl',
             'wolfnet_route_quicksearch'       => 'remoteRouteQuickSearch',
-            'wolfnet_search_manager_ajax'     => 'remoteAjaxRelay',
             'wolfnet_smart_search'            => 'remoteGetSuggestions',
             );
 
@@ -75,7 +74,6 @@ class Wolfnet_Ajax
             'wolfnet_base_url'          => 'remoteGetBaseUrl',
             'wolfnet_price_range'       => 'remotePriceRange',
             'wolfnet_route_quicksearch' => 'remoteRouteQuickSearch',
-            'wolfnet_search_manager_ajax'=> 'remoteAjaxRelay',
             'wolfnet_smart_search'      => 'remoteGetSuggestions',
             );
 
@@ -654,66 +652,6 @@ class Wolfnet_Ajax
 
         wp_send_json($response);
     }
-
-
-	public function remoteAjaxRelay()
-	{
-
-		try {
-
-			$url       = $_REQUEST['wnt__url'];
-			$reqMethod = $_REQUEST['wnt__method'];
-			$params    = $_REQUEST['wnt__params'];
-			$dataType  = (array_key_exists('wnt__datatype', $_REQUEST) ? $_REQUEST['wnt__datatype'] : '');
-
-			// Relay the request and get the response
-			$response = $GLOBALS['wolfnet']->searchManager->searchRelay($url, $requestMethod, $params);
-
-		} catch (Wolfnet_Exception $e) {
-
-			status_header(500);
-			$response = var_export(
-				array(
-					'message' => $e->getMessage(),
-					'data' => $e->getData(),
-				),
-				true
-			);
-
-		}
-
-		// For the create_session request (which returns HTML of a full page of 2.5), remove HTML
-		if (
-			(strpos($params, 'create_session') !== false) &&
-			in_array($dataType, array('json', 'script', 'jsonp'))
-		) {
-			$response = 'true';
-		}
-
-		switch ($dataType) {
-			case 'json':
-				header('Content-Type: text/json');
-				break;
-			case 'script':
-			case 'jsonp':
-				header('Content-Type: text/javascript');
-				break;
-			case 'xml':
-				header('Content-Type: application/xml');
-				break;
-			case 'html':
-				header('Content-Type: text/html');
-				break;
-			case 'text':
-				header('Content-Type: text/plain');
-				break;
-		}
-
-		echo $response;
-
-		die;
-
-	}
 
 
 	public function remoteGetSuggestions()

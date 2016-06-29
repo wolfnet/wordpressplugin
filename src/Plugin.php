@@ -181,17 +181,9 @@ class Wolfnet_Plugin
             array(self::CACHE_CRON_HOOK, array($this->cachingService, 'clearExpired')),
             ));
 
-        try {
-			$productKey = $this->keyService->getDefault();
-			$response = $this->api->sendRequest($productKey, '/status', 'GET');
-			$successfulApiConnection = true;
-		} catch (Exception $e) {
-			$successfulApiConnection = false;
-		}
-
-        if ($successfulApiConnection) {
+        if($this->keyService->getDefault()) {
             $this->addAction(array(
-                array('widgets_init','widgetInit'),
+                array('widgets_init',      'widgetInit'),
             ));
         }
 
@@ -563,7 +555,7 @@ class Wolfnet_Plugin
 
     public function sbMcePlugin(array $plugins)
     {
-        $plugins['wolfnetShortcodeBuilder'] = $this->url . 'js/tinymce.wolfnetShortcodeBuilder.src.js';
+        $plugins['wolfnetShortcodeBuilder'] = $this->url . 'js/tinymce.wolfnetShortcodeBuilder.min.js';
 
         return $plugins;
 

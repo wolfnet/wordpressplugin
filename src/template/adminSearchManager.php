@@ -96,18 +96,16 @@
 
 </div>
 
+<script type="text/javascript" src="<?php echo $url; ?>js/jquery.wolfnetSearchManager.min.js"></script>
 <script type="text/javascript">
 
     if ( typeof jQuery != 'undefined' ) {
 
         ( function ( $ ) {
 
-			$('#savedsearches').wolfnetSearchManager({
-				baseUrl    : '<?php echo $baseUrl; ?>',
-				ajaxUrl    : wolfnet_ajax.ajaxurl,
-				ajaxAction : 'wolfnet_search_manager_ajax',
-				saveForm   : $( '#save_search' )
-			});
+            $( '#savedsearches' ).wolfnetSearchManager( {
+                saveForm  : $( '#save_search' )
+            } );
 
             <?php if(count($markets) > 1): ?>
             $( '#changeMarket' ).click(function() {
