@@ -195,7 +195,7 @@ if ( typeof jQuery != 'undefined' ) {
 							}
 
 						}
-					},
+					}
 
 				});
 			},
