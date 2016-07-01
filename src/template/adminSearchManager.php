@@ -103,9 +103,12 @@
 
         ( function ( $ ) {
 
-            $( '#savedsearches' ).wolfnetSearchManager( {
-                saveForm  : $( '#save_search' )
-            } );
+			$('#savedsearches').wolfnetSearchManager({
+				baseUrl    : '<?php echo $baseUrl; ?>',
+				ajaxUrl    : wolfnet_ajax.ajaxurl,
+				ajaxAction : 'wolfnet_search_manager_ajax',
+				saveForm   : $( '#save_search' )
+			});
 
             <?php if(count($markets) > 1): ?>
             $( '#changeMarket' ).click(function() {
