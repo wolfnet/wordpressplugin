@@ -63,8 +63,8 @@
 @agentInfoWidthMd: 250px;
 @agentImgWidthSm:  30%;
 @agentInfoWidthSm: 65%;
-@agentImgWidthXs:  35%;
-@agentInfoWidthXs: 60%;
+@agentImgWidthXs:  45%;
+@agentInfoWidthXs: 50%;
 
 
 .wolfnet_widget {
@@ -233,7 +233,7 @@
 
 		.wolfnet_aoTitle {
 			font-weight: bold;
-			font-size: 20px;
+			font-size: 1.25em;
 			color: #222222;
 
 			a, a:link, a:hover, a:visited {
@@ -253,11 +253,11 @@
 				text-indent: -1.8em;
 				margin-left: 1.8em;
 				list-style: none;
-				font-size: 14px;
+				font-size: 0.9em;
 
 				.wnt-icon {
 					margin-right: 6px;
-					font-size: 16px;
+					font-size: 1.15em;
 					color: @accentColor;
 				}
 
@@ -910,8 +910,13 @@
 		&.wolfnet_aoAgentsList {
 			.wolfnet_aoItem {
 
+				hr {
+					width: 45%;
+				}
+
 				.wolfnet_aoBody {
 					height: 295px;
+					font-size: 0.9em;
 				}
 
 				.wolfnet_aoImage {
@@ -920,7 +925,7 @@
 
 				.wolfnet_aoInfo {
 					width: @agentInfoWidthXs;
-					padding: 10px;
+					padding: 10px 5px;
 
 					.wolfnet_aoActions {
 						display: none;
@@ -930,6 +935,20 @@
 
 				ul.wolfnet_aoLinks {
 					margin-bottom: 5px;
+
+					li {
+						padding: 4px 0;
+						text-indent: -1.8em;
+						margin-left: 1.8em;
+						list-style: none;
+						font-size: 0.9em;
+
+						.wnt-icon {
+							margin-right: 6px;
+						}
+
+					}
+
 				}
 
 				.wolfnet_aoFooter {
