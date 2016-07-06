@@ -182,10 +182,17 @@ if ( typeof jQuery !== 'undefined' ) {
 			}
 
 			// Reposition the agent/office nav
-			var itemWidth = $aoItems.outerWidth(true) + 4; // Add 4 to acct for inline space
-			var itemMargin = itemWidth - $aoItems.outerWidth() - 4; // Remove 1 margin width
-			var rowWidth = (itemWidth * colCount) - itemMargin;
-			$aoHeader.width(rowWidth).css('padding-right', itemMargin);
+			if ($aoItems.length > 0) {
+				var itemWidth = $aoItems.outerWidth(true) + 4; // Add 4 to acct for inline space
+				var itemMargin = itemWidth - $aoItems.outerWidth() - 4; // Remove 1 margin width
+				var rowWidth = (itemWidth * colCount) - itemMargin;
+				$aoHeader.width(rowWidth).css('padding-right', itemMargin);
+			} else {
+				$aoHeader.css({
+					'width': 'inherit',
+					'padding-right': 'inherit'
+				});
+			}
 
 		};
 

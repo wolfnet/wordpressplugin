@@ -82,7 +82,7 @@
 					if (strlen($agent['address_1']) > 0) {
 						echo '<li><span class="wnt-icon wnt-icon-location"></span> '
 							. '<span class="wnt-visuallyhidden">Address:</span> '
-							. $agent['address_1'] . ' ' . $agent['address_2']
+							. '<span class="address-focus">' . $agent['address_1'] . ' ' . $agent['address_2'] . '</span>'
 							. '<br />'
 							. $agent['city'] . ', ' . $agent['state'] . ' '
 							. $agent ['zip_code'];

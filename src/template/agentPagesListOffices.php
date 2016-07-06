@@ -49,6 +49,18 @@ $postHash = '#post-' . get_the_id();
 
 	<div class="wolfnet_clearfix"></div>
 
+	<?php
+		if (
+			(count($offices) == 0) &&
+			array_key_exists('officeCriteria', $_REQUEST) &&
+			(strlen($_REQUEST['officeCriteria']) > 0)
+		) {
+	?>
+			<p class="wolfnet_noResults">There are no matching offices. Please try your search again.</p>
+	<?php
+		}
+	?>
+
 	<div class="wolfnet_aoOffices">
 
 		<?php
