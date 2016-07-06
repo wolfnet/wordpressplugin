@@ -93,7 +93,7 @@ Please upgrade to the latest version of the plugin as we will be disabling our o
 
 == Changelog ==
 
-= 1.10.6 =
+= 1.11.0 =
 
 * HTTPS Search Manager fix.
 
