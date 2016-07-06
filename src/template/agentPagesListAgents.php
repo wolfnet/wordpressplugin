@@ -276,7 +276,7 @@ if (!function_exists('paginate')) {
 				{ selector: '.wolfnet_aoContact',  maxHeight: 0,  origMaxHeight: 0 },
 				{ selector: '.wolfnet_aoLinks',    maxHeight: 0,  origMaxHeight: 0 },
 				{ selector: '.wolfnet_aoInfo .wolfnet_aoActions',  maxHeight: 0,  origMaxHeight: 0 },
-				{ selector: '.wolfnet_aoBody',     maxHeight: 0,  origMaxHeight: 0 },
+				{ selector: '.wolfnet_aoBody',     maxHeight: 0,  origMaxHeight: 0, alwaysResize: true },
 				{ selector: '.wolfnet_aoFooter',   maxHeight: 0,  origMaxHeight: 0 },
 				{ selector: '.wolfnet_aoItem',     maxHeight: 0,  origMaxHeight: 0 }
 			],

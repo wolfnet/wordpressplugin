@@ -145,9 +145,12 @@ if ( typeof jQuery !== 'undefined' ) {
 				colCount = 0,
 				colsCounted = false;
 
-			// Reset the max heights
+			// Reset the max heights & set default options
 			for (var i=0, l=itemSections.length; i<l; i++) {
 				itemSections[i].maxHeight = 0;
+				if (!itemSections[i].hasOwnProperty('alwaysResize')) {
+					itemSections[i]['alwaysResize'] = false;
+				}
 			}
 
 			for (var i=0, l=$aoItems.length; i<l; i++) {
@@ -178,7 +181,11 @@ if ( typeof jQuery !== 'undefined' ) {
 				if (($itemSection.length === 0) && $aoItems.is(itemSections[i].selector)) {
 					$itemSection = $aoItems;
 				}
-				$itemSection.height(Math.max(itemSections[i].maxHeight, itemSections[i].origMaxHeight));
+				if (itemSections[i].alwaysResize || (colCount > 1)) {
+					$itemSection.height(Math.max(itemSections[i].maxHeight, itemSections[i].origMaxHeight));
+				} else {
+					$itemSection.css('height', '');
+				}
 			}
 
 			// Reposition the agent/office nav
@@ -221,6 +228,7 @@ if ( typeof jQuery !== 'undefined' ) {
 					if (sectionHeight > itemSections[i].maxHeight) {
 						itemSections[i].maxHeight = sectionHeight;
 					}
+					$itemSection.css('height', '');
 				}
 			}
 		};
