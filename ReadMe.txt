@@ -93,6 +93,15 @@ Please upgrade to the latest version of the plugin as we will be disabling our o
 
 == Changelog ==
 
+= 1.10.5 =
+
+* Temporary rollback of HTTPS fix.
+
+= 1.10.4 =
+
+* HTTPS fix of AJAX calls made from within Search Manager
+* Fixed a bug on Widgets based on state of API key
+
 = 1.10.3 =
 
 * Two new widget themes: "Modern Contrast" & "Modern Tile"
