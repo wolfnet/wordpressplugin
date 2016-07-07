@@ -493,7 +493,9 @@
         var $prevBtn = $container.find(prevClass);
         var state = $container.data(stateKey);
         var options = $container.data(optionsKey);
-        var maxPage = Math.ceil(options.maxResults / state.numrows);
+
+		var listingCount = state.total_rows < state.maxresults ? state.total_rows : state.maxresults;
+        var maxPage = Math.ceil(listingCount / state.numrows);
 
         if (state.page <= 1) {
             $prevBtn.addClass('wolfnet_disabled');
@@ -512,8 +514,8 @@
         // Update results count display
         var rowcountDisplay = (Number(state.startrow) - 1) + Number(state.numrows);
 
-        if (Number(options.maxResults) < rowcountDisplay) {
-            rowcountDisplay = Number(options.maxResults);
+        if (Number(listingCount) < rowcountDisplay) {
+            rowcountDisplay = Number(listingCount);
         }
 
         // Update page information
