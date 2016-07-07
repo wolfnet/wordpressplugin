@@ -228,7 +228,6 @@ if ( typeof jQuery !== 'undefined' ) {
 					if (sectionHeight > itemSections[i].maxHeight) {
 						itemSections[i].maxHeight = sectionHeight;
 					}
-					$itemSection.css('height', '');
 				}
 			}
 		};
