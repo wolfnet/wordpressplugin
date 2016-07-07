@@ -469,6 +469,8 @@ jQuery(function ($) {
 		sb = {
 			lastScrollTop:  $window.scrollTop(),
 			leftOffset:     20,
+			// The following is set up in setupStickySidebar() and disableStickySidebar()
+			enabled:        false,
 			// The following are set up in updatePosition()
 			windowTop:      0,
 			windowHeight:   0,
@@ -503,19 +505,37 @@ jQuery(function ($) {
 	};
 
 
+	var canStickSidebar = function () {
+		return (sb.sidebarTop + sb.sidebarHeight) > $aoMainContent.offset().top;
+	};
+
+
 	var setupStickySidebar = function () {
 		updatePosition();
 
-		$(window).on('scroll touchmove', onScrollAgent);
+		$window.on('resize.wntSticky', onResizeAgent);
 
-		$(window).resize(function () {
-			detachSidebar();
-			updatePosition();
-			onScrollAgent();
-		});
+		onResizeAgent();
+
+	};
+
+
+	var enableStickySidebar = function () {
+		updatePosition();
+
+		$window.on('scroll.wntSticky touchmove.wntSticky', onScrollAgent);
 
 		onScrollAgent();
 
+		sb.enabled = true;
+
+	};
+
+
+	var disableStickySidebar = function () {
+		$window.off('scroll.wntSticky touchmove.wntSticky');
+		detachSidebar();
+		sb.enabled = false;
 	};
 
 
@@ -542,6 +562,23 @@ jQuery(function ($) {
 				width:  ''
 			});
 		}
+	};
+
+
+	var onResizeAgent = function () {
+		var canStick = canStickSidebar();
+
+		if (canStick) {
+			if (!sb.enabled) {
+				enableStickySidebar();
+			}
+			detachSidebar();
+			updatePosition();
+			onScrollAgent();
+		} else if (sb.enabled) {
+			disableStickySidebar();
+		}
+
 	};
 
 
