@@ -200,9 +200,17 @@ class Wolfnet_Plugin
             array(self::CACHE_CRON_HOOK, array($this->cachingService, 'clearExpired')),
             ));
 
-        if($this->keyService->getDefault()) {
+        try {
+			$productKey = $this->keyService->getDefault();
+			$response = $this->api->sendRequest($productKey, '/status', 'GET');
+			$successfulApiConnection = true;
+		} catch (Exception $e) {
+			$successfulApiConnection = false;
+		}
+
+        if ($successfulApiConnection) {
             $this->addAction(array(
-                array('widgets_init',      'widgetInit'),
+                array('widgets_init','widgetInit'),
             ));
         }
 

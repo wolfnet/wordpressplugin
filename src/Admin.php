@@ -109,6 +109,7 @@ class Wolfnet_Admin extends Wolfnet_Plugin
             'jquery-ui-slider',
             'wolfnet-admin',
             'wolfnet-shortcode-builder',
+            'wolfnet-search-manager',
         );
 
         foreach ($scripts as $script) {
@@ -133,8 +134,7 @@ class Wolfnet_Admin extends Wolfnet_Plugin
 			'wolfnet',
 			'wolfnet-agent',
 			'icomoon',
-			'google-lato',
-			'google-roboto',
+			'google-fonts',
 			'wolfnet-admin',
 		);
 

@@ -200,6 +200,7 @@ class Wolfnet_Views
                     'markets' => json_decode($GLOBALS['wolfnet']->keyService->get()),
                     'selectedKey' => $_SESSION['keyid'],
                     'url' => $GLOBALS['wolfnet']->url,
+                    'baseUrl' => $GLOBALS['wolfnet']->data->getSearchManagerBaseUrl($productKey),
                 ));
 
             }
