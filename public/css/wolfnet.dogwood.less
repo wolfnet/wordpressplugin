@@ -79,7 +79,7 @@
 
         .wolfnet_listing {
             // TODO: Remove these 2 rules if BrandCo stops targeting our class names:
-            width:  auto !important;
+            width:  @listingWidth !important;
             height: @listingHeight !important;
         }
 
@@ -93,6 +93,7 @@
         line-height: 1.5em;
 
         .wolfnet_listing {
+            width:      @listingWidth;
             height:     @listingHeight;
             margin:     0 @listingPadding 0 0;
             padding:    0;
@@ -138,8 +139,8 @@
                     .vertical-align();
 
                     img {
-                        width: 100%;
                         height: auto;
+                        max-height: @listingImgHeight;
                         border: none;
                     }
 
@@ -302,7 +303,6 @@
     &.wolfnet_listingGrid {
 
         .wolfnet_listing {
-            width: @listingWidth;
             margin: 0 @listingPadding 1em @listingPadding;
 
             &.wolfnet_listing_sm {

@@ -93,6 +93,23 @@ Please upgrade to the latest version of the plugin as we will be disabling our o
 
 == Changelog ==
 
+= 1.10.5 =
+
+* Temporary rollback of HTTPS fix.
+
+= 1.10.4 =
+
+* HTTPS fix of AJAX calls made from within Search Manager
+* Fixed a bug on Widgets based on state of API key
+
+= 1.10.3 =
+
+* Two new widget themes: "Modern Contrast" & "Modern Tile"
+* Adds a missing font to the "Modern Lite" widget theme
+* Simplified widget theme selection interface
+* Fixes a bug in pagination
+* Updates Featured Listings scroller logic
+
 = 1.10.2 =
 * New, simpler speed scale for Featured Listings scroller in lieu of the 1-99 scale.
 * New speed default for Featured Listings scroller.

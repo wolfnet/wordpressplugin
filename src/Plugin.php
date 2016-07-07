@@ -555,7 +555,7 @@ class Wolfnet_Plugin
 
     public function sbMcePlugin(array $plugins)
     {
-        $plugins['wolfnetShortcodeBuilder'] = $this->url . 'js/tinymce.wolfnetShortcodeBuilder.src.js';
+        $plugins['wolfnetShortcodeBuilder'] = $this->url . 'js/tinymce.wolfnetShortcodeBuilder.min.js';
 
         return $plugins;
 
