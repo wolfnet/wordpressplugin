@@ -86,11 +86,11 @@
 		border-color: <?php echo getHex($args['colors'][0]); ?>;
 	}
 
-	.wolfnet_widget.wolfnet_ao ul.wolfnet_aoLinks .wnt-icon,
-	.wolfnet_widget.wolfnet_ao ul.wolfnet_aoLinks a,
-	.wolfnet_widget.wolfnet_ao ul.wolfnet_aoLinks a:hover,
-	.wolfnet_widget.wolfnet_ao ul.wolfnet_aoLinks a:active,
-	.wolfnet_widget.wolfnet_ao ul.wolfnet_aoLinks a:visited {
+	.wolfnet_widget.wolfnet_ao ul.wolfnet_aoLinks li .wnt-icon,
+	.wolfnet_widget.wolfnet_ao ul.wolfnet_aoLinks li a,
+	.wolfnet_widget.wolfnet_ao ul.wolfnet_aoLinks li a:hover,
+	.wolfnet_widget.wolfnet_ao ul.wolfnet_aoLinks li a:active,
+	.wolfnet_widget.wolfnet_ao ul.wolfnet_aoLinks li a:visited {
 		color: <?php echo getHex($args['colors'][0]); ?>;
 	}
 
