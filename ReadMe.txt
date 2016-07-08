@@ -95,6 +95,7 @@ Please upgrade to the latest version of the plugin as we will be disabling our o
 
 = 1.11.0 =
 
+* New layout for the Agents and Offices
 * HTTPS Search Manager fix.
 
 = 1.10.5 =
