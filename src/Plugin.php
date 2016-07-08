@@ -367,7 +367,8 @@ class Wolfnet_Plugin
 
         register_widget('Wolfnet_Widget_QuickSearchWidget');
 
-        register_widget('Wolfnet_Widget_AgentPagesWidget');
+		// Agent Pages widget - currently does not fit in a sidebar
+		//register_widget('Wolfnet_Widget_AgentPagesWidget');
 
         do_action($this->postHookPrefix . 'registerWidgets'); // Legacy hook
 
