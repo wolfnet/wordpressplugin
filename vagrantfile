@@ -10,49 +10,49 @@ Vagrant.configure("2") do |config|
     config.vm.provision :shell, :path => ".vagrant/php-config.sh"
 
     # This is the oldest version that we currently support.
-    config.vm.define "wp" do |wp|
+    config.vm.define "wp", autostart: false do |wp|
         wp.vm.network :private_network, ip: "192.168.50.30"
         wp.vm.provision :shell, :path => ".vagrant/wordpress.sh", :args => "3.5.1"
     end
 
     # The most up to date version of the 3.5
-    config.vm.define "wp35" do |wp35|
+    config.vm.define "wp35", autostart: false do |wp35|
         wp35.vm.network :private_network, ip: "192.168.50.35"
         wp35.vm.provision :shell, :path => ".vagrant/wordpress.sh", :args => "3.5.2"
     end
 
     # The most up to date version of the 3.6
-    config.vm.define "wp36" do |wp36|
+    config.vm.define "wp36", autostart: false do |wp36|
         wp36.vm.network :private_network, ip: "192.168.50.36"
         wp36.vm.provision :shell, :path => ".vagrant/wordpress.sh", :args => "3.6.1"
     end
 
     # The most up to date version of the 3.7
-    config.vm.define "wp37" do |wp37|
+    config.vm.define "wp37", autostart: false do |wp37|
         wp37.vm.network :private_network, ip: "192.168.50.37"
         wp37.vm.provision :shell, :path => ".vagrant/wordpress.sh", :args => "3.7.2"
     end
 
     # The most up to date version of the 3.8
-    config.vm.define "wp38" do |wp38|
+    config.vm.define "wp38", autostart: false do |wp38|
         wp38.vm.network :private_network, ip: "192.168.50.38"
         wp38.vm.provision :shell, :path => ".vagrant/wordpress.sh", :args => "3.8.2"
     end
 
     # The most up to date version of the 3.9
-    config.vm.define "wp39" do |wp39|
+    config.vm.define "wp39", autostart: false do |wp39|
         wp39.vm.network :private_network, ip: "192.168.50.39"
         wp39.vm.provision :shell, :path => ".vagrant/wordpress.sh", :args => "3.9.2"
     end
 
     # The most up to date version of the 4.0
-    config.vm.define "wp40" do |wp40|
+    config.vm.define "wp40", autostart: false do |wp40|
         wp40.vm.network :private_network, ip: "192.168.50.40"
         wp40.vm.provision :shell, :path => ".vagrant/wordpress.sh", :args => "4.0.7"
     end
 
     # The most up to date version of the 4.1
-    config.vm.define "wp41" do |wp41|
+    config.vm.define "wp41", autostart: false do |wp41|
         #wp41.vm.box = "ubuntu-14"
         wp41.vm.box_url = "https://github.com/kraksoft/vagrant-box-ubuntu/releases/download/14.04/ubuntu-14.04-amd64.box"
         wp41.vm.network :private_network, ip: "192.168.50.41"
@@ -60,7 +60,7 @@ Vagrant.configure("2") do |config|
     end
 
     # The most up to date version of the 4.2
-    config.vm.define "wp42" do |wp42|
+    config.vm.define "wp42", autostart: false do |wp42|
         #wp42.vm.box = "ubuntu-14"
         wp42.vm.box_url = "https://github.com/kraksoft/vagrant-box-ubuntu/releases/download/14.04/ubuntu-14.04-amd64.box"
         wp42.vm.network :private_network, ip: "192.168.50.42"
@@ -68,7 +68,7 @@ Vagrant.configure("2") do |config|
     end
 
     # The most up to date version of the 4.3
-    config.vm.define "wp43" do |wp43|
+    config.vm.define "wp43", autostart: false do |wp43|
         #wp43.vm.box = "ubuntu-14"
         wp43.vm.box_url = "https://github.com/kraksoft/vagrant-box-ubuntu/releases/download/14.04/ubuntu-14.04-amd64.box"
         wp43.vm.network :private_network, ip: "192.168.50.43"
@@ -76,7 +76,7 @@ Vagrant.configure("2") do |config|
     end
 
     # The most up to date version of the 4.4
-    config.vm.define "wp44" do |wp44|
+    config.vm.define "wp44", autostart: false do |wp44|
         #wp44.vm.box = "ubuntu-14"
         wp44.vm.box_url = "https://github.com/kraksoft/vagrant-box-ubuntu/releases/download/14.04/ubuntu-14.04-amd64.box"
         wp44.vm.network :private_network, ip: "192.168.50.44"
@@ -84,7 +84,7 @@ Vagrant.configure("2") do |config|
     end
 
     # The most up to date version of the 4.5
-    config.vm.define "wp45" do |wp45|
+    config.vm.define "wp45", autostart: false do |wp45|
         #wp45.vm.box = "ubuntu-14"
         wp45.vm.box_url = "https://github.com/kraksoft/vagrant-box-ubuntu/releases/download/14.04/ubuntu-14.04-amd64.box"
         wp45.vm.network :private_network, ip: "192.168.50.45"
@@ -92,7 +92,7 @@ Vagrant.configure("2") do |config|
     end
 
     # Most up to date version from master
-    config.vm.define "dev" do |dev|
+    config.vm.define "dev", primary: true do |dev|
         #dev.vm.box = "ubuntu-14"
         dev.vm.box_url = "https://github.com/kraksoft/vagrant-box-ubuntu/releases/download/14.04/ubuntu-14.04-amd64.box"
         dev.vm.network :private_network, ip: "192.168.50.100"
