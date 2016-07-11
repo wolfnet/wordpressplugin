@@ -68,9 +68,9 @@ class Wolfnet_Template
     {
         $styles = array(
             'wolfnet',
+            'wolfnet-agent',
             'icomoon',
-            'google-lato',
-            'google-roboto',
+            'google-fonts',
         );
 
         $widgetTheme = $this->plugin->views->getWidgetTheme();
@@ -131,6 +131,10 @@ class Wolfnet_Template
             'wolfnet-admin' => array(
                 $this->url . 'js/wolfnetAdmin.min.js',
                 array('jquery-ui-dialog', 'jquery-ui-tabs', 'jquery-ui-datepicker', 'wolfnet'),
+            ),
+            'wolfnet-search-manager' => array(
+                $this->url . 'js/jquery.wolfnetSearchManager.min.js',
+                array('jquery'),
             ),
             'wolfnet-scrolling-items' => array(
                 $this->url . 'js/jquery.wolfnetScrollingItems.min.js',
@@ -204,9 +208,19 @@ class Wolfnet_Template
         global $wp_scripts;
         $jquery_ui = $wp_scripts->query('jquery-ui-core');
 
+		$google_fonts = array(
+			'Lato:400,700',
+			'Montserrat:400,700',
+			'Open+Sans:400,700',
+			'Roboto:400,700',
+		);
+
         $styles = array(
             'wolfnet' => array(
                 $this->url . 'css/wolfnet.min.css'
+            ),
+            'wolfnet-agent' => array(
+                $this->url . 'css/wolfnetAgentPages.min.css'
             ),
             'wolfnet-admin' => array(
                 $this->url . 'css/wolfnetAdmin.min.css',
@@ -221,11 +235,8 @@ class Wolfnet_Template
             'icomoon' => array(
                 $this->url . 'lib/icomoon/style.css'
             ),
-            'google-lato' => array(
-                'https://fonts.googleapis.com/css?family=Lato',
-            ),
-            'google-roboto' => array(
-                'https://fonts.googleapis.com/css?family=Roboto',
+            'google-fonts' => array(
+                'https://fonts.googleapis.com/css?family=' . implode('|', $google_fonts),
             ),
         );
 

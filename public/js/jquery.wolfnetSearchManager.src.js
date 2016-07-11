@@ -47,7 +47,10 @@ if ( typeof jQuery != 'undefined' ) {
 			refreshedEvent  : 'wolfnetDataRefreshed',
 			savedEvent      : 'wolfnetSearchSaved',
 			deletedEvent    : 'wolfnetSearchDelete',
-			itemIdPrefix    : 'savedsearch_'
+			itemIdPrefix    : 'savedsearch_',
+			baseUrl         : '',
+			ajaxUrl         : '',
+			ajaxAction      : 'wolfnet_search_manager_ajax'
 		};
 
 		var methods = {
@@ -57,7 +60,9 @@ if ( typeof jQuery != 'undefined' ) {
 
 				return this.each( function () {
 
-					var $this = $( this );
+					methods.interceptAjax(options.baseUrl, options.ajaxUrl, options.ajaxAction);
+
+					var $this = $(this);
 
 					var data = {
 						option        : $.extend( defaultOptions, options ),
@@ -140,6 +145,61 @@ if ( typeof jQuery != 'undefined' ) {
 				} );
 
 			},
+
+
+			interceptAjax: function(baseUrl, ajaxUrl, ajaxAction)
+			{
+
+				// Intercept outgoing AJAX requests
+				$.ajaxSetup({
+
+					beforeSend: function (jqXHR, data) {
+
+						// Look for URL Search Builder calls being made to gateway.cfm -
+						// calls being made from https wordpress solutions.
+						if (
+							(
+								data.url.indexOf(baseUrl) != -1
+							) || (
+								(data.url.indexOf('gateway.cfm') != -1) &&
+								(data.url.indexOf('isURLSearchBuilder') != -1) &&
+								(window.location.href.indexOf('https:') != -1)
+							)
+						) {
+
+							// Split up the URL into the URL path and the URL params
+							var urlParts = data.url.split('?');
+							var destUrl  = urlParts[0];
+
+							// Add the originally-intended URL and request type
+							var queryString = 'wnt__url=' + destUrl + '&wnt__method=' + data.type;
+
+							if (data.hasOwnProperty('dataType')) {
+								queryString += '&wnt__datatype=' + data.dataType;
+							}
+
+							// Test for absolute URL
+							if (/^(http|\/\/)/.test(destUrl)) {
+
+								// Prefix the original URL params to avoid conflicts with WP params
+								if (urlParts.length > 1) {
+									/* var destParams = urlParts[1].split('&');
+									for (var i=0, l=destParams.length; i<l; i++) {
+										queryString += 'wnt__' + destParams[i];
+									} */
+									queryString += '&wnt__params=' + encodeURIComponent(urlParts[1]);
+								}
+
+								// Route ajax call through wordpress ajax so it's being made from https
+								data.url = ajaxUrl + '?action=' + ajaxAction + '&' + queryString;
+							}
+
+						}
+					}
+
+				});
+			},
+
 
 			refresh : function ()
 			{
