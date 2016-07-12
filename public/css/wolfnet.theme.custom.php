@@ -60,6 +60,32 @@
 		return getRGB($color) . ',' . $opacity;
 	}
 
+	function getARGB (array $color, $opacity) {
+		$hexOpacity = dechex($opacity);
+
+		if (strlen($hexOpacity) == 1) {
+			$hexOpacity = '0' . $hexOpacity;
+		}
+
+		return '#' . $hexOpacity . $color['r']['hex'] . $color['g']['hex'] . $color['b']['hex'];
+
+	}
+
+/*
+	function vertGradient(array $startColor, array $endColor, $startOpacity=1, $endOpacity=1) {
+		$startARGB: getARGB($startColor, $startOpacity);
+		$endARGB:   getARGB($endColor, $endOpacity);
+		// FF3.6-15
+		background: -moz-linear-gradient(top, $startColor 0%, $endColor 100%);
+		// Chrome10-25,Safari5.1-6
+		background: -webkit-linear-gradient(top, $startColor 0%, $endColor 100%);
+		// W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+
+		background: linear-gradient(to bottom, $startColor 0%, $endColor 100%);
+		// IE6-9
+		-ms-filter: ~"progid:DXImageTransform.Microsoft.gradient(startColorstr='@{startARGB}', endColorstr='@{endARGB}', GradientType=0)";
+		filter: ~"progid:DXImageTransform.Microsoft.gradient(startColorstr='@{startARGB}', endColorstr='@{endARGB}', GradientType=0)";
+	}
+*/
 
 	// Get the color parts
 	foreach ($args['colors'] as $colorKey => $colorVal) {
@@ -70,6 +96,14 @@
 	$args['opacity'] /= 100;
 
 ?>
+
+
+/* Birch Theme */
+
+	.wolfnet_widget.wolfnet-theme-birch.wolfnet_featuredListings .wolfnet_listing .wolfnet_listingHead .wolfnet_listingInfo,
+	.wolfnet_widget.wolfnet-theme-birch.wolfnet_listingGrid      .wolfnet_listing .wolfnet_listingHead .wolfnet_listingInfo {
+		// TODO: Add gradient background
+	}
 
 
 /* Cedar Theme */
