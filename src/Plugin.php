@@ -50,7 +50,7 @@ class Wolfnet_Plugin
      * collection of variables which are used in saving page settings.
      * @var string
      */
-    public $StyleOptionGroup = 'wolfnetStyle';
+    public $WidgetThemeOptionGroup = 'wolfnetStyle';
 
     /**
      * This property is used to set the option group for the Edit Css page. It creates a namespaced
@@ -164,6 +164,7 @@ class Wolfnet_Plugin
         $this->quickSearch = $this->ioc->get('Wolfnet_Module_QuickSearch');
         $this->smartSearch = $this->ioc->get('Wolfnet_Module_SmartSearch');
         $this->searchManager = $this->ioc->get('Wolfnet_Module_SearchManager');
+        $this->widgetTheme = $this->ioc->get('Wolfnet_Module_WidgetTheme');
 
         if(is_admin()) {
             $this->admin = $this->ioc->get('Wolfnet_Admin');
@@ -180,9 +181,17 @@ class Wolfnet_Plugin
             array(self::CACHE_CRON_HOOK, array($this->cachingService, 'clearExpired')),
             ));
 
-        if($this->keyService->getDefault()) {
+        try {
+			$productKey = $this->keyService->getDefault();
+			$response = $this->api->sendRequest($productKey, '/status', 'GET');
+			$successfulApiConnection = true;
+		} catch (Exception $e) {
+			$successfulApiConnection = false;
+		}
+
+        if ($successfulApiConnection) {
             $this->addAction(array(
-                array('widgets_init',      'widgetInit'),
+                array('widgets_init','widgetInit'),
             ));
         }
 
@@ -339,7 +348,8 @@ class Wolfnet_Plugin
 
         register_widget('Wolfnet_Widget_QuickSearchWidget');
 
-        register_widget('Wolfnet_Widget_AgentPagesWidget');
+		// Agent Pages widget - currently does not fit in a sidebar
+		//register_widget('Wolfnet_Widget_AgentPagesWidget');
 
         do_action($this->postHookPrefix . 'registerWidgets'); // Legacy hook
 
@@ -554,7 +564,7 @@ class Wolfnet_Plugin
 
     public function sbMcePlugin(array $plugins)
     {
-        $plugins['wolfnetShortcodeBuilder'] = $this->url . 'js/tinymce.wolfnetShortcodeBuilder.src.js';
+        $plugins['wolfnetShortcodeBuilder'] = $this->url . 'js/tinymce.wolfnetShortcodeBuilder.min.js';
 
         return $plugins;
 

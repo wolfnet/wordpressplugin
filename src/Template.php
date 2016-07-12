@@ -68,7 +68,9 @@ class Wolfnet_Template
     {
         $styles = array(
             'wolfnet',
+            'wolfnet-agent',
             'icomoon',
+            'google-fonts',
         );
 
         $widgetTheme = $this->plugin->views->getWidgetTheme();
@@ -115,51 +117,55 @@ class Wolfnet_Template
     {
         $scripts = array(
             'tooltipjs' => array(
-                $this->url . 'js/jquery.tooltip.src.js',
+                $this->url . 'js/jquery.tooltip.min.js',
                 array('jquery'),
             ),
             'imagesloadedjs' => array(
-                $this->url . 'js/jquery.imagesloaded.src.js',
+                $this->url . 'js/jquery.imagesloaded.min.js',
                 array('jquery'),
             ),
             'wolfnet' => array(
-                $this->url . 'js/wolfnet.src.js',
+                $this->url . 'js/wolfnet.min.js',
                 array('jquery', 'tooltipjs'),
             ),
             'wolfnet-admin' => array(
-                $this->url . 'js/wolfnetAdmin.src.js',
+                $this->url . 'js/wolfnetAdmin.min.js',
                 array('jquery-ui-dialog', 'jquery-ui-tabs', 'jquery-ui-datepicker', 'wolfnet'),
             ),
+            'wolfnet-search-manager' => array(
+                $this->url . 'js/jquery.wolfnetSearchManager.min.js',
+                array('jquery'),
+            ),
             'wolfnet-scrolling-items' => array(
-                $this->url . 'js/jquery.wolfnetScrollingItems.src.js',
+                $this->url . 'js/jquery.wolfnetScrollingItems.min.js',
                 array('wolfnet'),
             ),
             'wolfnet-quick-search' => array(
-                $this->url . 'js/jquery.wolfnetQuickSearch.src.js',
+                $this->url . 'js/jquery.wolfnetQuickSearch.min.js',
                 array('jquery', 'wolfnet'),
             ),
             'wolfnet-smartsearch' => array(
-                $this->url . 'js/jquery.wolfnetSmartsearch.src.js',
+                $this->url . 'js/jquery.wolfnetSmartsearch.min.js',
                 array('jquery'),
             ),
             'wolfnet-listing-grid' => array(
-                $this->url . 'js/jquery.wolfnetListingGrid.src.js',
+                $this->url . 'js/jquery.wolfnetListingGrid.min.js',
                 array('jquery', 'tooltipjs', 'imagesloadedjs', 'wolfnet'),
             ),
             'wolfnet-swipe' => array(
-                $this->url . 'js/wolfnetSwipe.src.js',
+                $this->url . 'js/wolfnetSwipe.min.js',
                 array('jquery'),
             ),
             'wolfnet-thumbnail-scroller' => array(
-                $this->url . 'js/jquery.wolfnetThumbnailScroller.src.js',
+                $this->url . 'js/jquery.wolfnetThumbnailScroller.min.js',
                 array('jquery', 'wolfnet-swipe', 'wolfnet'),
             ),
             'wolfnet-toolbar' => array(
-                $this->url . 'js/jquery.wolfnetToolbar.src.js',
+                $this->url . 'js/jquery.wolfnetToolbar.min.js',
                 array('jquery', 'wolfnet'),
             ),
             'wolfnet-shortcode-builder' => array(
-                $this->url . 'js/jquery.wolfnetShortcodeBuilder.src.js',
+                $this->url . 'js/jquery.wolfnetShortcodeBuilder.min.js',
                 array('jquery-ui-widget', 'jquery-effects-core', 'wolfnet-admin'),
             ),
             'mapquest-api' => array(
@@ -169,7 +175,7 @@ class Wolfnet_Template
                 true,
             ),
             'wolfnet-maptracks' => array(
-                $this->url . 'js/jquery.wolfnetMaptracks.src.js',
+                $this->url . 'js/jquery.wolfnetMaptracks.min.js',
                 array('jquery', 'mapquest-api'),
                 $this->version,
                 true,
@@ -202,30 +208,45 @@ class Wolfnet_Template
         global $wp_scripts;
         $jquery_ui = $wp_scripts->query('jquery-ui-core');
 
+		$google_fonts = array(
+			'Lato:400,700',
+			'Montserrat:400,700',
+			'Open+Sans:400,700',
+			'Roboto:400,700',
+		);
+
         $styles = array(
             'wolfnet' => array(
-                $this->url . 'css/wolfnet.src.css'
-                ),
+                $this->url . 'css/wolfnet.min.css'
+            ),
+            'wolfnet-agent' => array(
+                $this->url . 'css/wolfnetAgentPages.min.css'
+            ),
             'wolfnet-admin' => array(
-                $this->url . 'css/wolfnetAdmin.src.css',
-                ),
+                $this->url . 'css/wolfnetAdmin.min.css',
+            ),
             'wolfnet-custom' => array(
                 admin_url('admin-ajax.php') . '?action=wolfnet_css',
-                ),
-            'wolfnet-ash' => array(
-                $this->url . 'css/wolfnet.ash.src.css'
-                ),
-            'wolfnet-birch' => array(
-                $this->url . 'css/wolfnet.birch.src.css'
-                ),
+            ),
             'jquery-ui' => array(
                 'http://ajax.googleapis.com/ajax/libs/jqueryui/' . $jquery_ui->ver
                     . '/themes/smoothness/jquery-ui.css'
-                ),
+            ),
             'icomoon' => array(
                 $this->url . 'lib/icomoon/style.css'
-                ),
+            ),
+            'google-fonts' => array(
+                'https://fonts.googleapis.com/css?family=' . implode('|', $google_fonts),
+            ),
+        );
+
+        // Add widget theme styles
+        $widgetThemes = $this->plugin->widgetTheme->getThemeOptions();
+        foreach ($widgetThemes as $widgetTheme) {
+            $styles[$widgetTheme['styleName']] = array(
+                $this->url . 'css/' . $widgetTheme['styleFile']
             );
+        }
 
         foreach ($styles as $style => $data) {
             $params   = array($style);

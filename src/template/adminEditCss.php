@@ -36,8 +36,6 @@
 
             <textarea id="wolfnetCss_adminCss" name="wolfnetCss_adminCss" class="wolfnet_cssBox"><?php echo $adminCss; ?></textarea>
 
-            </table>
-
         </fieldset>
 
         <p class="submit">
