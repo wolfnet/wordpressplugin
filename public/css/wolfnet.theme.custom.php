@@ -71,12 +71,18 @@
 
 ?>
 
-.wolfnet_widget.wolfnet-theme-cedar.wolfnet_featuredListings .wolfnet_listing .wolfnet_listingHead .wolfnet_listingInfo,
-.wolfnet_widget.wolfnet-theme-cedar.wolfnet_listingGrid .wolfnet_listing .wolfnet_listingHead .wolfnet_listingInfo {
-	background-color: rgba(<?php echo getRGBA($args['colors'][0], $args['opacity']); ?>);
-}
 
-.wolfnet_widget.wolfnet-theme-dogwood.wolfnet_featuredListings .wolfnet_listing .wolfnet_listingHead .wolfnet_detailsLink,
-.wolfnet_widget.wolfnet-theme-dogwood.wolfnet_listingGrid .wolfnet_listing .wolfnet_listingHead .wolfnet_detailsLink {
-	background-color: rgba(<?php echo getRGBA($args['colors'][0], $args['opacity']); ?>);
-}
+/* Cedar Theme */
+
+	.wolfnet_widget.wolfnet-theme-cedar.wolfnet_featuredListings .wolfnet_listing .wolfnet_listingHead .wolfnet_listingInfo,
+	.wolfnet_widget.wolfnet-theme-cedar.wolfnet_listingGrid      .wolfnet_listing .wolfnet_listingHead .wolfnet_listingInfo {
+		background-color: rgba(<?php echo getRGBA($args['colors'][0], $args['opacity']); ?>);
+	}
+
+
+/* Dogwood Theme */
+
+	.wolfnet_widget.wolfnet-theme-dogwood.wolfnet_featuredListings .wolfnet_listing .wolfnet_listingHead .wolfnet_detailsLink,
+	.wolfnet_widget.wolfnet-theme-dogwood.wolfnet_listingGrid      .wolfnet_listing .wolfnet_listingHead .wolfnet_detailsLink {
+		background-color: rgba(<?php echo getRGBA($args['colors'][0], $args['opacity']); ?>);
+	}
