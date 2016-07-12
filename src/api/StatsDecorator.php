@@ -109,8 +109,15 @@ class Wolfnet_Api_StatsDecorator extends Wolfnet_Api_Client
     {
         global $wp_version;
 
+        // This code needed for certain scenarios where wolfnet is not yet in globals
+        if (array_key_exists('wolfnet',$GLOBALS)) {
+        	$v = $GLOBALS['wolfnet']->version;
+        } else {
+        	$v = 'UNAVAILABLE';
+        }
+
         $stats = array(
-            'pluginVersion' => $GLOBALS['wolfnet']->version,
+            'pluginVersion' => $v,
             'phpVersion'    => phpversion(),
             'wpVersion'     => $wp_version,
             'wpTheme'       => wp_get_theme()->get('Name'),

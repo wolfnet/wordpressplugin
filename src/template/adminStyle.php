@@ -2,10 +2,10 @@
 
     <div id="icon-options-wolfnet" class="icon32"><br /></div>
 
-    <h2>WolfNet <sup>&reg;</sup> - Appearance</h2>
+    <h1>WolfNet <sup>&reg;</sup> - Appearance</h1>
 
     <p>
-        The 'Modern' widget theme streamlines the look of the property photos within
+        The 'Modern' widget themes streamline the look of the property photos within
         "featured listings" and the "listing grid". With this optional feature enabled,
         property photos will appear larger and will only include the most important property
         listing details within the photo.
@@ -19,51 +19,80 @@
 
         <p>Select the appearance of the widgets.</p>
 
-        <fieldset>
-            <legend class="screen-reader-text"><span>Widget Theme</span></legend>
-            <div class="wolfnet_widget_themes">
-                <div class="wolfnet_widget_theme">
-                    <label for="wolfnet_widgetTheme_ash">
-                        <div class="wolfnet_widget_theme_thumb">
-                            <img src="<?php echo $imgdir; ?>support-ash-listing.png" />
-                        </div>
-                        <div class="wolfnet_widget_theme_label">
-                            <input type="radio" name="wolfnet_widgetTheme"
-                             id="wolfnet_widgetTheme_ash" value="ash"
-                             <?php if (($widgetTheme == 'ash') || ($widgetTheme == '')) echo 'checked="checked"'; ?> />
-                            Classic
-                        </div>
-                    </label>
-                </div>
-                <div class="wolfnet_widget_theme">
-                    <label for="wolfnet_widgetTheme_birch">
-                        <div class="wolfnet_widget_theme_thumb">
-                            <img src="<?php echo $imgdir; ?>support-birch-listing.png" />
-                        </div>
-                        <div class="wolfnet_widget_theme_label">
-                            <input type="radio" name="wolfnet_widgetTheme"
-                             id="wolfnet_widgetTheme_birch" value="birch"
-                             <?php checked($widgetTheme, 'birch'); ?> />
-                            Modern
-                        </div>
-                    </label>
-                </div>
-            </div>
-        </fieldset>
-
-        <div class="notice notice-warning below-h2">
+        <div class="notice notice-warning below-h2" style="clear: both;">
             <p>
-                Updating to the 'Modern' widget theme may cause display conflicts on your website.
+                Updating to the 'Modern' widget themes may cause display conflicts on your website.
                 If you experience any conflicts, switch back to the 'Classic' widget theme
                 and contact your web developer to correct these issues.
             </p>
         </div>
 
-        <p style="clear: both;">
-            <input type="submit" name="submit" id="submit" class="button button-primary"
-             value="<?php _e('Save Changes') ?>" />
-        </p>
+        <fieldset>
+            <legend class="screen-reader-text"><span>Widget Theme</span></legend>
+            <div class="wolfnet_widget_themes">
+            <?php foreach ($widgetThemes as $themeOpt) {
+                $themeOptSelected = (
+                    ($widgetTheme == $themeOpt['name'])
+                    || (($widgetTheme == '') && ($defaultWidgetTheme == $themeOpt['name']))
+                ); ?>
+                <div class="wolfnet_widget_theme <?php if ($themeOptSelected) echo esc_attr('wolfnet_widget_theme_active'); ?>"
+                 tabindex="0">
+                    <div class="wolfnet_widget_theme_thumb">
+                        <img src="<?php echo $imgdir . $themeOpt['previewImg']; ?>?v={X.X.X}.2" />
+                    </div>
+                    <div class="wolfnet_widget_theme_info">
+                        <span class="wolfnet_widget_theme_label">
+                            <span class="wolfnet_widget_theme_flag">
+                                <?php if ($themeOptSelected) echo _e('Active:') ?>
+                            </span>
+                            <?php _e($themeOpt['label']); ?>
+                        </span>
+                        <span class="wolfnet_widget_theme_actions">
+                            <?php if (!$themeOptSelected) { ?>
+                                <button type="submit" class="button button-secondary"
+                                 name="wolfnet_widgetTheme"
+                                 id="wolfnet_widgetTheme_<?php echo esc_attr($themeOpt['name']); ?>"
+                                 value="<?php echo esc_attr($themeOpt['name']); ?>"
+                                 title="<?php esc_attr_e('Apply this widget theme'); ?>">
+                                    <?php echo _e('Apply'); ?>
+                                </button>
+                            <?php } ?>
+                        </span>
+                    </div>
+                </div>
+            <?php } ?>
+            </div>
+        </fieldset>
 
     </form>
 
 </div>
+
+
+<script>
+
+    if (typeof jQuery !== 'undefined') {
+
+        jQuery(function ($) {
+
+            var btnClasses = {
+                primary:    'button-primary',
+                secondary:  'button-secondary'
+            };
+            var btnSelector = 'button[name="wolfnet_widgetTheme"], input[name="wolfnet_widgetTheme"]';
+
+            $('.wolfnet_widget_theme').mouseover(function () {
+                var $btn = $(this).find(btnSelector);
+                $btn.removeClass(btnClasses.secondary).addClass(btnClasses.primary);
+            });
+
+            $('.wolfnet_widget_theme').mouseout(function () {
+                var $btn = $(this).find(btnSelector);
+                $btn.removeClass(btnClasses.primary).addClass(btnClasses.secondary);
+            });
+
+        });
+
+    }
+
+</script>

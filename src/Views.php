@@ -101,10 +101,16 @@ class Wolfnet_Views
     {
 
         try {
+
+            $widgetThemeDefaults = $GLOBALS['wolfnet']->widgetTheme->getDefaults();
+
             $out = $this->parseTemplate('adminStyle', array(
                 'imgdir' => $this->remoteImages,
                 'formHeader' => $this->styleFormHeaders(),
                 'widgetTheme' => $this->getWidgetTheme(),
+                'widgetThemes' => $GLOBALS['wolfnet']->widgetTheme->getThemeOptions(),
+                'defaultWidgetTheme' => $widgetThemeDefaults['widgetTheme'],
+                'defaultColors' => $widgetThemeDefaults['colors'],
             ));
 
         } catch (Wolfnet_Exception $e) {
@@ -153,6 +159,7 @@ class Wolfnet_Views
                     'markets' => json_decode($GLOBALS['wolfnet']->keyService->get()),
                     'selectedKey' => $_SESSION['keyid'],
                     'url' => $GLOBALS['wolfnet']->url,
+                    'baseUrl' => $GLOBALS['wolfnet']->data->getSearchManagerBaseUrl($productKey),
                 ));
 
             }
@@ -315,6 +322,17 @@ class Wolfnet_Views
         }
 
         return apply_filters('wolfnet_listingResultsView', $this->parseTemplate('resultsListing', $args));
+
+    }
+
+
+    public function agentsNavView(array $args = array())
+    {
+        foreach ($args as $key => $item) {
+            $args[$key] = apply_filters('wolfnet_agentPagesNavView_' . $key, $item);
+        }
+
+        return apply_filters('wolfnet_agentPagesNavView', $this->parseTemplate('agentPagesNav', $args));
 
     }
 
@@ -533,7 +551,7 @@ class Wolfnet_Views
     {
         ob_start();
 
-        settings_fields($GLOBALS['wolfnet']->StyleOptionGroup);
+        settings_fields($GLOBALS['wolfnet']->WidgetThemeOptionGroup);
 
         return trim(ob_get_clean());
 

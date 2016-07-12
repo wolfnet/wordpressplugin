@@ -24,9 +24,9 @@
 
 <div id="wolfnet-search-manager" class="wrap">
 
-    <div id="icon-options-wolfnet" class="icon32"><br></div>
+    <div id="icon-options-wolfnet" class="icon32"><br /></div>
 
-    <h2>WolfNet <sup>&reg;</sup> - Search Manager</h2>
+    <h1>WolfNet <sup>&reg;</sup> - Search Manager</h1>
 
     <noscript>
         <div class="error">
@@ -96,16 +96,19 @@
 
 </div>
 
-<script type="text/javascript" src="<?php echo $url; ?>js/jquery.wolfnetSearchManager.src.js"></script>
+
 <script type="text/javascript">
 
     if ( typeof jQuery != 'undefined' ) {
 
         ( function ( $ ) {
 
-            $( '#savedsearches' ).wolfnetSearchManager( {
-                saveForm  : $( '#save_search' )
-            } );
+			$('#savedsearches').wolfnetSearchManager({
+				baseUrl    : '<?php echo $baseUrl; ?>',
+				ajaxUrl    : wolfnet_ajax.ajaxurl,
+				ajaxAction : 'wolfnet_search_manager_ajax',
+				saveForm   : $( '#save_search' )
+			});
 
             <?php if(count($markets) > 1): ?>
             $( '#changeMarket' ).click(function() {

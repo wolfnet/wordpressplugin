@@ -49,6 +49,7 @@ if (typeof jQuery != 'undefined') {
             itemClass: 'item'
         };
 
+
         /**
          * Retrieve the "state" data for the supplied target element.
          *
@@ -60,6 +61,7 @@ if (typeof jQuery != 'undefined') {
         {
             return $(target).data(pluginName) || {};
         };
+
 
         /**
          * This function is responsible for clearing whitespace which otherwise causes spacing issues.
@@ -78,33 +80,6 @@ if (typeof jQuery != 'undefined') {
 
         };
 
-        /**
-         * Ensures there are enough items within the container so that the animation is not jerky
-         * or not possible to complete. If there are not enough items it will copy the items and
-         * append them to the parent element.
-         *
-         * @param  DOMElement  target  The element within which to ensure there are enough items.
-         *
-         * @return null
-         */
-        var ensureThereAreEnoughItems = function(target, containerWidth)
-        {
-            var $target = $(target);
-            var data = getData(target);
-            containerWidth = containerWidth || data.$itemContainer.innerWidth();
-            var $items = getItems(target);
-
-            if (
-				(containerWidth) &&
-				($items.length) &&
-				(data.itemWidth) &&
-				containerWidth >= (($items.length * data.itemWidth) / 2)
-			) {
-               	$items.clone().appendTo(data.$itemContainer);
-               	ensureThereAreEnoughItems(target, containerWidth);
-            }
-
-        };
 
         /**
          * Retrieves all child elements which match a specific class.
@@ -120,6 +95,7 @@ if (typeof jQuery != 'undefined') {
             return data.$itemContainer.children().filter('.' + data.option.itemClass);
 
         };
+
 
         /**
          * Establishes the next frame event for animation. This method will use the most efficient
@@ -157,6 +133,7 @@ if (typeof jQuery != 'undefined') {
 
         };
 
+
         /**
          * The callback which is executed for every animation frame. This method also determines
          * whether or not the animation should actually be performed.
@@ -168,10 +145,15 @@ if (typeof jQuery != 'undefined') {
         var executeFrame = function(target)
         {
             var data = getData(target);
+            var enoughItems = hasEnoughItems(target);
 
             if (shouldAnimate(target)) {
-                // Trigger the animation
-                animate(target);
+
+                // Trigger the animation if there are enough items to scroll
+				if (enoughItems) {
+					cloneItems(target);
+                	animate(target);
+                }
 
                 data.timeoutFlag = false;
 
@@ -186,6 +168,68 @@ if (typeof jQuery != 'undefined') {
             }
 
         };
+
+
+        /**
+         * If there are not enough items within the container for a smooth animation, recursively
+         * clone the items and append to the parent element.
+         *
+         * @param  DOMElement  target  The element within which to ensure there are enough items.
+         *
+         * @return null
+         */
+        var cloneItems = function(target)
+        {
+            var $target = $(target);
+            var data = getData(target);
+            var containerWidth = data.$itemContainer.innerWidth();
+            var $items = getItems(target);
+
+            if (
+				(containerWidth) &&
+				($items.length) &&
+				(data.itemWidth) &&
+				containerWidth >= (($items.length * data.itemWidth) / 2)
+			) {
+               	$items.clone().appendTo(data.$itemContainer);
+               	cloneItems(target, containerWidth);
+            }
+
+        };
+
+
+        /**
+         * Return true if the sum width of the items included in the scroller are greater than
+         * the container's width; return false if the sum width of the items is smaller.
+         *
+         * @param  DOMElement  target  The element within which to ensure there are enough items.
+         *
+         * @return null
+         */
+        var hasEnoughItems = function(target)
+        {
+            var $target = $(target);
+            var data = getData(target);
+
+            var numberOfItems = getItems(target).length;
+            var itemWidth = data.itemWidth;
+            var containerWidth = data.$itemContainer.innerWidth();
+
+            // Do not scroll if width of all items in scroller is less than container
+            if ((numberOfItems) && (itemWidth) && (containerWidth) &&
+				(numberOfItems * itemWidth) < containerWidth) {
+				return false;
+            }
+
+            // Do not scroll a single item
+            if ((numberOfItems) && numberOfItems == 1) {
+				return false;
+            }
+
+            return true;
+
+        };
+
 
         /**
          * Perform the actual animation. This function advances or retreats the "scroll" position of
@@ -233,6 +277,7 @@ if (typeof jQuery != 'undefined') {
 
         };
 
+
         /**
          * Determines whether or not animation should be performed.
          *
@@ -247,6 +292,30 @@ if (typeof jQuery != 'undefined') {
             return (data.animating || false);
 
         };
+
+
+        /**
+         * Translate string speed to integer.
+         *
+         * @param  string  speed  The speed string to be translated ('slow'/'medium'/'fast')
+         *
+         * @return int
+         */
+        var translateSpeed = function(speed)
+        {
+            switch (speed) {
+                case 'slow':
+                    return 1;
+                case 'medium':
+                    return 2;
+                case 'fast':
+                    return 3;
+                default:
+                    // Default to slowest in case of unspecified speed or deprecated integer value
+                    return 1;
+            }
+        };
+
 
         /**
          * This method builds control elements which can be used to control the animation of the
@@ -271,6 +340,7 @@ if (typeof jQuery != 'undefined') {
             createButton(target, 'right').prependTo($target);
 
         };
+
 
         /**
          * Creates a control element for a specified direction and returns it. The new element is
@@ -318,6 +388,7 @@ if (typeof jQuery != 'undefined') {
 
         };
 
+
         var methods = {
 
             /**
@@ -329,10 +400,10 @@ if (typeof jQuery != 'undefined') {
              */
             init: function(options)
             {
-
                 return this.each(function(){
                     var target = this;
                     var $target = $(this);
+                    options.speed = translateSpeed(options.speed);
 
                     $target.data(pluginName, {option:$.extend({}, defaultOptions, options)});
 
@@ -345,12 +416,8 @@ if (typeof jQuery != 'undefined') {
                         $target.addClass(data.option.componentClass);
                     }
 
-                    data.option.speed = Math.round(data.option.speed / 4);
-                    data.option.speed = (data.option.speed < 1) ? 1 : (data.option.speed > 5) ? 5 : data.option.speed;
-
                     removeWhitespaceBetweenTags(target);
                     data.itemWidth = getItems(target).first().outerWidth(true);
-                    ensureThereAreEnoughItems(target);
 
                     if (data.option.showControls) {
                         buildControls(target);
@@ -376,13 +443,14 @@ if (typeof jQuery != 'undefined') {
                         }
                     });
 
-                    $(window).resize(function(){
-                        if ((data.resizing || false) === false) {
-                            data.resizing = true;
-                            ensureThereAreEnoughItems(target);
-                            data.resizing = false;
-                        }
-                    });
+					var enoughItems = hasEnoughItems(target);
+
+					$(window).resize(function(){
+						if ((data.resizing || false) === false) {
+							data.resizing = true;
+							data.resizing = false;
+						}
+					});
 
                 });
 

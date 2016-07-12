@@ -106,11 +106,15 @@
                                 <label for="<?php echo $speed_wpid; ?>">Animation Speed:</label>
                             </th>
                             <td>
-                                <input id="<?php echo $speed_wpid; ?>" name="<?php echo $speed_wpname; ?>"
-                                 type="text" value="<?php echo $speed; ?>" size="2" maxlength="2" />
+                                <select id="<?php echo $speed_wpid; ?>" name="<?php echo $speed_wpname; ?>">
+                                    <?php foreach ( $speedsettings as $setting ) { ?>
+                                        <option value="<?php echo $setting['value']; ?>"<?php selected($speed, $setting['value']); ?>>
+                                            <?php echo $setting['label']; ?>
+                                        </option>
+                                    <?php } ?>
+                                </select>
                                 <span class="wolfnet_moreInfo">
-                                    Set the speed for the scrolling animation. Enter a value between
-                                    1 and 99; the higher the number, the faster the scroll speed.
+                                    Set the speed for the scrolling animation.
                                 </span>
                             </td>
                         </tr>

@@ -1,8 +1,8 @@
 <div class="wrap">
 
-    <div id="icon-options-wolfnet" class="icon32"><br></div>
+    <div id="icon-options-wolfnet" class="icon32"><br /></div>
 
-    <h2>WolfNet <sup>&reg;</sup> - Edit CSS</h2>
+    <h1>WolfNet <sup>&reg;</sup> - Edit CSS</h1>
 
     <p>This is a high-level tool that should only be used by a web developer or designer who is familiar with CSS.</p>
 
@@ -12,39 +12,37 @@
 
         <fieldset>
 
-            <table class="form-table">
+            <legend>
+                <h2 class="title">
+                    <label for="wolfnetCss_publicCss">Public CSS</label>
+                </h2>
+            </legend>
 
-                <tr>
-                    <th class="wolfnet_cssLabel"><label for="wolfnetCss_publicCss">Public CSS</label></th>
-                </tr>
+            <p class="description">This CSS will affect the public-facing pages of your web site.</p>
 
-                <tr>
-                    <td>
-                        <p class="wolfnet_note">This CSS will affect the public-facing pages of your web site.</p>
-                        <textarea id="wolfnetCss_publicCss" name="wolfnetCss_publicCss" class="wolfnet_cssBox"><?php echo $publicCss; ?></textarea>
-                    </td>
-                </td>
-
-                <tr>
-                    <th class="wolfnet_cssLabel"><label for="wolfnetCss_adminCss">Admin CSS</label></th>
-                </tr>
-
-                <tr>
-                    <td>
-                        <p class="wolfnet_note">This CSS will affect your Wordpress admin (the pages you are looking at now).</p>
-                        <textarea id="wolfnetCss_adminCss" name="wolfnetCss_adminCss" class="wolfnet_cssBox"><?php echo $adminCss; ?></textarea>
-                    </td>
-                </tr>
-
-                <tr>
-                    <td class="submit">
-                        <input type="submit" class="button-primary" value="<?php _e('Save Changes') ?>" />
-                    </td>
-                </tr>
-
-            </table>
+            <textarea id="wolfnetCss_publicCss" name="wolfnetCss_publicCss" class="wolfnet_cssBox"><?php echo $publicCss; ?></textarea>
 
         </fieldset>
+
+        <fieldset>
+
+            <legend>
+                <h2 class="title">
+                    <label for="wolfnetCss_adminCss">Admin CSS</label>
+                </h2>
+            </legend>
+
+            <p class="description">This CSS will affect your Wordpress admin (the pages you are looking at now).</p>
+
+            <textarea id="wolfnetCss_adminCss" name="wolfnetCss_adminCss" class="wolfnet_cssBox"><?php echo $adminCss; ?></textarea>
+
+        </fieldset>
+
+        <p class="submit">
+            <?php submit_button(
+                $text = NULL, $type = 'primary', $name = 'submit', $wrap = FALSE, $other_attributes = NULL
+            ); ?>
+        </p>
 
     </form>
 

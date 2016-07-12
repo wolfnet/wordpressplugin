@@ -297,6 +297,11 @@
 			var $suggestions = pluginData.suggestionContainer;
 			var $form = $($smartSearch[0].form);
 
+			if ($form.width() <= 400) {
+				// Apply narrow CSS based on container size
+				methods.applyNarrowCSS($form);
+			}
+
 			$smartSearch.on('wntFocus', function(event){
 				$searchInput.focus();
 			});
@@ -1031,6 +1036,30 @@
 			if (event.relatedTarget != $smartSearch[0]) {
 				methods.refreshExistingValues($smartSearch, event);
 			}
+
+		},
+
+		applyNarrowCSS: function($form) {
+
+			// Put min/max price, bed/bath, and submit button on own lines
+			$form.find('.wolfnet_smartPriceFields').css({
+				width: "100%",
+				clear: "both"
+			});
+			$form.find('.wolfnet_smartBedBathFields').css({
+				width: "100%",
+				clear: "both"
+			});
+			$form.find('.wolfnet_smartSubmit').css({
+				width: "100%",
+				clear: "both"
+			});
+
+			// Adjust widths of formfield pairs
+			$form.find('.wolfnet_smartMinPrice').css({'width':'50%'});
+			$form.find('.wolfnet_smartMaxPrice').css({'width':'50%'});
+			$form.find('.wolfnet_smartBeds').css({'width':'50%'});
+			$form.find('.wolfnet_smartBaths').css({'width':'50%'});
 
 		}
 

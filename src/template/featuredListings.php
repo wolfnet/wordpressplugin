@@ -39,7 +39,7 @@
         $featured.wolfnetScrollingItems({
             autoPlay : <?php echo ($autoplay) ? 'true' : 'false'; ?>,
             direction : <?php echo "'" . $direction . "'"; ?>,
-            speed : <?php echo $speed; ?>,
+            speed : '<?php echo $speed; ?>',
             componentClass: 'wolfnet_featuredListings',
             withControlsClass: 'wolfnet_withControls',
             controlClass: 'wolfnet_control',

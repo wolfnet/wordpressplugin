@@ -107,7 +107,8 @@ class Wolfnet_Admin extends Wolfnet_Plugin
         $scripts = array(
             'wolfnet-admin',
             'wolfnet-shortcode-builder',
-            );
+            'wolfnet-search-manager',
+        );
 
         foreach ($scripts as $script) {
             wp_enqueue_script($script);
@@ -128,7 +129,8 @@ class Wolfnet_Admin extends Wolfnet_Plugin
         $styles = array(
             'jquery-ui',
             'wolfnet-admin',
-            );
+            'icomoon',
+        );
 
         foreach ($styles as $style) {
             wp_enqueue_style($style);
@@ -156,8 +158,8 @@ class Wolfnet_Admin extends Wolfnet_Plugin
             if(is_array($keyArray) && $keyArray[0]->key != false) {
                 $this->setSslVerifyOption($keyArray[0]->key);
 
-                // Check that key structure is formatted correctly and that the key 
-                // label gets set if it was not already. If there's no preexisting key, 
+                // Check that key structure is formatted correctly and that the key
+                // label gets set if it was not already. If there's no preexisting key,
                 // ignore this.
                 foreach($keyArray as $key) {
                     if(strlen($key->label) == 0) {
@@ -172,7 +174,7 @@ class Wolfnet_Admin extends Wolfnet_Plugin
         // Register Options
         register_setting($this->optionGroup, Wolfnet_Service_ProductKeyService::PRODUCT_KEY_OPTION);
         register_setting($this->optionGroup, Wolfnet_Plugin::SSL_WP_OPTION);
-        register_setting($this->StyleOptionGroup, $this->widgetThemeOptionKey);
+        register_setting($this->WidgetThemeOptionGroup, $this->widgetThemeOptionKey);
         register_setting($this->CssOptionGroup, $this->publicCssOptionKey);
         register_setting($this->CssOptionGroup, $this->adminCssOptionKey);
 

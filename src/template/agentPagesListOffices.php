@@ -20,141 +20,178 @@
  *                Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-?>
-
-<div id="<?php echo $instance_id; ?>" class="wolfnet_widget wolfnet_officesList">
-
-<?php
-if(array_key_exists("REDIRECT_URL", $_SERVER)) {
+if (array_key_exists("REDIRECT_URL", $_SERVER)) {
 	$linkBase = $_SERVER['REDIRECT_URL'];
 } else {
 	$linkBase = $_SERVER['PHP_SELF'];
 }
 
-if(strlen($officetitle) > 0) {
-	echo '<h2>' . $officetitle . '</h2>';
-}
+$postHash = '#post-' . get_the_id();
+
 ?>
 
-<div class="wolfnet_viewAll">
-	<a href="?search#post-<?php echo get_the_id(); ?>">Click here</a> to view all agents and staff.
-</div>
 
-<form name="wolfnet_agentSearch" class="wolfnet_agentSearch" method="POST" 
-	action="<?php echo $linkBase . "?search#post-" . get_the_id(); ?>">
-	<?php // No office ID as a hidden field. We want to search all offices ?>
+<div id="<?php echo $instance_id; ?>" class="wolfnet_widget wolfnet_aoOfficesList">
 
-	<input type="text" name="agentCriteria" class="wolfnet_agentCriteria"
-		value="<?php echo (strlen($agentCriteria) > 0) ? $agentCriteria : ''; ?>" /> 
-	<input type="submit" name="agentSearch" class="wolfnet_agentSearchButton" value="Search" />
-	<div class="wolfnet_clearfix"></div>
-</form>
+	<div class="wolfnet_agentOfficeHeader">
 
-<?php
+		<?php
 
-foreach($offices as $office) {
-	if($office['office_id'] != '') {
-		$officeLink = $linkBase . '?officeId=' . $office['office_id'];
-		$officeLink .= '#post-' . get_the_id();
-
-		$searchLink = $office['search_solution_url'] . "/?action=newsearch";
-		$searchLink .= "&office_id=" . $office['office_id'];
-		$searchLink .= "&ld_action=find_office";
-
-		$searchResultLink = $office['search_solution_url'] . "/?action=newsearchsession";
-		$searchResultLink .= "&office_id=" . $office['office_id'];
-
-		$contactLink = "?contactOffice=" . $office['office_id'];
-		$contactLink .= "#post-" . get_the_id();
-?>
-
-	<div class="wolfnet_officePreview">
-		<?php 
-			echo '<div class="wolfnet_officeImage">';
-			if(strlen($office['photo_url']) > 0) {
-				echo '<a href="' . $officeLink . '">';
-				echo "<img src=\"{$office['photo_url']}\" />";
-				echo '</a>';
+			if (strlen($officetitle) > 0) {
+				echo '<h2>' . $officetitle . '</h2>';
 			}
-			echo '</div>'; 
+
+			echo $agentsNav;
+
 		?>
 
-		<div class="wolfnet_officeContact">
-			<div class="wolfnet_officeName">
-				<?php 
-					echo '<a href="' . $officeLink . '">';
-					echo $office['name'];
-					echo '</a>';
-				?>
-			</div>
-
-			<?php 
-			if(strlen($office['address_1']) > 0) {
-				echo '<div class="wolfnet_officeAddress">';
-				echo $office['address_1'] . ' ' . $office['address_2'];
-				echo '<br>';
-				echo $office['city'] . ', ' . $office['state'] . ' ';
-				echo $office ['postal_code'];
-				echo '</div>';
-			}
-			if(strlen($office['phone_number']) > 0) {
-				echo '<div class="wolfnet_officePhone">';
-				echo "Phone: " . $office['phone_number'];
-				echo '</div>';
-			}
-
-			if(strlen($office['fax_number']) > 0) {
-				echo '<div class="wolfnet_officeFax">';
-				echo "Fax: " . $office['fax_number'];
-				echo '</div>';
-			}
-			?>
-		</div>
-
-		<div class="wolfnet_clearfix"></div>
-
-		<div class="wolfnet_officeLinks">
-			<div class="wolfnet_officeLinkLeft">
-				<a href="<?php echo $officeLink; ?>">Meet Our Agents</a>
-			</div>
-			<div class="wolfnet_officeLink">
-				<a href="<?php echo $searchResultLink; ?>">Our Featured Listings</a>
-			</div>
-			<div class="wolfnet_officeLinkLeft">
-				<a href="<?php echo $searchLink; ?>">Search All Area<br />Listings</a>
-			</div>
-			<div class="wolfnet_officeLink">
-				<a href="<?php echo $contactLink; ?>">Contact Us</a>
-			</div>
-		</div>
 	</div>
 
-<?php
-	}
-} // end foreach
-?>
+	<div class="wolfnet_clearfix"></div>
+
+	<?php
+		if (
+			(count($offices) == 0) &&
+			array_key_exists('officeCriteria', $_REQUEST) &&
+			(strlen($_REQUEST['officeCriteria']) > 0)
+		) {
+	?>
+			<p class="wolfnet_noResults">There are no matching offices. Please try your search again.</p>
+	<?php
+		}
+	?>
+
+	<div class="wolfnet_aoOffices">
+
+		<?php
+
+			foreach ($offices as $office) {
+
+				if ($office['office_id'] != '') {
+
+					$officeLink = $linkBase . '?officeId=' . $office['office_id'] . $postHash;
+
+					$searchLink = $office['search_solution_url'] . '/?action=newsearchsession';
+
+					$searchResultLink = $office['search_solution_url'] . '/?action=newsearchsession'
+						. '&office_id=' . $office['office_id']
+						. '&ld_action=find_office';
+
+					$contactLink = '?contactOffice=' . $office['office_id'] . $postHash;
+
+		?>
+
+					<div class="wolfnet_aoItem">
+
+						<a href="<?php echo $officeLink; ?>">
+							<div class="wolfnet_aoImage"
+							 style="background-image: url('<?php echo $office['medium_url']; ?>');">
+								<img src="<?php echo $office['medium_url']; ?>" />
+							</div>
+						</a>
+
+						<div class="wolfnet_aoInfo">
+
+							<div class="wolfnet_aoContact">
+
+								<div class="wolfnet_aoTitle">
+									<?php echo '<a href="' . $officeLink . '">' . $office['name'] . '</a>'; ?>
+								</div>
+
+								<hr />
+
+								<div class="wolfnet_aoSubTitle">
+									<?php
+										if (strlen($office['address_1']) > 0) {
+											echo $office['address_1'] . ' ' . $office['address_2']
+												. '<br />'
+												. $office['city'] . ', ' . $office['state'] . ' '
+												. $office ['postal_code'];
+										}
+									?>
+								</div>
+
+							</div>
+
+							<ul class="wolfnet_aoLinks">
+
+								<?php
+
+									if (strlen($office['phone_number']) > 0) {
+										echo '<li><span class="wnt-icon wnt-icon-phone"></span> '
+											. '<span class="wnt-visuallyhidden">Office phone:</span> '
+											. $office['phone_number'] . '</li>';
+									}
+
+									if (strlen($office['fax_number']) > 0) {
+										echo '<li><span  class="wnt-icon wnt-icon-fax"></span> '
+											. '<span class="wnt-visuallyhidden">Office fax:</span> '
+											. $office['fax_number'] . '</li>';
+									}
+
+								?>
+
+								<li>
+									<span class="wnt-icon wnt-icon-mail"></span>
+									<a href="<?php echo $contactLink; ?>">Contact Us</a>
+								</li>
+								<li>
+									<span class="wnt-icon wnt-icon-location"></span>
+									<a target="_blank" href="<?php echo $searchLink; ?>">Search All Area Listings</a>
+								</li>
+
+							</ul>
+
+							<div class="wolfnet_aoActions wolfnet_clearfix">
+								<div class="wolfnet_aoAction">
+									<a class="wnt-btn wnt-btn-secondary" href="<?php echo $officeLink; ?>">Meet Our Agents</a>
+								</div>
+								<div class="wolfnet_aoAction">
+									<a class="wnt-btn wnt-btn-primary" target="_blank" href="<?php echo $searchResultLink; ?>">Featured Listings</a>
+								</div>
+							</div>
+
+						</div>
+
+					</div>
+
+		<?php
+				}
+			} // end foreach
+		?>
+
+	</div>
 
 	<div class="wolfnet_clearfix"></div>
+
 </div>
 
+
 <script type="text/javascript">
-jQuery(function($) {
-	$(window).load(function() {
-		// Resize office boxes to height of tallest one.
-		var $offices = $('#<?php echo $instance_id; ?> .wolfnet_officePreview');
-		var maxHeight<?php echo $instance_id; ?> = 0;
-		$offices.each(function() {
-			if($(this).height() > maxHeight<?php echo $instance_id; ?>) {
-				maxHeight<?php echo $instance_id; ?> = $(this).height();
-			}
+
+	jQuery(function ($) {
+
+		var $aoWidget = $('#<?php echo $instance_id; ?>');
+
+		// Resize item boxes to height of tallest one.
+
+		var $aoItems = $aoWidget.find('.wolfnet_aoItem'),
+			itemSections = [
+				{ selector: '.wolfnet_aoContact', maxHeight: 0, origMaxHeight: 0 },
+				{ selector: '.wolfnet_aoLinks',   maxHeight: 0, origMaxHeight: 0 }
+			],
+			$aoHeader = $aoWidget.find('.wolfnet_agentOfficeHeader');
+
+		wolfnet.resizeAOItems($aoItems, itemSections, $aoHeader);
+
+		var resizeTimeout;
+		$(window).resize(function () {
+			clearTimeout(resizeTimeout);
+			resizeTimeout = setTimeout(function () {
+				wolfnet.resizeAOItems($aoItems, itemSections, $aoHeader);
+			}, 500);
 		});
 
-		// Increase height to account for absolute positioned links
-		maxHeight<?php echo $instance_id; ?> += 90;
-
-		$('#<?php echo $instance_id; ?> .wolfnet_officePreview').height(
-			maxHeight<?php echo $instance_id; ?>
-		);
 	});
-});
+
 </script>

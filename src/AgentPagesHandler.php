@@ -30,11 +30,11 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
         $this->plugin = $plugin;
     }
 
-    public function handleRequest() 
+    public function handleRequest()
     {
         $action = '';
 
-        if(array_key_exists('search', $_REQUEST)) {
+        if (array_key_exists('agentSearch', $_REQUEST)) {
             // All of the logic for searching is in the agentList function since
             // we're just passing more criteria to the API call.
             $action = 'agentList';
@@ -62,7 +62,7 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
         } else {
             $action = 'officeList';
         }
-        
+
         // Run the function associated with the action.
         return $this->$action();
 	}
@@ -75,25 +75,39 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
      */
 
 
-    protected function officeList()
-    {
-        $officeData = $this->getOfficeData();
+	protected function officeList()
+	{
 
-        // If there is only one office then just display its agents.
-        if(count($officeData) == 1) {
-            return $this->agentList();
-        }
+		// This will be populated if an office search is being performed.
+		if (array_key_exists('officeCriteria', $_REQUEST) && strlen($_REQUEST['officeCriteria']) > 0) {
+			$this->args['criteria']['name'] = $_REQUEST['officeCriteria'];
+		}
 
-        // agentCriteria is set to null if not passed along. Do not change this
-        // or it will screw up agent pagination when running a search.
-        $args = array(
-            'offices' => $officeData,
-            'agentCriteria' => (array_key_exists('agentCriteria', $_REQUEST)) ? $_REQUEST['agentCriteria'] : null,
-        );
-        $args = array_merge($args, $this->args);
+		$this->args['criteria']['omit_office_id'] = $this->args['excludeoffices'];
 
-        return $this->plugin->views->officesListView($args);
-    }
+		if (array_key_exists('officeSort', $_REQUEST)) {
+			$officeSort = $_REQUEST['officeSort'];
+			$this->args['criteria']['sort'] = ($_REQUEST['officeSort'] == 'office_id') ? 'office_id' : 'name';
+		} else {
+			$officeSort = 'name';
+		}
+
+		$officeData = $this->getOfficeData();
+
+		// agentCriteria is set to null if not passed along. Do not change this
+		// or it will screw up agent pagination when running a search.
+		$args = array(
+			'offices' => $officeData,
+			'agentCriteria' => (array_key_exists('agentCriteria', $_REQUEST)) ? $_REQUEST['agentCriteria'] : null,
+			'officeCriteria' => (array_key_exists('officeCriteria', $_REQUEST)) ? $_REQUEST['officeCriteria'] : null,
+			'isAgent' => false,
+		);
+		$args['agentsNav'] = $this->plugin->views->agentsNavView($args);
+		$args = array_merge($args, $this->args);
+
+		return $this->plugin->views->officesListView($args);
+
+	}
 
 
     protected function agentList()
@@ -101,7 +115,7 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
         if(array_key_exists("agentpage", $_REQUEST) && $_REQUEST['agentpage'] > 1) {
             /*
              * $startrow needs to be calculated based on the requested page. If $page == 2
-             * and numPerPage is 10, for example, we would need to get agents 11 through 20. 
+             * and numPerPage is 10, for example, we would need to get agents 11 through 20.
              * The below equation will set the starting row accordingly.
              */
             $startrow = $this->args['criteria']['numperpage'] * ($_REQUEST['agentpage'] - 1) + 1;
@@ -158,10 +172,14 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
             'officeId' => (array_key_exists('officeId', $_REQUEST)) ? $_REQUEST['officeId'] : '',
             'officeCount' => $officeCount,
             'agentCriteria' => (array_key_exists('agentCriteria', $_REQUEST)) ? $_REQUEST['agentCriteria'] : '',
+            'officeCriteria' => (array_key_exists('officeCriteria', $_REQUEST)) ? $_REQUEST['officeCriteria'] : '',
+            'isAgent' => true,
         );
         $args = array_merge($args, $this->args);
+        $args['agentsNav'] = $this->plugin->views->agentsNavView($args);
 
         return $this->plugin->views->agentsListView($args);
+
     }
 
 
@@ -211,10 +229,10 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
     }
 
 
-    protected function contactForm() 
+    protected function contactForm()
     {
         $agentData = $this->getAgentById($_REQUEST['contact']);
-        
+
         $args = array(
             'agent' => $agentData,
             'agentId' => $_REQUEST['contact'],
@@ -229,7 +247,7 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
     protected function contactFormOffice()
     {
         $officeData = $this->getOfficeByOfficeId($_REQUEST['contactOffice']);
-        
+
         $args = array(
             'office' => $officeData,
             'officeId' => $_REQUEST['contactOffice'],
@@ -325,8 +343,6 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
 
     protected function getOfficeData()
     {
-        $this->args['criteria']['omit_office_id'] = $this->args['excludeoffices'];
-
         try {
             $data = $this->plugin->api->sendRequest($this->key, '/office', 'GET', $this->args['criteria']);
         } catch (Wolfnet_Exception $e) {
@@ -343,7 +359,7 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
     }
 
 
-    protected function agentFeaturedListings($key, $agentId) 
+    protected function agentFeaturedListings($key, $agentId)
     {
         return $this->getAgentListings($key, $agentId);
     }
@@ -362,7 +378,7 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
         $criteria['maxrows'] = $count;
         $criteria['maxresults'] = $count;
         $criteria['gridalign'] = 'left';
-        
+
         // Override the default key with the agent's key
         $criteria['key'] = $key;
         $criteria['keyid'] = $this->plugin->keyService->getIdByKey($key);
@@ -371,9 +387,13 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
 
         $agentListings = $this->getListingsByAgentId($key, $agentId, $sold);
 
-        if($agentListings == null || count($agentListings['responseData']['data']['listing']) == 0) {
-            return array('totalRows' => 0, 'listings' => '');
-        }
+		if (
+			($agentListings == null) ||
+			!array_key_exists('responseData', $agentListings) ||
+			(count($agentListings['responseData']['data']['listing']) == 0)
+		) {
+			return array('totalRows' => 0, 'listings' => '');
+		}
 
         $this->decodeCriteria($criteria);
         $agentListings['requestData'] = array_merge($agentListings['requestData'], $criteria);
@@ -385,37 +405,49 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
     }
 
 
-    protected function getListingsByAgentId($key, $agentId, $sold = 0) 
+	protected function getListingsByAgentId($key, $agentId, $sold = 0)
+	{
+		try {
+
+			$data = $this->plugin->api->sendRequest(
+				$key,
+				'/listing/?agent_id=' . $agentId . "&sold=" . $sold,
+				'GET',
+				$this->args['criteria']
+			);
+
+		} catch (Wolfnet_Exception $e) {
+
+			$data = $e->getData();
+			$errorCode = '';
+
+			if (array_key_exists('body', $data)) {
+				$responseBody = json_decode($data['body']);
+				if (is_object($responseBody)) {
+					$errorCode = $responseBody->metadata->status->errorCode;
+				}
+			}
+
+			if ($errorCode == 'Auth1004' || $errorCode == 'Auth1001') {
+				$data = null;
+			} else {
+				$this->plugin->displayException($e);
+			}
+
+		}
+
+		return $data;
+
+	}
+
+
+    protected function getAgentById($agentId)
     {
         try {
             $data = $this->plugin->api->sendRequest(
-                $key, 
-                '/listing/?agent_id=' . $agentId . "&sold=" . $sold, 
-                'GET', 
-                $this->args['criteria']
-            );
-        } catch (Wolfnet_Exception $e) {
-            $data = $e->getData();
-            $errorCode = json_decode($data['body'])->metadata->status->errorCode;
-            
-            if($errorCode == 'Auth1004' || $errorCode == 'Auth1001') {
-                $data = null;
-            } else {
-                $this->plugin->displayException($e);
-            }
-        }
-
-        return $data;
-    }
-
-
-    protected function getAgentById($agentId) 
-    {
-        try {
-            $data = $this->plugin->api->sendRequest(
-                $this->key, 
-                '/agent/' . $agentId, 
-                'GET', 
+                $this->key,
+                '/agent/' . $agentId,
+                'GET',
                 $this->args['criteria']
             );
         } catch (Wolfnet_Exception $e) {
@@ -456,12 +488,12 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
     }
 
 
-    public function setKey(&$key) 
+    public function setKey(&$key)
     {
         $this->key = $key;
     }
 
-    public function setArgs(&$args) 
+    public function setArgs(&$args)
     {
         $this->args = $args;
     }
