@@ -189,6 +189,7 @@ class Wolfnet_Views
                     'markets' => json_decode($GLOBALS['wolfnet']->keyService->get()),
                     'selectedKey' => $_SESSION['keyid'],
                     'url' => $GLOBALS['wolfnet']->url,
+                    'baseUrl' => $GLOBALS['wolfnet']->data->getSearchManagerBaseUrl($productKey),
                 ));
 
             }
@@ -395,6 +396,17 @@ class Wolfnet_Views
         }
 
         return apply_filters('wolfnet_listingResultsView', $this->parseTemplate('resultsListing', $args));
+
+    }
+
+
+    public function agentsNavView(array $args = array())
+    {
+        foreach ($args as $key => $item) {
+            $args[$key] = apply_filters('wolfnet_agentPagesNavView_' . $key, $item);
+        }
+
+        return apply_filters('wolfnet_agentPagesNavView', $this->parseTemplate('agentPagesNav', $args));
 
     }
 
