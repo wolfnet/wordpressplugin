@@ -118,7 +118,7 @@
 ?>
 
 
-/* Birch Theme */
+/* Birch Theme (Modern Lite) */
 
 	.wolfnet_widget.wolfnet-theme-birch.wolfnet_featuredListings .wolfnet_listing .wolfnet_listingHead .wolfnet_listingInfo,
 	.wolfnet_widget.wolfnet-theme-birch.wolfnet_listingGrid      .wolfnet_listing .wolfnet_listingHead .wolfnet_listingInfo {
@@ -126,7 +126,7 @@
 	}
 
 
-/* Cedar Theme */
+/* Cedar Theme (Modern Contrast) */
 
 	.wolfnet_widget.wolfnet-theme-cedar.wolfnet_featuredListings .wolfnet_listing .wolfnet_listingHead .wolfnet_listingInfo,
 	.wolfnet_widget.wolfnet-theme-cedar.wolfnet_listingGrid      .wolfnet_listing .wolfnet_listingHead .wolfnet_listingInfo {
@@ -134,7 +134,7 @@
 	}
 
 
-/* Dogwood Theme */
+/* Dogwood Theme (Modern Tile) */
 
 	.wolfnet_widget.wolfnet-theme-dogwood.wolfnet_featuredListings .wolfnet_listing .wolfnet_listingHead .wolfnet_detailsLink,
 	.wolfnet_widget.wolfnet-theme-dogwood.wolfnet_listingGrid      .wolfnet_listing .wolfnet_listingHead .wolfnet_detailsLink {
