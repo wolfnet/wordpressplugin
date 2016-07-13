@@ -122,7 +122,7 @@
 
 	.wolfnet_widget.wolfnet-theme-birch.wolfnet_featuredListings .wolfnet_listing .wolfnet_listingHead .wolfnet_listingInfo,
 	.wolfnet_widget.wolfnet-theme-birch.wolfnet_listingGrid      .wolfnet_listing .wolfnet_listingHead .wolfnet_listingInfo {
-		// TODO: Add gradient background
+		<?php echo vertGradient($args['colors'][0], $args['colors'][0], 0, $args['opacity']); ?>
 	}
 
 
