@@ -43,6 +43,14 @@
 
 			<h2>Color Options</h2>
 
+			<?php if ($widgetTheme == 'ash') { ?>
+				<div class="notice notice-info below-h2" style="clear: both;">
+					<p>
+						A custom color does not apply to the 'Classic' theme.
+					</p>
+				</div>
+			<?php } ?>
+
 			<table class="form-table">
 				<tbody>
 					<tr>
