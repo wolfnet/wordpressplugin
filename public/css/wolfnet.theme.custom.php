@@ -71,21 +71,41 @@
 
 	}
 
-/*
+
 	function vertGradient(array $startColor, array $endColor, $startOpacity=1, $endOpacity=1) {
-		$startARGB: getARGB($startColor, $startOpacity);
-		$endARGB:   getARGB($endColor, $endOpacity);
+		$gradientCSS = '';
+		$startRGBA   = getRGBA($startColor, $startOpacity);
+		$endRGBA     = getRGBA($endColor,   $endOpacity);
+		$startARGB   = getARGB($startColor, $startOpacity);
+		$endARGB     = getARGB($endColor,   $endOpacity);
+
 		// FF3.6-15
-		background: -moz-linear-gradient(top, $startColor 0%, $endColor 100%);
+		$gradientCSS .= 'background: -moz-linear-gradient('
+			. 'top, rgba(' . $startRGBA . ') 0%, rgba(' . $endRGBA . ') 100%'
+			. '); ';
+
 		// Chrome10-25,Safari5.1-6
-		background: -webkit-linear-gradient(top, $startColor 0%, $endColor 100%);
+		$gradientCSS .= 'background: -webkit-linear-gradient('
+			. 'top, rgba(' . $startRGBA . ') 0%, rgba(' . $endRGBA . ') 100%'
+			. '); ';
+
 		// W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+
-		background: linear-gradient(to bottom, $startColor 0%, $endColor 100%);
+		$gradientCSS .= 'background: linear-gradient('
+			. 'to bottom, rgba(' . $startRGBA . ') 0%, rgba(' . $endRGBA . ') 100%'
+			. '); ';
+
 		// IE6-9
-		-ms-filter: ~"progid:DXImageTransform.Microsoft.gradient(startColorstr='@{startARGB}', endColorstr='@{endARGB}', GradientType=0)";
-		filter: ~"progid:DXImageTransform.Microsoft.gradient(startColorstr='@{startARGB}', endColorstr='@{endARGB}', GradientType=0)";
+		$gradientCSS .= '-ms-filter: ~"progid:DXImageTransform.Microsoft.gradient('
+			. 'startColorstr=\'' . $startARGB . '\', endColorstr=\'' . $endARGB . '\', GradientType=0'
+			. ')"; '
+			. 'filter: ~"progid:DXImageTransform.Microsoft.gradient('
+			. 'startColorstr=\'' . $startARGB . '\', endColorstr=\'' . $endARGB . '\', GradientType=0'
+			. ')"; ';
+
+		return $gradientCSS;
+
 	}
-*/
+
 
 	// Get the color parts
 	foreach ($args['colors'] as $colorKey => $colorVal) {
