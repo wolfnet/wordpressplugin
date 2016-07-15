@@ -27,6 +27,14 @@
 
 			<h2>Color Options</h2>
 
+			<?php if ($widgetTheme == 'ash') { ?>
+				<div class="notice notice-info below-h2" style="clear: both;">
+					<p>
+						A custom color does not apply to the 'Classic' theme.
+					</p>
+				</div>
+			<?php } ?>
+
 			<div class="wolfnet_colorOption">
 				<label for="wolfnet_themeColors[0]">
 					<?php echo _e('Accent Color'); ?>:

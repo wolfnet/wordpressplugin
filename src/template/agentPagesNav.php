@@ -47,12 +47,14 @@ if ($isAgent) {
 
 <div class="wolfnet_agentOfficeNav">
 
-	<div class="wnt-btn-group">
-		<a class="wnt-btn <?php if ($isAgent) { echo 'wnt-btn-active'; } ?>"
-		 href="<?php echo $agentsLink; ?>">Agents</a>
-		<a class="wnt-btn <?php if (!$isAgent) { echo 'wnt-btn-active'; } ?>"
-		 href="<?php echo $officesLink; ?>">Offices</a>
-	</div>
+	<?php if ($showoffices) { ?>
+		<div class="wnt-btn-group">
+			<a class="wnt-btn <?php if ($isAgent) { echo 'wnt-btn-active'; } ?>"
+			 href="<?php echo $agentsLink; ?>">Agents</a>
+			<a class="wnt-btn <?php if (!$isAgent) { echo 'wnt-btn-active'; } ?>"
+			 href="<?php echo $officesLink; ?>">Offices</a>
+		</div>
+	<?php } ?>
 
 	<form name="wolfnet_aoSearch" class="wolfnet_aoSearch" method="post"
 	 action="<?php echo $searchAction; ?>">
