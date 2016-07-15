@@ -69,9 +69,7 @@
 
 .wolfnet_widget {
 
-    &.wolfnet_aoOfficesList,
-    &.wolfnet_aoAgentsList,
-    &.wolfnet_aoAgentDetails {
+	&.wolfnet_ao {
         font-family: 'Montserrat', sans-serif;
         font-size: 16px;
         line-height: 1.3em;
@@ -81,17 +79,14 @@
             width: 100px;
             text-transform: uppercase;
 
-            &.wnt-btn-primary {
-                background-color: @accentColor;
-            }
+			&.wnt-btn-primary,
+			&.wnt-btn-active {
+				background-color: @accentColor;
+			}
 
-            &.wnt-btn-secondary {
-                background-color: #ccc;
-            }
-
-            &.wnt-btn-active {
-                background-color: @accentColor;
-            }
+			&.wnt-btn-secondary {
+				background-color: #ccc;
+			}
 
 			&.wnt-btn-round {
 				width: 2em;
@@ -174,15 +169,15 @@
             border: 1px solid #ccc;
             background-color: #fff;
 
-            a, a:hover, a:active, a:visited {
-                // Color the links, but let the client's theme decide whether to use decorations
-                // e.g., text-decoration, border, box-shadow
-                color: @accentColor;
-            }
+			>a, >a:hover, >a:active, >a:visited {
+				.no-decoration();
+			}
 
-            >a, >a:hover, >a:active, >a:visited {
-                .no-decoration();
-            }
+			.wolfnet_aoBody {
+				>a, >a:hover, >a:active, >a:visited {
+					.no-decoration();
+				}
+			}
 
             .wolfnet_aoInfo {
                 padding: 20px;
@@ -248,6 +243,7 @@
 		}
 
 		ul.wolfnet_aoLinks {
+
 			li {
 				padding: 8px 0;
 				text-indent: -1.8em;
@@ -261,9 +257,12 @@
 					color: @accentColor;
 				}
 
-				.address-focus {
-					font-weight: bold;
-				}
+			.wnt-icon,
+			a, a:hover, a:active, a:visited {
+				// Color the links, but let the client's theme decide whether to use decorations
+				// e.g., text-decoration, border, box-shadow
+				color: @accentColor;
+			}
 
 			}
 		}
@@ -293,6 +292,18 @@
 
 		.wolfnet_aoInfo {
 			margin-bottom: 40px;
+		}
+
+		.wolfnet_aoSocial {
+
+			a, a:hover, a:active, a:visited {
+				.no-decoration();
+			}
+
+			.wnt-icon {
+				color: @accentColor;
+			}
+
 		}
 
 	}
@@ -473,13 +484,11 @@
 					a, a:hover, a:active, a:visited {
 						display: inline-block;
 						margin: 0 0 0.5em 0.5em;
-						.no-decoration();
 					}
 
 					.wnt-icon {
 						vertical-align: middle;
 						font-size: 2em;
-						color: @accentColor;
 					}
 
 				}

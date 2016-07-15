@@ -50,6 +50,10 @@
 	}
 
 
+	function getHex (array $color) {
+		return '#' . $color['r']['hex'] . $color['g']['hex'] . $color['b']['hex'];
+	}
+
 	function getRGB (array $color) {
 		return $color['r']['dec'] . ','
 			. $color['g']['dec'] . ','
@@ -116,6 +120,29 @@
 	$args['opacity'] /= 100;
 
 ?>
+
+/* Agent Pages */
+
+	.wolfnet_widget.wolfnet_ao .wnt-btn.wnt-btn-primary,
+	.wolfnet_widget.wolfnet_ao .wnt-btn.wnt-btn-active {
+		background-color: <?php echo getHex($args['colors'][0]); ?>;
+	}
+
+	.wolfnet_widget.wolfnet_ao hr {
+		border-color: <?php echo getHex($args['colors'][0]); ?>;
+	}
+
+	.wolfnet_widget.wolfnet_ao ul.wolfnet_aoLinks li .wnt-icon,
+	.wolfnet_widget.wolfnet_ao ul.wolfnet_aoLinks li a,
+	.wolfnet_widget.wolfnet_ao ul.wolfnet_aoLinks li a:hover,
+	.wolfnet_widget.wolfnet_ao ul.wolfnet_aoLinks li a:active,
+	.wolfnet_widget.wolfnet_ao ul.wolfnet_aoLinks li a:visited {
+		color: <?php echo getHex($args['colors'][0]); ?>;
+	}
+
+	.wolfnet_widget.wolfnet_ao .wolfnet_aoSocial .wnt-icon {
+		color: <?php echo getHex($args['colors'][0]); ?>;
+	}
 
 
 /* Birch Theme (Modern Lite) */
