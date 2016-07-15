@@ -54,8 +54,12 @@ if [ ! -f "${runfile}" ]; then
         cp -f /usr/share/php5/php.ini-development /etc/php5/apache2/php.ini
     fi
 
-    echo "Start apache ..."
-    service apache2 start > /dev/null 2> /dev/null
+fi
+
+echo "Start apache ..."
+service apache2 start > /dev/null 2> /dev/null
+
+if [ ! -f "${runfile}" ]; then
 
     echo "Installing phpUnit ..."
     wget -q https://phar.phpunit.de/phpunit.phar > /dev/null
