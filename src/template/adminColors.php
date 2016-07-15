@@ -23,22 +23,6 @@
 
 		<?php echo $formHeader; ?>
 
-		<div class="wolfnet_themePreview">
-
-			<h2>Preview</h2>
-
-			<div class="wolfnet_themePreviewBody">
-
-				<div class="wolfnet_widget wolfnet_listingGrid wolfnet-theme-<?php echo $widgetTheme; ?>">
-					<div class="wolfnet_listings">
-						<?php echo $sampleListing; ?>
-					</div>
-				</div>
-
-			</div>
-
-		</div>
-
 		<div class="wolfnet_colorOptions">
 
 			<h2>Color Options</h2>
@@ -51,42 +35,67 @@
 				</div>
 			<?php } ?>
 
-			<table class="form-table">
-				<tbody>
-					<tr>
-						<th scope="row">
-							<label for="wolfnet_themeColors[0]">
-								<?php echo _e('Accent Color'); ?>
-							</label>
-						</th>
-						<td>
-							<input type="text" name="wolfnet_themeColors[0]" id="wolfnet_themeColors[0]"
-							 value="<?php echo esc_attr($themeColors[0]); ?>"
-							 data-default-color="#333333" class="wolfnet_colorPicker" />
-						</td>
-					</tr>
-					<tr>
-						<th scope="row">
-							<label for="wolfnet_opacity">
-								<?php echo _e('Opacity'); ?>
-							</label>
-						</th>
-						<td>
-							<select name="wolfnet_themeOpacity" id="wolfnet_themeOpacity">
-								<?php for ($i = $opacityMin; $i <= $opacityMax; $i += $opacityStep) {
-									echo '<option value="' . $i . '"'
-										. ($i == $themeOpacity ? ' selected="selected"' : '')
-										. '>' . $i . '%</option>';
-								} ?>
-							</select>
-						</td>
-					</tr>
-				</tbody>
-			</table>
+			<div class="wolfnet_colorOption">
+				<label for="wolfnet_themeColors[0]">
+					<?php echo _e('Accent Color'); ?>:
+				</label>
+				<div class="wolfnet_colorField">
+					<input type="text" name="wolfnet_themeColors[0]" id="wolfnet_themeColors[0]"
+					 value="<?php echo esc_attr($themeColors[0]); ?>"
+					 data-default-color="#333333" class="wolfnet_colorPicker" />
+				</div>
+			</div>
+
+			<div class="wolfnet_colorOption">
+				<label for="wolfnet_opacity">
+					<?php echo _e('Opacity'); ?>:
+				</label>
+				<div class="wolfnet_colorField">
+					<select name="wolfnet_themeOpacity" id="wolfnet_themeOpacity">
+						<?php for ($i = $opacityMin; $i <= $opacityMax; $i += $opacityStep) {
+							echo '<option value="' . $i . '"'
+								. ($i == $themeOpacity ? ' selected="selected"' : '')
+								. '>' . $i . '%</option>';
+						} ?>
+					</select>
+				</div>
+			</div>
 
 			<p class="submit">
 				<button class="button button-primary" type="submit"><?php echo _e('Save Color Options'); ?></button>
 			</p>
+
+		</div>
+
+		<div class="wolfnet_themePreview">
+
+			<div class="wolfnet_themePreviewBody" id="wnt-theme-preview-listing">
+
+				<h3>Listing Preview</h3>
+
+				<div class="wolfnet_widget wolfnet_listingGrid wolfnet-theme-<?php echo $widgetTheme; ?>">
+					<div class="wolfnet_listings">
+						<?php echo $sampleListing; ?>
+					</div>
+				</div>
+
+			</div>
+
+			<?php if (strlen($sampleAgent) > 0) { ?>
+
+				<div class="wolfnet_themePreviewBody" id="wnt-theme-preview-agent">
+
+					<h3>Agent Preview</h3>
+
+					<div class="wolfnet_widget wolfnet_ao wolfnet_aoAgentsList">
+						<div class="wolfnet_aoAgents">
+							<?php echo $sampleAgent; ?>
+						</div>
+					</div>
+
+				</div>
+
+			<?php } ?>
 
 		</div>
 
@@ -171,6 +180,34 @@
 			}).on('wnt-theme-change', onWidgetThemeChange);
 
 			updateThemePreview();
+
+
+			// Preview tabs
+
+			var $previewItems = $themePreview.find('.wolfnet_themePreviewBody');
+
+			if ($previewItems.length > 1) {
+
+				var $previewNav = $('<ul>');
+
+				$previewItems.each(function () {
+					var $item = $(this);
+					var $itemHeading = $item.find('>h1, >h2, >h3, >h4, >h5').first();
+					var itemId = $item.attr('id'),
+						itemLabel = $itemHeading.text();
+
+					$itemHeading.remove();
+
+					$previewNav.append($('<li><a href="#' + itemId + '">' + itemLabel + '</a></li>'));
+
+				});
+
+				$previewItems.first().before($previewNav);
+
+				$themePreview.tabs();
+
+			}
+
 
 		});
 
