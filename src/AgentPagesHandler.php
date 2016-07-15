@@ -102,8 +102,8 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
 			'officeCriteria' => (array_key_exists('officeCriteria', $_REQUEST)) ? $_REQUEST['officeCriteria'] : null,
 			'isAgent' => false,
 		);
-		$args['agentsNav'] = $this->plugin->views->agentsNavView($args);
 		$args = array_merge($args, $this->args);
+		$args['agentsNav'] = $this->plugin->views->agentsNavView($args);
 
 		return $this->plugin->views->officesListView($args);
 
