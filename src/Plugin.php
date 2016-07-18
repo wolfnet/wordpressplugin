@@ -181,9 +181,17 @@ class Wolfnet_Plugin
             array(self::CACHE_CRON_HOOK, array($this->cachingService, 'clearExpired')),
             ));
 
-        if($this->keyService->getDefault()) {
+        try {
+			$productKey = $this->keyService->getDefault();
+			$response = $this->api->sendRequest($productKey, '/status', 'GET');
+			$successfulApiConnection = true;
+		} catch (Exception $e) {
+			$successfulApiConnection = false;
+		}
+
+        if ($successfulApiConnection) {
             $this->addAction(array(
-                array('widgets_init',      'widgetInit'),
+                array('widgets_init','widgetInit'),
             ));
         }
 
@@ -340,7 +348,8 @@ class Wolfnet_Plugin
 
         register_widget('Wolfnet_Widget_QuickSearchWidget');
 
-        register_widget('Wolfnet_Widget_AgentPagesWidget');
+		// Agent Pages widget - currently does not fit in a sidebar
+		//register_widget('Wolfnet_Widget_AgentPagesWidget');
 
         do_action($this->postHookPrefix . 'registerWidgets'); // Legacy hook
 
@@ -555,7 +564,7 @@ class Wolfnet_Plugin
 
     public function sbMcePlugin(array $plugins)
     {
-        $plugins['wolfnetShortcodeBuilder'] = $this->url . 'js/tinymce.wolfnetShortcodeBuilder.src.js';
+        $plugins['wolfnetShortcodeBuilder'] = $this->url . 'js/tinymce.wolfnetShortcodeBuilder.min.js';
 
         return $plugins;
 

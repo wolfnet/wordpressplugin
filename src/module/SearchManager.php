@@ -108,6 +108,56 @@ class Wolfnet_Module_SearchManager
     }
 
 
+	public function searchRelay($url='', $requestMethod='get', $params='')
+	{
+
+		if (strlen($params) > 0) {
+			$urlHash = '';
+			$urlHashPos = strpos($url, '#');
+			if ($urlHashPos !== false) {
+				$urlHash = substr($url, $urlHashPos, strlen($url) - $urlHashPos);
+				$url = substr($url, 0, $urlHashPos + 1);
+			}
+			if (strpos($url, '?') === false) {
+				$url .= '?';
+			} else {
+				$url .= '&';
+			}
+			$url .= $params . $urlHash;
+		}
+
+		$reqHeaders = array(
+			'cookies'    => $this->searchManagerCookies(),
+			'timeout'    => 180,
+			'user-agent' => 'WordPress/' . $wp_version,
+		);
+
+		$http = wp_remote_get($url, $reqHeaders);
+
+		if (!is_wp_error($http)) {
+
+			$http['request'] = array(
+				'url'     => $url,
+				'headers' => $reqHeaders,
+			);
+
+			if ($http['response']['code'] == '200') {
+				$this->searchManagerCookies($http['cookies']);
+				//$http['body'] = $this->removeJqueryFromHTML($http['body']);
+				return $http['body'];
+			} else {
+				return '';
+			}
+
+		} else {
+
+			return $this->plugin->getWpError($http);
+
+		}
+
+	}
+
+
     public function getSavedSearches($count = -1, $keyid = null)
     {
         // Cache the data in the request scope so that we only have to query for it once per request.

@@ -24,12 +24,12 @@
 
 <div class="wolfnet_toolbar <?php echo $toolbarClass; ?>" data-numrows="<?php echo $numrows ?>" data-startrow="<?php echo $startrow ?>">
     <?php if ($paginated) { ?>
-        <a href="<?php echo $prevLink; ?>" title="Previous Page" class="wolfnet_page_nav wolfnet_page_nav_prev <?php echo $prevClass; ?>" rel="follow">
+        <a href="<?php echo $prevLink; ?>" title="Previous Page" class="wolfnet_page_nav wolfnet_page_nav_prev <?php echo $prevClass; ?>" rel="nofollow">
             <span>Previous</span>
         </a>
     <?php } ?>
     <?php if ($paginated) { ?>
-        <a href="<?php echo $nextLink; ?>" title="Next Page" class="wolfnet_page_nav wolfnet_page_nav_next <?php echo $nextClass; ?>" rel="follow">
+        <a href="<?php echo $nextLink; ?>" title="Next Page" class="wolfnet_page_nav wolfnet_page_nav_next <?php echo $nextClass; ?>" rel="nofollow">
             <span>Next</span>
         </a>
     <?php } ?>
