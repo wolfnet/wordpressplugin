@@ -27,63 +27,63 @@ class Wolfnet_Ajax
 	 *
 	 */
 	public function registerAdminAjaxActions()
-    {
-        $ajxActions = array(
-            'wolfnet_validate_key'            => 'remoteValidateProductKey',
-            'wolfnet_saved_searches'          => 'remoteGetSavedSearches',
-            'wolfnet_save_search'             => 'remoteSaveSearch',
-            'wolfnet_delete_search'           => 'remoteDeleteSearch',
-            'wolfnet_scb_options_agent'       => 'remoteShortcodeBuilderOptionsAgent',
-            'wolfnet_scb_options_featured'    => 'remoteShortcodeBuilderOptionsFeatured',
-            'wolfnet_scb_options_grid'        => 'remoteShortcodeBuilderOptionsGrid',
-            'wolfnet_scb_options_list'        => 'remoteShortcodeBuilderOptionsList',
-            'wolfnet_scb_options_quicksearch' => 'remoteShortcodeBuilderOptionsQuickSearch',
-            'wolfnet_scb_savedsearch'         => 'remoteShortcodeBuilderSavedSearch',
-            'wolfnet_scb_showagentfeature'    => 'remoteShortcodeBuilderShowAgentFeature',
-            'wolfnet_content'                 => 'remoteContent',
-            'wolfnet_content_header'          => 'remoteContentHeader',
-            'wolfnet_content_footer'          => 'remoteContentFooter',
-            'wolfnet_listings'                => 'remoteListings',
-            'wolfnet_get_listings'            => 'remoteListingsGet',
-            'wolfnet_listing_photos'          => 'remoteListingPhotos',
-            'wolfnet_css'                     => 'remotePublicCss',
-            'wolfnet_market_name'             => 'remoteGetMarketName',
-            'wolfnet_map_enabled'             => 'remoteMapEnabled',
-            'wolfnet_price_range'             => 'remotePriceRange',
-            'wolfnet_base_url'                => 'remoteGetBaseUrl',
-            'wolfnet_route_quicksearch'       => 'remoteRouteQuickSearch',
-            'wolfnet_search_manager_ajax'     => 'remoteAjaxRelay',
-            'wolfnet_smart_search'            => 'remoteGetSuggestions',
-            );
+	{
+		$ajaxActions = array(
+			'wolfnet_validate_key'            => 'remoteValidateProductKey',
+			'wolfnet_saved_searches'          => 'remoteGetSavedSearches',
+			'wolfnet_save_search'             => 'remoteSaveSearch',
+			'wolfnet_delete_search'           => 'remoteDeleteSearch',
+			'wolfnet_scb_options_agent'       => 'remoteShortcodeBuilderOptionsAgent',
+			'wolfnet_scb_options_featured'    => 'remoteShortcodeBuilderOptionsFeatured',
+			'wolfnet_scb_options_grid'        => 'remoteShortcodeBuilderOptionsGrid',
+			'wolfnet_scb_options_list'        => 'remoteShortcodeBuilderOptionsList',
+			'wolfnet_scb_options_quicksearch' => 'remoteShortcodeBuilderOptionsQuickSearch',
+			'wolfnet_scb_savedsearch'         => 'remoteShortcodeBuilderSavedSearch',
+			'wolfnet_scb_showagentfeature'    => 'remoteShortcodeBuilderShowAgentFeature',
+			'wolfnet_content'                 => 'remoteContent',
+			'wolfnet_content_header'          => 'remoteContentHeader',
+			'wolfnet_content_footer'          => 'remoteContentFooter',
+			'wolfnet_listings'                => 'remoteListings',
+			'wolfnet_get_listings'            => 'remoteListingsGet',
+			'wolfnet_listing_photos'          => 'remoteListingPhotos',
+			'wolfnet_css'                     => 'remotePublicCss',
+			'wolfnet_market_name'             => 'remoteGetMarketName',
+			'wolfnet_map_enabled'             => 'remoteMapEnabled',
+			'wolfnet_price_range'             => 'remotePriceRange',
+			'wolfnet_base_url'                => 'remoteGetBaseUrl',
+			'wolfnet_route_quicksearch'       => 'remoteRouteQuickSearch',
+			'wolfnet_search_manager_ajax'     => 'remoteAjaxRelay',
+			'wolfnet_smart_search'            => 'remoteGetSuggestions',
+		);
 
-        foreach ($ajxActions as $action => $method) {
-            $GLOBALS['wolfnet']->addAction('wp_ajax_' . $action, array(&$this, $method));
-        }
+		foreach ($ajaxActions as $action => $method) {
+			$GLOBALS['wolfnet']->addAction('wp_ajax_' . $action, array(&$this, $method));
+		}
 
-    }
+	}
 
-    public function registerAjaxActions()
-    {
-        $ajxActions = array(
-            'wolfnet_content'           => 'remoteContent',
-            'wolfnet_content_header'    => 'remoteContentHeader',
-            'wolfnet_content_footer'    => 'remoteContentFooter',
-            'wolfnet_listings'          => 'remoteListings',
-            'wolfnet_get_listings'      => 'remoteListingsGet',
-            'wolfnet_listing_photos'    => 'remoteListingPhotos',
-            'wolfnet_css'               => 'remotePublicCss',
-            'wolfnet_base_url'          => 'remoteGetBaseUrl',
-            'wolfnet_price_range'       => 'remotePriceRange',
-            'wolfnet_route_quicksearch' => 'remoteRouteQuickSearch',
-            'wolfnet_search_manager_ajax'=> 'remoteAjaxRelay',
-            'wolfnet_smart_search'      => 'remoteGetSuggestions',
-            );
+	public function registerAjaxActions()
+	{
+		$ajaxActions = array(
+			'wolfnet_content'              => 'remoteContent',
+			'wolfnet_content_header'       => 'remoteContentHeader',
+			'wolfnet_content_footer'       => 'remoteContentFooter',
+			'wolfnet_listings'             => 'remoteListings',
+			'wolfnet_get_listings'         => 'remoteListingsGet',
+			'wolfnet_listing_photos'       => 'remoteListingPhotos',
+			'wolfnet_css'                  => 'remotePublicCss',
+			'wolfnet_base_url'             => 'remoteGetBaseUrl',
+			'wolfnet_price_range'          => 'remotePriceRange',
+			'wolfnet_route_quicksearch'    => 'remoteRouteQuickSearch',
+			'wolfnet_search_manager_ajax'  => 'remoteAjaxRelay',
+			'wolfnet_smart_search'         => 'remoteGetSuggestions',
+		);
 
-        foreach ($ajxActions as $action => $method) {
-            $GLOBALS['wolfnet']->addAction('wp_ajax_nopriv_' . $action, array(&$this, $method));
-        }
+		foreach ($ajaxActions as $action => $method) {
+			$GLOBALS['wolfnet']->addAction('wp_ajax_nopriv_' . $action, array(&$this, $method));
+		}
 
-    }
+	}
 
 
 	/*
