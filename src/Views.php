@@ -105,14 +105,23 @@ class Wolfnet_Views
 			$themeDefaults = $GLOBALS['wolfnet']->widgetTheme->getDefaults();
 			$sampleListing = $GLOBALS['wolfnet']->listings->getSample();
 
-			$out = $this->parseTemplate('adminStyle', array(
-				'imgdir'              => $this->remoteImages,
-				'formHeader'          => $this->styleFormHeaders(),
-				'widgetTheme'         => $this->getWidgetTheme(),
-				'widgetThemes'        => $GLOBALS['wolfnet']->widgetTheme->getThemeOptions(),
-				'defaultWidgetTheme'  => $themeDefaults['widgetTheme'],
-				'sampleListing'       => $this->listingView(array( 'listing' => $sampleListing )),
-			));
+			$args = array(
+				'url'               => $GLOBALS['wolfnet']->url,
+				'colorOptionsUrl'   => admin_url('admin.php?page=wolfnet_plugin_colors'),
+				'colorOut'          => $this->amColor(),
+				'themeOut'          => $this->amTheme(),
+				'sampleAgent'       => '',
+			);
+
+			if ($GLOBALS['wolfnet']->agentPages->showAgentFeature()) {
+				$args['sampleAgent'] = $this->agentBriefView(array(
+					'agent'        => $GLOBALS['wolfnet']->agentPages->getSampleAgent(),
+					'agentLink'    => '#',
+					'contactLink'  => '#',
+				));
+			}
+
+			$out = $this->parseTemplate('adminStyle', $args);
 
 		} catch (Wolfnet_Exception $e) {
 			$out = $this->exceptionView($e);
@@ -125,7 +134,33 @@ class Wolfnet_Views
 	}
 
 
-	public function amColorPage()
+	public function amTheme()
+	{
+
+		try {
+
+			$themeDefaults = $GLOBALS['wolfnet']->widgetTheme->getDefaults();
+			$sampleListing = $GLOBALS['wolfnet']->listings->getSample();
+
+			$out = $this->parseTemplate('adminThemes', array(
+				'imgdir'              => $this->remoteImages,
+				'formHeader'          => $this->styleFormHeaders(),
+				'widgetTheme'         => $this->getWidgetTheme(),
+				'widgetThemes'        => $GLOBALS['wolfnet']->widgetTheme->getThemeOptions(),
+				'defaultWidgetTheme'  => $themeDefaults['widgetTheme'],
+				'sampleListing'       => $this->listingView(array( 'listing' => $sampleListing )),
+			));
+
+		} catch (Wolfnet_Exception $e) {
+			$out = $this->exceptionView($e);
+		}
+
+		return $out;
+
+	}
+
+
+	public function amColor()
 	{
 
 		try {
@@ -134,31 +169,18 @@ class Wolfnet_Views
 			$sampleListing = $GLOBALS['wolfnet']->listings->getSample();
 
 			$args = array(
-				'url'            => $GLOBALS['wolfnet']->url,
 				'imgdir'         => $this->remoteImages,
 				'formHeader'     => $this->colorFormHeaders(),
 				'widgetTheme'    => $this->getWidgetTheme(),
 				'themeColors'    => $this->getThemeColors(),
 				'themeOpacity'   => $this->getThemeOpacity(),
-				'sampleListing'  => $this->listingView(array( 'listing' => $sampleListing )),
-				'sampleAgent'    => '',
 			);
-
-			if ($GLOBALS['wolfnet']->agentPages->showAgentFeature()) {
-				$args['sampleAgent'] = $this->agentBriefView(array(
-					'agent'        => $GLOBALS['wolfnet']->agentPages->getSampleAgent(),
-					'agentLink'    => '#',
-					'contactLink'  => '#',
-				));
-			}
 
 			$out = $this->parseTemplate('adminColors', $args);
 
 		} catch (Wolfnet_Exception $e) {
 			$out = $this->exceptionView($e);
 		}
-
-		echo $out;
 
 		return $out;
 

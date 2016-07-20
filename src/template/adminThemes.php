@@ -1,21 +1,7 @@
-<div class="wrap">
-
-	<div id="icon-options-wolfnet" class="icon32"><br /></div>
-
-	<h2>WolfNet <sup>&reg;</sup> - Appearance</h2>
-
-	<p>
-		The 'Modern' widget themes streamline the look of the property photos within
-		"featured listings" and the "listing grid". With this optional feature enabled,
-		property photos will appear larger and will only include the most important property
-		listing details within the photo.
-	</p>
 
 	<form method="post" action="options.php">
 
 		<?php echo $formHeader; ?>
-
-		<h2>Widget Theme</h2>
 
 		<p>Select the appearance of the widgets.</p>
 
@@ -65,7 +51,7 @@
 
 							<span class="wolfnet_widget_theme_actions">
 								<?php if ($themeOptSelected) { ?>
-									<a href="<?php echo admin_url('admin.php?page=wolfnet_plugin_colors'); ?>"
+									<a href="#wolfnet-color-options"
 									 class="button-primary"><?php echo _e('Customize'); ?></a>
 								<?php } else { ?>
 									<button type="submit" class="button button-secondary"
@@ -89,8 +75,6 @@
 		</fieldset>
 
 	</form>
-
-</div>
 
 
 <script>
