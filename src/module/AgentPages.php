@@ -239,6 +239,52 @@ class Wolfnet_Module_AgentPages
 	}
 
 
+	public function getOfficeDefaults()
+	{
+
+		return array(
+			'address_1'             => '',
+			'address_2'             => '',
+			'city'                  => '',
+			'email'                 => '',
+			'fax_number'            => '',
+			'medium_url'            => '',
+			'name'                  => '',
+			'office_id'             => '',
+			'phone_number'          => '',
+			'photo_url'             => '',
+			'postal_code'           => '',
+			'search_solution_url'   => '',
+			'state'                 => '',
+			'thumb_url'             => '',
+			'toll_free_number'      => '',
+		);
+	}
+
+
+	public function getSampleOffice()
+	{
+
+		return array_merge($this->getAgentDefaults(), array(
+			'address_1'             => '1234 Green Hills Rd',
+			'city'                  => 'Austin',
+			'email'                 => 'tester@test.com',
+			'fax_number'            => '',
+			'medium_url'            => '//common.wolfnet.com/wordpress/sample-agent.jpg',
+			'name'                  => 'Millenium Enterprise Realty',
+			'office_id'             => '123456',
+			'phone_number'          => '123-456-7890',
+			'photo_url'             => '//common.wolfnet.com/wordpress/sample-agent.jpg',
+			'postal_code'           => '78701',
+			'search_solution_url'   => '',
+			'state'                 => 'TX',
+			'thumb_url'             => '//common.wolfnet.com/wordpress/sample-agent.jpg',
+			'toll_free_number'      => '',
+		));
+
+	}
+
+
 }
 
 ?>

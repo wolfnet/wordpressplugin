@@ -105,6 +105,28 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
 		$args = array_merge($args, $this->args);
 		$args['agentsNav'] = $this->plugin->views->agentsNavView($args);
 
+		// Add offices HTML
+		$officesHtml = '';
+
+		foreach ($officeData as &$office) {
+
+			if ($office['office_id'] != '') {
+
+				$officeArgs = array_merge($args, array(
+					'office'             => $office,
+					'officeLink'         => $this->buildLinkToOffice($office),
+					'contactLink'        => $this->buildLinkToOfficeContact($office),
+					'searchLink'         => $this->buildLinkToOfficeSearch($office),
+					'searchResultLink'   => $this->buildLinkToOfficeSearchResults($office),
+				));
+
+				$officesHtml .= $this->plugin->views->officeBriefView($officeArgs);
+
+			}
+		}
+
+		$args['officesHtml'] = $officesHtml;
+
 		return $this->plugin->views->officesListView($args);
 
 	}
@@ -573,7 +595,7 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
 	}
 
 
-	protected function buildLinkToOfficeContact($agent)
+	protected function buildLinkToOfficeContact($office)
 	{
 		return $this->buildLink(array( 'contactOffice' => $office['office_id'] ));
 

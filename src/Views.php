@@ -102,15 +102,13 @@ class Wolfnet_Views
 
 		try {
 
-			$themeDefaults = $GLOBALS['wolfnet']->widgetTheme->getDefaults();
-			$sampleListing = $GLOBALS['wolfnet']->listings->getSample();
-
 			$args = array(
 				'url'               => $GLOBALS['wolfnet']->url,
 				'colorOptionsUrl'   => admin_url('admin.php?page=wolfnet_plugin_colors'),
 				'colorOut'          => $this->amColor(),
 				'themeOut'          => $this->amTheme(),
 				'sampleAgent'       => '',
+				'sampleOffice'      => '',
 			);
 
 			if ($GLOBALS['wolfnet']->agentPages->showAgentFeature()) {
@@ -118,6 +116,13 @@ class Wolfnet_Views
 					'agent'        => $GLOBALS['wolfnet']->agentPages->getSampleAgent(),
 					'agentLink'    => '#',
 					'contactLink'  => '#',
+				));
+				$args['sampleOffice'] = $this->officeBriefView(array(
+					'office'             => $GLOBALS['wolfnet']->agentPages->getSampleOffice(),
+					'officeLink'         => '#',
+					'contactLink'        => '#',
+					'searchLink'         => '#',
+					'searchResultLink'   => '#',
 				));
 			}
 
@@ -481,6 +486,18 @@ class Wolfnet_Views
         }
 
         return apply_filters('wolfnet_agentPagesView', $this->parseTemplate('agentPagesAgentBrief', $args));
+
+    }
+
+
+    public function officeBriefView(array $args = array())
+    {
+        foreach ($args as $key => $item) {
+            $args[$key] = apply_filters('wolfnet_agentPagesView_' . $key, $item);
+        }
+
+        return apply_filters('wolfnet_agentPagesView', $this->parseTemplate('agentPagesOfficeBrief', $args));
+
     }
 
 

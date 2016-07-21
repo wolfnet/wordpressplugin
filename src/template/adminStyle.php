@@ -1,8 +1,9 @@
 <?php
 
-	$colorSection = $colorOut;
-	$themeSection = $themeOut;
-	$agentSection = $sampleAgent;
+	$colorSection    = $colorOut;
+	$themeSection    = $themeOut;
+	$agentSection    = $sampleAgent;
+	$officeSection   = $sampleOffice;
 
 ?>
 
@@ -62,7 +63,7 @@
 
 					<div class="wolfnet_widget wolfnet_ao wolfnet_aoAgentsList">
 						<div class="wolfnet_aoAgents">
-							Test
+							<?php echo $officeSection; ?>
 						</div>
 					</div>
 
