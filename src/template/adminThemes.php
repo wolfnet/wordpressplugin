@@ -25,7 +25,7 @@
 					|| (($widgetTheme == '') && ($defaultWidgetTheme == $themeOpt['name']))
 				); ?>
 
-					<div class="wolfnet_widget_theme <?php if ($themeOptSelected) echo esc_attr('wolfnet_widget_theme_active'); ?>"
+					<div class="wolfnet_box wolfnet_widget_theme <?php if ($themeOptSelected) echo esc_attr('wolfnet_widget_theme_active'); ?>"
 					 tabindex="0">
 
 						<div class="wolfnet_widget_theme_thumb">

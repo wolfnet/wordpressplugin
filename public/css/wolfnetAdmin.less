@@ -90,6 +90,36 @@ html {
 
 }
 
+.wolfnet_box {
+	margin: 0 1em 1em 0;
+	border: 1px solid @gray-lightest;
+	background-color: #fff;
+	box-shadow: 0 1px 1px rgba(0, 0, 0, 0.04);
+
+	&.wolfnet_boxCollapsed {
+		display: inline-block;
+	}
+
+	> h2, > h3 {
+		margin: 0;
+		padding: 1em;
+	}
+
+	.wolfnet_boxToggle {
+		float: right;
+		margin-left: 1em;
+		font-size: 0.8em;
+		line-height: 1.7em;
+		color: inherit;
+		.no-decoration();
+	}
+
+	.wolfnet_boxContent {
+		margin: 1em;
+	}
+
+}
+
 .wolfnet_tools_div {
 	display: table-cell;
 }
@@ -178,8 +208,6 @@ html {
 
 .wolfnet_themePreview {
 	min-width: 480px;
-	border: 1px solid @gray-lightest;
-	background-color: #fff;
 	text-align: center;
 
 	> h2, > h3 {
