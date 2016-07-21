@@ -61,8 +61,8 @@
 
 					<h3>Office Preview</h3>
 
-					<div class="wolfnet_widget wolfnet_ao wolfnet_aoAgentsList">
-						<div class="wolfnet_aoAgents">
+					<div class="wolfnet_widget wolfnet_ao wolfnet_aoOfficesList">
+						<div class="wolfnet_aoOffices">
 							<?php echo $officeSection; ?>
 						</div>
 					</div>
