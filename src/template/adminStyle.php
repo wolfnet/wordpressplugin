@@ -140,18 +140,6 @@
 			$(window).on('wnt-color-change', onWidgetThemeChange);
 
 
-			// Color Options AJAX
-			/*$colorOptionsForm.submit(function() {
-				$(this).ajaxSubmit({
-					success: function () {
-						$('#saveResult').html("<div id='saveMessage' class='successModal'></div>");
-						$('#saveMessage').append("<p><?php echo htmlentities(__('Settings Saved Successfully', 'wp'), ENT_QUOTES); ?></p>").show();
-					},
-					timeout: 5000
-				});
-				setTimeout("$('#saveMessage').hide('slow');", 5000);
-				return false;
-			});*/
 
 
 			// Preview tabs
