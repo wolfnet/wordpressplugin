@@ -12,8 +12,6 @@
 
 		<div class="wolfnet_colorOptions">
 
-			<h2>Color Options</h2>
-
 			<?php if ($widgetTheme == 'ash') { ?>
 				<div class="notice notice-info below-h2" style="clear: both;">
 					<p>

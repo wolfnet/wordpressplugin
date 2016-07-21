@@ -29,49 +29,51 @@
 	</div>
 
 
-	<?php /* Color Options */ ?>
-	<div id="wolfnet-color-options">
+	<!-- Color options form -->
+
+	<div class="wolfnet_box">
+
+	<h3>Color Options</h3>
+
+	<div class="wolfnet_boxContent">
 		<?php echo $colorSection; ?>
 	</div>
 
+	</div>
 
-	<?php /* Agent Preview */ ?>
+
+	<!-- Previews -->
+
 	<?php if (strlen($agentSection) > 0) { ?>
 
-		<details class="wolfnet_colorPreview">
+		<div id="wolfnet-color-options-preview" class="wolfnet_box">
 
-			<summary title="Preview color options">Preview color options</summary>
+			<h3>Preview Color Options</h3>
+
+			<div class="wolfnet_boxContent">
 
 			<div class="wolfnet_themePreview">
-
 				<div class="wolfnet_themePreviewItem wolfnet_themePreviewBody" id="wnt-theme-preview-agent">
-
-
 					<h3>Agent Preview</h3>
-
 					<div class="wolfnet_widget wolfnet_ao wolfnet_aoAgentsList">
 						<div class="wolfnet_aoAgents">
 							<?php echo $agentSection; ?>
 						</div>
 					</div>
-
 				</div>
-
 				<div class="wolfnet_themePreviewItem wolfnet_themePreviewBody" id="wnt-theme-preview-office">
-
 					<h3>Office Preview</h3>
-
 					<div class="wolfnet_widget wolfnet_ao wolfnet_aoOfficesList">
 						<div class="wolfnet_aoOffices">
 							<?php echo $officeSection; ?>
 						</div>
 					</div>
-
 				</div>
+			</div>
 
 			</div>
 
-		</details>
+		</div>
 
 	<?php } ?>
 
@@ -89,7 +91,10 @@
 			var themeStylesheetBaseUrl = '<?php echo $url; ?>/css/wolfnet.theme.custom.php',
 				colorOptionsUrl        = '<?php echo $colorOptionsUrl; ?>';
 
-			var $themePreview       = $('.wolfnet_themePreview'),
+			var $previewBox         = $('#wolfnet-color-options-preview'),
+				$previewHeader      = $previewBox.find('> h2, > h3, > h4').first(),
+				$previewContent     = $previewBox.find('.wolfnet_boxContent').first(),
+				$themePreview       = $previewBox.find('.wolfnet_themePreview'),
 				$previewItems       = $themePreview.find('.wolfnet_themePreviewItem'),
 				$themeStyles        = $('<style type="text/css"></style>'),
 				$spinner            = $('<div class="spinner is-active"></div>'),
@@ -140,6 +145,41 @@
 			$(window).on('wnt-color-change', onWidgetThemeChange);
 
 
+			// Expandable preview
+
+			if ($previewBox.length > 0) {
+
+				var $previewToggleIcon = $('<span class="wnt-icon wnt-icon-triangle-up"></span>');
+
+				var $previewToggleBtn = $(
+					'<a href="javascript:void(0);" title="Show/hide preview" class="wolfnet_boxToggle"></a>'
+				).append($previewToggleIcon);
+
+				var expandPreview = function () {
+					$previewBox.removeClass('wolfnet_boxCollapsed');
+					$previewContent.show();
+					$previewToggleIcon.removeClass('wnt-icon-triangle-down').addClass('wnt-icon-triangle-up');
+				};
+
+				var collapsePreview = function () {
+					$previewBox.addClass('wolfnet_boxCollapsed');
+					$previewContent.hide();
+					$previewToggleIcon.removeClass('wnt-icon-triangle-up').addClass('wnt-icon-triangle-down');
+				};
+
+				var onPreviewToggle = function () {
+					if ($previewBox.is('.wolfnet_boxCollapsed')) {
+						expandPreview();
+					} else {
+						collapsePreview();
+					}
+				};
+
+				collapsePreview();
+
+				$previewHeader.click(onPreviewToggle).css('cursor', 'pointer').append($previewToggleBtn);
+
+			}
 
 
 			// Preview tabs
