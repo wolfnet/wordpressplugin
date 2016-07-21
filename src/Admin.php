@@ -288,11 +288,6 @@ class Wolfnet_Admin extends Wolfnet_Plugin
                 'cb'    => array(&$GLOBALS['wolfnet']->views, 'amStylePage')
             ),
             array(
-                'title' => 'Color Options',
-                'key'   => 'wolfnet_plugin_colors',
-                'cb'    => array(&$GLOBALS['wolfnet']->views, 'amColorPage')
-            ),
-            array(
                 'title' => 'Edit CSS',
                 'key'   => 'wolfnet_plugin_css',
                 'cb'    => array(&$GLOBALS['wolfnet']->views, 'amEditCssPage')
