@@ -66,19 +66,19 @@ if (!function_exists('paginate')) {
 		$linkBase .= 'agentSort=' . $sort . '&';
 
 		if (($page * $numPerPage) > $numPerPage) {
-			$output .= '<li><a href="' . $linkBase . 'agentpage=' . ($page - 1) . '">Previous</a></li>';
+			$output .= '<li><a href="' . $linkBase . 'agentpage=' . ($page - 1) . '"><span>Previous</span></a></li>';
 		}
 
 		for ($i = 1; $i <= $iterate; $i++) {
 			if ($i == $page) {
-				$output .= '<li class="wolfnet_selected">' . $i . '</li>';
+				$output .= '<li class="wolfnet_selected"><span>' . $i . '</span></li>';
 			} else {
-				$output .= '<li><a href="' . $linkBase . 'agentpage=' . $i . $postHash . '">' . $i . '</a></li>';
+				$output .= '<li><a href="' . $linkBase . 'agentpage=' . $i . $postHash . '"><span>' . $i . '</span></a></li>';
 			}
 		}
 
 		if(($page * $numPerPage) < $total) {
-			$output .= '<li><a href="' . $linkBase . 'agentpage=' . ($page + 1) . $postHash . '">Next</a></li>';
+			$output .= '<li><a href="' . $linkBase . 'agentpage=' . ($page + 1) . $postHash . '"><span>Next</span></a></li>';
 		}
 
 		$output .= "</ul>";
