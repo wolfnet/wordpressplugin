@@ -76,7 +76,7 @@ if (!function_exists('formatUrl')) {
 
 ?>
 
-<div id="<?php echo $instance_id; ?>" class="wolfnet_widget wolfnet_aoAgentDetails">
+<div id="<?php echo $instance_id; ?>" class="wolfnet_widget wolfnet_ao wolfnet_aoAgentDetails">
 
 <?php
 
@@ -254,7 +254,7 @@ if (!function_exists('formatUrl')) {
 						'areas_served'       => 'Areas Served',
 						'services_available' => 'Services Available',
 						'awards'             => 'Awards',
-						'specialty'          => 'Speciality',
+						'specialty'          => 'Specialty',
 						'motto_quote'        => 'Motto',
 						'designations'       => 'Designations',
 					);

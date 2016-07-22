@@ -1,6 +1,6 @@
 === WolfNet IDX for WordPress  ===
 Author:             WolfNet Technologies, LLC
-Contributors:       wolfnettech, ajmichels, asbaumgart, michaelpidde, blots
+Contributors:       wolfnettech, ajmichels, asbaumgart, michaelpidde, thenewcoke, blots
 Tags:               idx, mls, homes
 Requires at least:  3.5.1
 Tested up to:       4.5
@@ -93,10 +93,20 @@ Please upgrade to the latest version of the plugin as we will be disabling our o
 
 == Changelog ==
 
+= 1.12.0 =
+
+* New Color Options form in the admin to customize the appearance of listings, agents, and offices
+* Aligned the agent pagination links
+* Fixed a bug in the listing grid prev/next links (when opening in a new tab)
+
+= 1.11.1 =
+
+* Hides the Agents/Offices toggle when offices are not included
+
 = 1.11.0 =
 
 * New layout for the Agents and Offices
-* HTTPS Search Manager fix.
+* HTTPS Search Manager fix
 
 = 1.10.5 =
 

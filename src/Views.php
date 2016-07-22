@@ -97,31 +97,99 @@ class Wolfnet_Views
     }
 
 
-    public function amStylePage()
-    {
+	public function amStylePage()
+	{
 
-        try {
+		try {
 
-            $widgetThemeDefaults = $GLOBALS['wolfnet']->widgetTheme->getDefaults();
+			$args = array(
+				'url'               => $GLOBALS['wolfnet']->url,
+				'colorOptionsUrl'   => admin_url('admin.php?page=wolfnet_plugin_colors'),
+				'colorOut'          => $this->amColor(),
+				'themeOut'          => $this->amTheme(),
+				'sampleAgent'       => '',
+				'sampleOffice'      => '',
+			);
 
-            $out = $this->parseTemplate('adminStyle', array(
-                'imgdir' => $this->remoteImages,
-                'formHeader' => $this->styleFormHeaders(),
-                'widgetTheme' => $this->getWidgetTheme(),
-                'widgetThemes' => $GLOBALS['wolfnet']->widgetTheme->getThemeOptions(),
-                'defaultWidgetTheme' => $widgetThemeDefaults['widgetTheme'],
-                'defaultColors' => $widgetThemeDefaults['colors'],
-            ));
+			if ($GLOBALS['wolfnet']->agentPages->showAgentFeature()) {
+				$args['sampleAgent'] = $this->agentBriefView(array(
+					'agent'        => $GLOBALS['wolfnet']->agentPages->getSampleAgent(),
+					'agentLink'    => '#',
+					'contactLink'  => '#',
+				));
+				$args['sampleOffice'] = $this->officeBriefView(array(
+					'office'             => $GLOBALS['wolfnet']->agentPages->getSampleOffice(),
+					'officeLink'         => '#',
+					'contactLink'        => '#',
+					'searchLink'         => '#',
+					'searchResultLink'   => '#',
+				));
+			}
 
-        } catch (Wolfnet_Exception $e) {
-            $out = $this->exceptionView($e);
-        }
+			$out = $this->parseTemplate('adminStyle', $args);
 
-        echo $out;
+		} catch (Wolfnet_Exception $e) {
+			$out = $this->exceptionView($e);
+		}
 
-        return $out;
+		echo $out;
 
-    }
+		return $out;
+
+	}
+
+
+	public function amTheme()
+	{
+
+		try {
+
+			$themeDefaults = $GLOBALS['wolfnet']->widgetTheme->getDefaults();
+			$sampleListing = $GLOBALS['wolfnet']->listings->getSample();
+
+			$out = $this->parseTemplate('adminThemes', array(
+				'imgdir'              => $this->remoteImages,
+				'formHeader'          => $this->styleFormHeaders(),
+				'widgetTheme'         => $this->getWidgetTheme(),
+				'widgetThemes'        => $GLOBALS['wolfnet']->widgetTheme->getThemeOptions(),
+				'defaultWidgetTheme'  => $themeDefaults['widgetTheme'],
+				'sampleListing'       => $this->listingView(array( 'listing' => $sampleListing )),
+			));
+
+		} catch (Wolfnet_Exception $e) {
+			$out = $this->exceptionView($e);
+		}
+
+		return $out;
+
+	}
+
+
+	public function amColor()
+	{
+
+		try {
+
+			$themeDefaults = $GLOBALS['wolfnet']->widgetTheme->getDefaults();
+			$sampleListing = $GLOBALS['wolfnet']->listings->getSample();
+
+			$args = array(
+				'imgdir'         => $this->remoteImages,
+				'formHeader'     => $this->colorFormHeaders(),
+				'widgetTheme'    => $this->getWidgetTheme(),
+				'themeColors'    => $this->getThemeColors(),
+				'themeOpacity'   => $this->getThemeOpacity(),
+			);
+
+			$out = $this->parseTemplate('adminColors', $args);
+
+		} catch (Wolfnet_Exception $e) {
+			$out = $this->exceptionView($e);
+		}
+
+		return $out;
+
+	}
 
 
     public function amEditCssPage()
@@ -200,10 +268,54 @@ class Wolfnet_Views
     }
 
 
-    public function getWidgetTheme()
-    {
-        return get_option(trim($GLOBALS['wolfnet']->widgetThemeOptionKey), 'ash');
-    }
+	public function getWidgetTheme()
+	{
+		$themeDefaults = $GLOBALS['wolfnet']->widgetTheme->getDefaults();
+		return get_option(trim($GLOBALS['wolfnet']->widgetThemeOptionKey), $themeDefaults['widgetTheme']);
+	}
+
+
+	public function getThemeColors()
+	{
+		$themeDefaults = $GLOBALS['wolfnet']->widgetTheme->getDefaults();
+		$themeColors = get_option(trim($GLOBALS['wolfnet']->themeColorsOptionKey), $themeDefaults['colors']);
+
+		// Set default values
+		foreach ($themeColors as $key => $color) {
+			if (strlen($color) == 0) {
+				$themeColors[$key] = $themeDefaults['colors'][$key];
+			}
+		}
+
+		return $themeColors;
+
+	}
+
+
+	public function getThemeOpacity()
+	{
+		$themeDefaults = $GLOBALS['wolfnet']->widgetTheme->getDefaults();
+		$themeOpacity = get_option(trim($GLOBALS['wolfnet']->themeOpacityOptionKey), $themeDefaults['opacity']);
+
+		if (!is_numeric($themeOpacity)) {
+			$themeOpacity = $themeDefaults['opacity'];
+		}
+
+		return $themeOpacity;
+
+	}
+
+
+	public function getThemeStyleArgs(array $args = array())
+	{
+		$styleOptions = array(
+			'colors'    => (array_key_exists('colors', $args)  ? $args['colors']  : $this->getThemeColors()),
+			'opacity'   => (array_key_exists('opacity', $args) ? $args['opacity'] : $this->getThemeOpacity()),
+		);
+
+		return $GLOBALS['wolfnet']->widgetTheme->getStyleArgs($styleOptions);
+
+	}
 
 
     /**
@@ -364,6 +476,28 @@ class Wolfnet_Views
         }
 
         return apply_filters('wolfnet_agentPagesView', $this->parseTemplate('agentPagesShowAgent', $args));
+    }
+
+
+    public function agentBriefView(array $args = array())
+    {
+        foreach ($args as $key => $item) {
+            $args[$key] = apply_filters('wolfnet_agentPagesView_' . $key, $item);
+        }
+
+        return apply_filters('wolfnet_agentPagesView', $this->parseTemplate('agentPagesAgentBrief', $args));
+
+    }
+
+
+    public function officeBriefView(array $args = array())
+    {
+        foreach ($args as $key => $item) {
+            $args[$key] = apply_filters('wolfnet_agentPagesView_' . $key, $item);
+        }
+
+        return apply_filters('wolfnet_agentPagesView', $this->parseTemplate('agentPagesOfficeBrief', $args));
+
     }
 
 
@@ -533,8 +667,11 @@ class Wolfnet_Views
 
     private function parseTemplate($template, array $vars = array())
     {
-        $vars['widgetThemeName'] = $this->getWidgetTheme();
-        $vars['widgetThemeClass'] = 'wolfnet-theme-' . $vars['widgetThemeName'];
+		// Load theme option values for use in rendering
+		$vars['widgetThemeName']   = $this->getWidgetTheme();
+		$vars['widgetThemeClass']  = 'wolfnet-theme-' . $vars['widgetThemeName'];
+		$vars['themeColors']       = $this->getThemeColors();
+		$vars['themeOpacity']      = $this->getThemeOpacity();
 
         extract($vars, EXTR_OVERWRITE);
 
@@ -552,6 +689,17 @@ class Wolfnet_Views
         ob_start();
 
         settings_fields($GLOBALS['wolfnet']->WidgetThemeOptionGroup);
+
+        return trim(ob_get_clean());
+
+    }
+
+
+    private function colorFormHeaders()
+    {
+        ob_start();
+
+        settings_fields($GLOBALS['wolfnet']->ColorOptionGroup);
 
         return trim(ob_get_clean());
 

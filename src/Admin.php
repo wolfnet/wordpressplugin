@@ -105,6 +105,8 @@ class Wolfnet_Admin extends Wolfnet_Plugin
 
         // JavaScript
         $scripts = array(
+            'wp-color-picker',
+            'jquery-ui-slider',
             'wolfnet-admin',
             'wolfnet-shortcode-builder',
             'wolfnet-search-manager',
@@ -117,28 +119,39 @@ class Wolfnet_Admin extends Wolfnet_Plugin
     }
 
 
-    /**
-     * This method is a callback for the 'admin_enqueue_scripts' hook. Any CSS files which are
-     * needed by the plugin for areas areas are registered in this method.
-     * @return void
-     */
-    public function adminStyles()
-    {
+	/**
+	 * This method is a callback for the 'admin_enqueue_scripts' hook. Any CSS files which are
+	 * needed by the plugin for areas areas are registered in this method.
+	 * @return void
+	 */
+	public function adminStyles()
+	{
 
-        // CSS
-        $styles = array(
-            'jquery-ui',
-            'wolfnet-admin',
-            'icomoon',
-        );
+		// CSS
+		$styles = array(
+			'wolfnet-jquery-ui',
+			'wp-color-picker',
+			'wolfnet',
+			'wolfnet-agent',
+			'icomoon',
+			'google-fonts',
+			'wolfnet-admin',
+		);
 
-        foreach ($styles as $style) {
-            wp_enqueue_style($style);
-        }
+		$widgetThemes = $GLOBALS['wolfnet']->widgetTheme->getThemeOptions();
+		foreach ($widgetThemes as $widgetTheme) {
+			array_push($styles, $widgetTheme['styleName']);
+		}
 
-        do_action($this->postHookPrefix . 'enqueueAdminResources');
+		array_push($styles, 'wolfnet-theme-custom');
 
-    }
+		foreach ($styles as $style) {
+			wp_enqueue_style($style);
+		}
+
+		do_action($this->postHookPrefix . 'enqueueAdminResources');
+
+	}
 
 
     /**
@@ -175,6 +188,8 @@ class Wolfnet_Admin extends Wolfnet_Plugin
         register_setting($this->optionGroup, Wolfnet_Service_ProductKeyService::PRODUCT_KEY_OPTION);
         register_setting($this->optionGroup, Wolfnet_Plugin::SSL_WP_OPTION);
         register_setting($this->WidgetThemeOptionGroup, $this->widgetThemeOptionKey);
+        register_setting($this->ColorOptionGroup, $this->themeColorsOptionKey);
+        register_setting($this->ColorOptionGroup, $this->themeOpacityOptionKey);
         register_setting($this->CssOptionGroup, $this->publicCssOptionKey);
         register_setting($this->CssOptionGroup, $this->adminCssOptionKey);
 
