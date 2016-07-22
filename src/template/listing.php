@@ -23,7 +23,8 @@
 ?>
 
 <div id="wolfnet_listing_<?php echo $listing['property_id']; ?>" class="wolfnet_listing" itemscope="itemscope">
-    <a class="wolfnet_listingLink" href="<?php echo $listing['property_url']; ?>" rel="follow">
+    <a class="wolfnet_listingLink" rel="follow"
+     <?php if (strlen($listing['property_url']) > 0) { echo 'href="' . $listing['property_url'] . '"'; } ?>>
         <div class="wolfnet_listingMain">
             <div class="wolfnet_listingHead">
                 <span class="wolfnet_listingImage">
