@@ -428,7 +428,7 @@ class Wolfnet_Ajax
             $args = $GLOBALS['wolfnet']->listingGrid->getOptions($_REQUEST);
 
             $response = $GLOBALS['wolfnet']->template->getWpHeader()
-            	. $GLOBALS['wolfnet']->listingGrid($args)
+            	. $GLOBALS['wolfnet']->listingGrid->listingGrid($args)
             	. $GLOBALS['wolfnet']->template->getWpFooter();
 
         } catch (Wolfnet_Exception $e) {
