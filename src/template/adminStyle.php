@@ -48,7 +48,7 @@
 
 		<div id="wolfnet-color-options-preview" class="wolfnet_box">
 
-			<h3>Preview Color Options</h3>
+			<h3>Agent/Office Pages Preview</h3>
 
 			<div class="wolfnet_boxContent">
 
