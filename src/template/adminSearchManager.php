@@ -64,8 +64,8 @@
                 <?php endfor; ?>
             </select>
             <input type="button" id="changeMarket" value="Apply" /></p>
-        </div>
-    </div>
+		</div>
+	</div>
     <?php else: ?>
     <input type="hidden" id="keyid" name="keyid" value="<?php echo $markets[0]->id; ?>" />
     <?php endif; ?>
@@ -97,27 +97,29 @@
 </div>
 
 
-<script type="text/javascript">
+<script>
 
-    if ( typeof jQuery != 'undefined' ) {
+	if (typeof jQuery !== 'undefined') {
 
-        ( function ( $ ) {
+		(function ($) {
+
+
 
 			$('#savedsearches').wolfnetSearchManager({
-				baseUrl    : '<?php echo $baseUrl; ?>',
-				ajaxUrl    : wolfnet_ajax.ajaxurl,
-				ajaxAction : 'wolfnet_search_manager_ajax',
-				saveForm   : $( '#save_search' )
+				baseUrl:     '<?php echo $baseUrl; ?>',
+				ajaxUrl:     wolfnet_ajax.ajaxurl,
+				ajaxAction:  'wolfnet_search_manager_ajax',
+				saveForm:    $( '#save_search' )
 			});
 
-            <?php if(count($markets) > 1): ?>
-            $( '#changeMarket' ).click(function() {
-                document.location.href = "admin.php?page=wolfnet_plugin_search_manager&keyid=" + $('#keyid').val();
-            });
-            <?php endif; ?>
+			<?php if(count($markets) > 1): ?>
+				$('#changeMarket').click(function () {
+					document.location.href = 'admin.php?page=wolfnet_plugin_search_manager&keyid=' + $('#keyid').val();
+				});
+			<?php endif; ?>
 
-        } )( jQuery );
+		})(jQuery);
 
-    }
+	}
 
 </script>
