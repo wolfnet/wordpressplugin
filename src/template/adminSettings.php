@@ -66,7 +66,7 @@
                     }
                     for($i=1; $i<=$numrows; $i++):
                     ?>
-                        <tr class="<?php echo ($i % 2 == 0) ? 'alternate': '' ?>">
+                        <tr class="row<?php echo $i; ?> <?php echo ($i % 2 == 0) ? 'alternate': '' ?>">
                             <td>
                                 <input class="wolfnet_productKey"
                                  type="text" size="40"
@@ -163,11 +163,11 @@
 
 </div>
 
-<script type="text/javascript">
+<script>
 
-    if ( typeof jQuery != 'undefined' ) {
+	if (typeof jQuery !== 'undefined') {
 
-        ( function ( $ ) {
+		jQuery(function ($) {
 
 			$('.wolfnet_productKey').wolfnetValidateProductKey({
 				rootUri: '<?php echo site_url(); ?>?pagename=wolfnet-admin-validate-key',
@@ -218,17 +218,17 @@
             } );
 
 
-            $( '.wolfnet_deleteKey' ).click( function(button) {
-                $.fn.wolfnetDeleteKeyRow(button);
-            } );
+			$('#wolfnet_keys').on('click.wnt', '.wolfnet_deleteKey', function () {
+				$.fn.wolfnetDeleteKeyRow($(this));
+			});
 
 
             $( '#wolfnet_addKey' ).click( function() {
                 $.fn.wolfnetInsertKeyRow();
             } );
 
-        } )( jQuery );
+		});
 
-    }
+	}
 
 </script>

@@ -456,10 +456,10 @@ if ( typeof jQuery != 'undefined' ) {
         };
 
 
-		$.fn.wolfnetDeleteKeyRow = function (button) {
-            var key = $(button.srcElement).attr('data-wnt-key');
-            $('.row' + key).remove();
-        }
+		$.fn.wolfnetDeleteKeyRow = function ($button) {
+			var key = $button.attr('data-wnt-key');
+			$('.row' + key).remove();
+		}
 
 
         $.fn.wolfnetInsertKeyRow = function ()
@@ -527,9 +527,6 @@ if ( typeof jQuery != 'undefined' ) {
                             .addClass('button action wolfnet_deleteKey')
                             .attr('data-wnt-key', nextIteration)
                             .attr('type', 'button')
-                            .click(function (button) {
-                                $.fn.wolfnetDeleteKeyRow(button);
-                            })
                             .append([
                                 $('<span>').addClass('wnt-icon wnt-icon-bin wnt-text-danger'),
                                 ' ',
