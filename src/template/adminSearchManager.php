@@ -103,7 +103,13 @@
 
 		(function ($) {
 
+			var $searchMgr = $('#wolfnet-search-manager');
+			var $searchResetBtn = $searchMgr.find('.resetForm a');
 
+			// Dress the reset link as a button
+			$searchResetBtn.addClass('button button-secondary').prepend(
+				'<span class="wnt-icon wnt-icon-cancel-circle"></span> '
+			);
 
 			$('#savedsearches').wolfnetSearchManager({
 				baseUrl:     '<?php echo $baseUrl; ?>',
