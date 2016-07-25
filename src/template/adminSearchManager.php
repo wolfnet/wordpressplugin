@@ -86,7 +86,7 @@
         <thead>
             <tr>
                 <th style="text-align:left;">Description</th>
-                <th style="wwidth:200px;">Date Created</th>
+                <th style="width:200px;">Date Created</th>
                 <th style="width:110px;"></th>
             </tr>
         </thead>
