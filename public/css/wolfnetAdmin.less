@@ -498,40 +498,25 @@ html.ie .wolfnetProductKeyValidationWrapper.invalid input {
 
 #wolfnet-search-manager {
 
-	.style_box {
-		border: 1px solid @gray-lighter;
-		border-radius: 3px;
-
-		.style_box_header {
-			border-bottom: 1px solid #F2F2F2;
-			color: @gray-dark;
-			font-weight: normal;
-			padding: 2px 5px;
-			text-align: left;
-			background-color: #F2F2F2;
-			background-image: -ms-linear-gradient(top, #FAFAFA, @gray-lightest);
-			background-image: -moz-linear-gradient(top, #FAFAFA, @gray-lightest);
-			background-image: -o-linear-gradient(top, #FAFAFA, @gray-lightest);
-			background-image: -webkit-gradient(linear, left top, left bottom, from(#FAFAFA), to(@gray-lightest));
-			background-image: -webkit-linear-gradient(top, #FAFAFA, @gray-lightest);
-			background-image: linear-gradient(top, #FAFAFA, @gray-lightest);
-			padding: 7px 7px 8px;
-			text-align: left;
-			line-height: 1.3em;
-			font-size: 14px;
-			font-family: Georgia,"Times New Roman","Bitstream Charter",Times,serif;
-		}
-
-	}
-
 	#savedsearches.wp-list-table {
 		width: 875px !important;
 	}
 
 	#tool_container {
+
 		input[type=checkbox], input[type=radio] {
-			border: 1px solid @gray-light;
+			border: 1px solid @gray-lighter;
 		}
+
+		.resetForm {
+			float: right;
+			font-size: inherit;
+		}
+
+		.wntBodyWidth .wntPrimarySearchTypes .wntPrimarySearchType {
+			margin-right: 1em;
+		}
+
 	}
 
 }
