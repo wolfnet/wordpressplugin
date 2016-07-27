@@ -467,24 +467,27 @@ if ( typeof jQuery != 'undefined' ) {
 			var $keyTable = $('#wolfnet_keys'),
 				$keyCount = $('#wolfnet_keyCount');
 			var nextIteration = parseInt($keyCount.val()) + 1;
-			var $row = $keyTable.find('tr').last().clone();
+			var $lastRow = $keyTable.find('tr').last(),
+				$row = $lastRow.clone();
 
 			$row.attr('class', 'row' + nextIteration);
+
+			$row.find('.wolfnetProductKeyValidationWrapper').removeClass('valid invalid success error');
 
 			$row.find('.wolfnet_productKey').attr({
 				'id':     'wolfnet_productKey_' + nextIteration,
 				'name':   'wolfnet_productKey_' + nextIteration
-			});
+			}).val('');
 
 			$row.find('.wolfnet_keyMarket_value').attr({
 				'id':     'wolfnet_keyMarket_' + nextIteration,
 				'name':   'wolfnet_keyMarket_' + nextIteration
-			});
+			}).val('');
 
 			$row.find('.wolfnet_keyLabel').attr({
 				'id':     'wolfnet_keyLabel_' + nextIteration,
 				'name':   'wolfnet_keyLabel_' + nextIteration
-			});
+			}).val('');
 
 			$row.find('.wolfnet_deleteKey').attr('data-wnt-key', nextIteration);
 
@@ -494,6 +497,8 @@ if ( typeof jQuery != 'undefined' ) {
 				rootUri: '<?php echo site_url(); ?>?pagename=wolfnet-admin-validate-key',
 				setSslVerify: $('#wolfnet_setSslVerify').val()
 			});
+
+			$lastRow.after($row);
 
 		}
 
