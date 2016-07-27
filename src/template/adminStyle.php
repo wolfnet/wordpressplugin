@@ -33,11 +33,11 @@
 
 	<div class="wolfnet_box">
 
-	<h3>Color Options</h3>
+		<h3>Color Options</h3>
 
-	<div class="wolfnet_boxContent">
-		<?php echo $colorSection; ?>
-	</div>
+		<div class="wolfnet_boxContent">
+			<?php echo $colorSection; ?>
+		</div>
 
 	</div>
 
@@ -52,24 +52,24 @@
 
 			<div class="wolfnet_boxContent">
 
-			<div class="wolfnet_themePreview">
-				<div class="wolfnet_themePreviewItem wolfnet_themePreviewBody" id="wnt-theme-preview-agent">
-					<h3>Agent Preview</h3>
-					<div class="wolfnet_widget wolfnet_ao wolfnet_aoAgentsList">
-						<div class="wolfnet_aoAgents">
-							<?php echo $agentSection; ?>
+				<div class="wolfnet_themePreview">
+					<div class="wolfnet_themePreviewItem wolfnet_themePreviewBody" id="wnt-theme-preview-agent">
+						<h3>Agent Preview</h3>
+						<div class="wolfnet_widget wolfnet_ao wolfnet_aoAgentsList">
+							<div class="wolfnet_aoAgents">
+								<?php echo $agentSection; ?>
+							</div>
+						</div>
+					</div>
+					<div class="wolfnet_themePreviewItem wolfnet_themePreviewBody" id="wnt-theme-preview-office">
+						<h3>Office Preview</h3>
+						<div class="wolfnet_widget wolfnet_ao wolfnet_aoOfficesList">
+							<div class="wolfnet_aoOffices">
+								<?php echo $officeSection; ?>
+							</div>
 						</div>
 					</div>
 				</div>
-				<div class="wolfnet_themePreviewItem wolfnet_themePreviewBody" id="wnt-theme-preview-office">
-					<h3>Office Preview</h3>
-					<div class="wolfnet_widget wolfnet_ao wolfnet_aoOfficesList">
-						<div class="wolfnet_aoOffices">
-							<?php echo $officeSection; ?>
-						</div>
-					</div>
-				</div>
-			</div>
 
 			</div>
 
