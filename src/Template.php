@@ -73,10 +73,12 @@ class Wolfnet_Template
             'google-fonts',
         );
 
-        $widgetTheme = $this->plugin->views->getWidgetTheme();
-        if (strlen($widgetTheme)) {
-            array_push($styles, 'wolfnet-' . $widgetTheme);
-        }
+		$widgetTheme = $this->plugin->views->getWidgetTheme();
+		if (strlen($widgetTheme)) {
+			array_push($styles, 'wolfnet-' . $widgetTheme);
+		}
+
+		array_push($styles, 'wolfnet-theme-custom');
 
         foreach ($styles as $style) {
             wp_enqueue_style($style);
@@ -228,6 +230,13 @@ class Wolfnet_Template
             'wolfnet-custom' => array(
                 admin_url('admin-ajax.php') . '?action=wolfnet_css',
             ),
+			'wolfnet-theme-custom' => array(
+				$this->url . 'css/wolfnet.theme.custom.php?' . $this->plugin->views->getThemeStyleArgs(),
+			),
+			'wolfnet-jquery-ui' => array(
+				$this->url . 'lib/jquery-ui/themes/wolfnet-wp/jquery-ui.min.css',
+				$this->url . 'lib/jquery-ui/themes/wolfnet-wp/jquery-ui.theme.min.css',
+			),
             'jquery-ui' => array(
                 'http://ajax.googleapis.com/ajax/libs/jqueryui/' . $jquery_ui->ver
                     . '/themes/smoothness/jquery-ui.css'
@@ -240,13 +249,13 @@ class Wolfnet_Template
             ),
         );
 
-        // Add widget theme styles
-        $widgetThemes = $this->plugin->widgetTheme->getThemeOptions();
-        foreach ($widgetThemes as $widgetTheme) {
-            $styles[$widgetTheme['styleName']] = array(
-                $this->url . 'css/' . $widgetTheme['styleFile']
-            );
-        }
+		// Add widget theme styles
+		$widgetThemes = $this->plugin->widgetTheme->getThemeOptions();
+		foreach ($widgetThemes as $widgetTheme) {
+			$styles[$widgetTheme['styleName']] = array(
+				$this->url . 'css/' . $widgetTheme['styleFile']
+			);
+		}
 
         foreach ($styles as $style => $data) {
             $params   = array($style);
