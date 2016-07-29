@@ -119,10 +119,6 @@ module.exports = function (grunt) {
 	grunt.loadNpmTasks('grunt-contrib-uglify');
 	grunt.loadNpmTasks('grunt-gitinfo');
 
-	var gitProp = function (propName) {
-		return grunt.template.process('<%= gitinfo.local.branch.current.' + propName + ' %>');
-	};
-
 
 	/* Tasks ************************************************************************************ */
 
@@ -138,14 +134,15 @@ module.exports = function (grunt) {
 	);
 
 	grunt.registerTask('outputInfo', function () {
-		grunt.log.writeln('Current HEAD SHA:       ' + gitProp('SHA'));
-		grunt.log.writeln('Current HEAD short SHA: ' + gitProp('shortSHA'));
-		grunt.log.writeln('Current branch name:    ' + gitProp('name'));
-		grunt.log.writeln('Current git user:       ' + gitProp('currentUser'));
-		grunt.log.writeln('Last commit time:       ' + gitProp('lastCommitTime'));
-		grunt.log.writeln('Last commit message:    ' + gitProp('lastCommitMessage'));
-		grunt.log.writeln('Last commit author:     ' + gitProp('lastCommitAuthor'));
-		grunt.log.writeln('Last commit number:     ' + gitProp('lastCommitNumber'));
+		var commitInfo = grunt.config('gitinfo').local.branch.current;
+		grunt.log.writeln('Current HEAD SHA:       ' + commitInfo['SHA']);
+		grunt.log.writeln('Current HEAD short SHA: ' + commitInfo['shortSHA']);
+		grunt.log.writeln('Current branch name:    ' + commitInfo['name']);
+		grunt.log.writeln('Current git user:       ' + commitInfo['currentUser']);
+		grunt.log.writeln('Last commit time:       ' + commitInfo['lastCommitTime']);
+		grunt.log.writeln('Last commit message:    ' + commitInfo['lastCommitMessage']);
+		grunt.log.writeln('Last commit author:     ' + commitInfo['lastCommitAuthor']);
+		grunt.log.writeln('Last commit number:     ' + commitInfo['lastCommitNumber']);
 	});
 
 	grunt.registerTask('info', function () {
