@@ -152,10 +152,12 @@ module.exports = function (grunt) {
 
 	grunt.registerTask('build', function () {
 		grunt.task.run('createBuild');
+		grunt.task.run('gitinfo');
 		grunt.task.run('compressBuild');
 	});
 
 	grunt.registerTask('build-test', function () {
+		grunt.task.run('createBuild');
 		grunt.task.run('gitinfo');
 		grunt.task.run('compressBuild:test');
 	});
@@ -163,10 +165,7 @@ module.exports = function (grunt) {
 
 	/* Subtasks ********************************************************************************* */
 
-	grunt.registerTask('createBuild', function (mode) {
-		if (typeof mode === 'undefined') {
-			mode = 'main';
-		}
+	grunt.registerTask('createBuild', function () {
 		grunt.task.run('clean');
 		grunt.log.writeln('Creating ' + colors.code('build') + ' directory');
 		grunt.task.run('copy:main');
@@ -182,10 +181,9 @@ module.exports = function (grunt) {
 		grunt.log.writeln(
 			'Creating file: ' +
 			colors.alert(
-				grunt.template.process(
-					'<%= pkg.name %>_<%= pkg.version %>' +
-					(mode === 'test' ? '+<%= gitinfo.local.branch.current.shortSHA %>' : '')
-				) + '.zip'
+				grunt.template.process('<%= pkg.name %>_<%= pkg.version %>') +
+				(mode === 'test' ? '+' + shortSHA : '') +
+				'.zip'
 			)
 		);
 		grunt.task.run('compress:main');
