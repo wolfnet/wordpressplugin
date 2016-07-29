@@ -17,9 +17,9 @@
 
     <available file=".git" type="dir" property="git.present"/>
 
-    <condition property="gruntExecutable" value="grunt.cmd" else="grunt">
-        <os family="windows" />
-    </condition>
+	<condition property="gruntExec" value="grunt.cmd" else="grunt">
+		<os family="windows" />
+	</condition>
 
 
     <!-- Define the Java Library for the AntContrib project -->
@@ -30,29 +30,22 @@
     </taskdef>
 
 
-    <target name="compile" depends="compile-less,minify-javascript">
-    </target>
+	<target name="compile" depends="compile-less,minify-javascript">
+	</target>
 
 
-    <target name="compile-less">
-        <sequential>
-            <!-- Compile Less Files -->
-            <echo>Compiling Less Files</echo>
-            <exec executable="${gruntExecutable}" dir="${basedir}">
-                <arg value="less" />
-            </exec>
-        </sequential>
-    </target>
+	<target name="compile-less">
+		<sequential>
+			<exec executable="${gruntExec}" dir="${basedir}"><arg value="compile:less" /></exec>
+		</sequential>
+	</target>
 
 
-    <target name="minify-javascript">
-        <sequential>
-            <echo>Minifiying JavaScript Files</echo>
-            <exec executable="${gruntExecutable}" dir="${basedir}">
-                <arg value="uglify" />
-            </exec>
-        </sequential>
-    </target>
+	<target name="minify-javascript">
+		<sequential>
+			<exec executable="${gruntExec}" dir="${basedir}"><arg value="compile:js" /></exec>
+		</sequential>
+	</target>
 
 
     <target name="build" depends="compile,git-revision">
@@ -121,11 +114,11 @@
 
     <!-- MACROS -->
 
-    <macrodef name="clean-for-build">
-        <sequential>
-            <delete dir="${dir.build}" />
-        </sequential>
-    </macrodef>
+	<macrodef name="clean-for-build">
+		<sequential>
+			<exec executable="${gruntExec}" dir="${basedir}"><arg value="clean" /></exec>
+		</sequential>
+	</macrodef>
 
 
     <macrodef name="clean-for-dist">

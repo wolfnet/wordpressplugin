@@ -4,11 +4,13 @@ module.exports = function (grunt) {
 	var execSync = require('child_process').execSync;
 	var clc = require('cli-color');
 	var colors = {
-		alert : clc.xterm(214),
-		warn  : clc.yellow,
-		error : clc.red.bold,
-		notice: clc.blue,
-		code  : clc.white.bold
+		alert      : clc.xterm(214),
+		warn       : clc.yellow,
+		error      : clc.red.bold,
+		info       : clc.blueBright,
+		notice     : clc.cyanBright,
+		success    : clc.greenBright,
+		code       : clc.white.bold,
 	};
 
 
@@ -109,6 +111,16 @@ module.exports = function (grunt) {
 					}
 				]
 			}
+		},
+		compile: {
+			less: {
+				task: 'less',
+				desc: 'Compiling Less Files'
+			},
+			js: {
+				task: 'uglify',
+				desc: 'Minifiying JavaScript Files'
+			}
 		}
 	});
 
@@ -124,69 +136,104 @@ module.exports = function (grunt) {
 
 	grunt.registerTask('default', 'compile');
 
-	grunt.registerTask(
+	grunt.registerMultiTask(
 		'compile',
-		'Compiles LESS (.less) and JavaScript (.js) files.\n\t' + colors.code('compile[:less|:js]') + '.',
-		function (mode) {
-			var less = (!mode || (mode === 'less')) ? grunt.task.run(['less'])   : null;
-			var js   = (!mode || (mode === 'js'))   ? grunt.task.run(['uglify']) : null;
+		colors.success('use: ') +
+		'Compiles LESS (.less) and/or JavaScript (.js) files.' +
+		'\n\t' + colors.code('compile[:less|:js]'),
+		function () {
+			grunt.log.writeln('');
+			grunt.log.writeln(colors.notice(this.data.desc));
+			grunt.task.run(this.data.task);
 		}
 	);
 
-	grunt.registerTask('outputInfo', function () {
-		var commitInfo = grunt.config('gitinfo').local.branch.current;
-		grunt.log.writeln('Current HEAD SHA:       ' + commitInfo['SHA']);
-		grunt.log.writeln('Current HEAD short SHA: ' + commitInfo['shortSHA']);
-		grunt.log.writeln('Current branch name:    ' + commitInfo['name']);
-		grunt.log.writeln('Current git user:       ' + commitInfo['currentUser']);
-		grunt.log.writeln('Last commit time:       ' + commitInfo['lastCommitTime']);
-		grunt.log.writeln('Last commit message:    ' + commitInfo['lastCommitMessage']);
-		grunt.log.writeln('Last commit author:     ' + commitInfo['lastCommitAuthor']);
-		grunt.log.writeln('Last commit number:     ' + commitInfo['lastCommitNumber']);
-	});
+	grunt.registerTask(
+		'info',
+		colors.success('use: ') +
+		'Print current commit info.',
+		function () {
+			grunt.task.run('gitinfo');
+			grunt.task.run('output-info');
+		}
+	);
 
-	grunt.registerTask('info', function () {
-		grunt.task.run('gitinfo');
-		grunt.task.run('outputInfo');
-	});
+	grunt.registerTask(
+		'build',
+		colors.success('use: ') +
+		'Create a build of the current version.',
+		function () {
+			grunt.task.run('create-build');
+			grunt.task.run('gitinfo');
+			grunt.task.run('compress-build');
+		}
+	);
 
-	grunt.registerTask('build', function () {
-		grunt.task.run('createBuild');
-		grunt.task.run('gitinfo');
-		grunt.task.run('compressBuild');
-	});
-
-	grunt.registerTask('build-test', function () {
-		grunt.task.run('createBuild');
-		grunt.task.run('gitinfo');
-		grunt.task.run('compressBuild:test');
-	});
+	grunt.registerTask(
+		'build-test',
+		colors.success('use: ') +
+		'Create a test build of the current version.',
+		function () {
+			grunt.task.run('create-build');
+			grunt.task.run('gitinfo');
+			grunt.task.run('compress-build:test');
+		}
+	);
 
 
 	/* Subtasks ********************************************************************************* */
 
-	grunt.registerTask('createBuild', function () {
-		grunt.task.run('clean');
-		grunt.log.writeln('Creating ' + colors.code('build') + ' directory');
-		grunt.task.run('copy:main');
-	});
-
-	grunt.registerTask('compressBuild', function (mode) {
-		mode = (typeof mode === 'undefined' ? 'main' : mode);
-		if (mode === 'test') {
-			// Global variable shortSHA
-			shortSHA = grunt.config('gitinfo').local.branch.current.shortSHA;
+	grunt.registerTask(
+		'output-info',
+		colors.info('Subtask') + ' of ' + colors.code('info') + '. ' +
+		'Output git commit info. Requires ' + colors.code('gitinfo') + '.',
+		function () {
+			var commitInfo = grunt.config('gitinfo').local.branch.current;
+			grunt.log.writeln('Current HEAD SHA:       ' + commitInfo['SHA']);
+			grunt.log.writeln('Current HEAD short SHA: ' + commitInfo['shortSHA']);
+			grunt.log.writeln('Current branch name:    ' + commitInfo['name']);
+			grunt.log.writeln('Current git user:       ' + commitInfo['currentUser']);
+			grunt.log.writeln('Last commit time:       ' + commitInfo['lastCommitTime']);
+			grunt.log.writeln('Last commit message:    ' + commitInfo['lastCommitMessage']);
+			grunt.log.writeln('Last commit author:     ' + commitInfo['lastCommitAuthor']);
+			grunt.log.writeln('Last commit number:     ' + commitInfo['lastCommitNumber']);
 		}
-		grunt.log.writeln('');
-		grunt.log.writeln(
-			'Creating file: ' +
-			colors.alert(
-				grunt.template.process('<%= pkg.name %>_<%= pkg.version %>') +
-				(mode === 'test' ? '+' + shortSHA : '') +
-				'.zip'
-			)
-		);
-		grunt.task.run('compress:main');
-	});
+	);
+
+	grunt.registerTask(
+		'create-build',
+		colors.info('Subtask') + ' of ' + colors.code('build') + '. ' +
+		'Clean and create a new build.',
+		function () {
+			grunt.task.run('clean');
+			grunt.log.writeln('Creating ' + colors.code('build') + ' directory');
+			grunt.task.run('copy:main');
+		}
+	);
+
+	grunt.registerTask(
+		'compress-build',
+		colors.info('Subtask') + ' of ' + colors.code('build') + '. ' +
+		'Create a zip file of the build.' +
+		'\n\t' + colors.code('compress-build[:test]') +
+		'\n\tIf using `test` mode, requires ' + colors.code('gitinfo') + '.',
+		function (mode) {
+			mode = (typeof mode === 'undefined' ? 'main' : mode);
+			if (mode === 'test') {
+				// Global variable shortSHA
+				shortSHA = grunt.config('gitinfo').local.branch.current.shortSHA;
+			}
+			grunt.log.writeln('');
+			grunt.log.writeln(
+				'Creating file: ' +
+				colors.alert(
+					grunt.template.process('<%= pkg.name %>_<%= pkg.version %>') +
+					(mode === 'test' ? '+' + shortSHA : '') +
+					'.zip'
+				)
+			);
+			grunt.task.run('compress:main');
+		}
+	);
 
 };
