@@ -61,20 +61,15 @@ module.exports = function (grunt) {
 		compress: {
 			main: {
 				options: {
-					archive: 'dist/<% getVersionName(); %>.zip',
-					level: 5
-				},
-				files: [{
-					expand: true,
-					cwd: 'build',
-					src: [ '**' ],
-					dest: '.'
-				}]
-			},
-			test: {
-				options: {
-					archive: 'dist/<% getVersionName(true); %>.zip',
-					level: 5
+					archive: function () {
+						return (
+							'dist/' + grunt.config('pkg').name + '_' + grunt.config('pkg').version +
+							((typeof shortSHA !== 'undefined') && (shortSHA.length > 0) ? '+' + shortSHA : '') +
+							'.zip'
+						);
+					},
+					level: 5,
+					pretty: true
 				},
 				files: [{
 					expand: true,
@@ -128,13 +123,6 @@ module.exports = function (grunt) {
 		return grunt.template.process('<%= gitinfo.local.branch.current.' + propName + ' %>');
 	};
 
-	var getVersionName = function (includeSHA) {
-		if (typeof includeSHA === 'undefined') {
-			includeSHA = false;
-		}
-		return grunt.template.process('<%= pkg.name %>') + '_' + grunt.template.process('<%= pkg.version %>') + (includeSHA ? '+' + gitProp('shortSHA') : '');
-	};
-
 
 	/* Tasks ************************************************************************************ */
 
@@ -165,6 +153,19 @@ module.exports = function (grunt) {
 		grunt.task.run('outputInfo');
 	});
 
+	grunt.registerTask('build', function () {
+		grunt.task.run('createBuild');
+		grunt.task.run('compressBuild');
+	});
+
+	grunt.registerTask('build-test', function () {
+		grunt.task.run('gitinfo');
+		grunt.task.run('compressBuild:test');
+	});
+
+
+	/* Subtasks ********************************************************************************* */
+
 	grunt.registerTask('createBuild', function (mode) {
 		if (typeof mode === 'undefined') {
 			mode = 'main';
@@ -172,18 +173,25 @@ module.exports = function (grunt) {
 		grunt.task.run('clean');
 		grunt.log.writeln('Creating ' + colors.code('build') + ' directory');
 		grunt.task.run('copy:main');
-		grunt.task.run('gitinfo');
-		grunt.log.writeln('Creating zip file for version ' + colors.code(getVersionName(mode === 'test')));
+	});
+
+	grunt.registerTask('compressBuild', function (mode) {
+		mode = (typeof mode === 'undefined' ? 'main' : mode);
+		if (mode === 'test') {
+			// Global variable shortSHA
+			shortSHA = grunt.config('gitinfo').local.branch.current.shortSHA;
+		}
+		grunt.log.writeln('');
+		grunt.log.writeln(
+			'Creating file: ' +
+			colors.alert(
+				grunt.template.process(
+					'<%= pkg.name %>_<%= pkg.version %>' +
+					(mode === 'test' ? '+<%= gitinfo.local.branch.current.shortSHA %>' : '')
+				) + '.zip'
+			)
+		);
 		grunt.task.run('compress:main');
-	});
-
-	grunt.registerTask('build', function () {
-		grunt.task.run('createBuild');
-	});
-
-	grunt.registerTask('build-test', function () {
-		grunt.task.run('gitinfo');
-		grunt.task.run('compress:test');
 	});
 
 };
