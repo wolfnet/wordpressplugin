@@ -15,13 +15,13 @@ module.exports = function (grunt) {
 	};
 	var flags = {
 		main       : function (text) {
-			return colors.success('♥ ') + (typeof text !== 'undefined' ? text + ' ' : '');
+			return colors.success('main task : ') + (typeof text !== 'undefined' ? text + ' ' : '');
 		},
 		alias      : function (text) {
-			return colors.note('alias ') + (typeof text !== 'undefined' ? colors.note('for  : ') + text + ' ' : '      ');
+			return colors.note('alias ') + (typeof text !== 'undefined' ? colors.note('for : ') + text + ' ' : ':      ');
 		},
-		subtask    : function (text) {
-			return colors.info('subtask ') + (typeof text !== 'undefined' ? colors.info('of : ') + text + ' ' : '    ');
+		subtask    : function () {
+			return colors.info('subtask');
 		},
 	};
 
@@ -148,9 +148,8 @@ module.exports = function (grunt) {
 
 	grunt.registerTask(
 		'build',
-		flags.main() +
-		'Build the current version.        ' +
-		colors.code('build[:test]'),
+		flags.main() + 'Build the current version.' +
+		'\n\tUsage:\t' + colors.code('build[:test]') + '\n',
 		function (mode) {
 			mode = (typeof mode !== 'undefined' ? mode : 'main');
 			grunt.task.run('create-build');
@@ -167,9 +166,9 @@ module.exports = function (grunt) {
 
 	grunt.registerMultiTask(
 		'compile',
-		flags.main() +
-		'Compile LESS and/or JS files.     ' +
-		colors.code('compile[:less|:js]'),
+		flags.main() + 'Compile LESS and/or JS files.' +
+		'\n\tUsage:\t' + colors.code('compile[:less|:js]') +
+		'\n\t' + colors.info('This is a "multi task"'),
 		function () {
 			grunt.log.writeln('');
 			grunt.log.writeln(colors.notice(this.data.desc));
@@ -178,31 +177,33 @@ module.exports = function (grunt) {
 	);
 
 	grunt.registerTask(
-		'info',
-		flags.main() +
-		'Print current commit info.        ' + colors.code('info'),
-		function () {
+		'git-info',
+		flags.main() + 'Print current commit info.' +
+		'\n\tUsage:\t' + colors.code('git-info') + '\n',
+		function (item) {
 			grunt.task.run('gitinfo');
-			grunt.task.run('output-info');
+			grunt.task.run('output-info' + (typeof item !== 'undefined' ? ':' + item : ''));
 		}
 	);
 
 
 	/* Aliases ********************************************************************************** */
 
-	grunt.registerTask('default',        flags.alias('build'),          'build');
-	grunt.registerTask('build-test',     flags.alias('build:test'),     'build:test');
-	grunt.registerTask('dist',           flags.alias('build'),          'build');
-	grunt.registerTask('test-dist',      flags.alias('build:test'),     'build:test');
-	grunt.registerTask('compile-less',   flags.alias('compile:less'),   'compile:less');
-	grunt.registerTask('compile-js',     flags.alias('compile:js'),     'compile:js');
+	grunt.registerTask('default',        flags.alias('build'),               'build');
+	grunt.registerTask('build-test',     flags.alias('build:test'),          'build:test');
+	grunt.registerTask('dist',           flags.alias('build'),               'build');
+	grunt.registerTask('test-dist',      flags.alias('build:test'),          'build:test');
+	grunt.registerTask('compile-less',   flags.alias('compile:less'),        'compile:less');
+	grunt.registerTask('compile-js',     flags.alias('compile:js'),          'compile:js');
+	grunt.registerTask('git-revision',   flags.alias('git-info:shortSHA'),   'git-info:shortSHA');
 
 
 	/* Subtasks ********************************************************************************* */
 
+	// Creates a zip file of the build
 	grunt.registerTask(
 		'compress-build',
-		flags.subtask('build') + '   creates a zip file of the build',
+		flags.subtask(),
 		function (mode) {
 			mode = (typeof mode !== 'undefined' ? mode : 'main');
 			if (mode === 'test') {
@@ -222,9 +223,10 @@ module.exports = function (grunt) {
 		}
 	);
 
+	// Cleans and creates a new build
 	grunt.registerTask(
 		'create-build',
-		flags.subtask('build') + '   cleans and creates a new build',
+		flags.subtask(),
 		function () {
 			grunt.task.run('clean');
 			grunt.log.writeln('Creating ' + colors.code('build') + ' directory');
@@ -232,25 +234,35 @@ module.exports = function (grunt) {
 		}
 	);
 
+	// Outputs git commit info
 	grunt.registerTask(
 		'output-info',
-		flags.subtask('info') + '    outputs git commit info',
-		function () {
+		flags.subtask(),
+		function (item) {
 			var commitInfo = grunt.config('gitinfo').local.branch.current;
-			grunt.log.writeln('Current HEAD SHA:       ' + commitInfo['SHA']);
-			grunt.log.writeln('Current HEAD short SHA: ' + commitInfo['shortSHA']);
-			grunt.log.writeln('Current branch name:    ' + commitInfo['name']);
-			grunt.log.writeln('Current git user:       ' + commitInfo['currentUser']);
-			grunt.log.writeln('Last commit time:       ' + commitInfo['lastCommitTime']);
-			grunt.log.writeln('Last commit message:    ' + commitInfo['lastCommitMessage']);
-			grunt.log.writeln('Last commit author:     ' + commitInfo['lastCommitAuthor']);
-			grunt.log.writeln('Last commit number:     ' + commitInfo['lastCommitNumber']);
+			var infoItems = [
+				{ name: 'SHA',                 label: 'Current HEAD SHA:       ' },
+				{ name: 'shortSHA',            label: 'Current HEAD short SHA: ' },
+				{ name: 'name',                label: 'Current branch name:    ' },
+				{ name: 'currentUser',         label: 'Current git user:       ' },
+				{ name: 'lastCommitTime',      label: 'Last commit time:       ' },
+				{ name: 'lastCommitMessage',   label: 'Last commit message:    ' },
+				{ name: 'lastCommitAuthor',    label: 'Last commit author:     ' },
+				{ name: 'lastCommitNumber',    label: 'Last commit number:     ' }
+			];
+			item = (typeof item !== 'undefined' ? item : '');
+			for (var i=0, l=infoItems.length; i<l; i++) {
+				if ((item === '') || (item == infoItems[i].name)) {
+					grunt.log.writeln(infoItems[i].label + commitInfo[infoItems[i].name]);
+				}
+			}
 		}
 	);
 
+	// Updates version number on build files
 	grunt.registerTask(
 		'update-version',
-		flags.subtask('build') + '   updates version number on build files',
+		flags.subtask(),
 		function (mode) {
 			var version = grunt.config('pkg').version,
 				versionParts = version.split('.'),
