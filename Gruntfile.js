@@ -8,6 +8,7 @@ module.exports = function (grunt) {
 		warn       : clc.yellow,
 		error      : clc.red.bold,
 		info       : clc.blueBright,
+		note       : clc.magenta,
 		notice     : clc.cyanBright,
 		success    : clc.greenBright,
 		code       : clc.white.bold,
@@ -17,7 +18,7 @@ module.exports = function (grunt) {
 			return colors.success('♥ ') + (typeof text !== 'undefined' ? text + ' ' : '');
 		},
 		alias      : function (text) {
-			return colors.alert('alias ') + (typeof text !== 'undefined' ? colors.alert('for  : ') + text + ' ' : '      ');
+			return colors.note('alias ') + (typeof text !== 'undefined' ? colors.note('for  : ') + text + ' ' : '      ');
 		},
 		subtask    : function (text) {
 			return colors.info('subtask ') + (typeof text !== 'undefined' ? colors.info('of : ') + text + ' ' : '    ');
@@ -189,6 +190,8 @@ module.exports = function (grunt) {
 
 	grunt.registerTask('default',        flags.alias('build'),          'build');
 	grunt.registerTask('build-test',     flags.alias('build:test'),     'build:test');
+	grunt.registerTask('dist',           flags.alias('build'),          'build');
+	grunt.registerTask('test-dist',      flags.alias('build:test'),     'build:test');
 	grunt.registerTask('compile-less',   flags.alias('compile:less'),   'compile:less');
 	grunt.registerTask('compile-js',     flags.alias('compile:js'),     'compile:js');
 
