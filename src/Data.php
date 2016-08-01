@@ -402,4 +402,16 @@ class Wolfnet_Data
     {
         return $this->getBeds();
     }
+
+
+	public function getZipLabel()
+	{
+		$data = $this->plugin->api->sendRequest(
+			$this->plugin->keyService->getDefault(),
+			'/settings'
+		);
+
+		return $data['responseData']['data']['resource']['general']['displayFormat']['postalCodeLabel'];
+	}
+
 }
