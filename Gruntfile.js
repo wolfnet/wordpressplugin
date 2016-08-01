@@ -156,8 +156,10 @@ module.exports = function (grunt) {
 			grunt.task.run('create-build');
 			grunt.task.run('gitinfo');
 			if (mode === 'test') {
+				grunt.task.run('update-version:test');
 				grunt.task.run('compress-build:test');
 			} else {
+				grunt.task.run('update-version');
 				grunt.task.run('compress-build');
 			}
 		}
@@ -199,39 +201,10 @@ module.exports = function (grunt) {
 	/* Subtasks ********************************************************************************* */
 
 	grunt.registerTask(
-		'output-info',
-		flags.subtask('info') +
-		'\t outputs git commit info',
-		function () {
-			var commitInfo = grunt.config('gitinfo').local.branch.current;
-			grunt.log.writeln('Current HEAD SHA:       ' + commitInfo['SHA']);
-			grunt.log.writeln('Current HEAD short SHA: ' + commitInfo['shortSHA']);
-			grunt.log.writeln('Current branch name:    ' + commitInfo['name']);
-			grunt.log.writeln('Current git user:       ' + commitInfo['currentUser']);
-			grunt.log.writeln('Last commit time:       ' + commitInfo['lastCommitTime']);
-			grunt.log.writeln('Last commit message:    ' + commitInfo['lastCommitMessage']);
-			grunt.log.writeln('Last commit author:     ' + commitInfo['lastCommitAuthor']);
-			grunt.log.writeln('Last commit number:     ' + commitInfo['lastCommitNumber']);
-		}
-	);
-
-	grunt.registerTask(
-		'create-build',
-		flags.subtask('build') +
-		'\t cleans and creates a new build',
-		function () {
-			grunt.task.run('clean');
-			grunt.log.writeln('Creating ' + colors.code('build') + ' directory');
-			grunt.task.run('copy:main');
-		}
-	);
-
-	grunt.registerTask(
 		'compress-build',
-		flags.subtask('build') +
-		'\t creates a zip file of the build',
+		flags.subtask('build') + '   creates a zip file of the build',
 		function (mode) {
-			mode = (typeof mode === 'undefined' ? 'main' : mode);
+			mode = (typeof mode !== 'undefined' ? mode : 'main');
 			if (mode === 'test') {
 				// Global variable shortSHA
 				shortSHA = grunt.config('gitinfo').local.branch.current.shortSHA;
@@ -246,6 +219,59 @@ module.exports = function (grunt) {
 				)
 			);
 			grunt.task.run('compress:main');
+		}
+	);
+
+	grunt.registerTask(
+		'create-build',
+		flags.subtask('build') + '   cleans and creates a new build',
+		function () {
+			grunt.task.run('clean');
+			grunt.log.writeln('Creating ' + colors.code('build') + ' directory');
+			grunt.task.run('copy:main');
+		}
+	);
+
+	grunt.registerTask(
+		'output-info',
+		flags.subtask('info') + '    outputs git commit info',
+		function () {
+			var commitInfo = grunt.config('gitinfo').local.branch.current;
+			grunt.log.writeln('Current HEAD SHA:       ' + commitInfo['SHA']);
+			grunt.log.writeln('Current HEAD short SHA: ' + commitInfo['shortSHA']);
+			grunt.log.writeln('Current branch name:    ' + commitInfo['name']);
+			grunt.log.writeln('Current git user:       ' + commitInfo['currentUser']);
+			grunt.log.writeln('Last commit time:       ' + commitInfo['lastCommitTime']);
+			grunt.log.writeln('Last commit message:    ' + commitInfo['lastCommitMessage']);
+			grunt.log.writeln('Last commit author:     ' + commitInfo['lastCommitAuthor']);
+			grunt.log.writeln('Last commit number:     ' + commitInfo['lastCommitNumber']);
+		}
+	);
+
+	grunt.registerTask(
+		'update-version',
+		flags.subtask('build') + '   updates version number on build files',
+		function (mode) {
+			var version = grunt.config('pkg').version,
+				versionParts = version.split('.'),
+				majorVersion = versionParts[0] + '.' + versionParts[1],
+				minorVersion = (versionParts.length > 2 ? versionParts[2] : 0),
+				versionFiles = grunt.file.expand('build/**/*.php', 'build/ReadMe.txt');
+			mode = (typeof mode !== 'undefined' ? mode : 'main');
+			if (mode === 'test') {
+				var shortSHA = grunt.config('gitinfo').local.branch.current.shortSHA;
+			}
+			versionFiles.forEach(function (filePath) {
+				grunt.file.copy(filePath, filePath, {
+					process: function (text) {
+						text = text.replace('{majorVersion}', majorVersion);
+						text = text.replace('{minorVersion}', minorVersion);
+						text = text.replace('{X.X.X}', version + (mode === 'test' ? '+' + shortSHA : ''));
+						text = text.replace('{X.X.X-stable}', version);
+						return text;
+					}
+				});
+			});
 		}
 	);
 
