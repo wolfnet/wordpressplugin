@@ -12,6 +12,17 @@ module.exports = function (grunt) {
 		success    : clc.greenBright,
 		code       : clc.white.bold,
 	};
+	var flags = {
+		main       : function (text) {
+			return colors.success('♥ ') + (typeof text !== 'undefined' ? text + ' ' : '');
+		},
+		alias      : function (text) {
+			return colors.alert('alias ') + (typeof text !== 'undefined' ? colors.alert('for  : ') + text + ' ' : '      ');
+		},
+		subtask    : function (text) {
+			return colors.info('subtask ') + (typeof text !== 'undefined' ? colors.info('of : ') + text + ' ' : '    ');
+		},
+	};
 
 
 	/* Project Configuration ******************************************************************** */
@@ -134,13 +145,28 @@ module.exports = function (grunt) {
 
 	/* Tasks ************************************************************************************ */
 
-	grunt.registerTask('default', 'compile');
+	grunt.registerTask(
+		'build',
+		flags.main() +
+		'Build the current version.        ' +
+		colors.code('build[:test]'),
+		function (mode) {
+			mode = (typeof mode !== 'undefined' ? mode : 'main');
+			grunt.task.run('create-build');
+			grunt.task.run('gitinfo');
+			if (mode === 'test') {
+				grunt.task.run('compress-build:test');
+			} else {
+				grunt.task.run('compress-build');
+			}
+		}
+	);
 
 	grunt.registerMultiTask(
 		'compile',
-		colors.success('use: ') +
-		'Compiles LESS (.less) and/or JavaScript (.js) files.' +
-		'\n\t' + colors.code('compile[:less|:js]'),
+		flags.main() +
+		'Compile LESS and/or JS files.     ' +
+		colors.code('compile[:less|:js]'),
 		function () {
 			grunt.log.writeln('');
 			grunt.log.writeln(colors.notice(this.data.desc));
@@ -150,43 +176,29 @@ module.exports = function (grunt) {
 
 	grunt.registerTask(
 		'info',
-		colors.success('use: ') +
-		'Print current commit info.',
+		flags.main() +
+		'Print current commit info.        ' + colors.code('info'),
 		function () {
 			grunt.task.run('gitinfo');
 			grunt.task.run('output-info');
 		}
 	);
 
-	grunt.registerTask(
-		'build',
-		colors.success('use: ') +
-		'Create a build of the current version.',
-		function () {
-			grunt.task.run('create-build');
-			grunt.task.run('gitinfo');
-			grunt.task.run('compress-build');
-		}
-	);
 
-	grunt.registerTask(
-		'build-test',
-		colors.success('use: ') +
-		'Create a test build of the current version.',
-		function () {
-			grunt.task.run('create-build');
-			grunt.task.run('gitinfo');
-			grunt.task.run('compress-build:test');
-		}
-	);
+	/* Aliases ********************************************************************************** */
+
+	grunt.registerTask('default',        flags.alias('build'),          'build');
+	grunt.registerTask('build-test',     flags.alias('build:test'),     'build:test');
+	grunt.registerTask('compile-less',   flags.alias('compile:less'),   'compile:less');
+	grunt.registerTask('compile-js',     flags.alias('compile:js'),     'compile:js');
 
 
 	/* Subtasks ********************************************************************************* */
 
 	grunt.registerTask(
 		'output-info',
-		colors.info('Subtask') + ' of ' + colors.code('info') + '. ' +
-		'Output git commit info. Requires ' + colors.code('gitinfo') + '.',
+		flags.subtask('info') +
+		'\t outputs git commit info',
 		function () {
 			var commitInfo = grunt.config('gitinfo').local.branch.current;
 			grunt.log.writeln('Current HEAD SHA:       ' + commitInfo['SHA']);
@@ -202,8 +214,8 @@ module.exports = function (grunt) {
 
 	grunt.registerTask(
 		'create-build',
-		colors.info('Subtask') + ' of ' + colors.code('build') + '. ' +
-		'Clean and create a new build.',
+		flags.subtask('build') +
+		'\t cleans and creates a new build',
 		function () {
 			grunt.task.run('clean');
 			grunt.log.writeln('Creating ' + colors.code('build') + ' directory');
@@ -213,10 +225,8 @@ module.exports = function (grunt) {
 
 	grunt.registerTask(
 		'compress-build',
-		colors.info('Subtask') + ' of ' + colors.code('build') + '. ' +
-		'Create a zip file of the build.' +
-		'\n\t' + colors.code('compress-build[:test]') +
-		'\n\tIf using `test` mode, requires ' + colors.code('gitinfo') + '.',
+		flags.subtask('build') +
+		'\t creates a zip file of the build',
 		function (mode) {
 			mode = (typeof mode === 'undefined' ? 'main' : mode);
 			if (mode === 'test') {
