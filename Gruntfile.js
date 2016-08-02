@@ -1,4 +1,8 @@
+var timer = require('grunt-timer');
+
 module.exports = function (grunt) {
+
+	timer.init(grunt);
 
 	var exec = require('child_process').exec, child;
 	var execSync = require('child_process').execSync;
@@ -142,6 +146,7 @@ module.exports = function (grunt) {
 	grunt.loadNpmTasks('grunt-contrib-less');
 	grunt.loadNpmTasks('grunt-contrib-uglify');
 	grunt.loadNpmTasks('grunt-gitinfo');
+	grunt.loadNpmTasks('grunt-timer');
 
 
 	/* Tasks ************************************************************************************ */
