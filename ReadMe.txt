@@ -93,6 +93,12 @@ Please upgrade to the latest version of the plugin as we will be disabling our o
 
 == Changelog ==
 
+= 1.12.0 =
+
+* New Color Options form in the admin to customize the appearance of listings, agents, and offices
+* Aligned the agent pagination links
+* Fixed a bug in the listing grid prev/next links (when opening in a new tab)
+
 = 1.11.1 =
 
 * Hides the Agents/Offices toggle when offices are not included
