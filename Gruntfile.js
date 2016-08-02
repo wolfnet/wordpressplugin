@@ -194,13 +194,14 @@ module.exports = function (grunt) {
 
 	/* Aliases ********************************************************************************** */
 
-	grunt.registerTask('default',        flags.alias('build'),               'build');
-	grunt.registerTask('build-test',     flags.alias('build:test'),          'build:test');
-	grunt.registerTask('dist',           flags.alias('build'),               'build');
-	grunt.registerTask('test-dist',      flags.alias('build:test'),          'build:test');
-	grunt.registerTask('compile-less',   flags.alias('compile:less'),        'compile:less');
-	grunt.registerTask('compile-js',     flags.alias('compile:js'),          'compile:js');
-	grunt.registerTask('git-revision',   flags.alias('git-info:shortSHA'),   'git-info:shortSHA');
+	grunt.registerTask('default',             flags.alias('build'),               'build');
+	grunt.registerTask('build-test',          flags.alias('build:test'),          'build:test');
+	grunt.registerTask('dist',                flags.alias('build'),               'build');
+	grunt.registerTask('test-dist',           flags.alias('build:test'),          'build:test');
+	grunt.registerTask('compile-less',        flags.alias('compile:less'),        'compile:less');
+	grunt.registerTask('compile-js',          flags.alias('compile:js'),          'compile:js');
+	grunt.registerTask('minify-javascript',   flags.alias('compile:js'),          'compile:js');
+	grunt.registerTask('git-revision',        flags.alias('git-info:shortSHA'),   'git-info:shortSHA');
 
 
 	/* Subtasks ********************************************************************************* */
