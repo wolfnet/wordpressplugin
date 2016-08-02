@@ -1,19 +1,8 @@
 <project name="wolfnet-idx-for-wordpress" default="build" basedir=".">
 
-    <property name="majorVersion" value="1.12" />
-    <property name="minorVersion" value="0" />
-
-    <property name="version" value="${majorVersion}.${minorVersion}" />
-
     <property name="dir.ant"   value="${basedir}/.ant" />
-    <property name="dir.build" value="${basedir}/build" />
-    <property name="dir.dist"  value="${basedir}/dist" />
-    <property name="dir.js"    value="public/js" />
-    <property name="dir.css"   value="public/css" />
 
     <property name="tool.ant-contrib"   value="${dir.ant}/ant-contrib/lib/ant-contrib.jar" />
-
-    <property name="dist.name"          value="${dir.dist}/${ant.project.name}" />
 
     <available file=".git" type="dir" property="git.present"/>
 
@@ -30,79 +19,38 @@
     </taskdef>
 
 
-	<target name="compile" depends="compile-less,minify-javascript">
+	<target name="compile">
+		<exec executable="${gruntExec}" dir="${basedir}"><arg value="compile" /></exec>
 	</target>
 
 
 	<target name="compile-less">
-		<sequential>
-			<exec executable="${gruntExec}" dir="${basedir}"><arg value="compile:less" /></exec>
-		</sequential>
+		<exec executable="${gruntExec}" dir="${basedir}"><arg value="compile:less" /></exec>
 	</target>
 
 
 	<target name="minify-javascript">
-		<sequential>
-			<exec executable="${gruntExec}" dir="${basedir}"><arg value="compile:js" /></exec>
-		</sequential>
+		<exec executable="${gruntExec}" dir="${basedir}"><arg value="compile:js" /></exec>
 	</target>
 
 
-    <target name="build" depends="compile,git-revision">
-        <clean-for-build />
-
-        <echo>Creating Build Directory: ${dir.build}</echo>
-        <copy todir="${dir.build}">
-            <fileset dir="${basedir}">
-                <!-- Excluded Directories -->
-                <exclude name="build/" />
-                <exclude name="dist/" />
-                <exclude name="docs/" />
-                <exclude name="tests/" />
-                <exclude name="node_modules/" />
-                <!-- Excluded Files -->
-                <exclude name="build.xml" />
-                <exclude name="phpunit.xml" />
-                <exclude name="LessCompilerOutput.txt" />
-                <exclude name="vagrantfile" />
-                <!-- Excluded File Patterns -->
-                <exclude name="**/.*" />
-                <exclude name="**/.*/" />
-                <exclude name="*.sublime*" />
-                <exclude name="**/*.less" />
-                <exclude name="**/*.tmp" />
-                <exclude name="phpdoc*.xml" />
-            </fileset>
-        </copy>
-
-    </target>
+	<target name="build">
+		<exec executable="${gruntExec}" dir="${basedir}"><arg value="build" /></exec>
+	</target>
 
 
 	<target name="dist">
-		<sequential>
-			<exec executable="${gruntExec}" dir="${basedir}"><arg value="build" /></exec>
-		</sequential>
+		<exec executable="${gruntExec}" dir="${basedir}"><arg value="build" /></exec>
 	</target>
 
 
 	<target name="test-dist">
-		<sequential>
-			<exec executable="${gruntExec}" dir="${basedir}"><arg value="build:test" /></exec>
-		</sequential>
+		<exec executable="${gruntExec}" dir="${basedir}"><arg value="build:test" /></exec>
 	</target>
 
 
 	<target name="git-revision" description="Print git revision" if="git.present">
 		<exec executable="${gruntExec}" dir="${basedir}"><arg value="git-info:shortSHA" /></exec>
 	</target>
-
-
-	<!-- MACROS -->
-
-	<macrodef name="clean-for-build">
-		<sequential>
-			<exec executable="${gruntExec}" dir="${basedir}"><arg value="clean" /></exec>
-		</sequential>
-	</macrodef>
 
 </project>
