@@ -404,14 +404,14 @@ class Wolfnet_Data
     }
 
 
-	public function getZipLabel()
+	public function isCanada()
 	{
 		$data = $this->plugin->api->sendRequest(
 			$this->plugin->keyService->getDefault(),
 			'/settings'
 		);
 
-		return $data['responseData']['data']['resource']['general']['displayFormat']['postalCodeLabel'];
+		return $data['responseData']['data']['resource']['country'] == 'Canada' ? true : false;
 	}
 
 }

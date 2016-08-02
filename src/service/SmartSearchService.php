@@ -83,13 +83,17 @@ class Wolfnet_Service_SmartSearchService
 	}
 
 
-	public function getPlaceholder($zipLabel) {
+	public function getPlaceholder($canada) {
 
         $labelLimit = 2;
         $labelsAdded = 0;
 
-		// TODO: Add "Zip" with logic for Canadian markets to be "Postal Code"
-		$placeholder = 'Search by City, Address, ' . $zipLabel . ', ';
+		if ($canada) {
+			$placeholder = 'Search by City, Address, Postal Code, ';
+		} else {
+			$placeholder = 'Search by City, Address, Zip, ';
+		}
+
         $searchTypes = $this->getLocaleLabels();
 
         foreach($searchTypes as &$searchType)

@@ -31,7 +31,7 @@ class Wolfnet_Module_SmartSearch
             $defaultAttributes = $this->getDefaults();
 
             $criteria = array_merge($defaultAttributes, (is_array($attrs)) ? $attrs : array());
-			$criteria['zipLabel'] = $this->plugin->data->getZipLabel();
+			$criteria['isCanada'] = $this->plugin->data->isCanada();
             $this->plugin->decodeCriteria($criteria);
 
             $out = $this->smartSearch($criteria);
@@ -119,7 +119,7 @@ class Wolfnet_Module_SmartSearch
 
         $args['smartSearchFields'] = json_encode($smartSearchService->getFields());
         $args['smartSearchFieldMap'] = json_encode($smartSearchService->getFieldMap());
-        $args['smartSearchPlaceholder'] = $smartSearchService->getPlaceholder($args['zipLabel']);
+        $args['smartSearchPlaceholder'] = $smartSearchService->getPlaceholder($criteria['isCanada']);
         $args['componentId'] = uniqid('-');
 
         return $this->plugin->views->smartSearchView($args);

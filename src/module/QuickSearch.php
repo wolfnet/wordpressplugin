@@ -30,7 +30,7 @@ class Wolfnet_Module_QuickSearch
             $defaultAttributes = $this->getDefaults();
 
             $criteria = array_merge($defaultAttributes, (is_array($attrs)) ? $attrs : array());
-			$criteria['zipLabel'] = $this->plugin->data->getZipLabel();
+			$criteria['isCanada'] = $this->plugin->data->isCanada();
             $this->plugin->decodeCriteria($criteria);
 
             $out = $this->quickSearch($criteria);
@@ -171,7 +171,7 @@ class Wolfnet_Module_QuickSearch
             'beds'         => $beds,
             'baths'        => $baths,
             'formAction'   => $formAction,
-            'hintText'     => $this->getHintText($criteria['zipLabel']),
+            'hintText'     => $this->getHintText($criteria['isCanada']),
             );
 
         $args = $this->plugin->convertDataType(array_merge($criteria, $vars));
@@ -180,11 +180,11 @@ class Wolfnet_Module_QuickSearch
     }
 
 
-	public function getHintText($zipLabel){
-		if (empty($zipLabel)) {
-			return 'House #, Street, City, State, or Zip';
+	public function getHintText($canada){
+		if ($canada) {
+			return 'House #, Street, City, or Postal Code';
 		} else {
-			return 'House #, Street, City, State, or ' . $zipLabel;
+			return 'House #, Street, City, State, or Zip';
 		}
 	}
 
