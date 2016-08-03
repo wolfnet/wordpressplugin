@@ -43,6 +43,7 @@ class Wolfnet_Widget_QuickSearchWidget extends Wolfnet_Widget_AbstractWidget
             $options = $this->getOptions($instance);
 
             $isSmart = isset($options['smartsearch']) ? $options['smartsearch'] : false;
+            $options['isCanada'] = $this->plugin->data->isCanada();
 
             // Route to smart search module, if user opted for smart functionality
             if ($isSmart === 'true') {
