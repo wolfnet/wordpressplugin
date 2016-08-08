@@ -23,23 +23,23 @@
 if (array_key_exists("REDIRECT_URL", $_SERVER)) {
 	$linkBase = $_SERVER['REDIRECT_URL'];
 } else {
-	$linkBase = $_SERVER['PHP_SELF'];
+	$linkBase = $_SERVER['PHP_SELF'] . '/';
 }
 
-$postHash = '#post-' . get_the_id();
+// Remove office part of URL since we don't need it past this point.
+$linkBase = preg_replace('/office\/.*/', '', $linkBase);
 
 $linkExtra = (
 		array_key_exists('agentCriteria', $_REQUEST) && (strlen($_REQUEST['agentCriteria']) > 0) ?
 		'&agentCriteria=' . $_REQUEST['agentCriteria'] : ''
 	)
-	. ($officeId != '' ? '&officeId=' . $officeId : '')
-	. $postHash;
+	. ($officeId != '' ? '&officeId=' . $officeId : '');
 
-$allAgentsLink = $linkBase . '?agentSearch' . $postHash;
+$allAgentsLink = $linkBase . '?agentSearch';
 
 if (!function_exists('paginate')) {
 
-	function paginate ($page, $total, $numPerPage, $postHash, $officeId = '', $search = null, $sort = 'name') {
+	function paginate ($page, $total, $numPerPage, $officeId = '', $search = null, $sort = 'name') {
 		/*
 		 * Note: We're using "agentpage" instead of just "page" as out URL variable
 		 * here because Wordpress uses page internally for their own pagination
@@ -73,12 +73,12 @@ if (!function_exists('paginate')) {
 			if ($i == $page) {
 				$output .= '<li class="wolfnet_selected">' . $i . '</li>';
 			} else {
-				$output .= '<li><a href="' . $linkBase . 'agentpage=' . $i . $postHash . '">' . $i . '</a></li>';
+				$output .= '<li><a href="' . $linkBase . 'agentpage=' . $i . '">' . $i . '</a></li>';
 			}
 		}
 
 		if(($page * $numPerPage) < $total) {
-			$output .= '<li><a href="' . $linkBase . 'agentpage=' . ($page + 1) . $postHash . '">Next</a></li>';
+			$output .= '<li><a href="' . $linkBase . 'agentpage=' . ($page + 1) . '">Next</a></li>';
 		}
 
 		$output .= "</ul>";
@@ -136,7 +136,7 @@ if (!function_exists('paginate')) {
 
 				if ($agent['display_agent']) {
 
-					$agentLink = $linkBase . '?agentId=' . $agent['agent_id'] . $linkExtra;
+					$agentLink = $linkBase . 'agent/' . $agent['agent_stub'] . $linkExtra;
 
 					$contactLink = $linkBase . '?contact=' . $agent['agent_id'] . $linkExtra;
 
@@ -258,7 +258,7 @@ if (!function_exists('paginate')) {
 
 	<div class="wolfnet_clearfix"></div>
 
-	<?php echo paginate($page, $totalrows, $numperpage, $postHash, $officeId, $agentCriteria, $agentSort); ?>
+	<?php echo paginate($page, $totalrows, $numperpage, $officeId, $agentCriteria, $agentSort); ?>
 
 </div>
 

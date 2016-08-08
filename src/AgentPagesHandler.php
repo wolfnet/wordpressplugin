@@ -32,32 +32,49 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
 
     public function handleRequest()
     {
+        global $wp_query;
+        $query = $wp_query->query;
+
         $action = '';
 
-        if (array_key_exists('agentSearch', $_REQUEST)) {
+        if(array_key_exists('agentSearch', $_REQUEST)) {
             // All of the logic for searching is in the agentList function since
             // we're just passing more criteria to the API call.
             $action = 'agentList';
-        } elseif(array_key_exists('contact', $_REQUEST)) {
-            if($_SERVER['REQUEST_METHOD'] == 'POST') {
-                $action = 'contactProcess';
+        } elseif(array_key_exists('agent', $query) && sizeof(trim($query['agent']) > 0)) {
+
+            // Check if we're requesting the contact form. If not, show agent detail.
+            if(preg_match('/\/contact.*/', $query['agent'])) {
+                // Requesting the contact form.
+                $_REQUEST['contact'] = preg_replace('/\/contact.*/', '', $query['agent']);
+                if($_SERVER['REQUEST_METHOD'] == 'POST') {
+                    $action = 'contactProcess';
+                } else {
+                    $action = 'contactForm';
+                }
             } else {
-                $action = 'contactForm';
+                // Show the agent detail.
+                $_REQUEST['agentId'] = $query['agent'];
+                $action = 'agent';
             }
-        } elseif(array_key_exists('contactOffice', $_REQUEST)) {
-            if($_SERVER['REQUEST_METHOD'] == 'POST') {
-                $action = 'contactProcess';
+        } elseif(array_key_exists('office', $query) && sizeof(trim($query['office']) > 0)) {
+
+            // Check if we're requesting the contact form. If not, show list of office's agents.
+            if(preg_match('/\/contact.*/', $query['office'])) {
+                // Requesting the contact form.
+                $_REQUEST['contactOffice'] = preg_replace('/\/contact.*/', '', $query['office']);
+                if($_SERVER['REQUEST_METHOD'] == 'POST') {
+                    $action = 'contactProcess';
+                } else {
+                    $action = 'contactFormOffice';
+                }
             } else {
-                $action = 'contactFormOffice';
+                // Office is passed in; list their agents.
+                $_REQUEST['officeId'] = $query['office'];
+                $action = 'agentList';
             }
-        } elseif(array_key_exists('agentId', $_REQUEST) && sizeof(trim($_REQUEST['agentId']) > 0)) {
-            // If agentId is passed through, show the agent detail.
-            $action = 'agent';
-        } elseif(array_key_exists('officeId', $_REQUEST) && sizeof(trim($_REQUEST['officeId']) > 0)) {
-            // officeId is passed in; list their agents.
-            $action = 'agentList';
         } elseif(!$this->args['showoffices']) {
-            // if none of the above match and they don't want to show an office list, show all agents.
+            // If none of the above match and they don't want to show an office list, show all agents.
             $action = 'agentList';
         } else {
             $action = 'officeList';
@@ -112,6 +129,8 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
 
     protected function agentList()
     {
+        global $wp_query;
+
         if(array_key_exists("agentpage", $_REQUEST) && $_REQUEST['agentpage'] > 1) {
             /*
              * $startrow needs to be calculated based on the requested page. If $page == 2
@@ -134,8 +153,8 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
 
         $endpoint = '/agent';
         $separator = "?";
-        if(array_key_exists('officeId', $_REQUEST)) {
-            $endpoint .= '?office_id=' . $_REQUEST['officeId'];
+        if(array_key_exists('office', $wp_query->query)) {
+            $endpoint .= '?office_name=' . $wp_query->query['office'];
             $separator = "&";
         }
         $endpoint .= $separator . "startrow=" . $startrow;
@@ -185,6 +204,8 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
 
     protected function agent()
     {
+        global $wp_query;
+
         $agentData = $this->getAgentById($_REQUEST['agentId']);
 
         // We need to get a product key that we can pull this agent's listings with.

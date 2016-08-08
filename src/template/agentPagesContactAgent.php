@@ -28,25 +28,32 @@
 	if(array_key_exists("REDIRECT_URL", $_SERVER)) {
 		$linkBase = $_SERVER['REDIRECT_URL'];
 	} else {
-		$linkBase = $_SERVER['PHP_SELF'];
+		$linkBase = $_SERVER['PHP_SELF'] . '/';
 	}
 
 	$link = $linkBase;
-	$link .= '?agentId=' . $agentId;
-	$link .= '&officeId=' . $officeId;
-	$link .= '#post-' . get_the_id();
+	$formAction = $linkBase;
+	if(!preg_match('/\/agent/', $linkBase)) {
+		// Landing on this page without a redirect URL.
+		$link .= 'agent/' . $agentId;
+		$formAction = $link . '/contact';
+	} else {
+		// Should just be able to remove /contact from the link.
+		$formAction = $linkBase;
+		$link = preg_replace('/\/contact.*/', '', $linkBase);
+	}
 
 	echo '<p><a href="' . $link . '">Back</a> to agent.</p>';
 
 	?>
 
 	<div class="wolfnet_agentPreview">
-		<?php 
+		<?php
 		if(strlen($agent['thumbnail_url']) > 0) {
 			echo '<div class="wolfnet_agentImage">';
 			echo "<img src=\"{$agent['thumbnail_url']}\" />";
 			echo '</div>';
-		} 
+		}
 		?>
 
 		<div class="wolfnet_agentInfo">
@@ -65,7 +72,7 @@
 			</div>
 
 			<div class="wolfnet_agentContact">
-				<?php 
+				<?php
 				if(strlen($agent['office_phone_number']) > 0) {
 					echo '<div class="wolfnet_agentOfficePhone">';
 					echo "<strong>Office</strong>: " . $agent['office_phone_number'];
@@ -98,10 +105,9 @@
 	} else {
 	?>
 
-	<form class="wolfnet_contactForm" action="<?php echo $linkBase. "?contact=" 
-		. $agentId . "&officeId=" . $officeId . "#post-" . get_the_id(); ?>" method="post">
+	<form class="wolfnet_contactForm" action="<?php echo $formAction; ?>" method="post">
 
-		<?php 
+		<?php
 		if(array_key_exists('errorField', $_REQUEST)) {
 			echo '<span class="wolfnet_red">Please correct the errors below.</span><br />';
 			$errorField = $_REQUEST['errorField'];
@@ -113,8 +119,8 @@
 		(<span class="wolfnet_red">*</span> Indicates a required field.)<br />
 
 		<label for="name"><span class="wolfnet_red">*</span>Name: </label>
-		<input type="text" name="wolfnet_name" 
-			class="wolfnet_name<?php echo ($errorField == 'wolfnet_name') ? ' wolfnet_required' : ''; ?>" 
+		<input type="text" name="wolfnet_name"
+			class="wolfnet_name<?php echo ($errorField == 'wolfnet_name') ? ' wolfnet_required' : ''; ?>"
 			value="<?php echo (array_key_exists('wolfnet_name', $_REQUEST)) ? $_REQUEST['wolfnet_name'] : ''; ?>" />
 		<?php
 			if($errorField == 'wolfnet_name') {
@@ -123,7 +129,7 @@
 		?>
 
 		<label for="email"><span class="wolfnet_red">*</span>Email: </label>
-		<input type="text" name="wolfnet_email" 
+		<input type="text" name="wolfnet_email"
 			class="wolfnet_email<?php echo ($errorField == 'wolfnet_email') ? ' wolfnet_required' : ''; ?>"
 			value="<?php echo (array_key_exists('wolfnet_email', $_REQUEST)) ? $_REQUEST['wolfnet_email'] : ''; ?>" />
 		<?php
@@ -178,7 +184,7 @@ jQuery(function($) {
 	$(window).load(function() {
 		$('#wolfnet_submit').click(function(event) {
 			event.preventDefault();
-			
+
 			var message = '';
 			var error = false;
 			var validEmail = true;

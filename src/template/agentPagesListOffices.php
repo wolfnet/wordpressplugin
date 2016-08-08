@@ -23,10 +23,8 @@
 if (array_key_exists("REDIRECT_URL", $_SERVER)) {
 	$linkBase = $_SERVER['REDIRECT_URL'];
 } else {
-	$linkBase = $_SERVER['PHP_SELF'];
+	$linkBase = $_SERVER['PHP_SELF'] . '/';
 }
-
-$postHash = '#post-' . get_the_id();
 
 ?>
 
@@ -69,7 +67,7 @@ $postHash = '#post-' . get_the_id();
 
 				if ($office['office_id'] != '') {
 
-					$officeLink = $linkBase . '?officeId=' . $office['office_id'] . $postHash;
+					$officeLink = $linkBase . 'office/' . $office['office_stub'];
 
 					$searchLink = $office['search_solution_url'] . '/?action=newsearchsession';
 
@@ -77,7 +75,7 @@ $postHash = '#post-' . get_the_id();
 						. '&office_id=' . $office['office_id']
 						. '&ld_action=find_office';
 
-					$contactLink = '?contactOffice=' . $office['office_id'] . $postHash;
+					$contactLink = '?contactOffice=' . $office['office_id'];
 
 		?>
 

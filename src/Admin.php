@@ -148,7 +148,6 @@ class Wolfnet_Admin extends Wolfnet_Plugin
      */
     public function adminInit()
     {
-
         // Do activation updates.
         if(is_admin() && get_option('wolfnet_activatedPlugin181') == '1.8.1') {
             delete_option('wolfnet_activatedPlugin181');

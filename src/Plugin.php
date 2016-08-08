@@ -107,6 +107,9 @@ class Wolfnet_Plugin
 
     private $cachingService;
 
+    // add_rewrite_endpoint flag
+    private $epFlag = 0;
+
     const CACHE_CRON_HOOK = 'wntCronCacheDaily';
 
     const SSL_WP_OPTION = 'wolfnet_sslEnabled';
@@ -173,6 +176,7 @@ class Wolfnet_Plugin
         // Register actions.
         $this->addAction(array(
             array('init',                  'init'),
+            array('init',                  'setupRewriteTags', 10),
             array('wp_enqueue_scripts',    'scripts'),
             array('wp_enqueue_scripts',    'styles'),
             array('wp_footer',             'footer'),
@@ -376,6 +380,14 @@ class Wolfnet_Plugin
     }
 
 
+    public function setupRewriteTags() {
+        if($this->agentPages->showAgentFeature()) {
+            add_rewrite_endpoint('agent', $this->epFlag);
+            add_rewrite_endpoint('office', $this->epFlag);
+        }
+    }
+
+
     /* Custom Post Types ************************************************************************ */
     /*  _                         _              ___                                              */
     /* /       _ _|_  _  ._ _    |_) _   _ _|_    |    ._   _   _                                 */
@@ -455,6 +467,9 @@ class Wolfnet_Plugin
     /*                                                                                            */
     /* ****************************************************************************************** */
 
+    public function setEpFlag($flag) {
+        $this->epFlag = $flag;
+    }
 
     /**
      * Decodes all HTML entities, including numeric and hexadecimal ones.
