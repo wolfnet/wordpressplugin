@@ -93,6 +93,11 @@ Please upgrade to the latest version of the plugin as we will be disabling our o
 
 == Changelog ==
 
+= 1.12.1 =
+
+* Back-to-top link on Agent Page scrolls the screen higher than the agent content, to account for fixed headers
+* Canada postal code labels
+
 = 1.12.0 =
 
 * New Color Options form in the admin to customize the appearance of listings, agents, and offices

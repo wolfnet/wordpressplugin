@@ -78,6 +78,8 @@ if (!function_exists('formatUrl')) {
 
 <div id="<?php echo $instance_id; ?>" class="wolfnet_widget wolfnet_ao wolfnet_aoAgentDetails">
 
+	<a id="agentTop_<?php echo $instance_id; ?>" class="wolfnet_aoTop"></a>
+
 <?php
 
 	if (strlen($detailtitle) > 0) {
@@ -355,7 +357,7 @@ if (!function_exists('formatUrl')) {
 
 <div class="wnt-clearfix"></div>
 
-<a class="wnt-btn wnt-btn-round wnt-btn-primary wolfnet_top" href="#<?php echo $instance_id; ?>"
+<a class="wnt-btn wnt-btn-round wnt-btn-primary wolfnet_top" href="#agentTop_<?php echo $instance_id; ?>"
  title="<?php esc_attr_e('Back to Top'); ?>">
 	<span class="wnt-icon wnt-icon-triangle-up-stop"></span>
 	<span class="wnt-visuallyhidden"><?php _e('Back to Top'); ?></span>

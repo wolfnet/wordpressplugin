@@ -402,4 +402,16 @@ class Wolfnet_Data
     {
         return $this->getBeds();
     }
+
+
+	public function isCanada()
+	{
+		$data = $this->plugin->api->sendRequest(
+			$this->plugin->keyService->getDefault(),
+			'/settings'
+		);
+
+		return $data['responseData']['data']['resource']['country'] == 'Canada' ? true : false;
+	}
+
 }
