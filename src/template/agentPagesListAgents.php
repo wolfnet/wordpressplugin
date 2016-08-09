@@ -26,20 +26,24 @@ if (array_key_exists("REDIRECT_URL", $_SERVER)) {
 	$linkBase = $_SERVER['PHP_SELF'] . '/';
 }
 
+$paginationLinkBase = $linkBase;
+
 // Remove office part of URL since we don't need it past this point.
 if(preg_match('/office\/.*/', $linkBase)) {
 	$linkBase = preg_replace('/office\/.*/', '', $linkBase);
-}
-
-if(preg_match('/search.*/', $linkBase)) {
+} elseif(preg_match('/search.*/', $linkBase)) {
+	$allAgentsLink = $linkBase;
+} elseif(preg_match('/agents.*/', $linkBase)) {
+	$paginationLinkBase = $linkBase;
+	$linkBase = preg_replace('/agents.*/', '', $linkBase);
 	$allAgentsLink = $linkBase;
 } else {
-	$allAgentsLink = $linkBase . 'search';
+	$allAgentsLink = $linkBase . 'search/';
 }
 
 if (!function_exists('paginate')) {
 
-	function paginate ($page, $total, $numPerPage, $officeId = '', $search = null, $sort = 'name') {
+	function paginate ($linkBase, $page, $total, $numPerPage, $officeId = '', $search = null) {
 		/*
 		 * Note: We're using "agentpage" instead of just "page" as out URL variable
 		 * here because Wordpress uses page internally for their own pagination
@@ -53,32 +57,28 @@ if (!function_exists('paginate')) {
 		$output = '<ul class="wolfnet_agentPagination">';
 		$iterate = ceil($total / $numPerPage);
 
-		if (!is_null($search)) {
-			$linkBase = '?agentSearch&agentCriteria=' . $search . '&';
-		} else {
-			$linkBase = '?';
-		}
-
 		if ($officeId != '') {
-			$linkBase .= 'officeId=' . $officeId . '&';
+			$linkBase .= 'office/' . $officeId . '/';
 		}
 
-		$linkBase .= 'agentSort=' . $sort . '&';
+		if (!is_null($search)) {
+			$_SESSION['agentCriteria'] = $search;
+		}
 
 		if (($page * $numPerPage) > $numPerPage) {
-			$output .= '<li><a href="' . $linkBase . 'agentpage=' . ($page - 1) . '">Previous</a></li>';
+			$output .= '<li><a href="' . $linkBase . ($page - 1) . '">Previous</a></li>';
 		}
 
 		for ($i = 1; $i <= $iterate; $i++) {
 			if ($i == $page) {
 				$output .= '<li class="wolfnet_selected">' . $i . '</li>';
 			} else {
-				$output .= '<li><a href="' . $linkBase . 'agentpage=' . $i . '">' . $i . '</a></li>';
+				$output .= '<li><a href="' . $linkBase . $i . '">' . $i . '</a></li>';
 			}
 		}
 
 		if(($page * $numPerPage) < $total) {
-			$output .= '<li><a href="' . $linkBase . 'agentpage=' . ($page + 1) . '">Next</a></li>';
+			$output .= '<li><a href="' . $linkBase . ($page + 1) . '">Next</a></li>';
 		}
 
 		$output .= "</ul>";
@@ -258,7 +258,7 @@ if (!function_exists('paginate')) {
 
 	<div class="wolfnet_clearfix"></div>
 
-	<?php echo paginate($page, $totalrows, $numperpage, $officeId, $agentCriteria, $agentSort); ?>
+	<?php echo paginate($paginationLinkBase, $page, $totalrows, $numperpage, $officeId, $agentCriteria); ?>
 
 </div>
 

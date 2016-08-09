@@ -390,6 +390,7 @@ class Wolfnet_Plugin
 
         if($this->agentPages->showAgentFeature()) {
             add_rewrite_endpoint('agent', $this->epFlag);
+            add_rewrite_endpoint('agents', $this->epFlag);
             add_rewrite_endpoint('office', $this->epFlag);
             add_rewrite_endpoint('search', $this->epFlag);
         }

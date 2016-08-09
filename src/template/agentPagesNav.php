@@ -27,16 +27,19 @@ if (array_key_exists("REDIRECT_URL", $_SERVER)) {
 }
 
 if(preg_match('/search.*/', $linkBase)) {
-	$agentsLink = $linkBase;
+	$agentsLink = preg_replace('/search\/.*/', 'agents/', $linkBase);
 	$officesLink = preg_replace('/search\/.*/', '', $linkBase);
+} elseif(preg_match('/agents.*/', $linkBase)) {
+	$agentsLink = $linkBase;
+	$officesLink = preg_replace('/agents\/.*/', '', $linkBase);
 } else {
-	$agentsLink  = $linkBase . 'search';
+	$agentsLink  = $linkBase . 'agents';
 	$officesLink = $linkBase;
 }
 
 if ($isAgent) {
 	$searchPlaceholder = 'search by agent name';
-	$searchAction = $agentsLink;
+	$searchAction = preg_replace('/agents\/.*/', 'search/', $agentsLink);;
 	$criteriaName = 'agentCriteria';
 	$criteriaVal = (strlen($agentCriteria) > 0) ? $agentCriteria : '';
 } else {

@@ -31,6 +31,7 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
     public function __construct($plugin)
     {
         $this->plugin = $plugin;
+        session_start();
     }
 
     public function handleRequest()
@@ -40,7 +41,7 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
 
         $action = '';
 
-        if(array_key_exists('search', $query)) {
+        if(array_key_exists('search', $query) || array_key_exists('agents', $query)) {
 
             // All of the logic for searching is in the agentList function since
             // we're just passing more criteria to the API call.
@@ -118,7 +119,10 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
 		// This will be populated if an office search is being performed.
 		if (array_key_exists('officeCriteria', $_REQUEST) && strlen($_REQUEST['officeCriteria']) > 0) {
 			$this->args['criteria']['name'] = $_REQUEST['officeCriteria'];
-		}
+            $_SESSION['officeCriteria'] = $_REQUEST['officeCriteria'];
+		} else {
+            $_SESSION['officeCriteria'] = '';
+        }
 
 		$this->args['criteria']['omit_office_id'] = $this->args['excludeoffices'];
 
@@ -155,27 +159,25 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
         // If we're searching for agents in an office, isolate the office name.
         if(array_key_exists('office', $query) && preg_match('/\/search.*/', $query['office'])) {
             $query['office'] = preg_replace('/\/search.*/', '', $query['office']);
+        } else {
+            // Clear out session variables.
+            $_SESSION['agentpage'] = 1;
+            $_SESSION['agentCriteria'] = '';
         }
 
-        if(array_key_exists("agentpage", $_REQUEST) && $_REQUEST['agentpage'] > 1) {
+        if(array_key_exists("agentpage", $_SESSION) && $_SESSION['agentpage'] > 1) {
             /*
              * $startrow needs to be calculated based on the requested page. If $page == 2
              * and numPerPage is 10, for example, we would need to get agents 11 through 20.
              * The below equation will set the starting row accordingly.
              */
-            $startrow = $this->args['criteria']['numperpage'] * ($_REQUEST['agentpage'] - 1) + 1;
+            $startrow = $this->args['criteria']['numperpage'] * ($_SESSION['agentpage'] - 1) + 1;
         } else {
             $startrow = 1;
-            $_REQUEST['agentpage'] = 1;
+            $_SESSION['agentpage'] = 1;
         }
 
         $this->args['criteria']['omit_office_id'] = $this->args['excludeoffices'];
-        if(array_key_exists('agentSort', $_REQUEST)) {
-            $agentSort = $_REQUEST['agentSort'];
-            $this->args['criteria']['sort'] = ($_REQUEST['agentSort'] == 'name') ? 'name' : 'office_id';
-        } else {
-            $agentSort = 'name';
-        }
 
         $endpoint = '/agent';
         $separator = "?";
@@ -212,12 +214,11 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
         $args = array(
             'agents' => $agentsData,
             'totalrows' => $data['responseData']['data']['total_rows'],
-            'page' => $_REQUEST['agentpage'],
-            'agentSort' => $agentSort,
+            'page' => $_SESSION['agentpage'],
             'officeId' => (array_key_exists('officeId', $_REQUEST)) ? $_REQUEST['officeId'] : '',
             'officeCount' => $officeCount,
-            'agentCriteria' => (array_key_exists('agentCriteria', $_REQUEST)) ? $_REQUEST['agentCriteria'] : '',
-            'officeCriteria' => (array_key_exists('officeCriteria', $_REQUEST)) ? $_REQUEST['officeCriteria'] : '',
+            'agentCriteria' => (array_key_exists('agentCriteria', $_SESSION)) ? $_SESSION['agentCriteria'] : '',
+            'officeCriteria' => (array_key_exists('officeCriteria', $_SESSION)) ? $_SESSION['officeCriteria'] : '',
             'isAgent' => true,
         );
         $args = array_merge($args, $this->args);
