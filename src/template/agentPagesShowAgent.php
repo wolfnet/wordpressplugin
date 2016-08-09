@@ -22,23 +22,18 @@
 
 if (array_key_exists("REDIRECT_URL", $_SERVER)) {
 	$linkBase = $_SERVER['REDIRECT_URL'];
+	$contactLink = $linkBase . 'contact';
 } else {
-	$linkBase = $_SERVER['PHP_SELF'];
+	$linkBase = $_SERVER['PHP_SELF'] . '/';
+	$contactLink = $linkBase . 'agent/' . $_REQUEST['agentId'] . '/contact';
 }
 
-$postHash = '#post-' . get_the_id();
+// Remove /agent/* from link base.
+if(preg_match('/agent\/.*/', $linkBase)) {
+	$linkBase = preg_replace('/agent\/.*/', '', $linkBase);
+}
 
-$linkExtra = (
-		array_key_exists('agentCriteria', $_REQUEST) && (strlen($_REQUEST['agentCriteria']) > 0) ?
-		'&agentCriteria=' . $_REQUEST['agentCriteria'] : ''
-	)
-	. ($officeId != '' ? '&officeId=' . $officeId : '')
-	. $postHash;
-
-
-$contactLink = $linkBase . '?contact=' . $agent['agent_id'] . $linkExtra;
-
-$agentsLink  = $linkBase . '?agentSearch&agentCriteria=' . $postHash;
+$agentsLink  = $linkBase . 'search';
 
 
 // Agent links

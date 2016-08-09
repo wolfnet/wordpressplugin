@@ -24,6 +24,9 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
 
     protected $key;
     protected $plugin;
+    protected $regex = array(
+        'contact' => '/\/contact.*/',
+    );
 
     public function __construct($plugin)
     {
@@ -37,16 +40,19 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
 
         $action = '';
 
-        if(array_key_exists('agentSearch', $_REQUEST)) {
+        if(array_key_exists('search', $query)) {
+
             // All of the logic for searching is in the agentList function since
             // we're just passing more criteria to the API call.
             $action = 'agentList';
+
         } elseif(array_key_exists('agent', $query) && sizeof(trim($query['agent']) > 0)) {
 
             // Check if we're requesting the contact form. If not, show agent detail.
-            if(preg_match('/\/contact.*/', $query['agent'])) {
+            if($this->findIn('contact', $query['agent'])) {
                 // Requesting the contact form.
-                $_REQUEST['contact'] = preg_replace('/\/contact.*/', '', $query['agent']);
+                // Remove /contact part from agent.
+                $_REQUEST['contact'] = $this->removeIn('contact', $query['agent']);
                 if($_SERVER['REQUEST_METHOD'] == 'POST') {
                     $action = 'contactProcess';
                 } else {
@@ -57,12 +63,14 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
                 $_REQUEST['agentId'] = $query['agent'];
                 $action = 'agent';
             }
+
         } elseif(array_key_exists('office', $query) && sizeof(trim($query['office']) > 0)) {
 
             // Check if we're requesting the contact form. If not, show list of office's agents.
-            if(preg_match('/\/contact.*/', $query['office'])) {
+            if($this->findIn('contact', $query['office'])) {
                 // Requesting the contact form.
-                $_REQUEST['contactOffice'] = preg_replace('/\/contact.*/', '', $query['office']);
+                // Remove /contact part from office.
+                $_REQUEST['contactOffice'] = $this->removeIn('contact', $query['office']);
                 if($_SERVER['REQUEST_METHOD'] == 'POST') {
                     $action = 'contactProcess';
                 } else {
@@ -73,16 +81,28 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
                 $_REQUEST['officeId'] = $query['office'];
                 $action = 'agentList';
             }
+
         } elseif(!$this->args['showoffices']) {
+
             // If none of the above match and they don't want to show an office list, show all agents.
             $action = 'agentList';
+
         } else {
+
             $action = 'officeList';
+
         }
 
         // Run the function associated with the action.
         return $this->$action();
 	}
+
+    public function findIn($key, $string) {
+        return preg_match($this->regex[$key], $string);
+    }
+    public function removeIn($key, $string) {
+        return preg_replace($this->regex[$key], '', $string);
+    }
 
 
     /*
@@ -130,6 +150,12 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
     protected function agentList()
     {
         global $wp_query;
+        $query = $wp_query->query;
+
+        // If we're searching for agents in an office, isolate the office name.
+        if(array_key_exists('office', $query) && preg_match('/\/search.*/', $query['office'])) {
+            $query['office'] = preg_replace('/\/search.*/', '', $query['office']);
+        }
 
         if(array_key_exists("agentpage", $_REQUEST) && $_REQUEST['agentpage'] > 1) {
             /*
@@ -153,8 +179,8 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
 
         $endpoint = '/agent';
         $separator = "?";
-        if(array_key_exists('office', $wp_query->query)) {
-            $endpoint .= '?office_name=' . $wp_query->query['office'];
+        if(array_key_exists('office', $query)) {
+            $endpoint .= '?office_name=' . $query['office'];
             $separator = "&";
         }
         $endpoint .= $separator . "startrow=" . $startrow;

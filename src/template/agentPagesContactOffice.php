@@ -28,10 +28,20 @@
 	if(array_key_exists("REDIRECT_URL", $_SERVER)) {
 		$linkBase = $_SERVER['REDIRECT_URL'];
 	} else {
-		$linkBase = $_SERVER['PHP_SELF'];
+		$linkBase = $_SERVER['PHP_SELF'] . '/';
 	}
 
-	$link = $linkBase . '#post-' . get_the_id();
+	$link = $linkBase;
+	$formAction = $linkBase;
+	if(!preg_match('/\/office/', $linkBase)) {
+		// Landing on this page without a redirect URL.
+		$link .= 'office/' . $officeId;
+		$formAction = $link . '/contact';
+	} else {
+		// Should just be able to remove /contact from the link.
+		$formAction = $linkBase;
+		$link = preg_replace('/\/contact.*/', '', $linkBase);
+	}
 
 	echo '<p><a href="' . $link . '">Back</a> to offices.</p>';
 
@@ -79,7 +89,7 @@
 	} else {
 	?>
 
-	<form class="wolfnet_contactForm" action="<?php echo $_SERVER['PHP_SELF'] . "?contactOffice=" . $officeId; ?>" method="post">
+	<form class="wolfnet_contactForm" action="<?php echo $formAction; ?>" method="post">
 		<?php
 		if(array_key_exists('errorField', $_REQUEST)) {
 			echo '<span class="wolfnet_red">Please correct the errors below.</span><br />';

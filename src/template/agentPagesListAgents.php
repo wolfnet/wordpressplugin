@@ -27,15 +27,15 @@ if (array_key_exists("REDIRECT_URL", $_SERVER)) {
 }
 
 // Remove office part of URL since we don't need it past this point.
-$linkBase = preg_replace('/office\/.*/', '', $linkBase);
+if(preg_match('/office\/.*/', $linkBase)) {
+	$linkBase = preg_replace('/office\/.*/', '', $linkBase);
+}
 
-$linkExtra = (
-		array_key_exists('agentCriteria', $_REQUEST) && (strlen($_REQUEST['agentCriteria']) > 0) ?
-		'&agentCriteria=' . $_REQUEST['agentCriteria'] : ''
-	)
-	. ($officeId != '' ? '&officeId=' . $officeId : '');
-
-$allAgentsLink = $linkBase . '?agentSearch';
+if(preg_match('/search.*/', $linkBase)) {
+	$allAgentsLink = $linkBase;
+} else {
+	$allAgentsLink = $linkBase . 'search';
+}
 
 if (!function_exists('paginate')) {
 
@@ -136,9 +136,9 @@ if (!function_exists('paginate')) {
 
 				if ($agent['display_agent']) {
 
-					$agentLink = $linkBase . 'agent/' . $agent['agent_stub'] . $linkExtra;
+					$agentLink = $linkBase . 'agent/' . $agent['agent_stub'];
 
-					$contactLink = $linkBase . '?contact=' . $agent['agent_id'] . $linkExtra;
+					$contactLink = $agentLink . '/contact';
 
 		?>
 

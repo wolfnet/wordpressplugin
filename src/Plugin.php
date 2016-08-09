@@ -381,9 +381,17 @@ class Wolfnet_Plugin
 
 
     public function setupRewriteTags() {
+        /*
+         * We're using rewrite endpoints in stead of rewrite rules because we can't
+         * control the user's permalink structure, nor whether they will use this plugin
+         * on a post or a page. Since there is no uniformity there, it's probably best
+         * to go with the endpoint instead.
+         */
+
         if($this->agentPages->showAgentFeature()) {
             add_rewrite_endpoint('agent', $this->epFlag);
             add_rewrite_endpoint('office', $this->epFlag);
+            add_rewrite_endpoint('search', $this->epFlag);
         }
     }
 
