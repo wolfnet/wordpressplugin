@@ -31,6 +31,9 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
     public function __construct($plugin)
     {
         $this->plugin = $plugin;
+        if(!session_id()) {
+            session_start();
+        }
     }
 
     public function handleRequest()
@@ -114,6 +117,7 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
 
 	protected function officeList()
 	{
+        unset($_SESSION['agentCriteria']);
 
 		// This will be populated if an office search is being performed.
 		if (array_key_exists('officeCriteria', $_REQUEST) && strlen($_REQUEST['officeCriteria']) > 0) {
@@ -137,7 +141,7 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
 		// or it will screw up agent pagination when running a search.
 		$args = array(
 			'offices' => $officeData,
-			'agentCriteria' => (array_key_exists('agentCriteria', $_REQUEST)) ? $_REQUEST['agentCriteria'] : null,
+			'agentCriteria' => (array_key_exists('agentCriteria', $_SESSION)) ? $_SESSION['agentCriteria'] : null,
 			'officeCriteria' => (array_key_exists('officeCriteria', $_REQUEST)) ? $_REQUEST['officeCriteria'] : null,
 			'isAgent' => false,
 		);
@@ -170,8 +174,13 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
         }
 
         // The only values associated with these endpoints should be for pagination.
-        if(array_key_exists('agents', $query) && strlen($query['agents']) > 0) {
-            $_REQUEST['agentpage'] = $query['agents'];
+        if(array_key_exists('agents', $query)) {
+            // If this is the agents endpoint, we can clear the agent criteria.
+            unset($_SESSION['agentCriteria']);
+
+            if(strlen($query['agents']) > 0) {
+                $_REQUEST['agentpage'] = $query['agents'];
+            }
         } elseif(array_key_exists('search', $query) && strlen($query['search']) > 0) {
             $_REQUEST['agentpage'] = $query['search'];
         }
@@ -200,8 +209,11 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
         $endpoint .= "&maxrows=" . $this->args['criteria']['numperpage'];
 
         // This will be populated if an agent search is being performed.
-        if(array_key_exists('agentCriteria', $_REQUEST) && strlen($_REQUEST['agentCriteria']) > 0) {
-            $this->args['criteria']['name'] = $_REQUEST['agentCriteria'];
+        if(array_key_exists('agentCriteria', $_REQUEST)) {
+            $_SESSION['agentCriteria'] = $_REQUEST['agentCriteria'];
+        }
+        if(array_key_exists('agentCriteria', $_SESSION) && strlen($_SESSION['agentCriteria']) > 0) {
+            $this->args['criteria']['name'] = $_SESSION['agentCriteria'];
         }
 
         try {
@@ -228,7 +240,7 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
             'page' => $_REQUEST['agentpage'],
             'officeId' => (array_key_exists('officeId', $_REQUEST)) ? $_REQUEST['officeId'] : '',
             'officeCount' => $officeCount,
-            'agentCriteria' => (array_key_exists('agentCriteria', $_REQUEST)) ? $_REQUEST['agentCriteria'] : '',
+            'agentCriteria' => (array_key_exists('agentCriteria', $_SESSION)) ? $_SESSION['agentCriteria'] : '',
             'officeCriteria' => (array_key_exists('officeCriteria', $_REQUEST)) ? $_REQUEST['officeCriteria'] : '',
             'isAgent' => true,
         );
