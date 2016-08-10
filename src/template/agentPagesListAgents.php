@@ -26,15 +26,16 @@ if (array_key_exists("REDIRECT_URL", $_SERVER)) {
 	$linkBase = $_SERVER['PHP_SELF'] . '/';
 }
 
-$paginationLinkBase = $linkBase;
+// Remove any page number from link base
+$paginationLinkBase = preg_replace('/\/[0-9]+/', '', $linkBase);
 
 // Remove office part of URL since we don't need it past this point.
 if(preg_match('/office\/.*/', $linkBase)) {
 	$linkBase = preg_replace('/office\/.*/', '', $linkBase);
+	$allAgentsLink = $linkBase;
 } elseif(preg_match('/search.*/', $linkBase)) {
 	$allAgentsLink = $linkBase;
 } elseif(preg_match('/agents.*/', $linkBase)) {
-	$paginationLinkBase = $linkBase;
 	$linkBase = preg_replace('/agents.*/', '', $linkBase);
 	$allAgentsLink = $linkBase;
 } else {
@@ -57,12 +58,8 @@ if (!function_exists('paginate')) {
 		$output = '<ul class="wolfnet_agentPagination">';
 		$iterate = ceil($total / $numPerPage);
 
-		if ($officeId != '') {
-			$linkBase .= 'office/' . $officeId . '/';
-		}
-
 		if (!is_null($search)) {
-			$_SESSION['agentCriteria'] = $search;
+			$_REQUEST['agentCriteria'] = $search;
 		}
 
 		if (($page * $numPerPage) > $numPerPage) {
