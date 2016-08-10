@@ -34,11 +34,13 @@ if(preg_match('/office\/.*/', $linkBase)) {
 	$linkBase = preg_replace('/office\/.*/', '', $linkBase);
 	$allAgentsLink = $linkBase;
 } elseif(preg_match('/search.*/', $linkBase)) {
+	$linkBase = preg_replace('/search.*/', '', $linkBase);
 	$allAgentsLink = $linkBase;
 } elseif(preg_match('/agents.*/', $linkBase)) {
 	$linkBase = preg_replace('/agents.*/', '', $linkBase);
 	$allAgentsLink = $linkBase;
 } else {
+	$paginationLinkBase .= "agents/";
 	$allAgentsLink = $linkBase . 'search/';
 }
 

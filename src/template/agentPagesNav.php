@@ -39,8 +39,8 @@ if(preg_match('/office\/.*/', $linkBase)) {
 	// Likewise, remove search part and point back to base page/post url (site.com/page/)
 	$officesLink = preg_replace('/search\/.*/', '', $linkBase);
 } elseif(preg_match('/agents.*/', $linkBase)) {
-	// Retain default link base in this case.
-	$agentsLink = $linkBase;
+	// Remove any pagination for the agents link.
+	$agentsLink = preg_replace('/\/[0-9]+/', '', $linkBase);
 	// Remove agents part and direct back to base page/post url (site.com/page/)
 	$officesLink = preg_replace('/agents\/.*/', '', $linkBase);
 } else {
