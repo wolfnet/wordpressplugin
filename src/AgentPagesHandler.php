@@ -159,7 +159,7 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
             $query['office'] = preg_replace('/\/search.*/', '', $query['office']);
         }
 
-        // Office might have a page tacked onto the name
+        // Office might have a page tacked onto the name, so isolate that and remove it.
         if(array_key_exists('office', $query)) {
             $officePage = array();
             preg_match('/\/([0-9]+)$/', $query['office'], $officePage);
@@ -169,7 +169,7 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
             $query['office'] = preg_replace('/\/[0-9]+.*/', '', $query['office']);
         }
 
-        // The only values associated with these endpoints should be the page.
+        // The only values associated with these endpoints should be for pagination.
         if(array_key_exists('agents', $query) && strlen($query['agents']) > 0) {
             $_REQUEST['agentpage'] = $query['agents'];
         } elseif(array_key_exists('search', $query) && strlen($query['search']) > 0) {

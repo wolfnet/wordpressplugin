@@ -26,13 +26,25 @@ if (array_key_exists("REDIRECT_URL", $_SERVER)) {
 	$linkBase = $_SERVER['PHP_SELF'] . '/';
 }
 
-if(preg_match('/search.*/', $linkBase)) {
+// This chops the links down to only the necessary parts.
+if(preg_match('/office\/.*/', $linkBase)) {
+	// Remove any pagination for the agents link, but retain office name and add search part
+	// This will take us back to the agents in selected office (site.com/page/office/office-name/)
+	$agentsLink = preg_replace('/\/[0-9]+/', '', $linkBase);
+	// This will take us back to the base page/post url (site.com/page/)
+	$officesLink = preg_replace('/office\/.*/', '', $linkBase);
+} elseif(preg_match('/search.*/', $linkBase)) {
+	// Remove search part from agents link which leaves us with site.com/page/agents
 	$agentsLink = preg_replace('/search\/.*/', 'agents/', $linkBase);
+	// Likewise, remove search part and point back to base page/post url (site.com/page/)
 	$officesLink = preg_replace('/search\/.*/', '', $linkBase);
 } elseif(preg_match('/agents.*/', $linkBase)) {
+	// Retain default link base in this case.
 	$agentsLink = $linkBase;
+	// Remove agents part and direct back to base page/post url (site.com/page/)
 	$officesLink = preg_replace('/agents\/.*/', '', $linkBase);
 } else {
+	// I'm not sure if this condition would ever happen, but put in some defaults anyway.
 	$agentsLink  = $linkBase . 'agents';
 	$officesLink = $linkBase;
 }

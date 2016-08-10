@@ -29,7 +29,7 @@ if (array_key_exists("REDIRECT_URL", $_SERVER)) {
 // Remove any page number from link base
 $paginationLinkBase = preg_replace('/\/[0-9]+/', '', $linkBase);
 
-// Remove office part of URL since we don't need it past this point.
+// Chop the links down to only the necessary parts.
 if(preg_match('/office\/.*/', $linkBase)) {
 	$linkBase = preg_replace('/office\/.*/', '', $linkBase);
 	$allAgentsLink = $linkBase;
@@ -44,7 +44,7 @@ if(preg_match('/office\/.*/', $linkBase)) {
 
 if (!function_exists('paginate')) {
 
-	function paginate ($linkBase, $page, $total, $numPerPage, $officeId = '', $search = null) {
+	function paginate ($linkBase, $page, $total, $numPerPage) {
 		/*
 		 * Note: We're using "agentpage" instead of just "page" as out URL variable
 		 * here because Wordpress uses page internally for their own pagination
@@ -57,10 +57,6 @@ if (!function_exists('paginate')) {
 
 		$output = '<ul class="wolfnet_agentPagination">';
 		$iterate = ceil($total / $numPerPage);
-
-		if (!is_null($search)) {
-			$_REQUEST['agentCriteria'] = $search;
-		}
 
 		if (($page * $numPerPage) > $numPerPage) {
 			$output .= '<li><a href="' . $linkBase . ($page - 1) . '">Previous</a></li>';
@@ -255,7 +251,7 @@ if (!function_exists('paginate')) {
 
 	<div class="wolfnet_clearfix"></div>
 
-	<?php echo paginate($paginationLinkBase, $page, $totalrows, $numperpage, $officeId, $agentCriteria); ?>
+	<?php echo paginate($paginationLinkBase, $page, $totalrows, $numperpage); ?>
 
 </div>
 
