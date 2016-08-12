@@ -317,11 +317,15 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
 
     protected function contactFormOffice()
     {
-        $officeData = $this->getOfficeByOfficeId($_REQUEST['contactOffice']);
+        // This is being set in session so we don't need to parse the office name and make
+        // another API request on the 'thanks' page to get the office data.
+        if(!array_key_exists('officeData', $_SESSION)) {
+            $_SESSION['officeData'] = $this->getOfficeByName($_REQUEST['contactOffice']);
+        }
 
         $args = array(
-            'office' => $officeData,
-            'officeId' => $_REQUEST['contactOffice'],
+            'office' => $_SESSION['officeData'],
+            'officeId' => $_SESSION['officeData']['office_id'],
         );
         $args = array_merge($args, $this->args);
 
@@ -356,7 +360,7 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
             $_REQUEST['errorField'] = 'wolfnet_email';
         }
 
-        if($_REQUEST['errorField'] != '') {
+        if(strlen($_REQUEST['errorField']) > 0) {
             // Show contact form again.
             return $this->getForm($formType);
         }
@@ -372,9 +376,9 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
         // If this is the agent contact page, agent_guid will be passed along, otherwise
         // this was submitted via the office contact and we'll pass office_id.
         if($formType == 'agent') {
-            $this->args['criteria']['agent_id'] = $_REQUEST['contact'];
+            $this->args['criteria']['agent_id'] = $_REQUEST['agent_id'];
         } else {
-            $this->args['criteria']['office_id'] = $_REQUEST['contactOffice'];
+            $this->args['criteria']['office_id'] = $_REQUEST['office_id'];
         }
 
         try {
@@ -400,7 +404,13 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
 
         if($data['responseStatusCode'] == 200) {
             $_REQUEST['thanks'] = true;
-            return $this->getForm($formType);
+            $out = $this->getForm($formType);
+            if($formType == 'office') {
+                // This was carried over so we didn't need to make a new API request on the
+                // contact thanks page for office data. It can go away now.
+                unset($_SESSION['officeData']);
+            }
+            return $out;
         }
     }
 
@@ -549,10 +559,33 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
 
         $officeData = array();
         if(is_array($data['responseData']['data'])) {
-            $matches = count($data['responseData']['data']['office']);
             // Due to possible data duplication, get the last result... There
             // will only be one office returned for most implementations.
-            $officeData = $data['responseData']['data']['office'][$matches-1];
+            $officeData = $data['responseData']['data']['office'][0];
+        }
+
+        return $officeData;
+    }
+
+
+    protected function getOfficeByName($name)
+    {
+        try {
+            $data = $this->plugin->api->sendRequest(
+                $this->key,
+                '/office?name=' . $name,
+                'GET',
+                $this->args['criteria']
+            );
+        } catch(Wolfnet_Exception $e) {
+            return $this->plugin->displayException($e);
+        }
+
+        $officeData = array();
+        if(is_array($data['responseData']['data'])) {
+            // Due to possible data duplication, get the last result... There
+            // will only be one office returned for most implementations.
+            $officeData = $data['responseData']['data']['office'][0];
         }
 
         return $officeData;

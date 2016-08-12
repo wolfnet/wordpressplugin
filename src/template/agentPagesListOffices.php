@@ -75,7 +75,7 @@ if (array_key_exists("REDIRECT_URL", $_SERVER)) {
 						. '&office_id=' . $office['office_id']
 						. '&ld_action=find_office';
 
-					$contactLink = '?contactOffice=' . $office['office_id'];
+					$contactLink = 'office/' . $office['office_stub'] . '/contact';
 
 		?>
 

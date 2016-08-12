@@ -33,8 +33,7 @@ if(preg_match('/agent\/.*/', $linkBase)) {
 	$linkBase = preg_replace('/agent\/.*/', '', $linkBase);
 }
 
-$agentsLink  = $linkBase . 'search';
-
+$agentsLink  = $linkBase . 'agents';
 
 // Agent links
 $socialLinks = array(

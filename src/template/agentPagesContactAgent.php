@@ -107,6 +107,8 @@
 
 	<form class="wolfnet_contactForm" action="<?php echo $formAction; ?>" method="post">
 
+		<input type="hidden" name="agent_id" value="<?php echo $agent['agent_id']; ?>" />
+
 		<?php
 		if(array_key_exists('errorField', $_REQUEST)) {
 			echo '<span class="wolfnet_red">Please correct the errors below.</span><br />';
