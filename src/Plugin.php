@@ -325,6 +325,13 @@ class Wolfnet_Plugin
             // See Wolfnet_Admin->adminInit for this usage.
             add_option('wolfnet_activatedPlugin181', '1.8.1');
         }
+
+        /*
+         * Flush rewrite DB if agent pages is enabled.
+         */
+        if($this->agentPages->showAgentFeature()) {
+            flush_rewrite_rules();
+        }
     }
 
 
