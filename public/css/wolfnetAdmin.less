@@ -90,6 +90,29 @@ html {
 
 }
 
+.featured-listings-theme {
+	margin: 0 1em 1em 0;
+	border: 1px solid @gray-lightest;
+	background-color: #fff;
+	box-shadow: 0 1px 1px rgba(0, 0, 0, 0.04);
+
+	p {
+		margin: 0 0 .5em;
+	}
+
+	h2 {
+		margin: 0;
+		padding: 1em;
+	}
+	.wolfnet_boxContent {
+		margin: 0 1em 1em;
+	}
+
+	fieldset {	
+		margin-left: 1em;
+	}
+}
+
 .wolfnet_box {
 	margin: 0 1em 1em 0;
 	border: 1px solid @gray-lightest;
@@ -289,7 +312,7 @@ html {
 
     .wolfnet_widget_theme {
         float: left;
-        width: 350px;
+        width: 24%;
         margin: 0 1em 1em 0;
         background-color: @gray-lightest;
         transition-property: border-color, background-color;
@@ -304,7 +327,7 @@ html {
 
 		.wolfnet_widget_theme_thumb {
 			height: 300px;
-			padding: 1em;
+			padding: .5em;
 			border-bottom: none;
 			text-align: center;
 
@@ -318,11 +341,69 @@ html {
 					margin-bottom: 0;
 
 					.wolfnet_listings {
-						margin-top: 1em;
+						margin-top: 1em;						
 					}
+				}
+				.wolfnet-theme-birch {
+					margin: 0;
 
+					.wolfnet_listings {
+						margin-top: 0em;
+
+						.wolfnet_listing {
+							width: 92%;
+							margin: 0;
+
+							.wolfnet_listingHead {
+								height: 199px;
+
+								.wolfnet_listingImage {
+									top: 53%;
+								}
+							}
+
+							.wolfnet_locationInfo {
+								margin-bottom: 10px;
+							}
+						}
+					}
 				}
 
+				.wolfnet-theme-cedar {
+					
+					.wolfnet_listings {
+						margin-top: .8em;
+
+						.wolfnet_listing {
+							width: 92%;
+							margin: 0;
+
+							.wolfnet_listingHead {
+								height: 187px;
+							}
+						}
+
+						.wolfnet_locationInfo {
+							margin-bottom: .8em;
+						}
+					}
+				}
+
+				.wolfnet-theme-dogwood {
+
+					.wolfnet_listings {
+						margin: .8em auto;
+
+						.wolfnet_listing {
+							width: 92%;
+							margin: 0;
+
+							.wolfnet_listingHead {
+								height: 188px;
+							}	
+						}
+					}
+				}	
 			}
 
 		}
@@ -383,15 +464,23 @@ html {
 
     .wolfnet_widget_themes .wolfnet_widget_theme {
 
-        &:nth-child(even) {
+    	width: 32%;
+
+    }
+}
+
+@media screen and (max-width: 1240px) {
+
+    .wolfnet_widget_themes .wolfnet_widget_theme {
+
+    	width: 48%;
+
+    	&:nth-child(even) {
             margin-right: 0;
         }
 
-        &:nth-child(odd) {
-            clear: left;
-        }
-
     }
+
 }
 
 @media screen and (max-width: 840px) {
@@ -418,6 +507,15 @@ html {
 		}
 
 	}
+
+}
+
+@media screen and (max-width: 800px) {
+	
+	.wolfnet_widget_themes .wolfnet_widget_theme {
+		width: 97%;
+        clear: left;
+    }
 
 }
 

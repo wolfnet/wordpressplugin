@@ -22,9 +22,9 @@
 	</p>
 
 
-	<h2>Widget Theme</h2>
+	
 
-	<div>
+	<div class="featured-listings-theme">
 		<?php echo $themeSection; ?>
 	</div>
 
@@ -143,43 +143,6 @@
 			updateThemePreview();
 
 			$(window).on('wnt-color-change', onWidgetThemeChange);
-
-
-			// Expandable preview
-
-			if ($previewBox.length > 0) {
-
-				var $previewToggleIcon = $('<span class="wnt-icon wnt-icon-triangle-up"></span>');
-
-				var $previewToggleBtn = $(
-					'<a href="javascript:void(0);" title="Show/hide preview" class="wolfnet_boxToggle"></a>'
-				).append($previewToggleIcon);
-
-				var expandPreview = function () {
-					$previewBox.removeClass('wolfnet_boxCollapsed');
-					$previewContent.show();
-					$previewToggleIcon.removeClass('wnt-icon-triangle-down').addClass('wnt-icon-triangle-up');
-				};
-
-				var collapsePreview = function () {
-					$previewBox.addClass('wolfnet_boxCollapsed');
-					$previewContent.hide();
-					$previewToggleIcon.removeClass('wnt-icon-triangle-up').addClass('wnt-icon-triangle-down');
-				};
-
-				var onPreviewToggle = function () {
-					if ($previewBox.is('.wolfnet_boxCollapsed')) {
-						expandPreview();
-					} else {
-						collapsePreview();
-					}
-				};
-
-				collapsePreview();
-
-				$previewHeader.click(onPreviewToggle).css('cursor', 'pointer').append($previewToggleBtn);
-
-			}
 
 
 			// Preview tabs
