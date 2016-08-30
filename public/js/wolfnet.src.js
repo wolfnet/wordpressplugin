@@ -140,10 +140,12 @@ if ( typeof jQuery !== 'undefined' ) {
 
 	( function ( $ ) {
 
-		wolfnet.resizeAOItems = function ($aoItems, itemSections, $aoHeader) {
+		wolfnet.resizeAOItems = function ($aoItems, itemSections, $aoHeader, cb) {
 			var sectionsSelector = '',
 				colCount = 0,
 				colsCounted = false;
+
+			cb = cb || function () {};
 
 			// Reset the max heights & set default options
 			for (var i=0, l=itemSections.length; i<l; i++) {
@@ -200,6 +202,9 @@ if ( typeof jQuery !== 'undefined' ) {
 					'padding-right': 'inherit'
 				});
 			}
+
+			// Callback
+			cb(itemSections);
 
 		};
 
