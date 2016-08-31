@@ -327,11 +327,16 @@ class Wolfnet_Plugin
         }
 
         /*
-         * Flush rewrite DB if agent pages is enabled.
+         * This needs to happen here so the rewrite tags get registered before the rewrite rules
+         * are flushed, otherwise the agent page URLs will not work correctly.
          */
-        if($this->agentPages->showAgentFeature()) {
-            flush_rewrite_rules();
-        }
+        $this->setupRewriteTags();
+
+        /*
+         * Flush rewrite DB for agent page URLs. Don't bother to check if it's enabled
+         * by this point since they haven't entered an API key yet.
+         */
+        flush_rewrite_rules();
     }
 
 
@@ -394,13 +399,10 @@ class Wolfnet_Plugin
          * on a post or a page. Since there is no uniformity there, it's probably best
          * to go with the endpoint instead.
          */
-
-        if($this->agentPages->showAgentFeature()) {
-            add_rewrite_endpoint('agent', $this->epFlag);
-            add_rewrite_endpoint('agents', $this->epFlag);
-            add_rewrite_endpoint('office', $this->epFlag);
-            add_rewrite_endpoint('search', $this->epFlag);
-        }
+        add_rewrite_endpoint('agent', $this->epFlag);
+        add_rewrite_endpoint('agents', $this->epFlag);
+        add_rewrite_endpoint('office', $this->epFlag);
+        add_rewrite_endpoint('search', $this->epFlag);
     }
 
 
