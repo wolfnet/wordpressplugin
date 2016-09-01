@@ -157,6 +157,7 @@ module.exports = function (grunt) {
 		'\n\tUsage:\t' + colors.code('build[:test]') + '\n',
 		function (mode) {
 			mode = (typeof mode !== 'undefined' ? mode : 'main');
+			grunt.task.run('compile');
 			grunt.task.run('create-build');
 			grunt.task.run('gitinfo');
 			if (mode === 'test') {

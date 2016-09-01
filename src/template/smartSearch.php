@@ -33,7 +33,6 @@
         name="<?php echo $instance_id; ?>_smartSearchForm"
         method="get" action="<?php echo $formAction; ?>" >
 
-        <input type="hidden" name="search_mode" value="form">
         <input type="hidden" name="resetform" value="1">
         <input type="hidden" name="action" value="newsearchsession">
 
