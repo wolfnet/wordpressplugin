@@ -335,7 +335,7 @@ class Wolfnet_Plugin
 				// Set widget theme defaults for the new plugin installation
 				$widget_theme = $this->widgetTheme->getDefaults();
 			}
-			add_option($this->widgetThemeOptionKey, $widget_theme);
+			add_option($this->widgetThemeOptionKey, $widget_theme['widgetTheme']);
 		}
 
     }
