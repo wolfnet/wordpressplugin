@@ -324,6 +324,20 @@ class Wolfnet_Plugin
         // Register CSS
         $this->template->registerStyles();
 
+		// Check widget theme
+		$widget_theme = get_option(trim($this->widgetThemeOptionKey));
+		if (!$widget_theme) {
+			$keyArray = json_decode($this->keyService->get());
+			if (is_array($keyArray) && $keyArray[0]->key != false) {
+				// Set old widget theme defaults for the existing plugin installation
+				$widget_theme = $this->widgetTheme->getLegacyDefaults();
+			} else {
+				// Set widget theme defaults for the new plugin installation
+				$widget_theme = $this->widgetTheme->getDefaults();
+			}
+			add_option($this->widgetThemeOptionKey, $widget_theme);
+		}
+
     }
 
 

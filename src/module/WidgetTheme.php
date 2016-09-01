@@ -53,6 +53,18 @@ class Wolfnet_Module_WidgetTheme
 	{
 
 		return array(
+			'widgetTheme' => 'birch',
+			'colors'      => array('#333'),
+			'opacity'     => 80,
+		);
+
+	}
+
+
+	public function getLegacyDefaults()
+	{
+
+		return array(
 			'widgetTheme' => 'ash',
 			'colors'      => array('#333'),
 			'opacity'     => 80,
