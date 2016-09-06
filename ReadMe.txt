@@ -96,6 +96,7 @@ Please upgrade to the latest version of the plugin as we will be disabling our o
 = 1.12.2 =
 
 * Updating Smart Search results to land on configured view.
+* Default appearance set to "Modern Lite" for new installations
 
 = 1.12.1 =
 
