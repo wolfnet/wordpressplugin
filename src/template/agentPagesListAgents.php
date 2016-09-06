@@ -134,22 +134,31 @@ if (!function_exists('paginate')) {
 
 		var $aoItems = $aoWidget.find('.wolfnet_aoItem'),
 			itemSections = [
-				{ selector: '.wolfnet_aoContact',  maxHeight: 0,  origMaxHeight: 0 },
-				{ selector: '.wolfnet_aoLinks',    maxHeight: 0,  origMaxHeight: 0 },
-				{ selector: '.wolfnet_aoInfo .wolfnet_aoActions',  maxHeight: 0,  origMaxHeight: 0 },
-				{ selector: '.wolfnet_aoBody',     maxHeight: 0,  origMaxHeight: 0, alwaysResize: true },
-				{ selector: '.wolfnet_aoFooter',   maxHeight: 0,  origMaxHeight: 0 },
-				{ selector: '.wolfnet_aoItem',     maxHeight: 0,  origMaxHeight: 0 }
+				{ name: 'contact',  selector: '.wolfnet_aoContact',  maxHeight: 0,  origMaxHeight: 0 },
+				{ name: 'links',    selector: '.wolfnet_aoLinks',    maxHeight: 0,  origMaxHeight: 0 },
+				{ name: 'info',     selector: '.wolfnet_aoInfo .wolfnet_aoActions',  maxHeight: 0,  origMaxHeight: 0 },
+				{ name: 'body',     selector: '.wolfnet_aoBody',     maxHeight: 0,  origMaxHeight: 0, alwaysResize: true },
+				{ name: 'footer',   selector: '.wolfnet_aoFooter',   maxHeight: 0,  origMaxHeight: 0 },
+				{ name: 'item',     selector: '.wolfnet_aoItem',     maxHeight: 0,  origMaxHeight: 0 }
 			],
 			$aoHeader = $aoWidget.find('.wolfnet_agentOfficeHeader');
 
-		wolfnet.resizeAOItems($aoItems, itemSections, $aoHeader);
+		wolfnet.resizeAOItems($aoItems, itemSections, $aoHeader, resizeComplete);
+
+		var resizeComplete = function (data) {
+			for (var i=0, l=data.length; i<l; i++) {
+				if (data[i].hasOwnProperty('name') && (data[i].name === 'body')) {
+					$aoItems.find('.wolfnet_aoImage').height(data[i].maxHeight);
+					break;
+				}
+			}
+		};
 
 		var resizeTimeout;
 		$(window).resize(function () {
 			clearTimeout(resizeTimeout);
 			resizeTimeout = setTimeout(function () {
-				wolfnet.resizeAOItems($aoItems, itemSections, $aoHeader);
+				wolfnet.resizeAOItems($aoItems, itemSections, $aoHeader, resizeComplete);
 			}, 500);
 		});
 
