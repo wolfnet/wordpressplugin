@@ -97,6 +97,7 @@ Please upgrade to the latest version of the plugin as we will be disabling our o
 
 * Updating Smart Search results to land on configured view.
 * Default appearance set to "Modern Lite" for new installations
+* Fixed issue where agent photos would sometimes disappear in FireFox
 
 = 1.12.1 =
 
