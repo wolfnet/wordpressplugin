@@ -93,6 +93,13 @@ Please upgrade to the latest version of the plugin as we will be disabling our o
 
 == Changelog ==
 
+= 1.12.2 =
+
+* Updating Smart Search results to land on configured view.
+* Default appearance set to "Modern Lite" for new installations
+* Fixed issue where agent photos would sometimes disappear in FireFox
+* Fixed issue where agent/office search bar was too wide for iPhone 5
+
 = 1.12.1 =
 
 * Back-to-top link on Agent Page scrolls the screen higher than the agent content, to account for fixed headers

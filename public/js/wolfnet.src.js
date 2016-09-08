@@ -140,10 +140,12 @@ if ( typeof jQuery !== 'undefined' ) {
 
 	( function ( $ ) {
 
-		wolfnet.resizeAOItems = function ($aoItems, itemSections, $aoHeader) {
+		wolfnet.resizeAOItems = function ($aoItems, itemSections, $aoHeader, cb) {
 			var sectionsSelector = '',
 				colCount = 0,
 				colsCounted = false;
+
+			cb = cb || function () {};
 
 			// Reset the max heights & set default options
 			for (var i=0, l=itemSections.length; i<l; i++) {
@@ -189,7 +191,7 @@ if ( typeof jQuery !== 'undefined' ) {
 			}
 
 			// Reposition the agent/office nav
-			if ($aoItems.length > 0) {
+			if (($aoItems.length > 0) && ($(window).width() >= 600)) {
 				var itemWidth = $aoItems.outerWidth(true) + 4; // Add 4 to acct for inline space
 				var itemMargin = itemWidth - $aoItems.outerWidth() - 4; // Remove 1 margin width
 				var rowWidth = (itemWidth * colCount) - itemMargin;
@@ -200,6 +202,9 @@ if ( typeof jQuery !== 'undefined' ) {
 					'padding-right': 'inherit'
 				});
 			}
+
+			// Callback
+			cb(itemSections);
 
 		};
 
