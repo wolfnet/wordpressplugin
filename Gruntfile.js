@@ -115,7 +115,9 @@ module.exports = function (grunt) {
 							// Excluded File Patterns
 							'!**/.*',
 							'!**/*.{sublime*,less,tmp}',
-							'!phpdoc*.xml'
+							'!phpdoc*.xml',
+							'!readme.md',
+							'!ReadMe.txt'
 						],
 						dest: 'build'
 					},
@@ -238,6 +240,7 @@ module.exports = function (grunt) {
 			grunt.task.run('clean');
 			grunt.log.writeln('Creating ' + colors.code('build') + ' directory');
 			grunt.task.run('copy:main');
+			grunt.task.run('generate-readme');
 		}
 	);
 
@@ -293,5 +296,55 @@ module.exports = function (grunt) {
 			});
 		}
 	);
+
+	// Generates WordPress ReadMe.txt file
+	grunt.registerTask('generate-readme', flags.subtask(), function () {
+		var readme = grunt.file.read('readme.md');
+
+		grunt.log.writeln('Generating ' + colors.code('ReadMe.txt') + ' for WordPress');
+
+		// Format headings
+		readme = readme.replace(/### ([^\n]*)/g, '= $1 =')
+			.replace(/## ([^\n]*)/g, '== $1 ==')
+			.replace(/# ([^\n]*)/g, '=== $1 ===');
+
+		// Parse document
+		sections = readme.match(/===?[^=]*===?(\n(?!(==))[^\n]*)*/g);
+
+		readme = '';
+
+		for (var i=0, l=sections.length; i<l; i++) {
+
+			var section = sections[i],
+				heading = section.match(/^[^\n]*\n/g),
+				body    = section.substring(section.search(/\n/) + 1, section.length);
+
+			// Format code snippets
+			body = body.replace(/^```[^\n]*(\n[^`]*\n)```/gm, '`$1`');
+
+			// Format YouTube items
+			body = body.replace(/^\[\!?\[?[^\]]*\]?[^\]]*\][^\(\n]*\(([^\/\n]*\/\/[^\/]*youtube\.com[^\)]*)\)/gm, '[youtube $1]');
+
+			// Top section
+			if (i === 0) {
+
+				// Replace properties table
+				body = body.replace(/\n*[^\|]*\|[^|]*\n\s*---+\s*\|\s*---+[^\n]*\n/g, '')
+					.replace(/^([^\|]*)\|([^\n]*)\n/gm, '$1$2\n');
+
+				// Remove quoted description format
+				body = body.replace(/^\>\s*/gm, '');
+
+			} else {
+				readme += '\n\n';
+			}
+
+			readme += heading + body;
+
+		}
+
+		grunt.file.write('build/ReadMe.txt', readme);
+
+	});
 
 };
