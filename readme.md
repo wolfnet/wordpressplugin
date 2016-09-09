@@ -554,6 +554,10 @@ The following individuals contributed to the creation of this plugin.
 * http://michaelpidde.com
 * Minnesota, USA
 
+### John Coleman
+* @thenewcoke
+* Minneapolis, Minnesota, USA
+
 ### Tom Penney
 * http://tompenney.com
 * @tompenney
