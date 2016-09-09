@@ -93,6 +93,10 @@ Please upgrade to the latest version of the plugin as we will be disabling our o
 
 ## Changelog
 
+### 1.12.3
+
+* Gracefully degrade when adding widgets if the API key is disabled
+
 ### 1.12.2
 
 * Updating Smart Search results to land on configured view.
