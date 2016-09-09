@@ -83,8 +83,13 @@ class Wolfnet_Widget_FeaturedListingsWidget extends Wolfnet_Widget_AbstractWidge
 
     protected function getOptions($instance = null)
     {
-        $options = $this->plugin->featuredListings->getOptions($instance);
-
+        $options = array();
+        try {
+            $options = $this->plugin->featuredListings->getOptions($instance);
+        } catch (Wolfnet_Api_ApiException $e) {
+            echo $this->plugin->displayException($e);
+        }
+        
         return parent::prepOptions($options);
 
     }
