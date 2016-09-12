@@ -310,13 +310,17 @@ if (!function_exists('formatUrl')) {
 
 			<div class="wolfnet_aoListings">
 
-				<div class="wolfnet_aoTitle">Agent's Listings</div>
-
-				<hr />
-
 				<?php if ($activeListingCount > 0) { ?>
 
 					<div class="wolfnet_aoFeaturedListings">
+
+						<div class="wolfnet_aoTitle">
+							Agent's
+							<?=($soldListingCount == 0 ? 'Active' : '')?>
+							Listings
+						</div>
+
+						<hr />
 
 						<?php echo $activeListingHTML; ?>
 
@@ -334,6 +338,14 @@ if (!function_exists('formatUrl')) {
 				if ($soldListingCount > 0) { ?>
 
 					<div class="wolfnet_aoSoldListings">
+
+						<div class="wolfnet_aoTitle">
+							Agent's
+							<?=($activeListingCount == 0 ? 'Sold' : '')?>
+							Listings
+						</div>
+
+						<hr />
 
 						<?php echo $soldListingHTML; ?>
 
