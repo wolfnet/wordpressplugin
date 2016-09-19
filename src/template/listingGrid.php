@@ -69,9 +69,9 @@ unset($wpMeta['key']);
         var setupThumbnailScroller = function () {
             var $listing = $listingGrid.find('.wolfnet_listing');
             $listing.wolfnetThumbnailScroller({
-                keyid: <?php echo (array_key_exists('keyid', $wpMeta) ? $wpMeta['keyid'] : ''); ?>,
-                photoSelector: '.wolfnet_listingImage img',
-                hideControls: !wolfnet.hasFeature('touch') // If on a touch screen, always show the controls
+                keyid         : <?php echo (array_key_exists('keyid', $wpMeta) ? $wpMeta['keyid'] : ''); ?>,
+                photoSelector : '.wolfnet_listingImage img',
+                hideControls  : !wolfnet.hasFeature('touch') // If on a touch screen, always show the controls
             });
             $listing
                 .on('wolfnet.controlover', function () {
@@ -95,10 +95,10 @@ unset($wpMeta['key']);
 
         var setupListingGrid = function () {
             $listingGrid.filter('.wolfnet_listingGrid').wolfnetListingGrid({
-                containerClass: 'wolfnet_listings',
-                itemClass: 'wolfnet_listing',
-                clearfixClass: 'wolfnet_clearfix',
-                gridAlign: '<?php echo $gridalign; ?>'
+                containerClass : 'wolfnet_listings',
+                itemClass      : 'wolfnet_listing',
+                clearfixClass  : 'wolfnet_clearfix',
+                gridAlign      : '<?php echo $gridalign; ?>'
             });
         };
 
