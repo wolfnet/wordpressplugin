@@ -470,7 +470,12 @@
             for (var i=0,l=options.sortOptionsData.length; i<l; i++) {
                 var sort = options.sortOptionsData[i];
 
-                $('<option>').text(sort.label).attr('value', sort.value).appendTo($select);
+                if (options.defaultSort == sort.value) {
+					$sortOption = $('<option>').text(sort.label).attr({value:sort.value,selected:'selected'});
+                } else {
+					$sortOption = $('<option>').text(sort.label).attr('value', sort.value);
+                }
+				$sortOption.appendTo($select);
 
             }
 
@@ -479,10 +484,6 @@
             $sortDropDown.appendTo($container.find('.wolfnet_toolbar .wolfnet_page_info'));
 
         }
-
-        $container.find('span.' + sortClass + ' select').each(function(){
-            $(this).val(state.sort);
-        });
 
     };
 
@@ -540,6 +541,7 @@
         init : function(options)
         {
             return this.each(function() {
+
                 var $container = $(this);
                 var opts = $.extend(true, {}, defaultOptions, options);
                 var state = $.extend(true, {}, opts.criteria, opts, {page:1});

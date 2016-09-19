@@ -544,6 +544,7 @@ class Wolfnet_Views
 
         $data = $GLOBALS['wolfnet']->api->sendRequest($args['productkey'], '/search_criteria/sort_option');
         $args['sortOptions'] = $data['responseData']['data']['options'];
+		$args['defaultSort'] = $data['responseData']['data']['default'];
 
         foreach ($args as $key => $item) {
             $args[$key] = apply_filters('wolfnet_propertyListView_' . $key, $item);
@@ -570,6 +571,7 @@ class Wolfnet_Views
 
         $data = $GLOBALS['wolfnet']->api->sendRequest($args['productkey'], '/search_criteria/sort_option');
         $args['sortOptions'] = $data['responseData']['data']['options'];
+		$args['defaultSort'] = $data['responseData']['data']['default'];
 
         foreach ($args as $key => $item) {
             $args[$key] = apply_filters('wolfnet_listingGridView_' . $key, $item);
