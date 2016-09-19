@@ -33,7 +33,6 @@
     var sortClass  = 'wolfnet_sortoptions';
 
     var defaultOptions = {
-        sort             : 'price_desc',
         maxResults       : 250,
         criteria         : {},
         itemsPerPageData : [5,10,15,20,25,30,35,40,45,50],
