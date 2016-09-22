@@ -325,7 +325,7 @@ if (!function_exists('formatUrl')) {
 						<?php echo $activeListingHTML; ?>
 
 						<?php if ($activeListingCount > 10) {
-							echo '<a href="<?php echo $searchUrl; ?>">'
+							echo '<a href="' . $searchUrl . '">'
 								. 'View all ' . $activeListingCount . ' of '
 								. $agent['first_name'] . "'s listings."
 								. '</a>';
