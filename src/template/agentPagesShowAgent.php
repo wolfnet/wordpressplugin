@@ -520,7 +520,7 @@ jQuery(function ($) {
 
 
 	var canStickSidebar = function () {
-		return (sb.sidebarTop + sb.sidebarHeight) > $aoMainContent.offset().top;
+		return sb.sidebarHeight < (sb.limitBottom - sb.limitTop);
 	};
 
 
