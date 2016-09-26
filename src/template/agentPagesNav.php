@@ -59,13 +59,17 @@ if ($isAgent) {
 	<form name="wolfnet_aoSearch" class="wolfnet_aoSearch" method="post"
 	 action="<?php echo $searchAction; ?>">
 		<?php // No office ID as a hidden field. We want to search all offices ?>
-		<span class="wolfnet_aoCriteria">
-			<span class="wnt-icon wnt-icon-search"></span>
-			<input type="text" name="<?php echo $criteriaName; ?>"
-			 value="<?php echo $criteriaVal; ?>"
-			 placeholder="<?php echo $searchPlaceholder; ?>" />
-		</span>
-		<button type="submit" class="wolfnet_aoSearchButton">Search</button>
+		<div class="wolfnet_aoSearchBox wnt-clearfix">
+			<button type="submit" class="wnt-btn wnt-btn-primary wolfnet_aoSearchButton">
+				<span class="wnt-icon wnt-icon-search"></span>
+				<span class="wnt-visuallyhidden">Search</span>
+			</button>
+			<span class="wolfnet_aoCriteria">
+				<input type="text" name="<?php echo $criteriaName; ?>"
+				 value="<?php echo $criteriaVal; ?>"
+				 placeholder="<?php echo $searchPlaceholder; ?>" />
+			</span>
+		</div>
 	</form>
 
 </div>
