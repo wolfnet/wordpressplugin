@@ -93,9 +93,14 @@ Please upgrade to the latest version of the plugin as we will be disabling our o
 
 ## Changelog
 
-### 1.12.3
+### 1.13.0
 
+* Redesigned agent/office search bar
+* Agent profile listings are now labeled as active or sold when the active/sold toggle is not displayed
 * Gracefully degrade when adding widgets if the API key is disabled
+* Fixed issue with the agent profile photo scroll-following rules
+* Fixed agent profile active listings link
+* Fixed issue where the agents/offices toggle was partially covered
 
 ### 1.12.2
 
