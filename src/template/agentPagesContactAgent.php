@@ -33,9 +33,9 @@
 
 	$link = $linkBase;
 	$formAction = $linkBase;
-	if(!preg_match('/\/agent/', $linkBase)) {
+	if(!preg_match('/\/agnt/', $linkBase)) {
 		// Landing on this page without a redirect URL.
-		$link .= 'agent/' . $agentId;
+		$link .= 'agnt/' . $agentId;
 		$formAction = $link . '/contact';
 	} else {
 		// Should just be able to remove /contact from the link.

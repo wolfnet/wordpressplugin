@@ -36,11 +36,11 @@ if(preg_match('/office\/.*/', $linkBase)) {
 } elseif(preg_match('/search.*/', $linkBase)) {
 	$linkBase = preg_replace('/search.*/', '', $linkBase);
 	$allAgentsLink = $linkBase;
-} elseif(preg_match('/agents.*/', $linkBase)) {
-	$linkBase = preg_replace('/agents.*/', '', $linkBase);
+} elseif(preg_match('/agnts.*/', $linkBase)) {
+	$linkBase = preg_replace('/agnts.*/', '', $linkBase);
 	$allAgentsLink = $linkBase;
 } else {
-	$paginationLinkBase .= "agents/";
+	$paginationLinkBase .= "agnts/";
 	$allAgentsLink = $linkBase . 'search/';
 }
 
@@ -131,7 +131,7 @@ if (!function_exists('paginate')) {
 
 				if ($agent['display_agent']) {
 
-					$agentLink = $linkBase . 'agent/' . $agent['agent_stub'];
+					$agentLink = $linkBase . 'agnt/' . $agent['agent_stub'];
 
 					$contactLink = $agentLink . '/contact';
 

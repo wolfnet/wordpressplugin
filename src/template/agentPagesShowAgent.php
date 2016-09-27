@@ -25,15 +25,15 @@ if (array_key_exists("REDIRECT_URL", $_SERVER)) {
 	$contactLink = $linkBase . 'contact';
 } else {
 	$linkBase = $_SERVER['PHP_SELF'] . '/';
-	$contactLink = $linkBase . 'agent/' . $_REQUEST['agentId'] . '/contact';
+	$contactLink = $linkBase . 'agnt/' . $_REQUEST['agentId'] . '/contact';
 }
 
 // Remove /agent/* from link base.
-if(preg_match('/agent\/.*/', $linkBase)) {
-	$linkBase = preg_replace('/agent\/.*/', '', $linkBase);
+if(preg_match('/agnt\/.*/', $linkBase)) {
+	$linkBase = preg_replace('/agnt\/.*/', '', $linkBase);
 }
 
-$agentsLink  = $linkBase . 'agents';
+$agentsLink  = $linkBase . 'agnts';
 
 // Agent links
 $socialLinks = array(

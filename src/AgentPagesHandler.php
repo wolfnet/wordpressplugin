@@ -41,6 +41,16 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
         global $wp_query;
         $query = $wp_query->query;
 
+        // Do some translation of funky "agnt" and "agnts" back to real, non-hacked-up
+        // words. We can't use "agents" in the URL since it's highly likely that a site
+        // will use that as a page name, and that will conflict with the rewrite endpoint.
+        if(array_key_exists('agnts', $query)) {
+            $query['agents'] = $query['agnts'];
+        }
+        if(array_key_exists('agnt', $query)) {
+            $query['agent'] = $query['agnt'];
+        }
+
         $action = '';
 
         if(array_key_exists('search', $query) || array_key_exists('agents', $query)) {

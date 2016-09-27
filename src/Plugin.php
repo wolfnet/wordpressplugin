@@ -395,8 +395,12 @@ class Wolfnet_Plugin
          * on a post or a page. Since there is no uniformity there, it's probably best
          * to go with the endpoint instead.
          */
-        add_rewrite_endpoint('agent', $this->epFlag);
-        add_rewrite_endpoint('agents', $this->epFlag);
+        // No, these two are not typos. We can't use "agents" since that'll be a likely page
+        // name, and we'd better just change "agent" to use th same convention for the sake
+        // of consistency.
+        add_rewrite_endpoint('agnt', $this->epFlag);
+        add_rewrite_endpoint('agnts', $this->epFlag);
+
         add_rewrite_endpoint('office', $this->epFlag);
         add_rewrite_endpoint('search', $this->epFlag);
     }
