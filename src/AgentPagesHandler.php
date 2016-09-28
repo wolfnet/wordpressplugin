@@ -24,48 +24,100 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
 
     protected $key;
     protected $plugin;
+    protected $regex = array(
+        'contact' => '/\/contact.*/',
+    );
 
     public function __construct($plugin)
     {
         $this->plugin = $plugin;
+        if(!session_id()) {
+            session_start();
+        }
     }
 
     public function handleRequest()
     {
+        global $wp_query;
+        $query = &$wp_query->query;
+
+        // Do some translation of funky "agnt" and "agnts" back to real, non-hacked-up
+        // words. We can't use "agents" in the URL since it's highly likely that a site
+        // will use that as a page name, and that will conflict with the rewrite endpoint.
+        if(array_key_exists('agnts', $query)) {
+            $query['agents'] = $query['agnts'];
+            unset($query['agnts']);
+        }
+        if(array_key_exists('agnt', $query)) {
+            $query['agent'] = $query['agnt'];
+            unset($query['agnt']);
+        }
+
         $action = '';
 
-        if (array_key_exists('agentSearch', $_REQUEST)) {
+        if(array_key_exists('search', $query) || array_key_exists('agents', $query)) {
+
             // All of the logic for searching is in the agentList function since
             // we're just passing more criteria to the API call.
             $action = 'agentList';
-        } elseif(array_key_exists('contact', $_REQUEST)) {
-            if($_SERVER['REQUEST_METHOD'] == 'POST') {
-                $action = 'contactProcess';
+
+        } elseif(array_key_exists('agent', $query) && sizeof(trim($query['agent']) > 0)) {
+
+            // Check if we're requesting the contact form. If not, show agent detail.
+            if($this->findIn('contact', $query['agent'])) {
+                // Requesting the contact form.
+                // Remove /contact part from agent.
+                $_REQUEST['contact'] = $this->removeIn('contact', $query['agent']);
+                if($_SERVER['REQUEST_METHOD'] == 'POST') {
+                    $action = 'contactProcess';
+                } else {
+                    $action = 'contactForm';
+                }
             } else {
-                $action = 'contactForm';
+                // Show the agent detail.
+                $_REQUEST['agentId'] = $query['agent'];
+                $action = 'agent';
             }
-        } elseif(array_key_exists('contactOffice', $_REQUEST)) {
-            if($_SERVER['REQUEST_METHOD'] == 'POST') {
-                $action = 'contactProcess';
+
+        } elseif(array_key_exists('office', $query) && sizeof(trim($query['office']) > 0)) {
+
+            // Check if we're requesting the contact form. If not, show list of office's agents.
+            if($this->findIn('contact', $query['office'])) {
+                // Requesting the contact form.
+                // Remove /contact part from office.
+                $_REQUEST['contactOffice'] = $this->removeIn('contact', $query['office']);
+                if($_SERVER['REQUEST_METHOD'] == 'POST') {
+                    $action = 'contactProcess';
+                } else {
+                    $action = 'contactFormOffice';
+                }
             } else {
-                $action = 'contactFormOffice';
+                // Office is passed in; list their agents.
+                $_REQUEST['officeId'] = $query['office'];
+                $action = 'agentList';
             }
-        } elseif(array_key_exists('agentId', $_REQUEST) && sizeof(trim($_REQUEST['agentId']) > 0)) {
-            // If agentId is passed through, show the agent detail.
-            $action = 'agent';
-        } elseif(array_key_exists('officeId', $_REQUEST) && sizeof(trim($_REQUEST['officeId']) > 0)) {
-            // officeId is passed in; list their agents.
-            $action = 'agentList';
+
         } elseif(!$this->args['showoffices']) {
-            // if none of the above match and they don't want to show an office list, show all agents.
+
+            // If none of the above match and they don't want to show an office list, show all agents.
             $action = 'agentList';
+
         } else {
+
             $action = 'officeList';
+
         }
 
         // Run the function associated with the action.
         return $this->$action();
 	}
+
+    public function findIn($key, $string) {
+        return preg_match($this->regex[$key], $string);
+    }
+    public function removeIn($key, $string) {
+        return preg_replace($this->regex[$key], '', $string);
+    }
 
 
     /*
@@ -77,11 +129,14 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
 
 	protected function officeList()
 	{
+        unset($_SESSION['agentCriteria']);
 
 		// This will be populated if an office search is being performed.
 		if (array_key_exists('officeCriteria', $_REQUEST) && strlen($_REQUEST['officeCriteria']) > 0) {
 			$this->args['criteria']['name'] = $_REQUEST['officeCriteria'];
-		}
+		} else {
+            $_REQUEST['officeCriteria'] = '';
+        }
 
 		$this->args['criteria']['omit_office_id'] = $this->args['excludeoffices'];
 
@@ -98,7 +153,7 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
 		// or it will screw up agent pagination when running a search.
 		$args = array(
 			'offices' => $officeData,
-			'agentCriteria' => (array_key_exists('agentCriteria', $_REQUEST)) ? $_REQUEST['agentCriteria'] : null,
+			'agentCriteria' => (array_key_exists('agentCriteria', $_SESSION)) ? $_SESSION['agentCriteria'] : null,
 			'officeCriteria' => (array_key_exists('officeCriteria', $_REQUEST)) ? $_REQUEST['officeCriteria'] : null,
 			'isAgent' => false,
 		);
@@ -134,6 +189,36 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
 
     protected function agentList()
     {
+        global $wp_query;
+        $query = $wp_query->query;
+
+        // If we're searching for agents in an office, isolate the office name.
+        if(array_key_exists('office', $query) && preg_match('/\/search.*/', $query['office'])) {
+            $query['office'] = preg_replace('/\/search.*/', '', $query['office']);
+        }
+
+        // Office might have a page tacked onto the name, so isolate that and remove it.
+        if(array_key_exists('office', $query)) {
+            $officePage = array();
+            preg_match('/\/([0-9]+)$/', $query['office'], $officePage);
+            if(count($officePage) > 0) {
+                $_REQUEST['agentpage'] = $officePage[1];
+            }
+            $query['office'] = preg_replace('/\/[0-9]+.*/', '', $query['office']);
+        }
+
+        // The only values associated with these endpoints should be for pagination.
+        if(array_key_exists('agents', $query)) {
+            // If this is the agents endpoint, we can clear the agent criteria.
+            unset($_SESSION['agentCriteria']);
+
+            if(strlen($query['agents']) > 0) {
+                $_REQUEST['agentpage'] = $query['agents'];
+            }
+        } elseif(array_key_exists('search', $query) && strlen($query['search']) > 0) {
+            $_REQUEST['agentpage'] = $query['search'];
+        }
+
         if(array_key_exists("agentpage", $_REQUEST) && $_REQUEST['agentpage'] > 1) {
             /*
              * $startrow needs to be calculated based on the requested page. If $page == 2
@@ -147,25 +232,22 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
         }
 
         $this->args['criteria']['omit_office_id'] = $this->args['excludeoffices'];
-        if(array_key_exists('agentSort', $_REQUEST)) {
-            $agentSort = $_REQUEST['agentSort'];
-            $this->args['criteria']['sort'] = ($_REQUEST['agentSort'] == 'name') ? 'name' : 'office_id';
-        } else {
-            $agentSort = 'name';
-        }
 
         $endpoint = '/agent';
         $separator = "?";
-        if(array_key_exists('officeId', $_REQUEST)) {
-            $endpoint .= '?office_id=' . $_REQUEST['officeId'];
+        if(array_key_exists('office', $query)) {
+            $endpoint .= '?office_name=' . $query['office'];
             $separator = "&";
         }
         $endpoint .= $separator . "startrow=" . $startrow;
         $endpoint .= "&maxrows=" . $this->args['criteria']['numperpage'];
 
         // This will be populated if an agent search is being performed.
-        if(array_key_exists('agentCriteria', $_REQUEST) && strlen($_REQUEST['agentCriteria']) > 0) {
-            $this->args['criteria']['name'] = $_REQUEST['agentCriteria'];
+        if(array_key_exists('agentCriteria', $_REQUEST)) {
+            $_SESSION['agentCriteria'] = $_REQUEST['agentCriteria'];
+        }
+        if(array_key_exists('agentCriteria', $_SESSION) && strlen($_SESSION['agentCriteria']) > 0) {
+            $this->args['criteria']['name'] = $_SESSION['agentCriteria'];
         }
 
         try {
@@ -190,10 +272,9 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
 			'agents'          => $agentsData,
 			'totalrows'       => $data['responseData']['data']['total_rows'],
 			'page'            => $_REQUEST['agentpage'],
-			'agentSort'       => $agentSort,
 			'officeId'        => (array_key_exists('officeId', $_REQUEST)) ? $_REQUEST['officeId'] : '',
 			'officeCount'     => $officeCount,
-			'agentCriteria'   => (array_key_exists('agentCriteria', $_REQUEST)) ? $_REQUEST['agentCriteria'] : '',
+			'agentCriteria'   => (array_key_exists('agentCriteria', $_SESSION)) ? $_SESSION['agentCriteria'] : '',
 			'officeCriteria'  => (array_key_exists('officeCriteria', $_REQUEST)) ? $_REQUEST['officeCriteria'] : '',
 			'isAgent'         => true,
 			'agentsHtml'      => '',
@@ -229,6 +310,8 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
 
     protected function agent()
     {
+        global $wp_query;
+
         $agentData = $this->getAgentById($_REQUEST['agentId']);
 
         // We need to get a product key that we can pull this agent's listings with.
@@ -290,11 +373,15 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
 
     protected function contactFormOffice()
     {
-        $officeData = $this->getOfficeByOfficeId($_REQUEST['contactOffice']);
+        // This is being set in session so we don't need to parse the office name and make
+        // another API request on the 'thanks' page to get the office data.
+        if(!array_key_exists('officeData', $_SESSION)) {
+            $_SESSION['officeData'] = $this->getOfficeByName($_REQUEST['contactOffice']);
+        }
 
         $args = array(
-            'office' => $officeData,
-            'officeId' => $_REQUEST['contactOffice'],
+            'office' => $_SESSION['officeData'],
+            'officeId' => $_SESSION['officeData']['office_id'],
         );
         $args = array_merge($args, $this->args);
 
@@ -329,7 +416,7 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
             $_REQUEST['errorField'] = 'wolfnet_email';
         }
 
-        if($_REQUEST['errorField'] != '') {
+        if(strlen($_REQUEST['errorField']) > 0) {
             // Show contact form again.
             return $this->getForm($formType);
         }
@@ -345,9 +432,9 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
         // If this is the agent contact page, agent_guid will be passed along, otherwise
         // this was submitted via the office contact and we'll pass office_id.
         if($formType == 'agent') {
-            $this->args['criteria']['agent_id'] = $_REQUEST['contact'];
+            $this->args['criteria']['agent_id'] = $_REQUEST['agent_id'];
         } else {
-            $this->args['criteria']['office_id'] = $_REQUEST['contactOffice'];
+            $this->args['criteria']['office_id'] = $_REQUEST['office_id'];
         }
 
         try {
@@ -373,7 +460,13 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
 
         if($data['responseStatusCode'] == 200) {
             $_REQUEST['thanks'] = true;
-            return $this->getForm($formType);
+            $out = $this->getForm($formType);
+            if($formType == 'office') {
+                // This was carried over so we didn't need to make a new API request on the
+                // contact thanks page for office data. It can go away now.
+                unset($_SESSION['officeData']);
+            }
+            return $out;
         }
     }
 
@@ -522,10 +615,33 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
 
         $officeData = array();
         if(is_array($data['responseData']['data'])) {
-            $matches = count($data['responseData']['data']['office']);
             // Due to possible data duplication, get the last result... There
             // will only be one office returned for most implementations.
-            $officeData = $data['responseData']['data']['office'][$matches-1];
+            $officeData = $data['responseData']['data']['office'][0];
+        }
+
+        return $officeData;
+    }
+
+
+    protected function getOfficeByName($name)
+    {
+        try {
+            $data = $this->plugin->api->sendRequest(
+                $this->key,
+                '/office?name=' . $name,
+                'GET',
+                $this->args['criteria']
+            );
+        } catch(Wolfnet_Exception $e) {
+            return $this->plugin->displayException($e);
+        }
+
+        $officeData = array();
+        if(is_array($data['responseData']['data'])) {
+            // Due to possible data duplication, get the last result... There
+            // will only be one office returned for most implementations.
+            $officeData = $data['responseData']['data']['office'][0];
         }
 
         return $officeData;
@@ -540,10 +656,27 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
 		if (array_key_exists("REDIRECT_URL", $_SERVER)) {
 			$linkBase = $_SERVER['REDIRECT_URL'];
 		} else {
-			$linkBase = $_SERVER['PHP_SELF'];
+			$linkBase = $_SERVER['PHP_SELF'] . '/';
 		}
 
-		$agentPagesLink = $linkBase . '?' . http_build_query($args) . $this->getPostHash();
+        // Chop the links down to only the necessary parts.
+        if(preg_match('/office.*/', $linkBase)) {
+            $linkBase = preg_replace('/office.*/', '', $linkBase);
+        } elseif(preg_match('/search.*/', $linkBase)) {
+            $linkBase = preg_replace('/search.*/', '', $linkBase);
+        } elseif(preg_match('/agnts.*/', $linkBase)) {
+            $linkBase = preg_replace('/agnts.*/', '', $linkBase);
+        }
+
+		$agentPagesLink = $linkBase;
+
+        foreach($args as $key => $value) {
+            if(strlen($value) > 0) {
+                $agentPagesLink .= "$key/$value/";
+            } else {
+                $agentPagesLink .= "$key/";
+            }
+        }
 
 		return $agentPagesLink;
 
@@ -552,23 +685,21 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
 
 	protected function buildLinkToAgents()
 	{
-		return $this->buildLink(array( 'agentSearch' ));
+		return $this->buildLink(array( 'search' => '' ));
 	}
 
 
 	protected function buildLinkToAgent($agent)
 	{
-		$args = array(
-			'agentId' => $agent['agent_id'],
-			'agentCriteria' => (
-				array_key_exists('agentCriteria', $_REQUEST) && (strlen($_REQUEST['agentCriteria']) > 0) ?
-				$_REQUEST['agentCriteria'] : ''
-			),
-			'officeId' => (array_key_exists('officeId', $_REQUEST) ? $_REQUEST['officeId'] : ''),
-		);
+		$args = array();
 
+        if(array_key_exists('agentCriteria', $_SESSION) && (strlen($_SESSION['agentCriteria']) > 0)) {
+            $args['search'] = $_SESSION['agentCriteria'];
+            return $this->buildLink($args);
+        }
+
+        $args['agnt'] = $agent['agent_stub'];
 		return $this->buildLink($args);
-
 	}
 
 
@@ -590,14 +721,14 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
 
 	protected function buildLinkToOffice($office)
 	{
-		return $this->buildLink(array( 'officeId' => $office['office_id'] ));
+		return $this->buildLink(array( 'office' => $office['office_stub'] ));
 
 	}
 
 
 	protected function buildLinkToOfficeContact($office)
 	{
-		return $this->buildLink(array( 'contactOffice' => $office['office_id'] ));
+		return $this->buildLink(array( 'office' => $office['office_stub'], 'contact' => '' ));
 
 	}
 

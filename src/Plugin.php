@@ -126,6 +126,9 @@ class Wolfnet_Plugin
 
     private $cachingService;
 
+    // add_rewrite_endpoint flag
+    private $epFlag = 0;
+
     const CACHE_CRON_HOOK = 'wntCronCacheDaily';
 
     const SSL_WP_OPTION = 'wolfnet_sslEnabled';
@@ -192,6 +195,7 @@ class Wolfnet_Plugin
         // Register actions.
         $this->addAction(array(
             array('init',                  'init'),
+            array('init',                  'setupRewriteTags', 10),
             array('wp_enqueue_scripts',    'scripts'),
             array('wp_enqueue_scripts',    'styles'),
             array('wp_footer',             'footer'),
@@ -344,16 +348,24 @@ class Wolfnet_Plugin
     public function wolfnetActivation()
     {
         /*
-         * Note - functionality here has been moved to AFTER the activation
-         * redirect. In the unforunate event that the activation code fails,
-         * we want the activation to at least have succeeded and not thrown
-         * a fatal error. Problems related to SSL and API connectivity should
-         * not destroy the activation process.
+         * Add verifySSL option here.
          */
         if(get_option(self::VERIFYSSL_WP_OPTION) === false) {
             // See Wolfnet_Admin->adminInit for this usage.
-            add_option('wolfnet_activatedPlugin181', '1.8.1');
+            add_option(self::VERIFYSSL_WP_OPTION, true);
         }
+
+        /*
+         * This needs to happen here so the rewrite tags get registered before the rewrite rules
+         * are flushed, otherwise the agent page URLs will not work correctly.
+         */
+        $this->setupRewriteTags();
+
+        /*
+         * Flush rewrite DB for agent page URLs. Don't bother to check if it's enabled
+         * by this point since they haven't entered an API key yet.
+         */
+        flush_rewrite_rules();
     }
 
 
@@ -406,6 +418,24 @@ class Wolfnet_Plugin
 
         return (substr($pagename, 0, strlen($prefix)) === $prefix) ? false : $req;
 
+    }
+
+
+    public function setupRewriteTags() {
+        /*
+         * We're using rewrite endpoints in stead of rewrite rules because we can't
+         * control the user's permalink structure, nor whether they will use this plugin
+         * on a post or a page. Since there is no uniformity there, it's probably best
+         * to go with the endpoint instead.
+         */
+        // No, these two are not typos. We can't use "agents" since that'll be a likely page
+        // name, and we'd better just change "agent" to use th same convention for the sake
+        // of consistency.
+        add_rewrite_endpoint('agnt', $this->epFlag);
+        add_rewrite_endpoint('agnts', $this->epFlag);
+
+        add_rewrite_endpoint('office', $this->epFlag);
+        add_rewrite_endpoint('search', $this->epFlag);
     }
 
 
@@ -488,6 +518,9 @@ class Wolfnet_Plugin
     /*                                                                                            */
     /* ****************************************************************************************** */
 
+    public function setEpFlag($flag) {
+        $this->epFlag = $flag;
+    }
 
     /**
      * Decodes all HTML entities, including numeric and hexadecimal ones.

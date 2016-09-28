@@ -23,17 +23,34 @@
 if (array_key_exists("REDIRECT_URL", $_SERVER)) {
 	$linkBase = $_SERVER['REDIRECT_URL'];
 } else {
-	$linkBase = $_SERVER['PHP_SELF'];
+	$linkBase = $_SERVER['PHP_SELF'] . '/';
 }
 
-$postHash = '#post-' . get_the_id();
-
-$agentsLink  = $linkBase . '?agentSearch' . $postHash;
-$officesLink = $linkBase . $postHash;
+// This chops the links down to only the necessary parts.
+if(preg_match('/office\/.*/', $linkBase)) {
+	// Take us to see all agents (site.com/page/agnts)
+	$agentsLink = preg_replace('/office\/.*/', 'agnts', $linkBase);
+	// This will take us back to the base page/post url (site.com/page/)
+	$officesLink = preg_replace('/office\/.*/', '', $linkBase);
+} elseif(preg_match('/search.*/', $linkBase)) {
+	// Remove search part from agents link which leaves us with site.com/page/agnts
+	$agentsLink = preg_replace('/search\/.*/', 'agnts/', $linkBase);
+	// Likewise, remove search part and point back to base page/post url (site.com/page/)
+	$officesLink = preg_replace('/search\/.*/', '', $linkBase);
+} elseif(preg_match('/agnts.*/', $linkBase)) {
+	// Remove any pagination for the agents link.
+	$agentsLink = preg_replace('/\/[0-9]+/', '', $linkBase);
+	// Remove agents part and direct back to base page/post url (site.com/page/)
+	$officesLink = preg_replace('/agnts\/.*/', '', $linkBase);
+} else {
+	// I'm not sure if this condition would ever happen, but put in some defaults anyway.
+	$agentsLink  = $linkBase . 'agnts';
+	$officesLink = $linkBase;
+}
 
 if ($isAgent) {
 	$searchPlaceholder = 'search by agent name';
-	$searchAction = $agentsLink;
+	$searchAction = preg_replace('/agnts\/.*/', 'search/', $agentsLink);
 	$criteriaName = 'agentCriteria';
 	$criteriaVal = (strlen($agentCriteria) > 0) ? $agentCriteria : '';
 } else {
