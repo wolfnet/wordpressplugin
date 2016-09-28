@@ -95,6 +95,7 @@ Please upgrade to the latest version of the plugin as we will be disabling our o
 
 ### 1.13.0
 
+* Changed agent/office URLs to be a pretty format
 * Redesigned agent/office search bar
 * Agent profile listings are now labeled as active or sold when the active/sold toggle is not displayed
 * Gracefully degrade when adding widgets if the API key is disabled
