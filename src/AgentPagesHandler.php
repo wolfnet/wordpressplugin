@@ -660,8 +660,8 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
 		}
 
         // Chop the links down to only the necessary parts.
-        if(preg_match('/office.*/', $linkBase)) {
-            $linkBase = preg_replace('/office.*/', '', $linkBase);
+        if(preg_match('/\/office.*/', $linkBase)) {
+            $linkBase = preg_replace('/\/office.*/', '/', $linkBase);
         } elseif(preg_match('/search.*/', $linkBase)) {
             $linkBase = preg_replace('/search.*/', '', $linkBase);
         } elseif(preg_match('/agnts.*/', $linkBase)) {
