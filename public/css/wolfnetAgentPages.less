@@ -553,12 +553,12 @@
 
 		.wolfnet_aoListings {
 
-			.wolfnet_aoListingNav {
+			.wolfnet_aoListingNavArea {
 				position: relative;
 				z-index: 10;
 				float: right;
 
-				&.wnt-btn-group {
+				.wnt-btn-group {
 					.toggleBtnGroup(@btnRadius, 8em);
 				}
 
@@ -723,6 +723,14 @@
 		&.wolfnet_aoAgentDetails {
 			.wolfnet_aoMain {
 				max-width: 50%;
+			}
+			.wolfnet_aoListings {
+				.wolfnet_aoTitle {
+				}
+				.wolfnet_aoListingNavArea {
+					float: none;
+					//text-align: center;
+				}
 			}
 		}
 
