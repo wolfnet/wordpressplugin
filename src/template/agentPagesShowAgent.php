@@ -517,7 +517,10 @@ jQuery(function ($) {
 
 
 	var canStickSidebar = function () {
-		return sb.sidebarHeight < (sb.limitBottom - sb.limitTop);
+		return (
+			(sb.sidebarHeight < (sb.limitBottom - sb.limitTop))
+			&& (($aoSidebar.offset().top + sb.sidebarHeight) > ($aoMainContent.offset().top + 20))
+		);
 	};
 
 
