@@ -304,6 +304,8 @@ if (!function_exists('formatUrl')) {
 
 			<div class="wolfnet_aoListings">
 
+				<div class="wolfnet_aoListingNavArea"></div>
+
 				<?php if ($activeListingCount > 0) { ?>
 
 					<div class="wolfnet_aoFeaturedListings">
@@ -432,6 +434,7 @@ jQuery(function ($) {
 	var $agentListings = $aoWidget.find('.wolfnet_aoListings'),
 		$agentFeatured = $agentListings.find('.wolfnet_aoFeaturedListings'),
 		$agentSold = $agentListings.find('.wolfnet_aoSoldListings'),
+		$agentListingNavArea = $agentListings.find('.wolfnet_aoListingNavArea'),
 		agentFeaturedLabel = '<?php _e('Active'); ?>',
 		agentSoldLabel = '<?php _e('Sold'); ?>';
 
@@ -447,7 +450,7 @@ jQuery(function ($) {
 				' href="javascript:void(0);">' + agentSoldLabel + '</a>'
 			).appendTo($agentListingNav);
 
-		$agentListings.prepend($agentListingNav);
+		$agentListingNavArea.append($agentListingNav);
 
 		$agentSold.hide();
 
