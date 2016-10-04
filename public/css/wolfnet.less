@@ -1150,18 +1150,5 @@
 
 .wolfnet_clearfix,
 .wnt-clearfix {
-	/* *zoom: 1; */
-	float: none !important;
-	clear: both;
-
-	&:before,
-	&:after {
-		content: '';
-		display: table;
-	}
-
-	&:after {
-		clear: both;
-	}
-
+	.clearfix();
 }

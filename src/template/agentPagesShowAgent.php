@@ -22,24 +22,18 @@
 
 if (array_key_exists("REDIRECT_URL", $_SERVER)) {
 	$linkBase = $_SERVER['REDIRECT_URL'];
+	$contactLink = $linkBase . 'contact';
 } else {
-	$linkBase = $_SERVER['PHP_SELF'];
+	$linkBase = $_SERVER['PHP_SELF'] . '/';
+	$contactLink = $linkBase . 'agnt/' . $_REQUEST['agentId'] . '/contact';
 }
 
-$postHash = '#post-' . get_the_id();
+// Remove /agent/* from link base.
+if(preg_match('/agnt\/.*/', $linkBase)) {
+	$linkBase = preg_replace('/agnt\/.*/', '', $linkBase);
+}
 
-$linkExtra = (
-		array_key_exists('agentCriteria', $_REQUEST) && (strlen($_REQUEST['agentCriteria']) > 0) ?
-		'&agentCriteria=' . $_REQUEST['agentCriteria'] : ''
-	)
-	. ($officeId != '' ? '&officeId=' . $officeId : '')
-	. $postHash;
-
-
-$contactLink = $linkBase . '?contact=' . $agent['agent_id'] . $linkExtra;
-
-$agentsLink  = $linkBase . '?agentSearch&agentCriteria=' . $postHash;
-
+$agentsLink  = $linkBase . 'agnts';
 
 // Agent links
 $socialLinks = array(
@@ -310,18 +304,24 @@ if (!function_exists('formatUrl')) {
 
 			<div class="wolfnet_aoListings">
 
-				<div class="wolfnet_aoTitle">Agent's Listings</div>
-
-				<hr />
+				<div class="wolfnet_aoListingNavArea"></div>
 
 				<?php if ($activeListingCount > 0) { ?>
 
 					<div class="wolfnet_aoFeaturedListings">
 
+						<div class="wolfnet_aoTitle">
+							Agent's
+							<?=($soldListingCount == 0 ? 'Active' : '')?>
+							Listings
+						</div>
+
+						<hr />
+
 						<?php echo $activeListingHTML; ?>
 
 						<?php if ($activeListingCount > 10) {
-							echo '<a href="<?php echo $searchUrl; ?>">'
+							echo '<a href="' . $searchUrl . '">'
 								. 'View all ' . $activeListingCount . ' of '
 								. $agent['first_name'] . "'s listings."
 								. '</a>';
@@ -334,6 +334,14 @@ if (!function_exists('formatUrl')) {
 				if ($soldListingCount > 0) { ?>
 
 					<div class="wolfnet_aoSoldListings">
+
+						<div class="wolfnet_aoTitle">
+							Agent's
+							<?=($activeListingCount == 0 ? 'Sold' : '')?>
+							Listings
+						</div>
+
+						<hr />
 
 						<?php echo $soldListingHTML; ?>
 
@@ -426,6 +434,7 @@ jQuery(function ($) {
 	var $agentListings = $aoWidget.find('.wolfnet_aoListings'),
 		$agentFeatured = $agentListings.find('.wolfnet_aoFeaturedListings'),
 		$agentSold = $agentListings.find('.wolfnet_aoSoldListings'),
+		$agentListingNavArea = $agentListings.find('.wolfnet_aoListingNavArea'),
 		agentFeaturedLabel = '<?php _e('Active'); ?>',
 		agentSoldLabel = '<?php _e('Sold'); ?>';
 
@@ -441,7 +450,7 @@ jQuery(function ($) {
 				' href="javascript:void(0);">' + agentSoldLabel + '</a>'
 			).appendTo($agentListingNav);
 
-		$agentListings.prepend($agentListingNav);
+		$agentListingNavArea.append($agentListingNav);
 
 		$agentSold.hide();
 
@@ -508,7 +517,10 @@ jQuery(function ($) {
 
 
 	var canStickSidebar = function () {
-		return (sb.sidebarTop + sb.sidebarHeight) > $aoMainContent.offset().top;
+		return (
+			(sb.sidebarHeight < (sb.limitBottom - sb.limitTop))
+			&& (($aoSidebar.offset().top + sb.sidebarHeight) > ($aoMainContent.offset().top + 20))
+		);
 	};
 
 
