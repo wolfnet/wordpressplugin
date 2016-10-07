@@ -140,8 +140,6 @@ if (!function_exists('paginate')) {
 			],
 			$aoHeader = $aoWidget.find('.wolfnet_agentOfficeHeader');
 
-		wolfnet.resizeAOItems($aoItems, itemSections, $aoHeader, resizeComplete);
-
 		var resizeComplete = function (data) {
 			for (var i=0, l=data.length; i<l; i++) {
 				if (data[i].hasOwnProperty('name') && (data[i].name === 'body')) {
@@ -158,6 +156,8 @@ if (!function_exists('paginate')) {
 				wolfnet.resizeAOItems($aoItems, itemSections, $aoHeader, resizeComplete);
 			}, 500);
 		});
+
+		wolfnet.resizeAOItems($aoItems, itemSections, $aoHeader, resizeComplete);
 
 	});
 
