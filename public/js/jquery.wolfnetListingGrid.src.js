@@ -36,7 +36,7 @@ if (typeof jQuery !== 'undefined') {
             containerClass: null,
             itemClass: 'item',
             appendClearfix: true,
-            clearfixClass: 'clearfix',
+            clearfixClass: 'wnt-clearfix',
             minColumnGap: 5,
             minRowGap: 20,
             gridAlign: 'center'
