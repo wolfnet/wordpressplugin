@@ -93,6 +93,11 @@ Please upgrade to the latest version of the plugin as we will be disabling our o
 
 ## Changelog
 
+### 1.13.1
+
+* Fixed issue where agent photos would sometimes not appear on page load in FireFox in some themes
+* Removed generic `clearfix` class to avoid style conflicts with some themes
+
 ### 1.13.0
 
 * Changed agent/office URLs to be a pretty format
