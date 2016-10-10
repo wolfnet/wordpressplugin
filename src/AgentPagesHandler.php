@@ -231,6 +231,10 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
             $_REQUEST['agentpage'] = 1;
         }
 
+        $agentSort = $this->args['criteria']['agentsort'];
+        unset($this->args['criteria']['agentsort']);
+        $this->args['criteria']['sort'] = $agentSort;
+
         $this->args['criteria']['omit_office_id'] = $this->args['excludeoffices'];
 
         $endpoint = '/agent';
@@ -270,6 +274,7 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
 
 		$args = array(
 			'agents'          => $agentsData,
+            'agentSort'       => $agentSort,
 			'totalrows'       => $data['responseData']['data']['total_rows'],
 			'page'            => $_REQUEST['agentpage'],
 			'officeId'        => (array_key_exists('officeId', $_REQUEST)) ? $_REQUEST['officeId'] : '',
