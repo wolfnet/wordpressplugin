@@ -120,6 +120,18 @@
         </tr>
         <tr>
             <th>
+                <label for="<?php echo $agentsort_wpid; ?>">Sort agents by:</label>
+            </th>
+            <td>
+                <select id="<?php echo $agentsort_wpid; ?>" name="<?php echo $agentsort_wpname; ?>">
+                    <option value="name"<?php if($agentsort == 'name') echo ' selected="selected"'; ?>>Name</option>
+                    <option value="office_id"<?php if($agentsort == 'office_id') echo ' selected="selected"'; ?>>Office ID - Ascending</option>
+                    <option value="office_id_desc"<?php if($agentsort == 'office_id_desc') echo ' selected="selected"'; ?>>Office ID - Descending</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <th>
                 <label for="<?php echo $activelistings_wpid; ?>">Show active listings:</label>
             </th>
             <td>
