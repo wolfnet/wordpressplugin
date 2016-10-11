@@ -383,17 +383,13 @@ class Wolfnet_Views
     public function quickSearchOptionsFormView(array $args = array())
     {
         $markets = json_decode($GLOBALS['wolfnet']->keyService->get());
-        $keyids = array();
         $view = '';
 
-        foreach ($markets as $market) {
-            array_push($keyids, $market->id);
-        }
+        $args['keyids'] = explode(',', $args['keyids']);
 
         $defaultArgs = array(
             'instance_id' => str_replace('.', '', 'wolfnet_quickSearch_' . $GLOBALS['wolfnet']->createUUID()),
             'markets'     => $markets,
-            'keyids'      => $keyids,
             'view'        => $view,
         );
 

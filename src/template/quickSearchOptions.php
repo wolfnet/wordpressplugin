@@ -23,10 +23,6 @@
 ?>
 
 <?php
-    $keyids = array();
-    foreach($markets as $market) {
-        array_push($keyids, $market->id);
-    }
     $jsKeyids = json_encode($keyids);
 ?>
 
