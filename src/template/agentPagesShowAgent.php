@@ -396,6 +396,12 @@ jQuery(function ($) {
 			fullContent = $this.html(),
 			summaryText = $this.text();
 
+			// Just retain BR tags, but nix every other tag that might come into play.
+			summaryTextTemp = $this.html()
+			summaryTextTemp = summaryTextTemp.replace(/<br>/g, '[[br]]')
+			summaryTextTemp = $('<div>').html(summaryTextTemp).text();
+			summaryText = summaryTextTemp.replace(/\[\[br\]\]/g, '<br>');
+
 		if (summaryText.length > infoMaxLen) {
 
 			summaryText = summaryText.substring(0, infoMaxLen);
@@ -407,7 +413,7 @@ jQuery(function ($) {
 				summaryText = summaryText.substring(0, summaryText.lastIndexOf('\n'));
 			}
 
-			$this.html($summary.text(summaryText).append(' ', $showMoreBtn));
+			$this.html($summary.html(summaryText).append(' ', $showMoreBtn));
 			$this.append($content.hide().html(fullContent));
 
 			$showMoreBtn.click(onShowMoreClick);
