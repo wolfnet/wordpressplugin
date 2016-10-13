@@ -710,17 +710,7 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
 
 	protected function buildLinkToAgentContact($agent)
 	{
-		$args = array(
-			'contact' => $agent['agent_id'],
-			'agentCriteria' => (
-				array_key_exists('agentCriteria', $_REQUEST) && (strlen($_REQUEST['agentCriteria']) > 0) ?
-				$_REQUEST['agentCriteria'] : ''
-			),
-			'officeId' => (array_key_exists('officeId', $_REQUEST) ? $_REQUEST['officeId'] : ''),
-		);
-
-		return $this->buildLink($args);
-
+		return $this->buildLinkToAgent($agent) . 'contact';
 	}
 
 
