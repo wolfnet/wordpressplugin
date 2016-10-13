@@ -98,7 +98,8 @@ Please upgrade to the latest version of the plugin as we will be disabling our o
 * Fixed issue where agent photos would sometimes not appear on page load in FireFox in some themes
 * Removed generic `clearfix` class to avoid style conflicts with some themes
 * Added agent sort option to Agent Pages shortcode
-* Fixed quicksearch widget so it properly reflects the selected markets in multi-market mode.
+* Fixed quicksearch widget so it properly reflects the selected markets in multi-market mode
+* Various other Agent Pages fixes
 
 ### 1.13.0
 
