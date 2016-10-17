@@ -26,8 +26,19 @@ if (array_key_exists("REDIRECT_URL", $_SERVER)) {
 	$linkBase = $_SERVER['PHP_SELF'] . '/';
 }
 
+if($showOffices) {
+	$paginationLinkBase = $linkBase;
+} else {
+	/*
+	 * This prevents us from having a pagination link like 'page-name/2' which
+	 * would then use the WP page pagination. Instead we need a pagination link
+	 * like 'page-name/agnts/2'
+	 */
+	$paginationLinkBase = $allAgentsLink;
+}
+
 // Remove any page number from link base
-$paginationLinkBase = preg_replace('/\/[0-9]+/', '', $linkBase);
+$paginationLinkBase = preg_replace('/\/[0-9]+/', '', $paginationLinkBase);
 
 if (!function_exists('paginate')) {
 

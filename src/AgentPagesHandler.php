@@ -278,6 +278,7 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
 			'isAgent'         => true,
 			'agentsHtml'      => '',
 			'postHash'        => $this->getPostHash(),
+            'showOffices'     => $this->args['showoffices'],
 			'allAgentsLink'   => $this->buildLinkToAgents(),
 		);
 
@@ -684,7 +685,7 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
 
 	protected function buildLinkToAgents()
 	{
-		return $this->buildLink(array( 'search' => '' ));
+		return $this->buildLink(array( 'agnts' => '' ));
 	}
 
 
