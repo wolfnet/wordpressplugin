@@ -134,7 +134,7 @@
         <?php if(count($markets) > 1): ?>
 
         var <?php echo $instance_id; ?> = <?php echo $jsKeyids; ?>;
-        var form = $("#<?php echo $instance_id; ?>").parents("form:first");
+        var form = $("#widgets-right #<?php echo $instance_id; ?>").parents("form:first");
 
         $(".productkey").click(function(){
             // uncheck "All" if it is checked in this instance of the form only
