@@ -48,8 +48,9 @@ class Wolfnet_Template
             'wolfnet-smartsearch',
             'wolfnet-listing-grid',
             'wolfnet-toolbar',
-            'wolfnet-maptracks',
-            'mapquest-api'
+			'wolfnet-maps',
+			//'wolfnet-maptracks-theme',
+			'google-maps',
         );
 
         foreach ($scripts as $script) {
@@ -71,6 +72,7 @@ class Wolfnet_Template
             'wolfnet-agent',
             'icomoon',
             'google-fonts',
+            //'wolfnet-maptracks-theme-css',
         );
 
 		$widgetTheme = $this->plugin->views->getWidgetTheme();
@@ -170,18 +172,34 @@ class Wolfnet_Template
                 $this->url . 'js/jquery.wolfnetShortcodeBuilder.min.js',
                 array('jquery-ui-widget', 'jquery-effects-core', 'wolfnet-admin'),
             ),
-            'mapquest-api' => array(
-                '//www.mapquestapi.com/sdk/js/v7.0.s/mqa.toolkit.js?key=Gmjtd%7Clu6znua2n9%2C7l%3Do5-la70q',
+            'google-maps' => array(
+                'https://maps.googleapis.com/maps/api/js?key=AIzaSyBDp9ivfm4YJmDFvSkVhZ6CgZ4rz8CMDso',
                 array(),
                 $this->version,
                 true,
             ),
-            'wolfnet-maptracks' => array(
-                $this->url . 'js/jquery.wolfnetMaptracks.min.js',
-                array('jquery', 'mapquest-api'),
+            'wolfnet-maps' => array(
+                'http://common.wolfnet.com/js/maptracks/v3/maptracks.bundle.min.js?v=0.9.26',
+                array('jquery','google-maps'),
                 $this->version,
                 true,
             ),
+
+            // TOODO: Evaluate if theme JS is needed
+            //'wolfnet-maptracks-theme' => array(
+            //    'http://common.wolfnet.com/js/maptracks/themes/2_5/theme.js?v=1.2.3',
+            //    array(), //array('wolfnet-maptracks-theme-css'),
+            //    $this->version,
+            //    true,
+            //),
+
+            // TODO: Keep custom logic here or move to map.php JS script block
+			//'wolfnet-maptracks' => array(
+			//    $this->url . 'js/jquery.wolfnetMaptracks.min.js',
+			//    array('jquery', 'wolfnet-maptracks-v3'),
+			//    $this->version,
+			//    true,
+			//),
         );
 
         foreach ($scripts as $script => $data) {
@@ -247,6 +265,11 @@ class Wolfnet_Template
             'google-fonts' => array(
                 'https://fonts.googleapis.com/css?family=' . implode('|', $google_fonts),
             ),
+
+            // TODO: evaluate if theme CSS is needed in combination with theme JS
+            //'wolfnet-maptracks-theme-css' => array(
+            //    'http://common.wolfnet.com/js/maptracks/themes/2_5/theme.css?v=1.2.3',
+            //),
         );
 
 		// Add widget theme styles
