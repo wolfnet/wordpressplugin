@@ -48,7 +48,8 @@ class Wolfnet_Template
             'wolfnet-smartsearch',
             'wolfnet-listing-grid',
             'wolfnet-toolbar',
-			'wolfnet-maps',
+			'wolfnet-maptracks',
+			'wolfnet-map-driver',
 			//'wolfnet-maptracks-theme',
 			'google-maps',
         );
@@ -178,13 +179,18 @@ class Wolfnet_Template
                 $this->version,
                 true,
             ),
-            'wolfnet-maps' => array(
+            'wolfnet-maptracks' => array(
                 'http://common.wolfnet.com/js/maptracks/v3/maptracks.bundle.min.js?v=0.9.26',
                 array('jquery','google-maps'),
                 $this->version,
                 true,
             ),
-
+			'wolfnet-map-driver' => array(
+                $this->url . 'js/jquery.wolfnetMaptracksDriver.min.js',
+                array('jquery'),
+                $this->version,
+                true,
+            ),
             // TOODO: Evaluate if theme JS is needed
             //'wolfnet-maptracks-theme' => array(
             //    'http://common.wolfnet.com/js/maptracks/themes/2_5/theme.js?v=1.2.3',
@@ -193,13 +199,6 @@ class Wolfnet_Template
             //    true,
             //),
 
-            // TODO: Keep custom logic here or move to map.php JS script block
-			//'wolfnet-maptracks' => array(
-			//    $this->url . 'js/jquery.wolfnetMaptracks.min.js',
-			//    array('jquery', 'wolfnet-maptracks-v3'),
-			//    $this->version,
-			//    true,
-			//),
         );
 
         foreach ($scripts as $script => $data) {

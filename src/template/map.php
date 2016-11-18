@@ -60,19 +60,32 @@
 
 	jQuery(function($){
 
+		var houseoverJson = <?php echo json_encode($houseoverData); ?>;
+		var houseoverIcon = "<?php echo $mapParams['houseoverIcon']; ?>";
+		var mapId = "<?php echo $mapParams['mapId']; ?>";
+
 		var $map = $("#<?php echo $mapParams['mapId']; ?>");
 
 		var onMapLoaded = function () {
 
 			setMapBindFields();
 
-			// Logic written for plugin in wolfnetMaptracks.js
-			// functions in wolfnetMaptracks.src.js methods (map pins, houseovers, autosizing)
+			$('#' + mapId).wolfnetMaptracksDriver({
+				houseoverData : <?php echo json_encode($houseoverData); ?>,
+				houseoverIcon : "<?php echo $mapParams['houseoverIcon']; ?>",
+				mapId         : "<?php echo $mapParams['mapId']; ?>"
+			});
 
 		};
 
 		$map.mapTracks({
-			loaded:onMapLoaded
+			loaded:onMapLoaded,
+			/*startingRect: {
+				tlLat: "<?php echo $mapParams['tlBoundLat']; ?>",
+				tlLng: "<?php echo $mapParams['tlBoundLng']; ?>",
+				brLat: "<?php echo $mapParams['brBoundLat']; ?>",
+				brLng: "<?php echo $mapParams['brBoundLng']; ?>"
+			}*/
 		});
 
 		var $bindingFields = {
