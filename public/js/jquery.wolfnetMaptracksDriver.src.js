@@ -44,7 +44,6 @@
 				var lat = houseoverData[i].lat;
 				var lng = houseoverData[i].lng;
 
-
 				// Only add pin if coordinates are valid
 				if (
 					((lat !== 0) || (lng !== 0)) &&
@@ -53,6 +52,7 @@
 					((lat >= -180) && (lat <= 180)) &&
 					((lng >= -180) && (lng <= 180))
 				) {
+
 
 					// TODO: Build houseover icon object
 					//var houseoverIcon = wntMap.mapIcon(icon,20,20);
@@ -67,8 +67,15 @@
 					//	houseoverData[i].propertyUrl
 					//);
 
-					// TODO: Pin houseover poi to map
-					//wntMap.addPoi(houseover);
+					// TODO: Pin houseover poi to map if it's within bound ranges
+					//if (
+					//	(lat >= (wntMap.getBounds().lr.lat) &&
+					//	lat <= (wntMap.getBounds().ul.lat)) &&
+					//	(lng >=  (wntMap.getBounds().ul.lng) &&
+					//	lng <= (wntMap.getBounds().lr.lng))
+					//) {
+						//wntMap.addPoi(houseover);
+					//}
 
 				}
 

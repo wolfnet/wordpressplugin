@@ -91,26 +91,19 @@
 		var $bindingFields = {
 			centerLat:       $('[data-wnt-map-name=' + $map.mapTracks("getMapName") + '][data-wnt-map-bind=centerLat]'),
 			centerLng:       $('[data-wnt-map-name=' + $map.mapTracks("getMapName") + '][data-wnt-map-bind=centerLng]'),
-			mapType:         $('[data-wnt-map-name=' + $map.mapTracks("getMapName") + '][data-wnt-map-bind=mapType]'),
 			lrLat:           $('[data-wnt-map-name=' + $map.mapTracks("getMapName") + '][data-wnt-map-bind=lrLat]'),
 			lrLng:           $('[data-wnt-map-name=' + $map.mapTracks("getMapName") + '][data-wnt-map-bind=lrLng]'),
 			ulLat:           $('[data-wnt-map-name=' + $map.mapTracks("getMapName") + '][data-wnt-map-bind=ulLat]'),
 			ulLng:           $('[data-wnt-map-name=' + $map.mapTracks("getMapName") + '][data-wnt-map-bind=ulLng]'),
-			zoom:            $('[data-wnt-map-name=' + $map.mapTracks("getMapName") + '][data-wnt-map-bind=zoom]'),
-			mapViewType:     $('[data-wnt-map-name=' + $map.mapTracks("getMapName") + '][data-wnt-map-bind=mapViewType]'),
-			mapDragType:     $('[data-wnt-map-name=' + $map.mapTracks("getMapName") + '][data-wnt-map-bind=mapDragType]'),
-			allowMouseWheel: $('[data-wnt-map-name=' + $map.mapTracks("getMapName") + '][data-wnt-map-bind=allowMouseWheel]')
 		};
 
 		var setMapBindFields = function () {
-			$bindingFields.centerLat.val($map.mapTracks("getCenter").lat).change();
-			$bindingFields.centerLng.val($map.mapTracks("getCenter").lng).change();
-			$bindingFields.mapType.val($map.mapTracks("getCurrentView")).change();
-			$bindingFields.lrLat.val($map.mapTracks("getBounds").lr.lat).change();
-			$bindingFields.lrLng.val($map.mapTracks("getBounds").lr.lng).change();
-			$bindingFields.ulLat.val($map.mapTracks("getBounds").ul.lat).change();
-			$bindingFields.ulLng.val($map.mapTracks("getBounds").ul.lng).change();
-			$bindingFields.zoom.val($map.mapTracks("getZoomLevel")).change();
+			$bindingFields.centerLat.val("<?php echo $mapParams['centerLat']; ?>");
+			$bindingFields.centerLng.val("<?php echo $mapParams['centerLng']; ?>");
+			$bindingFields.lrLat.val("<?php echo $mapParams['brBoundLat']; ?>");
+			$bindingFields.lrLng.val("<?php echo $mapParams['brBoundLng']; ?>");
+			$bindingFields.ulLat.val("<?php echo $mapParams['tlBoundLat']; ?>");
+			$bindingFields.ulLng.val("<?php echo $mapParams['tlBoundLng']; ?>");
 		}
 
 	});
