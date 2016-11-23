@@ -180,7 +180,7 @@ class Wolfnet_Template
                 true,
             ),
             'wolfnet-maptracks' => array(
-                'http://common.wolfnet.com/js/maptracks/v3/maptracks.bundle.min.js?v=0.9.26',
+                'https://common.wolfnet.com/js/maptracks/v3/maptracks.bundle.min.js?v=0.9.30',
                 array('jquery','google-maps'),
                 $this->version,
                 true,
