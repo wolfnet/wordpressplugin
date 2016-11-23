@@ -68,7 +68,6 @@
 		var $map = $('#' + mapParams.mapId);
 
 		var onMapLoaded = function () {
-			setMapBindFields();
 			$map.wolfnetMaptracksDriver({
 				houseoverData : houseoverJson,
 				houseoverIcon : mapParams.houseoverIcon,
@@ -85,24 +84,6 @@
 				brLng: "<?php echo $mapParams['brBoundLng']; ?>"
 			}*/
 		});
-
-		var $bindingFields = {
-			centerLat:       $('[data-wnt-map-name=' + $map.mapTracks("getMapName") + '][data-wnt-map-bind=centerLat]'),
-			centerLng:       $('[data-wnt-map-name=' + $map.mapTracks("getMapName") + '][data-wnt-map-bind=centerLng]'),
-			lrLat:           $('[data-wnt-map-name=' + $map.mapTracks("getMapName") + '][data-wnt-map-bind=lrLat]'),
-			lrLng:           $('[data-wnt-map-name=' + $map.mapTracks("getMapName") + '][data-wnt-map-bind=lrLng]'),
-			ulLat:           $('[data-wnt-map-name=' + $map.mapTracks("getMapName") + '][data-wnt-map-bind=ulLat]'),
-			ulLng:           $('[data-wnt-map-name=' + $map.mapTracks("getMapName") + '][data-wnt-map-bind=ulLng]'),
-		};
-
-		var setMapBindFields = function () {
-			$bindingFields.centerLat.val("<?php echo $mapParams['centerLat']; ?>");
-			$bindingFields.centerLng.val("<?php echo $mapParams['centerLng']; ?>");
-			$bindingFields.lrLat.val("<?php echo $mapParams['brBoundLat']; ?>");
-			$bindingFields.lrLng.val("<?php echo $mapParams['brBoundLng']; ?>");
-			$bindingFields.ulLat.val("<?php echo $mapParams['tlBoundLat']; ?>");
-			$bindingFields.ulLng.val("<?php echo $mapParams['tlBoundLng']; ?>");
-		}
 
 	});
 
