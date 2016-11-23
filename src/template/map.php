@@ -62,19 +62,17 @@
 
 	jQuery(function ($) {
 
+		var mapParams = <?php echo json_encode($mapParams); ?>;
 		var houseoverJson = <?php echo json_encode($houseoverData); ?>;
-		var houseoverIcon = "<?php echo $mapParams['houseoverIcon']; ?>";
-		var mapId = "<?php echo $mapParams['mapId']; ?>";
 
-		var $map = $("#<?php echo $mapParams['mapId']; ?>");
+		var $map = $('#' + mapParams.mapId);
 
 		var onMapLoaded = function () {
 			setMapBindFields();
-
-			$('#' + mapId).wolfnetMaptracksDriver({
-				houseoverData : <?php echo json_encode($houseoverData); ?>,
-				houseoverIcon : "<?php echo $mapParams['houseoverIcon']; ?>",
-				mapId         : "<?php echo $mapParams['mapId']; ?>"
+			$map.wolfnetMaptracksDriver({
+				houseoverData : houseoverJson,
+				houseoverIcon : mapParams.houseoverIcon,
+				mapId         : mapParams.mapId
 			});
 		};
 
