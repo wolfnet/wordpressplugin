@@ -22,11 +22,13 @@
 
 ?>
 
+
 <div id="<?php echo $mapParams['hideMapId']; ?>" class="wolfnet_showhide">
 	<a href="javascript:void(0)" onclick="wolfnet.hideMap('<?php echo $mapParams['mapId']; ?>','<?php echo $mapParams['hideMapId']; ?>','<?php echo $mapParams['showMapId']; ?>');">
 		Hide Map
 	</a>
 </div>
+
 <div id="<?php echo $mapParams['showMapId']; ?>" style="display:none;" class="wolfnet_showhide">
 	<a href="javascript:void(0)" onclick="wolfnet.showMap('<?php echo $mapParams['mapId']; ?>','<?php echo $mapParams['hideMapId']; ?>','<?php echo $mapParams['showMapId']; ?>');">
 		Show these properties on a map
@@ -58,7 +60,7 @@
 
 <script type="text/javascript">
 
-	jQuery(function($){
+	jQuery(function ($) {
 
 		var houseoverJson = <?php echo json_encode($houseoverData); ?>;
 		var houseoverIcon = "<?php echo $mapParams['houseoverIcon']; ?>";
@@ -67,7 +69,6 @@
 		var $map = $("#<?php echo $mapParams['mapId']; ?>");
 
 		var onMapLoaded = function () {
-
 			setMapBindFields();
 
 			$('#' + mapId).wolfnetMaptracksDriver({
@@ -75,7 +76,6 @@
 				houseoverIcon : "<?php echo $mapParams['houseoverIcon']; ?>",
 				mapId         : "<?php echo $mapParams['mapId']; ?>"
 			});
-
 		};
 
 		$map.mapTracks({
