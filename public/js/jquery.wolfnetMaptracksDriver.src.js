@@ -38,20 +38,27 @@
 		pinHouseovers: function(wntMapContainer, houseoverData, icon) {
 
 			var wntMap = wntMapContainer.data('map');
+			var mapListings = [];
 
-			for (var i in houseoverData) {
-
-				var lat = houseoverData[i].lat;
-				var lng = houseoverData[i].lng;
+			for (var i=0, l=houseoverData.length; i<l; i++) {
 
 				// Only add pin if coordinates are valid
 				if (
-					((lat !== 0) || (lng !== 0)) &&
-					(!isNaN(lat) || !isNaN(lng)) &&
-					(lat !== '' || lng !== '') &&
-					((lat >= -180) && (lat <= 180)) &&
-					((lng >= -180) && (lng <= 180))
+					((houseoverData[i].lat !== 0) || (houseoverData[i].lng !== 0)) &&
+					(!isNaN(houseoverData[i].lat) || !isNaN(houseoverData[i].lng)) &&
+					(houseoverData[i].lat !== '' || houseoverData[i].lng !== '') &&
+					((houseoverData[i].lat >= -180) && (houseoverData[i].lat <= 180)) &&
+					((houseoverData[i].lng >= -180) && (houseoverData[i].lng <= 180))
 				) {
+
+					mapListings.push({
+						propertyId:    houseoverData[i].propertyId,
+						lat:           houseoverData[i].lat,
+						lng:           houseoverData[i].lng,
+						propertyType:  'default',
+						isGroup:       0,
+						html:          '<div class="single">' + houseoverData[i].content + '</div>'
+					});
 
 
 					// TODO: Build houseover icon object
@@ -81,6 +88,9 @@
 
 
 			}
+
+			wntMapContainer.mapTracks('addListings', mapListings, true);
+
 		},
 
 
