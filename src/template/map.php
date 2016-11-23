@@ -35,27 +35,8 @@
 	</a>
 </div>
 
-<div id="<?php echo $mapParams['mapId']; ?>"
-	mapName="pluginMap"
-	class="wolfnet_wntMainMap"
-	brLat="<?php echo $mapParams['brBoundLat']; ?>"
-	brLng="<?php echo $mapParams['brBoundLng']; ?>"
-	centerLat="<?php echo $mapParams['centerLat']; ?>"
-	centerLng="<?php echo $mapParams['centerLng']; ?>"
-	mapViewType="map"
-	tlLat="<?php echo $mapParams['tlBoundLat']; ?>"
-	tlLng="<?php echo $mapParams['tlBoundLng']; ?>"
-	zoomLevel="<?php echo $mapParams['zoomLevel'] ?>"
-	allowMouseWheel="false"
-	hasHouseView="false"
-	hasMiniMap="false"
-	hasStreetView="false"
-	isMoveable="false"
-	mapDragType="move"
-	showScales="false"
-	showView="false"
-	showZoom="true">
-</div>
+
+<div class="wolfnet_wntMainMap" id="<?php echo $mapParams['mapId']; ?>"></div>
 
 
 <script type="text/javascript">
@@ -76,13 +57,21 @@
 		};
 
 		$map.mapTracks({
-			loaded:onMapLoaded,
-			/*startingRect: {
-				tlLat: "<?php echo $mapParams['tlBoundLat']; ?>",
-				tlLng: "<?php echo $mapParams['tlBoundLng']; ?>",
-				brLat: "<?php echo $mapParams['brBoundLat']; ?>",
-				brLng: "<?php echo $mapParams['brBoundLng']; ?>"
-			}*/
+			mapName:          'pluginMap',
+			mapZoomLevel:     mapParams.zoomLevel,
+			centerLat:        mapParams.centerLat,
+			centerLng:        mapParams.centerLng,
+			isMoveable:       false,
+			showScales:       false,
+			showView:         false,
+			allowMouseWheel:  false,
+			startingRect:     {
+				north: mapParams.tlBoundLat,
+				south: mapParams.brBoundLat,
+				east:  mapParams.brBoundLng,
+				west:  mapParams.tlBoundLng
+			},
+			loaded: onMapLoaded
 		});
 
 	});
