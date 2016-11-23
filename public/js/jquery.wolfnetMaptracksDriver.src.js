@@ -35,7 +35,7 @@
 		},
 
 
-		pinHouseovers: function(wntMapContainer,houseoverData,icon) {
+		pinHouseovers: function(wntMapContainer, houseoverData, icon) {
 
 			var wntMap = wntMapContainer.data('map');
 
