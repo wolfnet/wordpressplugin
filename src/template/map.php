@@ -61,7 +61,7 @@
 			mapZoomLevel:     mapParams.zoomLevel,
 			centerLat:        mapParams.centerLat,
 			centerLng:        mapParams.centerLng,
-			isMoveable:       false,
+			isMovable:        false,
 			showScales:       false,
 			showView:         false,
 			allowMouseWheel:  false,
