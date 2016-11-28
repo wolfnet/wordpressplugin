@@ -180,8 +180,8 @@ class Wolfnet_Template
                 true,
             ),
             'wolfnet-maptracks' => array(
-                'https://common.wolfnet.com/js/maptracks/v3/maptracks.bundle.min.js?v=0.9.30',
-                array('jquery','google-maps'),
+				'https://common.wolfnet.com/js/maptracks/v3/maptracks.bundle.min.js?v=0.9.31',
+				array('jquery', 'google-maps'),
                 $this->version,
                 true,
             ),
@@ -191,13 +191,14 @@ class Wolfnet_Template
                 $this->version,
                 true,
             ),
-            // TOODO: Evaluate if theme JS is needed
-            //'wolfnet-maptracks-theme' => array(
-            //    'http://common.wolfnet.com/js/maptracks/themes/2_5/theme.js?v=1.2.3',
-            //    array(), //array('wolfnet-maptracks-theme-css'),
-            //    $this->version,
-            //    true,
-            //),
+			// Uncomment if the MapTracks theme JS is ever needed
+			/*
+			'wolfnet-maptracks-theme' => array(
+				'https://common.wolfnet.com/js/maptracks/themes/2_5/theme.js?v=1.2.3',
+				$this->version,
+				true,
+			),
+			*/
 
         );
 
@@ -264,11 +265,12 @@ class Wolfnet_Template
             'google-fonts' => array(
                 'https://fonts.googleapis.com/css?family=' . implode('|', $google_fonts),
             ),
-
-            // TODO: evaluate if theme CSS is needed in combination with theme JS
-            //'wolfnet-maptracks-theme-css' => array(
-            //    'http://common.wolfnet.com/js/maptracks/themes/2_5/theme.css?v=1.2.3',
-            //),
+			// Uncomment if the MapTracks theme CSS is ever needed (in combination with theme JS)
+			/*
+			'wolfnet-maptracks-theme-css' => array(
+				'https://common.wolfnet.com/js/maptracks/themes/2_5/theme.css?v=1.2.3',
+			),
+			*/
         );
 
 		// Add widget theme styles
