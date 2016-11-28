@@ -61,20 +61,6 @@
 						html:          '<div class="single">' + houseoverData[i].content + '</div>'
 					});
 
-
-					// TODO: Build houseover icon object
-					//var houseoverIcon = wntMap.mapIcon(icon,20,20);
-
-					// TODO: Build houseover as poi object
-					//var houseover = wntMap.poi(
-					//	lat,
-					//	lng,
-					//	houseoverIcon,
-					//	houseoverData[i].content,
-					//	houseoverData[i].propertyId,
-					//	houseoverData[i].propertyUrl
-					//);
-
 					// TODO: Pin houseover poi to map if it's within bound ranges
 					//if (
 					//	(lat >= (wntMap.getBounds().lr.lat) &&
@@ -122,7 +108,7 @@
 
 				// Fit map to listings
 				// TODO: find Maptracks 3 equivalent of this function (fit map to POI's)
-				//wntMap.bestFit();
+				wntMapContainer.mapTracks('bestFit');
 
 			}
 		}
