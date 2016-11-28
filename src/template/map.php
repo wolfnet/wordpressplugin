@@ -65,13 +65,7 @@
 			showScales:       false,
 			showView:         false,
 			allowMouseWheel:  false,
-			startingRect:     {
-				north: mapParams.tlBoundLat,
-				south: mapParams.brBoundLat,
-				east:  mapParams.brBoundLng,
-				west:  mapParams.tlBoundLng
-			},
-			loaded: onMapLoaded
+			loaded:           onMapLoaded
 		});
 
 	});
