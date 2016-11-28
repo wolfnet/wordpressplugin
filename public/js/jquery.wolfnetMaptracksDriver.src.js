@@ -55,7 +55,7 @@
 						propertyId:    houseoverData[i].propertyId,
 						lat:           houseoverData[i].lat,
 						lng:           houseoverData[i].lng,
-						icon:          { src: icon, width:  20, height: 20 },
+						icon:          { src: icon, width: 30, height: 30 },
 						propertyType:  'default',
 						isGroup:       0,
 						html:          '<div class="single">' + houseoverData[i].content + '</div>'
