@@ -42,34 +42,25 @@
 
 			for (var i=0, l=houseoverData.length; i<l; i++) {
 
+				var coords = { lat: Number(houseoverData[i].lat), lng: Number(houseoverData[i].lng) };
+
 				// Only add pin if coordinates are valid
 				if (
-					((houseoverData[i].lat !== 0) || (houseoverData[i].lng !== 0)) &&
-					(!isNaN(houseoverData[i].lat) || !isNaN(houseoverData[i].lng)) &&
-					(houseoverData[i].lat !== '' || houseoverData[i].lng !== '') &&
-					((houseoverData[i].lat >= -180) && (houseoverData[i].lat <= 180)) &&
-					((houseoverData[i].lng >= -180) && (houseoverData[i].lng <= 180))
+					!isNaN(coords.lat) && !isNaN(coords.lng) &&
+					(coords.lat !== 0) && (coords.lng !== 0) &&
+					(coords.lat >= -180) && (coords.lat <= 180) &&
+					(coords.lng >= -180) && (coords.lng <= 180)
 				) {
 
 					mapListings.push({
 						propertyId:    houseoverData[i].propertyId,
-						lat:           houseoverData[i].lat,
-						lng:           houseoverData[i].lng,
+						lat:           coords.lat,
+						lng:           coords.lng,
 						icon:          { src: icon, width: 30, height: 30 },
 						propertyType:  'default',
 						isGroup:       0,
 						html:          '<div class="single">' + houseoverData[i].content + '</div>'
 					});
-
-					// TODO: Pin houseover poi to map if it's within bound ranges
-					//if (
-					//	(lat >= (wntMap.getBounds().lr.lat) &&
-					//	lat <= (wntMap.getBounds().ul.lat)) &&
-					//	(lng >=  (wntMap.getBounds().ul.lng) &&
-					//	lng <= (wntMap.getBounds().lr.lng))
-					//) {
-						//wntMap.addPoi(houseover);
-					//}
 
 				}
 
