@@ -36,8 +36,6 @@
 
 
 		pinHouseovers: function(wntMapContainer, houseoverData, icon) {
-
-			var wntMap = wntMapContainer.data('map');
 			var mapListings = [];
 
 			for (var i=0, l=houseoverData.length; i<l; i++) {
@@ -83,22 +81,19 @@
 		// Resizes a map instance based on parent element width
 		autoSizeMap: function(wntMapContainer) {
 			var parentWidth = wntMapContainer.parent().width();
-			var wntMap = wntMapContainer.data('map');
 
-			if (typeof wntMap !== 'undefined') {
-
-				var mapWidth = wntMap.getSize().width;
-				var mapHeight = wntMap.getSize().height;
+			// Check if MapTracks is loaded
+			if (wntMapContainer.data('mapViewType') || wntMapContainer.data('map')) {
+				var mapSize = wntMapContainer.mapTracks('getSize');
+				var mapOuterWidth = wntMapContainer.outerWidth();
+				var mapOuterDiff = mapOuterWidth - mapSize.width;
 
 				// If mapWidth does not equal parentWidth, reset size
-				if (mapWidth != parentWidth) {
-
-					// TODO: Set size of map to new width/height
-					//wntMap.setSize(parentWidth,mapHeight);
+				if (mapOuterWidth != parentWidth) {
+					wntMapContainer.mapTracks('setSize', parentWidth - mapOuterDiff, mapSize.height);
 				}
 
 				// Fit map to listings
-				// TODO: find Maptracks 3 equivalent of this function (fit map to POI's)
 				wntMapContainer.mapTracks('bestFit');
 
 			}
