@@ -174,7 +174,7 @@ class Wolfnet_Template
                 array('jquery-ui-widget', 'jquery-effects-core', 'wolfnet-admin'),
             ),
             'google-maps' => array(
-                'https://maps.googleapis.com/maps/api/js?key=AIzaSyBDp9ivfm4YJmDFvSkVhZ6CgZ4rz8CMDso',
+                'https://maps.googleapis.com/maps/api/js?key=AIzaSyDhzz2408R2mLmzURdzlrhm9QEDfHlWydc',
                 array(),
                 $this->version,
                 true,
