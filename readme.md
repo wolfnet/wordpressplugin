@@ -93,9 +93,13 @@ Please upgrade to the latest version of the plugin as we will be disabling our o
 
 ## Changelog
 
-### 1.14.1
+### 1.14.2
 
 * Fixed an issue where fatal errors occurred on upgrade to WP 4.7 in conjunction with other plugins/themes.
+
+### 1.14.1
+
+*
 
 ### 1.14.0
 
