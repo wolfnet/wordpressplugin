@@ -64,15 +64,33 @@ class Wolfnet_Admin extends Wolfnet_Plugin
         $this->setUrl();
 
         // Register admin only actions.
-        $this->addAction(array(
-            array('admin_menu',            'adminMenu'),
-            array('admin_init',            'adminInit'),
-            array('admin_enqueue_scripts', 'adminScripts'),
-            array('admin_enqueue_scripts', 'adminStyles'),
-            array('admin_print_styles',    'adminPrintStyles',  1000),
-            array('wp_logout',             'adminEndSession'),
-            array('wp_login',              'adminEndSession'),
-            ));
+		do_action('wolfnet_pre_adminMenu');
+		add_action('admin_menu', array(&$this, 'adminMenu'));
+		do_action('wolfnet_post_adminMenu');
+
+		do_action('wolfnet_pre_adminInit');
+		add_action('admin_init', array(&$this, 'adminInit'));
+		do_action('wolfnet_post_adminInit');
+
+		do_action('wolfnet_pre_adminScripts');
+		add_action('admin_enqueue_scripts', array(&$this, 'adminScripts'));
+		do_action('wolfnet_post_adminScripts');
+
+		do_action('wolfnet_pre_adminStyles');
+		add_action('admin_enqueue_scripts', array(&$this, 'adminStyles'));
+		do_action('wolfnet_post_adminStyles');
+
+		do_action('wolfnet_pre_adminPrintStyles');
+		add_action('admin_print_styles', array(&$this, 'adminPrintStyles'), 1000);
+		do_action('wolfnet_post_adminPrintStyles');
+
+		do_action('wolfnet_pre_adminEndSession');
+		add_action('wp_logout', array(&$this, 'adminEndSession'));
+		do_action('wolfnet_post_adminEndSession');
+
+		do_action('wolfnet_pre_adminEndSession');
+		add_action('wp_login', array(&$this, 'adminEndSession'));
+		do_action('wolfnet_post_adminEndSession');
 
         // Register admin only filters.
         $this->addFilter(array(
