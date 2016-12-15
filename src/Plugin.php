@@ -145,54 +145,54 @@ class Wolfnet_Plugin
     /*                                                                                            */
     /* ****************************************************************************************** */
 
-    /**
-     * This constructor method prepares the plugin for use, defining properties and registering
-     * hooks to be used during the WordPress request cycle.
-     * @return void
-     */
-    public function __construct()
-    {
-        $this->pluginFile = dirname(dirname(__FILE__)) . '/wolfnet.php';
-        $this->setUrl();
+	/**
+	 * This constructor method prepares the plugin for use, defining properties and registering
+	 * hooks to be used during the WordPress request cycle.
+	 * @return void
+	 */
+	public function __construct()
+	{
+		$this->pluginFile = dirname(dirname(__FILE__)) . '/wolfnet.php';
+		$this->setUrl();
 
-        // Clear cache if url param exists.
-        $cacheFlag = Wolfnet_Service_CachingService::CACHE_FLAG;
-        $cacheParamExists = array_key_exists($cacheFlag, $_REQUEST);
+		// Clear cache if url param exists.
+		$cacheFlag = Wolfnet_Service_CachingService::CACHE_FLAG;
+		$cacheParamExists = array_key_exists($cacheFlag, $_REQUEST);
 
-        $this->ioc = new Wolfnet_Factory(array(
-            'plugin' => &$this,
-            'cacheRenew' => ($cacheParamExists) ? ($_REQUEST[$cacheFlag] == 'refresh') : false,
-            'cacheClear' => ($cacheParamExists) ? ($_REQUEST[$cacheFlag] == 'clear') : false,
-            'cacheReap' => ($cacheParamExists) ? ($_REQUEST[$cacheFlag] == 'reap') : false,
-            'sslEnabled' => $this->getSslEnabled(),
-            'verifySsl' => $this->getSslVerify(),
-        ));
+		$this->ioc = new Wolfnet_Factory(array(
+			'plugin' => &$this,
+			'cacheRenew' => ($cacheParamExists) ? ($_REQUEST[$cacheFlag] == 'refresh') : false,
+			'cacheClear' => ($cacheParamExists) ? ($_REQUEST[$cacheFlag] == 'clear') : false,
+			'cacheReap' => ($cacheParamExists) ? ($_REQUEST[$cacheFlag] == 'reap') : false,
+			'sslEnabled' => $this->getSslEnabled(),
+			'verifySsl' => $this->getSslVerify(),
+		));
 
-        $this->cachingService = $this->ioc->get('Wolfnet_Service_CachingService');
-        $this->keyService = $this->ioc->get('Wolfnet_Service_ProductKeyService');
+		$this->cachingService = $this->ioc->get('Wolfnet_Service_CachingService');
+		$this->keyService = $this->ioc->get('Wolfnet_Service_ProductKeyService');
 
-        $this->api = $this->ioc->get('Wolfnet_Api_Client');
-        $this->ajax = $this->ioc->get('Wolfnet_Ajax');
-        $this->data = $this->ioc->get('Wolfnet_Data');
-        $this->listings = $this->ioc->get('Wolfnet_Listings');
-        $this->template = $this->ioc->get('Wolfnet_Template');
-        $this->views = $this->ioc->get('Wolfnet_Views');
+		$this->api = $this->ioc->get('Wolfnet_Api_Client');
+		$this->ajax = $this->ioc->get('Wolfnet_Ajax');
+		$this->data = $this->ioc->get('Wolfnet_Data');
+		$this->listings = $this->ioc->get('Wolfnet_Listings');
+		$this->template = $this->ioc->get('Wolfnet_Template');
+		$this->views = $this->ioc->get('Wolfnet_Views');
 
-        // Modules
-        $this->agentPages = $this->ioc->get('Wolfnet_Module_AgentPages');
-        $this->featuredListings = $this->ioc->get('Wolfnet_Module_FeaturedListings');
-        $this->listingGrid = $this->ioc->get('Wolfnet_Module_ListingGrid');
-        $this->propertyList = $this->ioc->get('Wolfnet_Module_PropertyList');
-        $this->quickSearch = $this->ioc->get('Wolfnet_Module_QuickSearch');
-        $this->smartSearch = $this->ioc->get('Wolfnet_Module_SmartSearch');
-        $this->searchManager = $this->ioc->get('Wolfnet_Module_SearchManager');
-        $this->widgetTheme = $this->ioc->get('Wolfnet_Module_WidgetTheme');
+		// Modules
+		$this->agentPages = $this->ioc->get('Wolfnet_Module_AgentPages');
+		$this->featuredListings = $this->ioc->get('Wolfnet_Module_FeaturedListings');
+		$this->listingGrid = $this->ioc->get('Wolfnet_Module_ListingGrid');
+		$this->propertyList = $this->ioc->get('Wolfnet_Module_PropertyList');
+		$this->quickSearch = $this->ioc->get('Wolfnet_Module_QuickSearch');
+		$this->smartSearch = $this->ioc->get('Wolfnet_Module_SmartSearch');
+		$this->searchManager = $this->ioc->get('Wolfnet_Module_SearchManager');
+		$this->widgetTheme = $this->ioc->get('Wolfnet_Module_WidgetTheme');
 
-        if(is_admin()) {
-            $this->admin = $this->ioc->get('Wolfnet_Admin');
-        }
+		if(is_admin()) {
+			$this->admin = $this->ioc->get('Wolfnet_Admin');
+		}
 
-        // Register actions.
+		// Register actions.
 		do_action('wolfnet_pre_init');
 		add_action('init', array(&$this, 'init'));
 		do_action('wolfnet_post_init');
@@ -225,7 +225,7 @@ class Wolfnet_Plugin
 			array(self::CACHE_CRON_HOOK, array($this->cachingService, 'clearExpired')),
 		));
 
-        try {
+		try {
 			$productKey = $this->keyService->getDefault();
 			$response = $this->api->sendRequest($productKey, '/status', 'GET');
 			$successfulApiConnection = true;
@@ -233,25 +233,25 @@ class Wolfnet_Plugin
 			$successfulApiConnection = false;
 		}
 
-        if ($successfulApiConnection) {
+		if ($successfulApiConnection) {
 			do_action('wolfnet_pre_widgetInit');
 			add_action('widgets_init', array(&$this, 'widgetInit'));
 			do_action('wolfnet_post_widgetInit');
-        }
+		}
 
-        // Register filters.
-        $this->addFilter(array(
-            array('do_parse_request',     'doParseRequest'),
-            ));
+		// Register filters.
+		$this->addFilter(array(
+			array('do_parse_request',     'doParseRequest'),
+		));
 
-        // Register Cron Events
-        // NOTE: We do this here instead of on activation because the activation does not fire for updates.
-        $this->registerCronEvents();
+		// Register Cron Events
+		// NOTE: We do this here instead of on activation because the activation does not fire for updates.
+		$this->registerCronEvents();
 
-        register_activation_hook($this->pluginFile, array($this, 'wolfnetActivation'));
-        register_deactivation_hook($this->pluginFile, array($this, 'wolfnetDeactivation'));
+		register_activation_hook($this->pluginFile, array($this, 'wolfnetActivation'));
+		register_deactivation_hook($this->pluginFile, array($this, 'wolfnetDeactivation'));
 
-    }
+	}
 
 
     /* Hooks ************************************************************************************ */

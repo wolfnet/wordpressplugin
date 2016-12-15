@@ -27,43 +27,43 @@ class Wolfnet_Admin extends Wolfnet_Plugin
 {
 
 
-    /* Properties ******************************************************************************* */
-    /*  ____                            _   _                                                     */
-    /* |  _ \ _ __ ___  _ __   ___ _ __| |_(_) ___  ___                                           */
-    /* | |_) | '__/ _ \| '_ \ / _ \ '__| __| |/ _ \/ __|                                          */
-    /* |  __/| | | (_) | |_) |  __/ |  | |_| |  __/\__ \                                          */
-    /* |_|   |_|  \___/| .__/ \___|_|   \__|_|\___||___/                                          */
-    /*                 |_|                                                                        */
-    /* ****************************************************************************************** */
+	/* Properties ******************************************************************************* */
+	/*  ____                            _   _                                                     */
+	/* |  _ \ _ __ ___  _ __   ___ _ __| |_(_) ___  ___                                           */
+	/* | |_) | '__/ _ \| '_ \ / _ \ '__| __| |/ _ \/ __|                                          */
+	/* |  __/| | | (_) | |_) |  __/ |  | |_| |  __/\__ \                                          */
+	/* |_|   |_|  \___/| .__/ \___|_|   \__|_|\___||___/                                          */
+	/*                 |_|                                                                        */
+	/* ****************************************************************************************** */
 
-    /**
-     * This property contains the admin CSS as defined in the Edit CSS page.
-     * @var string
-     */
-    public $adminCssOptionKey = "wolfnetCss_adminCss";
+	/**
+	 * This property contains the admin CSS as defined in the Edit CSS page.
+	 * @var string
+	 */
+	public $adminCssOptionKey = "wolfnetCss_adminCss";
 
 
-    /* Constructor Method *********************************************************************** */
-    /*   ____                _                   _                                                */
-    /*  / ___|___  _ __  ___| |_ _ __ _   _  ___| |_ ___  _ __                                    */
-    /* | |   / _ \| '_ \/ __| __| '__| | | |/ __| __/ _ \| '__|                                   */
-    /* | |__| (_) | | | \__ \ |_| |  | |_| | (__| || (_) | |                                      */
-    /*  \____\___/|_| |_|___/\__|_|   \__,_|\___|\__\___/|_|                                      */
-    /*                                                                                            */
-    /* ****************************************************************************************** */
+	/* Constructor Method *********************************************************************** */
+	/*   ____                _                   _                                                */
+	/*  / ___|___  _ __  ___| |_ _ __ _   _  ___| |_ ___  _ __                                    */
+	/* | |   / _ \| '_ \/ __| __| '__| | | |/ __| __/ _ \| '__|                                   */
+	/* | |__| (_) | | | \__ \ |_| |  | |_| | (__| || (_) | |                                      */
+	/*  \____\___/|_| |_|___/\__|_|   \__,_|\___|\__\___/|_|                                      */
+	/*                                                                                            */
+	/* ****************************************************************************************** */
 
-    /**
-     * prepare the class for use.
-     * @param Object $wolfnet Pass in an instance or the Wolfnet class
-     * @return void
-     */
-    public function __construct($wolfnet)
-    {
-        $this->pluginFile = dirname(dirname(__FILE__)) . '/wolfnet.php';
-        // sets url
-        $this->setUrl();
+	/**
+	 * prepare the class for use.
+	 * @param Object $wolfnet Pass in an instance or the Wolfnet class
+	 * @return void
+	 */
+	public function __construct($wolfnet)
+	{
+		$this->pluginFile = dirname(dirname(__FILE__)) . '/wolfnet.php';
+		// sets url
+		$this->setUrl();
 
-        // Register admin only actions.
+		// Register admin only actions.
 		do_action('wolfnet_pre_adminMenu');
 		add_action('admin_menu', array(&$this, 'adminMenu'));
 		do_action('wolfnet_post_adminMenu');
@@ -92,13 +92,13 @@ class Wolfnet_Admin extends Wolfnet_Plugin
 		add_action('wp_login', array(&$this, 'adminEndSession'));
 		do_action('wolfnet_post_adminEndSession');
 
-        // Register admin only filters.
-        $this->addFilter(array(
-            array('mce_external_plugins', 'sbMcePlugin'),
-            array('mce_buttons',          'sbButton'),
-            ));
+		// Register admin only filters.
+		$this->addFilter(array(
+			array('mce_external_plugins', 'sbMcePlugin'),
+			array('mce_buttons',          'sbButton'),
+		));
 
-    }
+	}
 
 
     /* Public Methods *************************************************************************** */
