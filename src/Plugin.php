@@ -193,16 +193,37 @@ class Wolfnet_Plugin
         }
 
         // Register actions.
-        $this->addAction(array(
-            array('init',                  'init'),
-            array('init',                  'setupRewriteTags', 10),
-            array('wp_enqueue_scripts',    'scripts'),
-            array('wp_enqueue_scripts',    'styles'),
-            array('wp_footer',             'footer'),
-            array('template_redirect',     'templateRedirect'),
-            array('wp_enqueue_scripts',    'publicStyles',      1000),
-            array(self::CACHE_CRON_HOOK, array($this->cachingService, 'clearExpired')),
-            ));
+		do_action('wolfnet_pre_init');
+		add_action('init', array(&$this, 'init'));
+		do_action('wolfnet_post_init');
+
+		do_action('wolfnet_pre_setupRewriteTags');
+		add_action('init', array(&$this, 'setupRewriteTags'), 10);
+		do_action('wolfnet_post_setupRewriteTags');
+
+		do_action('wolfnet_pre_scripts');
+		add_action('wp_enqueue_scripts', array(&$this, 'scripts'));
+		do_action('wolfnet_post_scripts');
+
+		do_action('wolfnet_pre_styles');
+		add_action('wp_enqueue_scripts', array(&$this, 'styles'));
+		do_action('wolfnet_post_styles');
+
+		do_action('wolfnet_pre_footer');
+		add_action('wp_footer', array(&$this, 'footer'));
+		do_action('wolfnet_post_footer');
+
+		do_action('wolfnet_pre_templateRedirect');
+		add_action('template_redirect', array(&$this, 'templateRedirect'));
+		do_action('wolfnet_post_templateRedirect');
+
+		do_action('wolfnet_pre_publicStyles');
+		add_action('wp_enqueue_scripts', array(&$this, 'publicStyles'), 1000);
+		do_action('wolfnet_post_publicStyles');
+
+		$this->addAction(array(
+			array(self::CACHE_CRON_HOOK, array($this->cachingService, 'clearExpired')),
+		));
 
         try {
 			$productKey = $this->keyService->getDefault();
@@ -213,9 +234,9 @@ class Wolfnet_Plugin
 		}
 
         if ($successfulApiConnection) {
-            $this->addAction(array(
-                array('widgets_init','widgetInit'),
-            ));
+			do_action('wolfnet_pre_widgetInit');
+			add_action('widgets_init', array(&$this, 'widgetInit'));
+			do_action('wolfnet_post_widgetInit');
         }
 
         // Register filters.
@@ -555,6 +576,7 @@ class Wolfnet_Plugin
 
     public function addAction($action, $callable = null, $priority = null)
     {
+
         if (is_array($action)) {
             foreach ($action as $act) {
                 if (count($act) == 2) {
@@ -567,6 +589,8 @@ class Wolfnet_Plugin
             if (is_callable($callable) && is_array($callable)) {
                 add_action($action, $callable, $priority);
             } elseif (is_string($callable) && method_exists($this, $callable)) {
+            	// NOTE: This was fatally erroring as of WP 4.7.
+            	// Callback functions have been registered outside of this function.
                 do_action($this->preHookPrefix . $callable);
                 add_action($action, array(&$this, $callable), $priority);
                 do_action($this->postHookPrefix . $callable);
