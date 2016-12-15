@@ -129,6 +129,10 @@ class Wolfnet_Template
                 $this->url . 'js/jquery.imagesloaded.min.js',
                 array('jquery'),
             ),
+			'jquerywnt' => array(
+				$this->url . 'js/jquerywnt.min.js',
+				array('jquery'),
+			),
             'wolfnet' => array(
                 $this->url . 'js/wolfnet.min.js',
                 array('jquery', 'tooltipjs'),
@@ -181,8 +185,8 @@ class Wolfnet_Template
                 true,
             ),
             'wolfnet-maptracks' => array(
-				'https://common.wolfnet.com/js/maptracks/v3/maptracks.bundle.min.js?v=3.0.2',
-				array('jquery', 'google-maps'),
+				'https://common.wolfnet.com/js/maptracks/v3/maptracks.bundle.min.js?v=3.0.4',
+				array('jquerywnt', 'google-maps'),
                 $this->version,
                 true,
             ),
