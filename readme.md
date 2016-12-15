@@ -99,7 +99,7 @@ Please upgrade to the latest version of the plugin as we will be disabling our o
 
 ### 1.14.1
 
-*
+* Fixed issue where jQueryWnt was not defined in JavaScript, preventing the map from displaying
 
 ### 1.14.0
 
