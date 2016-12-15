@@ -93,6 +93,10 @@ Please upgrade to the latest version of the plugin as we will be disabling our o
 
 ## Changelog
 
+### 1.14.3
+
+* Fixed an issue where users may lose the ability to move the map after hovering over a listing
+
 ### 1.14.2
 
 * Fixed an issue where fatal errors occurred on upgrade to WP 4.7 in conjunction with other plugins/themes.
