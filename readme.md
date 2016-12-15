@@ -6,7 +6,7 @@ Author:             | WolfNet Technologies, LLC
 Contributors:       | wolfnettech, ajmichels, asbaumgart, michaelpidde, thenewcoke, blots
 Tags:               | idx, mls, homes
 Requires at least:  | 3.5.1
-Tested up to:       | 4.6
+Tested up to:       | 4.7
 Stable tag:         | {X.X.X-stable}
 License:            | GPLv2 or later
 License URI:        | http://www.gnu.org/licenses/gpl-2.0.html
@@ -92,6 +92,10 @@ Please upgrade to the latest version of the plugin as we will be disabling the i
 Please upgrade to the latest version of the plugin as we will be disabling our old API servers. This means that plugin versions 0.1.0 - 1.6.4 will no longer function.
 
 ## Changelog
+
+### 1.14.2
+
+* Fixed an issue where fatal errors occurred on upgrade to WP 4.7 in conjunction with other plugins/themes.
 
 ### 1.14.1
 

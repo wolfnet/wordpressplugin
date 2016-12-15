@@ -145,66 +145,87 @@ class Wolfnet_Plugin
     /*                                                                                            */
     /* ****************************************************************************************** */
 
-    /**
-     * This constructor method prepares the plugin for use, defining properties and registering
-     * hooks to be used during the WordPress request cycle.
-     * @return void
-     */
-    public function __construct()
-    {
-        $this->pluginFile = dirname(dirname(__FILE__)) . '/wolfnet.php';
-        $this->setUrl();
+	/**
+	 * This constructor method prepares the plugin for use, defining properties and registering
+	 * hooks to be used during the WordPress request cycle.
+	 * @return void
+	 */
+	public function __construct()
+	{
+		$this->pluginFile = dirname(dirname(__FILE__)) . '/wolfnet.php';
+		$this->setUrl();
 
-        // Clear cache if url param exists.
-        $cacheFlag = Wolfnet_Service_CachingService::CACHE_FLAG;
-        $cacheParamExists = array_key_exists($cacheFlag, $_REQUEST);
+		// Clear cache if url param exists.
+		$cacheFlag = Wolfnet_Service_CachingService::CACHE_FLAG;
+		$cacheParamExists = array_key_exists($cacheFlag, $_REQUEST);
 
-        $this->ioc = new Wolfnet_Factory(array(
-            'plugin' => &$this,
-            'cacheRenew' => ($cacheParamExists) ? ($_REQUEST[$cacheFlag] == 'refresh') : false,
-            'cacheClear' => ($cacheParamExists) ? ($_REQUEST[$cacheFlag] == 'clear') : false,
-            'cacheReap' => ($cacheParamExists) ? ($_REQUEST[$cacheFlag] == 'reap') : false,
-            'sslEnabled' => $this->getSslEnabled(),
-            'verifySsl' => $this->getSslVerify(),
-        ));
+		$this->ioc = new Wolfnet_Factory(array(
+			'plugin' => &$this,
+			'cacheRenew' => ($cacheParamExists) ? ($_REQUEST[$cacheFlag] == 'refresh') : false,
+			'cacheClear' => ($cacheParamExists) ? ($_REQUEST[$cacheFlag] == 'clear') : false,
+			'cacheReap' => ($cacheParamExists) ? ($_REQUEST[$cacheFlag] == 'reap') : false,
+			'sslEnabled' => $this->getSslEnabled(),
+			'verifySsl' => $this->getSslVerify(),
+		));
 
-        $this->cachingService = $this->ioc->get('Wolfnet_Service_CachingService');
-        $this->keyService = $this->ioc->get('Wolfnet_Service_ProductKeyService');
+		$this->cachingService = $this->ioc->get('Wolfnet_Service_CachingService');
+		$this->keyService = $this->ioc->get('Wolfnet_Service_ProductKeyService');
 
-        $this->api = $this->ioc->get('Wolfnet_Api_Client');
-        $this->ajax = $this->ioc->get('Wolfnet_Ajax');
-        $this->data = $this->ioc->get('Wolfnet_Data');
-        $this->listings = $this->ioc->get('Wolfnet_Listings');
-        $this->template = $this->ioc->get('Wolfnet_Template');
-        $this->views = $this->ioc->get('Wolfnet_Views');
+		$this->api = $this->ioc->get('Wolfnet_Api_Client');
+		$this->ajax = $this->ioc->get('Wolfnet_Ajax');
+		$this->data = $this->ioc->get('Wolfnet_Data');
+		$this->listings = $this->ioc->get('Wolfnet_Listings');
+		$this->template = $this->ioc->get('Wolfnet_Template');
+		$this->views = $this->ioc->get('Wolfnet_Views');
 
-        // Modules
-        $this->agentPages = $this->ioc->get('Wolfnet_Module_AgentPages');
-        $this->featuredListings = $this->ioc->get('Wolfnet_Module_FeaturedListings');
-        $this->listingGrid = $this->ioc->get('Wolfnet_Module_ListingGrid');
-        $this->propertyList = $this->ioc->get('Wolfnet_Module_PropertyList');
-        $this->quickSearch = $this->ioc->get('Wolfnet_Module_QuickSearch');
-        $this->smartSearch = $this->ioc->get('Wolfnet_Module_SmartSearch');
-        $this->searchManager = $this->ioc->get('Wolfnet_Module_SearchManager');
-        $this->widgetTheme = $this->ioc->get('Wolfnet_Module_WidgetTheme');
+		// Modules
+		$this->agentPages = $this->ioc->get('Wolfnet_Module_AgentPages');
+		$this->featuredListings = $this->ioc->get('Wolfnet_Module_FeaturedListings');
+		$this->listingGrid = $this->ioc->get('Wolfnet_Module_ListingGrid');
+		$this->propertyList = $this->ioc->get('Wolfnet_Module_PropertyList');
+		$this->quickSearch = $this->ioc->get('Wolfnet_Module_QuickSearch');
+		$this->smartSearch = $this->ioc->get('Wolfnet_Module_SmartSearch');
+		$this->searchManager = $this->ioc->get('Wolfnet_Module_SearchManager');
+		$this->widgetTheme = $this->ioc->get('Wolfnet_Module_WidgetTheme');
 
-        if(is_admin()) {
-            $this->admin = $this->ioc->get('Wolfnet_Admin');
-        }
+		if(is_admin()) {
+			$this->admin = $this->ioc->get('Wolfnet_Admin');
+		}
 
-        // Register actions.
-        $this->addAction(array(
-            array('init',                  'init'),
-            array('init',                  'setupRewriteTags', 10),
-            array('wp_enqueue_scripts',    'scripts'),
-            array('wp_enqueue_scripts',    'styles'),
-            array('wp_footer',             'footer'),
-            array('template_redirect',     'templateRedirect'),
-            array('wp_enqueue_scripts',    'publicStyles',      1000),
-            array(self::CACHE_CRON_HOOK, array($this->cachingService, 'clearExpired')),
-            ));
+		// Register actions.
+		do_action('wolfnet_pre_init');
+		add_action('init', array(&$this, 'init'));
+		do_action('wolfnet_post_init');
 
-        try {
+		do_action('wolfnet_pre_setupRewriteTags');
+		add_action('init', array(&$this, 'setupRewriteTags'), 10);
+		do_action('wolfnet_post_setupRewriteTags');
+
+		do_action('wolfnet_pre_scripts');
+		add_action('wp_enqueue_scripts', array(&$this, 'scripts'));
+		do_action('wolfnet_post_scripts');
+
+		do_action('wolfnet_pre_styles');
+		add_action('wp_enqueue_scripts', array(&$this, 'styles'));
+		do_action('wolfnet_post_styles');
+
+		do_action('wolfnet_pre_footer');
+		add_action('wp_footer', array(&$this, 'footer'));
+		do_action('wolfnet_post_footer');
+
+		do_action('wolfnet_pre_templateRedirect');
+		add_action('template_redirect', array(&$this, 'templateRedirect'));
+		do_action('wolfnet_post_templateRedirect');
+
+		do_action('wolfnet_pre_publicStyles');
+		add_action('wp_enqueue_scripts', array(&$this, 'publicStyles'), 1000);
+		do_action('wolfnet_post_publicStyles');
+
+		$this->addAction(array(
+			array(self::CACHE_CRON_HOOK, array($this->cachingService, 'clearExpired')),
+		));
+
+		try {
 			$productKey = $this->keyService->getDefault();
 			$response = $this->api->sendRequest($productKey, '/status', 'GET');
 			$successfulApiConnection = true;
@@ -212,25 +233,25 @@ class Wolfnet_Plugin
 			$successfulApiConnection = false;
 		}
 
-        if ($successfulApiConnection) {
-            $this->addAction(array(
-                array('widgets_init','widgetInit'),
-            ));
-        }
+		if ($successfulApiConnection) {
+			do_action('wolfnet_pre_widgetInit');
+			add_action('widgets_init', array(&$this, 'widgetInit'));
+			do_action('wolfnet_post_widgetInit');
+		}
 
-        // Register filters.
-        $this->addFilter(array(
-            array('do_parse_request',     'doParseRequest'),
-            ));
+		// Register filters.
+		$this->addFilter(array(
+			array('do_parse_request',     'doParseRequest'),
+		));
 
-        // Register Cron Events
-        // NOTE: We do this here instead of on activation because the activation does not fire for updates.
-        $this->registerCronEvents();
+		// Register Cron Events
+		// NOTE: We do this here instead of on activation because the activation does not fire for updates.
+		$this->registerCronEvents();
 
-        register_activation_hook($this->pluginFile, array($this, 'wolfnetActivation'));
-        register_deactivation_hook($this->pluginFile, array($this, 'wolfnetDeactivation'));
+		register_activation_hook($this->pluginFile, array($this, 'wolfnetActivation'));
+		register_deactivation_hook($this->pluginFile, array($this, 'wolfnetDeactivation'));
 
-    }
+	}
 
 
     /* Hooks ************************************************************************************ */
@@ -555,6 +576,7 @@ class Wolfnet_Plugin
 
     public function addAction($action, $callable = null, $priority = null)
     {
+
         if (is_array($action)) {
             foreach ($action as $act) {
                 if (count($act) == 2) {
@@ -567,6 +589,8 @@ class Wolfnet_Plugin
             if (is_callable($callable) && is_array($callable)) {
                 add_action($action, $callable, $priority);
             } elseif (is_string($callable) && method_exists($this, $callable)) {
+            	// NOTE: This was fatally erroring as of WP 4.7.
+            	// Callback functions have been registered outside of this function.
                 do_action($this->preHookPrefix . $callable);
                 add_action($action, array(&$this, $callable), $priority);
                 do_action($this->postHookPrefix . $callable);
