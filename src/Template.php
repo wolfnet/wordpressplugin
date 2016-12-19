@@ -48,10 +48,9 @@ class Wolfnet_Template
             'wolfnet-smartsearch',
             'wolfnet-listing-grid',
             'wolfnet-toolbar',
-			'wolfnet-maptracks',
-			'wolfnet-map-driver',
+			//'wolfnet-maptracks',
+			//'wolfnet-map-driver',
 			//'wolfnet-maptracks-theme',
-			'google-maps',
         );
 
         foreach ($scripts as $script) {
