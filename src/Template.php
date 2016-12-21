@@ -178,7 +178,7 @@ class Wolfnet_Template
             ),
             'google-maps' => array(
 				'https://maps.googleapis.com/maps/api/js?client=gme-wolfnettechnologies&v=3.26&channel='
-					. $this->plugin->data->getMarketName($this->plugin->keyService->getDefault()) . '_wp',
+					. $this->getGoogleMapChannel() . '_wp',
                 array(),
                 $this->version,
                 true,
@@ -445,4 +445,22 @@ class Wolfnet_Template
             'useDialogClass' => (version_compare($wp_version, '3.6')>0) ? "true" : "false",
         );
     }
+
+
+	private function getGoogleMapChannel()
+	{
+		$api_key = $this->plugin->keyService->getDefault();
+		$channel = 'unknown_wp';
+
+		if ($api_key) {
+			try {
+				$channel = $this->plugin->data->getMarketName($api_key) . '_wp';
+			} catch (Exception $e) {
+			}
+		}
+
+		return $channel;
+
+	}
+
 }
