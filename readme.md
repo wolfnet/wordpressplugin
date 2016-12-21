@@ -93,6 +93,10 @@ Please upgrade to the latest version of the plugin as we will be disabling our o
 
 ## Changelog
 
+### 1.14.5
+
+* Fixed an issue where the plugin settings were not working without an API key
+
 ### 1.14.4
 
 * Fixed an issue with the generated header/footer causing a Google Maps API conflict when used with the Responsive IDX map
