@@ -6,6 +6,21 @@ jQuery(function ($) {
 		$aoImages = $aoItems.find('.wolfnet_aoImage');
 
 
+	var officeItemSections = [
+		{ selector: '.wolfnet_aoContact', maxHeight: 0, origMaxHeight: 0 },
+		{ selector: '.wolfnet_aoLinks',   maxHeight: 0, origMaxHeight: 0 }
+	];
+
+	var agentItemSections = [
+		{ name: 'contact',  selector: '.wolfnet_aoContact',  maxHeight: 0,  origMaxHeight: 0 },
+		{ name: 'links',    selector: '.wolfnet_aoLinks',    maxHeight: 0,  origMaxHeight: 0 },
+		{ name: 'info',     selector: '.wolfnet_aoInfo .wolfnet_aoActions',  maxHeight: 0,  origMaxHeight: 0 },
+		{ name: 'body',     selector: '.wolfnet_aoBody',     maxHeight: 0,  origMaxHeight: 0, alwaysResize: true },
+		{ name: 'footer',   selector: '.wolfnet_aoFooter',   maxHeight: 0,  origMaxHeight: 0 },
+		{ name: 'item',     selector: '.wolfnet_aoItem',     maxHeight: 0,  origMaxHeight: 0 }
+	];
+
+
 	var breakpointClassPrefix = 'wnt-ao-';
 
 	var breakpoints = { xl: 1140, lg: 988, md: 735, sm: 560 };
@@ -37,12 +52,11 @@ jQuery(function ($) {
 
 	// Resize item boxes to height of tallest one.
 
-	var resizeAOItems = function ($aoItems, itemSections, $aoHeader, cb) {
+	var resizeAOItems = function () {
 		var sectionsSelector = '',
 			colCount = 0,
-			colsCounted = false;
-
-		cb = cb || function () {};
+			colsCounted = false,
+			itemSections = ($aoWidget.is('.wolfnet_aoAgentsList') ? agentItemSections : officeItemSections);
 
 		// Reset the max heights & set default options
 		for (var i=0, l=itemSections.length; i<l; i++) {
@@ -100,8 +114,14 @@ jQuery(function ($) {
 			});
 		}
 
-		// Callback
-		cb(itemSections);
+		if ($aoWidget.is('.wolfnet_aoAgentsList')) {
+			for (var i=0, l=itemSections.length; i<l; i++) {
+				if (itemSections[i].hasOwnProperty('name') && (itemSections[i].name === 'body')) {
+					$aoImages.height(itemSections[i].maxHeight);
+					break;
+				}
+			}
+		}
 
 	};
 
@@ -136,40 +156,20 @@ jQuery(function ($) {
 	};
 
 
-	var itemSections = [
-		{ name: 'contact',  selector: '.wolfnet_aoContact',  maxHeight: 0,  origMaxHeight: 0 },
-		{ name: 'links',    selector: '.wolfnet_aoLinks',    maxHeight: 0,  origMaxHeight: 0 },
-		{ name: 'info',     selector: '.wolfnet_aoInfo .wolfnet_aoActions',  maxHeight: 0,  origMaxHeight: 0 },
-		{ name: 'body',     selector: '.wolfnet_aoBody',     maxHeight: 0,  origMaxHeight: 0, alwaysResize: true },
-		{ name: 'footer',   selector: '.wolfnet_aoFooter',   maxHeight: 0,  origMaxHeight: 0 },
-		{ name: 'item',     selector: '.wolfnet_aoItem',     maxHeight: 0,  origMaxHeight: 0 }
-	];
-
-
-	var resizeComplete = function (data) {
-		for (var i=0, l=data.length; i<l; i++) {
-			if (data[i].hasOwnProperty('name') && (data[i].name === 'body')) {
-				$aoImages.height(data[i].maxHeight);
-				break;
-			}
-		}
-	};
-
-
 	var resizeTimeout;
 	$(window).resize(function () {
 		clearTimeout(resizeTimeout);
 		resizeTimeout = setTimeout(function () {
-			updateBreakpointClass();
+			//updateBreakpointClass();
 			if ($aoItems.length > 0) {
-				resizeAOItems($aoItems, itemSections, $aoHeader, resizeComplete);
+				resizeAOItems();
 			}
 		}, 500);
 	});
 
-	updateBreakpointClass();
+	//updateBreakpointClass();
 	if ($aoItems.length > 0) {
-		resizeAOItems($aoItems, itemSections, $aoHeader, resizeComplete);
+		resizeAOItems();
 	}
 
 
