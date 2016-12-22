@@ -160,14 +160,14 @@ jQuery(function ($) {
 	$(window).resize(function () {
 		clearTimeout(resizeTimeout);
 		resizeTimeout = setTimeout(function () {
-			//updateBreakpointClass();
+			updateBreakpointClass();
 			if ($aoItems.length > 0) {
 				resizeAOItems();
 			}
 		}, 500);
 	});
 
-	//updateBreakpointClass();
+	updateBreakpointClass();
 	if ($aoItems.length > 0) {
 		resizeAOItems();
 	}
