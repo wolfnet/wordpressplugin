@@ -183,7 +183,7 @@
 
 			setupKeyValidation($('.wolfnet_productKey'));
 
-			$('#wolfnet_keys').on('wnt_addKeyField', function (data) {
+			$('#wolfnet_keys').on('wnt_addKeyField', function (e, data) {
 				setupKeyValidation($(data));
 			});
 

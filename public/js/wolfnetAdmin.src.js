@@ -464,17 +464,18 @@ if ( typeof jQuery != 'undefined' ) {
 
 		$.fn.wolfnetInsertKeyRow = function ()
 		{
-			var $keyTable = $('#wolfnet_keys'),
-				$keyCount = $('#wolfnet_keyCount');
-			var nextIteration = parseInt($keyCount.val()) + 1;
-			var $lastRow = $keyTable.find('tr').last(),
-				$row = $lastRow.clone();
+			var $keyTable      = $('#wolfnet_keys'),
+				$keyCount      = $('#wolfnet_keyCount'),
+				$lastRow       = $keyTable.find('tr').last(),
+				$row           = $lastRow.clone(),
+				$keyField      = $row.find('.wolfnet_productKey');
+			var nextIteration  = parseInt($keyCount.val()) + 1;
 
 			$row.attr('class', 'row' + nextIteration);
 
 			$row.find('.wolfnetProductKeyValidationWrapper').removeClass('valid invalid success error');
 
-			$row.find('.wolfnet_productKey').attr({
+			$keyField.attr({
 				'id':     'wolfnet_productKey_' + nextIteration,
 				'name':   'wolfnet_productKey_' + nextIteration
 			}).val('');
@@ -499,6 +500,8 @@ if ( typeof jQuery != 'undefined' ) {
 			});
 
 			$lastRow.after($row);
+
+			$keyTable.trigger('wnt_addKeyField', [ $keyField ]);
 
 		}
 
