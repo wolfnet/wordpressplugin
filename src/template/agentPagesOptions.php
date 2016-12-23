@@ -64,22 +64,22 @@
                     value="<?php echo $detailtitle; ?>" type="text" />
             </td>
         </tr>
+		<tr>
+			<th>
+				<label for="<?php echo $showoffices_wpid; ?>">
+					Show office list:
+				</label>
+			</th>
+			<td>
+				<select id="<?php echo $showoffices_wpid; ?>" name="<?php echo $showoffices_wpname; ?>">
+					<option value="true"<?php if ($showoffices) echo ' selected="selected"'?>>Yes</option>
+					<option value="false"<?php if (!$showoffices) echo ' selected="selected"'?>>No</option>
+				</select>
+			</td>
+		</tr>
         <?php
         if(count($offices) > 1) {
         ?>
-            <tr>
-                <th>
-                    <label for="<?php echo $showoffices_wpid; ?>">
-                        Show offices:
-                    </label>
-                </th>
-                <td>
-                    <select id="<?php echo $showoffices_wpid; ?>" name="<?php echo $showoffices_wpname; ?>">
-                        <option value="true"<?php if($showoffices == 'true') echo ' selected="selected"'?>>Yes</option>
-                        <option value="false"<?php if($showoffices == 'false') echo ' selected="selected"'?>>No</option>
-                    </select>
-                </td>
-            </tr>
             <tr>
                 <th>
                     <label>Exclude offices:</label>
@@ -136,8 +136,8 @@
             </th>
             <td>
                 <select id="<?php echo $activelistings_wpid; ?>" name="<?php echo $activelistings_wpname; ?>">
-                    <option value="true"<?php if($activelistings == 'true') echo ' selected="selected"'; ?>>Yes</option>
-                    <option value="false"<?php if($activelistings == 'false') echo ' selected="selected"'; ?>>No</option>
+                    <option value="true"<?php if ($activelistings) echo ' selected="selected"'; ?>>Yes</option>
+                    <option value="false"<?php if (!$activelistings) echo ' selected="selected"'; ?>>No</option>
                 </select>
             </td>
         </tr>
@@ -150,8 +150,8 @@
             </th>
             <td>
                 <select id="<?php echo $soldlistings_wpid; ?>" name="<?php echo $soldlistings_wpname; ?>">
-                    <option value="true"<?php if($soldlistings == 'true') echo ' selected="selected"'; ?>>Yes</option>
-                    <option value="false"<?php if($soldlistings == 'false') echo ' selected="selected"'; ?>>No</option>
+                    <option value="true"<?php if ($soldlistings) echo ' selected="selected"'; ?>>Yes</option>
+                    <option value="false"<?php if (!$soldlistings) echo ' selected="selected"'; ?>>No</option>
                 </select>
             </td>
         </tr>
