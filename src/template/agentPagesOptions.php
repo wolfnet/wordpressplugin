@@ -29,7 +29,7 @@
 
     <table class="form-table">
         <tr>
-            <th>
+            <th scope="row">
                 <label for="<?php echo $officetitle_wpid; ?>">
                     Office list title:
                 </label>
@@ -41,7 +41,7 @@
             </td>
         </tr>
         <tr>
-            <th>
+            <th scope="row">
                 <label for="<?php echo $agenttitle_wpid; ?>">
                     Agent list title:
                 </label>
@@ -53,7 +53,7 @@
             </td>
         </tr>
         <tr>
-            <th>
+            <th scope="row">
                 <label for="<?php echo $detailtitle_wpid; ?>">
                     Agent detail title:
                 </label>
@@ -68,7 +68,7 @@
         if(count($offices) > 1) {
         ?>
             <tr>
-                <th>
+                <th scope="row">
                     <label for="<?php echo $showoffices_wpid; ?>">
                         Show offices:
                     </label>
@@ -81,7 +81,7 @@
                 </td>
             </tr>
             <tr>
-                <th>
+                <th scope="row">
                     <label>Exclude offices:</label>
                 </th>
                 <td>
@@ -107,7 +107,7 @@
         }
         ?>
         <tr>
-            <th>
+            <th scope="row">
                 <label for="<?php echo $numperpage_wpid; ?>">Agents per page:</label>
             </th>
             <td>
@@ -119,7 +119,7 @@
             </td>
         </tr>
         <tr>
-            <th>
+            <th scope="row">
                 <label for="<?php echo $agentsort_wpid; ?>">Sort agents by:</label>
             </th>
             <td>
@@ -131,7 +131,7 @@
             </td>
         </tr>
         <tr>
-            <th>
+            <th scope="row">
                 <label for="<?php echo $activelistings_wpid; ?>">Show active listings:</label>
             </th>
             <td>
@@ -145,7 +145,7 @@
         if($showSoldOption) {
         ?>
         <tr>
-            <th>
+            <th scope="row">
                 <label for="<?php echo $soldlistings_wpid; ?>">Show sold listings:</label>
             </th>
             <td>

@@ -35,7 +35,7 @@
     <table class="form-table">
 
         <tr>
-            <th>
+            <th scope="row">
                 <label for="wnt-<?php echo $title_wpid; ?>">Title:</label>
             </th>
             <td>
@@ -46,7 +46,7 @@
 
         <?php if(count($markets) > 1): ?>
             <tr>
-                <th>
+                <th scope="row">
                     <label for="<?php echo $keyid_wpid; ?>">Market:</label>
                 </th>
                 <td>
@@ -63,7 +63,7 @@
         <?php endif; ?>
 
         <tr class="modeField">
-            <th>
+            <th scope="row">
                 <label>Mode:</label>
             </th>
             <td>
@@ -83,7 +83,7 @@
         </tr>
 
         <tr>
-            <th>
+            <th scope="row">
                 <label for="<?php echo $maptype_wpid; ?>">Include Map:</label>
             </th>
             <td>
@@ -109,7 +109,7 @@
         </tr>
 
         <tr class="advanced-option savedSearchField">
-            <th>
+            <th scope="row">
                 <label for="<?php echo $savedsearch_wpid; ?>">Saved Search:</label>
             </th>
             <td>
@@ -135,7 +135,7 @@
         </tr>
 
         <tr class="basic-option">
-            <th>
+            <th scope="row">
                 <label for="<?php echo $minprice_wpid; ?>">Price:</label>
             </th>
             <td>
@@ -183,7 +183,7 @@
         </tr>
 
         <tr class="basic-option">
-            <th>
+            <th scope="row">
                 <label for="<?php echo $city_wpid; ?>">City:</label>
             </th>
             <td>
@@ -202,7 +202,7 @@
         </tr>
 
         <tr class="basic-option">
-            <th>
+            <th scope="row">
                 <label for="<?php echo $zipcode_wpid; ?>">Zipcode:</label>
             </th>
             <td>
@@ -212,7 +212,7 @@
         </tr>
 
         <tr>
-            <th>
+            <th scope="row">
                 <label for="<?php echo $ownertype_wpid; ?>">Agent/Broker:</label>
             </th>
             <td>
@@ -235,7 +235,7 @@
         </tr>
 
         <tr>
-            <th>
+            <th scope="row">
                 <label for="<?php echo $paginated_wpid; ?>">Pagination Enabled/Disabled:</label>
             </th>
             <td>
@@ -251,7 +251,7 @@
         </tr>
 
         <tr>
-            <th>
+            <th scope="row">
                 <label for="<?php echo $sortoptions_wpid; ?>">Sort Options:</label>
             </th>
             <td>
@@ -267,7 +267,7 @@
         </tr>
 
         <tr>
-            <th>
+            <th scope="row">
                 <label for="<?php echo $maxresults_wpid; ?>">Max Results Per Page:</label>
             </th>
             <td>
