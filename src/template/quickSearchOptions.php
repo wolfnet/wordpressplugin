@@ -40,7 +40,7 @@
             </th>
             <td>
                 <input id="wnt-<?php echo $title_wpid; ?>" name="<?php echo $title_wpname; ?>"
-                 value="<?php echo $title; ?>" type="text" />
+                 value="<?php echo $title; ?>" type="text" class="regular-text" />
             </td>
         </tr>
 

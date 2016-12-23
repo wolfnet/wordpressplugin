@@ -40,7 +40,7 @@
             </th>
             <td>
                 <input id="wnt-<?php echo $title_wpid; ?>" name="<?php echo $title_wpname; ?>"
-                 value="<?php echo $title; ?>" type="text" />
+                 value="<?php echo $title; ?>" type="text" class="regular-text" />
             </td>
         </tr>
 
@@ -189,7 +189,7 @@
             <td>
                 <div>
                     <input id="<?php echo $city_wpid; ?>" name="<?php echo $city_wpname; ?>"
-                     type="text" value="<?php echo $city; ?>" />
+                     type="text" value="<?php echo $city; ?>" class="regular-text" />
                 </div>
                 <div>
                     <input id="<?php echo $exactcity_wpid; ?>" name="<?php echo $exactcity_wpname; ?>"
@@ -207,7 +207,7 @@
             </th>
             <td>
                 <input id="<?php echo $zipcode_wpid; ?>" name="<?php echo $zipcode_wpname; ?>"
-                 type="text" value="<?php echo $zipcode; ?>" />
+                 type="text" value="<?php echo $zipcode; ?>" class="small" />
             </td>
         </tr>
 
@@ -272,7 +272,8 @@
             </th>
             <td>
                 <input id="<?php echo $maxresults_wpid; ?>" name="<?php echo $maxresults_wpname; ?>"
-                    type="text" maxlength="2" size="2" value="<?php echo $maxresults; ?>" />
+                    type="text" maxlength="2" size="2" class="small"
+                    value="<?php echo $maxresults; ?>" />
                 <span class="wolfnet_moreInfo">
                     Define the number of properties to display per search results page.
                     The maximum number of properties that can be displayed per page is 50.

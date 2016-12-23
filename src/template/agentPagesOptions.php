@@ -37,7 +37,7 @@
             <td>
                 <input id="<?php echo $officetitle_wpid; ?>"
                     name="<?php echo $officetitle_wpname; ?>"
-                    value="<?php echo $officetitle; ?>" type="text" />
+                    value="<?php echo $officetitle; ?>" type="text" class="regular-text" />
             </td>
         </tr>
         <tr>
@@ -49,7 +49,7 @@
             <td>
                 <input id="<?php echo $agenttitle_wpid; ?>"
                     name="<?php echo $agenttitle_wpname; ?>"
-                    value="<?php echo $agenttitle; ?>" type="text" />
+                    value="<?php echo $agenttitle; ?>" type="text" class="regular-text" />
             </td>
         </tr>
         <tr>
@@ -61,7 +61,7 @@
             <td>
                 <input id="<?php echo $detailtitle_wpid; ?>"
                     name="<?php echo $detailtitle_wpname; ?>"
-                    value="<?php echo $detailtitle; ?>" type="text" />
+                    value="<?php echo $detailtitle; ?>" type="text" class="regular-text" />
             </td>
         </tr>
         <?php

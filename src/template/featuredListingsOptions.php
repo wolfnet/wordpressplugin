@@ -37,7 +37,8 @@
                 <label for="wnt-<?php echo $title_wpid; ?>">Title:</label>
             </th>
             <td>
-                <input id="wnt-<?php echo $title_wpid; ?>" name="<?php echo $title_wpname; ?>" value="<?php echo $title; ?>" type="text" />
+                <input id="wnt-<?php echo $title_wpid; ?>" name="<?php echo $title_wpname; ?>"
+                 value="<?php echo $title; ?>" type="text" class="regular-text" />
             </td>
         </tr>
 
@@ -152,7 +153,7 @@
             </th>
             <td>
                 <input id="<?php echo $maxresults_wpid; ?>" name="<?php echo $maxresults_wpname; ?>"
-                 value="<?php echo $maxresults; ?>" type="text" size="2" maxlength="2" />
+                 value="<?php echo $maxresults; ?>" type="text" size="2" maxlength="2" class="small" />
                 <span class="wolfnet_moreInfo">
                     Define the number of properties to be featured.  The maximum number of
                     properties that can be included is 50.
