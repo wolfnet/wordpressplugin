@@ -106,7 +106,7 @@ jQuery(function($){
     {
 
         // Figure out if we can display the Agent Pages option.
-        // Note: This needs to NOT be asyncronous. 
+        // Note: This needs to NOT be asyncronous.
         $.ajax( {
             url: ajaxurl,
             type: 'GET',
