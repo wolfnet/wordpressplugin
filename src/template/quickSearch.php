@@ -146,7 +146,9 @@
 <script type="text/javascript">
 
     jQuery(function($){
-        $('#<?php echo $instance_id; ?>').wolfnetQuickSearch();
+		$('#<?php echo $instance_id; ?>').wolfnetQuickSearch({
+			hintText: '<?php echo $hintText; ?>'
+		});
 
         <?php if(count($keyids) > 1 && $routing == 'manual'): ?>
 

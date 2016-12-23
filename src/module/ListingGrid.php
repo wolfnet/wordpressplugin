@@ -254,6 +254,12 @@ class Wolfnet_Module_ListingGrid
             $vars['class'] .= 'wolfnet_withSortOptions ';
         }
 
+		if ($vars['mapEnabled']) {
+			wp_enqueue_script('wolfnet-maptracks');
+			wp_enqueue_script('wolfnet-map-driver');
+			//wp_enqueue_script('wolfnet-maptracks-theme');
+		}
+
         // $layout='grid'
         if ($layout=='list') {
             // echo "propertyListView<br>";

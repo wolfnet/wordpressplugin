@@ -129,7 +129,12 @@ class Wolfnet_Widget_ListingGridWidget extends Wolfnet_Widget_AbstractWidget
 
     protected function getOptions($instance = null)
     {
-        $options = $this->plugin->listingGrid->getOptions($instance);
+        $options = array();
+        try {
+            $options = $this->plugin->listingGrid->getOptions($instance);
+        } catch (Wolfnet_Api_ApiException $e) {
+            echo $this->plugin->displayException($e);
+        }
 
         return parent::prepOptions($options);
 

@@ -1,25 +1,14 @@
 <project name="wolfnet-idx-for-wordpress" default="build" basedir=".">
 
-    <property name="majorVersion" value="1.12" />
-    <property name="minorVersion" value="0" />
-
-    <property name="version" value="${majorVersion}.${minorVersion}" />
-
     <property name="dir.ant"   value="${basedir}/.ant" />
-    <property name="dir.build" value="${basedir}/build" />
-    <property name="dir.dist"  value="${basedir}/dist" />
-    <property name="dir.js"    value="public/js" />
-    <property name="dir.css"   value="public/css" />
 
     <property name="tool.ant-contrib"   value="${dir.ant}/ant-contrib/lib/ant-contrib.jar" />
 
-    <property name="dist.name"          value="${dir.dist}/${ant.project.name}" />
-
     <available file=".git" type="dir" property="git.present"/>
 
-    <condition property="gruntExecutable" value="grunt.cmd" else="grunt">
-        <os family="windows" />
-    </condition>
+	<condition property="gruntExec" value="grunt.cmd" else="grunt">
+		<os family="windows" />
+	</condition>
 
 
     <!-- Define the Java Library for the AntContrib project -->
@@ -30,157 +19,38 @@
     </taskdef>
 
 
-    <target name="compile" depends="compile-less,minify-javascript">
-    </target>
+	<target name="compile">
+		<exec executable="${gruntExec}" dir="${basedir}"><arg value="compile" /></exec>
+	</target>
 
 
-    <target name="compile-less">
-        <sequential>
-            <!-- Compile Less Files -->
-            <echo>Compiling Less Files</echo>
-            <exec executable="${gruntExecutable}" dir="${basedir}">
-                <arg value="less" />
-            </exec>
-        </sequential>
-    </target>
+	<target name="compile-less">
+		<exec executable="${gruntExec}" dir="${basedir}"><arg value="compile:less" /></exec>
+	</target>
 
 
-    <target name="minify-javascript">
-        <sequential>
-            <echo>Minifiying JavaScript Files</echo>
-            <exec executable="${gruntExecutable}" dir="${basedir}">
-                <arg value="uglify" />
-            </exec>
-        </sequential>
-    </target>
+	<target name="minify-javascript">
+		<exec executable="${gruntExec}" dir="${basedir}"><arg value="compile:js" /></exec>
+	</target>
 
 
-    <target name="build" depends="compile,git-revision">
-        <clean-for-build />
-
-        <echo>Creating Build Directory: ${dir.build}</echo>
-        <copy todir="${dir.build}">
-            <fileset dir="${basedir}">
-                <!-- Excluded Directories -->
-                <exclude name="build/" />
-                <exclude name="dist/" />
-                <exclude name="docs/" />
-                <exclude name="tests/" />
-                <exclude name="node_modules/" />
-                <!-- Excluded Files -->
-                <exclude name="build.xml" />
-                <exclude name="phpunit.xml" />
-                <exclude name="LessCompilerOutput.txt" />
-                <exclude name="vagrantfile" />
-                <!-- Excluded File Patterns -->
-                <exclude name="**/.*" />
-                <exclude name="**/.*/" />
-                <exclude name="*.sublime*" />
-                <exclude name="**/*.less" />
-                <exclude name="**/*.tmp" />
-                <exclude name="phpdoc*.xml" />
-            </fileset>
-        </copy>
-
-    </target>
+	<target name="build">
+		<exec executable="${gruntExec}" dir="${basedir}"><arg value="build" /></exec>
+	</target>
 
 
-    <target name="dist" depends="build">
-        <clean-for-dist />
-        <prep-for-dist />
-        <zip destfile="${dist.name}_${version}.zip" compress="true">
-            <zipfileset dir="${dir.build}" prefix="${ant.project.name}" />
-        </zip>
-    </target>
+	<target name="dist">
+		<exec executable="${gruntExec}" dir="${basedir}"><arg value="build" /></exec>
+	</target>
 
 
-    <target name="test-dist" depends="build">
-        <clean-for-test-dist />
-        <prep-for-test-dist />
-        <zip destfile="${dist.name}_${version}+${git.revision}.zip" compress="true">
-            <zipfileset dir="${dir.build}" prefix="${ant.project.name}" />
-        </zip>
-    </target>
+	<target name="test-dist">
+		<exec executable="${gruntExec}" dir="${basedir}"><arg value="build:test" /></exec>
+	</target>
 
 
-    <target name="git-revision" description="Store git revision in ${repository.version}" if="git.present">
-        <exec executable="git" outputproperty="git.revision" failifexecutionfails="false" errorproperty="">
-            <arg value="rev-parse"/>
-            <arg value="--short"/>
-            <arg value="HEAD"/>
-        </exec>
-        <condition property="repository.version" value="${git.revision}" else="unknown">
-            <and>
-                <isset property="git.revision"/>
-                <length string="${git.revision}" trim="yes" length="0" when="greater"/>
-            </and>
-        </condition>
-        <echo>Git Revision: ${git.revision}</echo>
-    </target>
-
-
-    <!-- MACROS -->
-
-    <macrodef name="clean-for-build">
-        <sequential>
-            <delete dir="${dir.build}" />
-        </sequential>
-    </macrodef>
-
-
-    <macrodef name="clean-for-dist">
-        <sequential>
-            <delete file="${dist.name}_${version}.zip" />
-        </sequential>
-    </macrodef>
-
-
-    <macrodef name="clean-for-test-dist">
-        <sequential>
-            <delete file="${dist.name}_${version}+${git.revision}.zip" />
-        </sequential>
-    </macrodef>
-
-
-    <macrodef name="prep-for-dist">
-        <sequential>
-            <!-- Minify Source Code -->
-            <!-- Use min files instead of src files -->
-            <echo>Switch to Minified Files</echo>
-            <echo>Update Version Numbers</echo>
-            <replace dir="${dir.build}">
-                <include name="**/*.php" />
-                <include name="ReadMe.txt" />
-                <replacefilter token=".src.js"  value=".min.js" />
-                <replacefilter token=".src.css" value=".min.css" />
-                <replacefilter token="{majorVersion}" value="${majorVersion}" />
-                <replacefilter token="{minorVersion}" value="${minorVersion}" />
-                <replacefilter token="{X.X.X}" value="${version}" />
-                <replacefilter token="{X.X.X-stable}" value="${version}" />
-            </replace>
-        </sequential>
-    </macrodef>
-
-
-    <macrodef name="prep-for-test-dist">
-        <sequential>
-            <!-- Minify Source Code -->
-            <!-- Use min files instead of src files -->
-            <echo>Switch to Minified Files</echo>
-            <echo>Update Version Numbers</echo>
-            <replace dir="${dir.build}">
-                <include name="**/*.php" />
-                <include name="ReadMe.txt" />
-                <exclude name="build.xml" />
-                <replacefilter token=".src.js"  value=".min.js" />
-                <replacefilter token=".src.css" value=".min.css" />
-                <replacefilter token="{majorVersion}" value="${majorVersion}" />
-                <replacefilter token="{minorVersion}" value="${minorVersion}" />
-                <replacefilter token="{X.X.X}" value="${version}+${git.revision}" />
-                <replacefilter token="{X.X.X-stable}" value="${version}" />
-            </replace>
-        </sequential>
-    </macrodef>
-
+	<target name="git-revision" description="Print git revision" if="git.present">
+		<exec executable="${gruntExec}" dir="${basedir}"><arg value="git-info:shortSHA" /></exec>
+	</target>
 
 </project>

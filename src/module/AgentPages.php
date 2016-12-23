@@ -85,6 +85,7 @@ class Wolfnet_Module_AgentPages
             'soldlistings'   => false,
             'excludeoffices' => '',
             'numperpage'     => 10,
+            'agentsort'      => 'name',
         );
 
     }

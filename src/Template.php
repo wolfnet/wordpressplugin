@@ -48,8 +48,9 @@ class Wolfnet_Template
             'wolfnet-smartsearch',
             'wolfnet-listing-grid',
             'wolfnet-toolbar',
-            'wolfnet-maptracks',
-            'mapquest-api'
+			//'wolfnet-maptracks',
+			//'wolfnet-map-driver',
+			//'wolfnet-maptracks-theme',
         );
 
         foreach ($scripts as $script) {
@@ -71,6 +72,7 @@ class Wolfnet_Template
             'wolfnet-agent',
             'icomoon',
             'google-fonts',
+            //'wolfnet-maptracks-theme-css',
         );
 
 		$widgetTheme = $this->plugin->views->getWidgetTheme();
@@ -126,6 +128,10 @@ class Wolfnet_Template
                 $this->url . 'js/jquery.imagesloaded.min.js',
                 array('jquery'),
             ),
+			'jquerywnt' => array(
+				$this->url . 'js/jquerywnt.min.js',
+				array('jquery'),
+			),
             'wolfnet' => array(
                 $this->url . 'js/wolfnet.min.js',
                 array('jquery', 'tooltipjs'),
@@ -170,18 +176,34 @@ class Wolfnet_Template
                 $this->url . 'js/jquery.wolfnetShortcodeBuilder.min.js',
                 array('jquery-ui-widget', 'jquery-effects-core', 'wolfnet-admin'),
             ),
-            'mapquest-api' => array(
-                '//www.mapquestapi.com/sdk/js/v7.0.s/mqa.toolkit.js?key=Gmjtd%7Clu6znua2n9%2C7l%3Do5-la70q',
+            'google-maps' => array(
+				'https://maps.googleapis.com/maps/api/js?client=gme-wolfnettechnologies&v=3.26&channel='
+					. $this->getGoogleMapChannel() . '_wp',
                 array(),
                 $this->version,
                 true,
             ),
             'wolfnet-maptracks' => array(
-                $this->url . 'js/jquery.wolfnetMaptracks.min.js',
-                array('jquery', 'mapquest-api'),
+				'https://common.wolfnet.com/js/maptracks/v3/maptracks.bundle.min.js?v=3.0.5',
+				array('jquerywnt', 'google-maps'),
                 $this->version,
                 true,
             ),
+			'wolfnet-map-driver' => array(
+                $this->url . 'js/jquery.wolfnetMaptracksDriver.min.js',
+                array('jquery'),
+                $this->version,
+                true,
+            ),
+			// Uncomment if the MapTracks theme JS is ever needed
+			/*
+			'wolfnet-maptracks-theme' => array(
+				'https://common.wolfnet.com/js/maptracks/themes/2_5/theme.js?v=1.2.3',
+				$this->version,
+				true,
+			),
+			*/
+
         );
 
         foreach ($scripts as $script => $data) {
@@ -247,6 +269,12 @@ class Wolfnet_Template
             'google-fonts' => array(
                 'https://fonts.googleapis.com/css?family=' . implode('|', $google_fonts),
             ),
+			// Uncomment if the MapTracks theme CSS is ever needed (in combination with theme JS)
+			/*
+			'wolfnet-maptracks-theme-css' => array(
+				'https://common.wolfnet.com/js/maptracks/themes/2_5/theme.css?v=1.2.3',
+			),
+			*/
         );
 
 		// Add widget theme styles
@@ -417,4 +445,22 @@ class Wolfnet_Template
             'useDialogClass' => (version_compare($wp_version, '3.6')>0) ? "true" : "false",
         );
     }
+
+
+	private function getGoogleMapChannel()
+	{
+		$api_key = $this->plugin->keyService->getDefault();
+		$channel = 'unknown_wp';
+
+		if ($api_key) {
+			try {
+				$channel = $this->plugin->data->getMarketName($api_key) . '_wp';
+			} catch (Exception $e) {
+			}
+		}
+
+		return $channel;
+
+	}
+
 }

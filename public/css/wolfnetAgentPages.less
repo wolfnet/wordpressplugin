@@ -95,6 +95,13 @@
 
         }
 
+		.wolfnet_aoTop {
+			position: relative;
+			top: -85px;
+			display: block;
+			visibility: hidden;
+		}
+
         .wolfnet_agentOfficeHeader {
 
             h2 {
@@ -120,49 +127,69 @@
                 vertical-align: middle;
                 margin-left: 1em;
 
-				.wolfnet_aoCriteria {
-                    display: block;
-                    width: 280px;
-                    border: 1px solid #ccc;
-                    border-radius: @btnRadius;
-                    padding: 6px;
+				.wolfnet_aoSearchBox {
+					position: relative;
+					width: 280px;
+					border-radius: @btnRadius;
 
-                    .wnt-icon {
-                        vertical-align: middle;
-                        color: #999;
-                    }
+					.wolfnet_aoCriteria,
+					.wolfnet_aoSearchButton {
+						display: inline-block;
+						//float: left;
+						height: 2.2em;
+					}
 
-                    input {
-                        display: inline-block;
-                        width: 90%;
-                        height: 100%;
-                        vertical-align: middle;
-                        border: none !important;
-                        border-radius: @btnRadius;
-                        outline: none !important;
-                        margin: 0 !important;
-                        padding: 0 !important;
-                        box-shadow: none;
-                        font-size: 0.8em;
-                        background-image: none !important;
-                        background-color: #fff !important;
+					.wolfnet_aoCriteria {
+						width: 100%;
+						border: 1px solid #ccc;
+						border-radius: @btnRadius;
+						padding: 6px;
 
-                        &[placeholder] {
-                            text-overflow: ellipsis;
-                            .placeholderColor(#ccc);
-                        }
+						.wnt-icon {
+							vertical-align: middle;
+							color: #999;
+						}
 
-                    }
+						input {
+							display: inline-block;
+							width: 90%;
+							height: 100%;
+							vertical-align: middle;
+							border: none !important;
+							border-radius: @btnRadius;
+							outline: none !important;
+							margin: 0 !important;
+							padding: 0 !important;
+							box-shadow: none;
+							font-size: 0.8em;
+							background-image: none !important;
+							background-color: #fff !important;
 
-				}
+							&[placeholder] {
+								text-overflow: ellipsis;
+								.placeholderColor(#ccc);
+							}
 
-				.wolfnet_aoSearchButton {
-					display: none;
+						}
+
+					}
+
+					.wolfnet_aoSearchButton {
+						z-index: 10;
+						position: absolute;
+						right: 0;
+						width: 2.2em;
+						border-top-left-radius: 0;
+						border-bottom-left-radius: 0;
+						border-top-right-radius: @btnRadius;
+						border-bottom-right-radius: @btnRadius;
+					}
+
 				}
 
 			}
 
-        }
+		}
 
         .wolfnet_aoItem {
             position: relative;
@@ -206,8 +233,7 @@
 			background-color: #fff;
 			background-repeat: no-repeat;
 			background-size: cover;
-			background-position-x: center;
-			background-position-y: center;
+			background-position: center center;
 
 			img {
 				display: block;
@@ -439,7 +465,6 @@
 		}
 
 		.wolfnet_aoSidebar {
-			display: inline-block;
 			position: relative;
 			float: right;
 			width: 39%;
@@ -515,7 +540,6 @@
 		}
 
 		.wolfnet_aoMain {
-			display: inline-block;
 			max-width: 58%;
 		}
 
@@ -529,10 +553,12 @@
 
 		.wolfnet_aoListings {
 
-			.wolfnet_aoListingNav {
+			.wolfnet_aoListingNavArea {
+				position: relative;
+				z-index: 10;
 				float: right;
 
-				&.wnt-btn-group {
+				.wnt-btn-group {
 					.toggleBtnGroup(@btnRadius, 8em);
 				}
 
@@ -698,6 +724,14 @@
 			.wolfnet_aoMain {
 				max-width: 50%;
 			}
+			.wolfnet_aoListings {
+				.wolfnet_aoTitle {
+				}
+				.wolfnet_aoListingNavArea {
+					float: none;
+					//text-align: center;
+				}
+			}
 		}
 
 	}
@@ -718,7 +752,7 @@
 					.wolfnet_aoSearch {
 						margin-left: 0.5em;
 
-						.wolfnet_aoCriteria {
+						.wolfnet_aoSearchBox {
 							width: 275px;
 						}
 
@@ -782,7 +816,7 @@
                         clear: both;
                         margin: 0;
 
-						.wolfnet_aoCriteria {
+						.wolfnet_aoSearchBox {
 							display: block;
 							width: 100% !important;
 						}
@@ -897,7 +931,7 @@
 						clear: both;
 						margin: 0;
 
-						.wolfnet_aoCriteria {
+						.wolfnet_aoSearchBox {
 							width: 100% !important;
 						}
 

@@ -20,9 +20,29 @@
  *                Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
+if (array_key_exists("REDIRECT_URL", $_SERVER)) {
+	$linkBase = $_SERVER['REDIRECT_URL'];
+} else {
+	$linkBase = $_SERVER['PHP_SELF'] . '/';
+}
+
+if($showOffices) {
+	$paginationLinkBase = $linkBase;
+} else {
+	/*
+	 * This prevents us from having a pagination link like 'page-name/2' which
+	 * would then use the WP page pagination. Instead we need a pagination link
+	 * like 'page-name/agnts/2'
+	 */
+	$paginationLinkBase = $allAgentsLink;
+}
+
+// Remove any page number from link base
+$paginationLinkBase = preg_replace('/\/[0-9]+/', '', $paginationLinkBase);
+
 if (!function_exists('paginate')) {
 
-	function paginate ($page, $total, $numPerPage, $postHash, $officeId = '', $search = null, $sort = 'name') {
+	function paginate ($linkBase, $page, $total, $numPerPage) {
 		/*
 		 * Note: We're using "agentpage" instead of just "page" as out URL variable
 		 * here because Wordpress uses page internally for their own pagination
@@ -36,32 +56,20 @@ if (!function_exists('paginate')) {
 		$output = '<ul class="wolfnet_agentPagination">';
 		$iterate = ceil($total / $numPerPage);
 
-		if (!is_null($search)) {
-			$linkBase = '?agentSearch&agentCriteria=' . $search . '&';
-		} else {
-			$linkBase = '?';
-		}
-
-		if ($officeId != '') {
-			$linkBase .= 'officeId=' . $officeId . '&';
-		}
-
-		$linkBase .= 'agentSort=' . $sort . '&';
-
 		if (($page * $numPerPage) > $numPerPage) {
-			$output .= '<li><a href="' . $linkBase . 'agentpage=' . ($page - 1) . '"><span>Previous</span></a></li>';
+			$output .= '<li><a href="' . $linkBase . ($page - 1) . '">Previous</a></li>';
 		}
 
 		for ($i = 1; $i <= $iterate; $i++) {
 			if ($i == $page) {
 				$output .= '<li class="wolfnet_selected"><span>' . $i . '</span></li>';
 			} else {
-				$output .= '<li><a href="' . $linkBase . 'agentpage=' . $i . $postHash . '"><span>' . $i . '</span></a></li>';
+				$output .= '<li><a href="' . $linkBase . $i . '">' . $i . '</a></li>';
 			}
 		}
 
 		if(($page * $numPerPage) < $total) {
-			$output .= '<li><a href="' . $linkBase . 'agentpage=' . ($page + 1) . $postHash . '"><span>Next</span></a></li>';
+			$output .= '<li><a href="' . $linkBase . ($page + 1) . '">Next</a></li>';
 		}
 
 		$output .= "</ul>";
@@ -119,7 +127,7 @@ if (!function_exists('paginate')) {
 
 	<div class="wolfnet_clearfix"></div>
 
-	<?php echo paginate($page, $totalrows, $numperpage, $postHash, $officeId, $agentCriteria, $agentSort); ?>
+	<?php echo paginate($paginationLinkBase, $page, $totalrows, $numperpage); ?>
 
 </div>
 
@@ -134,24 +142,33 @@ if (!function_exists('paginate')) {
 
 		var $aoItems = $aoWidget.find('.wolfnet_aoItem'),
 			itemSections = [
-				{ selector: '.wolfnet_aoContact',  maxHeight: 0,  origMaxHeight: 0 },
-				{ selector: '.wolfnet_aoLinks',    maxHeight: 0,  origMaxHeight: 0 },
-				{ selector: '.wolfnet_aoInfo .wolfnet_aoActions',  maxHeight: 0,  origMaxHeight: 0 },
-				{ selector: '.wolfnet_aoBody',     maxHeight: 0,  origMaxHeight: 0, alwaysResize: true },
-				{ selector: '.wolfnet_aoFooter',   maxHeight: 0,  origMaxHeight: 0 },
-				{ selector: '.wolfnet_aoItem',     maxHeight: 0,  origMaxHeight: 0 }
+				{ name: 'contact',  selector: '.wolfnet_aoContact',  maxHeight: 0,  origMaxHeight: 0 },
+				{ name: 'links',    selector: '.wolfnet_aoLinks',    maxHeight: 0,  origMaxHeight: 0 },
+				{ name: 'info',     selector: '.wolfnet_aoInfo .wolfnet_aoActions',  maxHeight: 0,  origMaxHeight: 0 },
+				{ name: 'body',     selector: '.wolfnet_aoBody',     maxHeight: 0,  origMaxHeight: 0, alwaysResize: true },
+				{ name: 'footer',   selector: '.wolfnet_aoFooter',   maxHeight: 0,  origMaxHeight: 0 },
+				{ name: 'item',     selector: '.wolfnet_aoItem',     maxHeight: 0,  origMaxHeight: 0 }
 			],
 			$aoHeader = $aoWidget.find('.wolfnet_agentOfficeHeader');
 
-		wolfnet.resizeAOItems($aoItems, itemSections, $aoHeader);
+		var resizeComplete = function (data) {
+			for (var i=0, l=data.length; i<l; i++) {
+				if (data[i].hasOwnProperty('name') && (data[i].name === 'body')) {
+					$aoItems.find('.wolfnet_aoImage').height(data[i].maxHeight);
+					break;
+				}
+			}
+		};
 
 		var resizeTimeout;
 		$(window).resize(function () {
 			clearTimeout(resizeTimeout);
 			resizeTimeout = setTimeout(function () {
-				wolfnet.resizeAOItems($aoItems, itemSections, $aoHeader);
+				wolfnet.resizeAOItems($aoItems, itemSections, $aoHeader, resizeComplete);
 			}, 500);
 		});
+
+		wolfnet.resizeAOItems($aoItems, itemSections, $aoHeader, resizeComplete);
 
 	});
 

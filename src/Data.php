@@ -273,7 +273,6 @@ class Wolfnet_Data
         }
 
         $args['mapParams'] = array(
-            'mapProvider'  => 'mapquest',
             'centerLat'    => $data['responseData']['data']['market']['maptracks']['map_start_lat'],
             'centerLng'    => $data['responseData']['data']['market']['maptracks']['map_start_lng'],
             'zoomLevel'    => $data['responseData']['data']['market']['maptracks']['map_start_scale'],
@@ -402,4 +401,16 @@ class Wolfnet_Data
     {
         return $this->getBeds();
     }
+
+
+	public function isCanada()
+	{
+		$data = $this->plugin->api->sendRequest(
+			$this->plugin->keyService->getDefault(),
+			'/settings'
+		);
+
+		return $data['responseData']['data']['resource']['country'] == 'Canada' ? true : false;
+	}
+
 }
