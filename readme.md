@@ -93,6 +93,11 @@ Please upgrade to the latest version of the plugin as we will be disabling our o
 
 ## Changelog
 
+### 1.14.6
+
+* Compatibility support for "Form-Maker" plugin
+* Fixed issue where admin listing appearance customize button was not scrolling the browser to the customization form
+
 ### 1.14.5
 
 * Fixed an issue where the plugin settings were not working without an API key
