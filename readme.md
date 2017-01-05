@@ -96,6 +96,7 @@ Please upgrade to the latest version of the plugin as we will be disabling our o
 ### 1.14.6
 
 * Compatibility support for "Form-Maker" plugin
+* Compatibility support for "WP Pro Real Estate 7" theme
 * Fixed issue where admin listing appearance customize button was not scrolling the browser to the customization form
 
 ### 1.14.5
