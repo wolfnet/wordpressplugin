@@ -172,5 +172,7 @@ jQuery(function ($) {
 		resizeAOItems();
 	}
 
+	$(window).trigger('resize');
+
 
 });
