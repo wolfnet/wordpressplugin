@@ -96,7 +96,7 @@ if (!function_exists('formatUrl')) {
 
 ?>
 
-		<div class="wolfnet_viewAll">
+		<div class="wolfnet_aoViewAll">
 			<a href="<?php echo $agentsLink; ?>">Click here</a> to view all agents and staff.
 		</div>
 
