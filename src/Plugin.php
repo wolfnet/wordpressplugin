@@ -221,6 +221,11 @@ class Wolfnet_Plugin
 		add_action('wp_enqueue_scripts', array(&$this, 'publicStyles'), 1000);
 		do_action('wolfnet_post_publicStyles');
 
+		function wnt_inspect_scripts () {
+			wp_dequeue_script('gmaps');
+		}
+		add_action('wp_print_scripts', 'wnt_inspect_scripts');
+
 		$this->addAction(array(
 			array(self::CACHE_CRON_HOOK, array($this->cachingService, 'clearExpired')),
 		));
