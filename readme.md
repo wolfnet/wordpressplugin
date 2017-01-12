@@ -96,6 +96,7 @@ Please upgrade to the latest version of the plugin as we will be disabling our o
 ### 1.14.7
 
 * WordPress "Twenty Seventeen" theme support
+* Agent search/buttons width support for Safari
 
 ### 1.14.6
 
