@@ -31,7 +31,7 @@
 
 	<!-- Color options form -->
 
-	<div class="wolfnet_box">
+	<div id="wolfnet-color-options" class="wolfnet_box">
 
 	<h3>Color Options</h3>
 
