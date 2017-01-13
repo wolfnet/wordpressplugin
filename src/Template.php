@@ -178,7 +178,7 @@ class Wolfnet_Template
             ),
             'google-maps' => array(
 				'https://maps.googleapis.com/maps/api/js?client=gme-wolfnettechnologies&v=3.26&channel='
-					. $this->getGoogleMapChannel() . '_wp',
+					. $this->getGoogleMapChannel(),
                 array(),
                 $this->version,
             ),
