@@ -114,10 +114,15 @@ jQuery(function ($) {
 			});
 		}
 
+		// Resize agent images
 		if ($aoWidget.is('.wolfnet_aoAgentsList')) {
 			for (var i=0, l=itemSections.length; i<l; i++) {
 				if (itemSections[i].hasOwnProperty('name') && (itemSections[i].name === 'body')) {
-					$aoImages.height(itemSections[i].maxHeight);
+					if (itemSections[i].alwaysResize || (colCount > 1)) {
+						$aoImages.height(Math.max(itemSections[i].maxHeight, itemSections[i].origMaxHeight));
+					} else {
+						$aoImages.css('height', '');
+					}
 					break;
 				}
 			}
