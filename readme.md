@@ -93,6 +93,10 @@ Please upgrade to the latest version of the plugin as we will be disabling our o
 
 ## Changelog
 
+### 1.14.7
+
+* New option to hide the offices list, regardless of the number of offices
+
 ### 1.14.6
 
 * Compatibility support for "Form-Maker" plugin
