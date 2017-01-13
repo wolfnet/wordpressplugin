@@ -108,6 +108,8 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
 
         }
 
+		wp_enqueue_script('wolfnet-agent-office');
+
         // Run the function associated with the action.
         return $this->$action();
 	}

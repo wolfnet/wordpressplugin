@@ -176,7 +176,11 @@ class Wolfnet_Template
                 $this->url . 'js/jquery.wolfnetShortcodeBuilder.min.js',
                 array('jquery-ui-widget', 'jquery-effects-core', 'wolfnet-admin'),
             ),
-            'google-maps' => array(
+			'wolfnet-agent-office' => array(
+				$this->url . 'js/wolfnetAgentOffice.min.js',
+				array('jquery', 'wolfnet'),
+			),
+			'google-maps' => array(
 				'https://maps.googleapis.com/maps/api/js?client=gme-wolfnettechnologies&v=3.26&channel='
 					. $this->getGoogleMapChannel(),
                 array(),
