@@ -93,7 +93,7 @@ class Wolfnet_Ajax
 	 */
 	public function remoteValidateProductKey()
     {
-        $productKey = (array_key_exists('key', $_REQUEST)) ? $_REQUEST['key'] : '';
+        $productKey = (array_key_exists('key', $_REQUEST)) ? sanitize_key($_REQUEST['key']) : '';
 
         try {
             $response = ($GLOBALS['wolfnet']->keyService->isValid($productKey)) ? 'true' : 'false';
@@ -118,7 +118,7 @@ class Wolfnet_Ajax
 
         try {
             if ($keyid == null) {
-                $keyid = (array_key_exists('keyid', $_REQUEST)) ? $_REQUEST['keyid'] : '1';
+                $keyid = (array_key_exists('keyid', $_REQUEST)) ? sanitize_key($_REQUEST['keyid']) : '1';
             }
 
             $response = $GLOBALS['wolfnet']->searchManager->getSavedSearches(-1, $keyid);
@@ -145,7 +145,7 @@ class Wolfnet_Ajax
             if (array_key_exists('post_title', $_REQUEST)) {
                 // Create post object
                 $my_post = array(
-                    'post_title'  => $_REQUEST['post_title'],
+                    'post_title'  => sanitize_title($_REQUEST['post_title']),
                     'post_status' => 'publish',
                     'post_author' => wp_get_current_user()->ID,
                     'post_type'   => $GLOBALS['wolfnet']->customPostTypeSearch
@@ -155,10 +155,10 @@ class Wolfnet_Ajax
                 $post_id = wp_insert_post($my_post);
 
                 foreach ($_REQUEST['custom_fields'] as $field => $value) {
-                    add_post_meta($post_id, $field, $value, true);
+                    add_post_meta($post_id, sanitize_text_field($field), sanitize_text_field($value), true);
                 }
 
-                $key = $_REQUEST['custom_fields']['keyid'];
+                $key = sanitize_key($_REQUEST['custom_fields']['keyid']);
 
             }
 
@@ -322,7 +322,7 @@ class Wolfnet_Ajax
     {
 
         try {
-            $id = (array_key_exists('id', $_REQUEST)) ? $_REQUEST['id'] : 0;
+            $id = (array_key_exists('id', $_REQUEST)) ? sanitize_text_field($_REQUEST['id']) : 0;
 
             $response = $GLOBALS['wolfnet']->searchManager->getSavedSearch($id);
 
@@ -453,12 +453,12 @@ class Wolfnet_Ajax
 
             // used by pagination dropdown "per page"
             if (!empty($_REQUEST['numrows'])) {
-                $_REQUEST['maxrows'] = $_REQUEST['numrows'];
+                $_REQUEST['maxrows'] = sanitize_text_field($_REQUEST['numrows']);
             }
 
             $criteria = $GLOBALS['wolfnet']->listings->prepareListingQuery($_REQUEST);
 
-            $keyid = (array_key_exists('keyid', $_REQUEST)) ? $_REQUEST["keyid"] : null;
+            $keyid = (array_key_exists('keyid', $_REQUEST)) ? sanitize_key($_REQUEST["keyid"]) : null;
 
             $productKey = $GLOBALS['wolfnet']->keyService->getById($keyid);
 
@@ -476,7 +476,7 @@ class Wolfnet_Ajax
         }
 
         // TODO: Do we really need to support AjaxP here?
-        $callback = (array_key_exists('callback', $_REQUEST)) ? $_REQUEST['callback'] : false;
+        $callback = (array_key_exists('callback', $_REQUEST)) ? sanitize_text_field($_REQUEST['callback']) : false;
 
         if ($callback !== false) {
             header('Content-Type: application/javascript');
@@ -494,8 +494,8 @@ class Wolfnet_Ajax
     {
         try {
 
-            $propertyId = (array_key_exists('property_id', $_REQUEST)) ? $_REQUEST['property_id'] : 0;
-            $keyId = (array_key_exists('keyid', $_REQUEST)) ? $_REQUEST['keyid'] : '';
+            $propertyId = (array_key_exists('property_id', $_REQUEST)) ? sanitize_text_field($_REQUEST['property_id']) : 0;
+            $keyId = (array_key_exists('keyid', $_REQUEST)) ? sanitize_key($_REQUEST['keyid']) : '';
 
             $response = $GLOBALS['wolfnet']->listings->getPhotos($propertyId, $keyId);
 
@@ -542,7 +542,7 @@ class Wolfnet_Ajax
 
         try {
             // TODO: Assign default value.
-            $keyid = $_REQUEST["keyid"];
+            $keyid = sanitize_key($_REQUEST["keyid"]);
 
             $productKey = $GLOBALS['wolfnet']->keyService->getById($keyid);
 
@@ -568,7 +568,7 @@ class Wolfnet_Ajax
 
         try {
             // TODO: Assign default value.
-            $productKey = $_REQUEST["productkey"];
+            $productKey = sanitize_key($_REQUEST["productkey"]);
 
             $marketName = $GLOBALS['wolfnet']->data->getMarketName($productKey);
             $response = strtoupper($marketName);
@@ -593,7 +593,7 @@ class Wolfnet_Ajax
 
         try {
             // TODO: Assign default value.
-            $keyid = $_REQUEST["keyid"];
+            $keyid = sanitize_key($_REQUEST["keyid"]);
 
             $productKey = $GLOBALS['wolfnet']->keyService->getById($keyid);
 
@@ -619,7 +619,7 @@ class Wolfnet_Ajax
 
         try {
             // TODO: Assign default value.
-            $keyid = $_REQUEST["keyid"];
+            $keyid = sanitize_key($_REQUEST["keyid"]);
             $productKey = $GLOBALS['wolfnet']->keyService->getById($keyid);
             $response = $GLOBALS['wolfnet']->data->getBaseUrl($productKey);
 
@@ -641,7 +641,7 @@ class Wolfnet_Ajax
     public function remoteRouteQuickSearch()
     {
         try {
-            $response = $GLOBALS['wolfnet']->quickSearch->routeQuickSearch($_REQUEST['formData']);
+            $response = $GLOBALS['wolfnet']->quickSearch->routeQuickSearch(sanitize_text_field($_REQUEST['formData']));
         } catch (Wolfnet_Exception $e) {
             status_header(500);
 
@@ -661,10 +661,10 @@ class Wolfnet_Ajax
 
 		try {
 
-			$url       = $_REQUEST['wnt__url'];
-			$reqMethod = $_REQUEST['wnt__method'];
-			$params    = $_REQUEST['wnt__params'];
-			$dataType  = (array_key_exists('wnt__datatype', $_REQUEST) ? $_REQUEST['wnt__datatype'] : '');
+			$url       = esc_url_raw($_REQUEST['wnt__url']);
+			$reqMethod = sanitize_text_field($_REQUEST['wnt__method']);
+			$params    = sanitize_text_field($_REQUEST['wnt__params']);
+			$dataType  = (array_key_exists('wnt__datatype', $_REQUEST) ? sanitize_text_field($_REQUEST['wnt__datatype']) : '');
 
 			// Relay the request and get the response
 			$response = $GLOBALS['wolfnet']->searchManager->searchRelay($url, $requestMethod, $params);
@@ -721,7 +721,7 @@ class Wolfnet_Ajax
 		try {
 
 			// Retrieve user's search term from request
-			$term = $_REQUEST['data']['term'];
+			$term = sanitize_text_field($_REQUEST['data']['term']);
 
 			// Make API request to retrieve suggestion data
 			$response = $GLOBALS['wolfnet']->smartSearch->getSuggestions($term);
@@ -737,9 +737,8 @@ class Wolfnet_Ajax
 		}
 
 		if(array_key_exists('callback', $_GET)){
-			$callback = $_REQUEST['callback'];
+			$callback = sanitize_text_field(sanitize_text_field($_REQUEST['callback']));
 
-			// TODO: evaluate if this is necessary
 			header('Content-Type: text/javascript; charset=utf8');
 			header('Access-Control-Allow-Origin: http://www.example.com/');
 			header('Access-Control-Max-Age: 3628800');
