@@ -662,8 +662,8 @@ class Wolfnet_Ajax
 		try {
 
 			$url       = esc_url_raw($_REQUEST['wnt__url']);
-			$reqMethod = sanitize_text_field($_REQUEST['wnt__method']);
-			$params    = sanitize_text_field($_REQUEST['wnt__params']);
+			$reqMethod = $_REQUEST['wnt__method'];
+			$params    = $_REQUEST['wnt__params'];
 			$dataType  = (array_key_exists('wnt__datatype', $_REQUEST) ? sanitize_text_field($_REQUEST['wnt__datatype']) : '');
 
 			// Relay the request and get the response
