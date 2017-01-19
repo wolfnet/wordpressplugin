@@ -93,6 +93,10 @@ Please upgrade to the latest version of the plugin as we will be disabling our o
 
 ## Changelog
 
+### 1.14.8
+
+* Security updates
+
 ### 1.14.7
 
 * Removing security hole in Agent Pages contact forms
