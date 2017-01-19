@@ -29,7 +29,8 @@
 
 		<?php 
 		//Strip out the extra periods in the agentLink
-		$agentLink = preg_replace("/\./", "", $agentLink); ?>
+		$agentLink = preg_replace("/\./", "", $agentLink); 
+		?>
 		
 		<a href="<?php echo $agentLink; ?>">
 			<div class="wolfnet_aoImage"
@@ -57,6 +58,8 @@
 					<?php $agent['business_name']; ?>
 				</div>
 
+			</div>
+			
 			<ul class="wolfnet_aoLinks">
 
 				<?php
@@ -93,8 +96,6 @@
 				?>
 
 			</ul>
-
-			</div>
 
 			<div class="wolfnet_aoActions wolfnet_clearfix">
 				<div class="wolfnet_aoAction">

@@ -317,7 +317,6 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
         $agentName = preg_replace("/\./", "", $_REQUEST['agentId']);
 
         $agentData = $this->getAgentById($agentName);
-        var_dump($agentName);
 
         //$agentData = $this->getAgentById($_REQUEST['agentId']);
 
