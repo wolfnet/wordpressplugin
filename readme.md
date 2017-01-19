@@ -93,10 +93,18 @@ Please upgrade to the latest version of the plugin as we will be disabling our o
 
 ## Changelog
 
-### 1.14.7
+### 1.14.9
 
 * WordPress "Twenty Seventeen" theme support
 * Agent search/buttons width support for Safari
+
+### 1.14.8
+
+
+
+### 1.14.7
+
+* Removing security hole in Agent Pages contact forms
 
 ### 1.14.6
 

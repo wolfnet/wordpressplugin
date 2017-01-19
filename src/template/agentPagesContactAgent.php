@@ -120,51 +120,21 @@
 
 		(<span class="wolfnet_red">*</span> Indicates a required field.)<br />
 
-		<label for="name"><span class="wolfnet_red">*</span>Name: </label>
-		<input type="text" name="wolfnet_name"
-			class="wolfnet_name<?php echo ($errorField == 'wolfnet_name') ? ' wolfnet_required' : ''; ?>"
-			value="<?php echo (array_key_exists('wolfnet_name', $_REQUEST)) ? $_REQUEST['wolfnet_name'] : ''; ?>" />
-		<?php
-			if($errorField == 'wolfnet_name') {
-				echo '<span class="wolfnet_red wolfnet_errorMessage">Name must be filled out.</span><br />';
-			}
-		?>
+		<label for="name"><span class="wolfnet_asterisk">*</span>Name: </label>
+		<input type="text" name="wolfnet_name" class="wolfnet_name" />
 
-		<label for="email"><span class="wolfnet_red">*</span>Email: </label>
-		<input type="text" name="wolfnet_email"
-			class="wolfnet_email<?php echo ($errorField == 'wolfnet_email') ? ' wolfnet_required' : ''; ?>"
-			value="<?php echo (array_key_exists('wolfnet_email', $_REQUEST)) ? $_REQUEST['wolfnet_email'] : ''; ?>" />
-		<?php
-			if($errorField == 'wolfnet_email') {
-				echo '<span class="wolfnet_red wolfnet_errorMessage">Email must be filled out and validly formatted.</span><br />';
-			}
-		?>
+		<label for="email"><span class="wolfnet_asterisk">*</span>Email: </label>
+		<input type="text" name="wolfnet_email" class="wolfnet_email" />
 
 		<label for="phone">Phone Number: </label>
-		<input type="text" name="wolfnet_phone" class="wolfnet_phone"
-			value="<?php echo (array_key_exists('wolfnet_phone', $_REQUEST)) ? $_REQUEST['wolfnet_phone'] : ''; ?>" />
-		<?php
-			if($errorField == 'wolfnet_phone') {
-				echo '<span class="wolfnet_red wolfnet_errorMessage">Phone must be a valid phone number.</span><br />';
-			}
-		?>
+		<input type="text" name="wolfnet_phone" class="wolfnet_phone" />
 
-		<?php
-			if(array_key_exists('wolfnet_contacttype', $_REQUEST)) {
-				$contactType = $_REQUEST['wolfnet_contacttype'];
-			} else {
-				$contactType = 'email';
-			}
-		?>
-		<label for="contacttype"><span class="wolfnet_red">*</span>Prefer to be contacted: </label>
-		<input type="radio" name="wolfnet_contacttype" class="wolfnet_contacttype" value="email" class="input"
-			<?php echo ($contactType == 'email') ? 'checked="checked";' : '' ?>> By Email
-		<input type="radio" name="wolfnet_contacttype" class="wolfnet_contacttype" value="phone" class="input"
-			<?php echo ($contactType == 'phone') ? 'checked="checked";' : '' ?>> By Phone
+		<label for="contacttype"><span class="wolfnet_asterisk">*</span>Prefer to be contacted: </label>
+		<input type="radio" name="wolfnet_contacttype" class="wolfnet_contacttype" value="email" class="input" checked="checked"> By Email
+		<input type="radio" name="wolfnet_contacttype" class="wolfnet_contacttype" value="phone" class="input"> By Phone
 
 		<label for="comments">Questions/Comments: </label>
-		<textarea name="wolfnet_comments"><?php echo (array_key_exists('wolfnet_comments', $_REQUEST)) ? $_REQUEST['wolfnet_comments'] : '';
-		?></textarea>
+		<textarea name="wolfnet_comments"></textarea>
 
 		<input type="submit" id="wolfnet_submit" value="Send" />
 	</form>
