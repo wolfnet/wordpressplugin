@@ -33,6 +33,9 @@
 
 	$link = $linkBase;
 	$formAction = $linkBase;
+
+	//Strip out the extra periods in the agentId.
+	$agentId = preg_replace("/\./", "", $agentId);
 	if(!preg_match('/\/agnt/', $linkBase)) {
 		// Landing on this page without a redirect URL.
 		$link .= 'agnt/' . $agentId;

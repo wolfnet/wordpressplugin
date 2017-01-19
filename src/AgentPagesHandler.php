@@ -45,11 +45,11 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
         // words. We can't use "agents" in the URL since it's highly likely that a site
         // will use that as a page name, and that will conflict with the rewrite endpoint.
         if(array_key_exists('agnts', $query)) {
-            $query['agents'] = $query['agnts'];
+            $query['agents'] = preg_replace("/\./", "", $query['agnts']);
             unset($query['agnts']);
         }
         if(array_key_exists('agnt', $query)) {
-            $query['agent'] = $query['agnt'];
+            $query['agent'] = preg_replace("/\./", "", $query['agnt']);
             unset($query['agnt']);
         }
 
@@ -314,7 +314,13 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
     {
         global $wp_query;
 
-        $agentData = $this->getAgentById(sanitize_text_field($_REQUEST['agentId']));
+
+        //Strip the extra periods from the agentName
+        $agentName = preg_replace("/\./", "", sanitize_text_field($_REQUEST['agentId']));
+
+        $agentData = $this->getAgentById($agentName);
+
+        //$agentData = $this->getAgentById(sanitize_text_field($_REQUEST['agentId']));
 
         // We need to get a product key that we can pull this agent's listings with.
         // Each key entered into the Settings page has a market name associated with it.
