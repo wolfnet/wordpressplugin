@@ -10,11 +10,11 @@
 	$userOptions = array();
 
 	if (!empty($_REQUEST['colors'])) {
-		$userOptions['colors'] = explode(',', $_REQUEST['colors']);
+		$userOptions['colors'] = explode(',', sanitize_text_field($_REQUEST['colors']));
 	}
 
 	if (!empty($_REQUEST['opacity'])) {
-		$userOptions['opacity'] = $_REQUEST['opacity'];
+		$userOptions['opacity'] = sanitize_text_field($_REQUEST['opacity']);
 	}
 
 	$args = array_merge($styleDefaults, $userOptions);

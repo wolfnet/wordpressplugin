@@ -135,7 +135,7 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
 
 		// This will be populated if an office search is being performed.
 		if (array_key_exists('officeCriteria', $_REQUEST) && strlen($_REQUEST['officeCriteria']) > 0) {
-			$this->args['criteria']['name'] = $_REQUEST['officeCriteria'];
+			$this->args['criteria']['name'] = sanitize_text_field($_REQUEST['officeCriteria']);
 		} else {
             $_REQUEST['officeCriteria'] = '';
         }
@@ -143,8 +143,8 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
 		$this->args['criteria']['omit_office_id'] = $this->args['excludeoffices'];
 
 		if (array_key_exists('officeSort', $_REQUEST)) {
-			$officeSort = $_REQUEST['officeSort'];
-			$this->args['criteria']['sort'] = ($_REQUEST['officeSort'] == 'office_id') ? 'office_id' : 'name';
+			$officeSort = sanitize_text_field($_REQUEST['officeSort']);
+			$this->args['criteria']['sort'] = (sanitize_text_field($_REQUEST['officeSort']) == 'office_id') ? 'office_id' : 'name';
 		} else {
 			$officeSort = 'name';
 		}
@@ -156,7 +156,7 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
 		$args = array(
 			'offices' => $officeData,
 			'agentCriteria' => (array_key_exists('agentCriteria', $_SESSION)) ? $_SESSION['agentCriteria'] : null,
-			'officeCriteria' => (array_key_exists('officeCriteria', $_REQUEST)) ? $_REQUEST['officeCriteria'] : null,
+			'officeCriteria' => (array_key_exists('officeCriteria', $_REQUEST)) ? sanitize_text_field($_REQUEST['officeCriteria']) : null,
 			'isAgent' => false,
 		);
 		$args = array_merge($args, $this->args);
@@ -224,7 +224,7 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
              * and numPerPage is 10, for example, we would need to get agents 11 through 20.
              * The below equation will set the starting row accordingly.
              */
-            $startrow = $this->args['criteria']['numperpage'] * ($_REQUEST['agentpage'] - 1) + 1;
+            $startrow = $this->args['criteria']['numperpage'] * (sanitize_text_field($_REQUEST['agentpage']) - 1) + 1;
         } else {
             $startrow = 1;
             $_REQUEST['agentpage'] = 1;
@@ -247,7 +247,7 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
 
         // This will be populated if an agent search is being performed.
         if(array_key_exists('agentCriteria', $_REQUEST) && strlen($_REQUEST['agentCriteria']) > 0) {
-            $this->args['criteria']['name'] = $_REQUEST['agentCriteria'];
+            $this->args['criteria']['name'] = sanitize_text_field($_REQUEST['agentCriteria']);
         }
 
         try {
@@ -272,11 +272,11 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
 			'agents'          => $agentsData,
             'agentSort'       => $agentSort,
 			'totalrows'       => $data['responseData']['data']['total_rows'],
-			'page'            => $_REQUEST['agentpage'],
-			'officeId'        => (array_key_exists('officeId', $_REQUEST)) ? $_REQUEST['officeId'] : '',
+			'page'            => sanitize_text_field($_REQUEST['agentpage']),
+			'officeId'        => (array_key_exists('officeId', $_REQUEST)) ? sanitize_text_field($_REQUEST['officeId']) : '',
 			'officeCount'     => $officeCount,
-			'agentCriteria'   => (array_key_exists('agentCriteria', $_REQUEST)) ? $_REQUEST['agentCriteria'] : '',
-			'officeCriteria'  => (array_key_exists('officeCriteria', $_REQUEST)) ? $_REQUEST['officeCriteria'] : '',
+			'agentCriteria'   => (array_key_exists('agentCriteria', $_REQUEST)) ? sanitize_text_field($_REQUEST['agentCriteria']) : '',
+			'officeCriteria'  => (array_key_exists('officeCriteria', $_REQUEST)) ? sanitize_text_field($_REQUEST['officeCriteria']) : '',
 			'isAgent'         => true,
 			'agentsHtml'      => '',
 			'postHash'        => $this->getPostHash(),
@@ -314,7 +314,7 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
     {
         global $wp_query;
 
-        $agentData = $this->getAgentById($_REQUEST['agentId']);
+        $agentData = $this->getAgentById(sanitize_text_field($_REQUEST['agentId']));
 
         // We need to get a product key that we can pull this agent's listings with.
         // Each key entered into the Settings page has a market name associated with it.
@@ -344,7 +344,7 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
 
         $args = array(
             'agent' => $agentData,
-            'officeId' => (array_key_exists('officeId', $_REQUEST)) ? $_REQUEST['officeId'] : '',
+            'officeId' => (array_key_exists('officeId', $_REQUEST)) ? sanitize_text_field($_REQUEST['officeId']) : '',
             'activeListingCount' => $count,
             'activeListingHTML' => $listings,
             'soldListingCount' => $soldCount,
@@ -360,12 +360,12 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
 
     protected function contactForm()
     {
-        $agentData = $this->getAgentById($_REQUEST['contact']);
+        $agentData = $this->getAgentById(sanitize_text_field($_REQUEST['contact']));
 
         $args = array(
             'agent' => $agentData,
-            'agentId' => $_REQUEST['contact'],
-            'officeId' => (array_key_exists('officeId', $_REQUEST)) ? $_REQUEST['officeId'] : '',
+            'agentId' => sanitize_text_field($_REQUEST['contact']),
+            'officeId' => (array_key_exists('officeId', $_REQUEST)) ? sanitize_text_field($_REQUEST['officeId']) : '',
         );
         $args = array_merge($args, $this->args);
 
@@ -378,7 +378,7 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
         // This is being set in session so we don't need to parse the office name and make
         // another API request on the 'thanks' page to get the office data.
         if(!array_key_exists('officeData', $_SESSION)) {
-            $_SESSION['officeData'] = $this->getOfficeByName($_REQUEST['contactOffice']);
+            $_SESSION['officeData'] = $this->getOfficeByName(sanitize_text_field($_REQUEST['contactOffice']));
         }
 
         $args = array(
@@ -425,18 +425,18 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
 
         // Translate form fields into request args. Using field name prefixes
         // on form fields since Wordpress has reserved field names.
-        $this->args['criteria']['name'] = $_REQUEST['wolfnet_name'];
-        $this->args['criteria']['email'] = $_REQUEST['wolfnet_email'];
-        $this->args['criteria']['phone'] = $_REQUEST['wolfnet_phone'];
-        $this->args['criteria']['contact_by'] = $_REQUEST['wolfnet_contacttype'];
-        $this->args['criteria']['message'] = $_REQUEST['wolfnet_comments'];
+        $this->args['criteria']['name'] = sanitize_text_field($_REQUEST['wolfnet_name']);
+        $this->args['criteria']['email'] = sanitize_email($_REQUEST['wolfnet_email']);
+        $this->args['criteria']['phone'] = sanitize_text_field($_REQUEST['wolfnet_phone']);
+        $this->args['criteria']['contact_by'] = sanitize_text_field($_REQUEST['wolfnet_contacttype']);
+        $this->args['criteria']['message'] = sanitize_text_field($_REQUEST['wolfnet_comments']);
 
         // If this is the agent contact page, agent_guid will be passed along, otherwise
         // this was submitted via the office contact and we'll pass office_id.
         if($formType == 'agent') {
-            $this->args['criteria']['agent_id'] = $_REQUEST['agent_id'];
+            $this->args['criteria']['agent_id'] = sanitize_text_field($_REQUEST['agent_id']);
         } else {
-            $this->args['criteria']['office_id'] = $_REQUEST['office_id'];
+            $this->args['criteria']['office_id'] = sanitize_text_field($_REQUEST['office_id']);
         }
 
         try {
@@ -656,9 +656,9 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
 		$agentPagesLink = '';
 
 		if (array_key_exists("REDIRECT_URL", $_SERVER)) {
-			$linkBase = $_SERVER['REDIRECT_URL'];
+			$linkBase = esc_url_raw($_SERVER['REDIRECT_URL']);
 		} else {
-			$linkBase = $_SERVER['PHP_SELF'] . '/';
+			$linkBase = esc_url_raw($_SERVER['PHP_SELF'] . '/');
 		}
 
         // Chop the links down to only the necessary parts.
