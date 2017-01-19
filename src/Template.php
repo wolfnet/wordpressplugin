@@ -176,9 +176,13 @@ class Wolfnet_Template
                 $this->url . 'js/jquery.wolfnetShortcodeBuilder.min.js',
                 array('jquery-ui-widget', 'jquery-effects-core', 'wolfnet-admin'),
             ),
-            'google-maps' => array(
+			'wolfnet-agent-office' => array(
+				$this->url . 'js/wolfnetAgentOffice.min.js',
+				array('jquery', 'wolfnet'),
+			),
+			'google-maps' => array(
 				'https://maps.googleapis.com/maps/api/js?client=gme-wolfnettechnologies&v=3.26&channel='
-					. $this->getGoogleMapChannel() . '_wp',
+					. $this->getGoogleMapChannel(),
                 array(),
                 $this->version,
             ),
@@ -314,7 +318,7 @@ class Wolfnet_Template
             foreach ($_REQUEST['keyList'] as $key) {
                 try {
                     $disclaimer = $this->plugin->api->sendRequest(
-                    	$key,
+                    	sanitize_key($key),
                     	'/core/disclaimer',
                     	'GET',
                     	array(
@@ -344,7 +348,7 @@ class Wolfnet_Template
      */
     public function templateRedirect()
     {
-        $pagename = (array_key_exists('pagename', $_REQUEST)) ? $_REQUEST['pagename'] : '';
+        $pagename = (array_key_exists('pagename', $_REQUEST)) ? sanitize_text_field($_REQUEST['pagename']) : '';
         $pagename = str_replace('-', '_', $pagename);
         $prefix   = 'wolfnet_';
 

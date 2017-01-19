@@ -26,9 +26,9 @@
 
 	<?php
 	if(array_key_exists("REDIRECT_URL", $_SERVER)) {
-		$linkBase = $_SERVER['REDIRECT_URL'];
+		$linkBase = esc_url_raw($_SERVER['REDIRECT_URL']);
 	} else {
-		$linkBase = $_SERVER['PHP_SELF'] . '/';
+		$linkBase = esc_url_raw($_SERVER['PHP_SELF']) . '/';
 	}
 
 	$link = $linkBase;
@@ -115,7 +115,7 @@
 		<?php
 		if(array_key_exists('errorField', $_REQUEST)) {
 			echo '<span class="wolfnet_red">Please correct the errors below.</span><br />';
-			$errorField = $_REQUEST['errorField'];
+			$errorField = sanitize_text_field($_REQUEST['errorField']);
 		} else {
 			$errorField = '';
 		}
@@ -126,7 +126,7 @@
 		<label for="name"><span class="wolfnet_red">*</span>Name: </label>
 		<input type="text" name="wolfnet_name"
 			class="wolfnet_name<?php echo ($errorField == 'wolfnet_name') ? ' wolfnet_required' : ''; ?>"
-			value="<?php echo (array_key_exists('wolfnet_name', $_REQUEST)) ? $_REQUEST['wolfnet_name'] : ''; ?>" />
+			value="<?php echo (array_key_exists('wolfnet_name', $_REQUEST)) ? sanitize_text_field($_REQUEST['wolfnet_name']) : ''; ?>" />
 		<?php
 			if($errorField == 'wolfnet_name') {
 				echo '<span class="wolfnet_red wolfnet_errorMessage">Name must be filled out.</span><br />';
@@ -136,7 +136,7 @@
 		<label for="email"><span class="wolfnet_red">*</span>Email: </label>
 		<input type="text" name="wolfnet_email"
 			class="wolfnet_email<?php echo ($errorField == 'wolfnet_email') ? ' wolfnet_required' : ''; ?>"
-			value="<?php echo (array_key_exists('wolfnet_email', $_REQUEST)) ? $_REQUEST['wolfnet_email'] : ''; ?>" />
+			value="<?php echo (array_key_exists('wolfnet_email', $_REQUEST)) ? sanitize_email($_REQUEST['wolfnet_email']) : ''; ?>" />
 		<?php
 			if($errorField == 'wolfnet_email') {
 				echo '<span class="wolfnet_red wolfnet_errorMessage">Email must be filled out and validly formatted.</span><br />';
@@ -145,7 +145,7 @@
 
 		<label for="phone">Phone Number: </label>
 		<input type="text" name="wolfnet_phone" class="wolfnet_phone"
-			value="<?php echo (array_key_exists('wolfnet_phone', $_REQUEST)) ? $_REQUEST['wolfnet_phone'] : ''; ?>" />
+			value="<?php echo (array_key_exists('wolfnet_phone', $_REQUEST)) ? sanitize_text_field($_REQUEST['wolfnet_phone']) : ''; ?>" />
 		<?php
 			if($errorField == 'wolfnet_phone') {
 				echo '<span class="wolfnet_red wolfnet_errorMessage">Phone must be a valid phone number.</span><br />';
@@ -154,7 +154,7 @@
 
 		<?php
 			if(array_key_exists('wolfnet_contacttype', $_REQUEST)) {
-				$contactType = $_REQUEST['wolfnet_contacttype'];
+				$contactType = sanitize_text_field($_REQUEST['wolfnet_contacttype']);
 			} else {
 				$contactType = 'email';
 			}
@@ -166,7 +166,7 @@
 			<?php echo ($contactType == 'phone') ? 'checked="checked";' : '' ?>> By Phone
 
 		<label for="comments">Questions/Comments: </label>
-		<textarea name="wolfnet_comments"><?php echo (array_key_exists('wolfnet_comments', $_REQUEST)) ? $_REQUEST['wolfnet_comments'] : '';
+		<textarea name="wolfnet_comments"><?php echo (array_key_exists('wolfnet_comments', $_REQUEST)) ? sanitize_text_field($_REQUEST['wolfnet_comments']) : '';
 		?></textarea>
 
 		<input type="submit" id="wolfnet_submit" value="Send" />

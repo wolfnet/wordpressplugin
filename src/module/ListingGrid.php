@@ -221,7 +221,7 @@ class Wolfnet_Module_ListingGrid
         if ($vars['wpMeta']['maptype'] != "disabled") {
             $vars['map'] = $this->plugin->data->getMap(
             	$listingsData,
-            	$_REQUEST[$this->plugin->requestPrefix.'productkey']
+            	sanitize_key($_REQUEST[$this->plugin->requestPrefix.'productkey'])
             );
             $vars['wpMeta']['maptype'] = $vars['maptype'];
             $vars['hideListingsTools'] = $this->plugin->data->getHideListingTools(
