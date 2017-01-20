@@ -161,9 +161,9 @@ class Wolfnet_Plugin
 
 		$this->ioc = new Wolfnet_Factory(array(
 			'plugin' => &$this,
-			'cacheRenew' => ($cacheParamExists) ? ($_REQUEST[$cacheFlag] == 'refresh') : false,
-			'cacheClear' => ($cacheParamExists) ? ($_REQUEST[$cacheFlag] == 'clear') : false,
-			'cacheReap' => ($cacheParamExists) ? ($_REQUEST[$cacheFlag] == 'reap') : false,
+			'cacheRenew' => ($cacheParamExists) ? (sanitize_text_field($_REQUEST[$cacheFlag]) == 'refresh') : false,
+			'cacheClear' => ($cacheParamExists) ? (sanitize_text_field($_REQUEST[$cacheFlag]) == 'clear') : false,
+			'cacheReap' => ($cacheParamExists) ? (sanitize_text_field($_REQUEST[$cacheFlag]) == 'reap') : false,
 			'sslEnabled' => $this->getSslEnabled(),
 			'verifySsl' => $this->getSslVerify(),
 		));
@@ -435,7 +435,7 @@ class Wolfnet_Plugin
      */
     public function doParseRequest($req)
     {
-        $pagename = (array_key_exists('pagename', $_REQUEST)) ? $_REQUEST['pagename'] : '';
+        $pagename = (array_key_exists('pagename', $_REQUEST)) ? sanitize_text_field($_REQUEST['pagename']) : '';
         $pagename = str_replace('-', '_', $pagename);
         $prefix   = 'wolfnet_';
 

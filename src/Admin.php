@@ -204,7 +204,7 @@ class Wolfnet_Admin extends Wolfnet_Plugin
             $_SESSION['keyid'] = 1;
         }
         if(array_key_exists('keyid', $_REQUEST)) {
-            $_SESSION['keyid'] = $_REQUEST['keyid'];
+            $_SESSION['keyid'] = sanitize_key($_REQUEST['keyid']);
         }
 
          /* If we are serving up the search manager page we need to get the search manager HTML from
