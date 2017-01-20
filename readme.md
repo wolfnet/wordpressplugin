@@ -93,6 +93,10 @@ Please upgrade to the latest version of the plugin as we will be disabling our o
 
 ## Changelog
 
+### 1.14.9
+
+* Fixing very minor bug caused by security updates
+
 ### 1.14.8
 
 * Security updates
