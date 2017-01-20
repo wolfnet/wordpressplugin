@@ -318,7 +318,7 @@ class Wolfnet_Template
             foreach ($_REQUEST['keyList'] as $key) {
                 try {
                     $disclaimer = $this->plugin->api->sendRequest(
-                    	$key,
+                    	sanitize_key($key),
                     	'/core/disclaimer',
                     	'GET',
                     	array(
@@ -348,7 +348,7 @@ class Wolfnet_Template
      */
     public function templateRedirect()
     {
-        $pagename = (array_key_exists('pagename', $_REQUEST)) ? $_REQUEST['pagename'] : '';
+        $pagename = (array_key_exists('pagename', $_REQUEST)) ? sanitize_text_field($_REQUEST['pagename']) : '';
         $pagename = str_replace('-', '_', $pagename);
         $prefix   = 'wolfnet_';
 
