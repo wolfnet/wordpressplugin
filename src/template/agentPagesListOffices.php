@@ -21,9 +21,9 @@
  */
 
 if (array_key_exists("REDIRECT_URL", $_SERVER)) {
-	$linkBase = $_SERVER['REDIRECT_URL'];
+	$linkBase = esc_url_raw($_SERVER['REDIRECT_URL']);
 } else {
-	$linkBase = $_SERVER['PHP_SELF'] . '/';
+	$linkBase = esc_url_raw($_SERVER['PHP_SELF'] . '/');
 }
 
 ?>

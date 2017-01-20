@@ -21,11 +21,11 @@
  */
 
 if (array_key_exists("REDIRECT_URL", $_SERVER)) {
-	$linkBase = $_SERVER['REDIRECT_URL'];
+	$linkBase = esc_url_raw($_SERVER['REDIRECT_URL']);
 	$contactLink = $linkBase . 'contact';
 } else {
-	$linkBase = $_SERVER['PHP_SELF'] . '/';
-	$contactLink = $linkBase . 'agnt/' . $_REQUEST['agentId'] . '/contact';
+	$linkBase = esc_url_raw($_SERVER['PHP_SELF'] . '/');
+	$contactLink = $linkBase . 'agnt/' . sanitize_text_field($_REQUEST['agentId']) . '/contact';
 }
 
 // Remove /agent/* from link base.
@@ -82,9 +82,9 @@ if (!function_exists('formatUrl')) {
 
 	if (array_key_exists('REDIRECT_URL', $_SERVER) && $officeId != '') {
 
-		$link = $_SERVER['REDIRECT_URL'] . "?";
+		$link = esc_url_raw($_SERVER['REDIRECT_URL']) . "?";
 		if (array_key_exists('agentCriteria', $_REQUEST) && strlen($_REQUEST['agentCriteria']) > 0) {
-			$link .= 'agentCriteria=' . $_REQUEST['agentCriteria'] . '&';
+			$link .= 'agentCriteria=' . sanitize_text_field($_REQUEST['agentCriteria']) . '&';
 		}
 		if ($officeId != '' && strpos($link, 'officeId') === false) {
 			$link .= 'officeId=' . $officeId;
