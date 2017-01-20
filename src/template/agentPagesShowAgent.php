@@ -440,6 +440,8 @@ jQuery(function ($) {
 	var $agentListings = $aoWidget.find('.wolfnet_aoListings'),
 		$agentFeatured = $agentListings.find('.wolfnet_aoFeaturedListings'),
 		$agentSold = $agentListings.find('.wolfnet_aoSoldListings'),
+		$agentFeaturedGrid   = $agentFeatured.find('.wolfnet_listingGrid'),
+		$agentSoldGrid       = $agentSold.find('.wolfnet_listingGrid'),
 		$agentListingNavArea = $agentListings.find('.wolfnet_aoListingNavArea'),
 		agentFeaturedLabel = '<?php _e('Active'); ?>',
 		agentSoldLabel = '<?php _e('Sold'); ?>';
@@ -465,6 +467,7 @@ jQuery(function ($) {
 			$agentSold.hide();
 			$agentSoldBtn.removeClass('wnt-btn-active');
 			$agentFeaturedBtn.addClass('wnt-btn-active');
+			$agentFeaturedGrid.wolfnetListingGrid('refresh');
 		});
 
 		$agentSoldBtn.click(function () {
@@ -472,6 +475,7 @@ jQuery(function ($) {
 			$agentFeatured.hide();
 			$agentFeaturedBtn.removeClass('wnt-btn-active');
 			$agentSoldBtn.addClass('wnt-btn-active');
+			$agentSoldGrid.wolfnetListingGrid('refresh');
 		});
 
 	}
