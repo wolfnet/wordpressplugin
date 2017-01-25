@@ -28,8 +28,9 @@
 
 
 		<?php 
-		//Strip out the extra periods in the agentLink
-		$agentLink = preg_replace("/\./", "", $agentLink); 
+		//Strip out the extra commas and periods in the agentLink
+		//$agentLink = preg_replace("/\./", "", $agentLink);
+		//$agentLink = preg_replace("/,/", "", $agentLink);
 		?>
 		
 		<a href="<?php echo $agentLink; ?>">

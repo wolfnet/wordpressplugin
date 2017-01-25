@@ -21,11 +21,29 @@
  */
 
 if (array_key_exists("REDIRECT_URL", $_SERVER)) {
-	$linkBase = $_SERVER['REDIRECT_URL'];
-	$contactLink = $linkBase . 'contact';
+	$linkBase = esc_url_raw($_SERVER['REDIRECT_URL']);
+
+	//Build an array of all the parts of URL string.
+	$linkNames = preg_split("/\//", $linkBase);
+	//Get the agent name (last trailing slash).
+	$agentName = $linkNames[count($linkNames) - 2];
+	//Strip out extraneous commas and periods.
+	$agentName = preg_replace("/\./", "", $agentName);
+	$agentName = preg_replace("/,/", "", $agentName);
+	$linkBase2 = "";
+	//Build the link base back up from the beginning. 
+	for ($i = 0; $i < count($linkNames) - 2; $i++) {
+		$linkBase2 = $linkBase2 . $linkNames[$i] . "/";
+	}
+	$linkBase2 = $linkBase2 . $agentName . "/";
+	$contactLink = $linkBase2 . 'contact';
 } else {
-	$linkBase = $_SERVER['PHP_SELF'] . '/';
-	$contactLink = $linkBase . 'agnt/' . $_REQUEST['agentId'] . '/contact';
+	$linkBase = esc_url_raw($_SERVER['PHP_SELF'] . '/');
+	$agentName = sanitize_text_field($_REQUEST['agentId']);
+	//Strip out extraneous periods and commas.
+	$agentName = preg_replace("/\./", "", $agentName);
+	$agentName = preg_replace("/,/", "", $agentName);
+	$contactLink = $linkBase . 'agnt/' . $agentName . '/contact';
 }
 
 // Remove /agent/* from link base.
@@ -82,9 +100,9 @@ if (!function_exists('formatUrl')) {
 
 	if (array_key_exists('REDIRECT_URL', $_SERVER) && $officeId != '') {
 
-		$link = $_SERVER['REDIRECT_URL'] . "?";
+		$link = esc_url_raw($_SERVER['REDIRECT_URL']) . "?";
 		if (array_key_exists('agentCriteria', $_REQUEST) && strlen($_REQUEST['agentCriteria']) > 0) {
-			$link .= 'agentCriteria=' . $_REQUEST['agentCriteria'] . '&';
+			$link .= 'agentCriteria=' . sanitize_text_field($_REQUEST['agentCriteria']) . '&';
 		}
 		if ($officeId != '' && strpos($link, 'officeId') === false) {
 			$link .= 'officeId=' . $officeId;
