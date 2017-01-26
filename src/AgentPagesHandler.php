@@ -313,8 +313,7 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
         global $wp_query;
 
         //Strip out extraneous periods and commas
-        $agentName = preg_replace("/\./", "", $_REQUEST['agentId']);
-        $agentName = preg_replace("/,/", "", $agentName);
+        $agentName = preg_replace("/[\.,]/", "", $_REQUEST['agentId']);
 
         $agentData = $this->getAgentById(sanitize_text_field($agentName));
 
