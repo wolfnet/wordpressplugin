@@ -108,6 +108,8 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
 
         }
 
+		wp_enqueue_script('wolfnet-agent-office');
+
         // Run the function associated with the action.
         return $this->$action();
 	}
@@ -314,7 +316,6 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
 
         //Strip out extraneous periods and commas
         $agentName = preg_replace("/[\.,]/", "", $_REQUEST['agentId']);
-
         $agentData = $this->getAgentById(sanitize_text_field($agentName));
 
         // We need to get a product key that we can pull this agent's listings with.

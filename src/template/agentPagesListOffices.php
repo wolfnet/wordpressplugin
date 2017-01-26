@@ -21,9 +21,9 @@
  */
 
 if (array_key_exists("REDIRECT_URL", $_SERVER)) {
-	$linkBase = $_SERVER['REDIRECT_URL'];
+	$linkBase = esc_url_raw($_SERVER['REDIRECT_URL']);
 } else {
-	$linkBase = $_SERVER['PHP_SELF'] . '/';
+	$linkBase = esc_url_raw($_SERVER['PHP_SELF'] . '/');
 }
 
 ?>
@@ -68,33 +68,3 @@ if (array_key_exists("REDIRECT_URL", $_SERVER)) {
 	<div class="wolfnet_clearfix"></div>
 
 </div>
-
-
-<script type="text/javascript">
-
-	jQuery(function ($) {
-
-		var $aoWidget = $('#<?php echo $instance_id; ?>');
-
-		// Resize item boxes to height of tallest one.
-
-		var $aoItems = $aoWidget.find('.wolfnet_aoItem'),
-			itemSections = [
-				{ selector: '.wolfnet_aoContact', maxHeight: 0, origMaxHeight: 0 },
-				{ selector: '.wolfnet_aoLinks',   maxHeight: 0, origMaxHeight: 0 }
-			],
-			$aoHeader = $aoWidget.find('.wolfnet_agentOfficeHeader');
-
-		wolfnet.resizeAOItems($aoItems, itemSections, $aoHeader);
-
-		var resizeTimeout;
-		$(window).resize(function () {
-			clearTimeout(resizeTimeout);
-			resizeTimeout = setTimeout(function () {
-				wolfnet.resizeAOItems($aoItems, itemSections, $aoHeader);
-			}, 500);
-		});
-
-	});
-
-</script>

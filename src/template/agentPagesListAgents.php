@@ -21,9 +21,9 @@
  */
 
 if (array_key_exists("REDIRECT_URL", $_SERVER)) {
-	$linkBase = $_SERVER['REDIRECT_URL'];
+	$linkBase = esc_url_raw($_SERVER['REDIRECT_URL']);
 } else {
-	$linkBase = $_SERVER['PHP_SELF'] . '/';
+	$linkBase = esc_url_raw($_SERVER['PHP_SELF'] . '/');
 }
 
 if($showOffices) {
@@ -130,46 +130,3 @@ if (!function_exists('paginate')) {
 	<?php echo paginate($paginationLinkBase, $page, $totalrows, $numperpage); ?>
 
 </div>
-
-
-<script type="text/javascript">
-
-	jQuery(function ($) {
-
-		var $aoWidget = $('#<?php echo $instance_id; ?>');
-
-		// Resize item boxes to height of tallest one.
-
-		var $aoItems = $aoWidget.find('.wolfnet_aoItem'),
-			itemSections = [
-				{ name: 'contact',  selector: '.wolfnet_aoContact',  maxHeight: 0,  origMaxHeight: 0 },
-				{ name: 'links',    selector: '.wolfnet_aoLinks',    maxHeight: 0,  origMaxHeight: 0 },
-				{ name: 'info',     selector: '.wolfnet_aoInfo .wolfnet_aoActions',  maxHeight: 0,  origMaxHeight: 0 },
-				{ name: 'body',     selector: '.wolfnet_aoBody',     maxHeight: 0,  origMaxHeight: 0, alwaysResize: true },
-				{ name: 'footer',   selector: '.wolfnet_aoFooter',   maxHeight: 0,  origMaxHeight: 0 },
-				{ name: 'item',     selector: '.wolfnet_aoItem',     maxHeight: 0,  origMaxHeight: 0 }
-			],
-			$aoHeader = $aoWidget.find('.wolfnet_agentOfficeHeader');
-
-		var resizeComplete = function (data) {
-			for (var i=0, l=data.length; i<l; i++) {
-				if (data[i].hasOwnProperty('name') && (data[i].name === 'body')) {
-					$aoItems.find('.wolfnet_aoImage').height(data[i].maxHeight);
-					break;
-				}
-			}
-		};
-
-		var resizeTimeout;
-		$(window).resize(function () {
-			clearTimeout(resizeTimeout);
-			resizeTimeout = setTimeout(function () {
-				wolfnet.resizeAOItems($aoItems, itemSections, $aoHeader, resizeComplete);
-			}, 500);
-		});
-
-		wolfnet.resizeAOItems($aoItems, itemSections, $aoHeader, resizeComplete);
-
-	});
-
-</script>
