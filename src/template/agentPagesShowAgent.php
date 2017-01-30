@@ -22,10 +22,26 @@
 
 if (array_key_exists("REDIRECT_URL", $_SERVER)) {
 	$linkBase = esc_url_raw($_SERVER['REDIRECT_URL']);
-	$contactLink = $linkBase . 'contact';
+
+	//Build an array of all the parts of URL string.
+	$linkNames = preg_split("/\//", $linkBase);
+	//Get the agent name (last trailing slash).
+	$agentName = $linkNames[count($linkNames) - 2];
+	//Strip out extraneous commas and periods.
+	$agentName = preg_replace("/[\.,]/", "", $agentName);
+	$linkBase2 = "";
+	//Build the link base back up from the beginning. 
+	for ($i = 0; $i < count($linkNames) - 2; $i++) {
+		$linkBase2 = $linkBase2 . $linkNames[$i] . "/";
+	}
+	$linkBase2 = $linkBase2 . $agentName . "/";
+	$contactLink = $linkBase2 . 'contact';
 } else {
 	$linkBase = esc_url_raw($_SERVER['PHP_SELF'] . '/');
-	$contactLink = $linkBase . 'agnt/' . sanitize_text_field($_REQUEST['agentId']) . '/contact';
+	$agentName = sanitize_text_field($_REQUEST['agentId']);
+	//Strip out extraneous periods and commas.
+	$agentName = preg_replace("/[\.,]/", "", $agentName);
+	$contactLink = $linkBase . 'agnt/' . $agentName . '/contact';
 }
 
 // Remove /agent/* from link base.

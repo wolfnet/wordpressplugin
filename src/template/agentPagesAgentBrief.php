@@ -25,12 +25,6 @@
 <div class="wolfnet_aoItem">
 
 	<div class="wolfnet_aoBody">
-
-
-		<?php 
-		//Strip out the extra periods in the agentLink
-		$agentLink = preg_replace("/\./", "", $agentLink); 
-		?>
 		
 		<a href="<?php echo $agentLink; ?>">
 			<div class="wolfnet_aoImage"
