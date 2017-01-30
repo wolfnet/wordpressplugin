@@ -553,7 +553,11 @@ jQuery(function ($) {
 	var setupStickySidebar = function () {
 		updatePosition();
 
-		$window.on('resize.wntSticky', onResizeAgent);
+		var resizeTimeout;
+		$window.on('resize.wntSticky', function () {
+			clearTimeout(resizeTimeout);
+			resizeTimeout = setTimeout(onResizeAgent, 500);
+		});
 
 		onResizeAgent();
 
