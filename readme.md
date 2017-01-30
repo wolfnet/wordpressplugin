@@ -99,6 +99,10 @@ Please upgrade to the latest version of the plugin as we will be disabling our o
 * Agent search/buttons width support for Safari
 * Agent list images height adjustment to fill boxes
 
+### 1.14.9
+
+* Fixing very minor bug caused by security updates
+
 ### 1.14.8
 
 * Security updates
