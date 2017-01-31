@@ -97,6 +97,19 @@
 				wntMapContainer.mapTracks('bestFit');
 
 			}
+		},
+
+
+		// Map-Tracking
+		mapTrack: function () {
+			/*if (links.hasOwnProperty('mapTrack')) {
+				$.ajax({
+					dataType: "json",
+					type:     "POST",
+					url:      links.mapTrack,
+					data:     { mapType: $map.mapTracks('getCurrentView') }
+				});
+			}*/
 		}
 
 
