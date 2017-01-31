@@ -30,7 +30,7 @@ if (array_key_exists("REDIRECT_URL", $_SERVER)) {
 	//Strip out extraneous commas and periods.
 	$agentName = preg_replace("/[\.,]/", "", $agentName);
 	$linkBase2 = "";
-	//Build the link base back up from the beginning. 
+	//Build the link base back up from the beginning.
 	for ($i = 0; $i < count($linkNames) - 2; $i++) {
 		$linkBase2 = $linkBase2 . $linkNames[$i] . "/";
 	}
@@ -456,6 +456,8 @@ jQuery(function ($) {
 	var $agentListings = $aoWidget.find('.wolfnet_aoListings'),
 		$agentFeatured = $agentListings.find('.wolfnet_aoFeaturedListings'),
 		$agentSold = $agentListings.find('.wolfnet_aoSoldListings'),
+		$agentFeaturedGrid   = $agentFeatured.find('.wolfnet_listingGrid'),
+		$agentSoldGrid       = $agentSold.find('.wolfnet_listingGrid'),
 		$agentListingNavArea = $agentListings.find('.wolfnet_aoListingNavArea'),
 		agentFeaturedLabel = '<?php _e('Active'); ?>',
 		agentSoldLabel = '<?php _e('Sold'); ?>';
@@ -481,6 +483,7 @@ jQuery(function ($) {
 			$agentSold.hide();
 			$agentSoldBtn.removeClass('wnt-btn-active');
 			$agentFeaturedBtn.addClass('wnt-btn-active');
+			$agentFeaturedGrid.wolfnetListingGrid('refresh');
 		});
 
 		$agentSoldBtn.click(function () {
@@ -488,6 +491,7 @@ jQuery(function ($) {
 			$agentFeatured.hide();
 			$agentFeaturedBtn.removeClass('wnt-btn-active');
 			$agentSoldBtn.addClass('wnt-btn-active');
+			$agentSoldGrid.wolfnetListingGrid('refresh');
 		});
 
 	}
@@ -549,7 +553,11 @@ jQuery(function ($) {
 	var setupStickySidebar = function () {
 		updatePosition();
 
-		$window.on('resize.wntSticky', onResizeAgent);
+		var resizeTimeout;
+		$window.on('resize.wntSticky', function () {
+			clearTimeout(resizeTimeout);
+			resizeTimeout = setTimeout(onResizeAgent, 500);
+		});
 
 		onResizeAgent();
 

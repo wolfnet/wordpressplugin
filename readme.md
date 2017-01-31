@@ -97,6 +97,7 @@ Please upgrade to the latest version of the plugin as we will be disabling our o
 
 * WordPress "Twenty Seventeen" theme support
 * Agent search/buttons width support for Safari
+* Agent list images height adjustment to fill boxes
 
 ### 1.14.9
 
