@@ -49,6 +49,7 @@ class Wolfnet_Ajax
 			'wolfnet_css'                     => 'remotePublicCss',
 			'wolfnet_market_name'             => 'remoteGetMarketName',
 			'wolfnet_map_enabled'             => 'remoteMapEnabled',
+			'wolfnet_map_track'               => 'remoteMapTrack',
 			'wolfnet_price_range'             => 'remotePriceRange',
 			'wolfnet_base_url'                => 'remoteGetBaseUrl',
 			'wolfnet_route_quicksearch'       => 'remoteRouteQuickSearch',
@@ -612,6 +613,32 @@ class Wolfnet_Ajax
         wp_send_json($response);
 
     }
+
+
+	public function remoteMapTrack()
+	{
+
+		$map_data = array();
+
+
+		if (array_key_exists('page_type', $_REQUEST)) {
+			$map_data['page_type'] = sanitize_text_field($_REQUEST['page_type']);
+		}
+		if (array_key_exists('map_type', $_REQUEST)) {
+			$map_data['map_type'] = sanitize_text_field($_REQUEST['map_type']);
+		}
+		if (array_key_exists('mt_version', $_REQUEST)) {
+			$map_data['mt_version'] = sanitize_text_field($_REQUEST['mt_version']);
+		}
+		if (array_key_exists('provider', $_REQUEST)) {
+			$map_data['provider'] = sanitize_text_field($_REQUEST['provider']);
+		}
+
+		$result = $GLOBALS['wolfnet']->data->sendMapTrack($map_data);
+
+		wp_send_json($result);
+
+	}
 
 
     public function remoteGetBaseUrl()

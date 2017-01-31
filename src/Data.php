@@ -229,6 +229,16 @@ class Wolfnet_Data
     }
 
 
+	public function sendMapTrack($map_data)
+	{
+
+		$productKey = json_decode($this->plugin->keyService->getDefault());
+
+		return $this->plugin->api->sendRequest($productKey, '/user/map_track', 'POST', $map_data);
+
+	}
+
+
     public function getOwnerTypes()
     {
         return array(

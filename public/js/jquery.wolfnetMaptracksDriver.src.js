@@ -31,6 +31,14 @@
 				// Bind map auto size to window resize for all maps
 				$(window).resize(methods.responsiveMaps);
 
+				// Run mapTrack
+				methods.mapTrack.call(this);
+
+				// Avoid double-logging on page load
+				setTimeout(function () {
+					$(this).on('moveEnd zoomEnd currentView mapControlChanged', methods.mapTrack);
+				}, 500);
+
 			});
 		},
 
@@ -102,14 +110,17 @@
 
 		// Map-Tracking
 		mapTrack: function () {
-			/*if (links.hasOwnProperty('mapTrack')) {
-				$.ajax({
-					dataType: "json",
-					type:     "POST",
-					url:      links.mapTrack,
-					data:     { mapType: $map.mapTracks('getCurrentView') }
-				});
-			}*/
+			$.ajax({
+				url: wolfnet_ajax.ajaxurl,
+				type: 'post',
+				data: {
+					action: 'wolfnet_map_track',
+					map_type: $(this).mapTracks('getCurrentView')
+				},
+				dataType: 'json',
+				cache: false,
+				timeout: 2500
+			});
 		}
 
 
