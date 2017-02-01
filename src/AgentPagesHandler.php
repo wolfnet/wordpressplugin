@@ -49,7 +49,8 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
             unset($query['agnts']);
         }
         if(array_key_exists('agnt', $query)) {
-            $query['agent'] = $query['agnt'];
+            $agentName = preg_replace("/[\.,]/", "", $query['agnt']);
+            $query['agent'] = $agentName; //$query['agnt']; 
             unset($query['agnt']);
         }
 
@@ -362,11 +363,12 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
 
     protected function contactForm()
     {
-        $agentData = $this->getAgentById(sanitize_text_field($_REQUEST['contact']));
+        $agentName = preg_replace("/[\.,]/", "", $_REQUEST['contact']);
+        $agentData = $this->getAgentById(sanitize_text_field($agentName));
 
         $args = array(
             'agent' => $agentData,
-            'agentId' => sanitize_text_field($_REQUEST['contact']),
+            'agentId' => sanitize_text_field($agentName),
             'officeId' => (array_key_exists('officeId', $_REQUEST)) ? sanitize_text_field($_REQUEST['officeId']) : '',
         );
         $args = array_merge($args, $this->args);
