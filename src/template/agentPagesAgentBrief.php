@@ -25,18 +25,6 @@
 <div class="wolfnet_aoItem">
 
 	<div class="wolfnet_aoBody">
-		
-	<?php
-	 	$agentArray = preg_split("/\//", $agentLink);
-		$agentName = $agentArray[count($agentArray) - 2];
-		$agentName = preg_replace("/[\.,]/", "", $agentName);
-		$agentLink = "http://" . $_SERVER['HTTP_HOST'];
-		for ($i = 0; $i < count($agentArray) - 2; $i++) {
-			$agentLink .= $agentArray[$i] . "/";
-		}
-		$agentLink .= $agentName;
-		$contactLink = $agentLink . "/contact/";
-	?>
 
 		<a href="<?php echo $agentLink; ?>">
 			<div class="wolfnet_aoImage"

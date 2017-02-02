@@ -678,6 +678,7 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
 
         foreach($args as $key => $value) {
             if(strlen($value) > 0) {
+                $value = preg_replace("/[\.,]/", "", $value);
                 $agentPagesLink .= "$key/$value/";
             } else {
                 $agentPagesLink .= "$key/";
