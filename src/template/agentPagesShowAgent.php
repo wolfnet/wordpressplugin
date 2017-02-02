@@ -29,6 +29,7 @@ if (array_key_exists("REDIRECT_URL", $_SERVER)) {
 	$agentName = $linkNames[count($linkNames) - 2];
 	//Strip out extraneous commas and periods.
 	$agentName = preg_replace("/[\.,]/", "", $agentName);
+	$agentName = sanitize_text_field($agentName);
 	$linkBase2 = "";
 	//Build the link base back up from the beginning.
 	for ($i = 0; $i < count($linkNames) - 2; $i++) {
