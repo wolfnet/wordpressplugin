@@ -183,6 +183,7 @@
 						border-bottom-left-radius: 0;
 						border-top-right-radius: @btnRadius;
 						border-bottom-right-radius: @btnRadius;
+						font-size: 1em;
 					}
 
 				}
@@ -275,11 +276,11 @@
 				text-indent: -1.8em;
 				margin-left: 1.8em;
 				list-style: none;
-				font-size: 0.9em;
+				font-size: 0.9rem;
 
 				.wnt-icon {
 					margin-right: 6px;
-					font-size: 1.15em;
+					font-size: 1.15rem;
 					color: @accentColor;
 				}
 
@@ -452,6 +453,10 @@
 
 		}
 
+		.wolfnet_aoViewAll {
+			margin-bottom: 1em;
+		}
+
 		.wolfnet_top {
 			float: right;
 			margin-top: 0.1em;
@@ -488,7 +493,8 @@
 			.wolfnet_aoExtLinks,
 			.wolfnet_aoContact {
 				display: inline-block;
-				width: 280px;
+				width: 100%;
+				max-width: 280px;
 				text-align: left;
 			}
 
@@ -662,13 +668,10 @@
 
     }
 
-}
 
+	// XL size and up
 
-// XL size and up
-@media screen and (min-width: @screenXlMin) {
-
-	.wolfnet_widget {
+	&.wnt-ao-xl {
 
 		&.wolfnet_aoOfficesList {
 
@@ -701,19 +704,14 @@
 
 	}
 
-}
+
+	// Up to and including Lg size should be handled above as the defaults
 
 
-// Up to and including Lg size - this should be handled above as the defaults
-@media screen and (max-width: @screenLgMax) {
-
-}
-
-
-// Up to and including Md size
-@media screen and (max-width: @screenMdMax) {
-
-	.wolfnet_widget {
+	// Up to and including Md size
+	&.wnt-ao-md,
+	&.wnt-ao-sm,
+	&.wnt-ao-xs {
 
 		&.wolfnet_aoOfficesList
 		&.wolfnet_aoAgentsList {
@@ -736,13 +734,9 @@
 
 	}
 
-}
 
-
-// Md size only
-@media screen and (min-width: @screenMdMin) and (max-width: @screenMdMax) {
-
-	.wolfnet_widget {
+	// Md size only
+	&.wnt-ao-md {
 
 		&.wolfnet_aoOfficesList,
 		&.wolfnet_aoAgentsList {
@@ -789,19 +783,16 @@
 
 	}
 
-}
 
-
-// Up to and including Sm Size
-@media screen and (max-width: @screenSmMax) {
-
-	.wolfnet_widget {
+	// Up to and including Sm Size
+	&.wnt-ao-sm,
+	&.wnt-ao-xs {
 
 		&.wolfnet_aoOfficesList,
 		&.wolfnet_aoAgentsList {
 
             .wolfnet_agentOfficeHeader {
-				min-width: auto;
+				min-width: 0;
 
                 .wolfnet_agentOfficeNav {
                     float: none;
@@ -839,13 +830,9 @@
 
     }
 
-}
 
-
-// Sm size only
-@media screen and (min-width: @screenSmMin) and (max-width: @screenSmMax) {
-
-	.wolfnet_widget {
+	// Sm size only
+	&.wnt-ao-sm {
 
 		&.wolfnet_aoOfficesList {
 
@@ -905,13 +892,9 @@
 
 	}
 
-}
 
-
-// Xs size and below
-@media screen and (max-width: @screenXsMax) {
-
-	.wolfnet_widget {
+	// Xs size and below
+	&.wnt-ao-xs {
 
 		&.wolfnet_aoOfficesList,
 		&.wolfnet_aoAgentsList {
@@ -997,7 +980,7 @@
 						text-indent: -1.8em;
 						margin-left: 1.8em;
 						list-style: none;
-						font-size: 0.9em;
+						font-size: 0.9rem;
 
 						.wnt-icon {
 							margin-right: 6px;
@@ -1055,6 +1038,7 @@
 	}
 
 }
+
 
 // Any screen (excludes printing and other non-screen presentations)
 @media screen {

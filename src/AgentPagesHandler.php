@@ -49,7 +49,8 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
             unset($query['agnts']);
         }
         if(array_key_exists('agnt', $query)) {
-            $query['agent'] = $query['agnt'];
+            $agentName = preg_replace("/[\.,]/", "", $query['agnt']);
+            $query['agent'] = $agentName; //$query['agnt']; 
             unset($query['agnt']);
         }
 
@@ -107,6 +108,8 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
             $action = 'officeList';
 
         }
+
+		wp_enqueue_script('wolfnet-agent-office');
 
         // Run the function associated with the action.
         return $this->$action();
@@ -312,7 +315,9 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
     {
         global $wp_query;
 
-        $agentData = $this->getAgentById(sanitize_text_field($_REQUEST['agentId']));
+        //Strip out extraneous periods and commas
+        $agentName = preg_replace("/[\.,]/", "", $_REQUEST['agentId']);
+        $agentData = $this->getAgentById(sanitize_text_field($agentName));
 
         // We need to get a product key that we can pull this agent's listings with.
         // Each key entered into the Settings page has a market name associated with it.
@@ -358,11 +363,12 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
 
     protected function contactForm()
     {
-        $agentData = $this->getAgentById(sanitize_text_field($_REQUEST['contact']));
+        $agentName = preg_replace("/[\.,]/", "", $_REQUEST['contact']);
+        $agentData = $this->getAgentById(sanitize_text_field($agentName));
 
         $args = array(
             'agent' => $agentData,
-            'agentId' => sanitize_text_field($_REQUEST['contact']),
+            'agentId' => sanitize_text_field($agentName),
             'officeId' => (array_key_exists('officeId', $_REQUEST)) ? sanitize_text_field($_REQUEST['officeId']) : '',
         );
         $args = array_merge($args, $this->args);
@@ -672,6 +678,7 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
 
         foreach($args as $key => $value) {
             if(strlen($value) > 0) {
+                $value = preg_replace("/[\.,]/", "", $value);
                 $agentPagesLink .= "$key/$value/";
             } else {
                 $agentPagesLink .= "$key/";
