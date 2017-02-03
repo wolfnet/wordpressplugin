@@ -97,6 +97,13 @@ Please upgrade to the latest version of the plugin as we will be disabling our o
 
 * New option to hide the offices list, regardless of the number of offices
 
+### 1.15.0
+
+* WordPress "Twenty Seventeen" theme support
+* Agent search/buttons width support for Safari
+* Agent list images height adjustment to fill boxes
+* Fixed agent details page URLs that used commas and/or periods
+
 ### 1.14.9
 
 * Fixing very minor bug caused by security updates
