@@ -22,10 +22,27 @@
 
 if (array_key_exists("REDIRECT_URL", $_SERVER)) {
 	$linkBase = esc_url_raw($_SERVER['REDIRECT_URL']);
-	$contactLink = $linkBase . 'contact';
+
+	//Build an array of all the parts of URL string.
+	$linkNames = preg_split("/\//", $linkBase);
+	//Get the agent name (last trailing slash).
+	$agentName = $linkNames[count($linkNames) - 2];
+	//Strip out extraneous commas and periods.
+	$agentName = preg_replace("/[\.,]/", "", $agentName);
+	$agentName = sanitize_text_field($agentName);
+	$linkBase2 = "";
+	//Build the link base back up from the beginning.
+	for ($i = 0; $i < count($linkNames) - 2; $i++) {
+		$linkBase2 = $linkBase2 . $linkNames[$i] . "/";
+	}
+	$linkBase2 = $linkBase2 . $agentName . "/";
+	$contactLink = $linkBase2 . 'contact';
 } else {
 	$linkBase = esc_url_raw($_SERVER['PHP_SELF'] . '/');
-	$contactLink = $linkBase . 'agnt/' . sanitize_text_field($_REQUEST['agentId']) . '/contact';
+	$agentName = sanitize_text_field($_REQUEST['agentId']);
+	//Strip out extraneous periods and commas.
+	$agentName = preg_replace("/[\.,]/", "", $agentName);
+	$contactLink = $linkBase . 'agnt/' . $agentName . '/contact';
 }
 
 // Remove /agent/* from link base.
@@ -96,7 +113,7 @@ if (!function_exists('formatUrl')) {
 
 ?>
 
-		<div class="wolfnet_viewAll">
+		<div class="wolfnet_aoViewAll">
 			<a href="<?php echo $agentsLink; ?>">Click here</a> to view all agents and staff.
 		</div>
 
@@ -440,6 +457,8 @@ jQuery(function ($) {
 	var $agentListings = $aoWidget.find('.wolfnet_aoListings'),
 		$agentFeatured = $agentListings.find('.wolfnet_aoFeaturedListings'),
 		$agentSold = $agentListings.find('.wolfnet_aoSoldListings'),
+		$agentFeaturedGrid   = $agentFeatured.find('.wolfnet_listingGrid'),
+		$agentSoldGrid       = $agentSold.find('.wolfnet_listingGrid'),
 		$agentListingNavArea = $agentListings.find('.wolfnet_aoListingNavArea'),
 		agentFeaturedLabel = '<?php _e('Active'); ?>',
 		agentSoldLabel = '<?php _e('Sold'); ?>';
@@ -465,6 +484,7 @@ jQuery(function ($) {
 			$agentSold.hide();
 			$agentSoldBtn.removeClass('wnt-btn-active');
 			$agentFeaturedBtn.addClass('wnt-btn-active');
+			$agentFeaturedGrid.wolfnetListingGrid('refresh');
 		});
 
 		$agentSoldBtn.click(function () {
@@ -472,6 +492,7 @@ jQuery(function ($) {
 			$agentFeatured.hide();
 			$agentFeaturedBtn.removeClass('wnt-btn-active');
 			$agentSoldBtn.addClass('wnt-btn-active');
+			$agentSoldGrid.wolfnetListingGrid('refresh');
 		});
 
 	}
@@ -533,7 +554,11 @@ jQuery(function ($) {
 	var setupStickySidebar = function () {
 		updatePosition();
 
-		$window.on('resize.wntSticky', onResizeAgent);
+		var resizeTimeout;
+		$window.on('resize.wntSticky', function () {
+			clearTimeout(resizeTimeout);
+			resizeTimeout = setTimeout(onResizeAgent, 500);
+		});
 
 		onResizeAgent();
 
