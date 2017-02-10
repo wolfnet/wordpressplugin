@@ -172,7 +172,17 @@
 	jQuery (function ($) {
 
 		var $form          = $('.wolfnet_agentPagesOptions');
+		var $officeToggle  = $form.find('input, select').filter('[name="<?php echo $showoffices_wpname; ?>"]');
+		var $officeFields  = $form.find('.wnt-office-field');
 		var $submitButton  = $form.find('button, input').filter('[type="submit"]');
+
+		$officeToggle.change(function () {
+			if ($officeToggle.val() === 'true') {
+				$officeFields.fadeIn();
+			} else {
+				$officeFields.fadeOut();
+			}
+		});
 
 		<?php if (count($offices) > 1): ?>
 			$submitButton.click(function () {
