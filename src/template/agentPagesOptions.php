@@ -29,7 +29,6 @@
 		 name="<?php echo $excludeoffices_wpname; ?>" value="" />
 	<?php endif; ?>
 
-	<h2 class="title">Agents/Office List</h2>
 
 	<table class="form-table">
 
@@ -127,8 +126,8 @@
 
 	</table>
 
+	<hr />
 
-	<h2 class="title">Agent Details Page</h2>
 
 	<table class="form-table">
 
