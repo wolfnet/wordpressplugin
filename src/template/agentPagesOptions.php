@@ -23,12 +23,14 @@
 ?>
 
 <div id="<?php echo $instance_id; ?>" class="wolfnet_agentPagesOptions">
-    <?php if(count($offices) > 1): ?>
-    <input type="hidden" id="<?php echo $excludeoffices_wpid; ?>" class="officeids" name="<?php echo $excludeoffices_wpname; ?>" value="" />
-    <?php endif; ?>
 
-    <table class="form-table">
-        <tr>
+	<?php if (count($offices) > 1): ?>
+		<input type="hidden" id="<?php echo $excludeoffices_wpid; ?>" class="officeids"
+		 name="<?php echo $excludeoffices_wpname; ?>" value="" />
+	<?php endif; ?>
+
+	<table class="form-table">
+
             <th scope="row">
                 <label for="<?php echo $officetitle_wpid; ?>">
                     Office list title:
@@ -40,6 +42,7 @@
                     value="<?php echo $officetitle; ?>" type="text" class="regular-text" />
             </td>
         </tr>
+
         <tr>
             <th scope="row">
                 <label for="<?php echo $agenttitle_wpid; ?>">
@@ -52,6 +55,7 @@
                     value="<?php echo $agenttitle; ?>" type="text" class="regular-text" />
             </td>
         </tr>
+
         <tr>
             <th scope="row">
                 <label for="<?php echo $detailtitle_wpid; ?>">
@@ -106,6 +110,7 @@
         <?php
         }
         ?>
+
         <tr>
             <th scope="row">
                 <label for="<?php echo $numperpage_wpid; ?>">Agents per page:</label>
@@ -118,6 +123,7 @@
                 </select>
             </td>
         </tr>
+
         <tr>
             <th scope="row">
                 <label for="<?php echo $agentsort_wpid; ?>">Sort agents by:</label>
@@ -130,6 +136,7 @@
                 </select>
             </td>
         </tr>
+
         <tr>
             <th scope="row">
                 <label for="<?php echo $activelistings_wpid; ?>">Show active listings:</label>
@@ -141,46 +148,49 @@
                 </select>
             </td>
         </tr>
-        <?php
-        if($showSoldOption) {
-        ?>
-        <tr>
-            <th scope="row">
-                <label for="<?php echo $soldlistings_wpid; ?>">Show sold listings:</label>
-            </th>
-            <td>
-                <select id="<?php echo $soldlistings_wpid; ?>" name="<?php echo $soldlistings_wpname; ?>">
-                    <option value="true"<?php if ($soldlistings) echo ' selected="selected"'; ?>>Yes</option>
-                    <option value="false"<?php if (!$soldlistings) echo ' selected="selected"'; ?>>No</option>
-                </select>
-            </td>
-        </tr>
-        <?php
-        }
-        ?>
-    </table>
+
+		<?php if ($showSoldOption) { ?>
+			<tr>
+				<th scope="row">
+					<label for="<?php echo $soldlistings_wpid; ?>">Show sold listings:</label>
+				</th>
+				<td>
+					<select id="<?php echo $soldlistings_wpid; ?>" name="<?php echo $soldlistings_wpname; ?>">
+						<option value="true"<?php if ($soldlistings) echo ' selected="selected"'; ?>>Yes</option>
+						<option value="false"<?php if (!$soldlistings) echo ' selected="selected"'; ?>>No</option>
+					</select>
+				</td>
+			</tr>
+		<?php } ?>
+
+	</table>
+
 </div>
 
-<?php if(count($offices) > 1): ?>
+
 <script type="text/javascript">
 
-    jQuery(function($){
-        $("button[type=submit],input[type=submit]").click(function() {
-            var <?php echo $instance_id; ?> = [];
-            var array = <?php echo $instance_id; ?>;
+	jQuery (function ($) {
 
-            $('.officeexclude').each(function() {
-                if($(this).prop('checked')) {
-                    if(array.indexOf($(this).val()) == -1) {
-                        array.push($(this).val());
-                    }
-                }
-            });
+		var $form          = $('.wolfnet_agentPagesOptions');
+		var $submitButton  = $form.find('button, input').filter('[type="submit"]');
 
-            $('#<?php echo $excludeoffices_wpid; ?>').val(array.join(','));
+		<?php if (count($offices) > 1): ?>
+			$submitButton.click(function () {
+				var <?php echo $instance_id; ?> = [];
+				var array = <?php echo $instance_id; ?>;
 
-        });
-    });
+				$('.officeexclude').each(function () {
+					if ($(this).prop('checked') && (array.indexOf($(this).val()) == -1) {
+						array.push($(this).val());
+					}
+				});
+
+				$('#<?php echo $excludeoffices_wpid; ?>').val(array.join(','));
+
+			});
+		<?php endif; ?>
+
+	});
 
 </script>
-<?php endif; ?>
