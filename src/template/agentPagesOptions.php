@@ -31,6 +31,47 @@
 
 	<table class="form-table">
 
+		<tr>
+			<th scope="row">
+				<label for="<?php echo $showoffices_wpid; ?>">
+					Show office list:
+				</label>
+			</th>
+			<td>
+				<select id="<?php echo $showoffices_wpid; ?>" name="<?php echo $showoffices_wpname; ?>">
+					<option value="true"<?php if ($showoffices) echo ' selected="selected"'?>>Yes</option>
+					<option value="false"<?php if (!$showoffices) echo ' selected="selected"'?>>No</option>
+				</select>
+			</td>
+		</tr>
+
+		<?php if (count($offices) > 1) { ?>
+			<tr scope="row" class="wnt-office-field">
+				<th>
+					<label>Exclude offices:</label>
+				</th>
+				<td>
+					<?php
+						$selectedOffices = array_unique(explode(",", $excludeoffices), SORT_STRING);
+						foreach ($offices as $office) {
+							if (strlen($office['office_id']) > 0) {
+								echo '<input id="officeexclude_' . $office['office_id'] . '"';
+								echo ' type="checkbox" class="officeexclude"';
+								if (in_array($office['office_id'], $selectedOffices)) {
+									echo ' checked="checked"';
+								}
+								echo ' value="' . $office['office_id'] . '" /> ';
+								echo '<label for="officeexclude_' . $office['office_id'] . '">';
+								echo $office['name'] . ' (' . $office['office_id'] . ')';
+								echo '</label><br />';
+							}
+						}
+					?>
+				</td>
+			</tr>
+		<?php } ?>
+
+		<tr class="wnt-office-field">
             <th scope="row">
                 <label for="<?php echo $officetitle_wpid; ?>">
                     Office list title:
@@ -68,48 +109,6 @@
                     value="<?php echo $detailtitle; ?>" type="text" class="regular-text" />
             </td>
         </tr>
-		<tr>
-			<th scope="row">
-				<label for="<?php echo $showoffices_wpid; ?>">
-					Show office list:
-				</label>
-			</th>
-			<td>
-				<select id="<?php echo $showoffices_wpid; ?>" name="<?php echo $showoffices_wpname; ?>">
-					<option value="true"<?php if ($showoffices) echo ' selected="selected"'?>>Yes</option>
-					<option value="false"<?php if (!$showoffices) echo ' selected="selected"'?>>No</option>
-				</select>
-			</td>
-		</tr>
-        <?php
-        if(count($offices) > 1) {
-        ?>
-            <tr scope="row">
-                <th>
-                    <label>Exclude offices:</label>
-                </th>
-                <td>
-                    <?php
-                    $selectedOffices = array_unique(explode(",", $excludeoffices), SORT_STRING);
-                    foreach ($offices as $office) {
-                        if (strlen($office['office_id']) > 0) {
-                            echo '<input id="officeexclude_' . $office['office_id'] . '"';
-                            echo ' type="checkbox" class="officeexclude"';
-                            if (in_array($office['office_id'], $selectedOffices)) {
-                                echo ' checked="checked"';
-                            }
-                            echo ' value="' . $office['office_id'] . '" /> ';
-                            echo '<label for="officeexclude_' . $office['office_id'] . '">';
-                            echo $office['name'] . ' (' . $office['office_id'] . ')';
-                            echo '</label><br />';
-                        }
-                    }
-                    ?>
-                </td>
-            </tr>
-        <?php
-        }
-        ?>
 
         <tr>
             <th scope="row">
