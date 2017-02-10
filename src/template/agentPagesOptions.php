@@ -35,22 +35,21 @@
 
 		<tr>
 			<th scope="row">
-				<label for="<?php echo $showoffices_wpid; ?>">
-					Show office list:
-				</label>
+				<label>Office:</label>
 			</th>
 			<td>
-				<select id="<?php echo $showoffices_wpid; ?>" name="<?php echo $showoffices_wpname; ?>">
-					<option value="true"<?php if ($showoffices) echo ' selected="selected"'?>>Yes</option>
-					<option value="false"<?php if (!$showoffices) echo ' selected="selected"'?>>No</option>
-				</select>
+				<label for="<?php echo $showoffices_wpid; ?>">
+					<input type="checkbox" id="<?php echo $showoffices_wpid; ?>" name="<?php echo $showoffices_wpname; ?>"
+					 value="true" <?php if ($showoffices) echo 'checked="checked"'?> />
+					Show office list
+				</label>
 			</td>
 		</tr>
 
 		<?php if (count($offices) > 1) { ?>
-			<tr scope="row" class="wnt-office-field">
-				<th>
-					<label>Exclude offices:</label>
+			<tr class="wnt-office-field">
+				<th scope="row">
+					<label>Offices to Exclude:</label>
 				</th>
 				<td>
 					<?php
@@ -95,20 +94,24 @@
 				 name="<?php echo $agenttitle_wpname; ?>"
 				 value="<?php echo $agenttitle; ?>" type="text" class="regular-text" />
 			</td>
-        </tr>
+		</tr>
 
-        <tr>
-            <th scope="row">
-                <label for="<?php echo $numperpage_wpid; ?>">Agents per page:</label>
-            </th>
-            <td>
-                <select id="<?php echo $numperpage_wpid; ?>" name="<?php echo $numperpage_wpname; ?>">
-                    <option value="10"<?php if($numperpage == 10) echo ' selected="selected"'; ?>>10</option>
-                    <option value="20"<?php if($numperpage == 20) echo ' selected="selected"'; ?>>20</option>
-                    <option value="30"<?php if($numperpage == 30) echo ' selected="selected"'; ?>>30</option>
-                </select>
-            </td>
-        </tr>
+		<tr>
+			<th scope="row">
+				<label for="<?php echo $numperpage_wpid; ?>">Agent list shows at most:</label>
+			</th>
+			<td>
+				<select id="<?php echo $numperpage_wpid; ?>" name="<?php echo $numperpage_wpname; ?>">
+					<option value="10"<?php if($numperpage == 10) echo ' selected="selected"'; ?>>10</option>
+					<option value="20"<?php if($numperpage == 20) echo ' selected="selected"'; ?>>20</option>
+					<option value="30"<?php if($numperpage == 30) echo ' selected="selected"'; ?>>30</option>
+				</select>
+				<label for="<?php echo $numperpage_wpid; ?>">
+					agents per page
+				</label>
+			</td>
+		</tr>
+
 		<tr>
 			<th scope="row">
 				<label for="<?php echo $agentsort_wpid; ?>">Sort agents by:</label>
