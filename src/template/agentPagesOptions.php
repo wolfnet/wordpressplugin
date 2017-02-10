@@ -29,6 +29,8 @@
 		 name="<?php echo $excludeoffices_wpname; ?>" value="" />
 	<?php endif; ?>
 
+	<h2 class="title">Agents/Office List</h2>
+
 	<table class="form-table">
 
 		<tr>
@@ -80,7 +82,7 @@
 				 name="<?php echo $officetitle_wpname; ?>"
 				 value="<?php echo $officetitle; ?>" type="text" class="regular-text" />
 			</td>
-        </tr>
+		</tr>
 
 		<tr>
 			<th scope="row">
@@ -93,19 +95,6 @@
 				 name="<?php echo $agenttitle_wpname; ?>"
 				 value="<?php echo $agenttitle; ?>" type="text" class="regular-text" />
 			</td>
-        </tr>
-
-        <tr>
-            <th scope="row">
-                <label for="<?php echo $detailtitle_wpid; ?>">
-                    Agent detail title:
-                </label>
-            </th>
-            <td>
-                <input id="<?php echo $detailtitle_wpid; ?>"
-                    name="<?php echo $detailtitle_wpname; ?>"
-                    value="<?php echo $detailtitle; ?>" type="text" class="regular-text" />
-            </td>
         </tr>
 
         <tr>
@@ -133,18 +122,37 @@
 			</td>
 		</tr>
 
+	</table>
 
-        <tr>
-            <th scope="row">
-                <label for="<?php echo $activelistings_wpid; ?>">Show active listings:</label>
-            </th>
-            <td>
-                <select id="<?php echo $activelistings_wpid; ?>" name="<?php echo $activelistings_wpname; ?>">
-                    <option value="true"<?php if ($activelistings) echo ' selected="selected"'; ?>>Yes</option>
-                    <option value="false"<?php if (!$activelistings) echo ' selected="selected"'; ?>>No</option>
-                </select>
-            </td>
-        </tr>
+
+	<h2 class="title">Agent Details Page</h2>
+
+	<table class="form-table">
+
+		<tr>
+			<th scope="row">
+				<label for="<?php echo $detailtitle_wpid; ?>">
+					Agent Details Title:
+				</label>
+			</th>
+			<td>
+				<input id="<?php echo $detailtitle_wpid; ?>"
+				 name="<?php echo $detailtitle_wpname; ?>"
+				 value="<?php echo $detailtitle; ?>" type="text" class="regular-text" />
+			</td>
+		</tr>
+
+		<tr>
+			<th scope="row">
+				<label for="<?php echo $activelistings_wpid; ?>">Show active listings:</label>
+			</th>
+			<td>
+				<select id="<?php echo $activelistings_wpid; ?>" name="<?php echo $activelistings_wpname; ?>">
+					<option value="true"<?php if ($activelistings) echo ' selected="selected"'; ?>>Yes</option>
+					<option value="false"<?php if (!$activelistings) echo ' selected="selected"'; ?>>No</option>
+				</select>
+			</td>
+		</tr>
 
 		<?php if ($showSoldOption) { ?>
 			<tr>
