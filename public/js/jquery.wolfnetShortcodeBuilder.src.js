@@ -265,19 +265,19 @@ jQuery(function($){
 
         this.find('input, select').each(function(){
 
-            if (this.name != '' && $.inArray(this.name, exclAttr) == -1) {
+			if (this.name !== '' && $.inArray(this.name, exclAttr) === -1) {
 
                 switch (this.type) {
 
                     default:
-                        if (this.value.trim() != '') {
+						if (this.value.trim() !== '') {
                             attrs[this.name] = this.value.trim();
                         }
                         break;
 
                     case 'checkbox':
                     case 'radio':
-                        if (this.checked == true) {
+						if (this.checked === true) {
                             attrs[this.name] = this.value;
                         }
                         break;
