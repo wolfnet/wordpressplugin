@@ -37,10 +37,15 @@
 				<label>Lists:</label>
 			</th>
 			<td>
-				<label for="<?php echo $showoffices_wpid; ?>">
-					<input type="checkbox" id="<?php echo $showoffices_wpid; ?>" name="<?php echo $showoffices_wpname; ?>"
+				<label for="<?php echo $showoffices_wpid; ?>" style="white-space: nowrap; margin-right: 1em;">
+					<input type="radio" id="<?php echo $showoffices_wpid; ?>" name="<?php echo $showoffices_wpname; ?>"
 					 value="true" <?php if ($showoffices) echo 'checked="checked"'?> />
-					Show office list
+					List agents and offices
+				</label>
+				<label for="<?php echo $showoffices_wpid; ?>_f" style="white-space: nowrap;">
+					<input type="radio" id="<?php echo $showoffices_wpid; ?>_f" name="<?php echo $showoffices_wpname; ?>"
+					 value="false" <?php if (!$showoffices) echo 'checked="checked"'?> />
+					List agents only
 				</label>
 			</td>
 		</tr>
@@ -159,26 +164,27 @@
 				<label>Agent Listings:</label>
 			</th>
 			<td>
-				<select id="<?php echo $activelistings_wpid; ?>" name="<?php echo $activelistings_wpname; ?>">
-					<option value="true"<?php if ($activelistings) echo ' selected="selected"'; ?>>Yes</option>
-					<option value="false"<?php if (!$activelistings) echo ' selected="selected"'; ?>>No</option>
-				</select>
+				<p>
+					<label for="<?php echo $activelistings_wpid; ?>">
+						<input type="checkbox" id="<?php echo $activelistings_wpid; ?>" name="<?php echo $activelistings_wpname; ?>"
+						 value="true" data-fallback-value="false"
+						 <?php if ($activelistings) echo 'checked="checked"'; ?> />
+						Show active listings
+					</label>
+				</p>
+				<?php if ($showSoldOption) { ?>
+					<p>
+						<label for="<?php echo $soldlistings_wpid; ?>">
+							<input type="checkbox" id="<?php echo $soldlistings_wpid; ?>" name="<?php echo $soldlistings_wpname; ?>"
+							 value="true" data-fallback-value="false"
+							 <?php if ($soldlistings) echo 'checked="checked"'; ?> />
+							Show sold listings
+						</label>
+					</p>
+				<?php } ?>
 			</td>
 		</tr>
 
-		<?php if ($showSoldOption) { ?>
-			<tr>
-				<th scope="row">
-					<label for="<?php echo $soldlistings_wpid; ?>">Show sold listings:</label>
-				</th>
-				<td>
-					<select id="<?php echo $soldlistings_wpid; ?>" name="<?php echo $soldlistings_wpname; ?>">
-						<option value="true"<?php if ($soldlistings) echo ' selected="selected"'; ?>>Yes</option>
-						<option value="false"<?php if (!$soldlistings) echo ' selected="selected"'; ?>>No</option>
-					</select>
-				</td>
-			</tr>
-		<?php } ?>
 
 	</table>
 
