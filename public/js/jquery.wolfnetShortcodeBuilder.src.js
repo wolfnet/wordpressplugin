@@ -279,6 +279,8 @@ jQuery(function($){
                     case 'radio':
 						if (this.checked === true) {
                             attrs[this.name] = this.value;
+						} else if (this.hasAttribute('data-fallback-value')) {
+							attrs[this.name] = this.getAttribute('data-fallback-value');
                         }
                         break;
 
