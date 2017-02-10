@@ -34,7 +34,7 @@
 
 		<tr>
 			<th scope="row">
-				<label>Office:</label>
+				<label>Lists:</label>
 			</th>
 			<td>
 				<label for="<?php echo $showoffices_wpid; ?>">
@@ -85,7 +85,7 @@
 		<tr>
 			<th scope="row">
 				<label for="<?php echo $agenttitle_wpid; ?>">
-					Agent List Title:
+					Agent List Heading:
 				</label>
 			</th>
 			<td>
@@ -134,7 +134,7 @@
 		<tr>
 			<th scope="row">
 				<label for="<?php echo $detailtitle_wpid; ?>">
-					Agent Details Title:
+					Agent Details Heading:
 				</label>
 			</th>
 			<td>
@@ -146,7 +146,7 @@
 
 		<tr>
 			<th scope="row">
-				<label for="<?php echo $activelistings_wpid; ?>">Show active listings:</label>
+				<label>Agent Listings:</label>
 			</th>
 			<td>
 				<select id="<?php echo $activelistings_wpid; ?>" name="<?php echo $activelistings_wpname; ?>">
