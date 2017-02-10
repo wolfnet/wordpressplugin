@@ -24,7 +24,7 @@
 
 <div id="<?php echo $instance_id; ?>" class="wolfnet_agentPagesOptions">
 
-	<?php if (count($offices) > 1): ?>
+	<?php if(count($offices) > 1): ?>
 		<input type="hidden" id="<?php echo $excludeoffices_wpid; ?>" class="officeids"
 		 name="<?php echo $excludeoffices_wpname; ?>" value="" />
 	<?php endif; ?>
@@ -72,29 +72,27 @@
 		<?php } ?>
 
 		<tr class="wnt-office-field">
-            <th scope="row">
-                <label for="<?php echo $officetitle_wpid; ?>">
-                    Office list title:
-                </label>
-            </th>
-            <td>
-                <input id="<?php echo $officetitle_wpid; ?>"
-                    name="<?php echo $officetitle_wpname; ?>"
-                    value="<?php echo $officetitle; ?>" type="text" class="regular-text" />
-            </td>
+			<th scope="row">
+				<label for="<?php echo $officetitle_wpid; ?>">Office List Title:</label>
+			</th>
+			<td>
+				<input id="<?php echo $officetitle_wpid; ?>"
+				 name="<?php echo $officetitle_wpname; ?>"
+				 value="<?php echo $officetitle; ?>" type="text" class="regular-text" />
+			</td>
         </tr>
 
-        <tr>
-            <th scope="row">
-                <label for="<?php echo $agenttitle_wpid; ?>">
-                    Agent list title:
-                </label>
-            </th>
-            <td>
-                <input id="<?php echo $agenttitle_wpid; ?>"
-                    name="<?php echo $agenttitle_wpname; ?>"
-                    value="<?php echo $agenttitle; ?>" type="text" class="regular-text" />
-            </td>
+		<tr>
+			<th scope="row">
+				<label for="<?php echo $agenttitle_wpid; ?>">
+					Agent List Title:
+				</label>
+			</th>
+			<td>
+				<input id="<?php echo $agenttitle_wpid; ?>"
+				 name="<?php echo $agenttitle_wpname; ?>"
+				 value="<?php echo $agenttitle; ?>" type="text" class="regular-text" />
+			</td>
         </tr>
 
         <tr>
@@ -122,19 +120,19 @@
                 </select>
             </td>
         </tr>
+		<tr>
+			<th scope="row">
+				<label for="<?php echo $agentsort_wpid; ?>">Sort agents by:</label>
+			</th>
+			<td>
+				<select id="<?php echo $agentsort_wpid; ?>" name="<?php echo $agentsort_wpname; ?>">
+					<option value="name"<?php if($agentsort == 'name') echo ' selected="selected"'; ?>>Name</option>
+					<option value="office_id"<?php if($agentsort == 'office_id') echo ' selected="selected"'; ?>>Office ID - Ascending</option>
+					<option value="office_id_desc"<?php if($agentsort == 'office_id_desc') echo ' selected="selected"'; ?>>Office ID - Descending</option>
+				</select>
+			</td>
+		</tr>
 
-        <tr>
-            <th scope="row">
-                <label for="<?php echo $agentsort_wpid; ?>">Sort agents by:</label>
-            </th>
-            <td>
-                <select id="<?php echo $agentsort_wpid; ?>" name="<?php echo $agentsort_wpname; ?>">
-                    <option value="name"<?php if($agentsort == 'name') echo ' selected="selected"'; ?>>Name</option>
-                    <option value="office_id"<?php if($agentsort == 'office_id') echo ' selected="selected"'; ?>>Office ID - Ascending</option>
-                    <option value="office_id_desc"<?php if($agentsort == 'office_id_desc') echo ' selected="selected"'; ?>>Office ID - Descending</option>
-                </select>
-            </td>
-        </tr>
 
         <tr>
             <th scope="row">
