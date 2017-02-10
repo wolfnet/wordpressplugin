@@ -201,10 +201,13 @@
 		var $submitButton  = $form.find('button, input').filter('[type="submit"]');
 
 		$officeToggle.change(function () {
-			if ($officeToggle.val() === 'true') {
-				$officeFields.fadeIn();
-			} else {
-				$officeFields.fadeOut();
+			var $toggle = $(this);
+			if ($toggle.is(':checked')) {
+				if ($toggle.val() === 'true') {
+					$officeFields.slideDown();
+				} else {
+					$officeFields.slideUp();
+				}
 			}
 		});
 
