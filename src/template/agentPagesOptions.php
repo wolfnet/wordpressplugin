@@ -29,7 +29,7 @@
 
     <table class="form-table">
         <tr>
-            <th>
+            <th scope="row">
                 <label for="<?php echo $officetitle_wpid; ?>">
                     Office list title:
                 </label>
@@ -37,11 +37,11 @@
             <td>
                 <input id="<?php echo $officetitle_wpid; ?>"
                     name="<?php echo $officetitle_wpname; ?>"
-                    value="<?php echo $officetitle; ?>" type="text" />
+                    value="<?php echo $officetitle; ?>" type="text" class="regular-text" />
             </td>
         </tr>
         <tr>
-            <th>
+            <th scope="row">
                 <label for="<?php echo $agenttitle_wpid; ?>">
                     Agent list title:
                 </label>
@@ -49,11 +49,11 @@
             <td>
                 <input id="<?php echo $agenttitle_wpid; ?>"
                     name="<?php echo $agenttitle_wpname; ?>"
-                    value="<?php echo $agenttitle; ?>" type="text" />
+                    value="<?php echo $agenttitle; ?>" type="text" class="regular-text" />
             </td>
         </tr>
         <tr>
-            <th>
+            <th scope="row">
                 <label for="<?php echo $detailtitle_wpid; ?>">
                     Agent detail title:
                 </label>
@@ -61,11 +61,11 @@
             <td>
                 <input id="<?php echo $detailtitle_wpid; ?>"
                     name="<?php echo $detailtitle_wpname; ?>"
-                    value="<?php echo $detailtitle; ?>" type="text" />
+                    value="<?php echo $detailtitle; ?>" type="text" class="regular-text" />
             </td>
         </tr>
 		<tr>
-			<th>
+			<th scope="row">
 				<label for="<?php echo $showoffices_wpid; ?>">
 					Show office list:
 				</label>
@@ -80,7 +80,7 @@
         <?php
         if(count($offices) > 1) {
         ?>
-            <tr>
+            <tr scope="row">
                 <th>
                     <label>Exclude offices:</label>
                 </th>
@@ -107,7 +107,7 @@
         }
         ?>
         <tr>
-            <th>
+            <th scope="row">
                 <label for="<?php echo $numperpage_wpid; ?>">Agents per page:</label>
             </th>
             <td>
@@ -119,7 +119,7 @@
             </td>
         </tr>
         <tr>
-            <th>
+            <th scope="row">
                 <label for="<?php echo $agentsort_wpid; ?>">Sort agents by:</label>
             </th>
             <td>
@@ -131,7 +131,7 @@
             </td>
         </tr>
         <tr>
-            <th>
+            <th scope="row">
                 <label for="<?php echo $activelistings_wpid; ?>">Show active listings:</label>
             </th>
             <td>
@@ -145,7 +145,7 @@
         if($showSoldOption) {
         ?>
         <tr>
-            <th>
+            <th scope="row">
                 <label for="<?php echo $soldlistings_wpid; ?>">Show sold listings:</label>
             </th>
             <td>
