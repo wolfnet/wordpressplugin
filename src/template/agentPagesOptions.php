@@ -24,12 +24,6 @@
 
 <div id="<?php echo $instance_id; ?>" class="wolfnet_agentPagesOptions">
 
-	<?php if(count($offices) > 1): ?>
-		<input type="hidden" id="<?php echo $excludeoffices_wpid; ?>" class="officeids"
-		 name="<?php echo $excludeoffices_wpname; ?>" value="" />
-	<?php endif; ?>
-
-
 	<table class="form-table">
 
 		<tr>
@@ -122,15 +116,16 @@
 						<?php
 							$selectedOffices = array_unique(explode(",", $excludeoffices), SORT_STRING);
 							foreach ($offices as $office) {
-								if (strlen($office['office_id']) > 0) {
-									echo '<input id="officeexclude_' . $office['office_id'] . '"';
-									echo ' type="checkbox" class="officeexclude"';
-									if (in_array($office['office_id'], $selectedOffices)) {
+								$office_id = $office['office_id'];
+								if (strlen($office_id) > 0) {
+									echo '<label for="officeexclude_' . $office_id . '">';
+									echo '<input id="officeexclude_' . $office_id . '"';
+									echo ' type="checkbox" name="' . $excludeoffices_wpname . '"';
+									if (in_array($office_id, $selectedOffices)) {
 										echo ' checked="checked"';
 									}
-									echo ' value="' . $office['office_id'] . '" /> ';
-									echo '<label for="officeexclude_' . $office['office_id'] . '">';
-									echo $office['name'] . ' (' . $office['office_id'] . ')';
+									echo ' value="' . $office_id . '" /> ';
+									echo $office['name'] . ' (' . $office_id . ')';
 									echo '</label><br />';
 								}
 							}
@@ -202,32 +197,26 @@
 		var $officeFields  = $form.find('.wnt-office-field');
 		var $submitButton  = $form.find('button, input').filter('[type="submit"]');
 
-		$officeToggle.change(function () {
-			var $toggle = $(this);
-			if ($toggle.is(':checked')) {
-				if ($toggle.val() === 'true') {
+		var onOfficeToggle = function (e, instant) {
+			var $toggle = $officeToggle.filter(':checked');
+			if (($toggle.length > 0) && ($toggle.val() === 'true')) {
+				if (instant) {
+					$officeFields.show();
+				} else {
 					$officeFields.slideDown();
+				}
+			} else {
+				if (instant) {
+					$officeFields.hide();
 				} else {
 					$officeFields.slideUp();
 				}
 			}
-		});
+		};
 
-		<?php if (count($offices) > 1): ?>
-			$submitButton.click(function () {
-				var <?php echo $instance_id; ?> = [];
-				var array = <?php echo $instance_id; ?>;
+		$officeToggle.change(onOfficeToggle);
 
-				$('.officeexclude').each(function () {
-					if ($(this).prop('checked') && (array.indexOf($(this).val()) == -1) {
-						array.push($(this).val());
-					}
-				});
-
-				$('#<?php echo $excludeoffices_wpid; ?>').val(array.join(','));
-
-			});
-		<?php endif; ?>
+		onOfficeToggle.call($officeToggle, null, true);
 
 	});
 

@@ -246,6 +246,7 @@ jQuery(function($){
 
     var insertShortCode = function ()
     {
+		// `this` should be the jQuery object for the form element
         buildShortcode.call(this, function (shortcode) {
             if (tinyMCE != null) {
                 tinyMCE.execCommand('mceInsertContent', false, shortcode);
@@ -255,42 +256,66 @@ jQuery(function($){
     }
 
 
-    var buildShortcode = function (callback)
-    {
-        var attrs    = {};
-        var code     = '[' + this.attr('wolfnet:sc') + ' /]';
-        var exclAttr = ['mode','savedsearch','criteria'];
-        var $advMode = this.find( 'input[type="radio"][name="mode"][value="advanced"]:first:checked' );
-        var $savSrch = this.find( 'select[name="savedsearch"]:first' );
+	// Callback method for the jQuery `.map()` function
+	var getFieldValue = function () {
+		return this.value;
+	};
 
-        this.find('input, select').each(function(){
 
-			if (this.name !== '' && $.inArray(this.name, exclAttr) === -1) {
+	var buildShortcode = function (callback)
+	{
+		// `this` should be the jQuery object for the form element
+		var $form    = this;
+		var attrs    = {};
+		var code     = '[' + $form.attr('wolfnet:sc') + ' /]';
+		var exclAttr = ['mode','savedsearch','criteria'];
+		var $advMode = $form.find( 'input[type="radio"][name="mode"][value="advanced"]:first:checked' );
+		var $savSrch = $form.find( 'select[name="savedsearch"]:first' );
 
-                switch (this.type) {
+		$form.find('input, select').each(function () {
+			var field   = this;
+			var $field  = $(field);
 
-                    default:
-						if (this.value.trim() !== '') {
-                            attrs[this.name] = this.value.trim();
-                        }
-                        break;
+			if ((field.name !== '') && ($.inArray(field.name, exclAttr) === -1)) {
 
-                    case 'checkbox':
-                    case 'radio':
-						if (this.checked === true) {
-                            attrs[this.name] = this.value;
-						} else if (this.hasAttribute('data-fallback-value')) {
-							attrs[this.name] = this.getAttribute('data-fallback-value');
-                        }
-                        break;
+				switch (field.type) {
 
-                }
+					default:
+						if (field.value.trim() !== '') {
+							attrs[field.name] = field.value.trim();
+						}
+						break;
 
-            }
+					case 'checkbox':
+						// Only check field if none of the values of the fields with this name have been applied
+						if (!attrs.hasOwnProperty(field.name)) {
+							if (field.checked === true) {
+								// Get all checked fields with this field's name
+								var $fieldSet = $form.find('input[type="checkbox"][name="' + field.name + '"]:checked')
+								// Combine values into a comma-separated list
+								attrs[field.name] = $fieldSet.map(getFieldValue).get().join(',');
+							} else if (field.hasAttribute('data-fallback-value')) {
+								// Use the fallback value
+								attrs[field.name] = field.getAttribute('data-fallback-value');
+							}
+						}
+						break;
 
-        });
+					case 'radio':
+						if (field.checked === true) {
+							attrs[field.name] = $field.val();
+						} else if (field.hasAttribute('data-fallback-value')) {
+							attrs[field.name] = field.getAttribute('data-fallback-value');
+						}
+						break;
 
-        if ($advMode.length != 0 && $savSrch.length != 0) {
+				}
+
+			}
+
+		});
+
+		if (($advMode.length !== 0) && ($savSrch.length !== 0)) {
 
             delete attrs.zipcode;
             delete attrs.city;
@@ -316,12 +341,11 @@ jQuery(function($){
                 }
             });
 
-        }
-        else {
-            buildShortcodeString(attrs, code, callback);
-        }
+		} else {
+			buildShortcodeString(attrs, code, callback);
+		}
 
-    };
+	};
 
 
     var buildShortcodeString = function (attrs, code, callback)
