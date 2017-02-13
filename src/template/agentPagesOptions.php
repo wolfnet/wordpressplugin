@@ -181,7 +181,7 @@
 				var array = <?php echo $instance_id; ?>;
 
 				$('.officeexclude').each(function () {
-					if ($(this).prop('checked') && (array.indexOf($(this).val()) == -1) {
+					if ($(this).prop('checked') && (array.indexOf($(this).val()) == -1)) {
 						array.push($(this).val());
 					}
 				});
