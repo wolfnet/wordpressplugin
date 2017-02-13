@@ -344,6 +344,10 @@ class Wolfnet_Views
 
         $args = array_merge($defaultArgs, $args);
 
+		if (count($offices) <= 1) {
+			$args['showoffices'] = false;
+		}
+
         return $this->parseTemplate('agentPagesOptions', $args);
 
     }
