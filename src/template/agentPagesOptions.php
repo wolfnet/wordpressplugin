@@ -41,7 +41,7 @@
 					<input type="radio" id="<?php echo $showoffices_wpid; ?>" name="<?php echo $showoffices_wpname; ?>"
 					 value="true" <?php if ($showoffices) echo 'checked="checked"'?> />
 					List agents and offices
-				</label>
+				</label><br />
 				<label for="<?php echo $showoffices_wpid; ?>_f" style="white-space: nowrap;">
 					<input type="radio" id="<?php echo $showoffices_wpid; ?>_f" name="<?php echo $showoffices_wpname; ?>"
 					 value="false" <?php if (!$showoffices) echo 'checked="checked"'?> />
