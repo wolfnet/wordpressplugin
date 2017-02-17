@@ -53,7 +53,7 @@ class Wolfnet_Template
 		// Include map scripts only on non-header/footer action requests
 		if (
 			!has_action('wp_ajax_wolfnet_content_header') && !has_action('wp_ajax_wolfnet_content_footer') &&
-			!preg_match('/(head|foot)er\.php/', $_SERVER['REQUEST_URI'])
+			(!isset($_SERVER['REQUEST_URI']) || !preg_match('/(head|foot)er\.php/', $_SERVER['REQUEST_URI']))
 		) {
 			array_push($scripts, 'wolfnet-maptracks');
 			array_push($scripts, 'wolfnet-map-driver');
