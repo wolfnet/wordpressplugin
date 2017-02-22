@@ -15,18 +15,25 @@
 
 			return this.each(function() {
 
-				var wntMapContainer = $('#' + args.mapId);
-				var houseoverData = args.houseoverData || [];
+				var $map = $(this);
+				var defaultOptions = {
+					keyid:         '',
+					houseoverData: [],
+					houseoverIcon: ''
+				};
+				var options = $.extend({}, defaultOptions, args);
+
+				// Save options to jQuery object data
+				$map.data(stateKey, options);
 
 				methods.pinHouseovers.call(
 					this,
-					wntMapContainer,
-					houseoverData,
-					args.houseoverIcon
+					options.houseoverData,
+					options.houseoverIcon
 				);
 
 				// Size and fit map instance
-				methods.autoSizeMap.call(this,wntMapContainer);
+				methods.autoSizeMap.call(this);
 
 				// Bind map auto size to window resize for all maps
 				$(window).resize(methods.responsiveMaps);
@@ -36,14 +43,15 @@
 
 				// Avoid double-logging on page load
 				setTimeout(function () {
-					$(this).on('moveEnd zoomEnd currentView mapControlChanged', methods.mapTrack);
+					$map.on('moveEnd zoomEnd currentView mapControlChanged', methods.mapTrack);
 				}, 500);
 
 			});
 		},
 
 
-		pinHouseovers: function(wntMapContainer, houseoverData, icon) {
+		pinHouseovers: function(houseoverData, icon) {
+			var $map = $(this);
 			var mapListings = [];
 
 			for (var i=0, l=houseoverData.length; i<l; i++) {
@@ -70,10 +78,9 @@
 
 				}
 
-
 			}
 
-			wntMapContainer.mapTracks('addListings', mapListings, true);
+			$map.mapTracks('addListings', mapListings, true);
 
 		},
 
@@ -87,22 +94,23 @@
 
 
 		// Resizes a map instance based on parent element width
-		autoSizeMap: function(wntMapContainer) {
-			var parentWidth = wntMapContainer.parent().width();
+		autoSizeMap: function() {
+			var $map = $(this);
+			var parentWidth = $map.parent().width();
 
 			// Check if MapTracks is loaded
-			if (wntMapContainer.data('mapViewType') || wntMapContainer.data('map')) {
-				var mapSize = wntMapContainer.mapTracks('getSize');
-				var mapOuterWidth = wntMapContainer.outerWidth();
+			if ($map.data('mapViewType') || $map.data('map')) {
+				var mapSize = $map.mapTracks('getSize');
+				var mapOuterWidth = $map.outerWidth();
 				var mapOuterDiff = mapOuterWidth - mapSize.width;
 
 				// If mapWidth does not equal parentWidth, reset size
 				if (mapOuterWidth != parentWidth) {
-					wntMapContainer.mapTracks('setSize', parentWidth - mapOuterDiff, mapSize.height);
+					$map.mapTracks('setSize', parentWidth - mapOuterDiff, mapSize.height);
 				}
 
 				// Fit map to listings
-				wntMapContainer.mapTracks('bestFit');
+				$map.mapTracks('bestFit');
 
 			}
 		},
@@ -110,17 +118,22 @@
 
 		// Map-Tracking
 		mapTrack: function () {
+			var $map = $(this);
+			var mapData = $map.data(stateKey);
+
 			$.ajax({
 				url: wolfnet_ajax.ajaxurl,
 				type: 'post',
 				data: {
 					action: 'wolfnet_map_track',
-					map_type: $(this).mapTracks('getCurrentView')
+					keyid:  mapData.keyid,
+					map_type: $map.mapTracks('getCurrentView')
 				},
 				dataType: 'json',
 				cache: false,
 				timeout: 2500
 			});
+
 		}
 
 

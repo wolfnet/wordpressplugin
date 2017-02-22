@@ -618,12 +618,12 @@ class Wolfnet_Ajax
 	public function remoteMapTrack()
 	{
 
+		$keyid = sanitize_key($_REQUEST["keyid"]);
+		$productKey = $GLOBALS['wolfnet']->keyService->getById($keyid);
 		$map_data = array();
 
+		$map_data['page_type'] = 'wp';
 
-		if (array_key_exists('page_type', $_REQUEST)) {
-			$map_data['page_type'] = sanitize_text_field($_REQUEST['page_type']);
-		}
 		if (array_key_exists('map_type', $_REQUEST)) {
 			$map_data['map_type'] = sanitize_text_field($_REQUEST['map_type']);
 		}
@@ -634,7 +634,7 @@ class Wolfnet_Ajax
 			$map_data['provider'] = sanitize_text_field($_REQUEST['provider']);
 		}
 
-		$result = $GLOBALS['wolfnet']->data->sendMapTrack($map_data);
+		$result = $GLOBALS['wolfnet']->data->sendMapTrack($productKey, $map_data);
 
 		wp_send_json($result);
 
