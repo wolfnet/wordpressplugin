@@ -93,6 +93,15 @@ Please upgrade to the latest version of the plugin as we will be disabling our o
 
 ## Changelog
 
+### 1.15.2
+
+* Fixed issue where map scripts were being included in header/footer-only requests
+
+### 1.15.1
+
+* Fixed issue in the Property List widget form's saved searches field
+* "Shandora" theme support
+
 ### 1.15.0
 
 * WordPress "Twenty Seventeen" theme support

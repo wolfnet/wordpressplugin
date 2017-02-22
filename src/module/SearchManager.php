@@ -157,13 +157,13 @@ class Wolfnet_Module_SearchManager
     {
         // Cache the data in the request scope so that we only have to query for it once per request.
         $cacheKey = 'wntSavedSearches';
-        $data = (array_key_exists($cacheKey, $_REQUEST)) ? sanitize_text_field($_REQUEST[$cacheKey]) : null;
+		$data = wp_cache_get($cacheKey);
 
         if ($keyid == null) {
             $keyid = "1";
         }
 
-        if ($data==null) {
+		if (!$data) {
             $dataArgs = array(
                 'numberposts' => $count,
                 'post_type' => $this->plugin->customPostTypeSearch,
@@ -198,7 +198,7 @@ class Wolfnet_Module_SearchManager
 
             }
 
-            $_REQUEST[$cacheKey] = $data;
+			wp_cache_set($cacheKey, $data);
 
         }
 

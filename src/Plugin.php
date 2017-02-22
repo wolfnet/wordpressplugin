@@ -223,6 +223,7 @@ class Wolfnet_Plugin
 
 		function wnt_inspect_scripts () {
 			wp_dequeue_script('gmaps');
+			wp_dequeue_script('googlemap3');
 		}
 		add_action('wp_print_scripts', 'wnt_inspect_scripts');
 
