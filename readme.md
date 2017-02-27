@@ -93,6 +93,10 @@ Please upgrade to the latest version of the plugin as we will be disabling our o
 
 ## Changelog
 
+### 1.15.3
+
+* Compatibility support for header/footer requests in BrandCo themes
+
 ### 1.15.2
 
 * Fixed issue where map scripts were being included in header/footer-only requests
