@@ -51,7 +51,10 @@ class Wolfnet_Template
         );
 
 		// Include map scripts only on non-header/footer action requests
-		if (!has_action('wp_ajax_wolfnet_content_header') && !has_action('wp_ajax_wolfnet_content_footer')) {
+		if (
+			!has_action('wp_ajax_wolfnet_content_header') && !has_action('wp_ajax_wolfnet_content_footer') &&
+			(!isset($_SERVER['REQUEST_URI']) || !preg_match('/(header|footer)[^\/]*\.php/', $_SERVER['REQUEST_URI']))
+		) {
 			array_push($scripts, 'wolfnet-maptracks');
 			array_push($scripts, 'wolfnet-map-driver');
 			//array_push($scripts, 'wolfnet-maptracks-theme');
