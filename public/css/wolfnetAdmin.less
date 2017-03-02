@@ -148,7 +148,6 @@ html {
 
     th {
         label {
-            font-weight: bold;
             white-space: nowrap;
         }
     }
@@ -174,27 +173,27 @@ html {
 .wolfnetProductKeyValidationWrapper {
 	display:        inline-block;
 	vertical-align: middle;
-    white-space:    nowrap;
+	white-space:    nowrap;
 
 	input {
 		height:     25px;
 	}
 
-    .wnt-indicator-valid,
-    .wnt-indicator-invalid {
-        display: none;
-        margin-left: 0.5em;
-        font-size: 2em;
-        vertical-align: middle;
-    }
+	.wnt-indicator-valid,
+	.wnt-indicator-invalid {
+		display: none;
+		margin-left: 0.5em;
+		font-size: 2em;
+		vertical-align: middle;
+	}
 
-    .wnt-indicator-valid {
-        color: @brand-success;
-    }
+	.wnt-indicator-valid {
+		color: @brand-success;
+	}
 
-    .wnt-indicator-invalid {
-        color: @brand-danger;
-    }
+	.wnt-indicator-invalid {
+		color: @brand-danger;
+	}
 
 	&.valid {
 
@@ -204,9 +203,9 @@ html {
 			box-shadow:         0 0 6px 0 @brand-success;
 		}
 
-        .wnt-indicator-valid {
-            display: inline-block;
-        }
+		.wnt-indicator-valid {
+			display: inline-block;
+		}
 
 	}
 
@@ -218,9 +217,9 @@ html {
 			box-shadow:         0 0 6px 0 @brand-danger;
 		}
 
-        .wnt-indicator-valid {
-            display: inline-block;
-        }
+		.wnt-indicator-invalid {
+			display: inline-block;
+		}
 
 	}
 
@@ -498,40 +497,30 @@ html.ie .wolfnetProductKeyValidationWrapper.invalid input {
 
 #wolfnet-search-manager {
 
-	.style_box {
-		border: 1px solid @gray-lighter;
-		border-radius: 3px;
-
-		.style_box_header {
-			border-bottom: 1px solid #F2F2F2;
-			color: @gray-dark;
-			font-weight: normal;
-			padding: 2px 5px;
-			text-align: left;
-			background-color: #F2F2F2;
-			background-image: -ms-linear-gradient(top, #FAFAFA, @gray-lightest);
-			background-image: -moz-linear-gradient(top, #FAFAFA, @gray-lightest);
-			background-image: -o-linear-gradient(top, #FAFAFA, @gray-lightest);
-			background-image: -webkit-gradient(linear, left top, left bottom, from(#FAFAFA), to(@gray-lightest));
-			background-image: -webkit-linear-gradient(top, #FAFAFA, @gray-lightest);
-			background-image: linear-gradient(top, #FAFAFA, @gray-lightest);
-			padding: 7px 7px 8px;
-			text-align: left;
-			line-height: 1.3em;
-			font-size: 14px;
-			font-family: Georgia,"Times New Roman","Bitstream Charter",Times,serif;
-		}
-
-	}
-
 	#savedsearches.wp-list-table {
 		width: 875px !important;
 	}
 
 	#tool_container {
+
 		input[type=checkbox], input[type=radio] {
-			border: 1px solid @gray-light;
+			border: 1px solid @gray-lighter;
 		}
+
+		.resetForm {
+			float: right;
+			font-size: inherit;
+		}
+
+		#matchCountURLBuilder {
+			font-weight: bold;
+			color: @brand-danger;
+		}
+
+		.wntBodyWidth .wntPrimarySearchTypes .wntPrimarySearchType {
+			margin-right: 1em;
+		}
+
 	}
 
 }
@@ -667,21 +656,21 @@ input.input-placeholder {
 
 
 .wnt-text-primary {
-    color: @brand-primary;
+	color: @brand-primary;
 }
 
 .wnt-text-success {
-    color: @brand-success;
+	color: @brand-success;
 }
 
 .wnt-text-info {
-    color: @brand-info;
+	color: @brand-info;
 }
 
 .wnt-text-warning {
-    color: @brand-warning;
+	color: @brand-warning;
 }
 
 .wnt-text-danger {
-    color: @brand-danger;
+	color: @brand-danger;
 }

@@ -53,9 +53,9 @@
     </div>
 
     <?php if(count($markets) > 1): ?>
-    <div class="style_box">
-        <div class="style_box_header">Market</div>
-        <div class="style_box_content">
+	<div class="wolfnet_box">
+		<h3>Market</h3>
+		<div class="wolfnet_boxContent">
             Select the market that you'd like to use to create searches and click Apply.
             <p><select id="keyid" name="keyid">
                 <?php for($i=0; $i<=count($markets)-1; $i++): ?>
@@ -64,8 +64,8 @@
                 <?php endfor; ?>
             </select>
             <input type="button" id="changeMarket" value="Apply" /></p>
-        </div>
-    </div>
+		</div>
+	</div>
     <?php else: ?>
     <input type="hidden" id="keyid" name="keyid" value="<?php echo $markets[0]->id; ?>" />
     <?php endif; ?>
@@ -74,19 +74,19 @@
     <?php echo $searchForm; ?>
     </div>
 
-    <div id="save_search" class="style_box">
-        <div class="style_box_header">Save</div>
-        <div class="style_box_content">
-            <input type="text" title="Description" style="width: 85%;" placeholder="Description">
-            <button class="button-primary" style="margin-left: 15px;">Save Search</button>
-        </div>
-    </div>
+	<div id="save_search" class="wolfnet_box">
+		<h3>Save</h3>
+		<div class="wolfnet_boxContent">
+			<input type="text" title="Description" style="width: 85%;" placeholder="Description" />
+			<button class="button button-primary" style="margin-left: 15px;">Save Search</button>
+		</div>
+	</div>
 
     <table id="savedsearches" class="wp-list-table widefat" style="width:100%;">
         <thead>
             <tr>
                 <th style="text-align:left;">Description</th>
-                <th style="wwidth:200px;">Date Created</th>
+                <th style="width:200px;">Date Created</th>
                 <th style="width:110px;"></th>
             </tr>
         </thead>
@@ -97,27 +97,35 @@
 </div>
 
 
-<script type="text/javascript">
+<script>
 
-    if ( typeof jQuery != 'undefined' ) {
+	if (typeof jQuery !== 'undefined') {
 
-        ( function ( $ ) {
+		(function ($) {
+
+			var $searchMgr = $('#wolfnet-search-manager');
+			var $searchResetBtn = $searchMgr.find('.resetForm a');
+
+			// Dress the reset link as a button
+			$searchResetBtn.addClass('button button-secondary').prepend(
+				'<span class="wnt-icon wnt-icon-cancel-circle"></span> '
+			);
 
 			$('#savedsearches').wolfnetSearchManager({
-				baseUrl    : '<?php echo $baseUrl; ?>',
-				ajaxUrl    : wolfnet_ajax.ajaxurl,
-				ajaxAction : 'wolfnet_search_manager_ajax',
-				saveForm   : $( '#save_search' )
+				baseUrl:     '<?php echo $baseUrl; ?>',
+				ajaxUrl:     wolfnet_ajax.ajaxurl,
+				ajaxAction:  'wolfnet_search_manager_ajax',
+				saveForm:    $( '#save_search' )
 			});
 
-            <?php if(count($markets) > 1): ?>
-            $( '#changeMarket' ).click(function() {
-                document.location.href = "admin.php?page=wolfnet_plugin_search_manager&keyid=" + $('#keyid').val();
-            });
-            <?php endif; ?>
+			<?php if(count($markets) > 1): ?>
+				$('#changeMarket').click(function () {
+					document.location.href = 'admin.php?page=wolfnet_plugin_search_manager&keyid=' + $('#keyid').val();
+				});
+			<?php endif; ?>
 
-        } )( jQuery );
+		})(jQuery);
 
-    }
+	}
 
 </script>

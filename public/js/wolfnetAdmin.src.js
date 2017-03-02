@@ -456,98 +456,54 @@ if ( typeof jQuery != 'undefined' ) {
         };
 
 
-		$.fn.wolfnetDeleteKeyRow = function (button) {
-            var key = $(button.srcElement).attr('data-wnt-key');
-            $('.row' + key).remove();
-        }
+		$.fn.wolfnetDeleteKeyRow = function ($button) {
+			var key = $button.attr('data-wnt-key');
+			$('.row' + key).remove();
+		}
 
 
-        $.fn.wolfnetInsertKeyRow = function ()
-        {
+		$.fn.wolfnetInsertKeyRow = function ()
+		{
+			var $keyTable      = $('#wolfnet_keys'),
+				$keyCount      = $('#wolfnet_keyCount'),
+				$lastRow       = $keyTable.find('tr').last(),
+				$row           = $lastRow.clone(),
+				$keyField      = $row.find('.wolfnet_productKey');
+			var nextIteration  = parseInt($keyCount.val()) + 1;
 
-            var nextIteration = parseInt($('#wolfnet_keyCount').val()) + 1;
+			$row.attr('class', 'row' + nextIteration);
 
-            // Row 1
-            var row = $('<tr />').attr('class', 'row' + nextIteration);
-            var headCell = $('<th />').attr('scope', 'row');
-            var headRow = row.clone().append(
-                headCell.clone().html(
-                    $('<label />').attr('for', 'wolfnet_productKey_' + nextIteration).html('Product Key')
-                )
-            );
-            headRow.append(headCell.clone().html('Market Name'));
-            headRow.append(
-                headCell.clone().html(
-                    $('<label />').attr('for', 'wolfnet_keyLabel_' + nextIteration).html('Label')
-                )
-            );
-            headRow.append(headCell.clone());
+			$row.find('.wolfnetProductKeyValidationWrapper').removeClass('valid invalid success error');
 
-            // Row 2
-            var cell = $('<td />');
-            var valueRow = row.clone().append(
-                cell.clone()
-                    .html(
-                        $('<input />').attr('id', 'wolfnet_productKey_' + nextIteration)
-                            .attr('class', 'wolfnet_productKey')
-                            .attr('name', 'wolfnet_productKey_' + nextIteration)
-                            .attr('type', 'text')
-                            .attr('value', '')
-                            .attr('size', '50')
-                    )
-            );
-            valueRow.append(
-                cell.clone()
-                    .html(
-                        $('<span/>').attr('class', 'wolfnet_keyMarket')
-                    )
-                    .append(
-                        $('<input/>').attr('id', 'wolfnet_keyMarket_'  + nextIteration)
-                        .attr('name', 'wolfnet_keyMarket_' + nextIteration)
-                        .attr('class', 'wolfnet_keyMarket_value')
-                        .attr('type', 'hidden')
-                        .attr('value', '')
-                    )
-            );
-            valueRow.append(
-                cell.clone()
-                .html(
-                    $('<input />').attr('id', 'wolfnet_keyLabel_' + nextIteration)
-                        .attr('name', 'wolfnet_keyLabel_' + nextIteration)
-                        .attr('class', 'wolfnet_keyLabel')
-                        .attr('type', 'text')
-                        .attr('value', '')
-                        .attr('size', '30')
-                    )
-            );
-            valueRow.append(
-                cell.clone()
-                    .html(
-                        $('<button />')
-                            .addClass('button action wolfnet_deleteKey')
-                            .attr('data-wnt-key', nextIteration)
-                            .attr('type', 'button')
-                            .click(function (button) {
-                                $.fn.wolfnetDeleteKeyRow(button);
-                            })
-                            .append([
-                                $('<span>').addClass('wnt-icon wnt-icon-bin wnt-text-danger'),
-                                ' ',
-                                $('<span>').addClass('wnt-text-danger').text('Delete')
-                            ])
-                    )
-            );
+			$keyField.attr({
+				'id':     'wolfnet_productKey_' + nextIteration,
+				'name':   'wolfnet_productKey_' + nextIteration
+			}).val('');
 
-            $('#wolfnet_keys').append(headRow).append(valueRow);
+			$row.find('.wolfnet_keyMarket_value').attr({
+				'id':     'wolfnet_keyMarket_' + nextIteration,
+				'name':   'wolfnet_keyMarket_' + nextIteration
+			}).val('');
 
-            $('#wolfnet_keyCount').val(nextIteration);
+			$row.find('.wolfnet_keyLabel').attr({
+				'id':     'wolfnet_keyLabel_' + nextIteration,
+				'name':   'wolfnet_keyLabel_' + nextIteration
+			}).val('');
 
-            $('#wolfnet_productKey_' + nextIteration).wolfnetValidateProductKey( {
-                rootUri: '<?php echo site_url(); ?>?pagename=wolfnet-admin-validate-key',
-                setSslVerify: $('#wolfnet_setSslVerify').val()
-            } );
+			$row.find('.wolfnet_deleteKey').attr('data-wnt-key', nextIteration);
 
-        }
+			$keyCount.val(nextIteration);
+
+			$('#wolfnet_productKey_' + nextIteration).wolfnetValidateProductKey( {
+				rootUri: '<?php echo site_url(); ?>?pagename=wolfnet-admin-validate-key',
+				setSslVerify: $('#wolfnet_setSslVerify').val()
+			});
+
+			$lastRow.after($row);
+
+			$keyTable.trigger('wnt_addKeyField', [ $keyField ]);
+
+		}
 
         $.fn.wolfnetUpdateShortcodeControls = function (container)
 	    {

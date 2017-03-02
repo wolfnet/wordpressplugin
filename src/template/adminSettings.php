@@ -41,73 +41,75 @@
                 <h2 class="title">Product Key</h2>
             </legend>
 
-            <table class="key-table widefat" id="wolfnet_keys">
-                <thead>
-                    <tr>
-                        <th class="row-title" scope="row">
-                            Product Key
-                        </th>
-                        <th class="row-title" scope="row">
-                            Market Name
-                        </th>
-                        <th class="row-title" scope="row">
-                            Label
-                        </th>
-                        <th class="row-title" scope="row"></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php
-                    $numrows = count($productKey);
-                    // we need to show at least one row of form fields so they can add a key if there are none
-                    if ($numrows < 1 ) {
-                        $numrows = 1;
-                        $productKey = array( (object) array('key' => '', 'market' => '', 'label' => '') );
-                    }
-                    for($i=1; $i<=$numrows; $i++):
-                    ?>
-                        <tr class="<?php echo ($i % 2 == 0) ? 'alternate': '' ?>">
-                            <td>
-                                <input class="wolfnet_productKey"
-                                 type="text" size="40"
-                                 id="wolfnet_productKey_<?php echo $i; ?>"
-                                 name="wolfnet_productKey_<?php echo $i; ?>"
-                                 value="<?php echo $productKey[$i-1]->key; ?>" />
-                            </td>
-                            <td>
-                                <span class="wolfnet_keyMarket">
-                                    <?php
-                                        if (isset($productKey[$i-1]->market)) {
-                                            echo $productKey[$i-1]->market;
-                                        }
-                                    ?>
-                                    <input class="wolfnet_keyMarket_value"
-                                     type="hidden"
-                                     id="wolfnet_keyMarket_<?php echo $i; ?>"
-                                     name="wolfnet_keyMarket_<?php echo $i; ?>"
-                                     value="<?php echo $productKey[$i-1]->market; ?>" />
-                                </span>
-                            </td>
-                            <td>
-                                <input class="wolfnet_keyLabel"
-                                 type="text" size="25"
-                                 id="wolfnet_keyLabel_<?php echo $i; ?>"
-                                 name="wolfnet_keyLabel_<?php echo $i; ?>"
-                                 value="<?php echo $productKey[$i-1]->label; ?>" />
-                            </td>
-                            <td>
-                                <?php if($i != 1): ?>
-                                    <button class="button action wolfnet_deleteKey wnt-text-danger"
-                                     type="button" data-wnt-key="<?php echo $i; ?>">
-                                        <span class="wnt-icon wnt-icon-remove wnt-text-danger"></span>
-                                        <?php _e('Delete'); ?>
-                                    </button>
-                                <?php endif; ?>
-                            </td>
-                        </tr>
-                    <?php endfor; ?>
-                </tbody>
-            </table>
+			<table class="key-table widefat" id="wolfnet_keys">
+				<thead>
+					<tr>
+						<th class="row-title" scope="row">
+							Product Key
+						</th>
+						<th class="row-title" scope="row">
+							Market Name
+						</th>
+						<th class="row-title" scope="row">
+							Label
+						</th>
+						<th class="row-title" scope="row"></th>
+					</tr>
+				</thead>
+				<tbody>
+					<?php
+						$numrows = count($productKey);
+						// we need to show at least one row of form fields so they can add a key if there are none
+						if ($numrows < 1) {
+							$numrows = 1;
+							$productKey = array( (object) array('key' => '', 'market' => '', 'label' => '') );
+						}
+						for ($i=1; $i<=$numrows; $i++):
+					?>
+						<tr class="row<?php echo $i; ?> <?php echo ($i % 2 == 0) ? 'alternate': '' ?>">
+							<td>
+								<input class="wolfnet_productKey"
+									type="text" size="40"
+									id="wolfnet_productKey_<?php echo $i; ?>"
+									name="wolfnet_productKey_<?php echo $i; ?>"
+									value="<?php echo $productKey[$i-1]->key; ?>" />
+							</td>
+							<td>
+								<span class="wolfnet_keyMarket">
+									<?php
+										if (isset($productKey[$i-1]->market)) {
+											echo $productKey[$i-1]->market;
+										}
+									?>
+									<input class="wolfnet_keyMarket_value"
+										type="hidden"
+										id="wolfnet_keyMarket_<?php echo $i; ?>"
+										name="wolfnet_keyMarket_<?php echo $i; ?>"
+										value="<?php echo $productKey[$i-1]->market; ?>" />
+								</span>
+							</td>
+							<td>
+								<input class="wolfnet_keyLabel"
+									type="text" size="25"
+									id="wolfnet_keyLabel_<?php echo $i; ?>"
+									name="wolfnet_keyLabel_<?php echo $i; ?>"
+									value="<?php echo $productKey[$i-1]->label; ?>" />
+							</td>
+							<td>
+								<?php if($i != 1): ?>
+									<button class="button action wolfnet_deleteKey wnt-text-danger"
+									 type="button" data-wnt-key="<?php echo $i; ?>">
+										<span class="wnt-text-danger">
+											<span class="wnt-icon wnt-icon-remove"></span>
+											<?php _e('Delete'); ?>
+										</span>
+									</button>
+								<?php endif; ?>
+							</td>
+						</tr>
+					<?php endfor; ?>
+				</tbody>
+			</table>
 
             <div class="tablenav bottom">
                 <button type="button" class="button action" id="wolfnet_addKey">
@@ -163,18 +165,26 @@
 
 </div>
 
-<script type="text/javascript">
+<script>
 
-    if ( typeof jQuery != 'undefined' ) {
+	if (typeof jQuery !== 'undefined') {
 
-        ( function ( $ ) {
+		jQuery(function ($) {
 
-			$('.wolfnet_productKey').wolfnetValidateProductKey({
-				rootUri: '<?php echo site_url(); ?>?pagename=wolfnet-admin-validate-key',
-				setSslVerify: $('#wolfnet_setSslVerify').val()
-			}).change(function () {
-				// Clear the market name, so the plugin will ask the API for the name based on the new key
-				$(this).closest('tr').find('.wolfnet_keyMarket_value').val('');
+			var setupKeyValidation = function ($productKeyField) {
+				$productKeyField.wolfnetValidateProductKey({
+					rootUri: '<?php echo site_url(); ?>?pagename=wolfnet-admin-validate-key',
+					setSslVerify: $('#wolfnet_setSslVerify').val()
+				}).change(function () {
+					// Clear the market name, so the plugin will ask the API for the name based on the new key
+					$(this).closest('tr').find('.wolfnet_keyMarket_value').val('');
+				});
+			};
+
+			setupKeyValidation($('.wolfnet_productKey'));
+
+			$('#wolfnet_keys').on('wnt_addKeyField', function (e, data) {
+				setupKeyValidation($(data));
 			});
 
 
@@ -218,17 +228,17 @@
             } );
 
 
-            $( '.wolfnet_deleteKey' ).click( function(button) {
-                $.fn.wolfnetDeleteKeyRow(button);
-            } );
+			$('#wolfnet_keys').on('click.wnt', '.wolfnet_deleteKey', function () {
+				$.fn.wolfnetDeleteKeyRow($(this));
+			});
 
 
             $( '#wolfnet_addKey' ).click( function() {
                 $.fn.wolfnetInsertKeyRow();
             } );
 
-        } )( jQuery );
+		});
 
-    }
+	}
 
 </script>
