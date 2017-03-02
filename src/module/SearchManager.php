@@ -50,12 +50,6 @@ class Wolfnet_Module_SearchManager
             $baseUrl .= 'index.cfm';
         }
 
-
-        /* commenting out map mode in search manager until we better figure out session constraints..
-        if (!array_key_exists('search_mode', $_GET)) {
-            $_GET['search_mode'] = ($maptracksEnabled) ? 'map' : 'form';
-        } */
-
         $_GET['search_mode'] = 'form';
 
         $url = $baseUrl . ((!strstr($baseUrl, '?')) ? '?' : '');
@@ -72,8 +66,9 @@ class Wolfnet_Module_SearchManager
 
         foreach ($_GET as $param => $paramValue) {
             if (!array_search($param, $resParams)) {
-                $paramValue = urlencode($this->plugin->htmlEntityDecodeNumeric($paramValue));
-                $url .= "&{$param}={$paramValue}";
+            	$sanitizedParamValue = sanitize_text_field($paramValue);
+                $sanitizedParamValue = urlencode($this->plugin->htmlEntityDecodeNumeric($sanitizedParamValue));
+                $url .= "&{$param}={$sanitizedParamValue}";
             }
         }
 
@@ -162,13 +157,13 @@ class Wolfnet_Module_SearchManager
     {
         // Cache the data in the request scope so that we only have to query for it once per request.
         $cacheKey = 'wntSavedSearches';
-        $data = (array_key_exists($cacheKey, $_REQUEST)) ? $_REQUEST[$cacheKey] : null;
+		$data = wp_cache_get($cacheKey);
 
         if ($keyid == null) {
             $keyid = "1";
         }
 
-        if ($data==null) {
+		if (!$data) {
             $dataArgs = array(
                 'numberposts' => $count,
                 'post_type' => $this->plugin->customPostTypeSearch,
@@ -203,7 +198,7 @@ class Wolfnet_Module_SearchManager
 
             }
 
-            $_REQUEST[$cacheKey] = $data;
+			wp_cache_set($cacheKey, $data);
 
         }
 

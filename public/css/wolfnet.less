@@ -88,6 +88,10 @@
         box-sizing: border-box !important;
     }
 
+	hr {
+		clear: none;
+	}
+
     button,
     input[type="button"],
     input[type="reset"],
@@ -507,6 +511,8 @@
 
     &.wolfnet_featuredListings,
     &.wolfnet_listingGrid {
+		// Set the base font size
+		font-size: 16px;
 
         &.wnt-in-transition {
             .wolfnet_listings {
@@ -1075,7 +1081,6 @@
             .wolfnet_branding {
                 display: block;
                 font-size: 0.8em;
-                line-height: 1.25;
 
                 .wolfnet_brokerLogo {
                     display: block;
@@ -1084,6 +1089,7 @@
                 .wolfnet_brandingMessage {
                     display: block;
                     margin-top: 0.5em;
+					line-height: 1.25;
                 }
 
             }
@@ -1207,18 +1213,5 @@
 
 .wolfnet_clearfix,
 .wnt-clearfix {
-	/* *zoom: 1; */
-	float: none !important;
-	clear: both;
-
-	&:before,
-	&:after {
-		content: '';
-		display: table;
-	}
-
-	&:after {
-		clear: both;
-	}
-
+	.clearfix();
 }

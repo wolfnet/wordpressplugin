@@ -43,7 +43,7 @@ if ( typeof jQuery != 'undefined' ) {
 			        defaultSearchType : 'opentxt',
 			        searchTypes : {
 			            opentxt : {
-			                hint : 'House #, Street, City, State, or Zip',
+			                hint : options.hintText,
 			                name : 'open_text'
 			                },
 			            mlsnum  : {
