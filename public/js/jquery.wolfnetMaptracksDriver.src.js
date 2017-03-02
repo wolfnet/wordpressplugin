@@ -41,11 +41,6 @@
 				// Run mapTrack
 				methods.mapTrack.call(this);
 
-				// Avoid double-logging on page load
-				setTimeout(function () {
-					$map.on('moveEnd zoomEnd currentView mapControlChanged', methods.mapTrack);
-				}, 500);
-
 			});
 		},
 
