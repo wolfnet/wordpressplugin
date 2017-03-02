@@ -93,9 +93,17 @@ Please upgrade to the latest version of the plugin as we will be disabling our o
 
 ## Changelog
 
-### 1.15.2
+### 1.15.4
 
 * New option to hide the offices list, regardless of the number of offices
+
+### 1.15.3
+
+* Compatibility support for header/footer requests in BrandCo themes
+
+### 1.15.2
+
+* Fixed issue where map scripts were being included in header/footer-only requests
 
 ### 1.15.1
 
