@@ -186,9 +186,15 @@ class Wolfnet_Api_Client
 
         $headers['api_token'] = $token;
 
-        return $this->performRequest(null, $token, $resource, $method, $data, $headers);
+		try {
+			$result = $this->performRequest(null, $token, $resource, $method, $data, $headers);
+		} catch (Wolfnet_Exception $e) {
+			$result = json_encode($e);
+		}
 
-    }
+		return $result;
+
+	}
 
 
     /* PRIVATE METHODS ************************************************************************** */
