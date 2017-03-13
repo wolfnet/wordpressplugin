@@ -93,9 +93,13 @@ Please upgrade to the latest version of the plugin as we will be disabling our o
 
 ## Changelog
 
-### 1.15.4
+### 1.15.5
 
 * New option to hide the offices list, regardless of the number of offices
+
+### 1.15.4
+
+* Logging map loads due to Google Maps API usage rates
 
 ### 1.15.3
 

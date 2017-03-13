@@ -50,9 +50,9 @@
 
 		var onMapLoaded = function () {
 			$map.wolfnetMaptracksDriver({
+				keyid         : '<?php echo $keyid; ?>',
 				houseoverData : houseoverJson,
-				houseoverIcon : mapParams.houseoverIcon,
-				mapId         : mapParams.mapId
+				houseoverIcon : mapParams.houseoverIcon
 			});
 		};
 
