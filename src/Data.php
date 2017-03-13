@@ -78,9 +78,9 @@ class Wolfnet_Data
     }
 
 
-    public function getMap($listingsData, $productKey = null)
+    public function getMap($listingsData, $keyid, $productKey = null)
     {
-        return $this->plugin->views->mapView($listingsData, $productKey);
+        return $this->plugin->views->mapView($listingsData, $keyid, $productKey);
     }
 
 
@@ -229,6 +229,19 @@ class Wolfnet_Data
     }
 
 
+	public function sendMapTrack($productKey=null, $map_data=array())
+	{
+		if ($productKey == null) {
+			$productKey = json_decode($this->plugin->keyService->getDefault());
+		}
+
+		$result = $this->plugin->api->sendRequest($productKey, '/user/map_track', 'POST', $map_data);
+
+		return $result;
+
+	}
+
+
     public function getOwnerTypes()
     {
         return array(
@@ -271,6 +284,8 @@ class Wolfnet_Data
         if (is_wp_error($data)) {
             return $this->plugin->getWpError($data);
         }
+
+		$args['keyid'] = $this->plugin->keyService->getIdByKey($productKey);
 
         $args['mapParams'] = array(
             'centerLat'    => $data['responseData']['data']['market']['maptracks']['map_start_lat'],
