@@ -93,6 +93,10 @@ Please upgrade to the latest version of the plugin as we will be disabling our o
 
 ## Changelog
 
+### 1.16.0
+
+* New option to hide the offices list, regardless of the number of offices
+
 ### 1.15.5
 
 * Fix to remove custom error-handling that hides API error messages behind warnings
