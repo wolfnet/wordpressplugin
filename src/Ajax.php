@@ -668,7 +668,7 @@ class Wolfnet_Ajax
     public function remoteRouteQuickSearch()
     {
         try {
-            $response = $GLOBALS['wolfnet']->quickSearch->routeQuickSearch(sanitize_text_field($_REQUEST['formData']));
+            $response = $GLOBALS['wolfnet']->quickSearch->routeQuickSearch(array_map('sanitize_text_field', $_REQUEST['formData']));
         } catch (Wolfnet_Exception $e) {
             status_header(500);
 
