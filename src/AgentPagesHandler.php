@@ -50,7 +50,7 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
         }
         if(array_key_exists('agnt', $query)) {
             $agentName = preg_replace("/[\.,]/", "", $query['agnt']);
-            $query['agent'] = $agentName; //$query['agnt']; 
+            $query['agent'] = $agentName; //$query['agnt'];
             unset($query['agnt']);
         }
 
@@ -665,14 +665,14 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
 			$linkBase = esc_url_raw($_SERVER['PHP_SELF'] . '/');
 		}
 
-        // Chop the links down to only the necessary parts.
-        if(preg_match('/\/office.*/', $linkBase)) {
-            $linkBase = preg_replace('/\/office.*/', '/', $linkBase);
-        } elseif(preg_match('/search.*/', $linkBase)) {
-            $linkBase = preg_replace('/search.*/', '', $linkBase);
-        } elseif(preg_match('/agnts.*/', $linkBase)) {
-            $linkBase = preg_replace('/agnts.*/', '', $linkBase);
-        }
+		// Chop the links down to only the necessary parts.
+		if (preg_match('/\/office\/.*/', $linkBase)) {
+			$linkBase = preg_replace('/\/office\/.*/', '/', $linkBase);
+		} elseif (preg_match('/search.*/', $linkBase)) {
+			$linkBase = preg_replace('/search.*/', '', $linkBase);
+		} elseif (preg_match('/agnts.*/', $linkBase)) {
+			$linkBase = preg_replace('/agnts.*/', '', $linkBase);
+		}
 
 		$agentPagesLink = $linkBase;
 
