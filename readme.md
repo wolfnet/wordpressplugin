@@ -98,6 +98,10 @@ Please upgrade to the latest version of the plugin as we will be disabling our o
 * New option to hide the offices list, regardless of the number of offices
 * Admin styles updates to better-match the current WordPress admin
 
+### 1.15.7
+
+* Fix for sites that display agents/offices with a permalink starting with `office`
+
 ### 1.15.6
 
 * Fix for sites that use multiple API keys in the Quick Search
