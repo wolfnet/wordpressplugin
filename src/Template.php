@@ -145,7 +145,7 @@ class Wolfnet_Template
             ),
             'wolfnet-admin' => array(
                 $this->url . 'js/wolfnetAdmin.min.js',
-                array('jquery-ui-dialog', 'jquery-ui-tabs', 'jquery-ui-datepicker', 'wolfnet'),
+                array('jquery-ui-dialog', 'jquery-ui-tabs', 'jquery-ui-datepicker', 'jquery', 'wolfnet'),
             ),
             'wolfnet-search-manager' => array(
                 $this->url . 'js/jquery.wolfnetSearchManager.min.js',
@@ -455,8 +455,8 @@ class Wolfnet_Template
         return array(
             'ajaxurl'        => admin_url('admin-ajax.php'),
             'loaderimg'      => admin_url('/images/wpspin_light.gif'),
-            'buildericon'    => $this->url . 'img/wp_wolfnet_nav.png',
-            'houseoverIcon'    => $this->url . 'img/houseover.png',
+            'buildericon'    => $this->url . 'img/paw-gold.svg',
+            'houseoverIcon'  => $this->url . 'img/houseover.png',
             'useDialogClass' => (version_compare($wp_version, '3.6')>0) ? "true" : "false",
         );
     }

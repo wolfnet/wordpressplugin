@@ -44,6 +44,63 @@
 			</td>
 		</tr>
 
+	</table>
+
+
+	<hr />
+
+
+	<div class="wnt-office-field">
+
+		<table class="form-table">
+
+			<tr>
+				<th scope="row">
+					<label for="<?php echo $officetitle_wpid; ?>">Office List Heading:</label>
+				</th>
+				<td>
+					<input id="<?php echo $officetitle_wpid; ?>"
+					 name="<?php echo $officetitle_wpname; ?>"
+					 value="<?php echo $officetitle; ?>" type="text" class="regular-text" />
+				</td>
+			</tr>
+
+			<?php if (count($offices) > 1) { ?>
+				<tr>
+					<th scope="row">
+						<label>Offices to Exclude:</label>
+					</th>
+					<td>
+						<?php
+							$selectedOffices = array_unique(explode(",", $excludeoffices), SORT_STRING);
+							foreach ($offices as $office) {
+								$office_id = $office['office_id'];
+								if (strlen($office_id) > 0) {
+									echo '<label for="officeexclude_' . $office_id . '">';
+									echo '<input id="officeexclude_' . $office_id . '"';
+									echo ' type="checkbox" name="' . $excludeoffices_wpname . '"';
+									if (in_array($office_id, $selectedOffices)) {
+										echo ' checked="checked"';
+									}
+									echo ' value="' . $office_id . '" /> ';
+									echo $office['name'] . ' (' . $office_id . ')';
+									echo '</label><br />';
+								}
+							}
+						?>
+					</td>
+				</tr>
+			<?php } ?>
+
+		</table>
+
+		<hr />
+
+	</div>
+
+
+	<table class="form-table">
+
 		<tr>
 			<th scope="row">
 				<label for="<?php echo $agenttitle_wpid; ?>">
@@ -90,53 +147,6 @@
 
 	</table>
 
-	<div class="wnt-office-field">
-
-		<hr />
-
-		<table class="form-table">
-
-			<tr>
-				<th scope="row">
-					<label for="<?php echo $officetitle_wpid; ?>">Office List Heading:</label>
-				</th>
-				<td>
-					<input id="<?php echo $officetitle_wpid; ?>"
-					 name="<?php echo $officetitle_wpname; ?>"
-					 value="<?php echo $officetitle; ?>" type="text" class="regular-text" />
-				</td>
-			</tr>
-
-			<?php if (count($offices) > 1) { ?>
-				<tr>
-					<th scope="row">
-						<label>Offices to Exclude:</label>
-					</th>
-					<td>
-						<?php
-							$selectedOffices = array_unique(explode(",", $excludeoffices), SORT_STRING);
-							foreach ($offices as $office) {
-								$office_id = $office['office_id'];
-								if (strlen($office_id) > 0) {
-									echo '<label for="officeexclude_' . $office_id . '">';
-									echo '<input id="officeexclude_' . $office_id . '"';
-									echo ' type="checkbox" name="' . $excludeoffices_wpname . '"';
-									if (in_array($office_id, $selectedOffices)) {
-										echo ' checked="checked"';
-									}
-									echo ' value="' . $office_id . '" /> ';
-									echo $office['name'] . ' (' . $office_id . ')';
-									echo '</label><br />';
-								}
-							}
-						?>
-					</td>
-				</tr>
-			<?php } ?>
-
-		</table>
-
-	</div>
 
 	<hr />
 

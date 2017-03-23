@@ -96,6 +96,7 @@ Please upgrade to the latest version of the plugin as we will be disabling our o
 ### 1.16.0
 
 * New option to hide the offices list, regardless of the number of offices
+* Admin styles updates to better-match the current WordPress admin
 
 ### 1.15.6
 
