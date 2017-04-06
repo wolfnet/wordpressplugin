@@ -33,17 +33,18 @@
 
     <table class="form-table">
         <tr>
-            <th>
+            <th scope="row">
                 <label for="wnt-<?php echo $title_wpid; ?>">Title:</label>
             </th>
             <td>
-                <input id="wnt-<?php echo $title_wpid; ?>" name="<?php echo $title_wpname; ?>" value="<?php echo $title; ?>" type="text" />
+                <input id="wnt-<?php echo $title_wpid; ?>" name="<?php echo $title_wpname; ?>"
+                 value="<?php echo $title; ?>" type="text" class="regular-text" />
             </td>
         </tr>
 
         <?php if(count($markets) > 1): ?>
             <tr>
-                <th>
+                <th scope="row">
                     <label for="<?php echo $keyid_wpid; ?>">Market:</label>
                 </th>
                 <td>
@@ -59,7 +60,7 @@
         <?php endif; ?>
 
         <tr>
-            <th>
+            <th scope="row">
                 <label for="<?php echo $autoplay_wpid; ?>">Scroll Control:</label>
             </th>
             <td>
@@ -89,7 +90,7 @@
                     <table class="form-table">
 
                         <tr>
-                            <th>
+                            <th scope="row">
                                 <label for="wnt-<?php echo $direction_wpid; ?>">Direction:</label>
                             </th>
                             <td>
@@ -102,7 +103,7 @@
                         </tr>
 
                         <tr>
-                            <th>
+                            <th scope="row">
                                 <label for="<?php echo $speed_wpid; ?>">Animation Speed:</label>
                             </th>
                             <td>
@@ -127,7 +128,7 @@
         </tr>
 
         <tr>
-            <th>
+            <th scope="row">
                 <label for="<?php echo $ownertype_wpid; ?>">Agent/Broker:</label>
             </th>
             <td>
@@ -147,12 +148,12 @@
         </tr>
 
         <tr>
-            <th>
+            <th scope="row">
                 <label for="<?php echo $maxresults_wpid; ?>">Max Results:</label>
             </th>
             <td>
                 <input id="<?php echo $maxresults_wpid; ?>" name="<?php echo $maxresults_wpname; ?>"
-                 value="<?php echo $maxresults; ?>" type="text" size="2" maxlength="2" />
+                 value="<?php echo $maxresults; ?>" type="text" size="2" maxlength="2" class="small" />
                 <span class="wolfnet_moreInfo">
                     Define the number of properties to be featured.  The maximum number of
                     properties that can be included is 50.

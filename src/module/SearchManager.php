@@ -89,6 +89,8 @@ class Wolfnet_Module_SearchManager
             if ($http['response']['code'] == '200') {
                 $this->searchManagerCookies($http['cookies']);
                 $http['body'] = $this->removeJqueryFromHTML($http['body']);
+                $http['body'] = $this->removeStyleTag($http['body']);
+                $http['body'] = $this->replaceStyleBoxClasses($http['body']);
 
                 return $http;
             } else {
@@ -229,6 +231,34 @@ class Wolfnet_Module_SearchManager
     {
         return preg_replace('/(<script)(.*)(jquery\.min\.js)(.*)(<\/script>)/i', '', $string);
     }
+
+
+	private function removeStyleTag($string)
+	{
+		return preg_replace(
+			'/(<style[^>]*>[^<]*<\/style>)/i',
+			"<!-- Blocked styles \n$1\n -->",
+			$string
+		);
+	}
+
+
+	private function replaceStyleBoxClasses($string)
+	{
+		return preg_replace(
+			array(
+				'/([\s\'"])style_box([\s\'"])/i',
+				'/([\s\'"])style_box_content([\s\'"])/i',
+				'/<[^>]*[\s\'"]style_box_header[\s\'"][^>]*>([^<]*(<[^\/][^>]*>[^<]*(<[^\/][^>]*>[^<]*<\/[^>]*>)?[^<]*<\/[^>]*>)?[^<]*)<\/[^>]*>/i',
+			),
+			array(
+				'$1wolfnet_box$1',
+				'$1wolfnet_boxContent$1',
+				'<h3>$1</h3>',
+			),
+			$string
+		);
+	}
 
 
     private function searchManagerCookies($cookies = null)
