@@ -315,11 +315,14 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
     {
         global $wp_query;
 
-        //Strip out extraneous periods and commas and url encode quotes
+        //Strip out extraneous periods, commas and ampersands and url encode quotes
         $agentName = preg_replace("/[\.,]/", "", $_REQUEST['agentId']);
         $agentName = preg_replace("/\"/", "%22", $agentName);
         $agentName = preg_replace("/&quote;/", "%22", $agentName);
+        $agentName = preg_replace("/&amp;/", "", $agentName;)
+        $agentName = preg_replace("/[^\x20-\x7E]/", "", $agentName);
 
+        var_dump($agentName);
         $agentData = $this->getAgentById(sanitize_text_field($agentName));
 
         // We need to get a product key that we can pull this agent's listings with.
