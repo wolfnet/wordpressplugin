@@ -321,8 +321,7 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
         $agentName = preg_replace("/&quote;/", "%22", $agentName);
         $agentName = preg_replace("/&amp;/", "", $agentName;)
         $agentName = preg_replace("/[^\x20-\x7E]/", "", $agentName);
-
-        var_dump($agentName);
+        
         $agentData = $this->getAgentById(sanitize_text_field($agentName));
 
         // We need to get a product key that we can pull this agent's listings with.
