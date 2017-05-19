@@ -93,6 +93,10 @@ Please upgrade to the latest version of the plugin as we will be disabling our o
 
 ## Changelog
 
+### 1.16.1
+
+* Fixed issue where some WordPress sites would store the Search Manager cache too long
+
 ### 1.16.0
 
 * New option to hide the offices list, regardless of the number of offices
