@@ -8,7 +8,8 @@
 		minLength: 3,
 		fieldMap: {},
 		searchField: null,
-		suggestionHoverClass: 'wnt-hover'
+		suggestionHoverClass: 'wnt-hover',
+		multiMarket: false
 	};
 
 	var methods =
@@ -34,6 +35,10 @@
 			return this.each(function(){
 				var $smartSearch = $(this);
 				var opts = $.extend(true, {}, defaultOptions, options);
+
+				if (opts.markets.length > 1) {
+					opts.multiMarket = true;
+				}
 
 				if (opts.fields.length === 0) {
 					opts.fields.push($smartSearch.attr('name'));
