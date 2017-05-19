@@ -28,6 +28,7 @@ class Wolfnet_Module_SmartSearch
     {
 
         try {
+
             $defaultAttributes = $this->getDefaults();
 
             $criteria = array_merge($defaultAttributes, (is_array($attrs)) ? $attrs : array());
@@ -60,7 +61,16 @@ class Wolfnet_Module_SmartSearch
     public function smartSearch(array $criteria)
     {
 
+
         $productKey = $this->plugin->keyService->getDefault();
+        $productKeysArray = json_decode($this->plugin->keyService->get());
+
+		// Multi market logic
+		if (count($productKeysArray) > 1)
+			$multiMarket = true;
+		else {
+			$multiMarket = false;
+		};
 
         if (is_wp_error($productKey)) {
             return $this->plugin->getWpError($productKey);
@@ -71,7 +81,6 @@ class Wolfnet_Module_SmartSearch
         $beds = $this->plugin->data->getBeds();
         $baths = $this->plugin->data->getBaths();
         $formAction = $this->plugin->data->getBaseUrl($productKey);
-        $markets = $this->plugin->keyService->get();
 
         if (is_wp_error($prices)) {
             return $this->plugin->getWpError($prices);
@@ -89,24 +98,18 @@ class Wolfnet_Module_SmartSearch
             return $this->plugin->getWpError($formAction);
         }
 
-        if (is_wp_error($markets)) {
-            return $this->plugin->getWpError($markets);
-        }
-
         $vars = array(
             'instance_id'  => str_replace('.', '', uniqid('wolfnet_quickSearch_')),
             'siteUrl'      => site_url(),
-            //'keyids'       => $keyids,
-            'markets'      => json_decode($markets),
+            'markets'      => $productKeysArray,
+            'multiMarket'  => $multiMarket,
             'prices'       => $prices,
             'beds'         => $beds,
             'baths'        => $baths,
             'formAction'   => $formAction,
-            );
+		);
 
         $args = $this->plugin->convertDataType(array_merge($criteria, $vars));
-
-
 
         // Instantiate SmartSearch Service
         $smartSearchService = $this->plugin->ioc->get(
