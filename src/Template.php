@@ -268,7 +268,7 @@ class Wolfnet_Template
 				$this->url . 'lib/jquery-ui/themes/wolfnet-wp/jquery-ui.theme.min.css',
 			),
             'jquery-ui' => array(
-                'http://ajax.googleapis.com/ajax/libs/jqueryui/' . $jquery_ui->ver
+                'https://ajax.googleapis.com/ajax/libs/jqueryui/' . $jquery_ui->ver
                     . '/themes/smoothness/jquery-ui.css'
             ),
             'icomoon' => array(
