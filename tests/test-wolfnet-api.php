@@ -29,9 +29,9 @@ class Test_Wolfnet_Api extends WP_UnitTestCase
         // $this->assertTrue( is_array( $data ) );
 
         // // transient index is generated from an encoded url
-    
-        // $url = 'http://just.atest.com/v1/?key=value&something=somethingelse';
-        
+
+        // $url = 'https://just.atest.com/v1/?key=value&something=somethingelse';
+
         // // set some transients
         // for($i = 1; $i <= 10; $i++) {
         //     $key = 'wolfnet_' . md5($url . $i);
