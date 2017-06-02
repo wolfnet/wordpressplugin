@@ -20,6 +20,7 @@
  *                Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
+// TODO: Disable "Routing" select if Smartsearch is true (logic is specific to Quick Search)
 ?>
 
 <?php
