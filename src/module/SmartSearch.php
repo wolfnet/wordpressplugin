@@ -61,16 +61,34 @@ class Wolfnet_Module_SmartSearch
     public function smartSearch(array $criteria)
     {
 
-
-        $productKey = $this->plugin->keyService->getDefault();
-        $productKeysArray = json_decode($this->plugin->keyService->get());
+		$markets = [];
+		$productKey = $this->plugin->keyService->getDefault();
+		$keyIds = explode(',',$criteria['keyids']);
 
 		// Multi market logic
-		if (count($productKeysArray) > 1)
+		if (sizeof($keyIds) > 1) {
+
+			//Loop keyids and build array of market datasource in multi-market search scenarios
+			foreach ($keyIds as $id) {
+				$keys = json_decode($this->plugin->keyService->get());
+				$thisKey = $this->plugin->keyService->getById($id);
+
+				foreach ($keys as $key) {
+					if ($thisKey == $key->key) {
+						$marketArray = [];
+						array_push($marketArray,$key->market);
+						array_push($marketArray,$key->label);
+						array_push($markets,$marketArray);
+					}
+				}
+			}
+
 			$multiMarket = true;
-		else {
+
+		} else {
+
 			$multiMarket = false;
-		};
+		}
 
         if (is_wp_error($productKey)) {
             return $this->plugin->getWpError($productKey);
@@ -101,7 +119,7 @@ class Wolfnet_Module_SmartSearch
         $vars = array(
             'instance_id'  => str_replace('.', '', uniqid('wolfnet_quickSearch_')),
             'siteUrl'      => site_url(),
-            'markets'      => $productKeysArray,
+            'markets'      => $markets,
             'multiMarket'  => $multiMarket,
             'prices'       => $prices,
             'beds'         => $beds,
