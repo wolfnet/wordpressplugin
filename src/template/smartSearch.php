@@ -123,16 +123,8 @@
 </div>
 
 
-<?php if ($multiMarket) {
+<?php $marketsJson = json_encode($markets); ?>
 
-	$marketsJson = json_encode($markets);
-
-
-	// Group market, passes markets json
-	//
-	// TODO: code consolidation after javascript is complete
-
-	?>
 
 	<script type="text/javascript">
 
@@ -140,7 +132,6 @@
 			var $form = $('#<?php echo $instance_id; ?>_smartSearchForm');
 
 			var markets = JSON.parse('<?php echo $marketsJson; ?>');
-
 
 			var fields = JSON.parse('<?php echo $smartSearchFields; ?>');
 			var map = JSON.parse('<?php echo $smartSearchFieldMap; ?>');
@@ -158,30 +149,3 @@
 
 	</script>
 
-<?php } else {
-
-	// Single market
-
-	?>
-
-	<script type="text/javascript">
-
-		jQuery(function($){
-			var $form = $('#<?php echo $instance_id; ?>_smartSearchForm');
-
-			var fields = JSON.parse('<?php echo $smartSearchFields; ?>');
-			var map = JSON.parse('<?php echo $smartSearchFieldMap; ?>');
-
-			$form.find('.wnt-smartsearch input:first').wolfnetSmartSearch({
-				ajaxUrl    : wolfnet_ajax.ajaxurl,
-				ajaxAction : 'wolfnet_smart_search',
-				componentId: '<?php echo $componentId; ?>',
-				fields     : fields,
-				fieldMap   : map
-			})
-
-		});
-
-	</script>
-
-<?php } ?>
