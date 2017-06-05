@@ -750,8 +750,11 @@ class Wolfnet_Ajax
 			// Retrieve user's search term from request
 			$term = sanitize_text_field($_REQUEST['data']['term']);
 
+			// TODO: sanitize this json string
+			$marketsJson = $_REQUEST['data']['marketsJson'];
+
 			// Make API request to retrieve suggestion data
-			$response = $GLOBALS['wolfnet']->smartSearch->getSuggestions($term);
+			$response = $GLOBALS['wolfnet']->smartSearch->getSuggestions($term,$marketsJson);
 
 		} catch (Wolfnet_Exception $e) {
 

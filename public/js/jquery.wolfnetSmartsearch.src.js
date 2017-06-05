@@ -12,6 +12,8 @@
 		multiMarket: false
 	};
 
+	var markets = null;
+
 	var methods =
 	{
 
@@ -36,6 +38,7 @@
 				var $smartSearch = $(this);
 				var opts = $.extend(true, {}, defaultOptions, options);
 
+				markets = options.markets;
 				if (opts.markets.length > 1) {
 					opts.multiMarket = true;
 				}
@@ -43,6 +46,7 @@
 				if (opts.fields.length === 0) {
 					opts.fields.push($smartSearch.attr('name'));
 				}
+
 
 				/* Store the plugin options with the element. */
 				$smartSearch.data(stateKey, opts);
@@ -390,11 +394,16 @@
 					data.field = pluginData.searchField;
 				}
 
+				data.marketsJson = null;
+				if (markets.length > 0) {
+					data.marketsJson = JSON.stringify(markets);
+				}
+
 				pluginData.xhr = $.ajax({
 					url: pluginData.ajaxUrl,
 					data: { action:pluginData.ajaxAction, data:data },
 					dataType: 'jsonp',
-					context: $smartSearch, // Make the context of this request the smart search element.
+					context: $smartSearch,
 					beforeSend: function(){methods.showSearchingMessage(this);}
 				})
 				.done(function(data){

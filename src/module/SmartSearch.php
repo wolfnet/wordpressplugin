@@ -75,9 +75,13 @@ class Wolfnet_Module_SmartSearch
 
 				foreach ($keys as $key) {
 					if ($thisKey == $key->key) {
-						$marketArray = [];
-						array_push($marketArray,$key->market);
-						array_push($marketArray,$key->label);
+
+						$marketArray = array(
+							'market_label'    => $key->label,
+							'datasource_name' => strtolower($key->market),
+							'product_key'     => $thisKey
+						);
+
 						array_push($markets,$marketArray);
 					}
 				}
@@ -152,7 +156,7 @@ class Wolfnet_Module_SmartSearch
      * @param  string $term
      * @return json array $suggestionsObject
      */
-    public function getSuggestions($term)
+    public function getSuggestions($term,$markets)
     {
         try {
 
@@ -162,7 +166,7 @@ class Wolfnet_Module_SmartSearch
                 $key,
                 '/search_criteria/suggestion',
                 'GET',
-                array('term'=>$term)
+                array('term'=>$term, 'markets' => $markets)
             );
 
             $suggestionsObject = array();
