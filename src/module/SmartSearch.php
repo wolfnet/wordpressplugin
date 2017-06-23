@@ -156,7 +156,7 @@ class Wolfnet_Module_SmartSearch
      * @param  string $term
      * @return json array $suggestionsObject
      */
-    public function getSuggestions($term,$markets)
+    public function getSuggestions($term,$marketList)
     {
         try {
 
@@ -166,7 +166,7 @@ class Wolfnet_Module_SmartSearch
                 $key,
                 '/search_criteria/suggestion',
                 'GET',
-                array('term'=>$term, 'markets' => $markets)
+                array('term'=>$term)
             );
 
             $suggestionsObject = array();
