@@ -8,11 +8,14 @@
 		minLength: 3,
 		fieldMap: {},
 		searchField: null,
-		suggestionHoverClass: 'wnt-hover',
-		multiMarket: false
+		suggestionHoverClass: 'wnt-hover'
 	};
 
-	var markets = null;
+	var multiMarket = {
+		enabled: false,
+		markets: null,
+		currentMarket: null
+	};
 
 	var methods =
 	{
@@ -38,9 +41,9 @@
 				var $smartSearch = $(this);
 				var opts = $.extend(true, {}, defaultOptions, options);
 
-				markets = options.markets;
-				if (opts.markets.length > 1) {
-					opts.multiMarket = true;
+				multiMarket.markets = options.markets;
+				if (multiMarket.markets.length > 1) {
+					multiMarket.enabled = true;
 				}
 
 				if (opts.fields.length === 0) {
@@ -394,9 +397,16 @@
 					data.field = pluginData.searchField;
 				}
 
-				data.marketsJson = null;
-				if (markets.length > 0) {
-					data.marketsJson = JSON.stringify(markets);
+				if (multiMarket.enabled &&
+					multiMarket.markets.length > 0
+				) {
+					var marketList = [];
+
+					for (i = 0; i < multiMarket.markets.length; i++) {
+						marketList.push(multiMarket.markets[i].datasource_name);
+					}
+
+					data.marketList = JSON.stringify(marketList);
 				}
 
 				pluginData.xhr = $.ajax({
