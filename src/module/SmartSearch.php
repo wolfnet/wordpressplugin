@@ -161,12 +161,13 @@ class Wolfnet_Module_SmartSearch
         try {
 
             $key = $this->plugin->keyService->getDefault();
+            $marketList = str_replace("\\",'',$marketList);
 
             $response = $this->plugin->api->sendRequest(
                 $key,
                 '/search_criteria/suggestion',
                 'GET',
-                array('term'=>$term)
+                array('term'=>$term,'market_list'=>$marketList)
             );
 
             $suggestionsObject = array();
