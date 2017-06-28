@@ -266,8 +266,18 @@
 						.text(data[i].value)
 						.addClass('wolfnet-suggestion-label');
 
+					// Get market suffix, if multi-market is enabled and current scope is null
+					if (multiMarket.enabled &&
+						multiMarket.currentMarket == null
+					) {
+						// TODO: Lookup label for market datasource here
+						marketSuffix = ' in ' + data[i].market;
+					} else {
+						marketSuffix = '';
+					}
+
 					var $fieldLabel = $('<span>')
-						.text(data[i].label)
+						.text(data[i].label + marketSuffix)
 						.addClass('wolfnet-suggestion-field');
 
 					var $clearFix = $('<span>')
