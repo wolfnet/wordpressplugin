@@ -280,8 +280,8 @@
 					if (multiMarket.enabled &&
 						multiMarket.currentMarket == null
 					) {
-						var datasource = multiMarket.labelLookup[data[i].market];
-						var marketSuffix = ' in ' + datasource;
+						var datasource = data[i].market;
+						var marketSuffix = ' in ' + multiMarket.labelLookup[datasource];
 					} else {
 						var datasource = null;
 						marketSuffix = '';
@@ -462,7 +462,7 @@
 		 * @param String field The name of the field (if any) to add the value to.
 		 * @return jQuery The jQuery selection object the plugin is operating on.
 		 */
-		addValue: function($smartSearch, value, field, isSilent) {
+		addValue: function($smartSearch, value, field, isSilent, datasource) {
 			isSilent = (typeof isSilent !== 'undefined') ? isSilent : false;
 
 			var pluginData = $smartSearch.data(stateKey);
@@ -470,6 +470,11 @@
 			var $form = $($smartSearch[0].form);
 			var $searchInput = pluginData.searchInput;
 			var fieldInputChanged = false;
+
+			// Set currentMarket to the market of this criteria being added
+			if (multiMarket.currentMarket == null) {
+				multiMarket.currentMarket = datasource;
+			}
 
 			// Retrieve the field name from the field map if necessary.
 			field = methods.getFieldNameFromFieldMap($smartSearch, field);
@@ -1062,13 +1067,15 @@
 			var $smartSearch = event.data.$smartSearch;
 			var pluginData = $smartSearch.data(stateKey);
 			var $searchInput = pluginData.searchInput;
-			var v = $suggestion.data('value');
-			var f = $suggestion.data('field');
+
+			var value = $suggestion.data('value');
+			var field = $suggestion.data('field');
+			var datasource = $suggestion.data('datasource');
 
 			$searchInput.val('');
 
 			methods.resetSuggestionsList($smartSearch);
-			methods.addValue($smartSearch, v, f);
+			methods.addValue($smartSearch, value, field, false, datasource);
 
 			$smartSearch.trigger('wntFocus');
 
