@@ -53,12 +53,9 @@
 					}
 				}
 
-				console.log(multiMarket.labelLookup);
-
 				if (opts.fields.length === 0) {
 					opts.fields.push($smartSearch.attr('name'));
 				}
-
 
 				/* Store the plugin options with the element. */
 				$smartSearch.data(stateKey, opts);
@@ -279,8 +276,7 @@
 					if (multiMarket.enabled &&
 						multiMarket.currentMarket == null
 					) {
-						// TODO: Lookup label for market datasource here
-						marketSuffix = ' in ' + data[i].market;
+						marketSuffix = ' in ' + multiMarket.labelLookup[data[i].market];
 					} else {
 						marketSuffix = '';
 					}
@@ -419,8 +415,12 @@
 				if (multiMarket.enabled &&
 					multiMarket.markets.length > 0
 				) {
-					var marketList = [];
 
+					// TODO: Build detection for number of criteria in smart search
+
+					// TODO: Add market scope logic based on above #
+
+					var marketList = [];
 					for (i = 0; i < multiMarket.markets.length; i++) {
 						marketList.push(multiMarket.markets[i].datasource_name);
 					}
