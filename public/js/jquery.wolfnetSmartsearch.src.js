@@ -14,7 +14,8 @@
 	var multiMarket = {
 		enabled: false,
 		markets: null,
-		currentMarket: null
+		currentMarket: null,
+		labelLookup: null
 	};
 
 	var methods =
@@ -44,7 +45,15 @@
 				multiMarket.markets = options.markets;
 				if (multiMarket.markets.length > 1) {
 					multiMarket.enabled = true;
+
+					// Build lookup array
+					multiMarket.labelLookup = {};
+					for (i = 0; i < multiMarket.markets.length; i++) {
+						multiMarket.labelLookup[multiMarket.markets[i].datasource_name] = multiMarket.markets[i].market_label;
+					}
 				}
+
+				console.log(multiMarket.labelLookup);
 
 				if (opts.fields.length === 0) {
 					opts.fields.push($smartSearch.attr('name'));
