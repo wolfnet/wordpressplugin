@@ -280,8 +280,10 @@
 					if (multiMarket.enabled &&
 						multiMarket.currentMarket == null
 					) {
-						marketSuffix = ' in ' + multiMarket.labelLookup[data[i].market];
+						var datasource = multiMarket.labelLookup[data[i].market];
+						var marketSuffix = ' in ' + datasource;
 					} else {
+						var datasource = null;
 						marketSuffix = '';
 					}
 
@@ -297,6 +299,7 @@
 						.addClass('wnt-suggestion')
 						.data('value', data[i].value)
 						.data('field', data[i].field)
+						.data('datasource', datasource)
 						.append($valueLabel)
 						.append($fieldLabel)
 						.append($clearFix)
