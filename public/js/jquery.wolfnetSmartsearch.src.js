@@ -14,6 +14,7 @@
 	var multiMarket = {
 		enabled: false,
 		markets: null,
+		allMarkets: null,
 		currentMarket: null,
 		labelLookup: null
 	};
@@ -42,14 +43,17 @@
 				var $smartSearch = $(this);
 				var opts = $.extend(true, {}, defaultOptions, options);
 
+
 				multiMarket.markets = options.markets;
 				if (multiMarket.markets.length > 1) {
 					multiMarket.enabled = true;
 
-					// Build lookup array
+					// Build label lookup object, and full market array to be passed as JSON
 					multiMarket.labelLookup = {};
+					multiMarket.allMarkets = [];
 					for (i = 0; i < multiMarket.markets.length; i++) {
 						multiMarket.labelLookup[multiMarket.markets[i].datasource_name] = multiMarket.markets[i].market_label;
+						multiMarket.allMarkets.push(multiMarket.markets[i].datasource_name);
 					}
 				}
 
@@ -394,6 +398,8 @@
 		input: function($smartSearch, term) {
 			var pluginData = $smartSearch.data(stateKey);
 			var $container = pluginData.suggestionContainer;
+			var $form = $($smartSearch[0].form);
+			var suggestionCount = $form.find('.wnt-ss-value').length;
 
 			// If there was already a request in progress abort it.
 			if (pluginData.xhr || null !== null && plugin.xhr.readyState != 4) {
@@ -413,19 +419,12 @@
 				}
 
 				if (multiMarket.enabled &&
-					multiMarket.markets.length > 0
+					multiMarket.markets.length > 0 &&
+					suggestionCount == 0
 				) {
 
-					// TODO: Build detection for number of criteria in smart search
-
-					// TODO: Add market scope logic based on above #
-
-					var marketList = [];
-					for (i = 0; i < multiMarket.markets.length; i++) {
-						marketList.push(multiMarket.markets[i].datasource_name);
-					}
-
-					data.marketList = JSON.stringify(marketList);
+					multiMarket.currentMarket = null;
+					data.marketList = JSON.stringify(multiMarket.allMarkets);
 				}
 
 				pluginData.xhr = $.ajax({
