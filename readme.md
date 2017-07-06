@@ -9,7 +9,7 @@ Requires at least:  | 3.5.1
 Tested up to:       | 4.7
 Stable tag:         | {X.X.X-stable}
 License:            | GPLv2 or later
-License URI:        | http://www.gnu.org/licenses/gpl-2.0.html
+License URI:        | https://www.gnu.org/licenses/gpl-2.0.html
 
 > The WolfNet IDX for WordPress plugin provides IDX search solution integration with any WordPress
 website.
@@ -667,10 +667,10 @@ The following individuals contributed to the creation of this plugin.
 ## Thanks
 We would like to thank the following projects as they have been a big part of creating this plugin.
 
-* **[Sublime Text](http://sublimetext.com)**
-* **[jQuery](http://jquery.com)**
-* **[Vagrant](http://vagrantup.com)**
+* **[Sublime Text](https://sublimetext.com)**
+* **[jQuery](https://jquery.com)**
+* **[Vagrant](https://vagrantup.com)**
 * **[Less CSS](http://lesscss.org)**
 * **jQuery Tooltip** by Jörn Zaefferer
 * **jQuery imagesLoaded** by Paul Irish
-* **[PHPUnit](http://phpunit.de)**
+* **[PHPUnit](https://phpunit.de)**

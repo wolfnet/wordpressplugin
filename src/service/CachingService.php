@@ -4,7 +4,7 @@
  * WolfNet Caching Service
  *
  * This class is used for caching wolfnet data and serves as a facade to the WordPress Transients
- * API (see http://codex.wordpress.org/Transients_API). Encapsulating this interaction with the WP
+ * API (see https://codex.wordpress.org/Transients_API). Encapsulating this interaction with the WP
  * API into its own class allows us to apply WolfNet logic to every request to the API.
  *
  * One big aspect of our implementation is that we maintain our own registry of cache keys which we
@@ -16,7 +16,7 @@
  *
  * @package Wolfnet
  * @copyright 2015 WolfNet Technologies, LLC.
- * @license GPLv2 or later (http://www.gnu.org/licenses/gpl-2.0.html)
+ * @license GPLv2 or later (https://www.gnu.org/licenses/gpl-2.0.html)
  *
  */
 class Wolfnet_Service_CachingService
