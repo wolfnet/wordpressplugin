@@ -7,7 +7,7 @@
  *
  * @package Wolfnet
  * @copyright 2015 WolfNet Technologies, LLC.
- * @license GPLv2 or later (http://www.gnu.org/licenses/gpl-2.0.html)
+ * @license GPLv2 or later (https://www.gnu.org/licenses/gpl-2.0.html)
  *
  */
 class Wolfnet_Template
@@ -268,7 +268,7 @@ class Wolfnet_Template
 				$this->url . 'lib/jquery-ui/themes/wolfnet-wp/jquery-ui.theme.min.css',
 			),
             'jquery-ui' => array(
-                'http://ajax.googleapis.com/ajax/libs/jqueryui/' . $jquery_ui->ver
+                'https://ajax.googleapis.com/ajax/libs/jqueryui/' . $jquery_ui->ver
                     . '/themes/smoothness/jquery-ui.css'
             ),
             'icomoon' => array(
