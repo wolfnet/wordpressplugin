@@ -93,6 +93,10 @@ Please upgrade to the latest version of the plugin as we will be disabling our o
 
 ## Changelog
 
+### 1.16.2
+
+* Added support for SSL
+
 ### 1.16.1
 
 * Fixed issue where some WordPress sites would store the Search Manager cache too long
