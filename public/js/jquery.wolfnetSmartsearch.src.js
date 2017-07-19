@@ -332,7 +332,6 @@
 
 		submitHandler: function($smartSearch) {
 			var $form = $($smartSearch[0].form);
-			var pluginData = $smartSearch.data(stateKey);
 
 			$form.submit(function(event)
 			{
@@ -340,11 +339,9 @@
 					// NOT multi-market, so submit form and rely on action value in form tag
 					return true;
 				} else {
-
-					// TODO: retrieve datasource of an suggestion entry and lookup action
-
-					// TEMP false return
-					return false;
+					// Dynamically set action to scope which current search is under
+					$form.attr('action',multiMarket.actionLookup[multiMarket.currentMarket]);
+					return true;
 				}
 			});
 		},
