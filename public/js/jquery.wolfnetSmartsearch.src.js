@@ -310,9 +310,6 @@
 
 				}
 
-				/* Highlight the first item in the suggestion list. */
-				$container.children(".wnt-suggestion:first").addClass(hoverClass);
-
 				methods.showSuggestionsList($smartSearch);
 
 			} else {
