@@ -76,10 +76,20 @@ class Wolfnet_Module_SmartSearch
 				foreach ($keys as $key) {
 					if ($thisKey == $key->key) {
 
+						// Get site base url for smart search form submit
+						$siteUrlResponse = $this->plugin->api->sendRequest(
+							$thisKey,
+							'/settings/site_base_url',
+							'GET',
+							array('key'=>$thisKey)
+						);
+
+						// Build site/market metadata array to be passed in paramaterized json
 						$marketArray = array(
 							'market_label'    => $key->label,
 							'datasource_name' => strtolower($key->market),
-							'product_key'     => $thisKey
+							'product_key'     => $thisKey,
+							'site_url'        => $siteUrlResponse['responseData']['data']['SITE_BASE_URL']
 						);
 
 						array_push($markets,$marketArray);
