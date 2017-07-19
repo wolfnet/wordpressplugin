@@ -9,7 +9,7 @@
  * the decorator from the execution of a request (even at run time) when debugging issues,
  * effectively eliminating caching from the equation to ensure it is not the source of any issues.
  *
- * This class uses the WordPress Transients API (see http://codex.wordpress.org/Transients_API) to
+ * This class uses the WordPress Transients API (see https://codex.wordpress.org/Transients_API) to
  * store (cache) and later retrieve certain API responses. This means that there are fewer requests
  * being made directly to the API server, reducing load and lower response times.
  *
@@ -19,7 +19,7 @@
  *
  * @package Wolfnet\Api
  * @copyright 2015 WolfNet Technologies, LLC.
- * @license GPLv2 or later (http://www.gnu.org/licenses/gpl-2.0.html)
+ * @license GPLv2 or later (https://www.gnu.org/licenses/gpl-2.0.html)
  *
  */
 class Wolfnet_Api_CachingDecorator extends Wolfnet_Api_Client
