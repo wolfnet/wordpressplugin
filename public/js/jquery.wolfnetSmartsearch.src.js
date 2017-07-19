@@ -16,7 +16,8 @@
 		markets: null,
 		allMarkets: null,
 		currentMarket: null,
-		labelLookup: null
+		labelLookup: null,
+		actionLookup: null
 	};
 
 	var methods =
@@ -42,17 +43,22 @@
 			return this.each(function(){
 				var $smartSearch = $(this);
 				var opts = $.extend(true, {}, defaultOptions, options);
-
-
 				multiMarket.markets = options.markets;
+
 				if (multiMarket.markets.length > 1) {
 					multiMarket.enabled = true;
 
-					// Build label lookup object, and full market array to be passed as JSON
+					// Build label lookup objects, and full market array to be passed as JSON
 					multiMarket.labelLookup = {};
+					multiMarket.actionLookup = {};
 					multiMarket.allMarkets = [];
 					for (i = 0; i < multiMarket.markets.length; i++) {
+
+						// Lookups objects
 						multiMarket.labelLookup[multiMarket.markets[i].datasource_name] = multiMarket.markets[i].market_label;
+						multiMarket.actionLookup[multiMarket.markets[i].datasource_name] = multiMarket.markets[i].site_url;
+
+						// Market list json
 						multiMarket.allMarkets.push(multiMarket.markets[i].datasource_name);
 					}
 				}
@@ -75,6 +81,9 @@
 
 				/* Look for existing input fields and add values to the smart search input. */
 				methods.refreshExistingValues($smartSearch, null, false);
+
+				/* Submit handler too handle multi-market submit vs simple 1 market setups. */
+				methods.submitHandler($smartSearch);
 
 			});
 
@@ -319,6 +328,25 @@
 
 			}
 
+		},
+
+		submitHandler: function($smartSearch) {
+			var $form = $($smartSearch[0].form);
+			var pluginData = $smartSearch.data(stateKey);
+
+			$form.submit(function(event)
+			{
+				if (!multiMarket.enabled) {
+					// NOT multi-market, so submit form and rely on action value in form tag
+					return true;
+				} else {
+
+					// TODO: retrieve datasource of an suggestion entry and lookup action
+
+					// TEMP false return
+					return false;
+				}
+			});
 		},
 
 		defineEvents: function($smartSearch) {
