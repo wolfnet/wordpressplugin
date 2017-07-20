@@ -61,7 +61,7 @@ class Wolfnet_Module_SmartSearch
     public function smartSearch(array $criteria)
     {
 
-		$markets = [];
+		$markets = array();
 		$productKey = $this->plugin->keyService->getDefault();
 		$keyIds = explode(',',$criteria['keyids']);
 
