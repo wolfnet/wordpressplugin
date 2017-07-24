@@ -63,10 +63,15 @@ class Wolfnet_Module_SmartSearch
 
 		$markets = array();
 		$productKey = $this->plugin->keyService->getDefault();
-		$keyIds = explode(',',$criteria['keyids']);
+
+		if (isset($criteria['keyids'])) {
+			$keyIds = explode(',',$criteria['keyids']);
+		}
 
 		// Multi market logic
-		if (sizeof($keyIds) > 1) {
+		if (isset($criteria['keyids']) &&
+			sizeof($keyIds) > 1
+		) {
 
 			//Loop keyids and build array of market datasource in multi-market search scenarios
 			foreach ($keyIds as $id) {
