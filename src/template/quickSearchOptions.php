@@ -210,15 +210,25 @@
         var $smartsearch = $('#<?php echo $smartsearch_wpid; ?>');
         if ($smartsearch.val() === 'true') {
             $('#<?php echo $view_wpid; ?>').prop('disabled',true);
+            $('#<?php echo $routing_wpid; ?>').prop('disabled',true);
         }
 
         $smartsearch.change(function() {
-            var $layoutSetting = $('#<?php echo $view_wpid; ?>');
 
+        	// toggle "Layout" setting onchange
+            var $layoutSetting = $('#<?php echo $view_wpid; ?>');
             if ($smartsearch.val() === 'true') {
                 $layoutSetting.prop('disabled',true);
             } else {
                 $layoutSetting.prop("disabled", false);
+            }
+
+        	// toggle "Routing" setting onchange
+            var $routingSetting = $('#<?php echo $routing_wpid; ?>');
+            if ($smartsearch.val() === 'true') {
+                $routingSetting.prop('disabled',true);
+            } else {
+                $routingSetting.prop("disabled", false);
             }
         });
 
