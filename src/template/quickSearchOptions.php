@@ -78,10 +78,15 @@
         <?php if(count($markets) > 1): ?>
             <tr>
                 <th scope="row">
-                    <label>Market:</label>
+                    <label>Markets:</label>
                 </th>
                 <td>
                     <table>
+                        <tr>
+                            <td>
+                            	Market Labels can be customized in the General Settings of the WolfNet IDX Plugin.
+                            </td>
+                        </td>
                         <tr>
                             <td>
                                 <input id="productkey_all" type="checkbox" class="allproductkeys"
