@@ -84,7 +84,7 @@
                     <table>
                         <tr>
                             <td>
-                            	Market Labels can be customized in the General Settings of the WolfNet IDX Plugin.
+								The display name for each of your markets can be customized in the General Settings section of the WolfNet IDX Plugin.
                             </td>
                         </td>
                         <tr>
