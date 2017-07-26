@@ -17,7 +17,8 @@
 		allMarkets: null,
 		currentMarket: null,
 		labelLookup: null,
-		actionLookup: null
+		actionLookup: null,
+		submitted: false
 	};
 
 	var methods =
@@ -338,14 +339,20 @@
 			$form.submit(function(event)
 			{
 				if (!multiMarket.enabled) {
+
 					// NOT multi-market, so submit form and rely on action value in form tag
 					return true;
+
 				} else {
+
 					// Dynamically set action to scope which current search is under
 					$form.attr('action',multiMarket.actionLookup[multiMarket.currentMarket]);
+					multiMarket.submitted = true;
 					return true;
+
 				}
 			});
+
 		},
 
 		defineEvents: function($smartSearch) {
