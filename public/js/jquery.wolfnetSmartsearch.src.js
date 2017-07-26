@@ -40,12 +40,14 @@
 				return this;
 			}
 
-			return this.each(function(){
+			return this.each(function() {
+
 				var $smartSearch = $(this);
 				var opts = $.extend(true, {}, defaultOptions, options);
 				multiMarket.markets = options.markets;
 
-				if (multiMarket.markets.length > 1) {
+				// multi-market enabled if pertinent arguments contain data
+				if (multiMarket.markets.length) {
 					multiMarket.enabled = true;
 
 					// Build label lookup objects, and full market array to be passed as JSON
