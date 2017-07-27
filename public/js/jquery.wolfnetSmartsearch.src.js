@@ -362,7 +362,7 @@
 			var $suggestions = pluginData.suggestionContainer;
 			var $form = $($smartSearch[0].form);
 
-			if ($form.width() <= 400) {
+			if ($form.width() <= 500) {
 				// Apply narrow CSS based on container size
 				methods.applyNarrowCSS($form);
 			}
