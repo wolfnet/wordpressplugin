@@ -290,7 +290,8 @@
 
 					// Get market suffix, if multi-market is enabled and current scope is null
 					if (multiMarket.enabled &&
-						multiMarket.currentMarket == null
+						multiMarket.currentMarket == null &&
+						multiMarket.markets.length > 1
 					) {
 						var datasource = data[i].market;
 						var marketSuffix = ' in ' + multiMarket.labelLookup[datasource];
@@ -342,14 +343,16 @@
 
 					// NOT multi-market, so submit form and rely on action value in form tag
 					return true;
-
 				} else {
 
 					// Dynamically set action to scope which current search is under
-					$form.attr('action',multiMarket.actionLookup[multiMarket.currentMarket]);
-					multiMarket.submitted = true;
+					if (multiMarket.markets.length == 1) {
+						// use action of "loner market"
+						$form.attr('action',multiMarket.actionLookup[multiMarket.markets[0].datasource_name]);
+					} else {
+						$form.attr('action',multiMarket.actionLookup[multiMarket.currentMarket]);
+					}
 					return true;
-
 				}
 			});
 
@@ -452,13 +455,27 @@
 					data.field = pluginData.searchField;
 				}
 
-				if (multiMarket.enabled &&
-					multiMarket.markets.length > 0 &&
-					suggestionCount == 0
-				) {
+				if (multiMarket.enabled) {
 
-					multiMarket.currentMarket = null;
-					data.marketList = JSON.stringify(multiMarket.allMarkets);
+					// Market scope scenarios
+					if (multiMarket.markets.length == 1) {
+
+						// Use the datasource of "loner market"
+						data.marketList = '["' + multiMarket.markets[0].datasource_name + '"]';
+					} else if (
+						multiMarket.markets.length > 1 &&
+						suggestionCount == 0
+					) {
+
+												// if count is 0 in 1+ market scenarios, reset marketlist and current scope
+						multiMarket.currentMarket = null;
+						data.marketList = JSON.stringify(multiMarket.allMarkets);
+					} else if (multiMarket.currentMarket != null) {
+
+						// if current market is not null and we've made it this far, use that
+						data.marketList = '["' + multiMarket.currentMarket + '"]';
+					}
+
 				}
 
 				pluginData.xhr = $.ajax({
