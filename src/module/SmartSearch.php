@@ -53,25 +53,45 @@ class Wolfnet_Module_SmartSearch
     }
 
 
-    /**
-     * Get markup for Smart Search form
-     * @param  array  $criteria
-     * @return string form markup
-     */
-    public function smartSearch(array $criteria)
-    {
+	/**
+	 * Get markup for Smart Search form
+	 * @param  array  $criteria
+	 * @return string form markup
+	 */
+	public function smartSearch(array $criteria)
+	{
 
 		$markets = array();
 		$productKey = $this->plugin->keyService->getDefault();
-		$keyIds = explode(',',$criteria['keyids']);
 
 		// Multi market logic
-		if (isset($criteria['keyids'])
-		) {
+		if (isset($criteria['keyids'])) {
+
+			$keyIds = explode(',',$criteria['keyids']);
+			$keys = json_decode($this->plugin->keyService->get());
+
+			// Get market datasource
+			for ($i=0; $i<count($keys); $i++) {
+				$key = $keys[$i]->key;
+
+				try {
+
+					$market = $GLOBALS['wolfnet']->data->getMarketName($key);
+
+					if (!is_wp_error($market)) {
+						$keys[$i]->market = strtoupper($market);
+					}
+
+				} catch (Exception $e) {
+					$market = '';
+				}
+
+			}
+
 
 			//Loop keyids and build array of market datasource in multi-market search scenarios
 			foreach ($keyIds as $id) {
-				$keys = json_decode($this->plugin->keyService->get());
+
 				$thisKey = $this->plugin->keyService->getById($id);
 
 				foreach ($keys as $key) {
