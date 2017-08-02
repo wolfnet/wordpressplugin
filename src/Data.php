@@ -80,6 +80,9 @@ class Wolfnet_Data
 
     public function getMap($listingsData, $keyid, $productKey = null)
     {
+		wp_enqueue_script('wolfnet-maptracks');
+		wp_enqueue_script('wolfnet-map-driver');
+		//wp_enqueue_script('wolfnet-maptracks-theme');
         return $this->plugin->views->mapView($listingsData, $keyid, $productKey);
     }
 
