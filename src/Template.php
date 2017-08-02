@@ -192,16 +192,19 @@ class Wolfnet_Template
 					. $this->getGoogleMapChannel(),
                 array(),
                 $this->version,
+				true,
             ),
             'wolfnet-maptracks' => array(
 				'https://common.wolfnet.com/js/maptracks/v3/maptracks.bundle.min.js?v=3.0.7',
 				array('jquerywnt', 'google-maps'),
                 $this->version,
+				true,
             ),
 			'wolfnet-map-driver' => array(
                 $this->url . 'js/jquery.wolfnetMaptracksDriver.min.js',
                 array('jquery'),
                 $this->version,
+				true,
             ),
 			// Uncomment if the MapTracks theme JS is ever needed
 			/*
