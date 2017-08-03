@@ -3,15 +3,20 @@
 
 		<?php echo $formHeader; ?>
 
-		<p>Select the appearance of the widgets.</p>
+		<h2>Widget Theme</h2>
 
-		<div class="notice notice-warning below-h2" style="clear: both;">
-			<p>
-				Updating to the 'Modern' widget themes may cause display conflicts on your website.
-				If you experience any conflicts, switch back to the 'Classic' widget theme
-				and contact your web developer to correct these issues.
-			</p>
+		<div class="wolfnet_boxContent">
+			<p>Select the appearance of the widgets.</p>
+
+			<div class="notice notice-warning below-h2" style="clear: both;">
+				<p>
+					Updating to the 'Modern' widget themes may cause display conflicts on your website.
+					If you experience any conflicts, switch back to the 'Classic' widget theme
+					and contact your web developer to correct these issues.
+				</p>
+			</div>
 		</div>
+
 
 		<fieldset>
 

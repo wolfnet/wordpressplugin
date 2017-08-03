@@ -22,9 +22,9 @@
 	</p>
 
 
-	<h2>Widget Theme</h2>
 
-	<div>
+
+	<div class="featured-listings-theme">
 		<?php echo $themeSection; ?>
 	</div>
 
