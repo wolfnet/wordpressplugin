@@ -7,7 +7,7 @@
  *
  * @package Wolfnet
  * @copyright 2015 WolfNet Technologies, LLC.
- * @license GPLv2 or later (http://www.gnu.org/licenses/gpl-2.0.html)
+ * @license GPLv2 or later (https://www.gnu.org/licenses/gpl-2.0.html)
  *
  */
 class Wolfnet_Template
@@ -48,9 +48,17 @@ class Wolfnet_Template
             'wolfnet-smartsearch',
             'wolfnet-listing-grid',
             'wolfnet-toolbar',
-            'wolfnet-maptracks',
-            'mapquest-api'
         );
+
+		// Include map scripts only on non-header/footer action requests
+		if (
+			!has_action('wp_ajax_wolfnet_content_header') && !has_action('wp_ajax_wolfnet_content_footer') &&
+			(!isset($_SERVER['REQUEST_URI']) || !preg_match('/(header|footer)[^\/]*\.php/', $_SERVER['REQUEST_URI']))
+		) {
+			array_push($scripts, 'wolfnet-maptracks');
+			array_push($scripts, 'wolfnet-map-driver');
+			//array_push($scripts, 'wolfnet-maptracks-theme');
+		}
 
         foreach ($scripts as $script) {
             wp_enqueue_script($script);
@@ -71,6 +79,7 @@ class Wolfnet_Template
             'wolfnet-agent',
             'icomoon',
             'google-fonts',
+            //'wolfnet-maptracks-theme-css',
         );
 
 		$widgetTheme = $this->plugin->views->getWidgetTheme();
@@ -126,13 +135,17 @@ class Wolfnet_Template
                 $this->url . 'js/jquery.imagesloaded.min.js',
                 array('jquery'),
             ),
+			'jquerywnt' => array(
+				$this->url . 'js/jquerywnt.min.js',
+				array('jquery'),
+			),
             'wolfnet' => array(
                 $this->url . 'js/wolfnet.min.js',
                 array('jquery', 'tooltipjs'),
             ),
             'wolfnet-admin' => array(
                 $this->url . 'js/wolfnetAdmin.min.js',
-                array('jquery-ui-dialog', 'jquery-ui-tabs', 'jquery-ui-datepicker', 'wolfnet'),
+                array('jquery-ui-dialog', 'jquery-ui-tabs', 'jquery-ui-datepicker', 'jquery', 'wolfnet'),
             ),
             'wolfnet-search-manager' => array(
                 $this->url . 'js/jquery.wolfnetSearchManager.min.js',
@@ -170,18 +183,35 @@ class Wolfnet_Template
                 $this->url . 'js/jquery.wolfnetShortcodeBuilder.min.js',
                 array('jquery-ui-widget', 'jquery-effects-core', 'wolfnet-admin'),
             ),
-            'mapquest-api' => array(
-                '//www.mapquestapi.com/sdk/js/v7.0.s/mqa.toolkit.js?key=Gmjtd%7Clu6znua2n9%2C7l%3Do5-la70q',
+			'wolfnet-agent-office' => array(
+				$this->url . 'js/wolfnetAgentOffice.min.js',
+				array('jquery', 'wolfnet'),
+			),
+			'google-maps' => array(
+				'https://maps.googleapis.com/maps/api/js?client=gme-wolfnettechnologies&v=3.26&channel='
+					. $this->getGoogleMapChannel(),
                 array(),
                 $this->version,
-                true,
             ),
             'wolfnet-maptracks' => array(
-                $this->url . 'js/jquery.wolfnetMaptracks.min.js',
-                array('jquery', 'mapquest-api'),
+				'https://common.wolfnet.com/js/maptracks/v3/maptracks.bundle.min.js?v=3.0.7',
+				array('jquerywnt', 'google-maps'),
                 $this->version,
-                true,
             ),
+			'wolfnet-map-driver' => array(
+                $this->url . 'js/jquery.wolfnetMaptracksDriver.min.js',
+                array('jquery'),
+                $this->version,
+            ),
+			// Uncomment if the MapTracks theme JS is ever needed
+			/*
+			'wolfnet-maptracks-theme' => array(
+				'https://common.wolfnet.com/js/maptracks/themes/2_5/theme.js?v=1.2.3',
+				$this->version,
+				true,
+			),
+			*/
+
         );
 
         foreach ($scripts as $script => $data) {
@@ -238,7 +268,7 @@ class Wolfnet_Template
 				$this->url . 'lib/jquery-ui/themes/wolfnet-wp/jquery-ui.theme.min.css',
 			),
             'jquery-ui' => array(
-                'http://ajax.googleapis.com/ajax/libs/jqueryui/' . $jquery_ui->ver
+                'https://ajax.googleapis.com/ajax/libs/jqueryui/' . $jquery_ui->ver
                     . '/themes/smoothness/jquery-ui.css'
             ),
             'icomoon' => array(
@@ -247,6 +277,12 @@ class Wolfnet_Template
             'google-fonts' => array(
                 'https://fonts.googleapis.com/css?family=' . implode('|', $google_fonts),
             ),
+			// Uncomment if the MapTracks theme CSS is ever needed (in combination with theme JS)
+			/*
+			'wolfnet-maptracks-theme-css' => array(
+				'https://common.wolfnet.com/js/maptracks/themes/2_5/theme.css?v=1.2.3',
+			),
+			*/
         );
 
 		// Add widget theme styles
@@ -289,7 +325,7 @@ class Wolfnet_Template
             foreach ($_REQUEST['keyList'] as $key) {
                 try {
                     $disclaimer = $this->plugin->api->sendRequest(
-                    	$key,
+                    	sanitize_key($key),
                     	'/core/disclaimer',
                     	'GET',
                     	array(
@@ -319,7 +355,7 @@ class Wolfnet_Template
      */
     public function templateRedirect()
     {
-        $pagename = (array_key_exists('pagename', $_REQUEST)) ? $_REQUEST['pagename'] : '';
+        $pagename = (array_key_exists('pagename', $_REQUEST)) ? sanitize_text_field($_REQUEST['pagename']) : '';
         $pagename = str_replace('-', '_', $pagename);
         $prefix   = 'wolfnet_';
 
@@ -336,17 +372,24 @@ class Wolfnet_Template
 
             status_header(200);
 
+			function wnt_remove_maptracks () {
+				wp_dequeue_script('wolfnet-maptracks');
+			}
+
             switch ($pagename) {
 
                 case 'wolfnet_content':
+					add_action('wp_print_scripts', 'wnt_remove_maptracks');
                     $this->plugin->ajax->remoteContent();
                     break;
 
                 case 'wolfnet_content_header':
+					add_action('wp_print_scripts', 'wnt_remove_maptracks');
                     $this->plugin->ajax->remoteContentHeader();
                     break;
 
                 case 'wolfnet_content_footer':
+					add_action('wp_print_scripts', 'wnt_remove_maptracks');
                     $this->plugin->ajax->remoteContentFooter();
                     break;
 
@@ -412,9 +455,27 @@ class Wolfnet_Template
         return array(
             'ajaxurl'        => admin_url('admin-ajax.php'),
             'loaderimg'      => admin_url('/images/wpspin_light.gif'),
-            'buildericon'    => $this->url . 'img/wp_wolfnet_nav.png',
-            'houseoverIcon'    => $this->url . 'img/houseover.png',
+            'buildericon'    => $this->url . 'img/paw-gold.svg',
+            'houseoverIcon'  => $this->url . 'img/houseover.png',
             'useDialogClass' => (version_compare($wp_version, '3.6')>0) ? "true" : "false",
         );
     }
+
+
+	private function getGoogleMapChannel()
+	{
+		$api_key = $this->plugin->keyService->getDefault();
+		$channel = 'unknown_wp';
+
+		if ($api_key) {
+			try {
+				$channel = $this->plugin->data->getMarketName($api_key) . '_wp';
+			} catch (Exception $e) {
+			}
+		}
+
+		return $channel;
+
+	}
+
 }

@@ -7,7 +7,7 @@
  *
  * @package Wolfnet
  * @copyright 2015 WolfNet Technologies, LLC.
- * @license GPLv2 or later (http://www.gnu.org/licenses/gpl-2.0.html)
+ * @license GPLv2 or later (https://www.gnu.org/licenses/gpl-2.0.html)
  *
  */
 class Wolfnet_Module_AgentPages
@@ -85,6 +85,7 @@ class Wolfnet_Module_AgentPages
             'soldlistings'   => false,
             'excludeoffices' => '',
             'numperpage'     => 10,
+            'agentsort'      => 'name',
         );
 
     }
@@ -211,15 +212,15 @@ class Wolfnet_Module_AgentPages
 			'display_agent'            => 1,
 			'email_address'            => 'tester@test.com',
 			'experience'               => 'In tincidunt lorem sed nisl venenatis imperdiet. Aenean quis diam odio. Morbi cursus cursus risus. Fusce semper nulla eu neque consectetur, sit amet ornare arcu aliquet. Morbi euismod nulla in sem aliquet.',
-			'facebook_url'             => 'http://www.facebook.com',
+			'facebook_url'             => 'https://www.facebook.com',
 			'fax_number'               => '',
 			'first_name'               => 'Carlisle',
 			'form_email_address'       => 'tester@test.com',
-			'google_plus_url'          => 'http://www.google.com',
+			'google_plus_url'          => 'https://www.google.com',
 			'home_phone_number'        => '123-456-7892',
 			'image_url'                => '//common.wolfnet.com/wordpress/sample-agent.jpg',
 			'last_name'                => 'Pike',
-			'linkedin_url'             => 'http://www.linkedin.com',
+			'linkedin_url'             => 'https://www.linkedin.com',
 			'medium_url'               => '//common.wolfnet.com/wordpress/sample-agent.jpg',
 			'mls_agent_id'             => '123456789',
 			'mobile_phone'             => '123-456-7891',
@@ -232,7 +233,7 @@ class Wolfnet_Module_AgentPages
 			'thumbnail_url'            => '//common.wolfnet.com/wordpress/sample-agent.jpg',
 			'title'                    => 'Realtor',
 			'web_url'                  => '#' ,
-			'youtube_url'              => 'http://www.youtube.com',
+			'youtube_url'              => 'https://www.youtube.com',
 			'zip_code'                 => '78701',
 		));
 

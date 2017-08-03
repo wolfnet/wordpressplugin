@@ -15,7 +15,7 @@
  *
  * @package Wolfnet\Api
  * @copyright 2015 WolfNet Technologies, LLC.
- * @license GPLv2 or later (http://www.gnu.org/licenses/gpl-2.0.html)
+ * @license GPLv2 or later (https://www.gnu.org/licenses/gpl-2.0.html)
  *
  */
 class Wolfnet_Api_Client
@@ -186,16 +186,18 @@ class Wolfnet_Api_Client
 
         $headers['api_token'] = $token;
 
-        return $this->performRequest(null, $token, $resource, $method, $data, $headers);
+		$result = $this->performRequest(null, $token, $resource, $method, $data, $headers);
 
-    }
+		return $result;
+
+	}
 
 
     /* PRIVATE METHODS ************************************************************************** */
 
     /**
      * This method takes in request parameters and performs HTTP requests to the WolfNet API using
-     * the WordPress HTTP API (see http://codex.wordpress.org/HTTP_API).
+     * the WordPress HTTP API (see https://codex.wordpress.org/HTTP_API).
      *
      * @param  string  $key      The API key that should be used to make authentication the requests.
      * @param  string  $token    The API token that should be used to make regular requests.

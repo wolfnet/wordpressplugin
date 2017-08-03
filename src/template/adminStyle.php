@@ -12,7 +12,7 @@
 
 	<div id="icon-options-wolfnet" class="icon32"><br /></div>
 
-	<h2>WolfNet <sup>&reg;</sup> - Appearance</h2>
+	<h1>WolfNet <sup>&reg;</sup> - Appearance</h1>
 
 	<p>
 		The 'Modern' widget themes streamline the look of the property photos within
@@ -22,7 +22,7 @@
 	</p>
 
 
-	
+
 
 	<div class="featured-listings-theme">
 		<?php echo $themeSection; ?>
@@ -31,13 +31,13 @@
 
 	<!-- Color options form -->
 
-	<div class="wolfnet_box">
+	<div id="wolfnet-color-options" class="wolfnet_box">
 
-	<h3>Color Options</h3>
+		<h3>Color Options</h3>
 
-	<div class="wolfnet_boxContent">
-		<?php echo $colorSection; ?>
-	</div>
+		<div class="wolfnet_boxContent">
+			<?php echo $colorSection; ?>
+		</div>
 
 	</div>
 
@@ -52,24 +52,24 @@
 
 			<div class="wolfnet_boxContent">
 
-			<div class="wolfnet_themePreview">
-				<div class="wolfnet_themePreviewItem wolfnet_themePreviewBody" id="wnt-theme-preview-agent">
-					<h3>Agent Preview</h3>
-					<div class="wolfnet_widget wolfnet_ao wolfnet_aoAgentsList">
-						<div class="wolfnet_aoAgents">
-							<?php echo $agentSection; ?>
+				<div class="wolfnet_themePreview">
+					<div class="wolfnet_themePreviewItem wolfnet_themePreviewBody" id="wnt-theme-preview-agent">
+						<h3>Agent Preview</h3>
+						<div class="wolfnet_widget wolfnet_ao wolfnet_aoAgentsList">
+							<div class="wolfnet_aoAgents">
+								<?php echo $agentSection; ?>
+							</div>
+						</div>
+					</div>
+					<div class="wolfnet_themePreviewItem wolfnet_themePreviewBody" id="wnt-theme-preview-office">
+						<h3>Office Preview</h3>
+						<div class="wolfnet_widget wolfnet_ao wolfnet_aoOfficesList">
+							<div class="wolfnet_aoOffices">
+								<?php echo $officeSection; ?>
+							</div>
 						</div>
 					</div>
 				</div>
-				<div class="wolfnet_themePreviewItem wolfnet_themePreviewBody" id="wnt-theme-preview-office">
-					<h3>Office Preview</h3>
-					<div class="wolfnet_widget wolfnet_ao wolfnet_aoOfficesList">
-						<div class="wolfnet_aoOffices">
-							<?php echo $officeSection; ?>
-						</div>
-					</div>
-				</div>
-			</div>
 
 			</div>
 
@@ -143,6 +143,43 @@
 			updateThemePreview();
 
 			$(window).on('wnt-color-change', onWidgetThemeChange);
+
+
+			// Expandable preview
+
+			if ($previewBox.length > 0) {
+
+				var $previewToggleIcon = $('<span class="wnt-icon wnt-icon-triangle-up"></span>');
+
+				var $previewToggleBtn = $(
+					'<a href="javascript:void(0);" title="Show/hide preview" class="wolfnet_boxToggle"></a>'
+				).append($previewToggleIcon);
+
+				var expandPreview = function () {
+					$previewBox.removeClass('wolfnet_boxCollapsed');
+					$previewContent.show();
+					$previewToggleIcon.removeClass('wnt-icon-triangle-down').addClass('wnt-icon-triangle-up');
+				};
+
+				var collapsePreview = function () {
+					$previewBox.addClass('wolfnet_boxCollapsed');
+					$previewContent.hide();
+					$previewToggleIcon.removeClass('wnt-icon-triangle-up').addClass('wnt-icon-triangle-down');
+				};
+
+				var onPreviewToggle = function () {
+					if ($previewBox.is('.wolfnet_boxCollapsed')) {
+						expandPreview();
+					} else {
+						collapsePreview();
+					}
+				};
+
+				collapsePreview();
+
+				$previewHeader.click(onPreviewToggle).css('cursor', 'pointer').append($previewToggleBtn);
+
+			}
 
 
 			// Preview tabs

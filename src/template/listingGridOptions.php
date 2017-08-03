@@ -35,18 +35,18 @@
     <table class="form-table">
 
         <tr>
-            <th>
+            <th scope="row">
                 <label for="wnt-<?php echo $title_wpid; ?>">Title:</label>
             </th>
             <td>
                 <input id="wnt-<?php echo $title_wpid; ?>" name="<?php echo $title_wpname; ?>"
-                 value="<?php echo $title; ?>" type="text" />
+                 value="<?php echo $title; ?>" type="text" class="regular-text" />
             </td>
         </tr>
 
         <?php if(count($markets) > 1): ?>
             <tr>
-                <th>
+                <th scope="row">
                     <label for="<?php echo $keyid_wpid; ?>">Market:</label>
                 </th>
                 <td>
@@ -63,7 +63,7 @@
         <?php endif; ?>
 
         <tr class="modeField">
-            <th>
+            <th scope="row">
                 <label>Mode:</label>
             </th>
             <td>
@@ -83,7 +83,7 @@
         </tr>
 
         <tr>
-            <th>
+            <th scope="row">
                 <label for="<?php echo $maptype_wpid; ?>">Include Map:</label>
             </th>
             <td>
@@ -109,7 +109,7 @@
         </tr>
 
         <tr class="advanced-option savedSearchField">
-            <th>
+            <th scope="row">
                 <label for="<?php echo $savedsearch_wpid; ?>">Saved Search:</label>
             </th>
             <td>
@@ -135,7 +135,7 @@
         </tr>
 
         <tr class="basic-option">
-            <th>
+            <th scope="row">
                 <label for="<?php echo $minprice_wpid; ?>">Price:</label>
             </th>
             <td>
@@ -183,13 +183,13 @@
         </tr>
 
         <tr class="basic-option">
-            <th>
+            <th scope="row">
                 <label for="<?php echo $city_wpid; ?>">City:</label>
             </th>
             <td>
                 <div>
                     <input id="<?php echo $city_wpid; ?>" name="<?php echo $city_wpname; ?>"
-                     type="text" value="<?php echo $city; ?>" />
+                     type="text" value="<?php echo $city; ?>" class="regular-text" />
                 </div>
                 <div>
                     <input id="<?php echo $exactcity_wpid; ?>" name="<?php echo $exactcity_wpname; ?>"
@@ -202,17 +202,17 @@
         </tr>
 
         <tr class="basic-option">
-            <th>
+            <th scope="row">
                 <label for="<?php echo $zipcode_wpid; ?>">Zipcode:</label>
             </th>
             <td>
                 <input id="<?php echo $zipcode_wpid; ?>" name="<?php echo $zipcode_wpname; ?>"
-                 type="text" value="<?php echo $zipcode; ?>" />
+                 type="text" value="<?php echo $zipcode; ?>" class="small" />
             </td>
         </tr>
 
         <tr>
-            <th>
+            <th scope="row">
                 <label for="<?php echo $ownertype_wpid; ?>">Agent/Broker:</label>
             </th>
             <td>
@@ -235,7 +235,7 @@
         </tr>
 
         <tr>
-            <th>
+            <th scope="row">
                 <label for="<?php echo $paginated_wpid; ?>">Pagination Enabled/Disabled:</label>
             </th>
             <td>
@@ -251,7 +251,7 @@
         </tr>
 
         <tr>
-            <th>
+            <th scope="row">
                 <label for="<?php echo $sortoptions_wpid; ?>">Sort Options:</label>
             </th>
             <td>
@@ -267,12 +267,13 @@
         </tr>
 
         <tr>
-            <th>
+            <th scope="row">
                 <label for="<?php echo $maxresults_wpid; ?>">Max Results Per Page:</label>
             </th>
             <td>
                 <input id="<?php echo $maxresults_wpid; ?>" name="<?php echo $maxresults_wpname; ?>"
-                    type="text" maxlength="2" size="2" value="<?php echo $maxresults; ?>" />
+                    type="text" maxlength="2" size="2" class="small"
+                    value="<?php echo $maxresults; ?>" />
                 <span class="wolfnet_moreInfo">
                     Define the number of properties to display per search results page.
                     The maximum number of properties that can be displayed per page is 50.

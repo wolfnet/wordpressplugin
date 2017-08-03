@@ -23,10 +23,6 @@
 ?>
 
 <?php
-    $keyids = array();
-    foreach($markets as $market) {
-        array_push($keyids, $market->id);
-    }
     $jsKeyids = json_encode($keyids);
 ?>
 
@@ -39,19 +35,19 @@
     <table class="form-table">
 
         <tr>
-            <th>
+            <th scope="row">
                 <label for="wnt-<?php echo $title_wpid; ?>">Title:</label>
             </th>
             <td>
                 <input id="wnt-<?php echo $title_wpid; ?>" name="<?php echo $title_wpname; ?>"
-                 value="<?php echo $title; ?>" type="text" />
+                 value="<?php echo $title; ?>" type="text" class="regular-text" />
             </td>
         </tr>
 
 
         <?php if(count($markets) < 2): ?>
             <tr>
-                <th>
+                <th scope="row">
                     <label for="<?php echo $smartsearch_wpid; ?>">SmartSearch:</label>
                 </th>
                 <td>
@@ -67,7 +63,7 @@
         <?php endif; ?>
 
         <tr>
-            <th>
+            <th scope="row">
                 <label for="<?php echo $view_wpid; ?>">Layout:</label>
             </th>
             <td>
@@ -80,7 +76,7 @@
 
         <?php if(count($markets) > 1): ?>
             <tr>
-                <th>
+                <th scope="row">
                     <label>Market:</label>
                 </th>
                 <td>
@@ -108,7 +104,7 @@
                 </td>
             </tr>
             <tr>
-                <th>
+                <th scope="row">
                     <label for="<?php echo $routing_wpid; ?>">Routing</label>
                 </th>
                 <td>
@@ -138,7 +134,13 @@
         <?php if(count($markets) > 1): ?>
 
         var <?php echo $instance_id; ?> = <?php echo $jsKeyids; ?>;
-        var form = $("#<?php echo $instance_id; ?>").parents("form:first");
+        var form;
+        if($("#widgets-right").length) {
+            form = $("#widgets-right #<?php echo $instance_id; ?>").parents("form:first");
+        } else {
+            form = $("#<?php echo $instance_id; ?>").parents("form:first");
+        }
+
 
         $(".productkey").click(function(){
             // uncheck "All" if it is checked in this instance of the form only

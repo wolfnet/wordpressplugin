@@ -2,7 +2,7 @@
 
 /**
  * Plugin Name:  WolfNet IDX for WordPress
- * Plugin URI:   http://wordpress.org/plugins/wolfnet-idx-for-wordpress
+ * Plugin URI:   https://wordpress.org/plugins/wolfnet-idx-for-wordpress
  * Description:  The WolfNet IDX for WordPress plugin provides IDX search solution integration with
  *               any WordPress website.
  * Version:      {X.X.X}
@@ -31,3 +31,4 @@
 require_once dirname(__FILE__) . '/bootstrap/autoload.php';
 
 $GLOBALS['wolfnet'] = new Wolfnet_Plugin();
+$GLOBALS['wolfnet']->setEpFlag(EP_ALL);

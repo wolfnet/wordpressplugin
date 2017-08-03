@@ -26,7 +26,6 @@
 
 	<div class="wolfnet_aoBody">
 
-
 		<a href="<?php echo $agentLink; ?>">
 			<div class="wolfnet_aoImage"
 			 style="background-image: url('<?php echo $agent['medium_url']; ?>');">
@@ -54,7 +53,7 @@
 				</div>
 
 			</div>
-
+			
 			<ul class="wolfnet_aoLinks">
 
 				<?php

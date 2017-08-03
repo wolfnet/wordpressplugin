@@ -7,7 +7,7 @@
  *
  * @package Wolfnet
  * @copyright 2015 WolfNet Technologies, LLC.
- * @license GPLv2 or later (http://www.gnu.org/licenses/gpl-2.0.html)
+ * @license GPLv2 or later (https://www.gnu.org/licenses/gpl-2.0.html)
  *
  */
 class Wolfnet_Module_ListingGrid
@@ -221,7 +221,7 @@ class Wolfnet_Module_ListingGrid
         if ($vars['wpMeta']['maptype'] != "disabled") {
             $vars['map'] = $this->plugin->data->getMap(
             	$listingsData,
-            	$_REQUEST[$this->plugin->requestPrefix.'productkey']
+            	sanitize_key($_REQUEST[$this->plugin->requestPrefix.'productkey'])
             );
             $vars['wpMeta']['maptype'] = $vars['maptype'];
             $vars['hideListingsTools'] = $this->plugin->data->getHideListingTools(

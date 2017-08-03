@@ -58,10 +58,6 @@
 @brand-success: #1eaa00;
 @brand-danger:  #d54e21;
 
-@brand-primary: #0073aa;
-@brand-success: #1eaa00;
-@brand-danger:  #d54e21;
-
 
 //
 // Styles
@@ -108,7 +104,7 @@ html {
 		margin: 0 1em 1em;
 	}
 
-	fieldset {	
+	fieldset {
 		margin-left: 1em;
 	}
 }
@@ -173,16 +169,21 @@ html {
 		}
 	}
 
-    th {
-        label {
-            font-weight: bold;
-            white-space: nowrap;
-        }
-    }
+	.form-table {
+		th {
+			width: 175px;
+		}
+	}
+
+	th {
+		label {
+			white-space: nowrap;
+		}
+	}
 
 	fieldset {
 
-		border:         1px solid #555;
+		border:         1px solid @gray;
 		padding-bottom: 2em;
 
 		legend {
@@ -201,31 +202,56 @@ html {
 .wolfnetProductKeyValidationWrapper {
 	display:        inline-block;
 	vertical-align: middle;
+	white-space:    nowrap;
 
 	input {
 		height:     25px;
 	}
 
+	.wnt-indicator-valid,
+	.wnt-indicator-invalid {
+		display: none;
+		margin-left: 0.5em;
+		font-size: 2em;
+		vertical-align: middle;
+	}
+
+	.wnt-indicator-valid {
+		color: @brand-success;
+	}
+
+	.wnt-indicator-invalid {
+		color: @brand-danger;
+	}
+
 	&.valid {
-		padding-right:    35px;
-		background: url('@{imagesDir}valid.png') no-repeat right;
 
 		input {
-			-moz-box-shadow:    0px 0px 10px 1px green;
-			-webkit-box-shadow: 0px 0px 10px 1px green;
-			box-shadow:         0px 0px 10px 1px green;
+			-moz-box-shadow:    0 0 6px 0 @brand-success;
+			-webkit-box-shadow: 0 0 6px 0 @brand-success;
+			box-shadow:         0 0 6px 0 @brand-success;
 		}
+
+		.wnt-indicator-valid {
+			display: inline-block;
+		}
+
 	}
+
 	&.invalid {
-		padding-right:    35px;
-		background: url('@{imagesDir}invalid.png') no-repeat right;
 
 		input {
-			-moz-box-shadow:    0px 0px 10px 1px red;
-			-webkit-box-shadow: 0px 0px 10px 1px red;
-			box-shadow:         0px 0px 10px 1px red;
+			-moz-box-shadow:    0 0 6px 0 @brand-danger;
+			-webkit-box-shadow: 0 0 6px 0 @brand-danger;
+			box-shadow:         0 0 6px 0 @brand-danger;
 		}
+
+		.wnt-indicator-invalid {
+			display: inline-block;
+		}
+
 	}
+
 }
 
 
@@ -341,7 +367,7 @@ html {
 					margin-bottom: 0;
 
 					.wolfnet_listings {
-						margin-top: 1em;						
+						margin-top: 1em;
 					}
 				}
 				.wolfnet-theme-birch {
@@ -370,7 +396,7 @@ html {
 				}
 
 				.wolfnet-theme-cedar {
-					
+
 					.wolfnet_listings {
 						margin-top: .8em;
 
@@ -400,10 +426,10 @@ html {
 
 							.wolfnet_listingHead {
 								height: 188px;
-							}	
+							}
 						}
 					}
-				}	
+				}
 			}
 
 		}
@@ -511,7 +537,7 @@ html {
 }
 
 @media screen and (max-width: 800px) {
-	
+
 	.wolfnet_widget_themes .wolfnet_widget_theme {
 		width: 97%;
         clear: left;
@@ -550,15 +576,15 @@ html {
 
 
 html.ie .wolfnetProductKeyValidationWrapper.valid input {
-	border-color: green !important;
+	border-color: @brand-success !important;
 }
 
 html.ie .wolfnetProductKeyValidationWrapper.invalid input {
-	border-color: red !important;
+	border-color: @brand-danger !important;
 }
 
 .wolfnet_keyLabel.error {
-	border: 1px solid red;
+	border: 1px solid @brand-danger;
 }
 
 #wolfnetShortcodeBuilderWindow {
@@ -575,46 +601,36 @@ html.ie .wolfnetProductKeyValidationWrapper.invalid input {
 
 #wolfnet-search-manager {
 
-	.style_box {
-		border: 1px solid #DEDEDE;
-		border-radius: 3px;
-
-		.style_box_header {
-			border-bottom: 1px solid #F2F2F2;
-			color: #333333;
-			font-weight: normal;
-			padding: 2px 5px;
-			text-align: left;
-			background-color: #F2F2F2;
-			background-image: -ms-linear-gradient(top,#FAFAFA,#EDEDED);
-			background-image: -moz-linear-gradient(top,#FAFAFA,#EDEDED);
-			background-image: -o-linear-gradient(top,#FAFAFA,#EDEDED);
-			background-image: -webkit-gradient(linear,left top,left bottom,from(#FAFAFA),to(#EDEDED));
-			background-image: -webkit-linear-gradient(top,#FAFAFA,#EDEDED);
-			background-image: linear-gradient(top,#FAFAFA,#EDEDED);
-			padding: 7px 7px 8px;
-			text-align: left;
-			line-height: 1.3em;
-			font-size: 14px;
-			font-family: Georgia,"Times New Roman","Bitstream Charter",Times,serif;
-		}
-
-	}
-
 	#savedsearches.wp-list-table {
 		width: 875px !important;
 	}
 
 	#tool_container {
+
 		input[type=checkbox], input[type=radio] {
-			border: 1px solid #BBB;
+			border: 1px solid @gray-lighter;
 		}
+
+		.resetForm {
+			float: right;
+			font-size: inherit;
+		}
+
+		#matchCountURLBuilder {
+			font-weight: bold;
+			color: @brand-danger;
+		}
+
+		.wntBodyWidth .wntPrimarySearchTypes .wntPrimarySearchType {
+			margin-right: 1em;
+		}
+
 	}
 
 }
 
 .ui-widget-overlay {
-	background-repeat:repeat !important; /* fixing apparent bug with the jQuery UI theme */
+	background-repeat: repeat !important; /* fixing apparent bug with the jQuery UI theme */
 }
 
 .wolfnet_moreInfo {
@@ -636,11 +652,11 @@ html.ie .wolfnetProductKeyValidationWrapper.invalid input {
 }
 
 #savedsearches {
-	position:relative;
+	position: relative;
 }
 
-#search_criteria{
-	label  {
+#search_criteria {
+	label {
 		vertical-align: baseline;
 	}
 }
@@ -654,8 +670,8 @@ html.ie .wolfnetProductKeyValidationWrapper.invalid input {
 #wolfnet_support_page {
 
 	img {
-		display:block;
-		clear:both;
+		display: block;
+		clear: both;
 		box-shadow: 5px 5px 30px 0 rgba( 0, 0, 0, .5 );
 		margin: 20px 30px 30px 20px;
 		max-width: 150px;
@@ -680,7 +696,7 @@ html.ie .wolfnetProductKeyValidationWrapper.invalid input {
 	margin:             0;
 	-moz-border-radius: 5px;
 	border-radius:      5px;
-	box-shadow:         0 10px 30px #DDD;
+	box-shadow:         0 10px 30px @gray-lighter;
 	min-width:          100px;
 	min-height:         100px;
 
@@ -710,8 +726,8 @@ input.input-placeholder {
 
 .wolfnet_clearfix {
 	/* *zoom: 1; */
-	float:none !important;
-	clear:both;
+	float: none !important;
+	clear: both;
 }
 
 .wolfnet_dialog {
@@ -721,18 +737,6 @@ input.input-placeholder {
 .wolfnet_cssBox {
 	width: 700px;
 	height: 400px;
-}
-
-.wolfnet_note {
-	font-size: .95em;
-	padding: 2px;
-	margin: 0;
-	color: #5e5e5e;
-}
-
-.form-table th.wolfnet_cssLabel {
-	padding: 15px 0 0 10px;
-	font-weight: bold;
 }
 
 .form-table #wolfnet_keys th {
@@ -747,8 +751,30 @@ input.input-placeholder {
 .wolfnet_prices {
 	position: relative;
 }
+
 .wolfnet_loaderImage {
     float: right;
     top: 25%;
 	left: -20px;
+}
+
+
+.wnt-text-primary {
+	color: @brand-primary;
+}
+
+.wnt-text-success {
+	color: @brand-success;
+}
+
+.wnt-text-info {
+	color: @brand-info;
+}
+
+.wnt-text-warning {
+	color: @brand-warning;
+}
+
+.wnt-text-danger {
+	color: @brand-danger;
 }

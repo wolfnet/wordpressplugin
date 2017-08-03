@@ -1,14 +1,28 @@
 {
   "name": "wolfnet-idx-for-wordpress",
-  "version": "1.12.1",
+  "version": "1.16.2",
   "description": "WolfNet IDX for WordPress",
   "homepage": "https://github.com/wolfnet/wordpressplugin",
   "bugs": "https://github.com/wolfnet/wordpressplugin/issues",
-  "license": "GPLv2 or later",
-  "private": true,
+  "license": "GPL-2.0+",
+  "author": "WolfNet Technologies, LLC",
+  "contributors": [
+    "AJ Michels <@ajmichels> (http://ajmichels.com)",
+    "Andrew Baumgart",
+    "Michael Pidde (http://michaelpidde.com)",
+    "John Coleman <@thenewcoke>",
+    "Tom Penney <@tompenney> (http://tompenney.com)"
+  ],
+  "directories": {
+    "lib": "src"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/wolfnet/wordpressplugin.git"
+  },
+  "scripts": {
+    "build": "grunt",
+    "prepublish": "grunt compile"
   },
   "devDependencies": {
     "grunt": "^1.0.1",
@@ -22,17 +36,8 @@
     "cli-color": "^0.3.2"
   },
   "buildDependencies": {},
-  "contributors": [
-    "AJ Michels <@ajmichels> (http://ajmichels.com)",
-    "Andrew Baumgart",
-    "Michael Pidde (http://michaelpidde.com)",
-    "John Coleman <@thenewcoke>",
-    "Tom Penney <@tompenney> (http://tompenney.com)"
-  ],
   "engines": {
     "node": "*"
   },
-  "scripts": {
-    "build": "grunt"
-  }
+  "private": true
 }

@@ -17,7 +17,7 @@
  *
  * @package Wolfnet\Api
  * @copyright 2015 WolfNet Technologies, LLC.
- * @license GPLv2 or later (http://www.gnu.org/licenses/gpl-2.0.html)
+ * @license GPLv2 or later (https://www.gnu.org/licenses/gpl-2.0.html)
  *
  */
 class Wolfnet_Api_AuthDecorator extends Wolfnet_Api_Client

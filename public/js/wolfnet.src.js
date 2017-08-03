@@ -133,104 +133,10 @@ wolfnet.hasFeature = function (feature)
 
 };
 
-wolfnet.resizeAOItems = function () {};
-
 
 if ( typeof jQuery !== 'undefined' ) {
 
 	( function ( $ ) {
-
-		wolfnet.resizeAOItems = function ($aoItems, itemSections, $aoHeader) {
-			var sectionsSelector = '',
-				colCount = 0,
-				colsCounted = false;
-
-			// Reset the max heights & set default options
-			for (var i=0, l=itemSections.length; i<l; i++) {
-				itemSections[i].maxHeight = 0;
-				if (!itemSections[i].hasOwnProperty('alwaysResize')) {
-					itemSections[i]['alwaysResize'] = false;
-				}
-			}
-
-			for (var i=0, l=$aoItems.length; i<l; i++) {
-				var $aoItem = $($aoItems[i]);
-
-				// Update the max heights
-				getItemSectionsMaxHeights($aoItem, itemSections);
-
-				// Count the columns
-				if (!colsCounted) {
-					var $prevItem = $aoItem.prev();
-					if ($prevItem.length > 0) {
-						if ($aoItem.position().top != $prevItem.position().top) {
-							colsCounted = true;
-						} else {
-							colCount++;
-						}
-					} else {
-						colCount++;
-					}
-				}
-
-			}
-
-			// Set the new heights
-			for (var i=0, l=itemSections.length; i<l; i++) {
-				var $itemSection = $aoItems.find(itemSections[i].selector);
-				if (($itemSection.length === 0) && $aoItems.is(itemSections[i].selector)) {
-					$itemSection = $aoItems;
-				}
-				if (itemSections[i].alwaysResize || (colCount > 1)) {
-					$itemSection.height(Math.max(itemSections[i].maxHeight, itemSections[i].origMaxHeight));
-				} else {
-					$itemSection.css('height', '');
-				}
-			}
-
-			// Reposition the agent/office nav
-			if ($aoItems.length > 0) {
-				var itemWidth = $aoItems.outerWidth(true) + 4; // Add 4 to acct for inline space
-				var itemMargin = itemWidth - $aoItems.outerWidth() - 4; // Remove 1 margin width
-				var rowWidth = (itemWidth * colCount) - itemMargin;
-				$aoHeader.width(rowWidth).css('padding-right', itemMargin);
-			} else {
-				$aoHeader.css({
-					'width': 'inherit',
-					'padding-right': 'inherit'
-				});
-			}
-
-		};
-
-		var getItemSectionsMaxHeights = function ($aoItem, itemSections) {
-			var $itemSection, sectionHeight;
-			// Get original max height
-			for (var i=0, l=itemSections.length; i<l; i++) {
-				$itemSection = $aoItem.find(itemSections[i].selector);
-				if (($itemSection.length === 0) && $aoItem.is(itemSections[i].selector)) {
-					$itemSection = $aoItem;
-				}
-				sectionHeight = $itemSection.height();
-				if (sectionHeight > itemSections[i].origMaxHeight) {
-					itemSections[i].origMaxHeight = sectionHeight;
-				}
-			}
-			// Get new max height
-			for (var i=0, l=itemSections.length; i<l; i++) {
-				$itemSection = $aoItem.find(itemSections[i].selector);
-				if (($itemSection.length === 0) && $aoItem.is(itemSections[i].selector)) {
-					$itemSection = $aoItem;
-				}
-				if ($itemSection.length > 0) {
-					$itemSection.css('height', 'auto');
-					sectionHeight = $itemSection.height();
-					if (sectionHeight > itemSections[i].maxHeight) {
-						itemSections[i].maxHeight = sectionHeight;
-					}
-				}
-			}
-		};
 
 		var isPlaceholderSupported = function ()
 		{

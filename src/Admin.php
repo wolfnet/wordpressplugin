@@ -27,60 +27,78 @@ class Wolfnet_Admin extends Wolfnet_Plugin
 {
 
 
-    /* Properties ******************************************************************************* */
-    /*  ____                            _   _                                                     */
-    /* |  _ \ _ __ ___  _ __   ___ _ __| |_(_) ___  ___                                           */
-    /* | |_) | '__/ _ \| '_ \ / _ \ '__| __| |/ _ \/ __|                                          */
-    /* |  __/| | | (_) | |_) |  __/ |  | |_| |  __/\__ \                                          */
-    /* |_|   |_|  \___/| .__/ \___|_|   \__|_|\___||___/                                          */
-    /*                 |_|                                                                        */
-    /* ****************************************************************************************** */
+	/* Properties ******************************************************************************* */
+	/*  ____                            _   _                                                     */
+	/* |  _ \ _ __ ___  _ __   ___ _ __| |_(_) ___  ___                                           */
+	/* | |_) | '__/ _ \| '_ \ / _ \ '__| __| |/ _ \/ __|                                          */
+	/* |  __/| | | (_) | |_) |  __/ |  | |_| |  __/\__ \                                          */
+	/* |_|   |_|  \___/| .__/ \___|_|   \__|_|\___||___/                                          */
+	/*                 |_|                                                                        */
+	/* ****************************************************************************************** */
 
-    /**
-     * This property contains the admin CSS as defined in the Edit CSS page.
-     * @var string
-     */
-    public $adminCssOptionKey = "wolfnetCss_adminCss";
+	/**
+	 * This property contains the admin CSS as defined in the Edit CSS page.
+	 * @var string
+	 */
+	public $adminCssOptionKey = "wolfnetCss_adminCss";
 
 
-    /* Constructor Method *********************************************************************** */
-    /*   ____                _                   _                                                */
-    /*  / ___|___  _ __  ___| |_ _ __ _   _  ___| |_ ___  _ __                                    */
-    /* | |   / _ \| '_ \/ __| __| '__| | | |/ __| __/ _ \| '__|                                   */
-    /* | |__| (_) | | | \__ \ |_| |  | |_| | (__| || (_) | |                                      */
-    /*  \____\___/|_| |_|___/\__|_|   \__,_|\___|\__\___/|_|                                      */
-    /*                                                                                            */
-    /* ****************************************************************************************** */
+	/* Constructor Method *********************************************************************** */
+	/*   ____                _                   _                                                */
+	/*  / ___|___  _ __  ___| |_ _ __ _   _  ___| |_ ___  _ __                                    */
+	/* | |   / _ \| '_ \/ __| __| '__| | | |/ __| __/ _ \| '__|                                   */
+	/* | |__| (_) | | | \__ \ |_| |  | |_| | (__| || (_) | |                                      */
+	/*  \____\___/|_| |_|___/\__|_|   \__,_|\___|\__\___/|_|                                      */
+	/*                                                                                            */
+	/* ****************************************************************************************** */
 
-    /**
-     * prepare the class for use.
-     * @param Object $wolfnet Pass in an instance or the Wolfnet class
-     * @return void
-     */
-    public function __construct($wolfnet)
-    {
-        $this->pluginFile = dirname(dirname(__FILE__)) . '/wolfnet.php';
-        // sets url
-        $this->setUrl();
+	/**
+	 * prepare the class for use.
+	 * @param Object $wolfnet Pass in an instance or the Wolfnet class
+	 * @return void
+	 */
+	public function __construct($wolfnet)
+	{
+		$this->pluginFile = dirname(dirname(__FILE__)) . '/wolfnet.php';
+		// sets url
+		$this->setUrl();
 
-        // Register admin only actions.
-        $this->addAction(array(
-            array('admin_menu',            'adminMenu'),
-            array('admin_init',            'adminInit'),
-            array('admin_enqueue_scripts', 'adminScripts'),
-            array('admin_enqueue_scripts', 'adminStyles'),
-            array('admin_print_styles',    'adminPrintStyles',  1000),
-            array('wp_logout',             'adminEndSession'),
-            array('wp_login',              'adminEndSession'),
-            ));
+		// Register admin only actions.
+		do_action('wolfnet_pre_adminMenu');
+		add_action('admin_menu', array(&$this, 'adminMenu'));
+		do_action('wolfnet_post_adminMenu');
 
-        // Register admin only filters.
-        $this->addFilter(array(
-            array('mce_external_plugins', 'sbMcePlugin'),
-            array('mce_buttons',          'sbButton'),
-            ));
+		do_action('wolfnet_pre_adminInit');
+		add_action('admin_init', array(&$this, 'adminInit'));
+		do_action('wolfnet_post_adminInit');
 
-    }
+		do_action('wolfnet_pre_adminScripts');
+		add_action('admin_enqueue_scripts', array(&$this, 'adminScripts'));
+		do_action('wolfnet_post_adminScripts');
+
+		do_action('wolfnet_pre_adminStyles');
+		add_action('admin_enqueue_scripts', array(&$this, 'adminStyles'));
+		do_action('wolfnet_post_adminStyles');
+
+		do_action('wolfnet_pre_adminPrintStyles');
+		add_action('admin_print_styles', array(&$this, 'adminPrintStyles'), 1000);
+		do_action('wolfnet_post_adminPrintStyles');
+
+		do_action('wolfnet_pre_adminEndSession');
+		add_action('wp_logout', array(&$this, 'adminEndSession'));
+		do_action('wolfnet_post_adminEndSession');
+
+		do_action('wolfnet_pre_adminEndSession');
+		add_action('wp_login', array(&$this, 'adminEndSession'));
+		do_action('wolfnet_post_adminEndSession');
+
+		// Register admin only filters.
+		$this->addFilter(array(
+			array('mce_external_plugins', 'sbMcePlugin'),
+			array('mce_buttons',          'sbButton'),
+		));
+
+	}
 
 
     /* Public Methods *************************************************************************** */
@@ -162,28 +180,6 @@ class Wolfnet_Admin extends Wolfnet_Plugin
      */
     public function adminInit()
     {
-
-        // Do activation updates.
-        if(is_admin() && get_option('wolfnet_activatedPlugin181') == '1.8.1') {
-            delete_option('wolfnet_activatedPlugin181');
-
-            $keyArray = json_decode($GLOBALS['wolfnet']->keyService->get());
-            if(is_array($keyArray) && $keyArray[0]->key != false) {
-                $this->setSslVerifyOption($keyArray[0]->key);
-
-                // Check that key structure is formatted correctly and that the key
-                // label gets set if it was not already. If there's no preexisting key,
-                // ignore this.
-                foreach($keyArray as $key) {
-                    if(strlen($key->label) == 0) {
-                        $key->label = strtoupper($GLOBALS['wolfnet']->data->getMarketName($key->key));
-                    }
-                }
-                $keyString = json_encode($keyArray);
-                update_option(Wolfnet_Service_ProductKeyService::PRODUCT_KEY_OPTION, $keyString);
-            }
-        }
-
         // Register Options
         register_setting($this->optionGroup, Wolfnet_Service_ProductKeyService::PRODUCT_KEY_OPTION);
         register_setting($this->optionGroup, Wolfnet_Plugin::SSL_WP_OPTION);
@@ -208,7 +204,7 @@ class Wolfnet_Admin extends Wolfnet_Plugin
             $_SESSION['keyid'] = 1;
         }
         if(array_key_exists('keyid', $_REQUEST)) {
-            $_SESSION['keyid'] = $_REQUEST['keyid'];
+            $_SESSION['keyid'] = sanitize_key($_REQUEST['keyid']);
         }
 
          /* If we are serving up the search manager page we need to get the search manager HTML from
@@ -236,30 +232,6 @@ class Wolfnet_Admin extends Wolfnet_Plugin
     }
 
 
-    private function setSslVerifyOption($key)
-    {
-        // Hit an API endpoint so we can verify SSL.
-        try {
-            $data = $GLOBALS['wolfnet']->api->sendRequest($key, '/settings');
-        } catch(Wolfnet_Api_ApiException $e) {
-            // And exception at this point is PROBABLY due to SSL verification.
-            // Set the verify SSL option to false if so.
-            if(strpos($e->getDetails(), 'SSL certificate problem') >= 0) {
-                $GLOBALS['wolfnet']->api->setVerifySSL(0);
-                update_option(Wolfnet_Plugin::VERIFYSSL_WP_OPTION, 0);
-                return false;
-            }
-        }
-        // If we made it to this point we can set SSL verification to true.
-        if(get_option(Wolfnet_Plugin::VERIFYSSL_WP_OPTION) === false) {
-            update_option(Wolfnet_Plugin::VERIFYSSL_WP_OPTION, 1);
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-
     /**
      * This method is a callback for the 'admin_menu' hook. This method is used to create any admin
      * menu pages for the plugin.
@@ -275,7 +247,8 @@ class Wolfnet_Admin extends Wolfnet_Plugin
             array(
                 'title' => 'WolfNet <span class="wolfnet_sup">&reg;</span>',
                 'key'   => 'wolfnet_plugin_settings',
-                'icon'  => $this->url . 'img/wp_wolfnet_nav.png',
+                //'icon'  => $this->url . 'img/wp_wolfnet_nav.png',
+                'icon'  => 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMCIgaGVpZ2h0PSIyMCIgdmlld0JveD0iMCAwIDUuMjkxNjY2NSA1LjI5MTY2NjUiPjxnIGZpbGw9IiM5Y2ExYTYiPjxwYXRoIGQ9Ik00LjM3NSAxLjUzOHMuMDM0LS4xOTYuMS4wMWMwIDAgLjA1NC4xNzUtLjAxOS4yMDQgMCAwLS4xMS4wMjQtLjA5LS4xMDQgMCAwIDAtLjA2Ny4wMDktLjExTTIuMTc5IDMuMjdzLjEzOC0uMzI5LjQ2OC0uMzI5YzAgMCAuMjU3IDAgLjQ4Ny4yNjMgMCAwIC4yNjcuNDYzLjQzNS42MzUgMCAwIC41MzkuNDk3LjIzOC44NjggMCAwLS4xMi4yNTMtLjU4Ny4xMzkgMCAwLS40NTQtLjEzOS0uNTQtLjExIDAgMC0uMzI5LjAzOS0uNTM1LjExIDAgMC0uNDUzLjE1My0uNjQ0LS4xMiAwIDAtLjEyOC0uMTkuMDA2LS41NTcgMCAwIC4xNDctLjI0NC4zLS4zODcgMCAwIC4zMi0uNDI2LjM3Mi0uNTEyTS43NzUgMi4yODJTLjkgMS42OCAxLjQyIDIuMTJjMCAwIC4zNjkuNDA2LjMwNy43NDQgMCAwLS4xMzUuNTgzLS42ODcuMzE2IDAgMC0uNDU1LS4yNDQtLjI2NC0uODk4TS44NTcgMS41MzhzLjA0My0uMTUzLjA5NS0uMDFjMCAwIC4wNDcuMTY3LjAyNC4xOTUgMCAwLS4wNTMuMTA2LS4xNDgtLjAxNCAwIDAtLjAwNC0uMS4wMjktLjE3MU0xLjc4My44NnMuMjcyLS40MjUuNTMuMDQzYzAgMCAuMTkxLjM3OC4xNzYuNzQ5IDAgMCAuMDMuNTI1LS41My40OTcgMCAwLS40MjktLjAzMy0uNDczLS42MDIgMCAwIC4wMy0uMzQ4LjI5Ny0uNjg3TTIuMDE2LjA4MnMuMDUzLS4xODcuMS4wMDRjMCAwIC4wNjguMTcyLS4wMDQuMjU4IDAgMC0uMTI0LjA3Mi0uMTQ4LS4wNjIgMCAwLS4wMDQtLjA5LjA1Mi0uMk0yLjg5IDEuMDU1UzMuMS40MTIgMy40NC44N2MwIDAgLjE4LjE4NS4yMjQuMjY3LjA0My4wODEuMTcyLjQ1My4wODIuNjkyIDAgMC0uMjAxLjU0OC0uNzYuMjQzIDAgMC0uMjM0LS4xMzgtLjE3Mi0uNjMgMCAwIC4wMTQtLjI1Mi4wNzYtLjM4N00zLjExLjFzLjAyOS0uMTk0LjEyNC0uMDAzYzAgMCAuMDg2LjIyNC4wMTkuMjQyIDAgMC0uMTQzLjA0OC0uMTUyLS4wNDMgMCAwLS4wMTUtLjEzMy4wMS0uMTk1TTMuODg0IDIuMDg3cy40NjctLjQwNy42MzQuMTQ3YzAgMCAuMTU4LjU5OC0uMTE5Ljg1NCAwIDAtLjM3OC40MDMtLjY5Ny0uMDQyIDAgMC0uMTQ5LS4xNTctLjA0OC0uNTgxIDAgMCAuMS0uMjczLjIzLS4zNzgiLz48L2c+PC9zdmc+',
                 ),
             array(
                 'title' => 'General Settings',

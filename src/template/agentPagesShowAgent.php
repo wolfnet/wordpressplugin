@@ -21,25 +21,36 @@
  */
 
 if (array_key_exists("REDIRECT_URL", $_SERVER)) {
-	$linkBase = $_SERVER['REDIRECT_URL'];
+	$linkBase = esc_url_raw($_SERVER['REDIRECT_URL']);
+
+	//Build an array of all the parts of URL string.
+	$linkNames = preg_split("/\//", $linkBase);
+	//Get the agent name (last trailing slash).
+	$agentName = $linkNames[count($linkNames) - 2];
+	//Strip out extraneous commas and periods.
+	$agentName = preg_replace("/[\.,]/", "", $agentName);
+	$agentName = sanitize_text_field($agentName);
+	$linkBase2 = "";
+	//Build the link base back up from the beginning.
+	for ($i = 0; $i < count($linkNames) - 2; $i++) {
+		$linkBase2 = $linkBase2 . $linkNames[$i] . "/";
+	}
+	$linkBase2 = $linkBase2 . $agentName . "/";
+	$contactLink = $linkBase2 . 'contact';
 } else {
-	$linkBase = $_SERVER['PHP_SELF'];
+	$linkBase = esc_url_raw($_SERVER['PHP_SELF'] . '/');
+	$agentName = sanitize_text_field($_REQUEST['agentId']);
+	//Strip out extraneous periods and commas.
+	$agentName = preg_replace("/[\.,]/", "", $agentName);
+	$contactLink = $linkBase . 'agnt/' . $agentName . '/contact';
 }
 
-$postHash = '#post-' . get_the_id();
+// Remove /agent/* from link base.
+if(preg_match('/agnt\/.*/', $linkBase)) {
+	$linkBase = preg_replace('/agnt\/.*/', '', $linkBase);
+}
 
-$linkExtra = (
-		array_key_exists('agentCriteria', $_REQUEST) && (strlen($_REQUEST['agentCriteria']) > 0) ?
-		'&agentCriteria=' . $_REQUEST['agentCriteria'] : ''
-	)
-	. ($officeId != '' ? '&officeId=' . $officeId : '')
-	. $postHash;
-
-
-$contactLink = $linkBase . '?contact=' . $agent['agent_id'] . $linkExtra;
-
-$agentsLink  = $linkBase . '?agentSearch&agentCriteria=' . $postHash;
-
+$agentsLink  = $linkBase . 'agnts';
 
 // Agent links
 $socialLinks = array(
@@ -65,11 +76,11 @@ $contactMethods = array(
 
 if (!function_exists('formatUrl')) {
 	function formatUrl ($url) {
-		$cleanUrl = $url;
-		if (strpos($url, "http://") === false) {
-			$cleanUrl = "http://" . $cleanUrl;
-		}
-		return '<a href="' . $cleanUrl . '">' . str_replace("http://", "", $cleanUrl) . '</a>';
+		$protocol_pattern = '/^https?:\/\//';
+		$display_pattern = '/^(https?:\/\/)?(www\.)?([^\/\.]+(\.[^\/\.]+)+)((\/[^\/\s]+)+)?\/?/';
+		$clean_url = (!preg_match($protocol_pattern, $url) ? 'http://' : '') . $url;
+		$display_url = preg_replace($display_pattern, '$3$5', $url);
+		return '<a href="' . $clean_url . '">' . $display_url . '</a>';
 	}
 }
 
@@ -88,9 +99,9 @@ if (!function_exists('formatUrl')) {
 
 	if (array_key_exists('REDIRECT_URL', $_SERVER) && $officeId != '') {
 
-		$link = $_SERVER['REDIRECT_URL'] . "?";
+		$link = esc_url_raw($_SERVER['REDIRECT_URL']) . "?";
 		if (array_key_exists('agentCriteria', $_REQUEST) && strlen($_REQUEST['agentCriteria']) > 0) {
-			$link .= 'agentCriteria=' . $_REQUEST['agentCriteria'] . '&';
+			$link .= 'agentCriteria=' . sanitize_text_field($_REQUEST['agentCriteria']) . '&';
 		}
 		if ($officeId != '' && strpos($link, 'officeId') === false) {
 			$link .= 'officeId=' . $officeId;
@@ -102,7 +113,7 @@ if (!function_exists('formatUrl')) {
 
 ?>
 
-		<div class="wolfnet_viewAll">
+		<div class="wolfnet_aoViewAll">
 			<a href="<?php echo $agentsLink; ?>">Click here</a> to view all agents and staff.
 		</div>
 
@@ -310,18 +321,24 @@ if (!function_exists('formatUrl')) {
 
 			<div class="wolfnet_aoListings">
 
-				<div class="wolfnet_aoTitle">Agent's Listings</div>
-
-				<hr />
+				<div class="wolfnet_aoListingNavArea"></div>
 
 				<?php if ($activeListingCount > 0) { ?>
 
 					<div class="wolfnet_aoFeaturedListings">
 
+						<div class="wolfnet_aoTitle">
+							Agent's
+							<?=($soldListingCount == 0 ? 'Active' : '')?>
+							Listings
+						</div>
+
+						<hr />
+
 						<?php echo $activeListingHTML; ?>
 
 						<?php if ($activeListingCount > 10) {
-							echo '<a href="<?php echo $searchUrl; ?>">'
+							echo '<a href="' . $searchUrl . '">'
 								. 'View all ' . $activeListingCount . ' of '
 								. $agent['first_name'] . "'s listings."
 								. '</a>';
@@ -334,6 +351,14 @@ if (!function_exists('formatUrl')) {
 				if ($soldListingCount > 0) { ?>
 
 					<div class="wolfnet_aoSoldListings">
+
+						<div class="wolfnet_aoTitle">
+							Agent's
+							<?=($activeListingCount == 0 ? 'Sold' : '')?>
+							Listings
+						</div>
+
+						<hr />
 
 						<?php echo $soldListingHTML; ?>
 
@@ -388,6 +413,12 @@ jQuery(function ($) {
 			fullContent = $this.html(),
 			summaryText = $this.text();
 
+			// Just retain BR tags, but nix every other tag that might come into play.
+			summaryTextTemp = $this.html()
+			summaryTextTemp = summaryTextTemp.replace(/<br>/g, '[[br]]')
+			summaryTextTemp = $('<div>').html(summaryTextTemp).text();
+			summaryText = summaryTextTemp.replace(/\[\[br\]\]/g, '<br>');
+
 		if (summaryText.length > infoMaxLen) {
 
 			summaryText = summaryText.substring(0, infoMaxLen);
@@ -399,7 +430,7 @@ jQuery(function ($) {
 				summaryText = summaryText.substring(0, summaryText.lastIndexOf('\n'));
 			}
 
-			$this.html($summary.text(summaryText).append(' ', $showMoreBtn));
+			$this.html($summary.html(summaryText).append(' ', $showMoreBtn));
 			$this.append($content.hide().html(fullContent));
 
 			$showMoreBtn.click(onShowMoreClick);
@@ -426,6 +457,9 @@ jQuery(function ($) {
 	var $agentListings = $aoWidget.find('.wolfnet_aoListings'),
 		$agentFeatured = $agentListings.find('.wolfnet_aoFeaturedListings'),
 		$agentSold = $agentListings.find('.wolfnet_aoSoldListings'),
+		$agentFeaturedGrid   = $agentFeatured.find('.wolfnet_listingGrid'),
+		$agentSoldGrid       = $agentSold.find('.wolfnet_listingGrid'),
+		$agentListingNavArea = $agentListings.find('.wolfnet_aoListingNavArea'),
 		agentFeaturedLabel = '<?php _e('Active'); ?>',
 		agentSoldLabel = '<?php _e('Sold'); ?>';
 
@@ -441,7 +475,7 @@ jQuery(function ($) {
 				' href="javascript:void(0);">' + agentSoldLabel + '</a>'
 			).appendTo($agentListingNav);
 
-		$agentListings.prepend($agentListingNav);
+		$agentListingNavArea.append($agentListingNav);
 
 		$agentSold.hide();
 
@@ -450,6 +484,7 @@ jQuery(function ($) {
 			$agentSold.hide();
 			$agentSoldBtn.removeClass('wnt-btn-active');
 			$agentFeaturedBtn.addClass('wnt-btn-active');
+			$agentFeaturedGrid.wolfnetListingGrid('refresh');
 		});
 
 		$agentSoldBtn.click(function () {
@@ -457,6 +492,7 @@ jQuery(function ($) {
 			$agentFeatured.hide();
 			$agentFeaturedBtn.removeClass('wnt-btn-active');
 			$agentSoldBtn.addClass('wnt-btn-active');
+			$agentSoldGrid.wolfnetListingGrid('refresh');
 		});
 
 	}
@@ -508,14 +544,21 @@ jQuery(function ($) {
 
 
 	var canStickSidebar = function () {
-		return (sb.sidebarTop + sb.sidebarHeight) > $aoMainContent.offset().top;
+		return (
+			(sb.sidebarHeight < (sb.limitBottom - sb.limitTop))
+			&& (($aoSidebar.offset().top + sb.sidebarHeight) > ($aoMainContent.offset().top + 20))
+		);
 	};
 
 
 	var setupStickySidebar = function () {
 		updatePosition();
 
-		$window.on('resize.wntSticky', onResizeAgent);
+		var resizeTimeout;
+		$window.on('resize.wntSticky', function () {
+			clearTimeout(resizeTimeout);
+			resizeTimeout = setTimeout(onResizeAgent, 500);
+		});
 
 		onResizeAgent();
 
