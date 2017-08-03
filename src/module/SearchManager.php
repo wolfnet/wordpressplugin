@@ -7,7 +7,7 @@
  *
  * @package Wolfnet
  * @copyright 2015 WolfNet Technologies, LLC.
- * @license GPLv2 or later (http://www.gnu.org/licenses/gpl-2.0.html)
+ * @license GPLv2 or later (https://www.gnu.org/licenses/gpl-2.0.html)
  *
  */
 class Wolfnet_Module_SearchManager
@@ -159,7 +159,7 @@ class Wolfnet_Module_SearchManager
     {
         // Cache the data in the request scope so that we only have to query for it once per request.
         $cacheKey = 'wntSavedSearches';
-		$data = wp_cache_get($cacheKey);
+		$data = wp_cache_get($cacheKey, 'wnt');
 
         if ($keyid == null) {
             $keyid = "1";
@@ -200,7 +200,7 @@ class Wolfnet_Module_SearchManager
 
             }
 
-			wp_cache_set($cacheKey, $data);
+			wp_cache_set($cacheKey, $data, 'wnt', 1);
 
         }
 

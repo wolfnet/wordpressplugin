@@ -32,14 +32,14 @@ Additional Info
 The tests are run using existing WordPress PHPUnit test configuration.
 
 Wordpress testing environment
-http://make.wordpress.org/core/handbook/automated-testing/
+https://make.wordpress.org/core/handbook/automated-testing/
 
 PHPUnit Documentation
-http://phpunit.de/documentation.html
+https://phpunit.de/documentation.html
 
 QUnit - javascript unit testing
-http://qunitjs.com/
+https://qunitjs.com/
 
 See the phpunit.xml in the base dir of this plugin file and testing-bootstrap.php for configuration details.
 
-The test are in the /tests/ directory. phpunit will run any tests in ".php" file beginning with "test-". 
+The test are in the /tests/ directory. phpunit will run any tests in ".php" file beginning with "test-".

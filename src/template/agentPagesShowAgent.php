@@ -76,11 +76,11 @@ $contactMethods = array(
 
 if (!function_exists('formatUrl')) {
 	function formatUrl ($url) {
-		$cleanUrl = $url;
-		if (strpos($url, "http://") === false) {
-			$cleanUrl = "http://" . $cleanUrl;
-		}
-		return '<a href="' . $cleanUrl . '">' . str_replace("http://", "", $cleanUrl) . '</a>';
+		$protocol_pattern = '/^https?:\/\//';
+		$display_pattern = '/^(https?:\/\/)?(www\.)?([^\/\.]+(\.[^\/\.]+)+)((\/[^\/\s]+)+)?\/?/';
+		$clean_url = (!preg_match($protocol_pattern, $url) ? 'http://' : '') . $url;
+		$display_url = preg_replace($display_pattern, '$3$5', $url);
+		return '<a href="' . $clean_url . '">' . $display_url . '</a>';
 	}
 }
 
