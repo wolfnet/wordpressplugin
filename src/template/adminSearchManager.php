@@ -26,7 +26,7 @@
 
     <div id="icon-options-wolfnet" class="icon32"><br /></div>
 
-    <h1>WolfNet <sup>&reg;</sup> - Search Manager</h1>
+    <h1>Search Manager - WolfNet<sup>&reg;</sup></h1>
 
     <noscript>
         <div class="error">
