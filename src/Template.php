@@ -181,7 +181,7 @@ class Wolfnet_Template
             ),
             'wolfnet-shortcode-builder' => array(
                 $this->url . 'js/jquery.wolfnetShortcodeBuilder.min.js',
-                array('jquery-ui-widget', 'jquery-effects-core', 'wolfnet-admin'),
+                array('jquerywnt', 'jquery-ui-widget', 'jquery-effects-core', 'wolfnet-admin'),
             ),
 			'wolfnet-agent-office' => array(
 				$this->url . 'js/wolfnetAgentOffice.min.js',
