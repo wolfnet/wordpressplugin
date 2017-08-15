@@ -93,6 +93,10 @@ Please upgrade to the latest version of the plugin as we will be disabling our o
 
 ## Changelog
 
+### 1.17.0
+
+* New Smart Search functionality for solutions configured with multiple API keys
+
 ### 1.16.2
 
 * Added support for SSL
