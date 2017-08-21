@@ -20,6 +20,7 @@
  *                Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
+// TODO: Disable "Routing" select if Smartsearch is true (logic is specific to Quick Search)
 ?>
 
 <?php
@@ -45,22 +46,22 @@
         </tr>
 
 
-        <?php if(count($markets) < 2): ?>
-            <tr>
-                <th scope="row">
-                    <label for="<?php echo $smartsearch_wpid; ?>">SmartSearch:</label>
-                </th>
-                <td>
-                    <select id="<?php echo $smartsearch_wpid; ?>" name="<?php echo $smartsearch_wpname; ?>" >
-                        <option value="false" <?php echo $smartsearch_false_wps; ?>>Disabled</option>
-                        <option value="true" <?php echo $smartsearch_true_wps; ?>>Enabled</option>
-                    </select>
-                    <span class="wolfnet_moreInfo">
-                        Enabling SmartSearch on your WolfNet Quick Search will allow website visitors to search all available locale-based search types, including categories like ‘area,’ ‘body of water’ and ‘school district,’ while also being presented with search suggestions as they enter their search terms.
-                    </span>
-                </td>
-            </tr>
-        <?php endif; ?>
+
+		<tr>
+		    <th scope="row">
+		        <label for="<?php echo $smartsearch_wpid; ?>">SmartSearch:</label>
+		    </th>
+		    <td>
+		        <select id="<?php echo $smartsearch_wpid; ?>" name="<?php echo $smartsearch_wpname; ?>" >
+		            <option value="false" <?php echo $smartsearch_false_wps; ?>>Disabled</option>
+		            <option value="true" <?php echo $smartsearch_true_wps; ?>>Enabled</option>
+		        </select>
+		        <span class="wolfnet_moreInfo">
+		            Enabling SmartSearch on your WolfNet Quick Search will allow website visitors to search all available locale-based search types, including categories like ‘area,’ ‘body of water’ and ‘school district,’ while also being presented with search suggestions as they enter their search terms.
+		        </span>
+		    </td>
+		</tr>
+
 
         <tr>
             <th scope="row">
@@ -77,10 +78,15 @@
         <?php if(count($markets) > 1): ?>
             <tr>
                 <th scope="row">
-                    <label>Market:</label>
+                    <label>Markets:</label>
                 </th>
                 <td>
                     <table>
+                        <tr>
+                            <td>
+								The display name for each of your markets can be customized in the General Settings section of the WolfNet IDX Plugin.
+                            </td>
+                        </td>
                         <tr>
                             <td>
                                 <input id="productkey_all" type="checkbox" class="allproductkeys"
@@ -209,15 +215,25 @@
         var $smartsearch = $('#<?php echo $smartsearch_wpid; ?>');
         if ($smartsearch.val() === 'true') {
             $('#<?php echo $view_wpid; ?>').prop('disabled',true);
+            $('#<?php echo $routing_wpid; ?>').prop('disabled',true);
         }
 
         $smartsearch.change(function() {
-            var $layoutSetting = $('#<?php echo $view_wpid; ?>');
 
+        	// toggle "Layout" setting onchange
+            var $layoutSetting = $('#<?php echo $view_wpid; ?>');
             if ($smartsearch.val() === 'true') {
                 $layoutSetting.prop('disabled',true);
             } else {
                 $layoutSetting.prop("disabled", false);
+            }
+
+        	// toggle "Routing" setting onchange
+            var $routingSetting = $('#<?php echo $routing_wpid; ?>');
+            if ($smartsearch.val() === 'true') {
+                $routingSetting.prop('disabled',true);
+            } else {
+                $routingSetting.prop("disabled", false);
             }
         });
 

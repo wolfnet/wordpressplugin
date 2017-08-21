@@ -90,7 +90,7 @@
 							</td>
 							<td>
 								<input class="wolfnet_keyLabel"
-									type="text" size="25"
+									type="text" size="25" maxlength ="23"
 									id="wolfnet_keyLabel_<?php echo $i; ?>"
 									name="wolfnet_keyLabel_<?php echo $i; ?>"
 									value="<?php echo $productKey[$i-1]->label; ?>" />
