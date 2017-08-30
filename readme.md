@@ -93,6 +93,10 @@ Please upgrade to the latest version of the plugin as we will be disabling our o
 
 ## Changelog
 
+### 1.17.1
+
+* Fix for sites that use Google Maps outside of this plugin
+
 ### 1.17.0
 
 * New Smart Search functionality for solutions configured with multiple API keys
