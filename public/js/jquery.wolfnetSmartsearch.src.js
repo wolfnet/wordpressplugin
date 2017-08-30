@@ -45,7 +45,12 @@
 
 				var $smartSearch = $(this);
 				var opts = $.extend(true, {}, defaultOptions, options);
-				multiMarket.markets = options.markets;
+
+				if (typeof options.markets === "undefined") {
+					multiMarket.markets = '';
+				} else {
+					multiMarket.markets = options.markets;
+				}
 
 				// multi-market enabled if pertinent arguments contain data
 				if (multiMarket.markets.length) {
