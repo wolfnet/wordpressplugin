@@ -50,16 +50,6 @@ class Wolfnet_Template
             'wolfnet-toolbar',
         );
 
-		// Include map scripts only on non-header/footer action requests
-		if (
-			!has_action('wp_ajax_wolfnet_content_header') && !has_action('wp_ajax_wolfnet_content_footer') &&
-			(!isset($_SERVER['REQUEST_URI']) || !preg_match('/(header|footer)[^\/]*\.php/', $_SERVER['REQUEST_URI']))
-		) {
-			array_push($scripts, 'wolfnet-maptracks');
-			array_push($scripts, 'wolfnet-map-driver');
-			//array_push($scripts, 'wolfnet-maptracks-theme');
-		}
-
         foreach ($scripts as $script) {
             wp_enqueue_script($script);
         }
@@ -192,16 +182,19 @@ class Wolfnet_Template
 					. $this->getGoogleMapChannel(),
                 array(),
                 $this->version,
+				true,
             ),
             'wolfnet-maptracks' => array(
 				'https://common.wolfnet.com/js/maptracks/v3/maptracks.bundle.min.js?v=3.0.7',
 				array('jquerywnt', 'google-maps'),
                 $this->version,
+				true,
             ),
 			'wolfnet-map-driver' => array(
                 $this->url . 'js/jquery.wolfnetMaptracksDriver.min.js',
                 array('jquery'),
                 $this->version,
+				true,
             ),
 			// Uncomment if the MapTracks theme JS is ever needed
 			/*
