@@ -96,6 +96,7 @@ Please upgrade to the latest version of the plugin as we will be disabling our o
 ### 1.17.1
 
 * Fix for sites that use Google Maps outside of this plugin
+* Fix for Javascript error in new Smart Search functionality
 
 ### 1.17.0
 
