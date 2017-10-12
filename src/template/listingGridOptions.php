@@ -22,7 +22,7 @@
 
 ?>
 
-<div id="<?php echo $instance_id; ?>" class="wolfnet_listingGridOptions">
+<div id="<?php echo $instance_id; ?>" class="wolfnet_widget_options wolfnet_listingGridOptions">
 
     <input id="<?php echo $criteria_wpid; ?>" name="<?php echo $criteria_wpname; ?>"
      value="<?php echo $criteria; ?>" type="hidden" />

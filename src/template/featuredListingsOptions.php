@@ -22,7 +22,7 @@
 
 ?>
 
-<div id="<?php echo $instance_id; ?>" class="wolfnet_featuredListingsOptions">
+<div id="<?php echo $instance_id; ?>" class="wolfnet_widget_options wolfnet_featuredListingsOptions">
 
     <input id="<?php echo $direction_wpid; ?>" name="<?php echo $direction_wpname; ?>" type="hidden"
      class="wolfnet_featuredListingsOptions_dirField" />
