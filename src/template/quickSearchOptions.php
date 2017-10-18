@@ -27,7 +27,7 @@
     $jsKeyids = json_encode($keyids);
 ?>
 
-<div id="<?php echo $instance_id; ?>" class="wolfnet_quickSearchOptions">
+<div id="<?php echo $instance_id; ?>" class="wolfnet_widget_options wolfnet_quickSearchOptions">
     <?php if(count($markets) > 1): ?>
         <input type="hidden" id="<?php echo $keyids_wpid; ?>" class="keyids"
          name="<?php echo $keyids_wpname; ?>" value="<?php echo implode(",", $keyids); ?>" />

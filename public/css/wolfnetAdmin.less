@@ -120,58 +120,102 @@ html {
 	display: table-cell;
 }
 
-.wolfnet_featuredListingsOptions,
-.wolfnet_listingGridOptions,
-.wolfnet_propertyListOptions,
-.wolfnet_quickSearchOptions,
-.wolfnet_agentPagesOptions {
+.widget-content .wolfnet_widget_options {
 
-	form {
+	.form-table {
+		-webkit-box-sizing: border-box;
+		-moz-box-sizing: border-box;
+		box-sizing: border-box;
 
-		select {
-			height: auto;
+		td, th {
+			display: block;
+			width: auto;
+			vertical-align: middle;
+		}
+
+		.form-required.form-invalid td:after {
+			float: right;
+			margin: -30px 3px 0 0;
+		}
+
+		th {
+			padding-top: 10px;
+			padding-bottom: 0;
+			border-bottom: 0;
+		}
+
+		td {
+			margin-bottom: 0;
+			padding-bottom: 6px;
+			padding-top: 4px;
+			padding-left: 0;
+		}
+
+		input.regular-text {
+			width: 100%;
+		}
+
+		label {
+			font-size: 14px;
+		}
+
+		fieldset label {
+			display: block;
 		}
 
 	}
 
-	table {
-		thead tr,
-		tbody tr,
-		tr {
+}
 
-			td {
-				vertical-align: top;
+
+.wolfnet_dialog {
+	z-index: 400000 !important;
+
+	.wolfnet_widget_options {
+
+		form {
+			select {
+				height: auto;
+			}
+		}
+
+		table {
+			thead tr,
+			tbody tr,
+			tr {
+				td {
+					vertical-align: top;
+				}
+			}
+		}
+
+		.form-table {
+			th {
+				width: 175px;
+			}
+		}
+
+		th {
+			label {
+				white-space: nowrap;
+			}
+		}
+
+		fieldset {
+			border:         1px solid @gray;
+			padding-bottom: 2em;
+
+			legend {
+				margin-left: 1em;
+				font-size:   1.15em;
 			}
 
 		}
-	}
 
-	.form-table {
-		th {
-			width: 175px;
-		}
-	}
-
-	th {
-		label {
-			white-space: nowrap;
-		}
-	}
-
-	fieldset {
-
-		border:         1px solid @gray;
-		padding-bottom: 2em;
-
-		legend {
-			margin-left: 1em;
-			font-size:   1.15em;
+		.disabled {
+			color: #999;
 		}
 
-	}
-
-	.disabled {
-		color: #999;
 	}
 
 }
@@ -591,7 +635,7 @@ html.ie .wolfnetProductKeyValidationWrapper.invalid input {
 
 #tooltip {
 	position:           absolute;
-	z-index:            400001;
+	z-index:            500001;
 	border:             1px solid #D5D5D0;
 	background-color:   #FFFFD0;
 	padding:            10px;
@@ -630,10 +674,6 @@ input.input-placeholder {
 	/* *zoom: 1; */
 	float: none !important;
 	clear: both;
-}
-
-.wolfnet_dialog {
-    z-index: 400000 !important;
 }
 
 .wolfnet_cssBox {
