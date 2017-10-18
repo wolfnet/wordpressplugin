@@ -93,6 +93,11 @@ Please upgrade to the latest version of the plugin as we will be disabling our o
 
 ## Changelog
 
+### 1.17.2
+
+* Fix to prevent zip codes from losing their leading zero(s) when applicable
+* Display widget forms in a single column
+
 ### 1.17.1
 
 * Fix for sites that use Google Maps outside of this plugin
