@@ -93,6 +93,10 @@ Please upgrade to the latest version of the plugin as we will be disabling our o
 
 ## Changelog
 
+### 1.17.3
+
+* Fix to prevent the featured listings scroller from crashing when used in a floating element
+
 ### 1.17.2
 
 * Fix to prevent zip codes from losing their leading zero(s) when applicable
