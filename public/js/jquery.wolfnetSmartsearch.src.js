@@ -25,7 +25,7 @@
 	var onResizeForm = function () {
 		var $form = this.closest('form');
 
-		if ($form.width() <= 500) {
+		if (!isNaN($form.width()) && ($form.width() > 0) && ($form.width() <= 500)) {
 			$form.addClass('wnt-smartsearch-narrow');
 		} else {
 			$form.removeClass('wnt-smartsearch-narrow');
