@@ -370,40 +370,56 @@
 
     }
 
-	&.wolfnet_smartSearch
-	{
+	&.wolfnet_smartSearch {
+
 		&.wnt-smartsearch {
 			.wnt-smartsearch-input-container {
 				width: 100%;
 			}
 		}
 
-        .wolfnet-suggestion-label
-        {
-            font-weight: bold;
-            font-size: 1.1em;
-            padding-left: 10px;
-            display: inline-block;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
+		.wolfnet_smartSearch_form.wnt-smartsearch-narrow {
 
-        .wolfnet-suggestion-field
-        {
-            float: right;
-            padding-right: 10px;
-            font-size: 0.9em;
-        }
+			// Put min/max price, bed/bath, and submit button on own lines
+			.wolfnet_smartPriceFields,
+			.wolfnet_smartBedBathFields,
+			.wolfnet_smartSubmit {
+				width: 100%;
+				clear: both;
+			}
 
-		.wnt-smart-menu
-		{
+			// Adjust widths of formfield pairs
+			.wolfnet_smartMinPrice,
+			.wolfnet_smartMaxPrice,
+			.wolfnet_smartBeds,
+			.wolfnet_smartBaths {
+				width: 50%;
+			}
+
+		}
+
+		.wolfnet-suggestion-label {
+			font-weight: bold;
+			font-size: 1.1em;
+			padding-left: 10px;
+			display: inline-block;
+			white-space: nowrap;
+			overflow: hidden;
+			text-overflow: ellipsis;
+		}
+
+		.wolfnet-suggestion-field {
+			float: right;
+			padding-right: 10px;
+			font-size: 0.9em;
+		}
+
+		.wnt-smart-menu {
 			display: inline-block;
 			position:absolute;
 		}
 
-		span.wnt-smart-search
-		{
+		span.wnt-smart-search {
 			padding: 1em 1em 1em 1em;
 			cursor: text;
 			overflow: hidden;
@@ -414,28 +430,25 @@
 			display: inline-block;
 			text-align: left;
 
-			.wnt-ss-value
-			{
+			.wnt-ss-value {
 				background-color: @quickSearchGrad2;
 				border: 1px solid black;
 				font-size: 1.1em;
 				margin-right:.5em;
 				padding: 0 5px 0 5px;
 
-				.wnt-close-btn
-				{
+				.wnt-close-btn {
 					padding-left: 5px;
 					cursor: pointer;
 					font-weight: bold;
 				}
 			}
 
-			> span
-			{
+			> span {
 				vertical-align: top;
 
 				input {
-                    background-color: white;
+					background-color: white;
 					height: 100%;
 					border: 0 !important;
 					padding: 0 !important;
@@ -447,25 +460,21 @@
 
 		}
 
-		.wnt-suggestions
-		{
+		.wnt-suggestions {
 			border-top: 1px solid @quickSearchGrad2;
 			border-bottom: 1px solid @quickSearchGrad2;
 			border-left: 1px solid @quickSearchGrad2;
 			border-right: 1px solid @quickSearchGrad2;
 
-			> div
-			{
+			> div {
 				clear: both;
 
-				&.wnt-hover
-				{
+				&.wnt-hover {
 					color: @quickSearchGrad2;
 					background-color: gray;
 				}
 
-				&.wnt-suggestion
-				{
+				&.wnt-suggestion {
 					cursor: pointer;
 				}
 
