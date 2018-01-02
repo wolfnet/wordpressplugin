@@ -93,6 +93,11 @@ Please upgrade to the latest version of the plugin as we will be disabling our o
 
 ## Changelog
 
+### 1.17.3
+
+* Fix to prevent the featured listings scroller from crashing when used in a floating element
+* SmartSearch layout fix for use in sliders
+
 ### 1.17.2
 
 * Fix to prevent zip codes from losing their leading zero(s) when applicable
@@ -101,7 +106,7 @@ Please upgrade to the latest version of the plugin as we will be disabling our o
 ### 1.17.1
 
 * Fix for sites that use Google Maps outside of this plugin
-* Fix for Javascript error in new Smart Search functionality
+* Fix for JavaScript error in new Smart Search functionality
 
 ### 1.17.0
 

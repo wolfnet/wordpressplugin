@@ -178,24 +178,17 @@ if (typeof jQuery != 'undefined') {
          *
          * @return null
          */
-        var cloneItems = function(target)
-        {
-            var $target = $(target);
-            var data = getData(target);
-            var containerWidth = data.$itemContainer.innerWidth();
-            var $items = getItems(target);
+		var cloneItems = function (target) {
+			var $target  = $(target);
+			var data     = getData(target);
+			var $items   = getItems(target);
 
-            if (
-				(containerWidth) &&
-				($items.length) &&
-				(data.itemWidth) &&
-				containerWidth >= (($items.length * data.itemWidth) / 2)
-			) {
-               	$items.clone().appendTo(data.$itemContainer);
-               	cloneItems(target, containerWidth);
-            }
+			if (!hasEnoughItems(target)) {
+				var $newItems = $items.clone().appendTo(data.$itemContainer);
+				cloneItems(target);
+			}
 
-        };
+		};
 
 
         /**
@@ -206,29 +199,24 @@ if (typeof jQuery != 'undefined') {
          *
          * @return null
          */
-        var hasEnoughItems = function(target)
-        {
-            var $target = $(target);
-            var data = getData(target);
+		var hasEnoughItems = function (target) {
+			var $target  = $(target);
+			var data     = getData(target);
 
-            var numberOfItems = getItems(target).length;
-            var itemWidth = data.itemWidth;
-            var containerWidth = data.$itemContainer.innerWidth();
+			var numberOfItems   = getItems(target).length;
+			var itemWidth       = data.itemWidth;
 
-            // Do not scroll if width of all items in scroller is less than container
-            if ((numberOfItems) && (itemWidth) && (containerWidth) &&
-				(numberOfItems * itemWidth) < containerWidth) {
-				return false;
-            }
+			// Do not scroll if width of all items in scroller is less than container
+			// Do not scroll a single item
+			return (
+				(
+					(itemWidth <= 0) ||
+					(numberOfItems === 0) || (numberOfItems > 50) ||
+					(data.containerWidth < ((numberOfItems * itemWidth) / 2))
+				) && (numberOfItems !== 1)
+			);
 
-            // Do not scroll a single item
-            if ((numberOfItems) && numberOfItems == 1) {
-				return false;
-            }
-
-            return true;
-
-        };
+		};
 
 
         /**
@@ -389,6 +377,24 @@ if (typeof jQuery != 'undefined') {
         };
 
 
+		var resizeTimeout = 0;
+
+		var onResize = function (target) {
+			if (resizeTimeout) clearTimeout(resizeTimeout);
+			resizeTimeout = setTimeout(function () { measureContainer(target); }, 50);
+		};
+
+
+		var measureContainer = function (target) {
+			var data = getData(target);
+			var $items = getItems(target);
+			$items.hide();
+			data.containerWidth = Math.max(data.$itemContainer.innerWidth(), data.itemWidth);
+			$items.show();
+			data.$itemContainer.css('max-width', data.containerWidth + 'px');
+		};
+
+
         var methods = {
 
             /**
@@ -419,6 +425,8 @@ if (typeof jQuery != 'undefined') {
                     removeWhitespaceBetweenTags(target);
                     data.itemWidth = getItems(target).first().outerWidth(true);
 
+					measureContainer(target);
+
                     if (data.option.showControls) {
                         buildControls(target);
                     }
@@ -445,11 +453,8 @@ if (typeof jQuery != 'undefined') {
 
 					var enoughItems = hasEnoughItems(target);
 
-					$(window).resize(function(){
-						if ((data.resizing || false) === false) {
-							data.resizing = true;
-							data.resizing = false;
-						}
+					$(window).resize(function () {
+						onResize(target);
 					});
 
                 });
