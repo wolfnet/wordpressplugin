@@ -317,12 +317,8 @@ if (typeof jQuery != 'undefined') {
         {
             var $target = $(target);
             var data = getData(target);
-            var $items = getItems(target);
 
             $target.addClass(data.option.withControlsClass);
-
-            // Wrap the contents to make button placement easier
-            data.$itemContainer = $('<div>').append($items).appendTo($target);
 
             createButton(target, 'left').prependTo($target);
             createButton(target, 'right').prependTo($target);
@@ -415,15 +411,18 @@ if (typeof jQuery != 'undefined') {
 
                     var data = getData(target);
 
-                    data.$itemContainer = $target;
                     data.direction = data.option.direction;
 
                     if (!$target.hasClass(data.option.componentClass)) {
                         $target.addClass(data.option.componentClass);
                     }
 
+					// Wrap the contents to make button placement easier
+					data.$itemContainer = $('<div>').append($target.children()).appendTo($target);
+					var $items = getItems(target);
+
                     removeWhitespaceBetweenTags(target);
-                    data.itemWidth = getItems(target).first().outerWidth(true);
+					data.itemWidth = $items.first().outerWidth(true);
 
 					measureContainer(target);
 
