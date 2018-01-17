@@ -385,6 +385,7 @@ if (typeof jQuery != 'undefined') {
 			var data = getData(target);
 			var $items = getItems(target);
 			$items.hide();
+			data.$itemContainer.css('max-width', '100%');
 			data.containerWidth = Math.max(data.$itemContainer.innerWidth(), data.itemWidth);
 			$items.show();
 			data.$itemContainer.css('max-width', data.containerWidth + 'px');
