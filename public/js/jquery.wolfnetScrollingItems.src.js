@@ -202,7 +202,7 @@ if (typeof jQuery != 'undefined') {
 			var data = getData(target);
 
 			var numberOfItems   = getItems(target).length;
-			var itemWidth       = data.itemWidth;
+			var itemWidth       = getItemWidth(target);
 
 			// Do not scroll if width of all items in scroller is less than container
 			// Do not scroll a single item
@@ -235,7 +235,7 @@ if (typeof jQuery != 'undefined') {
             var data = getData(target);
             var pixelsPerFrame = data.speed || data.option.speed;
             var scroll = data.$itemContainer.scrollLeft();
-            var containerWidth = data.$itemContainer.innerWidth();
+			var containerWidth = getContainerWidth(target);
             var maxScroll = data.$itemContainer[0].scrollWidth - containerWidth;
             var nextScroll;
 
@@ -391,6 +391,34 @@ if (typeof jQuery != 'undefined') {
 			$items.show();
 			data.$itemContainer.css('max-width', data.containerWidth + 'px');
 
+			return data.containerWidth
+
+		};
+
+
+		var getContainerWidth = function (target) {
+			var data = getData(target);
+
+			if (!data.hasOwnProperty('containerWidth') || isNaN(data.containerWidth) || (data.containerWidth <= 0)) {
+				var $items = getItems(target);
+				data.containerWidth = measureContainer(target);
+			}
+
+			return data.containerWidth;
+
+		};
+
+
+		var getItemWidth = function (target) {
+			var data = getData(target);
+
+			if (!data.hasOwnProperty('itemWidth') || isNaN(data.itemWidth) || (data.itemWidth <= 0)) {
+				var $items = getItems(target);
+				data.itemWidth = $items.first().outerWidth(true);
+			}
+
+			return data.itemWidth;
+
 		};
 
 
@@ -425,7 +453,7 @@ if (typeof jQuery != 'undefined') {
 					var $items = getItems(target);
 
                     removeWhitespaceBetweenTags(target);
-					data.itemWidth = $items.first().outerWidth(true);
+					data.itemWidth = getItemWidth(target);
 
 					measureContainer(target);
 
