@@ -179,10 +179,18 @@ if (typeof jQuery != 'undefined') {
          * @return null
          */
 		var cloneItems = function (target) {
-			var data     = getData(target);
-			var $items   = getItems(target);
+			var data    = getData(target);
+			var $items  = getItems(target);
 
-			if (!hasEnoughItems(target)) {
+			var numberOfItems   = $items.length;
+			var itemWidth       = getItemWidth(target);
+			var containerWidth  = getContainerWidth(target);
+
+			if (
+				(numberOfItems > 1) &&
+				(itemWidth > 0) &&
+				(containerWidth >= ((numberOfItems * itemWidth) / 2))
+			) {
 				var $newItems = $items.clone().appendTo(data.$itemContainer);
 				cloneItems(target);
 			}
@@ -203,16 +211,19 @@ if (typeof jQuery != 'undefined') {
 
 			var numberOfItems   = getItems(target).length;
 			var itemWidth       = getItemWidth(target);
+			var containerWidth  = getContainerWidth(target);
 
 			// Do not scroll if width of all items in scroller is less than container
 			// Do not scroll a single item
-			return (
-				(
-					(itemWidth <= 0) ||
-					(numberOfItems === 0) || (numberOfItems > 50) ||
-					(data.containerWidth < ((numberOfItems * itemWidth) / 2))
-				) && (numberOfItems !== 1)
-			);
+			if (
+				(itemWidth > 0) &&
+				(numberOfItems > 1) && (numberOfItems < 50) &&
+				(containerWidth > (numberOfItems * itemWidth))
+			) {
+				return false;
+			} else {
+				return true;
+			}
 
 		};
 
