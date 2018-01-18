@@ -179,7 +179,6 @@ if (typeof jQuery != 'undefined') {
          * @return null
          */
 		var cloneItems = function (target) {
-			var $target  = $(target);
 			var data     = getData(target);
 			var $items   = getItems(target);
 
@@ -200,8 +199,7 @@ if (typeof jQuery != 'undefined') {
          * @return null
          */
 		var hasEnoughItems = function (target) {
-			var $target  = $(target);
-			var data     = getData(target);
+			var data = getData(target);
 
 			var numberOfItems   = getItems(target).length;
 			var itemWidth       = data.itemWidth;
@@ -384,11 +382,15 @@ if (typeof jQuery != 'undefined') {
 		var measureContainer = function (target) {
 			var data = getData(target);
 			var $items = getItems(target);
+
 			$items.hide();
 			data.$itemContainer.css('max-width', '100%');
+
 			data.containerWidth = Math.max(data.$itemContainer.innerWidth(), data.itemWidth);
+
 			$items.show();
 			data.$itemContainer.css('max-width', data.containerWidth + 'px');
+
 		};
 
 
@@ -450,8 +452,6 @@ if (typeof jQuery != 'undefined') {
                             methods.play.call($target);
                         }
                     });
-
-					var enoughItems = hasEnoughItems(target);
 
 					$(window).resize(function () {
 						onResize(target);
