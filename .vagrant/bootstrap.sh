@@ -65,6 +65,7 @@ if [ ! -f "${runfile}" ]; then
 		rm -f /etc/php5/apache2/php.ini
 		cp -f /usr/share/php5/php.ini-development /etc/php5/apache2/php.ini
 	fi
+	echo "  done"
 
 fi
 
