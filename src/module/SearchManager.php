@@ -98,8 +98,7 @@ class Wolfnet_Module_SearchManager
                 return array('body' => '');
             }
         } else {
-            $http['body'] = $this->plugin->getWpError($http);
-            return $http;
+			return array('body' => $this->plugin->getWpError($http));
         }
 
     }
