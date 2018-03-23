@@ -89,6 +89,10 @@ Please upgrade to the latest version of the plugin as we will be disabling our o
 
 ## Changelog
 
+### 1.17.5
+
+* Fix for the error-handling in the Search Manager
+
 ### 1.17.4
 
 * Fix to keep the featured listings scroller from halting at some widths
