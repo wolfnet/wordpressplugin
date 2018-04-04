@@ -80,11 +80,6 @@ if [ ! -f "${runfile}" ]; then
 	mv phpunit.phar /usr/local/bin/phpunit
 	echo "  done"
 
-	# Fixing issues with WordPress API host
-	echo "Adding entries to hosts file ..."
-	echo "66.155.40.202 api.wordpress.org" >> /etc/hosts
-	echo "  done"
-
 	touch "${runfile}"
 
 fi
