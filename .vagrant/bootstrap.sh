@@ -50,6 +50,7 @@ if [ ! -f "${runfile}" ]; then
 	echo "  done"
 
 	echo "Configuring apache ..."
+	cp /vagrant/.vagrant/vagrant-mounted.conf /etc/init/ > /dev/null 2> /dev/null
 	rm -f /etc/apache2/httpd.conf
 	ln -sf /vagrant/.vagrant/httpd.conf /etc/apache2/httpd.conf
 	rm -f /etc/apache2/sites-enabled/000-default
