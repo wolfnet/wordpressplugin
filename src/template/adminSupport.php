@@ -31,7 +31,7 @@ function wolfnet_print_thumbnail($img, $imgdir)
 
     <div id="icon-options-wolfnet" class="icon32"><br /></div>
 
-    <h1>WolfNet <sup>&reg;</sup> - Plugin Support</h1>
+    <h1>Plugin Support - WolfNet<sup>&reg;</sup></h1>
 
     <p>
         Please contact WolfNet Technologies via phone at 612-342-0088 or toll-free at 1-866-WOLFNET,
