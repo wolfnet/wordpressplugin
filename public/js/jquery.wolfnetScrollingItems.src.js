@@ -178,24 +178,24 @@ if (typeof jQuery != 'undefined') {
          *
          * @return null
          */
-        var cloneItems = function(target)
-        {
-            var $target = $(target);
-            var data = getData(target);
-            var containerWidth = data.$itemContainer.innerWidth();
-            var $items = getItems(target);
+		var cloneItems = function (target) {
+			var data    = getData(target);
+			var $items  = getItems(target);
 
-            if (
-				(containerWidth) &&
-				($items.length) &&
-				(data.itemWidth) &&
-				containerWidth >= (($items.length * data.itemWidth) / 2)
+			var numberOfItems   = $items.length;
+			var itemWidth       = getItemWidth(target);
+			var containerWidth  = getContainerWidth(target);
+
+			if (
+				(numberOfItems > 1) &&
+				(itemWidth > 0) &&
+				(containerWidth >= ((numberOfItems * itemWidth) / 2))
 			) {
-               	$items.clone().appendTo(data.$itemContainer);
-               	cloneItems(target, containerWidth);
-            }
+				var $newItems = $items.clone().appendTo(data.$itemContainer);
+				cloneItems(target);
+			}
 
-        };
+		};
 
 
         /**
@@ -206,29 +206,26 @@ if (typeof jQuery != 'undefined') {
          *
          * @return null
          */
-        var hasEnoughItems = function(target)
-        {
-            var $target = $(target);
-            var data = getData(target);
+		var hasEnoughItems = function (target) {
+			var data = getData(target);
 
-            var numberOfItems = getItems(target).length;
-            var itemWidth = data.itemWidth;
-            var containerWidth = data.$itemContainer.innerWidth();
+			var numberOfItems   = getItems(target).length;
+			var itemWidth       = getItemWidth(target);
+			var containerWidth  = getContainerWidth(target);
 
-            // Do not scroll if width of all items in scroller is less than container
-            if ((numberOfItems) && (itemWidth) && (containerWidth) &&
-				(numberOfItems * itemWidth) < containerWidth) {
+			// Do not scroll if width of all items in scroller is less than container
+			// Do not scroll a single item
+			if (
+				(itemWidth > 0) &&
+				(numberOfItems > 1) && (numberOfItems < 50) &&
+				(containerWidth > (numberOfItems * itemWidth))
+			) {
 				return false;
-            }
+			} else {
+				return true;
+			}
 
-            // Do not scroll a single item
-            if ((numberOfItems) && numberOfItems == 1) {
-				return false;
-            }
-
-            return true;
-
-        };
+		};
 
 
         /**
@@ -249,7 +246,7 @@ if (typeof jQuery != 'undefined') {
             var data = getData(target);
             var pixelsPerFrame = data.speed || data.option.speed;
             var scroll = data.$itemContainer.scrollLeft();
-            var containerWidth = data.$itemContainer.innerWidth();
+			var containerWidth = getContainerWidth(target);
             var maxScroll = data.$itemContainer[0].scrollWidth - containerWidth;
             var nextScroll;
 
@@ -329,12 +326,8 @@ if (typeof jQuery != 'undefined') {
         {
             var $target = $(target);
             var data = getData(target);
-            var $items = getItems(target);
 
             $target.addClass(data.option.withControlsClass);
-
-            // Wrap the contents to make button placement easier
-            data.$itemContainer = $('<div>').append($items).appendTo($target);
 
             createButton(target, 'left').prependTo($target);
             createButton(target, 'right').prependTo($target);
@@ -389,6 +382,57 @@ if (typeof jQuery != 'undefined') {
         };
 
 
+		var resizeTimeout = 0;
+
+		var onResize = function (target) {
+			if (resizeTimeout) clearTimeout(resizeTimeout);
+			resizeTimeout = setTimeout(function () { measureContainer(target); }, 50);
+		};
+
+
+		var measureContainer = function (target) {
+			var data = getData(target);
+			var $items = getItems(target);
+
+			$items.hide();
+			data.$itemContainer.css('max-width', '100%');
+
+			data.containerWidth = Math.max(data.$itemContainer.innerWidth(), data.itemWidth);
+
+			$items.show();
+			data.$itemContainer.css('max-width', data.containerWidth + 'px');
+
+			return data.containerWidth
+
+		};
+
+
+		var getContainerWidth = function (target) {
+			var data = getData(target);
+
+			if (!data.hasOwnProperty('containerWidth') || isNaN(data.containerWidth) || (data.containerWidth <= 0)) {
+				var $items = getItems(target);
+				data.containerWidth = measureContainer(target);
+			}
+
+			return data.containerWidth;
+
+		};
+
+
+		var getItemWidth = function (target) {
+			var data = getData(target);
+
+			if (!data.hasOwnProperty('itemWidth') || isNaN(data.itemWidth) || (data.itemWidth <= 0)) {
+				var $items = getItems(target);
+				data.itemWidth = $items.first().outerWidth(true);
+			}
+
+			return data.itemWidth;
+
+		};
+
+
         var methods = {
 
             /**
@@ -409,15 +453,20 @@ if (typeof jQuery != 'undefined') {
 
                     var data = getData(target);
 
-                    data.$itemContainer = $target;
                     data.direction = data.option.direction;
 
                     if (!$target.hasClass(data.option.componentClass)) {
                         $target.addClass(data.option.componentClass);
                     }
 
+					// Wrap the contents to make button placement easier
+					data.$itemContainer = $('<div>').append($target.children()).appendTo($target);
+					var $items = getItems(target);
+
                     removeWhitespaceBetweenTags(target);
-                    data.itemWidth = getItems(target).first().outerWidth(true);
+					data.itemWidth = getItemWidth(target);
+
+					measureContainer(target);
 
                     if (data.option.showControls) {
                         buildControls(target);
@@ -443,13 +492,8 @@ if (typeof jQuery != 'undefined') {
                         }
                     });
 
-					var enoughItems = hasEnoughItems(target);
-
-					$(window).resize(function(){
-						if ((data.resizing || false) === false) {
-							data.resizing = true;
-							data.resizing = false;
-						}
+					$(window).resize(function () {
+						onResize(target);
 					});
 
                 });

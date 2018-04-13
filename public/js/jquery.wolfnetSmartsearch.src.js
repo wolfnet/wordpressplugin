@@ -11,6 +11,29 @@
 		suggestionHoverClass: 'wnt-hover'
 	};
 
+	var multiMarket = {
+		enabled: false,
+		markets: null,
+		allMarkets: null,
+		currentMarket: null,
+		labelLookup: null,
+		actionLookup: null,
+		submitted: false
+	};
+
+
+	var onResizeForm = function () {
+		var $form = this.closest('form');
+
+		if (!isNaN($form.width()) && ($form.width() > 0) && ($form.width() <= 500)) {
+			$form.addClass('wnt-smartsearch-narrow');
+		} else {
+			$form.removeClass('wnt-smartsearch-narrow');
+		}
+
+	};
+
+
 	var methods =
 	{
 
@@ -31,9 +54,35 @@
 				return this;
 			}
 
-			return this.each(function(){
+			return this.each(function() {
+
 				var $smartSearch = $(this);
 				var opts = $.extend(true, {}, defaultOptions, options);
+
+				if (typeof options.markets === "undefined") {
+					multiMarket.markets = '';
+				} else {
+					multiMarket.markets = options.markets;
+				}
+
+				// multi-market enabled if pertinent arguments contain data
+				if (multiMarket.markets.length) {
+					multiMarket.enabled = true;
+
+					// Build label lookup objects, and full market array to be passed as JSON
+					multiMarket.labelLookup = {};
+					multiMarket.actionLookup = {};
+					multiMarket.allMarkets = [];
+					for (i = 0; i < multiMarket.markets.length; i++) {
+
+						// Lookups objects
+						multiMarket.labelLookup[multiMarket.markets[i].datasource_name] = multiMarket.markets[i].market_label;
+						multiMarket.actionLookup[multiMarket.markets[i].datasource_name] = multiMarket.markets[i].site_url;
+
+						// Market list json
+						multiMarket.allMarkets.push(multiMarket.markets[i].datasource_name);
+					}
+				}
 
 				if (opts.fields.length === 0) {
 					opts.fields.push($smartSearch.attr('name'));
@@ -53,6 +102,9 @@
 
 				/* Look for existing input fields and add values to the smart search input. */
 				methods.refreshExistingValues($smartSearch, null, false);
+
+				/* Submit handler too handle multi-market submit vs simple 1 market setups. */
+				methods.submitHandler($smartSearch);
 
 			});
 
@@ -254,8 +306,20 @@
 						.text(data[i].value)
 						.addClass('wolfnet-suggestion-label');
 
+					// Get market suffix, if multi-market is enabled and current scope is null
+					if (multiMarket.enabled &&
+						multiMarket.currentMarket == null &&
+						multiMarket.markets.length > 1
+					) {
+						var datasource = data[i].market;
+						var marketSuffix = ' in ' + multiMarket.labelLookup[datasource];
+					} else {
+						var datasource = null;
+						marketSuffix = '';
+					}
+
 					var $fieldLabel = $('<span>')
-						.text(data[i].label)
+						.text(data[i].label + marketSuffix)
 						.addClass('wolfnet-suggestion-field');
 
 					var $clearFix = $('<span>')
@@ -266,6 +330,7 @@
 						.addClass('wnt-suggestion')
 						.data('value', data[i].value)
 						.data('field', data[i].field)
+						.data('datasource', datasource)
 						.append($valueLabel)
 						.append($fieldLabel)
 						.append($clearFix)
@@ -275,9 +340,6 @@
 						.on('wntSelect', {$smartSearch:$smartSearch}, methods.suggestionOnWntSearch);
 
 				}
-
-				/* Highlight the first item in the suggestion list. */
-				$container.children(".wnt-suggestion:first").addClass(hoverClass);
 
 				methods.showSuggestionsList($smartSearch);
 
@@ -290,6 +352,30 @@
 
 		},
 
+		submitHandler: function($smartSearch) {
+			var $form = $($smartSearch[0].form);
+
+			$form.submit(function(event)
+			{
+				if (!multiMarket.enabled) {
+
+					// NOT multi-market, so submit form and rely on action value in form tag
+					return true;
+				} else {
+
+					// Dynamically set action to scope which current search is under
+					if (multiMarket.markets.length == 1) {
+						// use action of "loner market"
+						$form.attr('action',multiMarket.actionLookup[multiMarket.markets[0].datasource_name]);
+					} else {
+						$form.attr('action',multiMarket.actionLookup[multiMarket.currentMarket]);
+					}
+					return true;
+				}
+			});
+
+		},
+
 		defineEvents: function($smartSearch) {
 			var pluginData = $smartSearch.data(stateKey);
 			var $searchInput = pluginData.searchInput;
@@ -297,10 +383,8 @@
 			var $suggestions = pluginData.suggestionContainer;
 			var $form = $($smartSearch[0].form);
 
-			if ($form.width() <= 400) {
-				// Apply narrow CSS based on container size
-				methods.applyNarrowCSS($form);
-			}
+			$(window).on('resize', function () { onResizeForm.call($smartSearch); });
+			onResizeForm.call($smartSearch);
 
 			$smartSearch.on('wntFocus', function(event){
 				$searchInput.focus();
@@ -367,6 +451,8 @@
 		input: function($smartSearch, term) {
 			var pluginData = $smartSearch.data(stateKey);
 			var $container = pluginData.suggestionContainer;
+			var $form = $($smartSearch[0].form);
+			var suggestionCount = $form.find('.wnt-ss-value').length;
 
 			// If there was already a request in progress abort it.
 			if (pluginData.xhr || null !== null && plugin.xhr.readyState != 4) {
@@ -385,11 +471,34 @@
 					data.field = pluginData.searchField;
 				}
 
+				if (multiMarket.enabled) {
+
+					// Market scope scenarios
+					if (multiMarket.markets.length == 1) {
+
+						// Use the datasource of "loner market"
+						data.marketList = '["' + multiMarket.markets[0].datasource_name + '"]';
+					} else if (
+						multiMarket.markets.length > 1 &&
+						suggestionCount == 0
+					) {
+
+												// if count is 0 in 1+ market scenarios, reset marketlist and current scope
+						multiMarket.currentMarket = null;
+						data.marketList = JSON.stringify(multiMarket.allMarkets);
+					} else if (multiMarket.currentMarket != null) {
+
+						// if current market is not null and we've made it this far, use that
+						data.marketList = '["' + multiMarket.currentMarket + '"]';
+					}
+
+				}
+
 				pluginData.xhr = $.ajax({
 					url: pluginData.ajaxUrl,
 					data: { action:pluginData.ajaxAction, data:data },
 					dataType: 'jsonp',
-					context: $smartSearch, // Make the context of this request the smart search element.
+					context: $smartSearch,
 					beforeSend: function(){methods.showSearchingMessage(this);}
 				})
 				.done(function(data){
@@ -417,7 +526,7 @@
 		 * @param String field The name of the field (if any) to add the value to.
 		 * @return jQuery The jQuery selection object the plugin is operating on.
 		 */
-		addValue: function($smartSearch, value, field, isSilent) {
+		addValue: function($smartSearch, value, field, isSilent, datasource) {
 			isSilent = (typeof isSilent !== 'undefined') ? isSilent : false;
 
 			var pluginData = $smartSearch.data(stateKey);
@@ -425,6 +534,11 @@
 			var $form = $($smartSearch[0].form);
 			var $searchInput = pluginData.searchInput;
 			var fieldInputChanged = false;
+
+			// Set currentMarket to the market of this criteria being added
+			if (multiMarket.currentMarket == null) {
+				multiMarket.currentMarket = datasource;
+			}
 
 			// Retrieve the field name from the field map if necessary.
 			field = methods.getFieldNameFromFieldMap($smartSearch, field);
@@ -1017,13 +1131,15 @@
 			var $smartSearch = event.data.$smartSearch;
 			var pluginData = $smartSearch.data(stateKey);
 			var $searchInput = pluginData.searchInput;
-			var v = $suggestion.data('value');
-			var f = $suggestion.data('field');
+
+			var value = $suggestion.data('value');
+			var field = $suggestion.data('field');
+			var datasource = $suggestion.data('datasource');
 
 			$searchInput.val('');
 
 			methods.resetSuggestionsList($smartSearch);
-			methods.addValue($smartSearch, v, f);
+			methods.addValue($smartSearch, value, field, false, datasource);
 
 			$smartSearch.trigger('wntFocus');
 
@@ -1036,30 +1152,6 @@
 			if (event.relatedTarget != $smartSearch[0]) {
 				methods.refreshExistingValues($smartSearch, event);
 			}
-
-		},
-
-		applyNarrowCSS: function($form) {
-
-			// Put min/max price, bed/bath, and submit button on own lines
-			$form.find('.wolfnet_smartPriceFields').css({
-				width: "100%",
-				clear: "both"
-			});
-			$form.find('.wolfnet_smartBedBathFields').css({
-				width: "100%",
-				clear: "both"
-			});
-			$form.find('.wolfnet_smartSubmit').css({
-				width: "100%",
-				clear: "both"
-			});
-
-			// Adjust widths of formfield pairs
-			$form.find('.wolfnet_smartMinPrice').css({'width':'50%'});
-			$form.find('.wolfnet_smartMaxPrice').css({'width':'50%'});
-			$form.find('.wolfnet_smartBeds').css({'width':'50%'});
-			$form.find('.wolfnet_smartBaths').css({'width':'50%'});
 
 		}
 

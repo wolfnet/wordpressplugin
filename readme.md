@@ -6,7 +6,7 @@ Author:             | WolfNet Technologies, LLC
 Contributors:       | wolfnettech, ajmichels, asbaumgart, michaelpidde, thenewcoke, blots
 Tags:               | idx, mls, homes
 Requires at least:  | 3.5.1
-Tested up to:       | 4.7
+Tested up to:       | 4.8.1
 Stable tag:         | {X.X.X-stable}
 License:            | GPLv2 or later
 License URI:        | https://www.gnu.org/licenses/gpl-2.0.html
@@ -92,6 +92,29 @@ Please upgrade to the latest version of the plugin as we will be disabling the i
 Please upgrade to the latest version of the plugin as we will be disabling our old API servers. This means that plugin versions 0.1.0 - 1.6.4 will no longer function.
 
 ## Changelog
+
+### 1.17.4
+
+* Fix to keep the featured listings scroller from halting at some widths
+
+### 1.17.3
+
+* Fix to prevent the featured listings scroller from crashing when used in a floating element
+* SmartSearch layout fix for use in sliders
+
+### 1.17.2
+
+* Fix to prevent zip codes from losing their leading zero(s) when applicable
+* Display widget forms in a single column
+
+### 1.17.1
+
+* Fix for sites that use Google Maps outside of this plugin
+* Fix for JavaScript error in new Smart Search functionality
+
+### 1.17.0
+
+* New Smart Search functionality for solutions configured with multiple API keys
 
 ### 1.16.2
 

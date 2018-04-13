@@ -22,7 +22,7 @@
 
 ?>
 
-<div id="<?php echo $instance_id; ?>" class="wolfnet_agentPagesOptions">
+<div id="<?php echo $instance_id; ?>" class="wolfnet_widget_options wolfnet_agentPagesOptions">
 
 	<table class="form-table">
 

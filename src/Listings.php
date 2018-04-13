@@ -285,14 +285,20 @@ class Wolfnet_Listings
         // loop over listings
         foreach ($listingsData as &$listing) {
 
-            // If sold_price is empty, use listing_price
-            if (empty($listing['sold_price'])) {
-                $listing['listing_price'] = '$' . number_format($listing['listing_price']);
+			// If sold_price is empty, use listing_price
+			if (empty($listing['sold_price'])) {
 
-            // If sold_price is populated, use that
-            } else {
-                $listing['listing_price'] = '$' . number_format($listing['sold_price']);
-            }
+				// Empty string listing price if it's null coming from the API
+				if (strlen($listing['listing_price'])) {
+					$listing['listing_price'] = '$' . number_format($listing['listing_price']);
+				} else {
+					$listing['listing_price'] = '';
+				}
+
+			// If sold_price is populated, use that
+			} else {
+				$listing['listing_price'] = '$' . number_format($listing['sold_price']);
+			}
 
             if ($show_logo && empty($listing['branding']['logo'])&& !empty($br_logo_url)) {
                 $listing['branding']['logo'] = $br_logo_url;

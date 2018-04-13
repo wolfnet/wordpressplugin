@@ -629,10 +629,14 @@ class Wolfnet_Plugin
     public function convertDataType($value)
     {
 
+		$exemptkeys = array( 'zipcode', 'zip_code', 'postalcode', 'postal_code' );
+
         if (is_array($value)) {
-            foreach ($value as $key => $val) {
-                $value[$key] = $this->convertDataType($val);
-            }
+			foreach ($value as $key => $val) {
+				if (!in_array($key, $exemptkeys)) {
+					$value[$key] = $this->convertDataType($val);
+				}
+			}
         } elseif (is_string($value) && ($value==='true' || $value==='false')) {
             return ($value==='true') ? true : false;
         } elseif (is_string($value) && ctype_digit($value)) {
