@@ -243,6 +243,32 @@ class Wolfnet_Views
     }
 
 
+	public function amSearchPage () {
+
+		try {
+			$productKey = $GLOBALS['wolfnet']->keyService->getById($_SESSION['keyid']);
+			if (!$GLOBALS['wolfnet']->keyService->isValid($productKey)) {
+				$out = $this->parseTemplate('invalidProductKey');
+			} else {
+				$out = $this->parseTemplate('adminSearch', array(
+					'searchForm'   => ($GLOBALS['wolfnet']->smHttp !== null) ? $GLOBALS['wolfnet']->smHttp['body'] : '',
+					'markets'      => json_decode($GLOBALS['wolfnet']->keyService->get()),
+					'selectedKey'  => $_SESSION['keyid'],
+					'url'          => $GLOBALS['wolfnet']->url,
+					'baseUrl'      => $GLOBALS['wolfnet']->data->getSearchManagerBaseUrl($productKey),
+				));
+			}
+		} catch (Wolfnet_Exception $e) {
+			$out = $this->exceptionView($e);
+		}
+
+		echo $out;
+
+		return $out;
+
+	}
+
+
     public function amSupportPage()
     {
 

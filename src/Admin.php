@@ -266,10 +266,15 @@ class Wolfnet_Admin extends Wolfnet_Plugin
                 'cb'    => array(&$GLOBALS['wolfnet']->views, 'amEditCssPage')
             ),
             array(
-                'title' => 'Search Manager',
+                'title' => 'Old Search Manager',
                 'key'   => 'wolfnet_plugin_search_manager',
                 'cb'    => array(&$GLOBALS['wolfnet']->views, 'amSearchManagerPage')
                 ),
+			array(
+				'title' => 'Search Manager',
+				'key'   => 'wolfnet_plugin_search',
+				'cb'    => array(&$GLOBALS['wolfnet']->views, 'amSearchPage')
+			),
             array(
                 'title' => 'Support',
                 'key'   => 'wolfnet_plugin_support',
