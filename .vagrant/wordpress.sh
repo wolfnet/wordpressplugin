@@ -32,7 +32,30 @@ if [ ! -f "${runfile}" ]; then
     # cat /vagrant/.vagrant/wp3.5.1-setup.sql | mysql -u root
 	echo "  done"
 
-    echo "Start apache ..."
+	echo "Removing default themes ..."
+	rm -rf /var/www/src/wp-content/themes/twentyten
+	rm -rf /var/www/src/wp-content/themes/twentyeleven
+	rm -rf /var/www/src/wp-content/themes/twentytwelve
+	rm -rf /var/www/src/wp-content/themes/twentythirteen
+	rm -rf /var/www/src/wp-content/themes/twentyfourteen
+	rm -rf /var/www/src/wp-content/themes/twentyfifteen
+	rm -rf /var/www/src/wp-content/themes/twentysixteen
+	echo "  done"
+
+	echo "Installing BrandCo themes ..."
+	unzip -qo /vagrant/.vagrant/themes/wolfnetresponsive.zip -d /var/www/src/wp-content/themes
+	unzip -qo /vagrant/.vagrant/themes/wolfnetresponsivSKIN1.zip -d /var/www/src/wp-content/themes
+	unzip -qo /vagrant/.vagrant/themes/wolfnetresponsivSKIN2.zip -d /var/www/src/wp-content/themes
+	unzip -qo /vagrant/.vagrant/themes/wolfnet-skin-4.zip -d /var/www/src/wp-content/themes
+	unzip -qo /vagrant/.vagrant/themes/wolfpressBLACK.zip -d /var/www/src/wp-content/themes
+	unzip -qo /vagrant/.vagrant/themes/wolfpressDARK.zip -d /var/www/src/wp-content/themes
+	unzip -qo /vagrant/.vagrant/themes/wolfpressGREY.zip -d /var/www/src/wp-content/themes
+	unzip -qo /vagrant/.vagrant/themes/wolfpressRED.zip -d /var/www/src/wp-content/themes
+	unzip -qo /vagrant/.vagrant/themes/wolfpresstheme.zip -d /var/www/src/wp-content/themes
+	unzip -qo /vagrant/.vagrant/themes/wolfpressWHITE.zip -d /var/www/src/wp-content/themes
+	echo "  done"
+
+	echo "Starting apache ..."
     service apache2 start
 	echo "  done"
 

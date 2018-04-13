@@ -16,8 +16,8 @@ if [ ! -f "${runfile}" ]; then
 	apt-get -qq -y update > /dev/null 2> /dev/null
 	echo "  done"
 
-	echo "Installing curl ..."
-	apt-get -qq -y -o dir::cache::archives="${tempdir}" install curl > /dev/null 2> /dev/null
+	echo "Installing curl and unzip ..."
+	apt-get -qq -y -o dir::cache::archives="${tempdir}" install curl unzip > /dev/null 2> /dev/null
 	echo "  done"
 
 	echo "Installing git ..."
