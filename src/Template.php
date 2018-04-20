@@ -137,6 +137,10 @@ class Wolfnet_Template
                 $this->url . 'js/wolfnetAdmin.min.js',
                 array('jquery-ui-dialog', 'jquery-ui-tabs', 'jquery-ui-datepicker', 'jquery', 'wolfnet'),
             ),
+			'wolfnet-collapsible' => array(
+				$this->url . 'js/jquery.wolfnetCollapsible.min.js',
+				array('jquery'),
+			),
             'wolfnet-search-manager' => array(
                 $this->url . 'js/jquery.wolfnetSearchManager.min.js',
                 array('jquery'),

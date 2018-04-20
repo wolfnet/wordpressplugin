@@ -126,6 +126,7 @@ class Wolfnet_Admin extends Wolfnet_Plugin
             'wp-color-picker',
             'jquery-ui-slider',
             'wolfnet-admin',
+			'wolfnet-collapsible',
             'wolfnet-shortcode-builder',
             'wolfnet-search-manager',
         );
