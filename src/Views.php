@@ -250,8 +250,11 @@ class Wolfnet_Views
 			if (!$GLOBALS['wolfnet']->keyService->isValid($productKey)) {
 				$out = $this->parseTemplate('invalidProductKey');
 			} else {
+				$form_id       = $GLOBALS['wolfnet']->createUUID();
+				$sampleListing = $GLOBALS['wolfnet']->listings->getSample();
 				$out = $this->parseTemplate('adminSearch', array(
-					'searchForm'   => $this->amSearch(),
+					'form_id'      => $form_id,
+					'searchForm'   => $this->amSearch($form_id),
 					'markets'      => json_decode($GLOBALS['wolfnet']->keyService->get()),
 					'selectedKey'  => $_SESSION['keyid'],
 					'url'          => $GLOBALS['wolfnet']->url,
@@ -269,16 +272,13 @@ class Wolfnet_Views
 	}
 
 
-	public function amSearch()
+	public function amSearch($form_id)
 	{
 
 		try {
 
-			$themeDefaults = $GLOBALS['wolfnet']->widgetTheme->getDefaults();
-			$sampleListing = $GLOBALS['wolfnet']->listings->getSample();
-
 			$out = $this->parseTemplate('adminSearchForm', array(
-				'form_id'  => $GLOBALS['wolfnet']->createUUID(),
+				'form_id'  => $form_id,
 				'prices'   => array(250,500,750,1000,1500,2000,2500,5000,10000,20000,30000,40000,50000,60000,70000,75000,80000,85000,90000,95000,100000,110000,120000,130000,140000,150000,160000,170000,180000,190000,200000,210000,220000,230000,240000,250000,260000,270000,280000,290000,300000,310000,320000,330000,340000,350000,360000,370000,380000,390000,400000,410000,420000,430000,440000,450000,460000,470000,480000,490000,500000,510000,520000,530000,540000,550000,560000,570000,580000,590000,600000,610000,620000,630000,640000,650000,660000,670000,680000,690000,700000,710000,720000,730000,740000,750000,760000,770000,780000,790000,800000,810000,820000,830000,840000,850000,860000,870000,880000,890000,900000,910000,920000,930000,940000,950000,960000,970000,980000,990000,1000000,1100000,1200000,1300000,1400000,1500000,1600000,1700000,1800000,1900000,2000000,2500000,3000000,3500000,4000000,4500000,5000000,6000000,8000000,10000000),
 				'sqft'     => array(600,800,1000,1200,1400,1600,1800,2000,2250,2500,2750,3000,3500,4000,5000,6000,7000,8000,9000,10000,11000,12000,13000,14000,15000),
 				'acres'    => array(.1,.25,.33,.5,1,2,3,4,5,6,7,8,9,10,15,25,50,100,250,500),

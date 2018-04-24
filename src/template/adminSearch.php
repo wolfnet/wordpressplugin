@@ -70,9 +70,52 @@
     <input type="hidden" id="keyid" name="keyid" value="<?php echo $markets[0]->id; ?>" />
     <?php endif; ?>
 
-    <div id="searchmanager">
-    <?php echo $searchForm; ?>
-    </div>
+
+
+	<form id="<?php echo esc_attr($form_id); ?>" role="form" method="get" class="wnt-form"
+	 action="<?php echo esc_attr($form_action); ?>">
+
+		<div class="wolfnet_box">
+			<div class="wolfnet_boxContent">
+				<div class="wnt-form-group">
+					<label for="q_searchInput">Search</label>
+					<input name="q" id="q_searchInput" type="text" autocomplete="off" class="wnt-form-control large-text"
+					 placeholder="Search by School, Area, Subdivision, Address/zip, School District, Area, County/city, and more!" />
+				</div>
+			</div>
+		</div>
+
+		<div class="wnt-sb-criteria">
+			<div class="wolfnet_box">
+				<h3>Filters</h3>
+				<div class="wolfnet_boxContent">
+					<?php echo $searchForm; ?>
+				</div>
+			</div>
+		</div>
+
+		<div class="wnt-sb-results">
+			<div class="wolfnet_box">
+				<h3>Results</h3>
+				<div class="wolfnet_boxContent">
+					<div class="wnt-sb-tabs">
+						<div class="wnt-sb-tab" id="wnt-sb-results">
+							<h4>Results</h4>
+							<?php //echo $searchResults; ?>
+						</div>
+						<div class="wnt-sb-tab" id="wnt-sb-map">
+							<h4>Map</h4>
+							<?php //echo $searchResults; ?>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="wolfnet_clearfix"></div>
+
+	</form>
+
 
 	<div id="save_search" class="wolfnet_box">
 		<h3>Save</h3>
@@ -103,6 +146,8 @@
 
 		(function ($) {
 
+			var formId = '<?php echo $form_id; ?>';
+			var $form = $('#' + formId);
 			var $searchMgr = $('#wolfnet-search-manager');
 			var $searchResetBtn = $searchMgr.find('.resetForm a');
 
@@ -123,6 +168,36 @@
 					document.location.href = 'admin.php?page=wolfnet_plugin_search&keyid=' + $('#keyid').val();
 				});
 			<?php endif; ?>
+
+
+			// Search tabs
+			/*
+			var $searchTabs  = $form.find('.wnt-sb-tabs'),
+				$searchTab   = $searchTabs.find('.wnt-sb-tab'),
+				$spinner     = $('<div class="spinner is-active"></div>');
+
+			if ($searchTab.length > 1) {
+
+				var $searchNav = $('<ul>');
+
+				$searchTab.each(function () {
+					var $item = $(this);
+					var $itemHeading = $item.find('>h1, >h2, >h3, >h4, >h5').first();
+					var itemId = $item.attr('id'),
+						itemLabel = $itemHeading.text();
+
+					$itemHeading.remove();
+
+					$searchNav.append($('<li><a href="#' + itemId + '">' + itemLabel + '</a></li>'));
+
+				});
+
+				$searchTab.first().before($searchNav);
+
+				$searchTabs.tabs();
+
+			}
+			*/
 
 		})(jQuery);
 

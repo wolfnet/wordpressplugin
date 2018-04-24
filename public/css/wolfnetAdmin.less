@@ -88,6 +88,10 @@ html {
 
 .wnt-form {
 
+	.wnt-form-control {
+		//display: block;
+	}
+
 	.wnt-form-group {
 		margin-bottom: 1rem;
 
@@ -95,7 +99,7 @@ html {
 			margin-right: 1rem;
 			color: @wp-grays-darker;
 			font-weight: 600;
-			line-height: 1.3rem;
+			line-height: 2rem;
 		}
 
 		&.wnt-form-group-inline {
@@ -112,12 +116,16 @@ html {
 
 	.wnt-form-check {
 
+		label {
+			font-weight: normal;
+		}
+
 		&.wnt-form-check-inline {
 			display: inline-block;
 			margin-right: 1rem;
 
 			>label,
-			wnt-form-control {
+			.wnt-form-control {
 				display: inline-block;
 				vertical-align: middle;
 			}
@@ -205,6 +213,19 @@ html {
 	}
 
 }
+
+
+// Search Builder
+
+.wnt-sb-criteria {
+	float: left;
+	width: 300px;
+}
+
+.wnt-sb-results {
+	margin-left: 300px;
+}
+
 
 .wolfnet_tools_div {
 	display: table-cell;
