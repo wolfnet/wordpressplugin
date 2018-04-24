@@ -77,8 +77,9 @@
 
 		<div class="wolfnet_box">
 			<div class="wolfnet_boxContent">
+				<h3>Search</h3>
 				<div class="wnt-form-group">
-					<label for="q_searchInput">Search</label>
+					<label for="q_searchInput" class="screen-reader-text">Search</label>
 					<input name="q" id="q_searchInput" type="text" autocomplete="off" class="wnt-form-control large-text"
 					 placeholder="Search by School, Area, Subdivision, Address/zip, School District, Area, County/city, and more!" />
 				</div>
