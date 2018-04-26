@@ -250,6 +250,56 @@ class Wolfnet_Views
 			if (!$GLOBALS['wolfnet']->keyService->isValid($productKey)) {
 				$out = $this->parseTemplate('invalidProductKey');
 			} else {
+
+				$wnt_searches = $GLOBALS['wolfnet']->searchManager->getSavedSearches(-1);
+				$search_urls = array(
+					'list'   => admin_url('admin.php?page=wolfnet_plugin_search'),
+					'new'    => admin_url('admin.php?page=wolfnet_plugin_search&action=new'),
+					'edit'   => admin_url('admin.php?page=wolfnet_plugin_search&post=%d&action=edit'),
+					'trash'  => admin_url('admin.php?page=wolfnet_plugin_search&post=%d&action=trash'),
+				);
+
+				// Determine which view to load
+				if (in_array($_GET['wnt_action'], array('new', 'edit')) || empty($wnt_searches)) {
+					$out = $this->amSearchEdit();
+				} else {
+					$out = $this->amSearchList($wnt_searches, $search_urls);
+				}
+
+			}
+		} catch (Wolfnet_Exception $e) {
+			$out = $this->exceptionView($e);
+		}
+
+		echo $out;
+
+		return $out;
+
+	}
+
+
+	public function amSearchList($wnt_searches=array()) {
+		try {
+			if (empty($wnt_searches)) {
+				$wnt_searches = $GLOBALS['wolfnet']->searchManager->getSavedSearches(-1);
+			}
+			$out = $this->parseTemplate('adminSearches', array(
+				'wnt_searches' => $wnt_searches,
+			));
+		} catch (Wolfnet_Exception $e) {
+			$out = $this->exceptionView($e);
+		}
+		return $out;
+	}
+
+
+	public function amSearchEdit () {
+
+		try {
+			$productKey = $GLOBALS['wolfnet']->keyService->getById($_SESSION['keyid']);
+			if (!$GLOBALS['wolfnet']->keyService->isValid($productKey)) {
+				$out = $this->parseTemplate('invalidProductKey');
+			} else {
 				$form_id       = $GLOBALS['wolfnet']->createUUID();
 				$sampleListing = $GLOBALS['wolfnet']->listings->getSample();
 				$out = $this->parseTemplate('adminSearch', array(

@@ -160,45 +160,36 @@ class Wolfnet_Module_SearchManager
         $cacheKey = 'wntSavedSearches';
 		$data = wp_cache_get($cacheKey, 'wnt');
 
-        if ($keyid == null) {
-            $keyid = "1";
-        }
-
 		if (!$data) {
 
             $dataArgs = array(
                 'numberposts' => $count,
                 'post_type' => $this->plugin->customPostTypeSearch,
-                'post_status' => 'publish',
-                'meta_query' => array(
-                    array(
-                        'key' => 'keyid',
-                        'value' => $keyid,
-                    )
-                )
-            );
+                'post_status' => 'publish'
+			);
+
+			if ($keyid != null) {
+				$dataArgs['meta_query'] = array(
+					array(
+						'key' => 'keyid',
+						'value' => $keyid,
+					)
+				);
+			}
 
             $data = get_posts($dataArgs);
 
-            if (count($data) == 0 && $keyid == 1) {
-                /*
-                 * This is for backwards compatibility - get posts without keyid meta query.
-                 * We will loop through these custom posts and add the keyid meta key.
-                 * Only do this on a keyid of 1 since that would be the default key back when we only allowed one.
-                 */
-                $dataArgs = array(
-                    'numberposts' => $count,
-                    'post_type' => $this->plugin->customPostTypeSearch,
-                    'post_status' => 'publish',
-                );
-
-                $data = get_posts($dataArgs);
-
-                foreach ($data as $post) {
-                    add_post_meta($post->ID, 'keyid', 1);
-                }
-
-            }
+			/*
+			* This is for backwards compatibility:
+			* We will loop through these custom posts and add the keyid meta key if it is missing.
+			* Only do this on a keyid of 1 since that would be the default key back when we only allowed one.
+			*/
+			foreach ($data as $post) {
+				$post_keyid = (array) get_post_meta($post->ID, 'keyid');
+				if (empty($post_keyid)) {
+					add_post_meta($post->ID, 'keyid', 1);
+				}
+			}
 
 			wp_cache_set($cacheKey, $data, 'wnt', 1);
 
