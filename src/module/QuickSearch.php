@@ -81,6 +81,7 @@ class Wolfnet_Module_QuickSearch
             try {
                 $key = $this->plugin->keyService->getById($keyID);
 
+                if ($key != null) {
                 $listings = $this->plugin->api->sendRequest(
                     $key,
                     '/listing?detaillevel=1&startrow=1&maxrows=1',
@@ -93,6 +94,7 @@ class Wolfnet_Module_QuickSearch
                     $highestCount = $count;
                     $highestMatchKey = $key;
                 }
+				}
             } catch (Wolfnet_Exception $e) {
                 echo $this->plugin->displayException($e);
             }
