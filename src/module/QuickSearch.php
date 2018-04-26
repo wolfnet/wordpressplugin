@@ -78,7 +78,9 @@ class Wolfnet_Module_QuickSearch
         $highestMatchKey = '';
 
         foreach (explode(',', $formData['keyids']) as $keyID) {
+
             try {
+
                 $key = $this->plugin->keyService->getById($keyID);
 
                 if ($key != null) {
@@ -88,16 +90,20 @@ class Wolfnet_Module_QuickSearch
                     'GET',
                     $formData
                 );
+
                 $count = $listings['responseData']['data']['total_rows'];
 
-                if($count > $highestCount) {
+                if ($count > $highestCount) {
                     $highestCount = $count;
                     $highestMatchKey = $key;
                 }
+
 				}
+
             } catch (Wolfnet_Exception $e) {
                 echo $this->plugin->displayException($e);
             }
+
         }
 
         /*
