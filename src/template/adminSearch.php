@@ -34,23 +34,27 @@
         </div>
     </noscript>
 
-    <div style="width:875px">
+	<div style="max-width: 875px;">
 
-        <p>The <strong>Search Manager</strong> allows you to create and save custom searches for use
-            in shortcodes and widgets. The WordPress Search Manager works much the same way as the
-            URL Search Builder within the MLSFinder Admin.</p>
+		<p>
+			The <strong>Search Manager</strong> allows you to create and save custom searches for use
+			in shortcodes and widgets. The WordPress Search Manager works much the same way as the
+			URL Search Builder within the MLSFinder Admin.
+		</p>
 
-        <p>Custom searches can target any of the search criteria that is available on your property
-            search. Keep in mind that some search criteria is more restrictive than others, which
-            means less results will be produced. Use the <strong>Results</strong> feature to
-            determine how restrictive a search may be. NOTE: the search criteria available on your
-            property search is based on the data available in the feed from your MLS. This data is
-            subject to change, which may affect custom search strings you generate. WolfNet
-            recommends that you periodically review your custom searches to verify that they still
-            produce the expected results. If not, you may need to revisit the search manager and
-            create a new custom search.</p>
+		<p>
+			Custom searches can target any of the search criteria that is available on your property
+			search. Keep in mind that some search criteria is more restrictive than others, which
+			means less results will be produced. Use the <strong>Results</strong> feature to
+			determine how restrictive a search may be. NOTE: the search criteria available on your
+			property search is based on the data available in the feed from your MLS. This data is
+			subject to change, which may affect custom search strings you generate. WolfNet
+			recommends that you periodically review your custom searches to verify that they still
+			produce the expected results. If not, you may need to revisit the search manager and
+			create a new custom search.
+		</p>
 
-    </div>
+	</div>
 
     <?php if(count($markets) > 1): ?>
 	<div class="wolfnet_box">
