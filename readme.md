@@ -92,6 +92,7 @@ Please upgrade to the latest version of the plugin as we will be disabling our o
 ### 1.17.5
 
 * Fix for the error-handling in the Search Manager
+* Fix to prevent older Quick Search widgets from using keys that no longer exist
 
 ### 1.17.4
 
