@@ -154,7 +154,7 @@ class Wolfnet_Module_SearchManager
 	}
 
 
-    public function getSavedSearches($count = -1, $keyid = null)
+    public function getSavedSearches($count=-1, $keyid=null)
     {
         // Cache the data in the request scope so that we only have to query for it once per request.
         $cacheKey = 'wntSavedSearches';
@@ -165,6 +165,7 @@ class Wolfnet_Module_SearchManager
         }
 
 		if (!$data) {
+
             $dataArgs = array(
                 'numberposts' => $count,
                 'post_type' => $this->plugin->customPostTypeSearch,

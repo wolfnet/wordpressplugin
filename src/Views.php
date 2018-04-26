@@ -272,8 +272,7 @@ class Wolfnet_Views
 	}
 
 
-	public function amSearch($form_id)
-	{
+	public function amSearch($form_id) {
 
 		try {
 
