@@ -26,11 +26,13 @@
 				// Save options to jQuery object data
 				$map.data(stateKey, options);
 
-				methods.pinHouseovers.call(
-					this,
-					options.houseoverData,
-					options.houseoverIcon
-				);
+				if (options.houseoverData) {
+					methods.pinHouseovers.call(
+						this,
+						options.houseoverData,
+						options.houseoverIcon
+					);
+				}
 
 				// Size and fit map instance
 				methods.autoSizeMap.call(this);

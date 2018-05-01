@@ -230,6 +230,11 @@ class Wolfnet_Admin extends Wolfnet_Plugin
 
         }
 
+		if ($pageKeyExists && ($_REQUEST['page'] == 'wolfnet_plugin_search')) {
+			wp_enqueue_script('wolfnet-maptracks');
+			wp_enqueue_script('wolfnet-map-driver');
+		}
+
     }
 
 

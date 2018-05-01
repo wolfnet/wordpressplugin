@@ -318,6 +318,7 @@ class Wolfnet_Views
 				$out = $this->parseTemplate('adminSearch', array(
 					'form_id'      => $form_id,
 					'searchForm'   => $this->amSearch($form_id),
+					'searchMap'    => $this->amSearchMap($form_id),
 					'markets'      => json_decode($GLOBALS['wolfnet']->keyService->get()),
 					'selectedKey'  => $_SESSION['keyid'],
 					'url'          => $GLOBALS['wolfnet']->url,
@@ -344,6 +345,21 @@ class Wolfnet_Views
 				'acres'    => array(.1,.25,.33,.5,1,2,3,4,5,6,7,8,9,10,15,25,50,100,250,500),
 			));
 
+		} catch (Wolfnet_Exception $e) {
+			$out = $this->exceptionView($e);
+		}
+
+		return $out;
+
+	}
+
+
+	public function amSearchMap($form_id) {
+
+		try {
+			$args = $GLOBALS['wolfnet']->data->getMapParameters();
+			$args['form_id'] = $form_id;
+			$out = $this->parseTemplate('adminSearchMap', $args);
 		} catch (Wolfnet_Exception $e) {
 			$out = $this->exceptionView($e);
 		}

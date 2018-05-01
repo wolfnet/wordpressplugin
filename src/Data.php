@@ -276,7 +276,7 @@ class Wolfnet_Data
     }
 
 
-    public function getMapParameters($listingsData, $productKey = null)
+    public function getMapParameters($listingsData=null, $productKey=null)
     {
         if ($productKey == null) {
             $productKey = $this->plugin->keyService->getDefault();
@@ -302,12 +302,15 @@ class Wolfnet_Data
             'brBoundLat'   => $data['responseData']['data']['market']['maptracks']['bounds_br_lat'],
             'tlBoundLat'   => $data['responseData']['data']['market']['maptracks']['bounds_tl_lat'],
             'brBoundLng'   => $data['responseData']['data']['market']['maptracks']['bounds_br_lng'],
+			'houseoverData' => array(),
 		);
 
-        $args['houseoverData'] = $this->getHouseoverData(
-            $listingsData,
-            $data['responseData']['data']['resource']['searchResults']['allLayouts']['showBrokerReciprocityLogo']
-        );
+		if ($listingsData != null) {
+			$args['houseoverData'] = $this->getHouseoverData(
+				$listingsData,
+				$data['responseData']['data']['resource']['searchResults']['allLayouts']['showBrokerReciprocityLogo']
+			);
+		}
 
         return $args;
     }
