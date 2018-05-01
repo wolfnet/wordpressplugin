@@ -246,12 +246,14 @@ class Wolfnet_Views
 	public function amSearchPage () {
 
 		try {
+
 			$productKey = $GLOBALS['wolfnet']->keyService->getById($_SESSION['keyid']);
+
 			if (!$GLOBALS['wolfnet']->keyService->isValid($productKey)) {
 				$out = $this->parseTemplate('invalidProductKey');
 			} else {
 
-				$wnt_searches = $GLOBALS['wolfnet']->searchManager->getSavedSearches(-1);
+				$searches = $GLOBALS['wolfnet']->searchManager->getSavedSearchesArray();
 				$search_urls = array(
 					'list'   => admin_url('admin.php?page=wolfnet_plugin_search'),
 					'new'    => admin_url('admin.php?page=wolfnet_plugin_search&action=new'),
@@ -259,14 +261,27 @@ class Wolfnet_Views
 					'trash'  => admin_url('admin.php?page=wolfnet_plugin_search&post=%d&action=trash'),
 				);
 
-				// Determine which view to load
-				if (in_array($_GET['wnt_action'], array('new', 'edit')) || empty($wnt_searches)) {
-					$out = $this->amSearchEdit();
+				if (empty($searches)) {
+					$action = 'new';
 				} else {
-					$out = $this->amSearchList($wnt_searches, $search_urls);
+					$action = $_GET['action'];
+				}
+
+				// Determine which view to load
+				switch ($action) {
+					case 'new':
+					case 'edit':
+						$out = $this->amSearchEdit($search_urls);
+						break;
+					case 'trash':
+						break;
+					default:
+						$out = $this->amSearchList($searches, $search_urls);
+						break;
 				}
 
 			}
+
 		} catch (Wolfnet_Exception $e) {
 			$out = $this->exceptionView($e);
 		}
@@ -278,13 +293,11 @@ class Wolfnet_Views
 	}
 
 
-	public function amSearchList($wnt_searches=array()) {
+	public function amSearchList($searches, $search_urls) {
 		try {
-			if (empty($wnt_searches)) {
-				$wnt_searches = $GLOBALS['wolfnet']->searchManager->getSavedSearches(-1);
-			}
 			$out = $this->parseTemplate('adminSearches', array(
-				'wnt_searches' => $wnt_searches,
+				'searches' => $searches,
+				'search_urls' => $search_urls,
 			));
 		} catch (Wolfnet_Exception $e) {
 			$out = $this->exceptionView($e);
@@ -314,8 +327,6 @@ class Wolfnet_Views
 		} catch (Wolfnet_Exception $e) {
 			$out = $this->exceptionView($e);
 		}
-
-		echo $out;
 
 		return $out;
 

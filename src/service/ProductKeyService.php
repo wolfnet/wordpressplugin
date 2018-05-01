@@ -39,15 +39,29 @@ class Wolfnet_Service_ProductKeyService
      */
     public function getById($id)
     {
-        $keyList = json_decode($this->get());
-
-        foreach ($keyList as $key) {
-            if ($key->id == $id) {
-                return $key->key;
-            }
-            // TODO: Add some sort of error throwing if no key is found for the given ID.
-        }
+		$key = $this->getKeyById($id);
+		return $key->key;
     }
+
+
+	/**
+	 * This method retrieves a specific product key JSON from the WordPress options table based on a
+	 * provided unique ID value.
+	 * @param  integer $id The ID of the key to be retrieved.
+	 * @return string      The key that was retrieved from the WP options table.
+	 */
+	public function getKeyById($id)
+	{
+		$keyList = json_decode($this->get());
+
+		foreach ($keyList as $key) {
+			if ($key->id == $id) {
+				return $key;
+			}
+			// TODO: Add some sort of error throwing if no key is found for the given ID.
+		}
+
+	}
 
 
     /**

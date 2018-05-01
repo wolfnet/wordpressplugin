@@ -30,6 +30,11 @@
 // -------------------------------------------- //
 
 
+//== WordPress Admin Sizes
+
+@wp-button-height: 28px;
+
+
 //== WordPress Admin Colors
 
 @wp-blues:               #0073aa;
@@ -52,7 +57,14 @@
 @gray:          @wp-grays-darker;
 @gray-light:    @wp-grays-light;
 @gray-lighter:  @wp-grays-lightest;
-@gray-lightest: lighten(@wp-grays-lightest, 15%); // #eee
+@gray-lightest: lighten(@wp-grays-lightest, 15%); // #dddfe2
+
+@bg-gray-darker:    lighten(@gray-darker,   10%);
+@bg-gray-dark:      lighten(@gray-dark,     10%);
+@bg-gray:           lighten(@gray,          10%);
+@bg-gray-light:     lighten(@gray-light,    10%);
+@bg-gray-lighter:   lighten(@gray-lighter,  10%);
+@bg-gray-lightest:  lighten(@gray-lightest, 10%);
 
 @brand-primary: @wp-blues;
 @brand-success: #1eaa00;
@@ -151,6 +163,11 @@ html {
 
 	}
 
+	// Fix WP button-link height
+	.button-link {
+		line-height: @wp-button-height;
+	}
+
 }
 
 .wnt-badge {
@@ -168,22 +185,60 @@ html {
 	text-align: center;
 }
 
+.wnt-box,
 .wolfnet_box {
 	margin: 0 1rem 1rem 0;
 	border: 1px solid @gray-lightest;
 	background-color: #fff;
 	box-shadow: 0 1px 1px rgba(0, 0, 0, 0.04);
 
+	&.wnt-box-collapsed,
 	&.wolfnet_boxCollapsed {
 		display: inline-block;
 	}
 
+	.wnt-box-header,
 	.wolfnet_boxHeader,
+	> header,
 	> h2, > h3, > h4 {
 		margin: 0;
 		padding: 1rem;
 	}
 
+	.wnt-box-footer,
+	.wolfnet_boxFooter,
+	> footer {
+		padding: 1rem;
+		border-top: 1px solid @gray-lightest;
+		background: @bg-gray-lightest;
+	}
+
+	.wnt-box-content,
+	.wolfnet_boxContent,
+	> section,
+	> article {
+		margin: 1rem;
+
+		.wnt-box,
+		.wolfnet_box {
+			margin: 0 0.5rem 0.5rem 0;
+
+			.wnt-box-header,
+			.wolfnet_boxHeader,
+			> h2, > h3, > h4 {
+				padding: 0.5rem;
+			}
+
+			.wnt-box-content,
+			.wolfnet_boxContent {
+				margin: 0.5rem;
+			}
+
+		}
+
+	}
+
+	.wnt-box-toggle,
 	.wolfnet_boxToggle {
 		float: right;
 		margin-left: 1em;
@@ -191,25 +246,6 @@ html {
 		line-height: 1.3rem;
 		color: inherit;
 		.no-decoration();
-	}
-
-	.wolfnet_boxContent {
-		margin: 1rem;
-
-		.wolfnet_box {
-			margin: 0 0.5rem 0.5rem 0;
-
-			.wolfnet_boxHeader,
-			> h2, > h3, > h4 {
-				padding: 0.5rem;
-			}
-
-			.wolfnet_boxContent {
-				margin: 0.5rem;
-			}
-
-		}
-
 	}
 
 }
@@ -771,20 +807,32 @@ input.input-placeholder {
 	color: #999;
 }
 
+.wnt-clearfix:before,
+.wnt-clearfix:after,
 .wolfnet_clearfix:before,
 .wolfnet_clearfix:after {
 	content: "";
 	display: table;
 }
 
+.wnt-clearfix:after,
 .wolfnet_clearfix:after {
 	clear: both;
 }
 
+.wnt-clearfix,
 .wolfnet_clearfix {
 	/* *zoom: 1; */
 	float: none !important;
 	clear: both;
+}
+
+.wnt-pull-left {
+	float: left;
+}
+
+.wnt-pull-right {
+	float: right;
 }
 
 .wolfnet_cssBox {

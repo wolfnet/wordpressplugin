@@ -200,6 +200,53 @@ class Wolfnet_Module_SearchManager
     }
 
 
+	public function getSavedSearchesArray ($count=-1, $keyid=null) {
+		$search_posts = $this->getSavedSearches($count, $keyid);
+		$searches = array();
+
+		foreach ($search_posts as $search_post) {
+			$search_keyid = get_post_meta($search_post->ID, 'keyid');
+			if (is_array($search_keyid)) {
+				$search_keyid = (int) $search_keyid[0];
+			}
+			$search_key = $this->plugin->keyService->getKeyById($search_keyid);
+			array_push($searches, array(
+				'ID'                     => $search_post->ID,
+				'post_author'            => $search_post->post_author,
+				'post_date'              => $search_post->post_date,
+				'post_date_gmt'          => $search_post->post_date_gmt,
+				'post_content'           => $search_post->post_content,
+				'post_title'             => $search_post->post_title,
+				'post_excerpt'           => $search_post->post_excerpt,
+				'post_status'            => $search_post->post_status,
+				'comment_status'         => $search_post->comment_status,
+				'ping_status'            => $search_post->ping_status,
+				'post_password'          => $search_post->post_password,
+				'post_name'              => $search_post->post_name,
+				'to_ping'                => $search_post->to_ping,
+				'pinged'                 => $search_post->pinged,
+				'post_modified'          => $search_post->post_modified,
+				'post_modified_gmt'      => $search_post->post_modified_gmt,
+				'post_content_filtered'  => $search_post->post_content_filtered,
+				'post_parent'            => $search_post->post_parent,
+				'guid'                   => $search_post->guid,
+				'menu_order'             => $search_post->menu_order,
+				'post_type'              => $search_post->post_type,
+				'post_mime_type'         => $search_post->post_mime_type,
+				'comment_count'          => $search_post->comment_count,
+				'filter'                 => $search_post->filter,
+				'keyid'                  => $search_keyid,
+				'key_market'             => ($search_key->market ?: $search_key->label),
+				'key_label'              => $search_key->label,
+				'user_login'             => get_userdata($search_post->post_author)->user_login,
+			));
+		}
+
+		return $searches;
+
+	}
+
+
     public function getSavedSearch($id = 0)
     {
         $data = array();

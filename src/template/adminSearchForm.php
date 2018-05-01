@@ -513,15 +513,6 @@
 
 	</div>
 
-	<div class="form-group redundant-controls">
-		<button type="button" class="btn btn-default btn-close">Close</button>
-		<button type="submit" class="btn btn-primary">
-			<span class="icon icon-search"></span>
-			<span>Search</span>
-		</button>
-		<a class="btn btn-default reset-btn" href="http://search.hometoaustx.com/reset" rel="nofollow">Reset</a>
-	</div>
-
 
 <script>
 
