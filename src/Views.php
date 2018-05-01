@@ -267,11 +267,24 @@ class Wolfnet_Views
 					$action = $_GET['action'];
 				}
 
+				if ($action == 'new') {
+					$keys = json_decode($GLOBALS['wolfnet']->keyService->get());
+					if (count($keys) > 1) {
+						$selected_key = $GLOBALS['wolfnet']->keyService->getKeyById($_GET['keyid']);
+						if (!$selected_key) {
+							$action = 'select-key';
+						}
+					}
+				}
+
 				// Determine which view to load
 				switch ($action) {
 					case 'new':
 					case 'edit':
 						$out = $this->amSearchEdit($search_urls);
+						break;
+					case 'select-key':
+						$out = $this->amSearchSelectKey($search_urls['new']);
 						break;
 					case 'trash':
 						break;
@@ -306,25 +319,41 @@ class Wolfnet_Views
 	}
 
 
-	public function amSearchEdit () {
+	public function amSearchSelectKey ($new_search_url) {
 
 		try {
-			$productKey = $GLOBALS['wolfnet']->keyService->getById($_SESSION['keyid']);
-			if (!$GLOBALS['wolfnet']->keyService->isValid($productKey)) {
-				$out = $this->parseTemplate('invalidProductKey');
-			} else {
-				$form_id       = $GLOBALS['wolfnet']->createUUID();
-				$sampleListing = $GLOBALS['wolfnet']->listings->getSample();
-				$out = $this->parseTemplate('adminSearch', array(
-					'form_id'      => $form_id,
-					'searchForm'   => $this->amSearch($form_id),
-					'searchMap'    => $this->amSearchMap($form_id),
-					'markets'      => json_decode($GLOBALS['wolfnet']->keyService->get()),
-					'selectedKey'  => $_SESSION['keyid'],
-					'url'          => $GLOBALS['wolfnet']->url,
-					'baseUrl'      => $GLOBALS['wolfnet']->data->getSearchManagerBaseUrl($productKey),
-				));
-			}
+			$form_id       = $GLOBALS['wolfnet']->createUUID();
+			$sampleListing = $GLOBALS['wolfnet']->listings->getSample();
+			$out = $this->parseTemplate('adminSelectKey', array(
+				'keys'          => json_decode($GLOBALS['wolfnet']->keyService->get()),
+				'selected_key'  => $_SESSION['keyid'],
+				'next_url'      => $new_search_url,
+				'instructions'  => 'Select the market that you would like to use for this search.',
+			));
+		} catch (Wolfnet_Exception $e) {
+			$out = $this->exceptionView($e);
+		}
+
+		return $out;
+
+	}
+
+
+	public function amSearchEdit ($search_urls) {
+
+		try {
+			$form_id       = $GLOBALS['wolfnet']->createUUID();
+			$sampleListing = $GLOBALS['wolfnet']->listings->getSample();
+			$out = $this->parseTemplate('adminSearch', array(
+				'form_id'      => $form_id,
+				'searchForm'   => $this->amSearch($form_id),
+				'searchMap'    => $this->amSearchMap($form_id),
+				'markets'      => json_decode($GLOBALS['wolfnet']->keyService->get()),
+				'selectedKey'  => $_SESSION['keyid'],
+				'search_urls'  => $search_urls,
+				'url'          => $GLOBALS['wolfnet']->url,
+				'baseUrl'      => $GLOBALS['wolfnet']->data->getSearchManagerBaseUrl($productKey),
+			));
 		} catch (Wolfnet_Exception $e) {
 			$out = $this->exceptionView($e);
 		}

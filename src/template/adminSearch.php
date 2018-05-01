@@ -56,28 +56,10 @@
 
 	</div>
 
-    <?php if(count($markets) > 1): ?>
-	<div class="wolfnet_box">
-		<h3>Market</h3>
-		<div class="wolfnet_boxContent">
-            Select the market that you'd like to use to create searches and click Apply.
-            <p><select id="keyid" name="keyid">
-                <?php for($i=0; $i<=count($markets)-1; $i++): ?>
-                <option value="<?php echo $markets[$i]->id; ?>"
-                    <?php if($markets[$i]->id == $selectedKey) echo ' selected="selected"'?>><?php echo $markets[$i]->label; ?></option>
-                <?php endfor; ?>
-            </select>
-            <input type="button" id="changeMarket" value="Apply" /></p>
-		</div>
-	</div>
-    <?php else: ?>
-    <input type="hidden" id="keyid" name="keyid" value="<?php echo $markets[0]->id; ?>" />
-    <?php endif; ?>
-
-
-
 	<form id="<?php echo esc_attr($form_id); ?>" role="form" method="get" class="wnt-form"
 	 action="<?php echo esc_attr($form_action); ?>">
+
+		<input type="hidden" id="keyid" name="keyid" value="<?php echo $markets[0]->id; ?>" />
 
 		<div class="wolfnet_box">
 			<div class="wolfnet_boxContent">
@@ -116,14 +98,14 @@
 				<div class="wolfnet_boxContent">
 					<h3>Results</h3>
 					<div class="wnt-sb-tabs">
-						<div class="wnt-sb-tab" id="wnt-sb-results">
+						<!-- <div class="wnt-sb-tab" id="wnt-sb-results">
 							<h4>Results</h4>
 							<?php //echo $searchResults; ?>
 						</div>
 						<div class="wnt-sb-tab" id="wnt-sb-map">
-							<h4>Map</h4>
-							<?php //echo $searchResults; ?>
-						</div>
+							<h4>Map</h4> -->
+							<?php echo $searchMap; ?>
+						<!-- </div> -->
 					</div>
 				</div>
 			</div>
