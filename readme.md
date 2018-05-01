@@ -15,11 +15,7 @@ License URI:        | https://www.gnu.org/licenses/gpl-2.0.html
 website.
 
 ## Description
-The WolfNet IDX for WordPress plugin provides IDX search solution integration with any WordPress
-website. To integrate WolfNet IDX data with your WordPress website, you must have a WolfNet IDX
-property search solution. To activate the plugin, you must have a unique product key. Please contact
-WolfNet Customer Service for support via phone at 612-342-0088 or toll free at 1-866-WOLFNET, or via
-email at service@wolfnet.com. You may also find us online at [WolfNet.com](http://wolfnet.com).
+The WolfNet IDX for WordPress plugin provides IDX search solution integration with any WordPress website. To integrate WolfNet IDX data with your WordPress website, you must have a WolfNet IDX property search solution. To access MLS data, you must have a unique product key. Contact WolfNet for more information.
 
 ## Installation
 There are no special instructions for installing the plugin, however a valid product key must be
@@ -92,6 +88,11 @@ Please upgrade to the latest version of the plugin as we will be disabling the i
 Please upgrade to the latest version of the plugin as we will be disabling our old API servers. This means that plugin versions 0.1.0 - 1.6.4 will no longer function.
 
 ## Changelog
+
+### 1.17.5
+
+* Fix for the error-handling in the Search Manager
+* Fix to prevent older Quick Search widgets from using keys that no longer exist
 
 ### 1.17.4
 
