@@ -89,6 +89,10 @@ Please upgrade to the latest version of the plugin as we will be disabling our o
 
 ## Changelog
 
+### 1.17.6
+
+* Fix to get the sort options to display when using multiple markets in a listing grid
+
 ### 1.17.5
 
 * Fix for the error-handling in the Search Manager

@@ -69,7 +69,7 @@ unset($wpMeta['key']);
         var setupThumbnailScroller = function () {
             var $listing = $listingGrid.find('.wolfnet_listing');
             $listing.wolfnetThumbnailScroller({
-                keyid         : <?php echo (array_key_exists('keyid', $wpMeta) ? $wpMeta['keyid'] : ''); ?>,
+                keyid         : '<?php echo (array_key_exists('keyid', $wpMeta) ? $wpMeta['keyid'] : ''); ?>',
                 photoSelector : '.wolfnet_listingImage img',
                 hideControls  : !wolfnet.hasFeature('touch') // If on a touch screen, always show the controls
             });
