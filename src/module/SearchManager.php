@@ -18,6 +18,8 @@ class Wolfnet_Module_SearchManager
     */
     protected $plugin = null;
 
+	private static $found_items = 0;
+
 
     public function __construct($plugin) {
         $this->plugin = $plugin;
@@ -243,6 +245,32 @@ class Wolfnet_Module_SearchManager
 		}
 
 		return $searches;
+
+	}
+
+
+	public function find ($args='') {
+		$default_args = array(
+			'post_status'     => 'any',
+			'posts_per_page'  => -1,
+			'offset'          => 0,
+			'orderby'         => 'ID',
+			'order'           => 'ASC',
+		);
+
+		$args = wp_parse_args($args, $default_args);
+		$args['post_type'] = $this->plugin->customPostTypeSearch;
+
+		$q_posts = new WP_Query();
+		$posts = $q_posts->query($args);
+
+		//self::found_items = $q_posts->found_posts;
+
+		$searches = array();
+
+		foreach ((array) $posts as $post) {
+			//$searches[] = new
+		}
 
 	}
 
