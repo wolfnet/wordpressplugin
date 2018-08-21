@@ -26,7 +26,7 @@
 
     <div id="icon-options-wolfnet" class="icon32"><br /></div>
 
-    <h1>WolfNet <sup>&reg;</sup> - General Settings</h1>
+    <h1>General Settings - WolfNet<sup>&reg;</sup></h1>
 
     <form method="post" id="wolfnetSettings" action="options.php">
 
