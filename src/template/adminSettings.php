@@ -128,28 +128,36 @@
 
 		</fieldset>
 
-        <fieldset>
-
-            <legend>
-                <h2 class="title">SSL</h2>
-            </legend>
-
-            <p>
-                <input name="<?php echo Wolfnet_Plugin::SSL_WP_OPTION; ?>"
-                 id="wnt-<?php echo Wolfnet_Plugin::SSL_WP_OPTION; ?>"
-                 <?php checked($sslEnabled, true); ?> type="checkbox" value="1" />
-                <label for="wnt-<?php echo Wolfnet_Plugin::SSL_WP_OPTION; ?>">
-                    SSL Enabled
-                </label>
-            </p>
-
-            <p class="description">
-                This option determines if the plugin will communicate with the API via
-                a secure connection. In the near future this option will be deprecated
-                and the API will only work over SSL.
-            </p>
-
-        </fieldset>
+		<div id="wolfnet-advanced-options">
+			<fieldset>
+				<legend>
+					<h2 class="title"><?php _e('Advanced Settings'); ?></h2>
+				</legend>
+				<table class="form-table">
+					<tr>
+						<th scope="row">WolfNet API Connection Port</th>
+						<td>
+							<label for="wnt-<?php echo Wolfnet_Plugin::SSL_WP_OPTION; ?>-1">
+								<input name="<?php echo Wolfnet_Plugin::SSL_WP_OPTION; ?>"
+								 id="wnt-<?php echo Wolfnet_Plugin::SSL_WP_OPTION; ?>-1"
+								 <?php checked($sslEnabled, true); ?> type="radio" value="1" />
+								<?php _e('Port 443 (Recommended)'); ?>
+							</label>
+							<br />
+							<label for="wnt-<?php echo Wolfnet_Plugin::SSL_WP_OPTION; ?>-0">
+								<input name="<?php echo Wolfnet_Plugin::SSL_WP_OPTION; ?>"
+								 id="wnt-<?php echo Wolfnet_Plugin::SSL_WP_OPTION; ?>-0"
+								 <?php checked($sslEnabled, false); ?> type="radio" value="0" />
+								<?php _e('Port 80 - not secure'); ?>
+							</label>
+							<p class="description">
+								<?php _e("This option determines if the plugin will communicate with the API via a secure connection. In the near future this option will be deprecated and the API will only work over TLS via port 443."); ?>
+							</p>
+						</td>
+					</tr>
+				</table>
+			</fieldset>
+		</div>
 
 		<p class="submit">
 			<?php submit_button(
@@ -232,6 +240,21 @@
             $( '#wolfnet_addKey' ).click( function() {
                 $.fn.wolfnetInsertKeyRow();
             } );
+
+
+			var $advOptions  = $('#wolfnet-advanced-options'),
+				$advContent  = $advOptions.find('fieldset').first().hide();
+
+			var $advToggle = $('<p>')
+				.append(
+					$('<button type="button" class="button">')
+						.html('<span class="wnt-icon wnt-icon-cog"></span> <?php _e('Advanced Settings ...'); ?>')
+						.click(function () {
+							$advToggle.hide();
+							$advContent.show();
+						})
+				)
+				.prependTo($advOptions);
 
 		});
 
