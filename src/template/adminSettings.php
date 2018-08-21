@@ -24,18 +24,18 @@
 
 <div class="wrap">
 
-    <div id="icon-options-wolfnet" class="icon32"><br /></div>
+	<div id="icon-options-wolfnet" class="icon32"><br /></div>
 
     <h1>General Settings - WolfNet<sup>&reg;</sup></h1>
 
-    <form method="post" id="wolfnetSettings" action="options.php">
+	<form method="post" id="wolfnetSettings" action="options.php">
 
-        <?php echo $formHeader; ?>
+		<?php echo $formHeader; ?>
 
-        <input type="hidden" id="wolfnet_setSslVerify" value="<?php echo $setSslVerify; ?>" />
-        <input type="hidden" id="wolfnet_keyCount" value="<?php echo count($productKey); ?>" />
+		<input type="hidden" id="wolfnet_setSslVerify" value="<?php echo $setSslVerify; ?>" />
+		<input type="hidden" id="wolfnet_keyCount" value="<?php echo count($productKey); ?>" />
 
-        <fieldset>
+		<fieldset>
 
             <legend>
                 <h2 class="title">Product Key</h2>
@@ -130,7 +130,7 @@
                 <a href="http://wolfnet.com" target="_blank">WolfNet.com</a>.
             </p>
 
-        </fieldset>
+		</fieldset>
 
         <fieldset>
 
@@ -155,13 +155,13 @@
 
         </fieldset>
 
-        <p class="submit">
-            <?php submit_button(
-                $text = NULL, $type = 'primary', $name = 'submit', $wrap = FALSE, $other_attributes = NULL
-            ); ?>
-        </p>
+		<p class="submit">
+			<?php submit_button(
+				$text = NULL, $type = 'primary', $name = 'submit', $wrap = FALSE, $other_attributes = NULL
+			); ?>
+		</p>
 
-    </form>
+	</form>
 
 </div>
 
