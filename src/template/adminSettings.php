@@ -24,34 +24,34 @@
 
 <div class="wrap">
 
-    <div id="icon-options-wolfnet" class="icon32"><br /></div>
+	<div id="icon-options-wolfnet" class="icon32"><br /></div>
 
-    <h1>WolfNet <sup>&reg;</sup> - General Settings</h1>
+	<h1><?php echo _e('General Settings'); ?> - WolfNet<sup>&reg;</sup></h1>
 
-    <form method="post" id="wolfnetSettings" action="options.php">
+	<form method="post" id="wolfnetSettings" action="options.php">
 
-        <?php echo $formHeader; ?>
+		<?php echo $formHeader; ?>
 
-        <input type="hidden" id="wolfnet_setSslVerify" value="<?php echo $setSslVerify; ?>" />
-        <input type="hidden" id="wolfnet_keyCount" value="<?php echo count($productKey); ?>" />
+		<input type="hidden" id="wolfnet_setSslVerify" value="<?php echo $setSslVerify; ?>" />
+		<input type="hidden" id="wolfnet_keyCount" value="<?php echo count($productKey); ?>" />
 
-        <fieldset>
+		<fieldset>
 
-            <legend>
-                <h2 class="title">Product Key</h2>
-            </legend>
+			<legend>
+				<h2 class="title"><?php echo _e('Product Key'); ?></h2>
+			</legend>
 
 			<table class="key-table widefat" id="wolfnet_keys">
 				<thead>
 					<tr>
 						<th class="row-title" scope="row">
-							Product Key
+							<?php echo _e('Product Key'); ?>
 						</th>
 						<th class="row-title" scope="row">
-							Market Name
+							<?php echo _e('Market Name'); ?>
 						</th>
 						<th class="row-title" scope="row">
-							Label
+							<?php echo _e('Label'); ?>
 						</th>
 						<th class="row-title" scope="row"></th>
 					</tr>
@@ -111,57 +111,61 @@
 				</tbody>
 			</table>
 
-            <div class="tablenav bottom">
-                <button type="button" class="button action" id="wolfnet_addKey">
-                    <span class="wnt-icon wnt-icon-plus"></span>
-                    <?php _e('Add Product Key'); ?>
-                </button>
-            </div>
+			<div class="tablenav bottom">
+				<button type="button" class="button action" id="wolfnet_addKey">
+					<span class="wnt-icon wnt-icon-plus"></span>
+					<?php _e('Add Product Key'); ?>
+				</button>
+			</div>
 
-            <p class="description">
-                Enter your unique product key for the WolfNet WordPress plugin. The
-                product key is required to connect your WordPress site to your WolfNet
-                property search. WolfNet Plugin features will not be available until the
-                correct key has been entered. If you do not have a key, please contact
-                WolfNet Technologies via phone at 612-342-0088 or toll free at
-                1-866-WOLFNET, or via email at
-                <a href="mailto:service@wolfnet.com">service@wolfnet.com</a>.
-                You may also find us online at
-                <a href="http://wolfnet.com" target="_blank">WolfNet.com</a>.
-            </p>
+			<p class="description">
+				<?php printf(
+					__("Enter your unique product key for the WolfNet WordPress plugin. The product key is required to connect your WordPress site to your WolfNet property search. WolfNet Plugin features will not be available until the correct key has been entered. If you do not have a key, please contact WolfNet Technologies via phone at 612-342-0088 or toll free at 1-866-WOLFNET, or via email at %s. You may also find us online at %s."),
+					'<a href="mailto:service@wolfnet.com">service@wolfnet.com</a>',
+					'<a href="http://wolfnet.com" target="_blank">WolfNet.com</a>'
+				); ?>
+			</p>
 
-        </fieldset>
+		</fieldset>
 
-        <fieldset>
+		<div id="wolfnet-advanced-options">
+			<fieldset>
+				<legend>
+					<h2 class="title"><?php _e('Advanced Settings'); ?></h2>
+				</legend>
+				<table class="form-table">
+					<tr>
+						<th scope="row">WolfNet API Connection Port</th>
+						<td>
+							<label for="wnt-<?php echo Wolfnet_Plugin::SSL_WP_OPTION; ?>-1">
+								<input name="<?php echo Wolfnet_Plugin::SSL_WP_OPTION; ?>"
+								 id="wnt-<?php echo Wolfnet_Plugin::SSL_WP_OPTION; ?>-1"
+								 <?php checked($sslEnabled, true); ?> type="radio" value="1" />
+								<?php _e('Port 443 (Recommended)'); ?>
+							</label>
+							<br />
+							<label for="wnt-<?php echo Wolfnet_Plugin::SSL_WP_OPTION; ?>-0">
+								<input name="<?php echo Wolfnet_Plugin::SSL_WP_OPTION; ?>"
+								 id="wnt-<?php echo Wolfnet_Plugin::SSL_WP_OPTION; ?>-0"
+								 <?php checked($sslEnabled, false); ?> type="radio" value="0" />
+								<?php _e('Port 80 - not secure'); ?>
+							</label>
+							<p class="description">
+								<?php _e("This option determines if the plugin will communicate with the API via a secure connection. In the near future this option will be deprecated and the API will only work over TLS via port 443."); ?>
+							</p>
+						</td>
+					</tr>
+				</table>
+			</fieldset>
+		</div>
 
-            <legend>
-                <h2 class="title">SSL</h2>
-            </legend>
+		<p class="submit">
+			<?php submit_button(
+				$text = NULL, $type = 'primary', $name = 'submit', $wrap = FALSE, $other_attributes = NULL
+			); ?>
+		</p>
 
-            <p>
-                <input name="<?php echo Wolfnet_Plugin::SSL_WP_OPTION; ?>"
-                 id="wnt-<?php echo Wolfnet_Plugin::SSL_WP_OPTION; ?>"
-                 <?php checked($sslEnabled, true); ?> type="checkbox" value="1" />
-                <label for="wnt-<?php echo Wolfnet_Plugin::SSL_WP_OPTION; ?>">
-                    SSL Enabled
-                </label>
-            </p>
-
-            <p class="description">
-                This option determines if the plugin will communicate with the API via
-                a secure connection. In the near future this option will be deprecated
-                and the API will only work over SSL.
-            </p>
-
-        </fieldset>
-
-        <p class="submit">
-            <?php submit_button(
-                $text = NULL, $type = 'primary', $name = 'submit', $wrap = FALSE, $other_attributes = NULL
-            ); ?>
-        </p>
-
-    </form>
+	</form>
 
 </div>
 
@@ -236,6 +240,21 @@
             $( '#wolfnet_addKey' ).click( function() {
                 $.fn.wolfnetInsertKeyRow();
             } );
+
+
+			var $advOptions  = $('#wolfnet-advanced-options'),
+				$advContent  = $advOptions.find('fieldset').first().hide();
+
+			var $advToggle = $('<p>')
+				.append(
+					$('<button type="button" class="button">')
+						.html('<span class="wnt-icon wnt-icon-cog"></span> <?php _e('Advanced Settings ...'); ?>')
+						.click(function () {
+							$advToggle.hide();
+							$advContent.show();
+						})
+				)
+				.prependTo($advOptions);
 
 		});
 
