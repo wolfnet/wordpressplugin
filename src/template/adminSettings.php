@@ -26,7 +26,7 @@
 
 	<div id="icon-options-wolfnet" class="icon32"><br /></div>
 
-	<h1><?php echo _e('General Settings'); ?> - WolfNet<sup>&reg;</sup></h1>
+	<h1><?php _e('General Settings'); ?> - WolfNet<sup>&reg;</sup></h1>
 
 	<form method="post" id="wolfnetSettings" action="options.php">
 
@@ -38,20 +38,20 @@
 		<fieldset>
 
 			<legend>
-				<h2 class="title"><?php echo _e('Product Key'); ?></h2>
+				<h2 class="title"><?php _e('Product Key'); ?></h2>
 			</legend>
 
 			<table class="key-table widefat" id="wolfnet_keys">
 				<thead>
 					<tr>
 						<th class="row-title" scope="row">
-							<?php echo _e('Product Key'); ?>
+							<?php _e('Product Key'); ?>
 						</th>
 						<th class="row-title" scope="row">
-							<?php echo _e('Market Name'); ?>
+							<?php _e('Market Name'); ?>
 						</th>
 						<th class="row-title" scope="row">
-							<?php echo _e('Label'); ?>
+							<?php _e('Label'); ?>
 						</th>
 						<th class="row-title" scope="row"></th>
 					</tr>
@@ -120,7 +120,7 @@
 
 			<p class="description">
 				<?php printf(
-					__("Enter your unique product key for the WolfNet WordPress plugin. The product key is required to connect your WordPress site to your WolfNet property search. WolfNet Plugin features will not be available until the correct key has been entered. If you do not have a key, please contact WolfNet Technologies via phone at 612-342-0088 or toll free at 1-866-WOLFNET, or via email at %s. You may also find us online at %s."),
+					__('Enter your unique product key for the WolfNet WordPress plugin. The product key is required to connect your WordPress site to your WolfNet property search. WolfNet Plugin features will not be available until the correct key has been entered. If you do not have a key, please contact WolfNet Technologies via phone at 612-342-0088 or toll free at 1-866-WOLFNET, or via email at %s. You may also find us online at %s.'),
 					'<a href="mailto:service@wolfnet.com">service@wolfnet.com</a>',
 					'<a href="http://wolfnet.com" target="_blank">WolfNet.com</a>'
 				); ?>

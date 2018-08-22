@@ -44,7 +44,7 @@
 
 							<span class="wolfnet_widget_theme_label">
 								<span class="wolfnet_widget_theme_flag">
-									<?php if ($themeOptSelected) echo _e('Active:') ?>
+									<?php if ($themeOptSelected) _e('Active:') ?>
 								</span>
 								<?php _e($themeOpt['label']); ?>
 							</span>
@@ -52,14 +52,14 @@
 							<span class="wolfnet_widget_theme_actions">
 								<?php if ($themeOptSelected) { ?>
 									<a href="#wolfnet-color-options"
-									 class="button-primary"><?php echo _e('Customize'); ?></a>
+									 class="button-primary"><?php _e('Customize'); ?></a>
 								<?php } else { ?>
 									<button type="submit" class="button button-secondary"
 									 name="wolfnet_widgetTheme"
 									 id="wolfnet_widgetTheme_<?php echo esc_attr($themeOpt['name']); ?>"
 									 value="<?php echo esc_attr($themeOpt['name']); ?>"
 									 title="<?php esc_attr_e('Apply this widget theme'); ?>">
-										<?php echo _e('Apply'); ?>
+										<?php _e('Apply'); ?>
 									</button>
 								<?php } ?>
 							</span>
