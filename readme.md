@@ -89,6 +89,10 @@ Please upgrade to the latest version of the plugin as we will be disabling our o
 
 ## Changelog
 
+### 1.18.0
+
+* Moved the "SSL" setting to the new "Advanced Settings" area, clarifying that it is an API connection method
+
 ### 1.17.6
 
 * Fix to get the sort options to display when using multiple markets in a listing grid

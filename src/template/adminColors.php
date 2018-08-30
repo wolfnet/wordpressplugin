@@ -22,7 +22,7 @@
 
 			<div class="wolfnet_colorOption">
 				<label for="wolfnet_themeColors[0]">
-					<?php echo _e('Accent Color'); ?>:
+					<?php _e('Accent Color'); ?>:
 				</label>
 				<div class="wolfnet_colorField">
 					<input type="text" name="wolfnet_themeColors[0]" id="wolfnet_themeColors[0]"
@@ -33,7 +33,7 @@
 
 			<div class="wolfnet_colorOption">
 				<label for="wolfnet_opacity">
-					<?php echo _e('Opacity'); ?>:
+					<?php _e('Opacity'); ?>:
 				</label>
 				<div class="wolfnet_colorField">
 					<select name="wolfnet_themeOpacity" id="wolfnet_themeOpacity">
@@ -46,7 +46,7 @@
 				</div>
 			</div>
 
-			<button class="button button-primary" type="submit"><?php echo _e('Save Color Options'); ?></button>
+			<button class="button button-primary" type="submit"><?php _e('Save Color Options'); ?></button>
 
 		</div>
 
