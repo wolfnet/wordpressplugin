@@ -49,7 +49,7 @@ class Wolfnet_AgentPagesHandler extends Wolfnet_Plugin
             unset($query['agnts']);
         }
         if(array_key_exists('agnt', $query)) {
-            $agentName = preg_replace("/[\.,]/", "", $query['agnt']);
+            $agentName = preg_replace("/[\/.,]/", "", $query['agnt']);
             $query['agent'] = $agentName; //$query['agnt'];
             unset($query['agnt']);
         }
