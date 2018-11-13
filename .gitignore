@@ -9,6 +9,7 @@ Desktop.ini
 *.sublime*
 **/icomoon/demo*
 node_modules
+rgloader
 /vendor/
 .vagrant/temp/*
 .vagrant/certs/*

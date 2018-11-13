@@ -89,6 +89,11 @@ Please upgrade to the latest version of the plugin as we will be disabling our o
 
 ## Changelog
 
+### 1.18.1
+
+* Agent pages URL fix for agents with special characters in their names
+* Map listing photo compatibility fix for WolfNet Responsive Skin #1
+
 ### 1.18.0
 
 * Moved the "SSL" setting to the new "Advanced Settings" area, clarifying that it is an API connection method
