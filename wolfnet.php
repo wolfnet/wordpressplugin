@@ -28,7 +28,11 @@
  *                Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-require_once dirname(__FILE__) . '/bootstrap/autoload.php';
+if (!defined('WNT_FILE')) {
+	define('WNT_FILE', __FILE__);
+}
+
+require_once dirname(WNT_FILE) . '/bootstrap/autoload.php';
 
 $GLOBALS['wolfnet'] = new Wolfnet_Plugin();
 $GLOBALS['wolfnet']->setEpFlag(EP_ALL);
