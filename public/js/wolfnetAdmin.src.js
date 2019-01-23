@@ -386,7 +386,9 @@ if ( typeof jQuery != 'undefined' ) {
                                 $marketLabel.val(data);
                             }
 
-                            $wrapper.closest('tr').find('.wolfnet_keyMarket_value').val(data);
+                            var $row = $wrapper.closest('tr');
+                            $row.find('.wolfnet_keyMarket_value').val(data);
+                            $row.find('.wolfnet_keyMarket_display').text(data);
 
                         },
                         error: function () {
@@ -479,6 +481,8 @@ if ( typeof jQuery != 'undefined' ) {
 				'id':     'wolfnet_productKey_' + nextIteration,
 				'name':   'wolfnet_productKey_' + nextIteration
 			}).val('');
+
+			$row.find('.wolfnet_keyMarket_display').text('');
 
 			$row.find('.wolfnet_keyMarket_value').attr({
 				'id':     'wolfnet_keyMarket_' + nextIteration,
