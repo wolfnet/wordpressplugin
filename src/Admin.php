@@ -96,6 +96,7 @@ class Wolfnet_Admin extends Wolfnet_Plugin
 		$this->addFilter(array(
 			array('mce_external_plugins', 'sbMcePlugin'),
 			array('mce_buttons',          'sbButton'),
+			array('plugin_action_links_' . plugin_basename(WNT_FILE), 'add_settings_link', 10, 2),
 		));
 
 	}

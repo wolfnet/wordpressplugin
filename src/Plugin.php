@@ -685,6 +685,13 @@ class Wolfnet_Plugin
     }
 
 
+	public function add_settings_link ($links) {
+		$settings_link = '<a href="' . admin_url('admin.php?page=wolfnet_plugin_settings') . '">' . __('Settings', $this->textdomain) . '</a>';
+		array_unshift($links, $settings_link);
+		return $links;
+	}
+
+
     public function decodeCriteria(array &$criteria)
     {
 
@@ -743,7 +750,7 @@ class Wolfnet_Plugin
     }
 
 
-    protected function addFilter($filter, $callable = null)
+    protected function addFilter($filter, $callable = null, $priority=10, $accepted_args=1)
     {
         if (is_array($filter)) {
             foreach ($filter as $flt) {
@@ -754,7 +761,7 @@ class Wolfnet_Plugin
                 add_filter($filter, $callable);
             } elseif (is_string($callable) && method_exists($this, $callable)) {
                 do_action($this->preHookPrefix . $callable);
-                add_filter($filter, array(&$this, $callable));
+                add_filter($filter, array(&$this, $callable), $priority, $accepted_args);
                 do_action($this->postHookPrefix . $callable);
             }
         }
