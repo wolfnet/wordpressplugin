@@ -177,8 +177,7 @@
 
 			var setupKeyValidation = function ($productKeyField) {
 				$productKeyField.wolfnetValidateProductKey({
-					rootUri: '<?php echo site_url(); ?>?pagename=wolfnet-admin-validate-key',
-					setSslVerify: $('#wolfnet_setSslVerify').val()
+					rootUri: '<?php echo site_url(); ?>?pagename=wolfnet-admin-validate-key'
 				}).change(function () {
 					// Clear the market name, so the plugin will ask the API for the name based on the new key
 					$(this).closest('tr').find('.wolfnet_keyMarket_value').val('');
