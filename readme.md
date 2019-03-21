@@ -89,6 +89,10 @@ Please upgrade to the latest version of the plugin as we will be disabling our o
 
 ## Changelog
 
+### 1.18.2
+
+* Map hotfix
+
 ### 1.18.1
 
 * Agent pages URL fix for agents with special characters in their names
