@@ -89,6 +89,13 @@ Please upgrade to the latest version of the plugin as we will be disabling our o
 
 ## Changelog
 
+### 1.19.0
+
+* Added a new "Settings" link on the plugins page
+* Yoast compatibility updates
+* Clear the market label when replacing an API key
+* Fix for issue where a valid API key is sometimes marked invalid
+
 ### 1.18.3
 
 * Changed the Google Maps API key for the new Google APIs account
