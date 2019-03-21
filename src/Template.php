@@ -178,14 +178,14 @@ class Wolfnet_Template
 				array('jquery', 'wolfnet'),
 			),
 			'google-maps' => array(
-				'https://maps.googleapis.com/maps/api/js?client=gme-wolfnettechnologies&v=3.26&channel='
+				'https://maps.googleapis.com/maps/api/js?key=AIzaSyA7sJ4JhPFI7RkttuHR6URRw7TZEXlMSDw&v=3&channel='
 					. $this->getGoogleMapChannel(),
                 array(),
                 $this->version,
 				true,
             ),
             'wolfnet-maptracks' => array(
-				'https://common.wolfnet.com/js/maptracks/v3/maptracks.bundle.min.js?v=3.0.7',
+				'https://common.wolfnet.com/js/maptracks/v3/maptracks.bundle.min.js?v=3.0.8',
 				array('jquerywnt', 'google-maps'),
                 $this->version,
 				true,
