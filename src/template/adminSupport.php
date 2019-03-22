@@ -387,12 +387,12 @@ function wolfnet_print_thumbnail($img, $imgdir)
 
             <h3>Shortcodes</h3>
 
-			<%php if ($gutenberg_available): %>
-				<div class="notice notice-info notice-alt">
+			<?php if ($gutenberg_available): ?>
+				<div class="notice notice-info notice-alt below-h2">
 					<h4>Gutenberg Users</h4>
 					<p>If you are using the Gutenberg editor, you can access the shortcode builder by adding a block, then selecting the "Classic" block, which can be found under the "Formatting" heading.</p>
 				</div>
-			<%php endif; %>
+			<?php endif; ?>
 
             <p>A shortcode is a quick way to insert content into a post or page within your WordPress website. Posts and pages are added via your WordPress dashboard.</p>
 
