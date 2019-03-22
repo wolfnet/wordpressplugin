@@ -20,6 +20,9 @@
  *                Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
+global $wp_version;
+$gutenberg_available = (version_compare($wp_version, '4.9', '>='));
+
 function wolfnet_print_thumbnail($img, $imgdir)
 {
     $url = $imgdir . $img;
@@ -383,6 +386,13 @@ function wolfnet_print_thumbnail($img, $imgdir)
         <div id="shortcodes">
 
             <h3>Shortcodes</h3>
+
+			<%php if ($gutenberg_available): %>
+				<div class="notice notice-info notice-alt">
+					<h4>Gutenberg Users</h4>
+					<p>If you are using the Gutenberg editor, you can access the shortcode builder by adding a block, then selecting the "Classic" block, which can be found under the "Formatting" heading.</p>
+				</div>
+			<%php endif; %>
 
             <p>A shortcode is a quick way to insert content into a post or page within your WordPress website. Posts and pages are added via your WordPress dashboard.</p>
 
