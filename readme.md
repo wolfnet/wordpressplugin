@@ -91,6 +91,10 @@ Please upgrade to the latest version of the plugin as we will be disabling our o
 
 ### 1.18.3
 
+* Fixing Office ID data cast issue
+
+### 1.18.3
+
 * Changed the Google Maps API key for the new Google APIs account
 
 ### 1.18.2
