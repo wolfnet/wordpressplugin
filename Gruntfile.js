@@ -111,7 +111,7 @@ module.exports = function (grunt) {
 							'!**/.*/',
 							'!{build,dist,docs,tests,node_modules}/**',
 							// Excluded Files
-							'!{build.xml,phpunit.xml,LessCompilerOutput.txt,vagrantfile}',
+							'!{build.xml,phpunit.xml,LessCompilerOutput.txt,docker-compose.yml}',
 							// Excluded File Patterns
 							'!**/.*',
 							'!**/*.{sublime*,less,tmp}',
