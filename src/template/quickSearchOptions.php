@@ -213,29 +213,32 @@
         });
 
         var $smartsearch = $('#<?php echo $smartsearch_wpid; ?>');
-        if ($smartsearch.val() === 'true') {
-            $('#<?php echo $view_wpid; ?>').prop('disabled',true);
-            $('#<?php echo $routing_wpid; ?>').prop('disabled',true);
-        }
 
         $smartsearch.change(function() {
 
         	// toggle "Layout" setting onchange
             var $layoutSetting = $('#<?php echo $view_wpid; ?>');
+            var $layoutRow = $layoutSetting.closest('tr');
             if ($smartsearch.val() === 'true') {
+                $layoutRow.hide();
                 $layoutSetting.prop('disabled',true);
             } else {
                 $layoutSetting.prop("disabled", false);
+                $layoutRow.show();
             }
 
         	// toggle "Routing" setting onchange
             var $routingSetting = $('#<?php echo $routing_wpid; ?>');
+            var $routingRow = $routingSetting.closest('tr');
             if ($smartsearch.val() === 'true') {
+                $routingRow.hide();
                 $routingSetting.prop('disabled',true);
             } else {
                 $routingSetting.prop("disabled", false);
+                $routingRow.show();
             }
-        });
+
+        }).change();
 
     });
 
