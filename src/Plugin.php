@@ -629,7 +629,7 @@ class Wolfnet_Plugin
     public function convertDataType($value)
     {
 
-		$exemptkeys = array( 'zipcode', 'zip_code', 'postalcode', 'postal_code' );
+		$exemptkeys = array( 'zipcode', 'zip_code', 'postalcode', 'postal_code', 'office_id' );
 
         if (is_array($value)) {
 			foreach ($value as $key => $val) {
