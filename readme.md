@@ -95,10 +95,7 @@ Please upgrade to the latest version of the plugin as we will be disabling our o
 * Yoast compatibility updates
 * Clear the market label when replacing an API key
 * Fix for issue where a valid API key is sometimes marked invalid
-
-### 1.18.3
-
-* Fixing Office ID data cast issue
+* Fix for Office ID data cast issue
 
 ### 1.18.3
 
