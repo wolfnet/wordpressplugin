@@ -76,11 +76,13 @@
 							</td>
 							<td>
 								<span class="wolfnet_keyMarket">
-									<?php
-										if (isset($productKey[$i-1]->market)) {
-											echo $productKey[$i-1]->market;
-										}
-									?>
+									<span class="wolfnet_keyMarket_display">
+										<?php
+											if (isset($productKey[$i-1]->market)) {
+												echo $productKey[$i-1]->market;
+											}
+										?>
+									</span>
 									<input class="wolfnet_keyMarket_value"
 										type="hidden"
 										id="wolfnet_keyMarket_<?php echo $i; ?>"
@@ -177,11 +179,12 @@
 
 			var setupKeyValidation = function ($productKeyField) {
 				$productKeyField.wolfnetValidateProductKey({
-					rootUri: '<?php echo site_url(); ?>?pagename=wolfnet-admin-validate-key',
-					setSslVerify: $('#wolfnet_setSslVerify').val()
+					rootUri: '<?php echo site_url(); ?>?pagename=wolfnet-admin-validate-key'
 				}).change(function () {
 					// Clear the market name, so the plugin will ask the API for the name based on the new key
-					$(this).closest('tr').find('.wolfnet_keyMarket_value').val('');
+					var $row = $(this).closest('tr');
+					$row.find('.wolfnet_keyMarket_value').val('');
+					$row.find('.wolfnet_keyMarket_display').text('');
 				});
 			};
 

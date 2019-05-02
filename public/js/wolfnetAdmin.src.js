@@ -288,17 +288,6 @@ if ( typeof jQuery != 'undefined' ) {
             var validateViaApi = function ($input) {
                 var key = $input.val();
 
-                if (clientOptions.setSslVerify) {
-                    $.ajax({
-                        url: wolfnet_ajax.ajaxurl,
-                        data: { action: 'wolfnet_set_sslverify', key: key },
-                        dataType: 'json',
-                        type: 'GET',
-                        cache: false,
-                        timeout: 3500
-                    });
-                }
-
                 $.ajax({
                     url: wolfnet_ajax.ajaxurl,
                     data: { action: 'wolfnet_validate_key', key: key },
@@ -386,7 +375,9 @@ if ( typeof jQuery != 'undefined' ) {
                                 $marketLabel.val(data);
                             }
 
-                            $wrapper.closest('tr').find('.wolfnet_keyMarket_value').val(data);
+                            var $row = $wrapper.closest('tr');
+                            $row.find('.wolfnet_keyMarket_value').val(data);
+                            $row.find('.wolfnet_keyMarket_display').text(data);
 
                         },
                         error: function () {
@@ -480,6 +471,8 @@ if ( typeof jQuery != 'undefined' ) {
 				'name':   'wolfnet_productKey_' + nextIteration
 			}).val('');
 
+			$row.find('.wolfnet_keyMarket_display').text('');
+
 			$row.find('.wolfnet_keyMarket_value').attr({
 				'id':     'wolfnet_keyMarket_' + nextIteration,
 				'name':   'wolfnet_keyMarket_' + nextIteration
@@ -495,8 +488,7 @@ if ( typeof jQuery != 'undefined' ) {
 			$keyCount.val(nextIteration);
 
 			$('#wolfnet_productKey_' + nextIteration).wolfnetValidateProductKey( {
-				rootUri: '<?php echo site_url(); ?>?pagename=wolfnet-admin-validate-key',
-				setSslVerify: $('#wolfnet_setSslVerify').val()
+				rootUri: '<?php echo site_url(); ?>?pagename=wolfnet-admin-validate-key'
 			});
 
 			$lastRow.after($row);

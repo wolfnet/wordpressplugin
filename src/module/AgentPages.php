@@ -34,7 +34,7 @@ class Wolfnet_Module_AgentPages
 
     public function scAgentPages($attrs)
     {
-        if(!$this->showAgentFeature()) {
+        if (is_admin() || !$this->showAgentFeature()) {
             return '';
         }
 
