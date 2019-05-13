@@ -1,25 +1,5 @@
 <?php
 
-	header('Content-type: text/css; charset: UTF-8');
-
-	$styleDefaults = array(
-		'colors'   => array('#333'),
-		'opacity'  => 80,
-	);
-
-	$userOptions = array();
-
-	if (!empty($_REQUEST['colors'])) {
-		$userOptions['colors'] = explode(',', htmlspecialchars($_REQUEST['colors']));
-	}
-
-	if (!empty($_REQUEST['opacity'])) {
-		$userOptions['opacity'] = htmlspecialchars($_REQUEST['opacity']);
-	}
-
-	$args = array_merge($styleDefaults, $userOptions);
-
-
 	function getColorPartDec ($colorPartHex, $colorPartLen = 2) {
 
 		// Convert single-digit values to multiples of hex 11
@@ -112,12 +92,12 @@
 
 
 	// Get the color parts
-	foreach ($args['colors'] as $colorKey => $colorVal) {
-		$args['colors'][$colorKey] = getColorParts($colorVal);
+	foreach ($colors as $colorKey => $colorVal) {
+		$colors[$colorKey] = getColorParts($colorVal);
 	}
 
 	// Make the opacity a percentage
-	$args['opacity'] /= 100;
+	$opacity /= 100;
 
 ?>
 
@@ -125,11 +105,11 @@
 
 	.wolfnet_widget.wolfnet_ao .wnt-btn.wnt-btn-primary,
 	.wolfnet_widget.wolfnet_ao .wnt-btn.wnt-btn-active {
-		background-color: <?php echo getHex($args['colors'][0]); ?>;
+		background-color: <?php echo getHex($colors[0]); ?>;
 	}
 
 	.wolfnet_widget.wolfnet_ao hr {
-		border-color: <?php echo getHex($args['colors'][0]); ?>;
+		border-color: <?php echo getHex($colors[0]); ?>;
 	}
 
 	.wolfnet_widget.wolfnet_ao ul.wolfnet_aoLinks li .wnt-icon,
@@ -137,11 +117,11 @@
 	.wolfnet_widget.wolfnet_ao ul.wolfnet_aoLinks li a:hover,
 	.wolfnet_widget.wolfnet_ao ul.wolfnet_aoLinks li a:active,
 	.wolfnet_widget.wolfnet_ao ul.wolfnet_aoLinks li a:visited {
-		color: <?php echo getHex($args['colors'][0]); ?>;
+		color: <?php echo getHex($colors[0]); ?>;
 	}
 
 	.wolfnet_widget.wolfnet_ao .wolfnet_aoSocial .wnt-icon {
-		color: <?php echo getHex($args['colors'][0]); ?>;
+		color: <?php echo getHex($colors[0]); ?>;
 	}
 
 
@@ -149,7 +129,7 @@
 
 	.wolfnet_widget.wolfnet-theme-birch.wolfnet_featuredListings .wolfnet_listing .wolfnet_listingHead .wolfnet_listingInfo,
 	.wolfnet_widget.wolfnet-theme-birch.wolfnet_listingGrid      .wolfnet_listing .wolfnet_listingHead .wolfnet_listingInfo {
-		<?php echo vertGradient($args['colors'][0], $args['colors'][0], 0, $args['opacity']); ?>
+		<?php echo vertGradient($colors[0], $colors[0], 0, $opacity); ?>
 	}
 
 
@@ -157,7 +137,7 @@
 
 	.wolfnet_widget.wolfnet-theme-cedar.wolfnet_featuredListings .wolfnet_listing .wolfnet_listingHead .wolfnet_listingInfo,
 	.wolfnet_widget.wolfnet-theme-cedar.wolfnet_listingGrid      .wolfnet_listing .wolfnet_listingHead .wolfnet_listingInfo {
-		background-color: rgba(<?php echo getRGBA($args['colors'][0], $args['opacity']); ?>);
+		background-color: rgba(<?php echo getRGBA($colors[0], $opacity); ?>);
 	}
 
 
@@ -165,5 +145,5 @@
 
 	.wolfnet_widget.wolfnet-theme-dogwood.wolfnet_featuredListings .wolfnet_listing .wolfnet_listingHead .wolfnet_listingInfo .wolfnet_price_rooms,
 	.wolfnet_widget.wolfnet-theme-dogwood.wolfnet_listingGrid      .wolfnet_listing .wolfnet_listingHead .wolfnet_listingInfo .wolfnet_price_rooms {
-		background-color: rgba(<?php echo getRGBA($args['colors'][0], $args['opacity']); ?>);
+		background-color: rgba(<?php echo getRGBA($colors[0], $opacity); ?>);
 	}

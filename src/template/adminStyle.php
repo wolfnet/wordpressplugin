@@ -88,7 +88,7 @@
 
 			var updatePreviewTimeout;
 
-			var themeStylesheetBaseUrl = '<?php echo $url; ?>/css/wolfnet.theme.custom.php',
+			var themeStylesheetBaseUrl = '<?php echo admin_url('admin-ajax.php') . '?action=wolfnet_theme_custom_css'; ?>',
 				colorOptionsUrl        = '<?php echo $colorOptionsUrl; ?>';
 
 			var $previewBox         = $('#wolfnet-color-options-preview'),
