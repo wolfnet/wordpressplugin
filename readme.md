@@ -89,6 +89,10 @@ Please upgrade to the latest version of the plugin as we will be disabling our o
 
 ## Changelog
 
+### 1.19.1
+
+* Security update to get custom styles via AJAX instead of via direct PHP execution
+
 ### 1.19.0
 
 * Added a new "Settings" link on the plugins page

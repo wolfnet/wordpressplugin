@@ -254,7 +254,7 @@ class Wolfnet_Template
                 admin_url('admin-ajax.php') . '?action=wolfnet_css',
             ),
 			'wolfnet-theme-custom' => array(
-				$this->url . 'css/wolfnet.theme.custom.php?' . $this->plugin->views->getThemeStyleArgs(),
+				admin_url('admin-ajax.php') . '?action=wolfnet_theme_custom_css',
 			),
 			'wolfnet-jquery-ui' => array(
 				$this->url . 'lib/jquery-ui/themes/wolfnet-wp/jquery-ui.min.css',

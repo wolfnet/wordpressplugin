@@ -318,6 +318,20 @@ class Wolfnet_Views
 	}
 
 
+	public function getThemeCustomCSS(array $args = array())
+	{
+		$defaultArgs = array(
+			'colors'    => $this->getThemeColors(),
+			'opacity'   => $this->getThemeOpacity(),
+		);
+
+		$args = array_merge($defaultArgs, $args);
+
+		return $this->parseTemplate('themeCustomCss', $args);
+
+	}
+
+
     /**
      * This method is used in the context of admin_print_styles to output custom CSS.
      * @return void
